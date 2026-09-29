@@ -25,11 +25,15 @@ validate_topic() {
 
 # Clean a paper title into a filename: keep its casing and words, drop
 # characters that are not legal in filenames, and cap the length at 100
-# characters on a word boundary.
+# characters on a word boundary. A question mark inside a title ends a
+# sentence, so it becomes a full stop ("Is Model Collapse Inevitable. Breaking
+# ..."); one at the very end is dropped.
 title_to_filename() {
   python3 -c '
-import sys
-title = sys.argv[1]
+import re, sys
+title = sys.argv[1].strip()
+title = re.sub(r"\?+$", "", title)
+title = re.sub(r"\?+(?=\s)", ".", title)
 bad = "/\\:*?<>|" + chr(34)
 name = "".join(" " if c in bad else c for c in title)
 name = " ".join(name.split())

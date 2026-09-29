@@ -21,13 +21,12 @@
 # start on (scripts/page-map.py).
 #
 # Markdown is converted from arXiv's own HTML rendering (arxiv.org/html/<id>),
-# which comes through pandoc far cleaner than PDF text extraction — see
-# docs/experiments/pdf-vs-html-conversion.md. Figures that arXiv's renderer
-# inlines as embedded SVG/base64 images are pulled out into the images/ folder
-# rather than left as data URIs in the markdown, since an inline base64 blob
-# makes the file unreadable both for a human skimming it and for a coding
-# agent. Existing files are left alone unless --force is given, and a paper
-# already in the library under another topic is refused.
+# which comes through far cleaner than PDF text extraction — see
+# docs/experiments/pdf-vs-html-conversion.md. The PDF and the HTML are fetched
+# at the same arXiv version. scripts/html-to-markdown.py does the conversion:
+# math as $...$, complex tables as HTML, figures saved to images/ as repaired
+# standalone SVGs. Existing files are left alone unless --force is given, and a
+# paper already in the library under another topic is refused.
 #
 # A small number of papers have no usable HTML rendering on arXiv: PDF-only
 # submissions get a stub page pointing back at the PDF, and a few LaTeXML runs
@@ -112,19 +111,27 @@ for attempt in 1 2 3 4 5; do
   sleep $((attempt * 5))
 done
 
-TITLE="$(python3 -c '
-import sys, xml.etree.ElementTree as ET
+read -r VERSION TITLE < <(python3 -c '
+import re, sys, xml.etree.ElementTree as ET
 ns = {"a": "http://www.w3.org/2005/Atom"}
 root = ET.parse(sys.argv[1]).getroot()
 entry = root.find("a:entry", ns)
 if entry is None or entry.find("a:title", ns) is None:
     sys.exit("error: arXiv id not found (no <entry> in API response)")
-print(" ".join(entry.find("a:title", ns).text.split()))
-' "$WORK/meta.xml")"
+version = re.search(r"v(\d+)$", entry.find("a:id", ns).text.strip()).group(1)
+print(version, " ".join(entry.find("a:title", ns).text.split()))
+' "$WORK/meta.xml")
+if [ -z "${VERSION:-}" ] || [ -z "${TITLE:-}" ]; then
+  echo "error: could not read the version and title for arXiv:$ID" >&2
+  exit 1
+fi
+# The PDF and the HTML are fetched at the same version, so the page numbers
+# written onto the markdown's headings match the PDF being read.
+VID="${ID}v${VERSION}"
 
 FILENAME="$(title_to_filename "$TITLE")"
 
-echo "Title:    $TITLE"
+echo "Title:    $TITLE (v$VERSION)"
 echo "Filename: $FILENAME"
 
 PDF="$ORIG_DIR/$FILENAME.pdf"
@@ -134,7 +141,7 @@ if [ -f "$PDF" ] && [ "$FORCE" != true ]; then
   echo "skip (exists): $PDF"
 else
   echo "Downloading PDF..."
-  curl -sL "https://arxiv.org/pdf/$ID" -o "$PDF"
+  curl -sL "https://arxiv.org/pdf/$VID" -o "$PDF"
 fi
 
 if [ -f "$MD" ] && [ "$FORCE" != true ]; then
@@ -145,7 +152,7 @@ else
     echo "Skipping the HTML rendering as asked (--from-pdf)."
   else
     echo "Fetching HTML rendering..."
-    curl -sL "https://arxiv.org/html/$ID" -o "$WORK/paper.html"
+    curl -sL "https://arxiv.org/html/$VID" -o "$WORK/paper.html"
 
     SOURCE=html
     if ! grep -q 'ltx_page_content' "$WORK/paper.html"; then
@@ -156,77 +163,9 @@ else
 fi
 
 if [ "${SOURCE:-}" = html ]; then
-  # arXiv's HTML page wraps the article body in a single
-  # <div class="ltx_page_content">...</div>; everything outside it is site
-  # nav/header/footer chrome that pandoc shouldn't see.
-  python3 -c '
-import re, sys
-html = open(sys.argv[1], encoding="utf-8").read()
-start_m = re.search(r"<div[^>]*\bltx_page_content\b[^>]*>", html)
-if not start_m:
-    sys.exit("error: could not find ltx_page_content in arXiv HTML — no HTML rendering for this paper?")
-pos = start_m.end()
-depth = 1
-end = None
-for m in re.finditer(r"<div\b|</div>", html[pos:]):
-    if m.group() == "</div>":
-        depth -= 1
-        if depth == 0:
-            end = pos + m.end()
-            break
-    else:
-        depth += 1
-if end is None:
-    sys.exit("error: unbalanced <div> while extracting article content")
-sys.stdout.write(html[start_m.start():end])
-' "$WORK/paper.html" > "$WORK/article.html"
-
-  # gfm-raw_html: without disabling the raw_html extension, pandoc falls back
-  # to emitting arXiv's HTML tags (div/span wrappers with id/class attributes
-  # on nearly every paragraph) verbatim instead of converting them, which
-  # buries the prose in markup noise.
-  pandoc "$WORK/article.html" -f html -t gfm-raw_html --wrap=none -o "$WORK/body.md"
-
-  # Diagrams that arXiv's renderer draws as inline SVG (rather than linking a
-  # raster figure) come out of pandoc as `![](data:image/svg+xml;base64,...)`
-  # — pull each one out to a real file in images/ and point the markdown at
-  # it instead of carrying the blob inline.
-  python3 -c '
-import base64, os, re, sys
-
-body_path, images_dir, basename = sys.argv[1], sys.argv[2], sys.argv[3]
-text = open(body_path, encoding="utf-8").read()
-
-exts = {"svg+xml": "svg", "png": "png", "jpeg": "jpg", "gif": "gif", "webp": "webp"}
-counter = 0
-
-def repl(m):
-    global counter
-    counter += 1
-    mime, data = m.group(1), m.group(2)
-    ext = exts.get(mime, "bin")
-    fname = f"{basename}-fig{counter:02d}.{ext}"
-    os.makedirs(images_dir, exist_ok=True)
-    with open(os.path.join(images_dir, fname), "wb") as f:
-        f.write(base64.b64decode(data))
-    return f"![](images/{fname})"
-
-text = re.sub(
-    r"!\[[^\]]*\]\(data:image/([a-zA-Z0-9+.-]+);base64,([A-Za-z0-9+/=]+)\)",
-    repl,
-    text,
-)
-
-# Raster figures, by contrast, arXiv links relative to the HTML page
-# ("2501.13956v1/x1.png"), which resolves nowhere once the markdown leaves
-# arxiv.org. Point them at arXiv so they still render in a markdown preview.
-text = re.sub(
-    r"(!\[[^\]]*\]\()(\d{4}\.\d{4,5}v\d+/)",
-    r"\1https://arxiv.org/html/\2",
-    text,
-)
-open(body_path, "w", encoding="utf-8").write(text)
-' "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
+  # Article extraction, pandoc, figure extraction and SVG repair: see the
+  # docstring of html-to-markdown.py for what each step fixes.
+  python3 "$REPO_ROOT/scripts/html-to-markdown.py" "$WORK/paper.html" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
 
   # For submissions uploaded as a PDF rather than as LaTeX source, arXiv still
   # serves an HTML page — but its body is a one-line "see the PDF" pointer. The

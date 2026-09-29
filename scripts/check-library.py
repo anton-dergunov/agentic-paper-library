@@ -8,7 +8,7 @@ Checks:
 - every paper has the required frontmatter fields, with a known `source`;
 - every paper has its PDF at the mirrored path under PDF_ROOT, and every PDF
   there has a paper (README files aside);
-- every relative image link in a paper resolves;
+- every relative image link in a paper resolves, and every image is used;
 - no PDF is inside the repository.
 """
 
@@ -19,7 +19,8 @@ from urllib.parse import unquote
 
 from paperlib import LIBRARY_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, paper_files, pdf_path_for, read_paper
 
-IMAGE_LINK = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
+# Markdown images, and <img> tags (used inside the HTML tables of complex tables).
+IMAGE_LINK = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
 
 
 def main():
@@ -39,11 +40,22 @@ def main():
                 problems.append(f"{rel}: unknown source `{meta['source']}`")
         if not pdf_path_for(md).exists():
             problems.append(f"{rel}: no PDF at {pdf_path_for(md)}")
-        for target in IMAGE_LINK.findall(body):
+        for groups in IMAGE_LINK.findall(body):
+            target = groups[0] or groups[1]
             if re.match(r"^[a-z]+:", target):
                 continue
             if not (md.parent / unquote(target)).exists():
                 problems.append(f"{rel}: broken image link {target}")
+
+    referenced = set()
+    for md in papers:
+        for groups in IMAGE_LINK.findall(read_paper(md)[1]):
+            target = groups[0] or groups[1]
+            if not re.match(r"^[a-z]+:", target):
+                referenced.add((md.parent / unquote(target)).resolve())
+    for img in LIBRARY_DIR.rglob("images/*"):
+        if img.resolve() not in referenced:
+            problems.append(f"image not used by any paper: {img.relative_to(LIBRARY_DIR)}")
 
     expected = {pdf_path_for(md) for md in papers}
     if PDF_ROOT.exists():
