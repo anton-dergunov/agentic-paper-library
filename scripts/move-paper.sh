@@ -4,7 +4,7 @@
 #
 #   ./scripts/move-paper.sh <library/.../Title.md> <new-topic>
 #
-#   ./scripts/move-paper.sh "library/llm/memory/agent/Zep A Temporal Knowledge Graph Architecture for Agent Memory.md" llm/memory/graphs
+#   ./scripts/move-paper.sh "library/llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md" llm/memory/graphs
 #
 # Moves library/<old>/<Title>.md, library/<old>/images/<Title>-fig*, and
 # $PDF_ROOT/<old>/<Title>.pdf to the same places under <new-topic>, removes

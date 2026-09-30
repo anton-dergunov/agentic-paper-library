@@ -29,6 +29,9 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
    - arXiv: `scripts/add-arxiv-paper.sh <id> <topic>`. If the output says it fell back to
      the PDF text layer, or the markdown looks like a conference template rather than the
      paper, say so; for the template case rerun with `--from-pdf --force`.
+   - Web article (Distill, transformer-circuits.pub, a blog-hosted paper):
+     `scripts/add-web-article.py <url> <topic>`; pass `--title`, `--authors "A; B"` or
+     `--published YYYY-MM-DD` when the page's metadata lacks them.
    - Local PDF: `scripts/add-pdf-paper.sh <file.pdf> <topic> --title "<exact title>"
      [--source "<url>"]`. It copies the PDF; files in `Papers_old/` stay where they are.
 4. **Write the summary.** Read the paper's markdown (abstract, introduction, conclusion) and

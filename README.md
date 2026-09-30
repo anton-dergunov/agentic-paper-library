@@ -14,6 +14,7 @@ Add a paper:
 ```bash
 ./scripts/add-arxiv-paper.sh 2501.13956 llm/memory/agent
 ./scripts/add-pdf-paper.sh ~/Downloads/paper.pdf llm/evaluation/methods --title "..."
+./scripts/add-web-article.py https://distill.pub/2017/momentum/ deep-learning/optimizers-and-schedules
 ./scripts/build-index.py && ./scripts/check-library.py
 ```
 

@@ -94,7 +94,7 @@ opening PDFs.
 
 ## Test fixture
 
-Use Zep (arXiv 2501.13956), at `llm/memory/agent/Zep A Temporal Knowledge Graph Architecture for Agent Memory.pdf` under the PDF root. It has 12 pages and 70 named
+Use Zep (arXiv 2501.13956), at `llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.pdf` under the PDF root. It has 12 pages and 70 named
 destinations. Its markdown in `library/` carries the same page numbers on its headings.
 
 | Target | Page | Named destination |
@@ -110,6 +110,6 @@ destinations. Its markdown in `library/` carries the same page numbers on its he
 
 - A link written in the Claude chat panel opens Zep at Table 2 in a VS Code tab, with no browser
   tab. For example: `[Table 2](http://paper.link/open?file=llm/memory/agent/Zep%20A%20Temporal%20Knowledge%20Graph%20Architecture%20for%20Agent%20Memory.pdf&dest=table.2)`.
-- `scripts/open-pdf "llm/memory/agent/Zep A Temporal Knowledge Graph Architecture for Agent Memory.pdf" --page 3` does the same from a terminal.
+- `scripts/open-pdf "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.pdf" --page 3` does the same from a terminal.
 - A highlight made in the tab is saved into the PDF and is visible in Skim or Preview afterwards.
 - A short section in `AGENTS.md` tells the agent the link format and when to use it.

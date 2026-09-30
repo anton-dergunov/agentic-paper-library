@@ -2,11 +2,14 @@
 """Add the inventory's `add` rows under one or more topics, one paper at a time.
 
     python3 docs/tasks/library-expansion/add_batch.py <topic-prefix> [...] [--limit N]
+                                                      [--pdfs <map.tsv>]
 
 For each row with action `add` and status `todo` whose topic starts with a given
 prefix: an arXiv paper goes through scripts/add-arxiv-paper.sh, a paper with only
 a local PDF in Papers_old/ through scripts/add-pdf-paper.sh. Rows with neither
-are left `todo` and listed at the end: they need a PDF from the web. Each row's
+are left `todo` and listed at the end: they need a PDF from the web. Once
+found, pass them with --pdfs: a TSV of `<key>\t<pdf path>\t<source url>` lines
+(key as in inventory.tsv). Each row's
 status becomes `added`, or `failed: <last line of output>`, and inventory.tsv is
 saved after every paper so an interrupted run resumes where it stopped.
 
@@ -44,7 +47,11 @@ def save(fields, rows):
     tmp.replace(INVENTORY)
 
 
-def command(row):
+def command(row, pdf_map):
+    if row["key"] in pdf_map:
+        path, url = pdf_map[row["key"]]
+        cmd = [str(REPO / "scripts/add-pdf-paper.sh"), path, row["topic"], "--title", row["title"]]
+        return cmd + (["--source", url or row["url"]] if (url or row["url"]) else [])
     if row["arxiv"]:
         return [str(REPO / "scripts/add-arxiv-paper.sh"), row["arxiv"], row["topic"]]
     pdfs = [PAPERS_OLD / f"{stem}.pdf" for stem in row["local_pdf"].split("; ") if stem]
@@ -72,7 +79,13 @@ def set_year(out, row):
 
 
 def main(argv):
-    limit = None
+    limit, pdf_map = None, {}
+    if "--pdfs" in argv:
+        i = argv.index("--pdfs")
+        for line in Path(argv[i + 1]).read_text().splitlines():
+            key, path, url = (line.split("\t") + ["", ""])[:3]
+            pdf_map[key] = (path, url)
+        argv = argv[:i] + argv[i + 2:]
     if "--limit" in argv:
         i = argv.index("--limit")
         limit = int(argv[i + 1])
@@ -86,7 +99,7 @@ def main(argv):
     for row in todo:
         if limit is not None and done + failed >= limit:
             break
-        cmd = command(row)
+        cmd = command(row, pdf_map)
         if cmd is None:
             web.append(row)
             continue

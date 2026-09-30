@@ -25,6 +25,10 @@ It runs over many sessions. This file is the plan and the progress record. Its o
   - 2026-09-30: every area run; 793 added with summaries (114 from PDF text: 90 local PDFs,
     24 arXiv papers without an HTML rendering). Left: 68 papers with no arXiv id or local
     PDF (`status: todo` in `inventory.tsv`), which need a PDF or a web article from the web.
+  - 2026-09-30: 47 of those found as open PDFs and 9 web articles converted with the new
+    `scripts/add-web-article.py`; 1,089 papers in the library. Left: 12 papers only
+    available from publishers that block scripts (ACM, Wiley, Springer, SSRN,
+    OpenReview), for Anton to download in a browser.
 - [ ] 6. Literature pass, one reading list per area (list the areas here as they are done)
 - [ ] 7. Wrap-up
 

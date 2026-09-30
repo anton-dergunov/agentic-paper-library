@@ -7,11 +7,12 @@ Also usable from the shell scripts:
     paperlib.py frontmatter-arxiv <meta.xml> <arxiv-id> <source>
     paperlib.py frontmatter-manual <title> <source> [<url>]
     paperlib.py set-summary <paper.md> <summary>
+    paperlib.py filename <title>
     paperlib.py set-type <paper.md> <type>
 
 The first two print a complete YAML frontmatter block (with the --- fences) to
 stdout; set-summary and set-type rewrite the paper's `summary:` or `type:` field
-in place.
+in place; filename prints the filename stem for a title.
 """
 
 import datetime
@@ -43,7 +44,7 @@ TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 # files the paper (the add-paper skill), so the add scripts leave it empty.
 FIELDS = ["title", "authors", "published", "arxiv", "url", "source", "type", "summary", "added"]
 REQUIRED = ["title", "source", "summary", "added"]
-SOURCES = {"html", "pdf-text"}
+SOURCES = {"html", "pdf-text", "web"}
 # Kind of paper, set by the overview skill when it classifies one (optional).
 TYPES = {"method", "survey", "benchmark", "study", "system", "position", "theory"}
 # Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
@@ -143,6 +144,34 @@ def fetch(url, attempts=4):
         if attempt < attempts - 1:
             time.sleep(5 * (attempt + 1))
     return None
+
+
+def title_to_filename(title):
+    """A paper's filename stem, from its title.
+
+    Keeps the title's casing and words. A colon or a question mark inside the
+    title ends a sentence, so each becomes a full stop ("Zep. A Temporal ...",
+    "Is Model Collapse Inevitable. Breaking ..."); a question mark at the very
+    end is dropped. LaTeX markup keeps its text (\\textit{X} -> X, \\infty ->
+    infty). Other characters that are not legal in filenames become spaces, and
+    the name is capped at 100 characters on a word boundary.
+    """
+    title = str(title).strip()
+    title = re.sub(r"\\[a-zA-Z]+\{([^{}]*)\}", r"\1", title)
+    title = re.sub(r"\\([a-zA-Z]+)\s*", r"\1", title).replace("$", "")
+    title = re.sub(r"\?+$", "", title)
+    title = re.sub(r"\s*[?:]+(?=\s)", ".", title)
+    bad = '/\\:*?<>|"'
+    name = "".join(" " if c in bad else c for c in title)
+    name = " ".join(name.split())
+    name = re.sub(r"\.(\s*\.)+", ".", name)
+    if len(name) > 100:
+        cut = name[:100]
+        name = cut[: cut.rfind(" ")] if " " in cut else cut
+        # A cut that lands just after a comma or dash leaves it dangling at the
+        # end of the filename, which reads like a typo rather than a truncation.
+        name = name.rstrip(" ,;:.-–—")
+    return name
 
 
 def load_topics():
@@ -266,6 +295,8 @@ def _main(argv):
             meta["url"] = argv[4]
         meta.update({"source": source, "summary": "", "added": datetime.date.today()})
         sys.stdout.write(render_frontmatter(meta))
+    elif len(argv) == 3 and argv[1] == "filename":
+        print(title_to_filename(argv[2]))
     elif len(argv) == 4 and argv[1] == "set-summary":
         path, summary = Path(argv[2]), " ".join(argv[3].split())
         meta, body = read_paper(path)
