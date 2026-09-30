@@ -69,15 +69,16 @@ for cmd in curl pandoc python3; do
 done
 
 # Accepts a bare id, an id with version ("2409.11901v1"), or a full
-# /abs/ or /pdf/ URL, and reduces it to the bare "YYMM.NNNNN" id.
-ID="$(python3 -c '
+# /abs/ or /pdf/ URL, and reduces it to the bare "YYMM.NNNNN" id. A version
+# given explicitly is the one fetched; otherwise the latest.
+read -r ID PINNED_VERSION < <(python3 -c '
 import re, sys
 raw = sys.argv[1]
-m = re.search(r"(\d{4}\.\d{4,5})(v\d+)?", raw)
+m = re.search(r"(\d{4}\.\d{4,5})(?:v(\d+))?", raw)
 if not m:
     sys.exit("error: could not find an arXiv id in " + repr(raw))
-print(m.group(1))
-' "$RAW_ID")"
+print(m.group(1), m.group(2) or "")
+' "$RAW_ID")
 
 # One paper, one place: refuse a paper that is already filed elsewhere.
 EXISTING="$(grep -rlE --include='*.md' "^arxiv: ['\"]?$ID['\"]?$" "$LIBRARY_DIR" 2>/dev/null || true)"
@@ -125,6 +126,7 @@ if [ -z "${VERSION:-}" ] || [ -z "${TITLE:-}" ]; then
   echo "error: could not read the version and title for arXiv:$ID" >&2
   exit 1
 fi
+[ -n "${PINNED_VERSION:-}" ] && VERSION="$PINNED_VERSION"
 # The PDF and the HTML are fetched at the same version, so the page numbers
 # written onto the markdown's headings match the PDF being read.
 VID="${ID}v${VERSION}"
@@ -137,11 +139,29 @@ echo "Filename: $FILENAME"
 PDF="$ORIG_DIR/$FILENAME.pdf"
 MD="$MD_DIR/$FILENAME.md"
 
-if [ -f "$PDF" ] && [ "$FORCE" != true ]; then
+is_pdf() { [ "$(head -c 5 "$1" 2>/dev/null)" = "%PDF-" ]; }
+
+if [ -f "$PDF" ] && [ "$FORCE" != true ] && is_pdf "$PDF"; then
   echo "skip (exists): $PDF"
 else
+  # A withdrawn version is served as an HTML notice rather than a PDF. Step
+  # back to the latest version that has a PDF (unless one was asked for), and
+  # use that version for the HTML too.
   echo "Downloading PDF..."
-  curl -sL "https://arxiv.org/pdf/$VID" -o "$PDF"
+  while :; do
+    curl -sL "https://arxiv.org/pdf/$VID" -o "$WORK/paper.pdf"
+    if is_pdf "$WORK/paper.pdf"; then
+      mv "$WORK/paper.pdf" "$PDF"
+      break
+    fi
+    if [ -n "${PINNED_VERSION:-}" ] || [ "$VERSION" -le 1 ]; then
+      echo "error: arXiv served no PDF for $VID (withdrawn?)" >&2
+      exit 1
+    fi
+    echo "  $VID has no PDF (withdrawn?), trying v$((VERSION - 1))" >&2
+    VERSION=$((VERSION - 1))
+    VID="${ID}v${VERSION}"
+  done
 fi
 
 if [ -f "$MD" ] && [ "$FORCE" != true ]; then

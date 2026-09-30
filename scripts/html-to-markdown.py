@@ -18,7 +18,9 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
    they lack the XML namespaces a standalone .svg needs and the HTML parser
    lowercased their camelCase names (viewBox, foreignObject), which leaves them
    blank in any viewer.
-4. Raster figures, whether inlined or hosted next to the rendering on arXiv,
+4. Code listings become fenced code blocks, from the exact source LaTeXML
+   embeds in each listing (see convert_listings).
+5. Raster figures, whether inlined or hosted next to the rendering on arXiv,
    become files in images/ too, downscaled and stored as WebP (see
    paperlib.to_webp). A hosted figure that fails to download keeps a link to
    arXiv.
@@ -165,6 +167,73 @@ def extract_svgs(article, save):
         pos = end
 
 
+PYTHON = re.compile(r"^\s*(def \w+\(.*\):\s*$|import \w|from [\w.]+ import \w|class \w+.*:\s*$)", re.M)
+# A listing that is itself a markdown code block (model output shown verbatim).
+FENCED = re.compile(r"\A[`\u201c\u2018\u201d\u2019]{3}\s*(\w*)\s*\n(.*)\n\s*[`\u201d\u2019]{3}\s*\Z", re.S)
+
+
+def balanced_end(article, begin, tag):
+    """Index just past the </tag> that closes the <tag> starting at `begin`."""
+    depth = 0
+    for m in re.compile(rf"<{tag}\b|</{tag}\s*>").finditer(article, begin):
+        depth += 1 if m.group().startswith(f"<{tag}") else -1
+        if depth == 0:
+            return m.end()
+    return None
+
+
+def listing_source(block):
+    """The source text of one LaTeXML code listing.
+
+    LaTeXML puts the listing's exact source in a "download" link as a base64
+    data URI; failing that, the text is rebuilt from its per-line <div>s.
+    """
+    m = re.search(r'href="data:text/plain;base64,([A-Za-z0-9+/=]+)"', block)
+    if m:
+        try:
+            return base64.b64decode(m.group(1)).decode("utf-8").rstrip("\n")
+        except (ValueError, UnicodeDecodeError):
+            pass
+    lines = re.findall(r'<(div|span)[^>]*\bltx_listingline\b[^>]*>(.*?)</\1>', block, re.S)
+    lines = [line for _, line in lines]
+    text = [html.unescape(re.sub(r"<[^>]+>", "", line)).strip("\n") for line in lines]
+    return "\n".join(text).rstrip("\n")
+
+
+def convert_listings(article):
+    """Replace each code listing with <pre><code>, which pandoc makes a fenced block.
+
+    Left to pandoc, a listing becomes a "⬇" link carrying the whole source as a
+    base64 data URI, followed by its lines as escaped paragraphs with the
+    indentation lost. Algorithm blocks (ltx_listing without ltx_lstlisting) hold
+    math and convert well as they are, so they are left alone.
+    """
+    out, pos = [], 0
+    start = re.compile(r'<(div|span)[^>]*class="([^"]*\bltx_lstlisting\b[^"]*)"[^>]*>')
+    while True:
+        m = start.search(article, pos)
+        end = balanced_end(article, m.start(), m.group(1)) if m else None
+        if end is None:
+            out.append(article[pos:])
+            return "".join(out)
+        source = listing_source(article[m.start():end])
+        # A class makes pandoc write a fenced block (an indented one otherwise):
+        # the language LaTeXML recorded, else "python" for code that looks like
+        # it, else "text".
+        lang = re.search(r"\bltx_lst_language_(\w+)", m.group(2))
+        lang = lang.group(1).lower() if lang else "python" if PYTHON.search(source) else "text"
+        fenced = FENCED.match(source)
+        if fenced:
+            source, lang = fenced.group(2), fenced.group(1) or lang
+        out.append(article[pos:m.start()])
+        if m.group(1) == "span" and "\n" not in source.strip():
+            # An inline listing (in running text or a table cell) stays inline.
+            out.append(f"<code>{html.escape(source.strip(), quote=False)}</code>")
+        else:
+            out.append(f'<pre><code class="{lang}">{html.escape(source, quote=False)}</code></pre>')
+        pos = end
+
+
 def main(html_path, body_path, images_dir, basename):
     images_dir = Path(images_dir)
     counter, invalid = 0, 0
@@ -190,7 +259,12 @@ def main(html_path, body_path, images_dir, basename):
         except Exception:
             return save(mime, data)
 
-    article = extract_article(Path(html_path).read_text(encoding="utf-8"))
+    page = Path(html_path).read_text(encoding="utf-8")
+    # Older renderings link figures relative to <base href="/html/<id>v<n>/">
+    # ("x1.png", "extracted/..."); the figure download needs the full path.
+    base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
+    article = extract_article(page)
+    article = convert_listings(article)
     article = extract_svgs(article, save)
     body = subprocess.run(
         [
@@ -206,6 +280,12 @@ def main(html_path, body_path, images_dir, basename):
         lambda m: f"![]({save_raster(m.group(1), base64.b64decode(m.group(2)))})",
         body,
     )
+    if base:
+        body = re.sub(
+            r'(!\[[^\]]*\]\(|<img\s[^>]*?src=")(?![a-z]+:|images/|/|\d{4}\.\d{4,5}v\d+/)([^)"\s]+)',
+            lambda m: m.group(1) + base.group(1) + m.group(2),
+            body,
+        )
     # Raster figures arXiv hosts next to the rendering.
     body, failed = localize_figures(body, lambda data: save("webp", data))
     Path(body_path).write_text(body, encoding="utf-8")

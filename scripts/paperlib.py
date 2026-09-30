@@ -7,9 +7,11 @@ Also usable from the shell scripts:
     paperlib.py frontmatter-arxiv <meta.xml> <arxiv-id> <source>
     paperlib.py frontmatter-manual <title> <source> [<url>]
     paperlib.py set-summary <paper.md> <summary>
+    paperlib.py set-type <paper.md> <type>
 
 The first two print a complete YAML frontmatter block (with the --- fences) to
-stdout; set-summary rewrites the paper's `summary:` field in place.
+stdout; set-summary and set-type rewrite the paper's `summary:` or `type:` field
+in place.
 """
 
 import datetime
@@ -39,9 +41,13 @@ TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 
 # Field order in every paper's frontmatter. `summary` is written by whoever
 # files the paper (the add-paper skill), so the add scripts leave it empty.
-FIELDS = ["title", "authors", "published", "arxiv", "url", "source", "summary", "added"]
+FIELDS = ["title", "authors", "published", "arxiv", "url", "source", "type", "summary", "added"]
 REQUIRED = ["title", "source", "summary", "added"]
 SOURCES = {"html", "pdf-text"}
+# Kind of paper, set by the overview skill when it classifies one (optional).
+TYPES = {"method", "survey", "benchmark", "study", "system", "position", "theory"}
+# Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
+NOTES_DIR = REPO_ROOT / "notes"
 
 _FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 ATOM = {"a": "http://www.w3.org/2005/Atom"}
@@ -266,6 +272,15 @@ def _main(argv):
         if not meta:
             sys.exit(f"error: {path} has no frontmatter")
         meta["summary"] = summary
+        write_paper(path, meta, body)
+    elif len(argv) == 4 and argv[1] == "set-type":
+        path, kind = Path(argv[2]), argv[3]
+        if kind not in TYPES:
+            sys.exit(f"error: unknown type `{kind}` (one of: {', '.join(sorted(TYPES))})")
+        meta, body = read_paper(path)
+        if not meta:
+            sys.exit(f"error: {path} has no frontmatter")
+        meta["type"] = kind
         write_paper(path, meta, body)
     else:
         sys.exit(__doc__)

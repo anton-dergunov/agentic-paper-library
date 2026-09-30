@@ -22,6 +22,9 @@ It runs over many sessions. This file is the plan and the progress record. Its o
 - [x] 3. Tooling for a declared tree: `catalog/`, scripts, `AGENTS.md`, skills (2026-09-30)
 - [x] 4. Existing papers moved into the new tree (2026-09-30): 125 moves, five old folders retired
 - [ ] 5. Inventory papers added, one batch per area (list the batches here as they are done)
+  - 2026-09-30: every area run; 793 added with summaries (114 from PDF text: 90 local PDFs,
+    24 arXiv papers without an HTML rendering). Left: 68 papers with no arXiv id or local
+    PDF (`status: todo` in `inventory.tsv`), which need a PDF or a web article from the web.
 - [ ] 6. Literature pass, one reading list per area (list the areas here as they are done)
 - [ ] 7. Wrap-up
 
@@ -208,6 +211,24 @@ in Decisions.
 - Tell Anton when every `Papers_old/` file is resolved. Deleting that folder is his call.
 
 ## Notes for later sessions
+
+- **Phase 5 pipeline**, optimised for token cost rather than speed:
+  1. `python3 docs/tasks/library-expansion/add_batch.py <topic-prefix> ...` adds the
+     inventory's `todo` rows one at a time and records `added` or `failed: …` in `status`,
+     saving after every paper, so a rerun resumes. Run it in the background; no model needs
+     to read its output beyond the failures.
+  2. `pending_summaries.py <out.md> [<topic-prefix>]` writes every paper without a summary
+     as a numbered block: path, title, abstract (from the arXiv API, or the markdown).
+  3. A Sonnet subagent reads only that file and writes `<number>\t<summary>` lines, matching
+     the style of existing summaries. A fresh, cheaper context beats reading ~200k tokens of
+     abstracts in the main session.
+  4. `apply_summaries.py <out.md> <summaries.tsv>`, then `scripts/build-index.py` and
+     `scripts/check-library.py`.
+  Rows with neither an arXiv id nor a local PDF are listed as needing a PDF from the web.
+- **Code listings:** until 2026-09-30 the converter turned code listings into a "⬇"
+  data-URI link plus unformatted text. After the bulk run, reconvert every paper still
+  containing `data:text/plain;base64` (`scripts/reconvert.py <paper.md>`), 76 of them at
+  the time of the fix.
 
 - **Paper metadata services** (as of 2026-09-30):
   - Semantic Scholar's title search (`/paper/search/match`) is rate-limited to near zero

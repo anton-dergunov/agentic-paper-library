@@ -5,7 +5,9 @@
 
 Checks:
 
-- every paper has the required frontmatter fields, with a known `source`;
+- every paper has the required frontmatter fields, with a known `source` (and
+  a known `type`, if it has one);
+- every file in notes/ is named after a paper in the library;
 - every paper has its PDF at the mirrored path under PDF_ROOT, and every PDF
   there has a paper (README files aside);
 - every relative image link in a paper resolves, and every image is used;
@@ -23,7 +25,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from paperlib import (
-    LIBRARY_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, TOPIC_PATH,
+    LIBRARY_DIR, NOTES_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, TOPIC_PATH, TYPES,
     load_skipped, load_topics, norm_title, paper_files, pdf_path_for, read_paper,
 )
 
@@ -83,6 +85,8 @@ def main():
                     problems.append(f"{rel}: missing or empty `{field}`")
             if meta.get("source") and meta["source"] not in SOURCES:
                 problems.append(f"{rel}: unknown source `{meta['source']}`")
+            if meta.get("type") and meta["type"] not in TYPES:
+                problems.append(f"{rel}: unknown type `{meta['type']}`")
         if not pdf_path_for(md).exists():
             problems.append(f"{rel}: no PDF at {pdf_path_for(md)}")
         for groups in IMAGE_LINK.findall(body):
@@ -109,6 +113,11 @@ def main():
                 problems.append(f"PDF without a paper: {pdf.relative_to(PDF_ROOT)}")
 
     problems += check_catalog(papers)
+
+    stems = {md.stem for md in papers}
+    for note in sorted(NOTES_DIR.glob("*.md")):
+        if note.name != "README.md" and note.stem not in stems:
+            problems.append(f"notes/{note.name}: no paper with this name in the library")
 
     for pdf in REPO_ROOT.rglob("*.pdf"):
         if ".git" not in pdf.parts:

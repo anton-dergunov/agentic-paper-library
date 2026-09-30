@@ -106,6 +106,8 @@ def dest_candidates(number):
 
 def main(pdf_path, md_path):
     doc = pymupdf.open(pdf_path)
+    if not doc.is_pdf:  # MuPDF also opens HTML, and crashes on its PDF-only calls
+        sys.exit(f"error: {pdf_path} is not a PDF")
     dests = {
         name: target["page"] + 1
         for name, target in doc.resolve_names().items()

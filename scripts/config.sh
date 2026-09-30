@@ -31,8 +31,8 @@ sys.exit(0 if sys.argv[2] in (yaml.safe_load(open(sys.argv[1])) or {}) else 1)
   fi
 }
 
-# Clean a paper title into a filename: keep its casing and words, drop
-# characters that are not legal in filenames, and cap the length at 100
+# Clean a paper title into a filename: keep its casing and words, drop LaTeX
+# markup and characters that are not legal in filenames, and cap the length at 100
 # characters on a word boundary. A question mark inside a title ends a
 # sentence, so it becomes a full stop ("Is Model Collapse Inevitable. Breaking
 # ..."); one at the very end is dropped.
@@ -40,6 +40,10 @@ title_to_filename() {
   python3 -c '
 import re, sys
 title = sys.argv[1].strip()
+# LaTeX in arXiv titles: keep the text of \textit{...}-style commands and the
+# name of bare ones (\infty -> infty), and drop the math dollars.
+title = re.sub(r"\\[a-zA-Z]+\{([^{}]*)\}", r"\1", title)
+title = re.sub(r"\\([a-zA-Z]+)\s*", r"\1", title).replace("$", "")
 title = re.sub(r"\?+$", "", title)
 title = re.sub(r"\?+(?=\s)", ".", title)
 bad = "/\\:*?<>|" + chr(34)
