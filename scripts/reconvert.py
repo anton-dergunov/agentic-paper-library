@@ -18,13 +18,11 @@ import subprocess
 import sys
 import tempfile
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 import pymupdf
 
-from paperlib import paper_files, pdf_path_for, read_paper, write_paper
+from paperlib import fetch, paper_files, pdf_path_for, read_paper, write_paper
 
 SCRIPTS = Path(__file__).resolve().parent
 HAND_EDITED = "<!-- hand-edited -->"
@@ -40,18 +38,9 @@ def pdf_version(pdf, arxiv_id):
     return m.group(1) if m else ""
 
 
-def fetch(url):
-    for attempt in range(4):
-        try:
-            with urllib.request.urlopen(url, timeout=60) as r:
-                return r.read().decode("utf-8", errors="replace")
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
-                return None
-        except urllib.error.URLError:
-            pass
-        time.sleep(5 * (attempt + 1))
-    return None
+def fetch_page(url):
+    data = fetch(url)
+    return data.decode("utf-8", errors="replace") if data else None
 
 
 def reconvert(md, force):
@@ -64,12 +53,12 @@ def reconvert(md, force):
 
     pdf = pdf_path_for(md)
     version = pdf_version(pdf, arxiv_id)
-    page = fetch(f"https://arxiv.org/html/{arxiv_id}{version}")
+    page = fetch_page(f"https://arxiv.org/html/{arxiv_id}{version}")
     note = ""
     if version and (not page or "ltx_page_content" not in page):
         # arXiv renders HTML for some versions only; the latest is the best
         # fallback, though its page numbers may drift from the PDF's.
-        page = fetch(f"https://arxiv.org/html/{arxiv_id}")
+        page = fetch_page(f"https://arxiv.org/html/{arxiv_id}")
         note = f" (no HTML for {version}; used latest, page numbers may be off)"
     if not page or "ltx_page_content" not in page:
         return f"skip (no HTML for {arxiv_id}{version})"

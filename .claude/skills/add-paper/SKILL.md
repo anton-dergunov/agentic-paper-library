@@ -9,13 +9,13 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
 
 ## Steps
 
-1. **Identify the paper.**
-   - arXiv URL or id: use it directly.
-   - A title, or a file in `~/Yandex.Disk.localized/Papers_old/`: find its arXiv id (search
-     the arXiv export API by title, e.g.
-     `http://export.arxiv.org/api/query?search_query=ti:%22<words>%22`). Confirm the match
-     with Anton if the title differs. If it is not on arXiv, use the local PDF.
-   - Check it is not already in the library: `grep -rl "^arxiv: '<id>'" library/`.
+1. **Identify the paper** with `scripts/arxiv-lookup.py`, which prints the id and latest
+   version, date, title, abstract, and the path if the paper is already in the library.
+   - arXiv URLs or ids: `scripts/arxiv-lookup.py <id-or-url> [...]`, all in one call.
+   - A title, or a file in `~/Yandex.Disk.localized/Papers_old/`:
+     `scripts/arxiv-lookup.py --title "<title>"`. Confirm the match with Anton if the
+     title differs. If it is not on arXiv, use the local PDF.
+   - A paper marked `already in library` is not added again.
 2. **Choose the topic.** Read `library/README.md`, then the index of the most likely
    folder, and compare with the papers already there. File it where Anton would look for
    it. If nothing fits, propose a new folder (following the intended top level in
@@ -27,9 +27,10 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
    - Local PDF: `scripts/add-pdf-paper.sh <file.pdf> <topic> --title "<exact title>"
      [--source "<url>"]`. It copies the PDF; files in `Papers_old/` stay where they are.
 4. **Write the summary.** Read the paper's markdown (abstract, introduction, conclusion) and
-   set `summary:` in its frontmatter to one neutral sentence on what the paper does or
-   finds — a mechanism or result, not "this paper is about". Match the style of the
-   summaries already in the folder.
+   write one neutral sentence on what the paper does or finds — a mechanism or result,
+   not "this paper is about". Match the style of the summaries already in the folder. Set
+   it with `scripts/paperlib.py set-summary <paper.md> "<summary>"`, which handles the
+   YAML quoting.
 5. **Rebuild and check.** `scripts/build-index.py`, then `scripts/check-library.py`, which
    must pass.
 6. **Report**, briefly:
@@ -41,8 +42,8 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
 
 ## Several papers at once
 
-Run steps 1–4 per paper, then rebuild and check once at the end. Leave a few seconds
-between arXiv calls; the export API rate-limits.
+Look them all up in one `arxiv-lookup.py` call, run steps 2–4 per paper, then rebuild
+and check once at the end. The add script retries when the export API rate-limits.
 
 ## From the inbox
 
@@ -55,7 +56,8 @@ between arXiv calls; the export API rate-limits.
    title, a PDF path, or a URL with its title on the next line. Any other words in an
    entry (e.g. "→ llm/memory") are Anton's notes: use them as a topic hint. Go by meaning
    when the format is loose.
-3. **Run step 1 for every entry**, including the duplicate check.
+3. **Run step 1 for every entry**: one `arxiv-lookup.py` call for all the ids and URLs,
+   plus a `--title` for each entry that has only a title.
 4. **Propose and wait.** Show one numbered table: entry, arXiv id or source, title,
    proposed topic. Mark `already in library`, `new folder` and `unclear match`. Run no
    script until Anton approves; he may change topics or skip entries by number.

@@ -18,7 +18,10 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
    they lack the XML namespaces a standalone .svg needs and the HTML parser
    lowercased their camelCase names (viewBox, foreignObject), which leaves them
    blank in any viewer.
-4. Raster figures arXiv links relative to its own page are pointed at arXiv.
+4. Raster figures, whether inlined or hosted next to the rendering on arXiv,
+   become files in images/ too, downscaled and stored as WebP (see
+   paperlib.to_webp). A hosted figure that fails to download keeps a link to
+   arXiv.
 """
 
 import base64
@@ -30,6 +33,8 @@ from urllib.parse import quote
 from pathlib import Path
 
 from lxml import etree
+
+from paperlib import localize_figures, to_webp
 
 FILTER = Path(__file__).with_name("arxiv-html.lua")
 EXTS = {"svg+xml": "svg", "png": "png", "jpeg": "jpg", "gif": "gif", "webp": "webp"}
@@ -178,6 +183,13 @@ def main(html_path, body_path, images_dir, basename):
         (images_dir / name).write_bytes(data)
         return f"images/{quote(name)}"
 
+    def save_raster(mime, data):
+        """Save an inlined raster figure as WebP, or as-is if it will not decode."""
+        try:
+            return save("webp", to_webp(data))
+        except Exception:
+            return save(mime, data)
+
     article = extract_article(Path(html_path).read_text(encoding="utf-8"))
     article = extract_svgs(article, save)
     body = subprocess.run(
@@ -191,14 +203,11 @@ def main(html_path, body_path, images_dir, basename):
     # Raster figures arXiv inlines as base64 data URIs.
     body = re.sub(
         r"!\[[^\]]*\]\(data:image/([a-zA-Z0-9+.-]+);base64,([A-Za-z0-9+/=]+)\)",
-        lambda m: f"![]({save(m.group(1), base64.b64decode(m.group(2)))})",
+        lambda m: f"![]({save_raster(m.group(1), base64.b64decode(m.group(2)))})",
         body,
     )
-    body = re.sub(
-        r"(!\[[^\]]*\]\(|<img\s[^>]*?src=\")(\d{4}\.\d{4,5}v\d+/)",
-        r"\1https://arxiv.org/html/\2",
-        body,
-    )
+    # Raster figures arXiv hosts next to the rendering.
+    body, failed = localize_figures(body, lambda data: save("webp", data))
     Path(body_path).write_text(body, encoding="utf-8")
     # A picture pandoc dropped along with its surroundings (a title-page logo)
     # would be left as an unreferenced file.
@@ -207,6 +216,8 @@ def main(html_path, body_path, images_dir, basename):
             f.unlink()
     if invalid:
         print(f"warning: {invalid} of {counter} extracted SVGs are still not valid XML", file=sys.stderr)
+    if failed:
+        print(f"warning: {failed} figures could not be downloaded and still link to arXiv", file=sys.stderr)
 
 
 if __name__ == "__main__":
