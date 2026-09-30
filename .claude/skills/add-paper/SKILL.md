@@ -16,10 +16,15 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
      `scripts/arxiv-lookup.py --title "<title>"`. Confirm the match with Anton if the
      title differs. If it is not on arXiv, use the local PDF.
    - A paper marked `already in library` is not added again.
-2. **Choose the topic.** Read `library/README.md`, then the index of the most likely
-   folder, and compare with the papers already there. File it where Anton would look for
-   it. If nothing fits, propose a new folder (following the intended top level in
-   `AGENTS.md`) and wait for his answer before creating it. State the choice in one line.
+   - A paper marked `skipped earlier` was declined before (`catalog/skipped.yaml` has the
+     reason). Say so and don't add it unless Anton confirms; if he does, remove its entry
+     from `catalog/skipped.yaml` first.
+2. **Choose the topic.** Read `catalog/topics.yaml` (every folder with its scope), then
+   the index of the most likely folder, and compare with the papers already there. File it
+   where Anton would look for it, general before LLM-specific (see Topics in `AGENTS.md`).
+   If nothing fits, propose a new folder with a one-line scope and wait for his answer;
+   once he agrees, add it to `catalog/topics.yaml` before running the script, which refuses
+   undeclared folders. State the choice in one line.
 3. **Run the script.**
    - arXiv: `scripts/add-arxiv-paper.sh <id> <topic>`. If the output says it fell back to
      the PDF text layer, or the markdown looks like a conference template rather than the
@@ -59,8 +64,9 @@ and check once at the end. The add script retries when the export API rate-limit
 3. **Run step 1 for every entry**: one `arxiv-lookup.py` call for all the ids and URLs,
    plus a `--title` for each entry that has only a title.
 4. **Propose and wait.** Show one numbered table: entry, arXiv id or source, title,
-   proposed topic. Mark `already in library`, `new folder` and `unclear match`. Run no
-   script until Anton approves; he may change topics or skip entries by number.
+   proposed topic. Mark `already in library`, `skipped earlier`, `new folder` and
+   `unclear match`. Run no script until Anton approves; he may change topics or skip entries
+   by number. An entry he declines for good goes to `catalog/skipped.yaml` with his reason.
 5. **Add** the approved entries (steps 3–4 per paper), then rebuild and check once
    (step 5).
 6. **Drain the inbox.** Remove from `INBOX.txt` every entry that was added or was already

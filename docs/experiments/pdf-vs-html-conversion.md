@@ -66,6 +66,6 @@ Convert with `scripts/add-arxiv-paper.sh`'s pipeline: `curl arxiv.org/html/<id>`
 Sources:
 
 - Zep: `llm/memory/agent/`,
-- DPO and SimPO: `llm/alignment/preference-learning/`,
+- DPO and SimPO: `llm/post-training/preference-learning/`,
 
 as markdown under `library/` and as PDFs under `~/Yandex.Disk.localized/Papers/`.

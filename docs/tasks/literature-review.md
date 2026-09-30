@@ -8,10 +8,10 @@ the systems compare, without re-reading 150 papers.
 
 Mainly these folders, with the rest of `llm/` pulled in where relevant:
 
-- `memory/agent/`, `memory/parametric/`
-- `personalization/`, `user-modelling/`, `user-intelligence/`
-- `evaluation/benchmarks/`, `evaluation/methods/`
-- `alignment/preference-learning/`, `context/`, `safety-and-privacy/`
+- `memory/` (`agent/`, `parametric/`, `benchmarks/`)
+- `personalization/` (`methods/`, `user-modelling/`, `benchmarks/`), `text-analytics/`
+- `evaluation/methods/`, `uncertainty-and-hallucination/`
+- `post-training/preference-learning/`, `context/`, `safety-and-privacy/`
 
 ## Framing
 

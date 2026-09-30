@@ -10,7 +10,8 @@ Ids and URLs (abs/, pdf/, html/, with or without a version) go to the export
 API in one request. Each --title is a separate search that prints its best
 matches, since a title can match several papers. For every paper it prints the
 id and latest version, the publication date, the title, where it already is in
-the library if it is, and the abstract.
+the library if it is, whether it was skipped earlier (catalog/skipped.yaml) and
+why, and the abstract.
 """
 
 import re
@@ -19,7 +20,7 @@ import textwrap
 import time
 from urllib.parse import quote
 
-from paperlib import LIBRARY_DIR, fetch, library_arxiv_ids, parse_arxiv_entries
+from paperlib import LIBRARY_DIR, fetch, library_arxiv_ids, norm_title, parse_arxiv_entries, skipped_index
 
 API = "https://export.arxiv.org/api/query"
 ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(?:v\d+)?")
@@ -33,11 +34,15 @@ def query(params):
     return parse_arxiv_entries(data.decode("utf-8"))
 
 
-def show(arxiv_id, entry, in_library, abstract):
+def show(arxiv_id, entry, in_library, skipped, abstract):
     version = f"v{entry['version']}" if entry.get("version") else ""
     print(f"{arxiv_id}{version} | {entry['published']} | {entry['title']}")
     if arxiv_id in in_library:
         print(f"  already in library: {in_library[arxiv_id].relative_to(LIBRARY_DIR)}")
+    by_id, by_title = skipped
+    skip = by_id.get(arxiv_id) or by_title.get(norm_title(entry["title"]))
+    if skip:
+        print(f"  skipped earlier ({skip.get('date', '')}): {skip['reason']}")
     if abstract:
         print(textwrap.indent(textwrap.fill(entry["abstract"], 100), "  "))
     print()
@@ -59,6 +64,7 @@ def main(argv):
         sys.exit(__doc__)
 
     in_library = library_arxiv_ids()
+    skipped = skipped_index()
     failed = False
 
     if ids:
@@ -69,7 +75,7 @@ def main(argv):
         else:
             for arxiv_id in dict.fromkeys(ids):
                 if arxiv_id in entries:
-                    show(arxiv_id, entries[arxiv_id], in_library, abstract)
+                    show(arxiv_id, entries[arxiv_id], in_library, skipped, abstract)
                 else:
                     print(f"{arxiv_id} | not found on arXiv\n")
                     failed = True
@@ -91,7 +97,7 @@ def main(argv):
             failed = True
             continue
         for arxiv_id, entry in entries.items():
-            show(arxiv_id, entry, in_library, abstract)
+            show(arxiv_id, entry, in_library, skipped, abstract)
 
     sys.exit(1 if failed else 0)
 

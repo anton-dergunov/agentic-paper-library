@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Shared helpers for the library scripts: paths, frontmatter, arXiv metadata,
-downloads and figures.
+"""Shared helpers for the library scripts: paths, the catalog, frontmatter,
+arXiv metadata, downloads and figures.
 
 Also usable from the shell scripts:
 
@@ -30,6 +30,12 @@ LIBRARY_DIR = Path(os.environ.get("LIBRARY_DIR", REPO_ROOT / "library"))
 PDF_ROOT = Path(
     os.environ.get("PDF_ROOT", Path.home() / "Yandex.Disk.localized" / "Papers")
 )
+# Hand-maintained data the scripts read: the declared topic tree and the papers
+# deliberately not added.
+CATALOG_DIR = REPO_ROOT / "catalog"
+TOPICS_FILE = CATALOG_DIR / "topics.yaml"
+SKIPPED_FILE = CATALOG_DIR / "skipped.yaml"
+TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 
 # Field order in every paper's frontmatter. `summary` is written by whoever
 # files the paper (the add-paper skill), so the add scripts leave it empty.
@@ -131,6 +137,35 @@ def fetch(url, attempts=4):
         if attempt < attempts - 1:
             time.sleep(5 * (attempt + 1))
     return None
+
+
+def load_topics():
+    """The declared topic tree: {folder path: scope}, in file order."""
+    if not TOPICS_FILE.exists():
+        return {}
+    return yaml.safe_load(TOPICS_FILE.read_text(encoding="utf-8")) or {}
+
+
+def load_skipped():
+    """The list of papers deliberately not added (dicts with title, reason, ...)."""
+    if not SKIPPED_FILE.exists():
+        return []
+    return yaml.safe_load(SKIPPED_FILE.read_text(encoding="utf-8")) or []
+
+
+def norm_title(title):
+    """A title reduced to lowercase words, for matching across sources."""
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", str(title or "").lower()).split())
+
+
+def skipped_index():
+    """Map arXiv id and normalised title -> skip record, for lookups."""
+    by_id, by_title = {}, {}
+    for entry in load_skipped():
+        if entry.get("arxiv"):
+            by_id[str(entry["arxiv"])] = entry
+        by_title[norm_title(entry.get("title"))] = entry
+    return by_id, by_title
 
 
 def library_arxiv_ids():

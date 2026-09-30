@@ -5,6 +5,7 @@ discussing papers with a coding agent. The PDFs live outside the repository, in
 `~/Yandex.Disk.localized/Papers/`, at the same topic paths.
 
 - [library/](library/README.md): the papers, by topic
+- [catalog/](catalog/): the topic tree, and the papers deliberately not added
 - [docs/](docs/): how this setup was chosen, open tasks, experiments
 - [AGENTS.md](AGENTS.md): how an agent works here
 

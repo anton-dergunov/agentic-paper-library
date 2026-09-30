@@ -9,7 +9,12 @@ Checks:
 - every paper has its PDF at the mirrored path under PDF_ROOT, and every PDF
   there has a paper (README files aside);
 - every relative image link in a paper resolves, and every image is used;
-- no PDF is inside the repository.
+- no PDF is inside the repository;
+- catalog/topics.yaml declares well-formed folder paths whose parents are also
+  declared, every declared folder exists, and every paper is in a declared
+  folder;
+- every entry in catalog/skipped.yaml has a title and a reason, names a
+  declared topic if it names one, and is not a paper that is in the library.
 """
 
 import re
@@ -17,10 +22,50 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-from paperlib import LIBRARY_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, paper_files, pdf_path_for, read_paper
+from paperlib import (
+    LIBRARY_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, TOPIC_PATH,
+    load_skipped, load_topics, norm_title, paper_files, pdf_path_for, read_paper,
+)
 
 # Markdown images, and <img> tags (used inside the HTML tables of complex tables).
 IMAGE_LINK = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
+
+
+def check_catalog(papers):
+    problems = []
+    topics = load_topics()
+    if not topics:
+        return ["catalog/topics.yaml is missing or empty"]
+    for topic in topics:
+        if not TOPIC_PATH.match(topic):
+            problems.append(f"catalog/topics.yaml: malformed folder path `{topic}`")
+        elif "/" in topic and topic.rsplit("/", 1)[0] not in topics:
+            problems.append(f"catalog/topics.yaml: `{topic}` has an undeclared parent")
+        if not (LIBRARY_DIR / topic).is_dir():
+            problems.append(f"declared folder missing (run build-index.py): {topic}")
+
+    ids, titles = {}, {}
+    for md in papers:
+        topic = md.parent.relative_to(LIBRARY_DIR).as_posix()
+        if topic not in topics:
+            problems.append(f"{md.relative_to(LIBRARY_DIR)}: folder `{topic}` is not in catalog/topics.yaml")
+        meta = read_paper(md)[0]
+        if meta.get("arxiv"):
+            ids[str(meta["arxiv"])] = md
+        titles[norm_title(meta.get("title"))] = md
+
+    for i, entry in enumerate(load_skipped()):
+        name = f"catalog/skipped.yaml entry {i + 1}"
+        if not isinstance(entry, dict) or not entry.get("title") or not entry.get("reason"):
+            problems.append(f"{name}: needs a title and a reason")
+            continue
+        if entry.get("topic") and entry["topic"] not in topics:
+            problems.append(f"{name} ({entry['title']}): undeclared topic `{entry['topic']}`")
+        md = ids.get(str(entry.get("arxiv"))) or titles.get(norm_title(entry["title"]))
+        if md:
+            problems.append(f"{name} ({entry['title']}): skipped but in the library at "
+                            f"{md.relative_to(LIBRARY_DIR)}")
+    return problems
 
 
 def main():
@@ -62,6 +107,8 @@ def main():
         for pdf in PDF_ROOT.rglob("*.pdf"):
             if pdf not in expected:
                 problems.append(f"PDF without a paper: {pdf.relative_to(PDF_ROOT)}")
+
+    problems += check_catalog(papers)
 
     for pdf in REPO_ROOT.rglob("*.pdf"):
         if ".git" not in pdf.parts:

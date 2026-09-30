@@ -1,9 +1,9 @@
-# Proposed topic tree
+# Topic tree
 
 Phase 2 of [the library expansion](../library-expansion.md). This is the complete folder tree for
 `library/` (and the mirrored PDF tree), with the moves of papers already in the library. Folders
 are created now even when they are empty. The literature pass (phase 6) fills the thin ones.
-Nothing moves until Anton approves.
+Approved by Anton on 2026-09-30, with the decisions at the end.
 
 ## How it is organised
 
@@ -38,7 +38,7 @@ Nothing moves until Anton approves.
 
 "In library" counts the current 240 papers after the moves below. "From inventory" counts the
 papers marked `add` in [inventory.tsv](inventory.tsv); the `skip?` ones are not counted.
-Totals: 104 folders, 240 papers in the library and 859 to add.
+Totals: 108 folders, 240 papers in the library and 862 to add.
 
 ## The tree
 
@@ -47,7 +47,9 @@ Totals: 104 folders, 240 papers in the library and 859 to add.
 | Folder | Scope | In library | From inventory |
 |---|---|--:|--:|
 | `foundation-models/` | Model families and technical reports (GPT, LLaMA, PaLM, DeepSeek), and surveys of LLMs as a whole. |  | 18 |
-| `architecture/` | Transformer variants for language models — attention efficiency, long context, positional encoding, mixture of experts, state-space and recurrent alternatives, tokenization. |  | 41 |
+| `architecture/` (group) | Transformer variants for language models — mixture of experts, positional encoding, tokenization and byte-level models, other architectural changes. |  | 41 |
+| `architecture/efficient-attention-and-long-context/` | Sparse, linear and blockwise attention, and extending context length (Longformer, Reformer, ALiBi, Ring Attention). |  | 10 |
+| `architecture/recurrent-and-state-space/` | Recurrent and state-space alternatives to attention (Mamba, RWKV, RetNet, xLSTM, linear RNNs, hybrids). |  | 14 |
 | `pretraining/` | Pretraining data, data curation and mixtures, synthetic data and model collapse, scaling laws, how knowledge is acquired during pretraining. | 3 | 19 |
 | `prompting-and-in-context/` | Prompting, in-context learning, chain-of-thought prompting, and automatic prompt optimization. | 9 | 7 |
 | `context/` | Context engineering — selecting, compressing and ordering what goes into the context window, and how models use long contexts. | 11 |  |
@@ -67,7 +69,7 @@ Totals: 104 folders, 240 papers in the library and 859 to add.
 | `personalization/methods/` | Personalization methods — user profiles and representations, personalized alignment, surveys. | 20 | 4 |
 | `personalization/user-modelling/` | Inferring user state, traits and intent — theory of mind, personality, clarification seeking. | 11 |  |
 | `personalization/benchmarks/` | Benchmarks and datasets for personalization and user understanding. | 20 |  |
-| `behaviour/` | Model behaviour and character — instruction following, sycophancy, model specs and constitutions, steering. | 10 | 3 |
+| `behaviour/` | Model behaviour and character — instruction following, sycophancy, model specs and constitutions, steering. | 10 | 4 |
 | `uncertainty-and-hallucination/` | Hallucination, calibration, verbalized uncertainty, knowing what the model knows. | 4 | 9 |
 | `evaluation/` (group) | Evaluating LLMs. | 24 | 23 |
 | `evaluation/benchmarks/` | Benchmarks and datasets for LLM capabilities. |  | 14 |
@@ -137,8 +139,10 @@ Totals: 104 folders, 240 papers in the library and 859 to add.
 
 | Folder | Scope | In library | From inventory |
 |---|---|--:|--:|
-| `architectures/` | Core architectures — CNNs, RNNs and LSTMs, the original transformer, capsules, MLP alternatives. |  | 16 |
-| `training-and-optimization/` | Optimizers, schedules, normalization, initialization, regularization. |  | 44 |
+| `deep-learning/` (top level) | papers spanning the area |  | 1 |
+| `architectures/` | Core architectures and their building blocks — CNNs, RNNs and LSTMs, the original transformer, capsules, MLP alternatives, activation functions. |  | 19 |
+| `optimizers-and-schedules/` | Optimizers, learning-rate and batch-size schedules, hyperparameter transfer, curricula, training diagnostics. |  | 21 |
+| `normalization-and-regularization/` | Normalization layers, initialization, dropout, weight decay, label smoothing. |  | 19 |
 | `theory/` | Generalization, double descent, lottery tickets, grokking, loss landscapes, implicit regularization. |  | 19 |
 | `efficiency-and-compression/` | Knowledge distillation, pruning and quantization of neural networks in general. |  | 9 |
 | `uncertainty-and-robustness/` | Bayesian deep learning, ensembles, out-of-distribution detection, adversarial examples. |  | 8 |
@@ -231,6 +235,12 @@ Totals: 104 folders, 240 papers in the library and 859 to add.
 |---|---|--:|--:|
 | `research-practice/` | (no subfolders) |  | 12 |
 
+### `curiosities/`: Papers kept for fun or personal interest, outside the professional areas.
+
+| Folder | Scope | In library | From inventory |
+|---|---|--:|--:|
+| `curiosities/` | (no subfolders) |  | 2 |
+
 ## Moves of papers already in the library
 
 ### Folder changes
@@ -277,16 +287,16 @@ Totals: 104 folders, 240 papers in the library and 859 to add.
 
 After these moves, `llm/behaviour/` keeps instruction following, sycophancy, model specs and constitutions, the instruction hierarchy, deliberative alignment and activation steering.
 
-## Open questions
+## Decisions (2026-09-30)
 
-1. **Split the two biggest folders now, or after the literature pass?**
-   - `deep-learning/training-and-optimization/` would get 44 papers. It splits naturally into
-     `optimizers-and-schedules/` (Adam, AdamW, LR schedules, Muon, Lion) and
-     `normalization-and-regularization/` (batch/layer norm, initialization, dropout, weight
-     decay, label smoothing).
-   - `llm/architecture/` would get 41. It splits naturally into
-     `efficient-attention-and-long-context/` and `recurrent-and-state-space/` (Mamba, RWKV, xLSTM,
-     RetNet), with MoE, positional encoding and tokenization staying at the top.
-   - I'd split both now. Each half is still 15–25 papers, and the literature pass will add more.
-2. **The original transformer paper**: `deep-learning/architectures/` (proposed, next to
-   ResNet and LSTM) or `llm/architecture/`?
+1. **The two biggest folders are split now.**
+   - `deep-learning/training-and-optimization/` becomes `optimizers-and-schedules/` and
+     `normalization-and-regularization/`. The activation-function papers go to
+     `architectures/`.
+   - `llm/architecture/` gets `efficient-attention-and-long-context/` and
+     `recurrent-and-state-space/`. MoE, positional encoding, tokenization and other variants stay
+     at its top level.
+2. **"Attention Is All You Need"** stays in `deep-learning/architectures/`.
+3. **`curiosities/`** is a new area for papers kept for fun or personal interest outside the
+   professional areas. It starts with the two fun reads kept from the review in
+   [inventory.md](inventory.md).

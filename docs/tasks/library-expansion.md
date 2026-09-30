@@ -16,11 +16,11 @@ It runs over many sessions. This file is the plan and the progress record. Its o
 ## Status
 
 - [x] 1. Inventory of existing papers: `library-expansion/inventory.tsv`, `inventory.md`
-  (2026-09-30). 981 papers: 859 to add, 88 `skip?` for Anton, 6 skipped, 28 already in the library.
-- [ ] 2. Structure proposal, approved by Anton: `library-expansion/structure.md`. Proposed
-  2026-09-30, waiting for approval together with the `skip?` list in `inventory.md`.
-- [ ] 3. Tooling for a declared tree: `catalog/`, scripts, `AGENTS.md`, skills
-- [ ] 4. Existing papers moved into the new tree
+  (2026-09-30). 981 papers: 862 to add, 91 skipped, 28 already in the library.
+- [x] 2. Structure, approved by Anton: `library-expansion/structure.md` (2026-09-30). 108
+  folders; the review of weak papers is recorded in `inventory.md`.
+- [x] 3. Tooling for a declared tree: `catalog/`, scripts, `AGENTS.md`, skills (2026-09-30)
+- [x] 4. Existing papers moved into the new tree (2026-09-30): 125 moves, five old folders retired
 - [ ] 5. Inventory papers added, one batch per area (list the batches here as they are done)
 - [ ] 6. Literature pass, one reading list per area (list the areas here as they are done)
 - [ ] 7. Wrap-up
@@ -43,6 +43,7 @@ It runs over many sessions. This file is the plan and the progress record. Its o
   - primary folders get 30–60 papers each: LLM evaluation, post-training, search and ranking,
     recsys, experimentation;
   - the others get 5–15 seminal and recent papers.
+- **Papers kept for fun** go in `curiosities/`, outside the professional areas.
 - **The tree is declared, not grown.** All folders are created up front, even empty ones, from
   `catalog/topics.yaml`.
 - **Storage is not a constraint.** GitHub allows 10 GB per repo, and Yandex Disk has room for far
