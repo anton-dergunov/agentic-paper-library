@@ -16,10 +16,10 @@ import datetime
 import io
 import os
 import re
+import subprocess
 import sys
+import tempfile
 import time
-import urllib.error
-import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -110,21 +110,24 @@ def parse_arxiv_entries(xml_text):
 def fetch(url, attempts=4):
     """GET a URL and return its body as bytes, or None on 404 or repeated failure.
 
-    arXiv answers throttled requests with errors or an empty body, so both are
-    retried with backoff.
+    Downloads go through curl, like the add scripts: arXiv's HTML server
+    answers Python's own HTTP client with 406 for anything not already in its
+    cache. Throttled requests (errors or an empty body) are retried with
+    backoff.
     """
-    request = urllib.request.Request(url, headers={"User-Agent": "papers-library/1.0"})
     for attempt in range(attempts):
-        try:
-            with urllib.request.urlopen(request, timeout=60) as r:
-                data = r.read()
-            if data:
-                return data
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
+        with tempfile.NamedTemporaryFile() as out:
+            result = subprocess.run(
+                ["curl", "-sL", "--max-time", "60", "-o", out.name, "-w", "%{http_code}", url],
+                capture_output=True, text=True,
+            )
+            status = result.stdout.strip()
+            if status == "404":
                 return None
-        except (urllib.error.URLError, TimeoutError):
-            pass
+            if status == "200":
+                data = Path(out.name).read_bytes()
+                if data:
+                    return data
         if attempt < attempts - 1:
             time.sleep(5 * (attempt + 1))
     return None
