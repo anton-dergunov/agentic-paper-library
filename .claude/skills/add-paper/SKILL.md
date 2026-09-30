@@ -1,6 +1,6 @@
 ---
 name: add-paper
-description: Add a paper to the library — from an arXiv link or id, a local PDF, or a paper in the unconverted Papers_old/ folder named by title. Picks the topic folder, runs the add script, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF", "convert <title> from my old papers".
+description: Add a paper to the library — from an arXiv link or id, a local PDF, or a paper in the unconverted Papers_old/ folder named by title. Picks the topic folder, runs the add script, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF", "convert <title> from my old papers". Also drains INBOX.txt: "add papers from my inbox", "process the inbox", "/add-paper inbox".
 ---
 
 # /add-paper — add a paper to the library
@@ -43,3 +43,26 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
 
 Run steps 1–4 per paper, then rebuild and check once at the end. Leave a few seconds
 between arXiv calls; the export API rate-limits.
+
+## From the inbox
+
+`INBOX.txt` at the repo root is where Anton collects papers to add later, pasted raw.
+
+1. **Resolve.** `/add-paper inbox`, "my inbox", or a bare `/add-paper` while `INBOX.txt`
+   is the file open in the editor all mean `INBOX.txt`. Read it and say how many entries
+   it holds. If it is empty, say so and stop.
+2. **Split into entries.** Blank lines separate entries. An entry is an arXiv URL or id, a
+   title, a PDF path, or a URL with its title on the next line. Any other words in an
+   entry (e.g. "→ llm/memory") are Anton's notes: use them as a topic hint. Go by meaning
+   when the format is loose.
+3. **Run step 1 for every entry**, including the duplicate check.
+4. **Propose and wait.** Show one numbered table: entry, arXiv id or source, title,
+   proposed topic. Mark `already in library`, `new folder` and `unclear match`. Run no
+   script until Anton approves; he may change topics or skip entries by number.
+5. **Add** the approved entries (steps 3–4 per paper), then rebuild and check once
+   (step 5).
+6. **Drain the inbox.** Remove from `INBOX.txt` every entry that was added or was already
+   in the library. Leave skipped and failed entries exactly as they were, and do not
+   rewrite the rest of the file.
+7. **Report** as in step 6, plus which entries are still in the inbox and why. One commit
+   message covers the whole run, `INBOX.txt` included.
