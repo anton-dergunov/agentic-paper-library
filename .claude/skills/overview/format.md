@@ -25,9 +25,17 @@ Anton's verdicts on earlier drafts:
 - Claude's 2026-09-30 note for "Learning to Discover at Test Time" failed. It was about 4×
   too long, full of hyperparameters, provider names, costs, numbers and page references,
   and too technical to read before the paper.
+- The second try was the right length, but the top half was still weak. The Setting listed
+  technical preconditions instead of the kind of problem. Why it works read as a wall of
+  text, and its bold lead-ins were claims ("the model learns from its rare successes")
+  instead of naming the design choice. The web-chat v2 note did these better with no
+  rules, so the examples below come from it.
 
 Aim for a clear structure and real insight, in few words:
 
+- **Punchy.** One idea per bullet and one line per bullet where possible. If a bullet runs
+  past two lines, cut it. Bold lead-ins name *the thing* (the design choice, the step, the
+  kind of evidence), and the text after them says what it does.
 - **One angle per section, each fact once.** The abstract callout is the only summary.
 - **Concrete means plain mechanism, not implementation detail.** "The model writes code, a
   checker scores it, and the model is nudged toward its best attempts", not "sample 512
@@ -61,9 +69,10 @@ successes".
 
 ### Diagrams
 
-Use a mermaid `flowchart LR` when the method is a loop or a pipeline: 4–5 nodes with
-two-line labels (`<br/>`), so it renders wide. Describe steps, not applications. Don't try
-to verify the rendering; Anton will say if it needs redrawing.
+Use a mermaid `flowchart LR` when the method is a loop or a pipeline: at most 5 nodes, one
+loop and one exit to the result, with two-line labels (`<br/>`) so it renders wide. Describe
+steps, not applications. Don't try to verify the rendering; Anton will say if it needs
+redrawing. Reference:
 
 ```mermaid
 flowchart LR
@@ -128,24 +137,24 @@ No H1, because Obsidian shows the file name. It starts with the callout:
 
 ```markdown
 > [!abstract]
-> <1–2 plain sentences, written for Anton: the problem and the idea>
+> <one punchy sentence, at most about 20 words: the idea and what it is for>
 ```
 
 Write the callout fresh. Don't copy the library `summary`, which is written for agents.
 No method name (it's in the title and aliases), no model names, no jargon. Example: "An LLM
-keeps learning while it works on one hard problem, training on its own best attempts
-instead of staying frozen, to find a single solution better than anything known."
+keeps learning while it solves one hard problem, training on its own best attempts instead
+of staying frozen."
 
 Then come three `##` sections. Anton adds his own `##` sections later.
 
 - `## Overview`, with the `###` subsections for the paper's type (next table). Keep every
   subsection of the type; if the paper gives nothing for one, say so in one line.
-- `## Questions`: 3–5 conceptual questions that deepen understanding: what exactly is
+- `## Questions`: 3–5 conceptual questions, each at most about 15 words: what exactly is
   updated, why this works, where it would break, how it compares to X. No numbers, no audit
   of the experiments.
-- `## Follow-ups`, with two bold-led lists, no checkboxes.
-  - **Read**: 2–4 papers or concepts, each with a few words on why. Closest work first.
-    Mark papers already in the library.
+- `## Follow-ups`, with two bold-led lists, no checkboxes, one line per item.
+  - **Read**: 2–4 papers or concepts, each a link plus a few words on why ("closest
+    concurrent work"). Closest work first. Mark papers already in the library.
   - **Try**: 1–2 simple hands-on ideas for building intuition, such as running the repo's
     simplest example or a small toy notebook. No parameter choices. Leave the list out if
     nothing practical applies.
@@ -156,10 +165,17 @@ Every type follows the same length and plainness rules. Each subsection is a few
 or a short list.
 
 These names mean the same in every type:
-- **Setting**: 1–3 sentences in plain words on which kind of problem the paper targets and
-  where it doesn't apply. No reward definitions or formulas.
-- **Evidence**: 2–4 short bullets on how solid the claims are: external validation, fair
-  baselines, ablations, what is missing. No tables.
+- **Setting**: one punchy sentence in the paper's own framing: the kind of problem and what
+  success means there, with a few everyday examples in passing. Optionally one more short
+  sentence for a key requirement, in everyday words ("needs an automatic checker that
+  scores each attempt"). Don't state technical preconditions ("continuous rewards",
+  "pass/fail rewards"), since they read as jargon without the paper. Example: "Hard
+  discovery problems (a new math bound, a record GPU kernel, a winning contest program)
+  where you want **one breakthrough**, not good average behaviour."
+- **Evidence**: 2–4 one-line bullets with a bold label naming the kind of evidence, then
+  the fact: "**Externally checked:** organisers and domain experts reviewed the
+  solutions", "**Thin ablations:** one task, one run each". Limits of the method go here
+  too, in everyday words. No tables.
 - **Novelty**: 3–5 one-line bullets of the form "vs [[X]]: the difference", from the paper's
   own related work, concurrent work marked. Optionally one line on the broader trend the
   paper names.
@@ -181,17 +197,21 @@ For a mixed paper, use the main type and add one subsection for the other part.
 
 #### method
 
-- **Motivation**: one short paragraph on what existing approaches do and where they fall
-  short, with links, then the key insight in one line. Level wanted: "Best-of-N treats
-  every attempt as independent: if attempt #37 was a near-miracle, attempt #38 learns
-  nothing from it."
-- **Method**: 4–6 plain numbered steps and the diagram. The mechanism only; the reasons go
-  in the next subsection.
-- **Why it works**: the most important section. One bold-led item per key idea, 2–3
-  sentences each, intuition or analogy first, saying which problem it solves. Written for
-  understanding, not completeness.
-- **Applications and results**: a table with the domain, the task in plain words (what
-  was being solved, in half a sentence), and a qualitative outcome ("beat the best human
+- **Motivation**: 2–3 sentences on what existing approaches do and the gap, with links,
+  then the key insight in one bold-led line. Level wanted: "Search around a frozen model
+  wastes its best attempts: if attempt #37 was a near-miracle, attempt #38 learns nothing
+  from it."
+- **Method**: one lead-in line, then 4–6 numbered steps, each a bold verb and one line:
+  "**Sample** candidates from the current model (base + LoRA adapter)", "**Score** each
+  with the checker", "**Update** the adapter toward the best ones". Then the diagram. The
+  mechanism only; the reasons go in the next subsection.
+- **Why it works**: 3–4 bullets, one per key design choice. The bold lead-in *names* the
+  choice as the paper does (linked if it is a concept). Then one or two sentences say what
+  it does and which problem it fixes. No paragraphs. Example: "**Entropic utility
+  loss** ([[Risk-sensitive RL]]): exponentially up-weights the best attempts, so learning
+  concentrates on rare breakthroughs instead of the average."
+- **Applications and results**: a table with the domain, the task in everyday words (what
+  was being built or optimised, in half a sentence), and a qualitative outcome ("beat the best human
   submission", "matched the known best, no gain"). At most one number per row, with its
   baseline.
 

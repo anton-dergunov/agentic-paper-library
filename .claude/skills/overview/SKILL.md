@@ -42,13 +42,15 @@ uses. Reorganising the vault means changing only this line.
 7. **Write `notes/<stem>.md`**, the agent's memory, in the format in `notes/README.md`: a
    digest of the mechanism and key numbers, and the related library papers. Detail belongs
    here, not in the vault note. If the file exists, merge and keep its Q&A.
-8. **Report in two parts only:**
+8. **Report.** The whole reply is exactly these two parts, with nothing before or after:
    - `I've written the overview note: [<stem>](<path>)`
    - A short commit message for the repo side (`type` field and `notes/<stem>.md`): a
      one-line summary and one short line of detail. Never commit.
 
-   Don't restate the type, the memory file or what you did. Add one line only if something
-   is really wrong (for example `source: pdf-text`, so the numbers may be unreliable).
+   Never mention what already existed or was skipped (the type was already set, the memory
+   file already had a digest), the type you chose, or what you did. Add one line only if
+   something is really wrong (for example `source: pdf-text`, so the numbers may be
+   unreliable).
 
 **Out of scope:** rebuilding indexes, `check-library.py`, `git status`, `docs/` and the
 inventory, the web, subagents, and career or org files. Untracked papers and empty summaries
