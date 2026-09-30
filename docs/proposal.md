@@ -53,7 +53,7 @@ the Claude app on iPad or Android.
 | Markdown (for the agent) | `~/papers/library/<topic path>/<Title>.md` + `images/` | Converted from arXiv HTML, which is measurably better than PDF text for maths and tables (`docs/experiments/pdf-vs-html-conversion.md`). Same path as the PDF. |
 | Indexes | a generated `README.md` per folder | Lets the agent (and me) find papers without reading them all. |
 | Workflow | `AGENTS.md`, `scripts/`, `.claude/skills/` | Adding, moving and checking papers. |
-| Paper notes | Obsidian `ML & AI/Papers/<Title>.md` (will move) | Overview plus what I took from the paper. Named after the library file; flat, grouped by a `topic` property. |
+| Paper notes | Obsidian `10 Knowledge/ML & AI/Papers/<Title>.md` | Overview plus what I took from the paper. Named after the library file; flat, grouped by a `topic` property. |
 | Agent memory | `~/papers/notes/<Title>.md` | What the agent learned about a paper (digest, related papers, Q&A), so later sessions don't re-read it. |
 | Conversations | Claude Code session transcripts | The durable part goes into Obsidian at the end of a session. |
 | Backlog | Yandex Disk `Papers_old/` | 546 older PDFs, converted one at a time when picked up. Temporary. |

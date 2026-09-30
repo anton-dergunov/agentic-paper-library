@@ -13,7 +13,7 @@ other work. Then he decides whether to read the paper, and grows the note himsel
 **Be fast and lightweight.** Anton runs this on many papers. Aim for a couple of minutes and
 a handful of tool calls. Do only the steps below, nothing around them.
 
-**Where notes go.** New paper notes are written to `~/obsidian/ML & AI/Papers/<stem>.md`,
+**Where notes go.** New paper notes are written to `~/obsidian/10 Knowledge/ML & AI/Papers/<stem>.md`,
 where `<stem>` is the paper's file name in `library/`. This is the only vault path the skill
 uses. Reorganising the vault means changing only this line.
 
@@ -23,7 +23,7 @@ uses. Reorganising the vault means changing only this line.
    (or `scripts/arxiv-lookup.py <id>` for an arXiv id). Several matches: ask. None: stop and
    offer `/add-paper`.
 2. **Check two files, nothing else.**
-   - `~/obsidian/ML & AI/Papers/<stem>.md`: if it exists, don't overwrite it; say so in one
+   - `~/obsidian/10 Knowledge/ML & AI/Papers/<stem>.md`: if it exists, don't overwrite it; say so in one
      line and ask whether to write `<stem> - overview.md` instead or stop. Don't search
      for other versions or variants of the note.
    - `notes/<stem>.md`: if it exists, read it and reuse it.
