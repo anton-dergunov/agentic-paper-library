@@ -1,66 +1,78 @@
 # Paper overview note: format
 
-The note is about one paper. It is not about the general approach or the field: those go in
-concept notes, which the paper note links to. Anton reads it in Obsidian and in VS Code, so
-it must render well in both.
+## Who reads it
+
+Anton reads this note **before** the paper, in 3–5 minutes, to get the intuition and decide
+whether to read further. He is an ML engineer and knows the basics. He reads papers to
+extend his knowledge, so the note must teach the idea, not summarise the paper's details.
+
+- **Length:** about 600–900 words of body. If it would take longer than 5 minutes to read,
+  it is too long.
+- **Test every sentence:** would Anton understand it without having read the paper? If
+  not, explain it in plain words or cut it. A note that needs the paper to be understood
+  has failed.
+- **Intuition first, always.** Plain language, an analogy or a small picture before any
+  term. Details are for the paper and for `notes/<stem>.md`, not this note.
+
+The note is about one paper. The general approach or field goes in concept notes, which
+this note links to. It must render well in Obsidian and VS Code.
 
 ## What makes a good overview
 
-Anton's verdict on earlier drafts:
+Anton's verdicts on earlier drafts:
 - ChatGPT's were clear and well structured, but repetitive and shallow.
 - Claude's had the depth and nuance, but were dense and harder to read.
+- Claude's 2026-09-30 note for "Learning to Discover at Test Time" failed. It was about 4×
+  too long, full of hyperparameters, provider names, costs, numbers and page references,
+  and too technical to read before the paper.
 
-Aim for Claude's depth with clean structure:
+Aim for a clear structure and real insight, in few words:
 
-- **One angle per section, each fact once.** Don't restate the summary in "Why it matters",
-  or the method in "Novelty". The abstract callout is the only summary. If a fact belongs in
-  two sections, put it in one and link to the other.
-- **Concrete over abstract.** "Sample N candidate programs from gpt-oss-120b with a LoRA
-  adapter" rather than "generate candidates". Name the model, the data, the reward, the
-  signal.
-- **No unexplained names.** Every method, algorithm or benchmark the note mentions gets a
-  link or a short gloss at first use. "A [[PUCT]]-style rule (the UCB exploration bonus from
-  AlphaZero)", not a bare "PUCT-style strategy".
-- **Say why, not only what.** Papers publish what worked, rarely why. "Why it works" (or
-  its equivalent for the type) is the most valuable part of the note. Tie each design choice
-  to the problem it solves.
+- **One angle per section, each fact once.** The abstract callout is the only summary.
+- **Concrete means plain mechanism, not implementation detail.** "The model writes code, a
+  checker scores it, and the model is nudged toward its best attempts", not "sample 512
+  rollouts from gpt-oss-120b with a rank-32 LoRA adapter on Tinker".
+- **Numbers: default to none.** Keep a number only if the note would be worse without it,
+  and then give its baseline ("about 2× faster than the best human kernel"). Never include
+  hyperparameters, batch sizes, ranks, step counts, costs, API or provider names, or exact
+  scores. A model name only when the model itself is the point (e.g. "works with an open
+  model, where prior results needed closed ones").
+- **No page, table, figure or equation references.** They pull the note toward detail; the
+  paper is there for that.
+- **No unexplained names.** Every method or benchmark gets a link or a few plain words at
+  first use.
 - **Answer questions; don't raise them.** A reader shouldn't finish a sentence with a new
-  question. For example, "RL on a single problem" needs one clause saying why a single
-  problem. If a term would puzzle someone new to the area, unpack it in place.
-- **Background only where it's needed.** Give enough context to follow the paper (Anton
-  learns from these notes), and no overview of the field.
-- **Numbers need a baseline.** "About 2× faster than the best human kernel" is useful. "An
-  error of 0.38 → 0.36" is not, unless the note says what the scale means and what the
-  previous best was.
-- **Claims come from the paper.** Related work and trends are taken from the paper itself.
-  Anything added from general knowledge is marked "(not from the paper)", because training
-  knowledge may be stale.
+  question. If a term would puzzle someone new to the area, unpack it in place or leave it
+  out.
+- **Say why, not only what.** Tie each design choice to the problem it solves, in words.
+- **Background only where needed**, and no overview of the field.
+- **Claims come from the paper.** Anything from general knowledge is marked "(not from the
+  paper)".
 - **Plain, readable prose.** Short paragraphs, bold lead-ins, bullets where items are
-  parallel, and nested bullets rather than long compound sentences. Don't use `---`
-  separators between sections.
-- **Pages.** Put "(p. 6)" after anything worth checking in the PDF: the main equation, a
-  key table, the ablation. Library headings carry the page each section starts on.
+  parallel. No `---` separators.
 
 ### Math
 
-Anton likes maths but remembers intuition, not formulas. Papers often write a simple idea as
-a huge formula. Include an equation only when it carries the idea, and then:
-
-1. rewrite it in clean, reduced notation, dropping indices and terms that don't matter for
-   the idea;
-2. label each part in plain words, as a bullet per term or with `\underbrace`;
-3. give the intuition in one sentence;
-4. when it helps, add a tiny numeric example: "with rewards 1, 2 and 10, the weights become
-   …, so the 10 dominates";
-5. cite the paper's equation number and page, so the full form can be found.
-
-Never paste a large formula as-is.
+Anton likes maths but remembers intuition, not formulas. Use at most one small formula, and
+only when it makes the idea click. Write it in reduced notation, then say in one sentence
+what it means. No numeric worked examples. Usually words are enough: "the loss
+exponentially up-weights the best attempts, so the model learns mostly from its rare
+successes".
 
 ### Diagrams
 
-Use a mermaid `flowchart` when the method is a loop or a pipeline. Keep node labels short,
-describe the step rather than an application ("External verifier → reward", not the list of
-verifiers), and make each arrow a real data flow.
+Use a mermaid `flowchart LR` when the method is a loop or a pipeline: 4–5 nodes with
+two-line labels (`<br/>`), so it renders wide. Describe steps, not applications. Don't try
+to verify the rendering; Anton will say if it needs redrawing.
+
+```mermaid
+flowchart LR
+    P[Single target problem] --> S[Sample candidates<br/>from LLM + LoRA]
+    S --> E[External verifier<br/>scores each one]
+    E --> U[Update LoRA<br/>toward the best]
+    U --> S
+    E --> B[Best-so-far solution]
+```
 
 ## Frontmatter
 
@@ -98,67 +110,62 @@ reproduce: false
 - `affiliations`: only if the paper states them. Short names, deduplicated.
 - `year`: from `published`.
 - `type`: the same value as in the library frontmatter (see the table below).
-- `topic`: the paper's library folder path. Bases group notes by it, so the notes need no
-  topic folders.
-- `links`: a plain list of URLs, without types, since the domain says what each one is.
-  Include the arXiv page and the code or project URLs printed in the paper. Anton adds more
-  by hand.
-- `concepts`: 3–6 links to the ideas the paper is *about*: the edges it adds to the graph.
-  Not tools it merely uses.
-- `papers`: links to the 2–5 closest papers. For a paper in the library, link its stem, so
-  the link resolves once that paper has a note. Otherwise use its short common name. If the
-  vault already has a note for the paper under another name, use that name.
-- `tags`: lowercase and hyphenated. List the specific tools, models, datasets and domains
-  the paper touches (`lora`, `gpt-oss`, `gpu-kernels`), so that an agent can search for
-  them. Never `paper`, never something every note would carry (`ml`, `llm`), and never
-  vague umbrellas (`ai-for-science`). Don't repeat anything already in `concepts`.
-- The checkboxes all start `false`. Anton sets them:
-  - `read`: he has read the paper itself.
-  - `analyzed`: he has worked through it in depth, beyond this overview.
-  - `queued`: he wants to read it properly.
-  - `revisit`: he wants to come back to it.
-  - `reproduce`: he wants to try it hands-on.
+- `topic`: the paper's library folder path.
+- `links`: a plain list of URLs: the arXiv page and the code or project URLs printed in
+  the paper.
+- `concepts`: 3–6 links to the ideas the paper is *about*, not tools it merely uses.
+- `papers`: links to the 2–5 closest papers. For a paper in the library, link its stem.
+  Otherwise use its short common name, or the name of an existing vault note for it.
+- `tags`: lowercase and hyphenated: the specific tools, models, datasets and domains the
+  paper touches, so an agent can search for them. The frontmatter is the place for these
+  details, not the body. Never `paper`, never something every note would carry, never
+  vague umbrellas (`ai-for-science`), and nothing already in `concepts`.
+- The checkboxes all start `false`; Anton sets them.
 
 ## Body
 
-The body has no H1, because Obsidian shows the file name. It starts with the callout:
+No H1, because Obsidian shows the file name. It starts with the callout:
 
 ```markdown
 > [!abstract]
-> <the library `summary`, copied verbatim>
+> <1–2 plain sentences, written for Anton: the problem and the idea>
 ```
 
-Then come three `##` sections. Anton adds his own `##` sections later, beside these.
+Write the callout fresh. Don't copy the library `summary`, which is written for agents.
+No method name (it's in the title and aliases), no model names, no jargon. Example: "An LLM
+keeps learning while it works on one hard problem, training on its own best attempts
+instead of staying frozen, to find a single solution better than anything known."
+
+Then come three `##` sections. Anton adds his own `##` sections later.
 
 - `## Overview`, with the `###` subsections for the paper's type (next table). Keep every
-  subsection of the type. If the paper gives nothing for one, say so in one line ("No
-  ablations; all results are self-reported."), because that is information too.
-- `## Questions`: 3–6 open questions for exploring this paper with the agent. Make them
-  specific to its mechanism and claims: what exactly is updated, what it costs, which
-  component the gain comes from, where it would break. Leave out generic ones such as "does
-  it generalise?" unless the question names the case.
-- `## Follow-ups`, with two bold-led lists. No checkboxes.
-  - **Read**: papers and concepts to read next, each with why, and in order. Start with the
-    closest prior and concurrent work, then prerequisites. Mark papers already in the
-    library.
-  - **Try**: concrete hands-on steps, such as an entry point in the paper's repo, a toy
-    version to build in a notebook, and what to observe. Leave this list out when nothing
-    practical applies.
+  subsection of the type; if the paper gives nothing for one, say so in one line.
+- `## Questions`: 3–5 conceptual questions that deepen understanding: what exactly is
+  updated, why this works, where it would break, how it compares to X. No numbers, no audit
+  of the experiments.
+- `## Follow-ups`, with two bold-led lists, no checkboxes.
+  - **Read**: 2–4 papers or concepts, each with a few words on why. Closest work first.
+    Mark papers already in the library.
+  - **Try**: 1–2 simple hands-on ideas for building intuition, such as running the repo's
+    simplest example or a small toy notebook. No parameter choices. Leave the list out if
+    nothing practical applies.
 
 ### Sections by type
 
-These names mean the same thing in every type:
-- **Setting**: which problems the paper targets and what it assumes, for example a verifier
-  with a continuous reward. Say where it does not apply.
-- **Evidence**: how solid the claims are. External validation, ablations, baselines, cost,
-  vendor-reported or single-benchmark results, and what is missing.
-- **Novelty**: nested bullets of the form "vs [[X]]: the difference", taken from the
-  paper's own related work, with concurrent work marked. End with one line on the broader
-  trend if the paper names one.
-- **Concepts**: always last. The prerequisites to learn, each as a link plus a one-line
-  gloss. Skip what Anton clearly knows, such as LoRA or transformers, and anything with a
-  concept note in the vault. This list may overlap the frontmatter `concepts` only where a
-  gloss is needed.
+Every type follows the same length and plainness rules. Each subsection is a few sentences
+or a short list.
+
+These names mean the same in every type:
+- **Setting**: 1–3 sentences in plain words on which kind of problem the paper targets and
+  where it doesn't apply. No reward definitions or formulas.
+- **Evidence**: 2–4 short bullets on how solid the claims are: external validation, fair
+  baselines, ablations, what is missing. No tables.
+- **Novelty**: 3–5 one-line bullets of the form "vs [[X]]: the difference", from the paper's
+  own related work, concurrent work marked. Optionally one line on the broader trend the
+  paper names.
+- **Concepts**: always last. Prerequisites as a link plus a one-line plain gloss, no
+  formulas. Skip what Anton clearly knows (LoRA, transformers, anything with a concept note
+  in the vault).
 
 | Type | The paper… | `###` subsections of Overview, in order |
 |---|---|---|
@@ -170,88 +177,72 @@ These names mean the same thing in every type:
 | `position` | argues a view | Claim · Arguments · Counterarguments · Implications · Novelty · Concepts |
 | `theory` | proves results | Setting · Result · Proof idea · Implications · Novelty · Concepts |
 
-For a mixed paper, such as a method that also introduces a benchmark, use the main type and
-add one subsection for the other part.
+For a mixed paper, use the main type and add one subsection for the other part.
 
 #### method
 
-- **Motivation**: what existing approaches do and where they fall short, with just enough
-  background to follow. Link each approach named (Best-of-N, evolutionary search, MCTS).
-  End with the key insight in one line. Example of the level wanted: "Best-of-N treats
+- **Motivation**: one short paragraph on what existing approaches do and where they fall
+  short, with links, then the key insight in one line. Level wanted: "Best-of-N treats
   every attempt as independent: if attempt #37 was a near-miracle, attempt #38 learns
   nothing from it."
-- **Method**: numbered, concrete steps, a diagram if the method is a loop or pipeline, and
-  pages. Keep it to the mechanism; the reasons go in the next subsection.
-- **Why it works**: one bold-led item per key design choice, each saying the problem it
-  solves. The central equation goes here, following the maths rules.
-- **Applications and results**: one entry per application or benchmark.
-  - **What the task is**, in one or two sentences: "AtCoder Heuristic Contests: open-ended
-    optimisation problems, such as scheduling, scored by a numeric objective rather than
-    pass/fail".
-  - **How the method was applied**: what was generated and what the reward or verifier was.
-  - **The result against a baseline.**
-  Use a table only if each cell stays short.
+- **Method**: 4–6 plain numbered steps and the diagram. The mechanism only; the reasons go
+  in the next subsection.
+- **Why it works**: the most important section. One bold-led item per key idea, 2–3
+  sentences each, intuition or analogy first, saying which problem it solves. Written for
+  understanding, not completeness.
+- **Applications and results**: a table with the domain, the task in plain words (what
+  was being solved, in half a sentence), and a qualitative outcome ("beat the best human
+  submission", "matched the known best, no gain"). At most one number per row, with its
+  baseline.
 
 #### survey
 
-- **Scope**: what is covered and what is excluded, the date range and the literature
-  cutoff.
-- **Taxonomy**: the survey's organising axes, as a nested list or a table. List the
-  reviewed methods under each branch, as links, with one line on each important one. Mark
-  those already in the library.
-- **Findings**: what the field agrees on, the main trade-offs, and the trends the survey
-  identifies.
+- **Scope**: what is covered, and roughly when the literature stops.
+- **Taxonomy**: the organising axes as a short nested list, with the key methods linked.
+- **Findings**: what the field agrees on and the main trade-offs.
 - **Open problems**: as the authors state them.
-- **Coverage**: what is missing or stale given the cutoff. If you add later developments
-  from general knowledge, mark them "(not from the paper)".
-- In Follow-ups, **Read** lists the primary papers worth reading from the survey.
+- **Coverage**: what is missing or stale; general knowledge is marked "(not from the
+  paper)".
 
 #### benchmark
 
-- **Setting**: the capability it measures, and why existing benchmarks fall short.
-- **Construction**: the data source, the task format, how labels were made, and the
-  metric.
-- **Findings**: how current models score and where they fail, with examples of failures.
-- **Validity**: contamination, label quality, whether the metric measures the capability,
-  and headroom or saturation.
+- **Setting**: the capability it measures and why existing benchmarks fall short.
+- **Construction**: where the data comes from, the task format, and the metric, in words.
+- **Findings**: how current models do and where they fail.
+- **Validity**: contamination, label quality, saturation.
 
 #### study
 
-- **Question**: what the study asks and why it is open.
-- **Design**: which models and data, what is varied, and what is held fixed.
-- **Findings**: one bold-led claim per item, each with its evidence and page.
-- **Caveats**: confounds, scale, and how far the findings generalise.
-- **Novelty**: what it confirms and what it overturns.
+- **Question**: what it asks and why that is open.
+- **Design**: what is compared and what is held fixed.
+- **Findings**: one bold-led claim per item.
+- **Caveats**: confounds and how far the findings generalise.
 
 #### system
 
 - **Architecture**: the components and how they connect, with a diagram.
-- **Recipe**: data, training stages, compute, and the choices the report says mattered.
-- **Results**: as in `method`, each benchmark explained.
-- **Novelty**: usually engineering decisions. Say which ones, and why they were made.
+- **Recipe**: the choices the report says mattered, not the full training setup.
+- **Results**: as in `method`.
 
 #### position
 
 - **Claim**: the thesis in one or two sentences.
-- **Arguments**: the paper's main arguments, each with the evidence it gives.
-- **Counterarguments**: those the paper addresses, plus obvious ones it doesn't, marked
-  "(not from the paper)".
+- **Arguments** and **Counterarguments**: the main ones, the latter marked "(not from the
+  paper)" when added.
 - **Implications**: what would change if the claim is right.
 
 #### theory
 
-- **Setting**: the problem and the assumptions, flagging the restrictive ones.
-- **Result**: the main theorem in plain words first, then stated cleanly.
-- **Proof idea**: the key trick in a few sentences, not the proof.
-- **Implications**: what it explains or predicts in practice, and what it does not.
+- **Setting**: the problem and any restrictive assumption.
+- **Result**: the main theorem in plain words.
+- **Proof idea**: the key trick in a sentence or two.
+- **Implications**: what it explains in practice.
 
 ## Links
 
-- Use Obsidian links (`[[Name]]`) for concepts and papers, in the frontmatter and in the
-  body. For a long paper stem in the body, add a display name:
+- Use Obsidian links (`[[Name]]`) for concepts and papers, in the frontmatter and the body.
+  For a long paper stem in the body, add a display name:
   `[[AlphaEvolve A coding agent for scientific and algorithmic discovery|AlphaEvolve]]`.
-- Linking to notes that don't exist yet is encouraged: those links show Anton which notes to
-  write. Pick a natural, singular name ("Risk-sensitive RL", "PUCT"). Don't normalise names
-  across the vault beyond reusing an existing note's name.
-- Don't add a "My thoughts" section, placeholders, or to-do checkboxes. Anton adds his own
-  sections when he has something to say.
+- Linking to notes that don't exist yet is encouraged. Pick a natural, singular name
+  ("Risk-sensitive RL", "PUCT"). Don't normalise names across the vault.
+- No "My thoughts" section, placeholders, or to-do checkboxes.
