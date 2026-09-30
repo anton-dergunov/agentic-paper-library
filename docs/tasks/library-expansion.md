@@ -21,7 +21,7 @@ It runs over many sessions. This file is the plan and the progress record. Its o
   folders; the review of weak papers is recorded in `inventory.md`.
 - [x] 3. Tooling for a declared tree: `catalog/`, scripts, `AGENTS.md`, skills (2026-09-30)
 - [x] 4. Existing papers moved into the new tree (2026-09-30): 125 moves, five old folders retired
-- [ ] 5. Inventory papers added, one batch per area (list the batches here as they are done)
+- [x] 5. Inventory papers added, one batch per area (list the batches here as they are done)
   - 2026-09-30: every area run; 793 added with summaries (114 from PDF text: 90 local PDFs,
     24 arXiv papers without an HTML rendering). Left: 68 papers with no arXiv id or local
     PDF (`status: todo` in `inventory.tsv`), which need a PDF or a web article from the web.
@@ -29,6 +29,9 @@ It runs over many sessions. This file is the plan and the progress record. Its o
     `scripts/add-web-article.py`; 1,089 papers in the library. Left: 12 papers only
     available from publishers that block scripts (ACM, Wiley, Springer, SSRN,
     OpenReview), for Anton to download in a browser.
+  - 2026-09-30: 11 of those added from Anton's downloads, 1 skipped at his choice. Every
+    inventory row is resolved: 860 added, 28 already in the library, 93 skipped; every
+    `Papers_old/` file is accounted for. 1,100 papers in the library.
 - [ ] 6. Literature pass, one reading list per area (list the areas here as they are done)
 - [ ] 7. Wrap-up
 
