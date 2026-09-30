@@ -1,6 +1,6 @@
 ---
 name: add-paper
-description: Add a paper to the library — from an arXiv link or id, a local PDF, or a paper in the unconverted Papers_old/ folder named by title. Picks the topic folder, runs the add script, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF", "convert <title> from my old papers". Also drains INBOX.txt: "add papers from my inbox", "process the inbox", "/add-paper inbox".
+description: Add a paper to the library — from an arXiv link or id, a local PDF, or a paper in the unconverted Papers_old/ folder named by title. Picks the topic folder, runs the add script, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF", "convert <title> from my old papers". Also use to drain INBOX.txt, for "add papers from my inbox", "process the inbox", "/add-paper inbox".
 ---
 
 # /add-paper — add a paper to the library
