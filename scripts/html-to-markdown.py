@@ -248,6 +248,24 @@ def spans_to_blocks(html_text):
     return SPAN_TAG.sub(rename, html_text)
 
 
+def picture_kind(svg):
+    """What a LaTeXML picture is: "box", "diagram" (a drawing holding a text
+    block), "badge" or "image"; see picture_text."""
+    blocks = foreign_objects(svg)
+    counts = [words(b) for b in blocks]
+    total = sum(counts)
+    paths = len(re.findall(r"<path\b", svg))
+    height = re.match(r"\s*<svg\b[^>]*?\bheight=\"([\d.]+)", svg)
+    height = float(height.group(1)) if height else 1000
+    if total and total < 8 and len(blocks) <= 2 and paths <= 4 and height < 25:
+        return "badge"
+    simple_frame = paths <= 6 and len(blocks) <= 4 and total >= 6
+    one_block = bool(counts) and max(counts) >= 12 and max(counts) >= 0.6 * total
+    if not (simple_frame or one_block):
+        return "image"
+    return "diagram" if paths > 15 else "box"
+
+
 def picture_text(svg, save):
     """What to put in the markdown for one LaTeXML picture.
 
@@ -264,20 +282,15 @@ def picture_text(svg, save):
     def image():
         return f'<img src="{save("svg+xml", svg.encode("utf-8"))}" alt="" />'
 
+    kind = picture_kind(svg)
     blocks = foreign_objects(svg)
-    counts = [words(b) for b in blocks]
-    total = sum(counts)
-    paths = len(re.findall(r"<path\b", svg))
-    height = re.match(r"<svg\b[^>]*?\bheight=\"([\d.]+)", svg)
-    height = float(height.group(1)) if height else 1000
-    if total and total < 8 and len(blocks) <= 2 and paths <= 4 and height < 25:
+    if kind == "badge":
         return f"<span>{' '.join(blocks)}</span>"
-    simple_frame = paths <= 6 and len(blocks) <= 4 and total >= 6
-    one_block = bool(counts) and max(counts) >= 12 and max(counts) >= 0.6 * total
-    if not (simple_frame or one_block):
+    if kind == "image":
         return image()
     parts = []
-    for k, (block, n) in enumerate(zip(blocks, counts)):
+    for k, block in enumerate(blocks):
+        n = words(block)
         if not n:
             continue
         if k == 0 and len(blocks) > 1 and n < 12:
@@ -288,7 +301,7 @@ def picture_text(svg, save):
             block = re.sub(r'(<span\b[^>]*class="ltx_tag\b[^"]*"[^>]*>[^<]*</span>)', r"\1 ", block)
             parts.append(f"<div>{spans_to_blocks(extract_svgs(block, save))}</div>")
     quote = f"<blockquote {LIFT}>{''.join(parts)}</blockquote>"
-    return image() + quote if paths > 15 else quote
+    return image() + quote if kind == "diagram" else quote
 
 
 PYTHON = re.compile(r"^\s*(def \w+\(.*\):\s*$|import \w|from [\w.]+ import \w|class \w+.*:\s*$)", re.M)

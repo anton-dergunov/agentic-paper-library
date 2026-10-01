@@ -18,12 +18,14 @@ with fetch()'s retries, writing an empty file on 404 or repeated failure.
 """
 
 import datetime
+import gzip
 import io
 import os
 import re
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -35,6 +37,11 @@ LIBRARY_DIR = Path(os.environ.get("LIBRARY_DIR", REPO_ROOT / "library"))
 PDF_ROOT = Path(
     os.environ.get("PDF_ROOT", Path.home() / "Yandex.Disk.localized" / "Papers")
 )
+# Downloads from arXiv's HTML renderings (pages and figures) and LaTeX sources
+# are kept here (outside the repo, about 10 GB for the whole library), so a
+# later reconversion needs no network. Delete a file, or the folder, to fetch
+# it again; failed downloads are never kept.
+CACHE_DIR = Path(os.environ.get("PAPERS_CACHE", Path.home() / ".cache" / "papers"))
 # Hand-maintained data the scripts read: the declared topic tree and the papers
 # deliberately not added.
 CATALOG_DIR = REPO_ROOT / "catalog"
@@ -130,14 +137,39 @@ def parse_arxiv_entries(xml_text):
     return out
 
 
+def cache_path(url):
+    """Where a download from arXiv's HTML or e-print service is cached, or None."""
+    m = re.match(r"https://arxiv\.org/(html|e-print)/([^?#]+?)/?$", url)
+    if not m or ".." in m.group(2):
+        return None
+    rel = m.group(2)
+    if re.fullmatch(r"\d{4}\.\d{4,5}(v\d+)?", rel) and m.group(1) == "html":
+        rel += "/index.html"  # the page itself, next to its figures
+    return CACHE_DIR / "arxiv" / m.group(1) / (rel + ".gz")
+
+
 def fetch(url, attempts=4):
     """GET a URL and return its body as bytes, or None on 404 or repeated failure.
 
     Downloads go through curl, like the add scripts: arXiv's HTML server
     answers Python's own HTTP client with 406 for anything not already in its
     cache. Throttled requests (errors or an empty body) are retried with
-    backoff.
+    backoff. arXiv HTML pages, their figures and LaTeX sources are served from
+    CACHE_DIR when already there, and stored there when downloaded.
     """
+    cached = cache_path(url)
+    if cached and cached.exists():
+        return gzip.decompress(cached.read_bytes())
+    data = download(url, attempts)
+    if cached and data:
+        cached.parent.mkdir(parents=True, exist_ok=True)
+        tmp = cached.with_name(f".{cached.name}.{os.getpid()}.{threading.get_ident()}")
+        tmp.write_bytes(gzip.compress(data, 6))
+        tmp.replace(cached)  # atomic, so parallel reconversions never read half a file
+    return data
+
+
+def download(url, attempts):
     for attempt in range(attempts):
         with tempfile.NamedTemporaryFile() as out:
             result = subprocess.run(

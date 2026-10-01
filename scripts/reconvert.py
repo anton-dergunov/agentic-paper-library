@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Regenerate papers' markdown from arXiv's HTML with the current converter.
 
-    ./scripts/reconvert.py <paper.md> [<paper.md> ...]
+    ./scripts/reconvert.py <paper.md | folder> [...]
     ./scripts/reconvert.py --all
     ./scripts/reconvert.py --all --force     # also papers marked hand-edited
     ./scripts/reconvert.py --all --pdf-text  # re-extract the PDF-text papers
+    ./scripts/reconvert.py --all --jobs 3 --state run.jsonl   # a long run, resumable
 
 For when the conversion improves: the frontmatter (summary included) and the
 PDF are kept; the body and the paper's images/ files are regenerated. The HTML
@@ -16,18 +17,31 @@ rendering of it (it becomes `source: html`). Otherwise it is skipped unless
 scripts/pdf-to-markdown.py (keeping the warning banner); `--all --pdf-text`
 does just those papers. Papers containing `<!-- hand-edited -->` are skipped,
 since a reconversion would drop the edit.
+
+Downloads are cached (paperlib.CACHE_DIR), so reconverting again later needs
+no network. --jobs N converts N papers at a time. --state FILE records each
+paper's outcome as a JSON line; run the same command again and it skips the
+papers already converted (or skipped for good) and retries the rest: those
+whose HTML could not be fetched, whose figures did not all download, or whose
+conversion failed. A progress bar shows the run; failures are printed as they
+happen.
 """
 
+import datetime
+import json
 import re
 import subprocess
 import sys
 import tempfile
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import pymupdf
+from tqdm import tqdm
 
-from paperlib import fetch, paper_files, pdf_path_for, read_paper, write_paper
+from paperlib import LIBRARY_DIR, fetch, paper_files, pdf_path_for, read_paper, write_paper
 
 SCRIPTS = Path(__file__).resolve().parent
 HAND_EDITED = "<!-- hand-edited -->"
@@ -60,17 +74,22 @@ def reconvert_pdf_text(md, meta, body):
 
 
 def reconvert(md, force, pdf_text=False):
+    """Reconvert one paper. Returns (status, message); the status is "ok",
+    "partial" (some figures did not download), "failed" (no HTML fetched, or
+    an error), or "skipped" (nothing to do, and a retry would not change that)."""
     meta, body = read_paper(md)
     arxiv_id = str(meta.get("arxiv") or "")
     if HAND_EDITED in body and not force:
-        return "skip (hand-edited; use --force)"
+        return "skipped", "hand-edited; use --force"
     if meta.get("source") == "pdf-text":
-        result = from_html(md, dict(meta, source="html"), arxiv_id) if arxiv_id else None
-        if result and result.startswith("ok"):
-            return result + " (was PDF text)"
-        return reconvert_pdf_text(md, meta, body) if pdf_text else "skip (PDF text; use --pdf-text)"
+        status, message = from_html(md, dict(meta, source="html"), arxiv_id) if arxiv_id else (None, "")
+        if status in ("ok", "partial"):
+            return status, message + " (was PDF text)"
+        if pdf_text:
+            return "ok", reconvert_pdf_text(md, meta, body)
+        return "skipped", "PDF text, no arXiv HTML; use --pdf-text"
     if meta.get("source") != "html" or not arxiv_id:
-        return "skip (not converted from arXiv HTML)"
+        return "skipped", "not converted from arXiv HTML"
     return from_html(md, meta, arxiv_id)
 
 
@@ -86,19 +105,22 @@ def from_html(md, meta, arxiv_id):
         page = fetch_page(f"https://arxiv.org/html/{arxiv_id}")
         note = f" (no HTML for {version}; used latest, page numbers may be off)"
     if not page or "ltx_page_content" not in page:
-        return f"skip (no HTML for {arxiv_id}{version})"
+        return "failed", f"no HTML for {arxiv_id}{version}"
 
     with tempfile.TemporaryDirectory() as tmp:
         html_path, body_path = Path(tmp) / "paper.html", Path(tmp) / "body.md"
         new_images = Path(tmp) / "images"
         html_path.write_text(page, encoding="utf-8")
-        subprocess.run(
+        run = subprocess.run(
             [sys.executable, SCRIPTS / "html-to-markdown.py", html_path, body_path, new_images, md.stem],
-            check=True,
+            capture_output=True, text=True,
         )
+        if run.returncode:
+            return "failed", f"html-to-markdown: {run.stderr.strip().splitlines()[-1:]}"
+        warnings = " ".join(line.removeprefix("warning: ") for line in run.stderr.splitlines() if line.startswith("warning"))
         new_body = body_path.read_text(encoding="utf-8")
         if len(new_body) < 4000:
-            return f"skip (HTML for {arxiv_id}{version} is a stub)"
+            return "skipped", f"HTML for {arxiv_id}{version} is a stub"
 
         images = md.parent / "images"
         for old in images.glob(f"{glob_escape(md.stem)}-fig*"):
@@ -114,24 +136,101 @@ def from_html(md, meta, arxiv_id):
     out = subprocess.run(
         [sys.executable, SCRIPTS / "page-map.py", pdf, md], capture_output=True, text=True, check=True
     )
-    return f"ok {arxiv_id}{version or ' (latest)'}{note}: {out.stdout.splitlines()[0]}"
+    message = f"{arxiv_id}{version or ' (latest)'}{note}: {out.stdout.splitlines()[0]}"
+    if "could not be downloaded" in warnings:
+        return "partial", f"{message}; {warnings}"
+    return "ok", message + (f"; {warnings}" if warnings else "")
 
 
 def glob_escape(s):
     return re.sub(r"([\[\]*?])", r"[\1]", s)
 
 
+def option(argv, name, default=None):
+    """The value after `name` in argv (and both removed), or default."""
+    if name not in argv:
+        return default
+    i = argv.index(name)
+    if i + 1 >= len(argv):
+        sys.exit(f"error: {name} needs a value")
+    value = argv[i + 1]
+    del argv[i:i + 2]
+    return value
+
+
+def load_state(path):
+    """The last recorded outcome of each paper in a state file: {path: status}."""
+    done = {}
+    if path and path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                record = json.loads(line)
+                done[record["paper"]] = record["status"]
+    return done
+
+
 def main(argv):
+    argv = list(argv)
+    jobs = int(option(argv, "--jobs", "1"))
+    state = option(argv, "--state")
+    state = Path(state).expanduser().resolve() if state else None
     force, pdf_text = "--force" in argv, "--pdf-text" in argv
     args = [a for a in argv if not a.startswith("--")]
-    papers = paper_files() if "--all" in argv else [Path(a).resolve() for a in args]
+    if "--all" in argv:
+        papers = paper_files()
+    else:
+        papers = []
+        for a in map(Path, args):
+            # A folder means every paper under it.
+            papers += paper_files(a.resolve()) if a.is_dir() else [a.resolve()]
     if pdf_text and "--all" in argv:  # only the PDF-text papers
         papers = [p for p in papers if read_paper(p)[0].get("source") == "pdf-text"]
     if not papers:
         sys.exit(__doc__)
-    for i, md in enumerate(papers):
-        print(f"[{i + 1}/{len(papers)}] {md.stem[:70]}: {reconvert(md, force, pdf_text)}", flush=True)
-        time.sleep(1)
+
+    def key(md):
+        return str(md.relative_to(LIBRARY_DIR)) if md.is_relative_to(LIBRARY_DIR) else str(md)
+
+    done = load_state(state)
+    todo = [md for md in papers if done.get(key(md)) not in ("ok", "skipped")]
+    if len(todo) < len(papers):
+        print(f"{len(papers) - len(todo)} papers already done in {state}; {len(todo)} to go", flush=True)
+    lock = threading.Lock()
+    counts = {"ok": 0, "partial": 0, "failed": 0, "skipped": 0}
+
+    def work(md):
+        try:
+            result = reconvert(md, force, pdf_text)
+        except Exception as e:  # one paper's failure must not stop the run
+            result = "failed", f"{type(e).__name__}: {e}"
+        time.sleep(1)  # be gentle with arXiv
+        return md, result
+
+    bar = tqdm(total=len(todo), unit="paper", dynamic_ncols=True)
+    pool = ThreadPoolExecutor(max_workers=jobs)
+    try:
+        for future in as_completed([pool.submit(work, md) for md in todo]):
+            md, (status, message) = future.result()
+            counts[status] += 1
+            if status in ("failed", "partial") or len(todo) <= 30:
+                bar.write(f"{status:8s}{md.stem[:60]}: {message}")
+            if state:
+                record = {"paper": key(md), "status": status, "message": message,
+                          "at": datetime.datetime.now().isoformat(timespec="seconds")}
+                with lock, state.open("a", encoding="utf-8") as f:
+                    f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            bar.set_postfix(counts, refresh=False)
+            bar.update()
+    except KeyboardInterrupt:
+        pool.shutdown(wait=False, cancel_futures=True)
+        bar.close()
+        sys.exit("interrupted; run the same command again to continue" if state else "interrupted")
+    pool.shutdown()
+    bar.close()
+    print(", ".join(f"{n} {status}" for status, n in counts.items()))
+    if counts["failed"] or counts["partial"]:
+        print("Some papers failed or lost figures"
+              + ("; run the same command again to retry them." if state else "."))
 
 
 if __name__ == "__main__":
