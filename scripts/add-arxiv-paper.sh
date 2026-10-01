@@ -17,8 +17,8 @@
 #   library/<topic>/images/<Title>-fig01.<ext>  (if the paper has any)
 #
 # The markdown starts with YAML frontmatter; `summary:` is left empty for
-# whoever files the paper to write. Afterwards, headings get the PDF page they
-# start on (scripts/page-map.py).
+# whoever files the paper to write. Headings carry the PDF page they start on
+# (scripts/page-map.py for HTML conversions; the PDF converter writes its own).
 #
 # Markdown is converted from arXiv's own HTML rendering (arxiv.org/html/<id>),
 # which comes through far cleaner than PDF text extraction — see
@@ -205,22 +205,18 @@ if [ "${SOURCE:-}" = html ]; then
 fi
 
 if [ "${SOURCE:-}" = pdf ]; then
-  # Last resort: the PDF's own text layer.
-  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" "$PDF" "$WORK/body.md"
+  # No HTML: convert the PDF by layout analysis (see pdf-to-markdown.py), which
+  # writes the note on how the paper was converted, and the page markers, itself.
+  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" --formulas "$PDF" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
 
   {
     python3 "$REPO_ROOT/scripts/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" pdf-text
-    echo
-    echo "> **Converted from the PDF text layer**, because arXiv has no HTML"
-    echo "> rendering for this paper. Section structure, tables and figures did"
-    echo "> not survive the conversion; check the original PDF (same path under"
-    echo "> \`Papers/\`) before relying on any number or table from this file."
     echo
     cat "$WORK/body.md"
   } > "$MD"
 fi
 
-if [ -n "${SOURCE:-}" ]; then
+if [ "${SOURCE:-}" = html ]; then
   python3 "$REPO_ROOT/scripts/page-map.py" "$PDF" "$MD"
 fi
 

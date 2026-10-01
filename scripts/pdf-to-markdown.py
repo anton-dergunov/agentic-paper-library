@@ -1,14 +1,32 @@
 #!/usr/bin/env python3
-"""Extract a PDF's text layer into rough markdown.
+"""Convert a PDF into markdown, for papers that have no HTML rendering.
 
-    ./scripts/pdf-to-markdown.py <input.pdf> <output.md>
+    ./scripts/pdf-to-markdown.py <input.pdf> <output.md> [<images-dir> <basename>]
+    ./scripts/pdf-to-markdown.py --text-layer <input.pdf> <output.md>
 
-This is the fallback conversion used by `add-arxiv-paper.sh` when arXiv has no
-HTML rendering for a paper, and the only conversion available to
-`add-pdf-paper.sh` for papers that were never on arXiv at all. It is markedly
-worse than converting arXiv's own HTML: section structure, tables and figures
-do not survive. Both callers therefore stamp a warning at the top of the
-markdown they write.
+Used by `add-arxiv-paper.sh` when arXiv has no HTML for a paper, by
+`add-pdf-paper.sh` for papers that were never on arXiv, and by
+`reconvert.py --pdf-text`. The output starts with a note saying how it was
+converted and what to check in the PDF.
+
+The conversion is docling's layout analysis (convert_layout): a layout model
+finds the headings, paragraphs, lists, tables, figures and equations on each
+page and their reading order, and a table model rebuilds each table's rows and
+columns. The words and numbers themselves are the PDF's own text layer, not
+OCR, so a number in a table is the number in the PDF. From docling's document
+this script writes:
+- headings, levelled by their numbering, each with the page it is on, "(p. N)",
+  so scripts/page-map.py is not needed for these papers;
+- tables as markdown tables, lists, code blocks and footnotes;
+- figures as files in <images-dir>, named <basename>-figNN.webp, followed by
+  their captions (left out when no images dir is given);
+- equations as LaTeX when docling's formula model is on (--formulas), which
+  reads the equation's image; otherwise as the PDF's raw text in a block
+  marked as such, since a flattened equation is better than an invented one.
+
+--text-layer, and any PDF docling fails on, uses the older extraction of the
+text layer alone (convert_text_layer below), which keeps the prose but loses
+section structure, tables and figures:
 
 Reading order comes from pymupdf4llm's column detection (column_boxes): each
 page is split into text regions in reading order, so a two-column paper reads
@@ -29,9 +47,12 @@ Lines repeated at the top or bottom of many pages (running headers, page
 numbers) are dropped.
 """
 
+import io
 import re
 import sys
 from collections import Counter
+from pathlib import Path
+from urllib.parse import quote
 
 try:
     import pymupdf
@@ -198,7 +219,7 @@ def repeated_edges(doc, pages):
     return {t for t, n in seen.items() if n >= threshold or re.fullmatch(r"[#ivxlc.\s]+", t)}
 
 
-def convert(pdf_path):
+def convert_text_layer(pdf_path):
     doc = pymupdf.open(pdf_path)
     pages = [page_regions(page) for page in doc]
     drop = repeated_edges(doc, pages)
@@ -221,12 +242,161 @@ def convert(pdf_path):
     return "\n\n".join(parts) + "\n"
 
 
+LAYOUT_NOTE = """> **Converted from the PDF by layout analysis** (docling), because this paper
+> has no HTML rendering. The text and the numbers are the PDF's own; the
+> structure of tables and the reading order are reconstructed by a model, and
+> {equations}. Check the PDF (same path under `Papers/`)
+> before quoting an equation, or a table whose columns look misaligned."""
+TEXT_LAYER_NOTE = """> **Converted from the PDF text layer**, because this paper has no HTML
+> rendering. Section structure, tables and figures did not survive the
+> conversion; check the original PDF (same path under `Papers/`) before
+> relying on any number or table from this file."""
+
+# Unnumbered headings that are sections of their own, not parts of the one before.
+TOP_LEVEL = re.compile(
+    r"(abstract|introduction|related work|background|methods?|methodology|experiments?|results|"
+    r"discussion|limitations|conclusions?|acknowledge?ments?|references|bibliography|"
+    r"appendix|appendices|supplementary materials?|significance|ethics statement|impact statement)\b", re.I)
+
+
+def heading_level(text, roman, last_numbered):
+    """A heading's markdown level (2-6) from its numbering.
+
+    "3 Method" is 2, "3.1 Setup" 3, "A.2 Proofs" 3. In an IEEE paper "II.
+    Background" is 2, "A. Surveys" 3 and "1) Details" 4. An unnumbered heading
+    is a section if it has a section's name ("Abstract", "References"), and
+    otherwise a part of the last numbered heading.
+    """
+    if roman:
+        if re.match(r"[IVXL]+\.?\s", text):
+            return 2
+        if re.match(r"[A-Z]\.\s", text):
+            return 3
+        if re.match(r"\d+\)\s", text):
+            return 4
+    m = re.match(r"(?:Appendix\s+)?((?:\d+|[A-Z])(?:\.\d+)*)\.?\s+\S", text)
+    if m and (m.group(1)[0].isdigit() or "." in m.group(1) or text.startswith("Appendix")):
+        return min(2 + m.group(1).count("."), 6)
+    if TOP_LEVEL.match(text) or last_numbered is None:
+        return 2
+    return min(last_numbered + 1, 6)
+
+
+def tidy(text):
+    """Text as docling returns it, with the spaces a PDF puts inside numbers removed."""
+    text = " ".join(text.split())
+    return re.sub(r"(?<=\d) \. (?=\d)", ".", text)  # "32 . 3", a number set in math mode
+
+
+def convert_layout(pdf_path, images_dir=None, basename=None, formulas=False):
+    """Markdown from docling's document for the PDF; see the module docstring."""
+    from docling.datamodel.base_models import InputFormat
+    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling.document_converter import DocumentConverter, PdfFormatOption
+    from docling_core.types.doc import DocItemLabel as Label
+
+    options = PdfPipelineOptions()
+    options.generate_picture_images = bool(images_dir)
+    options.images_scale = 2.0
+    options.do_formula_enrichment = formulas
+    converter = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=options)})
+    doc = converter.convert(pdf_path).document
+
+    items = [item for item, _ in doc.iterate_items()]
+    headings = [tidy(i.text) for i in items if i.label in (Label.SECTION_HEADER, Label.TITLE)]
+    # "I.INTRODUCTION": IEEE numbering, sometimes set without the space.
+    headings = [re.sub(r"^([IVXL]+\.)(?=\S)", r"\1 ", h) for h in headings]
+    roman = any(re.match(r"(?:II|III|IV|VI?)\.?\s", h) for h in headings)
+
+    from paperlib import to_webp
+
+    parts, figures, last_numbered, titled = [], 0, None, False
+    captions = set()  # docling yields a caption with its table or figure, and again on its own
+    for item in items:
+        page = item.prov[0].page_no if item.prov else None
+        label = item.label
+        if label in (Label.SECTION_HEADER, Label.TITLE):
+            text = re.sub(r"^([IVXL]+\.)(?=\S)", r"\1 ", tidy(item.text))
+            text = re.sub(r"^(\d+) ?\. ?(\d)", r"\1.\2", text)  # "4 .1 Evaluation"
+            if not titled and (label == Label.TITLE or page == 1) and not re.match(r"\d|abstract", text, re.I):
+                parts.append(f"# {text}")  # the paper's title
+                titled = True
+                continue
+            titled = True
+            level = heading_level(text, roman, last_numbered)
+            if re.match(r"(?:Appendix\s+)?(?:\d|[IVXL]+\.?\s|[A-Z]\.)", text):
+                last_numbered = level
+            parts.append(f"{'#' * level} {text}" + (f" (p. {page})" if page else ""))
+        elif label == Label.TABLE:
+            table = item.export_to_markdown(doc)
+            parts.append(re.sub(r"(?<=\d) \. (?=\d)", ".", table))
+        elif label in (Label.PICTURE, Label.CHART):
+            image = item.get_image(doc) if images_dir else None
+            if image is None or min(image.size) < 120:  # a logo or an icon
+                continue
+            buffer = io.BytesIO()
+            image.save(buffer, "PNG")
+            figures += 1
+            name = f"{basename}-fig{figures:02d}.webp"
+            Path(images_dir).mkdir(parents=True, exist_ok=True)
+            (Path(images_dir) / name).write_bytes(to_webp(buffer.getvalue()))
+            parts.append(f"![](images/{quote(name)})")
+        elif label == Label.FORMULA:
+            latex = item.text.strip()
+            raw = " ".join((item.orig or "").split())
+            if latex:
+                parts.append(f"$${latex}$$")
+            elif raw:
+                parts.append(f"<!-- equation: the PDF's raw text, not LaTeX; check the PDF"
+                             + (f", p. {page}" if page else "") + f" -->\n```text\n{raw}\n```")
+        elif label == Label.CODE:
+            parts.append(f"```text\n{item.text}\n```")
+        elif label == Label.LIST_ITEM:
+            marker = item.marker if getattr(item, "enumerated", False) and item.marker else "-"
+            parts.append(f"{marker} {tidy(item.text)}")
+        elif getattr(item, "text", "").strip():
+            text = tidy(item.text)
+            if label == Label.CAPTION:
+                if text in captions:
+                    continue
+                captions.add(text)
+            parts.append(text)
+
+    # Consecutive list items form one list.
+    out = []
+    for prev, part in zip([""] + parts, parts):
+        is_item = re.match(r"(?:-|\d+[.)]) ", part) is not None
+        was_item = re.match(r"(?:-|\d+[.)]) ", prev) is not None
+        out.append(("\n" if is_item and was_item else "\n\n") + part)
+    return "".join(out).strip() + "\n"
+
+
 def main():
-    if len(sys.argv) != 3:
-        sys.exit("usage: pdf-to-markdown.py <input.pdf> <output.md>")
-    pdf_path, out_path = sys.argv[1], sys.argv[2]
+    args = sys.argv[1:]
+    text_layer = "--text-layer" in args
+    formulas = "--formulas" in args
+    args = [a for a in args if not a.startswith("--")]
+    if len(args) not in (2, 4):
+        sys.exit(__doc__)
+    pdf_path, out_path = args[0], args[1]
+    images_dir, basename = (args[2], args[3]) if len(args) == 4 else (None, None)
+    body = None
+    if not text_layer:
+        try:
+            body = convert_layout(pdf_path, images_dir, basename, formulas)
+        except Exception as e:  # docling missing, or a PDF it cannot read
+            print(f"warning: layout conversion failed ({type(e).__name__}: {e}); using the text layer",
+                  file=sys.stderr)
+    if body is not None and len(body.split()) >= 200:
+        equations = ("equations are decoded from their images by a model" if formulas
+                     else "equations are the PDF's raw text")
+        note = LAYOUT_NOTE.format(equations=equations)
+    else:
+        if body is not None:
+            print("warning: layout conversion found almost no text; using the text layer", file=sys.stderr)
+        note, body = TEXT_LAYER_NOTE, convert_text_layer(pdf_path)
     with open(out_path, "w", encoding="utf-8") as f:
-        f.write(convert(pdf_path))
+        f.write(note + "\n\n" + body)
 
 
 if __name__ == "__main__":

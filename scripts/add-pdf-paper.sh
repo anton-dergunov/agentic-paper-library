@@ -19,10 +19,10 @@
 # not moved.
 #
 # There is no HTML rendering to convert here, so the markdown comes from the
-# PDF's text layer via scripts/pdf-to-markdown.py — which loses tables, figures
-# and section structure. The frontmatter says `source: pdf-text` and the
-# markdown carries a warning at the top, so that anyone (or any agent) reading
-# it knows to check the PDF before trusting a number.
+# PDF via scripts/pdf-to-markdown.py: layout analysis rebuilds the headings,
+# tables and figures around the PDF's own text. The frontmatter says
+# `source: pdf-text` and the markdown carries a note at the top, so that anyone
+# (or any agent) reading it knows what to check in the PDF.
 
 set -euo pipefail
 
@@ -87,18 +87,15 @@ if [ -f "$MD" ] && [ "$FORCE" != true ]; then
 else
   WORK="$(mktemp -d)"
   trap 'rm -rf "$WORK"' EXIT
-  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" "$PDF" "$WORK/body.md"
+  # Layout analysis (docling): headings with their pages, tables, figures. It
+  # writes the note on how the paper was converted, and the page markers, itself.
+  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" --formulas "$PDF" "$WORK/body.md" \
+    "$(dirname "$MD")/images" "$(basename "$MD" .md)"
   {
     python3 "$REPO_ROOT/scripts/paperlib.py" frontmatter-manual "$TITLE" pdf-text "$SOURCE_URL"
     echo
-    echo "> **Converted from the PDF text layer** — this paper has no HTML"
-    echo "> rendering anywhere. Section structure, tables and figures did not"
-    echo "> survive the conversion; check the original PDF (same path under"
-    echo "> \`Papers/\`) before relying on any number or table from this file."
-    echo
     cat "$WORK/body.md"
   } > "$MD"
-  python3 "$REPO_ROOT/scripts/page-map.py" "$PDF" "$MD"
 fi
 
 echo "Done: $PDF"

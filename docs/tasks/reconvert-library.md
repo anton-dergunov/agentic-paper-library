@@ -57,5 +57,14 @@ caffeinate -i python3 scripts/reconvert.py --all --jobs 3 --state ~/.cache/paper
    rerunning `scripts/build-index.py`, which must be run after the merge anyway. Then run
    `scripts/check-library.py`, which must pass, and remove the worktree:
    `git worktree remove ~/papers-reconvert && git branch -d reconvert-library`.
-7. Delete this file and remove the "Separately: conversion fixes" note from
+7. **Second pass.** The converter gained more fixes in `main` after this run started
+   (siunitx numbers, icon names as alt text, citations rebuilt from the `.bib`, and anything
+   later reviews turned up). After the merge, reconvert once more with a **new** state file;
+   the old one marks every paper done. Everything is cached, so it needs no network, only
+   the time to re-encode figures (1.5–2 hours):
+   ```sh
+   caffeinate -i python3 scripts/reconvert.py --all --jobs 3 --state ~/.cache/papers/reconvert-pass2.jsonl
+   ```
+   Then repeat steps 2–4 against the commit before this pass.
+8. Delete this file and remove the "Separately: conversion fixes" note from
    `docs/tasks/literature-review.md`, or reword it if entries remain.

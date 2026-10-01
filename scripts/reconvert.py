@@ -13,9 +13,10 @@ is fetched at the arXiv version printed on the PDF's first page, so headings
 get page numbers from the PDF actually being read. A paper converted from
 PDF text that is on arXiv is converted from the HTML instead once arXiv has a
 rendering of it (it becomes `source: html`). Otherwise it is skipped unless
---pdf-text is given, which regenerates its body from the PDF with the current
-scripts/pdf-to-markdown.py (keeping the warning banner); `--all --pdf-text`
-does just those papers. Papers containing `<!-- hand-edited -->` are skipped,
+--pdf-text is given, which regenerates its body, figures and conversion note
+from the PDF with the current scripts/pdf-to-markdown.py (--formulas also
+decodes equations with a model, slowly); `--all --pdf-text` does just those
+papers. Papers containing `<!-- hand-edited -->` are skipped,
 since a reconversion would drop the edit.
 
 Downloads are cached (paperlib.CACHE_DIR), so reconverting again later needs
@@ -62,18 +63,38 @@ def fetch_page(url):
     return data.decode("utf-8", errors="replace") if data else None
 
 
-def reconvert_pdf_text(md, meta, body):
-    """Regenerate a PDF-text paper's body from its PDF, keeping the warning banner."""
-    banner = re.match(r"\s*((?:>.*\n)+)", body)
+def replace_images(md, new_images):
+    """Swap a paper's figure files for the ones a conversion just wrote."""
+    images = md.parent / "images"
+    for old in images.glob(f"{glob_escape(md.stem)}-fig*"):
+        old.unlink()
+    if new_images.exists():
+        images.mkdir(exist_ok=True)
+        for f in new_images.iterdir():
+            f.rename(images / f.name)
+    if images.exists() and not any(images.iterdir()):
+        images.rmdir()
+
+
+def reconvert_pdf_text(md, meta, formulas=False):
+    """Regenerate a PDF paper's body, figures and conversion note from its PDF."""
     with tempfile.TemporaryDirectory() as tmp:
-        out = Path(tmp) / "body.md"
-        subprocess.run([sys.executable, SCRIPTS / "pdf-to-markdown.py", pdf_path_for(md), out], check=True)
+        out, new_images = Path(tmp) / "body.md", Path(tmp) / "images"
+        run = subprocess.run(
+            [sys.executable, SCRIPTS / "pdf-to-markdown.py", *(["--formulas"] if formulas else []),
+             pdf_path_for(md), out, new_images, md.stem],
+            capture_output=True, text=True,
+        )
+        if run.returncode:
+            raise RuntimeError(f"pdf-to-markdown: {run.stderr.strip().splitlines()[-1:]}")
         text = out.read_text(encoding="utf-8")
-    write_paper(md, meta, "\n" + (banner.group(1) + "\n" if banner else "") + text)
-    return f"ok (from PDF text, {len(text.split())} words)"
+        replace_images(md, new_images)
+    write_paper(md, meta, "\n" + text)
+    fallback = "; fell back to the text layer" if "using the text layer" in run.stderr else ""
+    return f"from the PDF, {len(text.split())} words{fallback}"
 
 
-def reconvert(md, force, pdf_text=False):
+def reconvert(md, force, pdf_text=False, formulas=False):
     """Reconvert one paper. Returns (status, message); the status is "ok",
     "partial" (some figures did not download), "failed" (no HTML fetched, or
     an error), or "skipped" (nothing to do, and a retry would not change that)."""
@@ -86,7 +107,7 @@ def reconvert(md, force, pdf_text=False):
         if status in ("ok", "partial"):
             return status, message + " (was PDF text)"
         if pdf_text:
-            return "ok", reconvert_pdf_text(md, meta, body)
+            return "ok", reconvert_pdf_text(md, meta, formulas)
         return "skipped", "PDF text, no arXiv HTML; use --pdf-text"
     if meta.get("source") != "html" or not arxiv_id:
         return "skipped", "not converted from arXiv HTML"
@@ -122,15 +143,7 @@ def from_html(md, meta, arxiv_id):
         if len(new_body) < 4000:
             return "skipped", f"HTML for {arxiv_id}{version} is a stub"
 
-        images = md.parent / "images"
-        for old in images.glob(f"{glob_escape(md.stem)}-fig*"):
-            old.unlink()
-        if new_images.exists():
-            images.mkdir(exist_ok=True)
-            for f in new_images.iterdir():
-                f.rename(images / f.name)
-        if images.exists() and not any(images.iterdir()):
-            images.rmdir()
+        replace_images(md, new_images)
 
     write_paper(md, meta, "\n" + new_body)
     out = subprocess.run(
@@ -174,7 +187,7 @@ def main(argv):
     jobs = int(option(argv, "--jobs", "1"))
     state = option(argv, "--state")
     state = Path(state).expanduser().resolve() if state else None
-    force, pdf_text = "--force" in argv, "--pdf-text" in argv
+    force, pdf_text, formulas = "--force" in argv, "--pdf-text" in argv, "--formulas" in argv
     args = [a for a in argv if not a.startswith("--")]
     if "--all" in argv:
         papers = paper_files()
@@ -200,7 +213,7 @@ def main(argv):
 
     def work(md):
         try:
-            result = reconvert(md, force, pdf_text)
+            result = reconvert(md, force, pdf_text, formulas)
         except Exception as e:  # one paper's failure must not stop the run
             result = "failed", f"{type(e).__name__}: {e}"
         time.sleep(1)  # be gentle with arXiv

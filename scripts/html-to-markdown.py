@@ -37,6 +37,7 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
 """
 
 import base64
+import functools
 import gzip
 import html
 import html.entities
@@ -45,6 +46,7 @@ import re
 import subprocess
 import sys
 import tarfile
+import tempfile
 from urllib.parse import quote
 from pathlib import Path
 
@@ -483,23 +485,30 @@ def paper_version(page):
     return None
 
 
-def latex_source(version):
-    """The paper's LaTeX, \\input files spliced in and comments removed, or None."""
+@functools.cache
+def source_files(version):
+    """The text files of a paper's arXiv source (.tex, .bib, .bbl): {name: text}."""
     data = fetch(f"https://arxiv.org/e-print/{version}")
     if not data:
-        return None
+        return {}
     files = {}
     try:
         with tarfile.open(fileobj=io.BytesIO(data), mode="r:*") as tar:
             for member in tar.getmembers():
-                if member.isfile() and member.name.endswith(".tex"):
+                if member.isfile() and member.name.endswith((".tex", ".bib", ".bbl")):
                     files[member.name.removeprefix("./")] = tar.extractfile(member).read()
     except tarfile.TarError:
         try:
-            files["main.tex"] = gzip.decompress(data)
+            files["main.tex"] = gzip.decompress(data)  # a single .tex file
         except OSError:
-            return None
-    files = {name: re.sub(r"(?<!\\)%.*", "", text.decode("utf-8", "replace")) for name, text in files.items()}
+            return {}
+    return {name: text.decode("utf-8", "replace") for name, text in files.items()}
+
+
+def latex_source(version):
+    """The paper's LaTeX, \\input files spliced in and comments removed, or None."""
+    files = {name: re.sub(r"(?<!\\)%.*", "", text)
+             for name, text in source_files(version).items() if name.endswith(".tex")}
     main = next((n for n, t in files.items() if r"\documentclass" in t), None)
     if not main:
         return None
@@ -515,6 +524,98 @@ def latex_source(version):
         )
 
     return splice(main)
+
+
+MISSING_CITATION = re.compile(r'<span class="ltx_ref ltx_missing_citation[^"]*">([^<]+)</span>')
+MISSING_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*">LABEL:([^<]+)</span>')
+
+
+def citations_from_bibtex(keys, bib):
+    """Author-year labels and reference entries for BibTeX keys, by pandoc's citeproc.
+
+    Returns ({key: "Jiang et al. 2025"}, {key: entry as HTML}); a key the
+    .bib file lacks is in neither.
+    """
+    with tempfile.TemporaryDirectory() as tmp:
+        bib_path = Path(tmp) / "paper.bib"
+        bib_path.write_text(bib, encoding="utf-8")
+        run = subprocess.run(
+            ["pandoc", "-f", "markdown", "-t", "html", "--wrap=none", "--citeproc", "--bibliography", str(bib_path)],
+            input="\n\n".join(f"[@{key}]" for key in keys), capture_output=True, text=True,
+        )
+    labels = {}
+    for key, text in re.findall(r'<span class="citation" data-cites="([^"]+)">(.*?)</span>', run.stdout, re.S):
+        text = re.sub(r"<[^>]+>", "", text).strip()
+        if "?" not in text:  # citeproc writes "(key?)" for a key it does not know
+            labels[key] = text.removeprefix("(").removesuffix(")")
+    entries = dict(re.findall(r'<div id="ref-([^"]+)" class="csl-entry"[^>]*>\s*(.*?)\s*</div>', run.stdout, re.S))
+    return labels, entries
+
+
+def unresolved_citations(article, page):
+    """Fill in the citations and table references arXiv's rendering left unresolved.
+
+    A paper submitted with its .bib but without the compiled bibliography
+    renders with every citation as its BibTeX key and no reference list.
+    Both are rebuilt from the .bib in the paper's source. A reference to a
+    table or figure LaTeXML lost ("Table LABEL:tab:x") gets its number from
+    the float whose caption follows that \\label in the source, or else
+    shows the label's name.
+    """
+    keys = list(dict.fromkeys(k.strip() for k in MISSING_CITATION.findall(article)))
+    labels_missing = MISSING_LABEL.search(article)
+    if not keys and not labels_missing:
+        return article
+    version = paper_version(page)
+    files = source_files(version) if version else {}
+
+    if keys:
+        bib = "\n".join(text for name, text in files.items() if name.endswith(".bib"))
+        labels, entries = citations_from_bibtex(keys, bib) if bib else ({}, {})
+        article = MISSING_CITATION.sub(lambda m: labels.get(m.group(1).strip(), m.group(0)), article)
+        cited = [entries[k] for k in keys if k in entries]
+        if cited and "ltx_bibitem" not in article:
+            listing = "<ul>" + "".join(f"<li>{entry}</li>" for entry in cited) + "</ul>"
+            section = re.search(r'<section\b[^>]*class="[^"]*\bltx_bibliography\b', article)
+            end = balanced_end(article, section.start(), "section") if section else None
+            if end:
+                cut = end - len("</section>")
+                article = article[:cut] + listing + article[cut:]
+            else:
+                cut = article.rindex("</div>")
+                article = article[:cut] + "<h2>References</h2>" + listing + article[cut:]
+        if len(labels) < len(keys):
+            print(f"warning: {len(keys) - len(labels)} of {len(keys)} unresolved citations not in the paper's .bib",
+                  file=sys.stderr)
+
+    if labels_missing:
+        tex = latex_source(version) or "" if version else ""
+        captions = [(re.sub(r"<[^>]+>", "", tag).strip(" :."), plain_words(re.sub(r"<math\b.*?</math>", " ", body, flags=re.S)))
+                    for tag, body in re.findall(
+                        r'<figcaption\b[^>]*>\s*<span class="ltx_tag[^"]*">(.*?)</span>(.*?)</figcaption>', article, re.S)]
+
+        def number(m):
+            label = m.group(1)
+            at = tex.find(f"\\label{{{label}}}")
+            # The caption of the float the label sits in: the nearest one before
+            # the label within the float, else the first after it.
+            begin = max(tex.rfind("\\begin{table", 0, at), tex.rfind("\\begin{figure", 0, at)) if at >= 0 else -1
+            caption = re.search(r"\\caption\*?\s*(?:\[[^\]]*\])?\s*\{", tex[begin:]) if begin >= 0 else None
+            if caption:
+                start = plain_words(tex[begin + caption.end():begin + caption.end() + 200])[:5]
+                for tag, body in captions:
+                    if start and body[:len(start)] == start:
+                        return tag.split()[-1]  # "Table 3" -> "3", after the "Table" already in the text
+            return label.split(":", 1)[-1]
+
+        article = MISSING_LABEL.sub(number, article)
+    return article
+
+
+def plain_words(text):
+    """The words of a LaTeX or HTML fragment, lowercased, markup dropped."""
+    text = re.sub(r"\\[a-zA-Z]+\*?|<[^>]+>|[{}$~]", " ", text)
+    return re.findall(r"[a-z0-9]+", text.lower())
 
 
 def forest_nodes(tex):
@@ -645,6 +746,30 @@ def unresolved_refs(article):
     )
 
 
+# A file name that says nothing about the picture: LaTeXML's own "x12.png",
+# "image3", "fig_2".
+GENERIC_NAME = re.compile(r"(?:x|img|image|fig|figure|icon|logo)?[-_ ]?\d*", re.I)
+
+
+def name_uncaptioned_images(article):
+    """Give an image without a caption its file's name as alt text.
+
+    Papers set icons inline (a check or cross mark in a table cell, a logo
+    before a model's name) as small images. arXiv's alt text for them is the
+    placeholder "[Uncaptioned image]", which leaves a table of identical
+    pictures; the file name ("yes_emoji", "Octicons-mark-github") says which
+    is which.
+    """
+    def rename(tag):
+        src = re.search(r'\bsrc="([^"]+)"', tag.group(0))
+        name = Path(html.unescape(src.group(1))).stem if src else ""
+        if not name or src.group(1).startswith("data:") or GENERIC_NAME.fullmatch(name):
+            return tag.group(0)
+        return tag.group(0).replace('alt="[Uncaptioned image]"', f'alt="{html.escape(name)}"')
+
+    return re.sub(r'<img\b[^>]*\balt="\[Uncaptioned image\]"[^>]*>', rename, article)
+
+
 def objects_to_images(article):
     """Replace each image <object data="..."> with an <img> of the same file."""
     return re.sub(
@@ -689,9 +814,11 @@ def main(html_path, body_path, images_dir, basename):
     article = span_tabulars_to_tables(article)
     article = forest_trees(article, page)
     article = unresolved_refs(article)
+    article = unresolved_citations(article, page)
     article = extract_svgs(article, save)
     article = lift_blocks(article)
     article = objects_to_images(article)
+    article = name_uncaptioned_images(article)
     body = subprocess.run(
         [
             "pandoc", "-f", "html", "-t", "gfm-tex_math_gfm+tex_math_dollars",

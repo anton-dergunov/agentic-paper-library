@@ -174,6 +174,36 @@ local function rewrite_commands(t)
   return table.concat(out)
 end
 
+-- siunitx numbers arrive as their unrounded input with digit groups
+-- ("0.769\,142\,111\,540\,03" where the PDF prints 0.77). Join the groups; a
+-- number with nine or more decimals is such raw input, so round it to four.
+local function join_digit_groups(t)
+  return (t:gsub("%d[%d.]*\\,[%d\\,]*%d", function(number)
+    local groups, valid = {}, true
+    for group in (number .. "\\,"):gmatch("(.-)\\,") do
+      table.insert(groups, group)
+    end
+    -- Decimal groups follow ".ddd" and may end short; integer groups
+    -- ("10\,000") are all three digits. Anything else ("1\,2") is not a number.
+    local decimal = groups[1]:match("^%d+%.%d%d%d$") ~= nil
+    valid = decimal or groups[1]:match("^%d%d?%d?$") ~= nil
+    for k = 2, #groups do
+      if decimal and k == #groups then
+        valid = valid and groups[k]:match("^%d%d?%d?$") ~= nil
+      else
+        valid = valid and groups[k]:match("^%d%d%d$") ~= nil
+      end
+    end
+    if not valid then return number end
+    local joined = table.concat(groups)
+    local decimals = joined:match("%.(%d+)$")
+    if decimals and #decimals >= 9 then
+      joined = string.format("%.4f", tonumber(joined))
+    end
+    return joined
+  end))
+end
+
 local function hex(x)
   return string.format("%02X", math.floor(tonumber(x) * 255 + 0.5))
 end
@@ -186,7 +216,7 @@ local function normalise_math(t)
   t = t:gsub("\\lx@sectionsign", "\\S ")
   t = t:gsub("\\addcontentsline%b{}%b{}%b{}", "")
   t = t:gsub("\\begin{array}%[%]", "\\begin{array}")
-  return rewrite_commands(strip_layout(t))
+  return rewrite_commands(strip_layout(join_digit_groups(t)))
 end
 
 function Math(m)

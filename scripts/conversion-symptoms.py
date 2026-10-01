@@ -17,6 +17,8 @@ lacks the content:
   figure-link   a figure still linking to arXiv instead of images/
   empty-header  a pipe table whose header row is empty
   box, badge    a linked SVG that the converter would now turn into text
+  digit-groups  siunitx numbers with digit groups ("0.769 142 111 540 03")
+  raw-citations citations left as BibTeX keys, or references as "LABEL:tab:x"
 
 --compare <git-ref> instead lists papers whose text shrank by more than 5%
 since <git-ref> (words outside markup, so dropped alt text and tags do not
@@ -50,6 +52,9 @@ CHECKS = {
     "figure-link": lambda t: re.search(
         r"\]\((?:https://arxiv\.org/html/)?\d{4}\.\d{4,5}v\d+/|src=\"\d{4}\.\d{4,5}v\d+/", t),
     "empty-header": lambda t: re.search(r"^\|(?:\s*\|)+\s*\n\|[-:| ]+\|\s*$", t, re.M),
+    "digit-groups": lambda t: re.search(r"\d\.\d{3}(?:[ \u2006\u2009\u202f]|\\,)\d{3}(?:[ \u2006\u2009\u202f]|\\,)\d", t),
+    "raw-citations": lambda t: "LABEL:" in t or len(re.findall(
+        r"\((?:[A-Za-z][\w-]*\d{4}[a-z][\w-]*)(?:; [A-Za-z][\w-]*\d{4}[a-z][\w-]*)*\)", t)) >= 5,
 }
 
 

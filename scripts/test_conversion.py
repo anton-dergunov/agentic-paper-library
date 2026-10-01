@@ -135,6 +135,11 @@ def checks():
     md, _ = convert("<p>See " + math(r"\mathsection") + " 2 and " + math(r"\argmax_{x}f") + ".</p>")
     yield "\\mathsection and \\argmax", r"$\S$" in md and r"\operatorname*{arg\,max}_{x}f" in md
 
+    md, _ = convert("<p>" + math(r"0.769\,142\,111\,540\,03\pm 0.162\,334\,188") + " of "
+                    + math(r"10\,000") + " with " + math(r"x_{1\,2}") + ".</p>")
+    yield "siunitx digit groups joined and rounded", r"$0.7691\pm 0.1623$ of $10000$" in md
+    yield "a thin space between indices is kept", r"x_{1\,2}" in md
+
     md, images = convert("<div>" + picture([PROMPT]) + "</div>")
     yield "prompt box becomes a quote", md.startswith("> Please act as an impartial judge") and not images
     yield "box paragraphs stay apart", "\n>\n> \\[\\[User Question\\]\\]" in md
@@ -176,6 +181,26 @@ def checks():
     yield "forest node text cleaned", "MyAgent, MemOS" in lists[0] and "citep" not in lists[0]
     yield "forest math kept", "x-tex" in lists[0] and "_2" in lists[0]
     yield "paper version from the margin stamp", h2m.paper_version("<div>arXiv:2505.00675v3 [cs.CL] 24 Dec 2025</div>") == "2505.00675v3"
+
+    named = h2m.name_uncaptioned_images(
+        '<img src="2512.06688v1/figures/yes_emoji.png" alt="[Uncaptioned image]">'
+        '<img src="2512.06688v1/x12.png" alt="[Uncaptioned image]">')
+    yield "an icon gets its file name as alt text", 'alt="yes_emoji"' in named
+    yield "a generic file name stays a placeholder", named.count("[Uncaptioned image]") == 1
+
+    labels, entries = h2m.citations_from_bibtex(["jiang2025know", "nokey"], """
+        @article{jiang2025know, title={Know Me, Respond to Me}, year={2025},
+                 author={Jiang, Bowen and Hao, Zhuoqun and Cho, Young-Min and Li, Bryan}}""")
+    yield "citation label from the .bib", labels == {"jiang2025know": "Jiang et al. 2025"}
+    yield "reference entry from the .bib", "Know Me, Respond to Me" in entries.get("jiang2025know", "")
+
+    pdf = load("pdf-to-markdown")
+    yield "PDF heading levels from numbering", [
+        pdf.heading_level(t, False, 2) for t in ("3 Method", "3.1 Setup", "A.2 Proofs", "Abstract", "User Consent")
+    ] == [2, 3, 3, 2, 3]
+    yield "PDF heading levels in an IEEE paper", [
+        pdf.heading_level(t, True, 2) for t in ("II. RELATED WORK", "A. Surveys", "1) Details")] == [2, 3, 4]
+    yield "PDF numbers set in math mode are rejoined", pdf.tidy("BM25  32 . 3   41 . 2") == "BM25 32.3 41.2"
 
     page_map = load("page-map")
     yield "ICML heading number", page_map.heading_number("1 Introduction", True, False) == ("1", "Introduction", ["1"])
