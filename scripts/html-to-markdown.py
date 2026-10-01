@@ -22,8 +22,10 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
    embeds in each listing (see convert_listings).
 5. Raster figures, whether inlined or hosted next to the rendering on arXiv,
    become files in images/ too, downscaled and stored as WebP (see
-   paperlib.to_webp). A hosted figure that fails to download keeps a link to
-   arXiv.
+   paperlib.to_webp). Hosted SVG figures are stored as they are. A hosted
+   figure that fails to download keeps a link to arXiv.
+6. Figures LaTeXML embeds as <object data="..."> (SVG plots, mostly) become
+   <img>s first; pandoc drops <object> elements without a trace.
 """
 
 import base64
@@ -234,16 +236,26 @@ def convert_listings(article):
         pos = end
 
 
+def objects_to_images(article):
+    """Replace each image <object data="..."> with an <img> of the same file."""
+    return re.sub(
+        r'<object\b[^>]*?\btype="image/[^"]*"[^>]*?\bdata="([^"]+)"[^>]*>.*?</object\s*>',
+        r'<img src="\1" alt="" />',
+        article,
+        flags=re.S,
+    )
+
+
 def main(html_path, body_path, images_dir, basename):
     images_dir = Path(images_dir)
     counter, invalid = 0, 0
 
-    def save(mime, data):
+    def save(mime, data, repair=True):
         """Write one figure to images/ and return its relative link."""
         nonlocal counter, invalid
         counter += 1
         ext = EXTS.get(mime, "bin")
-        if ext == "svg":
+        if ext == "svg" and repair:
             svg = repair_svg(data.decode("utf-8"))
             invalid += not is_valid_xml(svg)
             data = svg.encode("utf-8")
@@ -266,6 +278,7 @@ def main(html_path, body_path, images_dir, basename):
     article = extract_article(page)
     article = convert_listings(article)
     article = extract_svgs(article, save)
+    article = objects_to_images(article)
     body = subprocess.run(
         [
             "pandoc", "-f", "html", "-t", "gfm-tex_math_gfm+tex_math_dollars",
@@ -286,8 +299,11 @@ def main(html_path, body_path, images_dir, basename):
             lambda m: m.group(1) + base.group(1) + m.group(2),
             body,
         )
-    # Raster figures arXiv hosts next to the rendering.
-    body, failed = localize_figures(body, lambda data: save("webp", data))
+    # Figures arXiv hosts next to the rendering: rasters as WebP, SVGs as
+    # served (standalone files, so they need no repair).
+    body, failed = localize_figures(
+        body, lambda data, ext: save("svg+xml" if ext == "svg" else ext, data, repair=False)
+    )
     Path(body_path).write_text(body, encoding="utf-8")
     # A picture pandoc dropped along with its surroundings (a title-page logo)
     # would be left as an unreferenced file.

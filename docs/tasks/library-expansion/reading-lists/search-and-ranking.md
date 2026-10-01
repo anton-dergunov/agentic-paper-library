@@ -76,6 +76,7 @@ The library's 62 search-and-ranking papers lean on classical IR, early neural ra
 | 63 | Perspectives on Large Language Models for Relevance Judgment | 2023 | 2304.09161 | search-and-ranking/evaluation |
 | 64 | Synthetic Test Collections for Retrieval Evaluation | 2024 | 2405.07767 | search-and-ranking/evaluation |
 | 65 | Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference | 2024 | 2412.13663 | nlp/pretrained-language-models |
+| 66 | LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders | 2024 | 2404.05961 | search-and-ranking/dense-retrieval |
 
 ## Considered, not proposed
 

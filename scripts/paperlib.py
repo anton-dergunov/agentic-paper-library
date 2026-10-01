@@ -217,6 +217,10 @@ def library_arxiv_ids():
 # is still sharp on a laptop screen, and a fifth of the size of arXiv's PNGs.
 FIGURE_MAX_SIDE = 1600
 FIGURE_QUALITY = 85
+# arXiv serves plots converted from PDF as SVG. Most are small and stay vector;
+# a dense scatter plot can run to megabytes, so one larger than this is
+# rasterized to WebP like the other figures (with rsvg-convert, from librsvg).
+SVG_MAX_BYTES = 300_000
 
 # A raster figure on arXiv's HTML rendering, as pandoc writes it: a markdown
 # image or an <img>, with the link either relative to the rendering
@@ -242,10 +246,25 @@ def to_webp(data):
     return out.getvalue()
 
 
-def localize_figures(body, save, pause=0.2):
-    """Download every arXiv-hosted raster figure in a markdown body.
+def is_svg(data):
+    head = data[:1000].lstrip().lower()
+    return head.startswith(b"<svg") or (head.startswith(b"<?xml") and b"<svg" in head)
 
-    Each image goes through to_webp and then `save(data)`, which writes it and
+
+def svg_to_webp(data):
+    png = subprocess.run(
+        ["rsvg-convert", "--width", str(FIGURE_MAX_SIDE), "--keep-aspect-ratio"],
+        input=data, capture_output=True, check=True, timeout=120,
+    ).stdout
+    return to_webp(png)
+
+
+def localize_figures(body, save, pause=0.2):
+    """Download every arXiv-hosted figure in a markdown body.
+
+    A raster image goes through to_webp and then `save(data, "webp")`; an SVG
+    is passed on unchanged as `save(data, "svg")`, unless it is larger than
+    SVG_MAX_BYTES, when it is rasterized to WebP. `save` writes the file and
     returns the link to put in its place. A figure that cannot be downloaded or
     decoded keeps an absolute arXiv link. Returns (new body, number failed).
     """
@@ -258,7 +277,17 @@ def localize_figures(body, save, pause=0.2):
             data = fetch(url)
             time.sleep(pause)
             try:
-                saved[path] = save(to_webp(data)) if data else None
+                if not data:
+                    saved[path] = None
+                elif is_svg(data) and len(data) > SVG_MAX_BYTES:
+                    try:
+                        saved[path] = save(svg_to_webp(data), "webp")
+                    except Exception:
+                        saved[path] = save(data, "svg")
+                elif is_svg(data):
+                    saved[path] = save(data, "svg")
+                else:
+                    saved[path] = save(to_webp(data), "webp")
             except Exception:
                 saved[path] = None
             if saved[path] is None:

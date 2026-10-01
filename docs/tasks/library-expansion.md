@@ -32,13 +32,19 @@ It runs over many sessions. This file is the plan and the progress record. Its o
   - 2026-09-30: 11 of those added from Anton's downloads, 1 skipped at his choice. Every
     inventory row is resolved: 860 added, 28 already in the library, 93 skipped; every
     `Papers_old/` file is accounted for. 1,100 papers in the library.
-- [ ] 6. Literature pass, one reading list per area (list the areas here as they are done)
+- [x] 6. Literature pass, one reading list per area
   - 2026-10-01: the five primary areas (`llm/evaluation`, `llm/post-training`,
     `search-and-ranking`, `recommender-systems`, `experimentation-and-metrics`). Anton
     approved every proposed paper and added 18 from "considered"; 309 added with summaries
     (37 from PDF text), 1 withdrawn from arXiv and skipped, 230 considered papers recorded in
     `catalog/skipped.yaml`. 1,409 papers in the library.
-  - Left: the other areas, at 5–15 papers per folder (see Handoff).
+  - 2026-10-01: the other areas, nine lists (`llm-other`, `deep-and-representation-learning`,
+    `foundations-data-and-trustworthy-ml`, `vision-and-generative`, `nlp-and-graphs`,
+    `rl-and-robotics`, `systems`, `interpretability`, `society-and-research-practice`).
+    Anton approved every proposed paper and moved 32 in from "considered" (LLM2Vec and
+    Beyond the 80/20 Rule were taken off the skip list for it). 789 added with summaries
+    (719 from arXiv HTML, 65 from PDF text, 5 web articles); the considered papers went to
+    `catalog/skipped.yaml` (732 entries now). 2,200 papers in the library.
 - [ ] 7. Wrap-up
 
 ## Decisions
@@ -46,8 +52,9 @@ It runs over many sessions. This file is the plan and the progress record. Its o
 - **Every referenced paper is a candidate:** papers in `Papers_old/`, papers with Obsidian notes,
   papers mentioned in passing in concept notes, and papers in the org plans.
 - **Skips:**
-  - What gets skipped: duplicates, things that are not papers (books, slides, blog posts),
-    off-interest items, and papers superseded by a later version.
+  - What gets skipped: duplicates, things that are not papers (books, slides, talks),
+    off-interest items, and papers superseded by a later version. An engineering blog post
+    that is the only write-up of a system is added as a web article (2026-10-01).
   - Low-quality, outdated or out-of-place papers from `Papers_old/` are flagged `skip?` for
     Anton to confirm.
   - Every skip has a reason and is recorded in `catalog/skipped.yaml`, so it is not proposed
@@ -223,21 +230,20 @@ in Decisions.
 - Update the description of the tree in `AGENTS.md`.
 - Tell Anton when every `Papers_old/` file is resolved. Deleting that folder is his call.
 
-## Handoff: where things stand (end of 2026-10-01)
+## Handoff: where things stand (2026-10-01, afternoon)
 
 Read this first in a new session.
 
 ### Done
 
-- Phases 1–5 are complete: every inventory row from the old sources is resolved, and every
-  `Papers_old/` file is accounted for.
-- Phase 6, primary areas, is complete. The five reading lists are in
-  [reading-lists/](library-expansion/reading-lists/), each with an "Added from Considered"
-  section for the 18 papers Anton moved in. All 310 approved papers are resolved: 309 added
-  with summaries (272 from arXiv HTML, 37 from PDF text) and 1 skipped (360Brew: every arXiv
-  version withdrawn). The two blog posts Anton asked for, Netflix's foundation model and
-  Meta's GEM, have no paper and were not added.
-- The library holds 1,409 papers. `check-library.py` passes, and `build-index.py` is stable
+- Phases 1–6 are complete. Every inventory row is resolved, every `Papers_old/` file is
+  accounted for, and all fourteen reading lists in
+  [reading-lists/](library-expansion/reading-lists/) are added: 310 papers from the five
+  primary-area lists (360Brew skipped: every arXiv version withdrawn) and 789 from the
+  nine others. Each list's "Added from Considered" section holds what Anton moved in.
+- Netflix's recommendation foundation model and Meta's GEM, engineering blog posts with no
+  paper, are in `recommender-systems/industrial-systems` as web articles.
+- The library holds 2,200 papers. `check-library.py` passes, and `build-index.py` is stable
   when run twice.
 - Tooling added or fixed along the way:
   - `catalog/topics.yaml` and `catalog/skipped.yaml`, and the checks that use them.
@@ -247,51 +253,40 @@ Read this first in a new session.
     becomes ". ".
   - `reconvert.py --pdf-text`: regenerates PDF-text papers from their PDFs.
   - `library-expansion/import_reading_list.py`: turns a reviewed list into inventory rows and
-    skip records (see Next steps).
+    skip records.
   - Converter fixes: code listings, `<base>`-relative figure links, withdrawn arXiv
     versions, LaTeX in filenames, two-column PDFs, PDF-text code blocks, running headers.
+  - Figures arXiv embeds as `<object data="….svg">` (plots converted from PDF) were dropped
+    by pandoc without a trace: 831 of 1,185 arXiv-HTML papers had lost about 10,000 of
+    them. Since 2026-10-01 the converter keeps them, as SVG, or as WebP when larger than
+    300 KB (`paperlib.SVG_MAX_BYTES`), and the 831 papers were reconverted.
+  - `add-web-article.py` handles blogs: Medium pages (the story is rebuilt from its marked
+    blocks, without claps, tags and the newsletter box), WordPress share buttons,
+    `article:published_time` dates, and a desktop user agent, since Cloudflare answers
+    headless Chrome with a bot check. A bot-check page now stops the script. Dates and
+    authors on transformer-circuits.pub pages come from their byline block, ordinal dates
+    ("October 29th, 2025") included.
+  - `check-library.py` ignores image markup inside fenced code blocks (a paper's HTML
+    examples), following the fence-length rule for four-backtick blocks.
 
 ### Next steps
 
-1. **Reading lists for the other areas** (phase 6, second half): 63 leaf folders at 5–15
-   papers each, roughly 300–450 papers. One Sonnet subagent per group, with a short prompt
-   that points to [reading-lists/README.md](library-expansion/reading-lists/README.md),
-   names the group's folders and scopes, the depth, and what Anton cares about. Run them in
-   **two waves of four or five**: five at once hit the session usage limit on 2026-09-30.
-   Tell each subagent to write its `.md` incrementally, to check ids with
-   `arxiv-lookup.py --no-abstract` in batches of about 20, and not to use `--title`.
-   - LLM (rest): foundation models (including DeepSeek-V4, GLM-5 and Kimi K2.5, left out of
-     the post-training list), architecture, pretraining, prompting and context, reasoning,
-     agents, RAG, memory, personalization, behaviour, uncertainty, safety, routing,
-     efficiency, text-analytics.
-   - `deep-learning` and `representation-learning`.
-   - `nlp` and `graphs`.
-   - `vision-and-multimodal` and `generative-models`.
-   - `interpretability`.
-   - `ml-foundations`, `data-centric-ml` and `trustworthy-ml`.
-   - `ml-systems` and `computer-systems`.
-   - `reinforcement-learning` and `robotics-and-embodied`.
-   - `ai-and-society` and `research-practice` (`curiosities`: none unless Anton asks).
-2. **Anton reviews** the lists and strikes items by number; he may also move "considered"
-   papers in. Append those to the list's `.tsv` (continuing the numbering) and to an "Added
-   from Considered" section of the `.md`, placed before "Considered, not proposed".
-3. **Add them**, as for the primary areas:
-   1. `import_reading_list.py <area> --strike <numbers>` for each list: a dry run that
-      prints what it would do; add `--write` to save. It appends the approved rows to
-      `inventory.tsv` (`status: todo`, `sources: literature-pass:<area>`), and the struck
-      and considered papers to `catalog/skipped.yaml` with their arXiv titles.
-   2. `add_batch.py <topic-prefixes>` in the background, about 3–4 papers a minute. Rows
-      that fail on an arXiv API error stay `failed: …`: set them back to `todo` and rerun.
-   3. Papers not on arXiv: a Sonnet subagent finds open PDFs and writes a
-      `<key>\t<pdf>\t<url>` map for `add_batch.py --pdfs`. Author pages, Microsoft's
-      exp-platform site and Wayback `id_` URLs work; ACM blocks scripts (Cloudflare), so
-      what is left goes to Anton to download in a browser.
-   4. Summaries: `pending_summaries.py` → Sonnet subagent → `apply_summaries.py`, about
-      150 papers per subagent.
-   5. `build-index.py`, `check-library.py`, and a spot-check of a few conversions.
-4. **Phase 7 wrap-up**:
+1. **Phase 7 wrap-up**:
    - update "Next" in `docs/proposal.md` and the tree description in `AGENTS.md`;
    - tell Anton that `Papers_old/` is fully resolved. Deleting it is his call.
+2. **Optional:** retry the figures that still link to arXiv (`scripts/localize-figures.py`
+   on papers containing `arxiv.org/html/`). About 160 are broken on arXiv itself (404 or
+   truncated files: GANformer 127, GPT-3 12, StyleGAN2 6, single figures elsewhere), so a
+   retry recovers nothing until arXiv re-renders them.
+
+How the second half of phase 6 ran, for reuse: nine Sonnet subagents wrote the lists, at
+most four at a time (no usage-limit trouble); `import_reading_list.py --write` per list;
+`add_batch.py` over all topic prefixes in the background (about 3–4 papers a minute; 2 of
+733 failed on an arXiv API timeout and went through on a rerun); a Sonnet subagent found
+51 open PDFs (one, HDBSCAN, came from Anton's browser; Dietterich 1998 needed
+`ocrmypdf --force-ocr`, its text layer being scrambled); summaries by six Sonnet
+subagents, about 150 papers each, with the numbers in flagged summaries checked against
+the abstracts.
 
 Work in one session at a time: on 2026-09-30 two sessions ran the same lists and one
 overwrote the other's files.
@@ -301,8 +296,7 @@ overwrote the other's files.
 - PDF-text papers still lose tables and figures. Plot and legend text is sometimes fenced as
   a code block, and the BLEU paper's first-page header is fenced by mistake.
 - `arxiv-lookup.py` with 60+ ids printed one entry and stopped; batches of about 20 work.
-- `add-web-article.py`'s date fallback for transformer-circuits pages did not parse; the four
-  dates were set by hand. Authors are extracted.
+- PDF-text papers mostly have no headings, so they carry no page numbers either.
 - Figure grids of numbers in old PDFs (e.g. the prefix-sums paper) are jumbled, since they are
   two-dimensional in the PDF.
 

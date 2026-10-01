@@ -1,0 +1,141 @@
+1		https://papers.nips.cc/paper_files/paper/2017/hash/6449f44a102fde848669bdd9eb6b76fa-Abstract.html	LightGBM: A Highly Efficient Gradient Boosting Decision Tree	2017	ml-foundations/classical-ml
+2		https://doi.org/10.1023/A:1010933404324	Random Forests	2001	ml-foundations/classical-ml
+3		https://doi.org/10.1007/BF00994018	Support-Vector Networks	1995	ml-foundations/classical-ml
+4		https://doi.org/10.1007/978-3-642-37456-2_14	Density-Based Clustering Based on Hierarchical Density Estimates	2013	ml-foundations/classical-ml
+5		https://theory.stanford.edu/~sergei/papers/kMeansPP-soda.pdf	k-means++: The Advantages of Careful Seeding	2007	ml-foundations/classical-ml
+6	0711.0189		A Tutorial on Spectral Clustering	2007	ml-foundations/classical-ml
+7	1201.0490		Scikit-learn: Machine Learning in Python	2012	ml-foundations/classical-ml
+8		https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf	A Few Useful Things to Know About Machine Learning	2012	ml-foundations/classical-ml
+9		https://jmlr.org/papers/v15/delgado14a.html	Do we Need Hundreds of Classifiers to Solve Real World Classification Problems?	2014	ml-foundations/classical-ml
+10	2106.03253		Tabular Data: Deep Learning is Not All You Need	2021	ml-foundations/tabular
+11	2106.11189		Well-tuned Simple Nets Excel on Tabular Datasets	2021	ml-foundations/tabular
+12	2203.05556		On Embeddings for Numerical Features in Tabular Deep Learning	2022	ml-foundations/tabular
+13	2307.14338		TabR: Tabular Deep Learning Meets Nearest Neighbors in 2023	2023	ml-foundations/tabular
+14	2407.04491		Better by Default: Strong Pre-Tuned MLPs and Boosted Trees on Tabular Data	2024	ml-foundations/tabular
+15	2410.24210		TabM: Advancing Tabular Deep Learning with Parameter-Efficient Ensembling	2024	ml-foundations/tabular
+16	2506.16791		TabArena: A Living Benchmark for Machine Learning on Tabular Data	2025	ml-foundations/tabular
+17	2502.05564		TabICL: A Tabular Foundation Model for In-Context Learning on Large Data	2025	ml-foundations/tabular
+18	2511.08667		TabPFN-2.5: Advancing the State of the Art in Tabular Foundation Models	2025	ml-foundations/tabular
+19	2605.13986		TabPFN-3: Technical Report	2026	ml-foundations/tabular
+20	2510.21204		Mitra: Mixed Synthetic Priors for Enhancing Tabular Foundation Models	2025	ml-foundations/tabular
+21	2110.01889		Deep Neural Networks and Tabular Data: A Survey	2021	ml-foundations/tabular
+22	1907.00503		Modeling Tabular data using Conditional GAN	2019	ml-foundations/tabular
+23	2310.09656		Mixed-Type Tabular Data Synthesis with Score-based Diffusion in Latent Space	2023	ml-foundations/tabular
+24		https://jmlr.org/papers/v7/demsar06a.html	Statistical Comparisons of Classifiers over Multiple Data Sets	2006	ml-foundations/evaluation-and-model-selection
+25		https://doi.org/10.1162/089976698300017197	Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms	1998	ml-foundations/evaluation-and-model-selection
+26	1606.04316		Time for a change: a tutorial for comparing multiple classifiers through Bayesian analysis	2016	ml-foundations/evaluation-and-model-selection
+27	2104.00673		Cross-validation: what does it estimate and how well does it do it?	2021	ml-foundations/evaluation-and-model-selection
+30		https://jmlr.org/papers/v13/hernandez-orallo12a.html	A Unified View of Performance Metrics: Translating Threshold Choice into Expected Classification Loss	2012	ml-foundations/evaluation-and-model-selection
+31		https://doi.org/10.1198/016214506000001437	Strictly Proper Scoring Rules, Prediction, and Estimation	2007	ml-foundations/evaluation-and-model-selection
+32		https://jmlr.org/papers/v13/bergstra12a.html	Random Search for Hyper-Parameter Optimization	2012	ml-foundations/evaluation-and-model-selection
+33	1909.10155		Verified Uncertainty Calibration	2019	ml-foundations/evaluation-and-model-selection
+34		https://doi.org/10.1371/journal.pmed.0020124	Why Most Published Research Findings Are False	2005	ml-foundations/probabilistic-and-statistics
+35		https://doi.org/10.1214/ss/1009213726	Statistical Modeling: The Two Cultures	2001	ml-foundations/probabilistic-and-statistics
+36	2011.01808		Bayesian Workflow	2020	ml-foundations/probabilistic-and-statistics
+37	1701.02434		A Conceptual Introduction to Hamiltonian Monte Carlo	2017	ml-foundations/probabilistic-and-statistics
+38	1111.4246		The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo	2011	ml-foundations/probabilistic-and-statistics
+39		https://doi.org/10.18637/jss.v076.i01	Stan: A Probabilistic Programming Language	2017	ml-foundations/probabilistic-and-statistics
+40	1601.00670		Variational Inference: A Review for Statisticians	2016	ml-foundations/probabilistic-and-statistics
+41	1206.2944		Practical Bayesian Optimization of Machine Learning Algorithms	2012	ml-foundations/probabilistic-and-statistics
+42	1604.04173		Distribution-Free Predictive Inference For Regression	2016	ml-foundations/probabilistic-and-statistics
+43	1904.06019		Conformal Prediction Under Covariate Shift	2019	ml-foundations/probabilistic-and-statistics
+44	2208.02814		Conformal Risk Control	2022	ml-foundations/probabilistic-and-statistics
+45	1605.07723		Data Programming: Creating Large Training Sets, Quickly	2016	data-centric-ml/weak-supervision
+46	1703.00854		Learning the Structure of Generative Models without Labeled Data	2017	data-centric-ml/weak-supervision
+47	2002.11955		Fast and Three-rious: Speeding Up Weak Supervision with Triplet Methods	2020	data-centric-ml/weak-supervision
+48	2202.05433		A Survey on Programmatic Weak Supervision	2022	data-centric-ml/weak-supervision
+49	2109.11377		WRENCH: A Comprehensive Benchmark for Weak Supervision	2021	data-centric-ml/weak-supervision
+50	2010.07835		Fine-Tuning Pre-trained Language Model with Weak Supervision: A Contrastive-Regularized Self-Training Approach	2020	data-centric-ml/weak-supervision
+51		https://doi.org/10.1093/nsr/nwx106	A Brief Introduction to Weakly Supervised Learning	2018	data-centric-ml/weak-supervision
+52	2205.02318		Language Models in the Loop: Incorporating Prompting into Weak Supervision	2022	data-centric-ml/weak-supervision
+53	2210.02441		Ask Me Anything: A simple strategy for prompting language models	2022	data-centric-ml/weak-supervision
+54	2311.00739		Can Large Language Models Design Accurate Label Functions?	2023	data-centric-ml/weak-supervision
+55		https://doi.org/10.2307/2346806	Maximum Likelihood Estimation of Observer Error-Rates Using the EM Algorithm	1979	data-centric-ml/labels-and-annotation
+56		https://aclanthology.org/D08-1027/	Cheap and Fast - But is it Good? Evaluating Non-Expert Annotations for Natural Language Tasks	2008	data-centric-ml/labels-and-annotation
+57		https://jmlr.org/papers/v11/raykar10a.html	Learning From Crowds	2010	data-centric-ml/labels-and-annotation
+58		https://aclanthology.org/J08-4004/	Survey Article: Inter-Coder Agreement for Computational Linguistics	2008	data-centric-ml/labels-and-annotation
+59		https://doi.org/10.1613/jair.1.12752	Learning from Disagreement: A Survey	2021	data-centric-ml/labels-and-annotation
+60	2405.05860		The Perspectivist Paradigm Shift: Assumptions and Challenges of Capturing Human Labels	2024	data-centric-ml/labels-and-annotation
+61	2007.08199		Learning from Noisy Labels with Deep Neural Networks: A Survey	2020	data-centric-ml/labels-and-annotation
+62	2110.12088		Learning with Noisy Labels Revisited: A Study Using Real-World Human Annotations	2021	data-centric-ml/labels-and-annotation
+63	2001.10528		Identifying Mislabeled Data using the Area Under the Margin Ranking	2020	data-centric-ml/labels-and-annotation
+64	2009.10795		Dataset Cartography: Mapping and Diagnosing Datasets with Training Dynamics	2020	data-centric-ml/labels-and-annotation
+65		https://burrsettles.com/pub/settles.activelearning.pdf	Active Learning Literature Survey	2009	data-centric-ml/labels-and-annotation
+66	2009.00236		A Survey of Deep Active Learning	2020	data-centric-ml/labels-and-annotation
+67	2306.00176		Automated Annotation with Generative AI Requires Validation	2023	data-centric-ml/labels-and-annotation
+68	2509.08825		Large Language Model Hacking: Quantifying the Hidden Risks of Using LLMs for Text Annotation	2025	data-centric-ml/labels-and-annotation
+69	2402.13446		Large Language Models for Data Annotation and Synthesis: A Survey	2024	data-centric-ml/labels-and-annotation
+72	1805.09501		AutoAugment: Learning Augmentation Policies from Data	2018	data-centric-ml/augmentation-and-synthetic-data
+73	1909.13719		RandAugment: Practical automated data augmentation with a reduced search space	2019	data-centric-ml/augmentation-and-synthetic-data
+74	1904.12848		Unsupervised Data Augmentation for Consistency Training	2019	data-centric-ml/augmentation-and-synthetic-data
+75	1901.11196		EDA: Easy Data Augmentation Techniques for Boosting Performance on Text Classification Tasks	2019	data-centric-ml/augmentation-and-synthetic-data
+76		https://doi.org/10.1186/s40537-019-0197-0	A Survey on Image Data Augmentation for Deep Learning	2019	data-centric-ml/augmentation-and-synthetic-data
+77	2304.08466		Synthetic Data from Diffusion Models Improves ImageNet Classification	2023	data-centric-ml/augmentation-and-synthetic-data
+78	2212.08420		Fake it till you make it: Learning transferable representations from synthetic ImageNet clones	2022	data-centric-ml/augmentation-and-synthetic-data
+79	2202.04538		Generating Training Data with Language Models: Towards Zero-Shot Language Understanding	2022	data-centric-ml/augmentation-and-synthetic-data
+80	2310.07849		Synthetic Data Generation with Large Language Models for Text Classification: Potential and Limitations	2023	data-centric-ml/augmentation-and-synthetic-data
+81	1803.09010		Datasheets for Datasets	2018	data-centric-ml/data-quality-and-shift
+82		https://people.csail.mit.edu/torralba/publications/datasets_cvpr11.pdf	Unbiased Look at Dataset Bias	2011	data-centric-ml/data-quality-and-shift
+83	1803.02324		Annotation Artifacts in Natural Language Inference Data	2018	data-centric-ml/data-quality-and-shift
+84	2004.07780		Shortcut Learning in Deep Neural Networks	2020	data-centric-ml/data-quality-and-shift
+85	1902.10811		Do ImageNet Classifiers Generalize to ImageNet?	2019	data-centric-ml/data-quality-and-shift
+87	2012.07421		WILDS: A Benchmark of in-the-Wild Distribution Shifts	2020	data-centric-ml/data-quality-and-shift
+88	2312.07577		Benchmarking Distribution Shift in Tabular Data with TableShift	2023	data-centric-ml/data-quality-and-shift
+89	1802.03916		Detecting and Correcting for Label Shift with Black Box Predictors	2018	data-centric-ml/data-quality-and-shift
+90	2107.04649		Accuracy on the Line: On the Strong Correlation Between Out-of-Distribution and In-Distribution Generalization	2021	data-centric-ml/data-quality-and-shift
+91	2007.01434		In Search of Lost Domain Generalization	2020	data-centric-ml/data-quality-and-shift
+92	2004.05785		Learning under Concept Drift: A Review	2020	data-centric-ml/data-quality-and-shift
+94	1904.02868		Data Shapley: Equitable Valuation of Data for Machine Learning	2019	data-centric-ml/data-quality-and-shift
+95	1104.3913		Fairness Through Awareness	2011	trustworthy-ml/fairness-and-bias
+96	1610.02413		Equality of Opportunity in Supervised Learning	2016	trustworthy-ml/fairness-and-bias
+97	1609.05807		Inherent Trade-Offs in the Fair Determination of Risk Scores	2016	trustworthy-ml/fairness-and-bias
+98	1803.02453		A Reductions Approach to Fair Classification	2018	trustworthy-ml/fairness-and-bias
+99	1803.04383		Delayed Impact of Fair Machine Learning	2018	trustworthy-ml/fairness-and-bias
+100	1908.09635		A Survey on Bias and Fairness in Machine Learning	2019	trustworthy-ml/fairness-and-bias
+101	1808.00023		The Measure and Mismeasure of Fairness	2018	trustworthy-ml/fairness-and-bias
+102		https://proceedings.mlr.press/v81/buolamwini18a.html	Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification	2018	trustworthy-ml/fairness-and-bias
+103	1607.06520		Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings	2016	trustworthy-ml/fairness-and-bias
+104	1608.07187		Semantics derived automatically from language corpora contain human-like biases	2016	trustworthy-ml/fairness-and-bias
+105	2005.14050		Language (Technology) is Power: A Critical Survey of "Bias" in NLP	2020	trustworthy-ml/fairness-and-bias
+106	1802.07281		Fairness of Exposure in Rankings	2018	trustworthy-ml/fairness-and-bias
+107	2103.14000		Fairness in Ranking: A Survey	2021	trustworthy-ml/fairness-and-bias
+108	2309.00770		Bias and Fairness in Large Language Models: A Survey	2023	trustworthy-ml/fairness-and-bias
+109	2410.19803		First-Person Fairness in Chatbots	2024	trustworthy-ml/fairness-and-bias
+110		https://doi.org/10.1007/11681878_14	Calibrating Noise to Sensitivity in Private Data Analysis	2006	trustworthy-ml/privacy-and-federated
+111		https://doi.org/10.1561/0400000042	The Algorithmic Foundations of Differential Privacy	2014	trustworthy-ml/privacy-and-federated
+112	1702.07476		Renyi Differential Privacy	2017	trustworthy-ml/privacy-and-federated
+113	1610.05755		Semi-supervised Knowledge Transfer for Deep Learning from Private Training Data	2016	trustworthy-ml/privacy-and-federated
+114	2112.03570		Membership Inference Attacks From First Principles	2021	trustworthy-ml/privacy-and-federated
+115	2305.08846		Privacy Auditing with One (1) Training Run	2023	trustworthy-ml/privacy-and-federated
+116	1912.04977		Advances and Open Problems in Federated Learning	2019	trustworthy-ml/privacy-and-federated
+117	1812.06127		Federated Optimization in Heterogeneous Networks	2018	trustworthy-ml/privacy-and-federated
+118	2003.00295		Adaptive Federated Optimization	2020	trustworthy-ml/privacy-and-federated
+119	1906.08935		Deep Leakage from Gradients	2019	trustworthy-ml/privacy-and-federated
+120	2103.00039		Practical and Private (Deep) Learning without Sampling or Shuffling	2021	trustworthy-ml/privacy-and-federated
+121	2204.13650		Unlocking High-Accuracy Differentially Private Image Classification through Scale	2022	trustworthy-ml/privacy-and-federated
+122	2501.18914		Scaling Laws for Differentially Private Language Models	2025	trustworthy-ml/privacy-and-federated
+123	2510.15001		VaultGemma: A Differentially Private Gemma Model	2025	trustworthy-ml/privacy-and-federated
+124	1912.03817		Machine Unlearning	2019	trustworthy-ml/privacy-and-federated
+125	1906.01820		Risks from Learned Optimization in Advanced Machine Learning Systems	2019	trustworthy-ml/ai-safety
+126	2105.14111		Goal Misgeneralization in Deep Reinforcement Learning	2021	trustworthy-ml/ai-safety
+127	2209.00626		The Alignment Problem from a Deep Learning Perspective	2022	trustworthy-ml/ai-safety
+128	2209.13085		Defining and Characterizing Reward Hacking	2022	trustworthy-ml/ai-safety
+129	1811.07871		Scalable agent alignment via reward modeling: a research direction	2018	trustworthy-ml/ai-safety
+130	2306.12001		An Overview of Catastrophic AI Risks	2023	trustworthy-ml/ai-safety
+131	2305.15324		Model evaluation for extreme risks	2023	trustworthy-ml/ai-safety
+132	2403.10462		Safety Cases: How to Justify the Safety of Advanced AI Systems	2024	trustworthy-ml/ai-safety
+133	2405.06624		Towards Guaranteed Safe AI: A Framework for Ensuring Robust and Reliable AI Systems	2024	trustworthy-ml/ai-safety
+134	2312.06942		AI Control: Improving Safety Despite Intentional Subversion	2023	trustworthy-ml/ai-safety
+135	2504.01849		An Approach to Technical AGI Safety and Security	2025	trustworthy-ml/ai-safety
+136	2504.18530		Scaling Laws For Scalable Oversight	2025	trustworthy-ml/ai-safety
+137	2602.21012		International AI Safety Report 2026	2026	trustworthy-ml/ai-safety
+138	2601.09065		Beyond Consensus: Perspectivist Modeling and Evaluation of Annotator Disagreement in NLP	2026	data-centric-ml/labels-and-annotation
+139	2510.16211		Benchmarking noisy label detection methods	2025	data-centric-ml/labels-and-annotation
+140	2006.07159		Are we done with ImageNet?	2020	data-centric-ml/labels-and-annotation
+141	2301.04819		Data-centric AI: Perspectives and Challenges	2023	data-centric-ml
+142	2303.10158		Data-centric Artificial Intelligence: A Survey	2023	data-centric-ml
+143	2205.09911		Can Foundation Models Wrangle Your Data?	2022	data-centric-ml/data-quality-and-shift
+144	2210.07574		Is synthetic data from generative models ready for image recognition?	2022	data-centric-ml/augmentation-and-synthetic-data
+145	2505.13947		A Probabilistic Perspective on Model Collapse	2025	data-centric-ml/augmentation-and-synthetic-data
+146	2502.18049		Recursive Learning Without Collapse: A Weighting-Based Stabilization Framework	2025	data-centric-ml/augmentation-and-synthetic-data
+147	2509.04796		Knowledge Collapse in LLMs: When Fluency Survives but Facts Fail under Recursive Synthetic Training	2025	data-centric-ml/augmentation-and-synthetic-data

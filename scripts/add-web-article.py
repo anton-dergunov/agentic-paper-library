@@ -26,6 +26,7 @@ page's metadata when it has them; the options override them.
 """
 
 import base64
+import copy
 import datetime
 import html
 import importlib.util
@@ -46,9 +47,17 @@ from paperlib import (
 
 SCRIPTS = Path(__file__).resolve().parent
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# Headless Chrome announces itself as "HeadlessChrome", which Cloudflare-fronted
+# blogs (Medium, the Netflix Tech Blog) answer with a bot check; a desktop
+# user agent gets the article.
+USER_AGENT = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+              "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36")
+BOT_CHECK = re.compile(r"Attention Required! \| Cloudflare|Just a moment\.\.\.|Access denied")
 DROP = ["script", "style", "noscript", "d-bibliography", "d-citation-list", "d-footnote-list",
         "d-contents", "d-title", "d-byline", "d-front-matter", "dt-byline", "dt-bibliography",
         "dt-fn-list", "dt-header", "dt-footer", "d-appendix", "dt-appendix", "nav", "canvas"]
+# Blog chrome inside <article>: share buttons and related-post lists (WordPress/Jetpack).
+DROP_CLASSES = ["sharedaddy", "sd-sharing", "jp-relatedposts"]
 
 _spec = importlib.util.spec_from_file_location("h2m", SCRIPTS / "html-to-markdown.py")
 h2m = importlib.util.module_from_spec(_spec)
@@ -65,7 +74,8 @@ def chrome(url, *args):
     with tempfile.TemporaryDirectory() as profile:
         proc = subprocess.Popen(
             [CHROME, "--headless=new", "--disable-gpu", "--no-first-run", "--hide-scrollbars",
-             f"--user-data-dir={profile}", "--virtual-time-budget=20000", *args, url],
+             f"--user-data-dir={profile}", f"--user-agent={USER_AGENT}",
+             "--virtual-time-budget=20000", *args, url],
             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True,
         )
         try:
@@ -109,10 +119,46 @@ def replace(el, new):
     el.getparent().replace(el, new)
 
 
+def medium_body(body):
+    """The story itself from a Medium page, without the page's widgets.
+
+    Medium marks every block of the story (paragraph, heading, list item,
+    caption) with data-selectable-paragraph; claps, follow and share buttons,
+    tags and the newsletter box between sections carry no such mark. The
+    story is rebuilt from the title and the marked blocks, taking whole
+    lists, figures and code blocks around them.
+    """
+    def is_block(el):
+        if el.get("data-testid") == "storyTitle":
+            return True
+        if el.tag in ("ol", "ul", "figure", "pre", "blockquote"):
+            return bool(el.xpath(".//*[@data-selectable-paragraph] | .//img"))
+        return el.get("data-selectable-paragraph") is not None and el.tag not in ("li", "figcaption")
+
+    blocks = []
+    for el in body.iter():
+        if isinstance(el.tag, str) and is_block(el) and not any(a in blocks for a in el.iterancestors()):
+            blocks.append(el)
+    keep = lxml.html.Element("div")
+    for el in blocks:
+        el.tail = None
+        keep.append(el)  # moves it out of the page; blocks are in document order
+    for el in keep.xpath('.//*[contains(concat(" ", @class, " "), " speechify-ignore ")]'):
+        el.drop_tree()  # "Press enter or click to view image in full size"
+    return keep
+
+
 def clean(body, base_url):
     for tag in DROP:
         for el in body.xpath(f"//{tag}"):
             el.drop_tree()
+    for cls in DROP_CLASSES:
+        for el in body.xpath(f'//*[contains(concat(" ", @class, " "), " {cls} ")]'):
+            if el.getparent() is not None:
+                el.drop_tree()
+    # A <div> inside a heading makes pandoc split it into an empty heading and a paragraph.
+    for el in body.xpath("(//h1 | //h2 | //h3 | //h4 | //h5 | //h6)//div"):
+        el.drop_tag()
     # KaTeX output: the TeX source is in the MathML annotation.
     for el in body.xpath('//span[contains(concat(" ", @class, " "), " katex-display ")]'
                          ' | //span[contains(concat(" ", @class, " "), " katex ")]'):
@@ -164,25 +210,42 @@ def main(argv):
     if len(dom) < 1000:
         sys.exit("error: Chrome returned no page")
     doc = lxml.html.fromstring(dom)
+    if BOT_CHECK.search(doc.findtext(".//title") or ""):
+        sys.exit(f"error: the site answered with a bot check ({doc.findtext('.//title').strip()})")
     fm = front_matter(doc)
     title = opts["--title"] or fm.get("title") or (meta(doc, "citation_title", "og:title") or [None])[0] \
         or (doc.findtext(".//title") or "").strip()
     authors = [a.strip() for a in opts["--authors"].split(";")] if opts["--authors"] else \
         meta(doc, "citation_author", "article:author") or \
         [a.get("author") or a.get("name") for a in fm.get("authors", []) if isinstance(a, dict)]
-    published = opts["--published"] or (meta(doc, "article:published", "citation_publication_date",
+    published = opts["--published"] or (meta(doc, "article:published", "article:published_time",
+                                              "citation_publication_date",
                                               "citation_date") or [fm.get("publishedDate")])[0]
-    if not authors:  # transformer-circuits.pub: a header with class="author" elements
-        names = [" ".join(e.text_content().split()).strip(" ,*∗†‡") for e in
-                 doc.xpath('//*[contains(concat(" ", @class, " "), " author ")]')]
+    authors = [a for a in authors if a and not a.startswith("http")] or \
+        [a for a in meta(doc, "author") if not a.startswith("http")]  # Medium: article:author is a URL
+    # transformer-circuits.pub: a byline block (class "d-byline") with "authors" and
+    # "published" parts; older pages have class="author" elements and an
+    # "article-header" with "Published" followed by e.g. "Dec 22, 2021".
+    byline = doc.xpath('//*[contains(concat(" ", @class, " "), " d-byline ")]')
+    if not authors:
+        names = [e.text_content() for e in doc.xpath('//*[contains(concat(" ", @class, " "), " author ")]')]
+        if not names and byline:
+            for part in byline[0].xpath('.//*[contains(concat(" ", @class, " "), " authors ")]'):
+                part = copy.deepcopy(part)  # the byline stays intact for the article body
+                for h in part.xpath(".//h3"):
+                    h.drop_tree()
+                for br in part.xpath(".//br"):
+                    br.tail = ", " + (br.tail or "")
+                names = part.text_content().split(",")
+        names = [" ".join(n.split()).strip(" ,*∗†‡") for n in names]
         authors = list(dict.fromkeys(n for n in names if n))
-    if not published:  # ... and a "Published" label followed by e.g. "Dec 22, 2021"
-        text = " ".join(doc.xpath("//*[contains(@class, 'article-header')]")[0].text_content().split()) \
-            if doc.xpath("//*[contains(@class, 'article-header')]") else ""
-        m = re.search(r"Published\s+([A-Z][a-z]+ \d{1,2}, \d{4})", text)
-        for fmt in ("%b %d, %Y", "%B %d, %Y"):
+    if not published:
+        header = doc.xpath("//*[contains(@class, 'article-header')]") + byline
+        text = " ".join(" ".join(e.text_content().split()) for e in header)
+        m = re.search(r"Published\s+([A-Z][a-z]+) (\d{1,2})(?:st|nd|rd|th)?, (\d{4})", text)
+        for fmt in ("%b %d %Y", "%B %d %Y"):
             try:
-                published = datetime.datetime.strptime(m.group(1), fmt).date().isoformat() if m else None
+                published = datetime.datetime.strptime(" ".join(m.groups()), fmt).date().isoformat() if m else None
                 break
             except ValueError:
                 continue
@@ -208,6 +271,8 @@ def main(argv):
         if found:
             body = found[0]
             break
+    if doc.xpath("//*[@data-selectable-paragraph]"):
+        body = medium_body(body)
     body = clean(body, url)
     article = lxml.html.tostring(body, encoding="unicode")
 

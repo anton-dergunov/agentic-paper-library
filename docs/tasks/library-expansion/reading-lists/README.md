@@ -30,8 +30,10 @@ area. Fewer strong papers beat a padded list.
 - Outdated or superseded work, incremental variants, and papers with little uptake. List the
   notable ones you considered and rejected, with the reason, in the "Considered, not proposed"
   section, so they are recorded and not proposed again.
-- Blog posts, books, courses and talks (they are not papers). A paper published only as a web
-  article (Distill, transformer-circuits.pub) is fine.
+- Books, courses and talks. A paper published only as a web article (Distill,
+  transformer-circuits.pub) is fine, and so is an engineering blog post when it is the
+  reference write-up of a method or system that has no paper (Netflix's recommendation
+  foundation model, Meta's GEM); give its URL. Ordinary blog commentary is left out.
 
 ## Verifying
 

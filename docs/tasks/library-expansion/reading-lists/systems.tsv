@@ -1,0 +1,57 @@
+1		https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40565.pdf	Large Scale Distributed Deep Networks	2012	ml-systems/distributed-training
+2		https://www.usenix.org/system/files/conference/osdi14/osdi14-paper-li_mu.pdf	Scaling Distributed Machine Learning with the Parameter Server	2014	ml-systems/distributed-training
+3	1605.08695		TensorFlow: A system for large-scale machine learning	2016	ml-systems/distributed-training
+4	1712.05889		Ray: A Distributed Framework for Emerging AI Applications	2017	ml-systems/distributed-training
+5	1710.03740		Mixed Precision Training	2017	ml-systems/distributed-training
+6	1604.06174		Training Deep Nets with Sublinear Memory Cost	2016	ml-systems/distributed-training
+7	2105.04663		GSPMD: General and Scalable Parallelization for ML Computation Graphs	2021	ml-systems/distributed-training
+8	2201.12023		Alpa: Automating Inter- and Intra-Operator Parallelism for Distributed Deep Learning	2022	ml-systems/distributed-training
+9	2401.10241		Zero Bubble Pipeline Parallelism	2023	ml-systems/distributed-training
+10	2311.08105		DiLoCo: Distributed Low-Communication Training of Language Models	2023	ml-systems/distributed-training
+11	2402.15627		MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs	2024	ml-systems/distributed-training
+12	2410.21680		Revisiting Reliability in Large-Scale Machine Learning Research Clusters	2024	ml-systems/distributed-training
+13	2410.06511		TorchTitan: One-stop PyTorch native solution for production ready LLM pre-training	2024	ml-systems/distributed-training
+14	2505.11432		MegaScale-MoE: Large-Scale Communication-Efficient Training of Mixture-of-Experts Models in Production	2025	ml-systems/distributed-training
+15	2407.20018		Efficient Training of Large Language Models on Distributed Infrastructures: A Survey	2024	ml-systems/distributed-training
+16	2111.05897		Persia: An Open, Hybrid System Scaling Deep Learning-based Recommenders up to 100 Trillion Parameters	2021	ml-systems/distributed-training
+17	2011.05497		Understanding Training Efficiency of Deep Learning Recommendation Models at Scale	2020	ml-systems/distributed-training
+18	2108.09373		Understanding Data Storage and Ingestion for Large-Scale Deep Recommendation Model Training	2021	ml-systems/distributed-training
+19		https://www.usenix.org/system/files/osdi22-yu.pdf	Orca: A Distributed Serving System for Transformer-Based Generative Models	2022	ml-systems/inference-and-serving
+20	2309.06180		Efficient Memory Management for Large Language Model Serving with PagedAttention	2023	ml-systems/inference-and-serving
+21	2403.02310		Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve	2024	ml-systems/inference-and-serving
+22	2401.09670		DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving	2024	ml-systems/inference-and-serving
+23	2311.18677		Splitwise: Efficient generative LLM inference using phase splitting	2023	ml-systems/inference-and-serving
+24	2407.00079		Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving	2024	ml-systems/inference-and-serving
+25	2312.07104		SGLang: Efficient Execution of Structured Language Model Programs	2023	ml-systems/inference-and-serving
+26	2407.08608		FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision	2024	ml-systems/inference-and-serving
+27	2501.01005		FlashInfer: Efficient and Customizable Attention Engine for LLM Inference Serving	2025	ml-systems/inference-and-serving
+28	2504.02263		MegaScale-Infer: Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism	2025	ml-systems/inference-and-serving
+29	2312.15234		Towards Efficient Generative Large Language Model Serving: A Survey from Algorithms to Systems	2023	ml-systems/inference-and-serving
+30	1612.03079		Clipper: A Low-Latency Online Prediction Serving System	2016	ml-systems/inference-and-serving
+31	2001.02772		DeepRecSys: A System for Optimizing End-To-End At-scale Neural Recommendation Inference	2020	ml-systems/inference-and-serving
+32	2210.08804		A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	2022	ml-systems/inference-and-serving
+33	2511.14881		SilverTorch: A Unified Model-based System to Democratize Large-Scale Recommendation on GPUs	2025	ml-systems/inference-and-serving
+34		https://mlsys.org/Conferences/2019/doc/2019/167.pdf	Data Validation for Machine Learning	2019	ml-systems/production-ml
+35	2010.02013		Towards ML Engineering: A Brief History Of TensorFlow Extended (TFX)	2020	ml-systems/production-ml
+36	2011.09926		Challenges in Deploying Machine Learning: a Survey of Case Studies	2020	ml-systems/production-ml
+38	2108.13557		Towards Observability for Production Machine Learning Pipelines	2021	ml-systems/production-ml
+39	2205.02302		Machine Learning Operations (MLOps): Overview, Definition, and Architecture	2022	ml-systems/production-ml
+40	1909.05372		Overton: A Data System for Monitoring and Improving Machine-Learned Products	2019	ml-systems/production-ml
+41	2305.20077		Managed Geo-Distributed Feature Store: Architecture and System Design	2023	ml-systems/production-ml
+42	2403.16795		"We Have No Idea How Models will Behave in Production until Production": How Engineers Operationalize Machine Learning	2024	ml-systems/production-ml
+43	2509.25195		Understanding Practitioners Perspectives on Monitoring Machine Learning Systems	2025	ml-systems/production-ml
+44		https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf	MapReduce: Simplified Data Processing on Large Clusters	2004	computer-systems
+45		https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf	Dynamo: Amazon's Highly Available Key-value Store	2007	computer-systems
+46		https://raft.github.io/raft.pdf	In Search of an Understandable Consensus Algorithm	2014	computer-systems
+47		https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf	Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing	2012	computer-systems
+48		https://research.google/pubs/large-scale-cluster-management-at-google-with-borg/	Large-scale cluster management at Google with Borg	2015	computer-systems
+49		https://research.google/pubs/the-tail-at-scale/	The Tail at Scale	2013	computer-systems
+50		https://research.google/pubs/dapper-a-large-scale-distributed-systems-tracing-infrastructure/	Dapper, a Large-Scale Distributed Systems Tracing Infrastructure	2010	computer-systems
+51		https://lamport.azurewebsites.net/pubs/time-clocks.pdf	Time, Clocks, and the Ordering of Events in a Distributed System	1978	computer-systems
+52		https://www.cs.umb.edu/~poneil/lsmtree.pdf	The Log-Structured Merge-Tree (LSM-Tree)	1996	computer-systems
+53		https://www.usenix.org/legacy/event/atc10/tech/full_papers/Hunt.pdf	ZooKeeper: Wait-free coordination for Internet-scale systems	2010	computer-systems
+54		https://pages.cs.wisc.edu/~akella/CS744/F17/838-CloudPapers/Kafka.pdf	Kafka: a Distributed Messaging System for Log Processing	2011	computer-systems
+55		https://www.usenix.org/system/files/conference/atc13/atc13-bronson.pdf	TAO: Facebook's Distributed Data Store for the Social Graph	2013	computer-systems
+56		https://research.google/pubs/dremel-interactive-analysis-of-web-scale-datasets-2/	Dremel: Interactive Analysis of Web-Scale Datasets	2010	computer-systems
+57		https://www.vldb.org/pvldb/vol8/p1792-Akidau.pdf	The Dataflow Model: A Practical Approach to Balancing Correctness, Latency, and Cost in Massive-Scale, Unbounded, Out-of-Order Data Processing	2015	computer-systems
+58		https://dsf.berkeley.edu/cs286/papers/countmin-latin2004.pdf	An Improved Data Stream Summary: The Count-Min Sketch and its Applications	2005	computer-systems

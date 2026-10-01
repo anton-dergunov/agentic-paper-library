@@ -31,6 +31,23 @@ from paperlib import (
 
 # Markdown images, and <img> tags (used inside the HTML tables of complex tables).
 IMAGE_LINK = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
+# Fenced code can show image markup as text (a paper's HTML examples).
+FENCE = re.compile(r"^(`{3,}|~{3,})")
+
+
+def image_links(body):
+    """Image links in a markdown body, outside fenced code blocks."""
+    kept, fence = [], None
+    for line in body.splitlines():
+        m = FENCE.match(line)
+        if fence is None and m:
+            fence = m.group(1)
+        elif fence is not None and m and set(m.group(1)) == set(fence) \
+                and len(m.group(1)) >= len(fence) and not line[len(m.group(1)):].strip():
+            fence = None
+        elif fence is None:
+            kept.append(line)
+    return IMAGE_LINK.findall("\n".join(kept))
 
 
 def check_catalog(papers):
@@ -89,7 +106,7 @@ def main():
                 problems.append(f"{rel}: unknown type `{meta['type']}`")
         if not pdf_path_for(md).exists():
             problems.append(f"{rel}: no PDF at {pdf_path_for(md)}")
-        for groups in IMAGE_LINK.findall(body):
+        for groups in image_links(body):
             target = groups[0] or groups[1]
             if re.match(r"^[a-z]+:", target):
                 continue
@@ -98,7 +115,7 @@ def main():
 
     referenced = set()
     for md in papers:
-        for groups in IMAGE_LINK.findall(read_paper(md)[1]):
+        for groups in image_links(read_paper(md)[1]):
             target = groups[0] or groups[1]
             if not re.match(r"^[a-z]+:", target):
                 referenced.add((md.parent / unquote(target)).resolve())

@@ -1,0 +1,84 @@
+# Reading list: interpretability
+
+The library's explainability folder holds the classic attribution toolkit (SHAP and TreeSHAP, LIME, Integrated Gradients, Grad-CAM, GA2M), the attention-as-explanation debate, concept whitening, and two surveys. It lacks the evaluation and critique of those tools, concept-based and counterfactual explanation, training-data attribution, and explanation of LLMs. The mechanistic folder has the Anthropic core (Mathematical Framework, Toy Models, induction heads, Towards Monosemanticity, Scaling Monosemanticity, Circuit Tracing, Biology of an LLM), Gemma Scope, JumpReLU SAEs, ROME, and BERT analysis papers. It lacks the circuit-discovery and causal-intervention methods, the SAE training and critique papers, direction-based analysis and steering, and the 2024-2026 activation-explanation work. The list adds 15 explainability and 18 mechanistic papers. It is slightly over the usual depth for the mechanistic folder because both folders had real gaps; strike freely. Recent items on transformer-circuits.pub are given by URL. Persona vectors, emergent misalignment and CAA steering belong in llm/ folders.
+
+## Proposed
+
+| # | Paper | Year | arXiv / URL | Folder | Why |
+|--:|---|--:|---|---|---|
+| 1 | Towards A Rigorous Science of Interpretable Machine Learning | 2017 | 1702.08608 | interpretability/explainability | What interpretability is for and how to evaluate it (application-, human- and functionally-grounded); the common vocabulary for the folder. |
+| 2 | Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead | 2018 | 1811.10154 | interpretability/explainability | Rudin's argument that post-hoc explanations are unreliable and inherently interpretable models should be preferred; the counter-position to SHAP/LIME. |
+| 3 | Sanity Checks for Saliency Maps | 2018 | 1810.03292 | interpretability/explainability | Randomisation tests showing many saliency methods ignore the model's weights; the standard reference for validating attributions. |
+| 4 | Learning Important Features Through Propagating Activation Differences | 2017 | 1704.02685 | interpretability/explainability | DeepLIFT: backpropagated attribution relative to a reference input; the basis of DeepSHAP and a standard baseline next to Integrated Gradients. |
+| 5 | Interpretability Beyond Feature Attribution: Quantitative Testing with Concept Activation Vectors (TCAV) | 2017 | 1711.11279 | interpretability/explainability | Explains predictions in human concepts via directions in activation space; the origin of concept-based explanation and of linear-direction thinking in LLM interpretability. |
+| 6 | Network Dissection: Quantifying Interpretability of Deep Visual Representations | 2017 | 1704.05796 | interpretability/explainability | Measures how well individual units align with labelled concepts; the first systematic unit-level interpretability measurement. |
+| 7 | Concept Bottleneck Models | 2020 | 2007.04612 | interpretability/explainability | Predict human-named concepts first, then the label from them, allowing inspection and test-time intervention; the reference concept-based interpretable-by-design model. |
+| 8 | Counterfactual Explanations without Opening the Black Box: Automated Decisions and the GDPR | 2017 | 1711.00399 | interpretability/explainability | Introduces counterfactual explanations (smallest change that flips a decision); the basis of recourse methods and used in ranking/recommendation explanations. |
+| 9 | The Disagreement Problem in Explainable Machine Learning: A Practitioner's Perspective | 2022 | 2202.01602 | interpretability/explainability | Shows practitioners get conflicting explanations from different methods and have no principled way to choose; a caution before trusting SHAP/LIME. |
+| 10 | Fooling LIME and SHAP: Adversarial Attacks on Post hoc Explanation Methods | 2019 | 1911.02508 | interpretability/explainability | Shows a biased classifier can be made to look unbiased to LIME and SHAP; a limit on using them for audits. |
+| 11 | Understanding Black-box Predictions via Influence Functions | 2017 | 1703.04730 | interpretability/explainability | Traces a prediction back to the training points that most influenced it; the seminal training-data attribution method. |
+| 12 | TRAK: Attributing Model Behavior at Scale | 2023 | 2303.14186 | interpretability/explainability | Data attribution that is cheap enough for large models; the practical successor to influence functions. |
+| 13 | Studying Large Language Model Generalization with Influence Functions | 2023 | 2308.03296 | interpretability/explainability | Scales influence functions (EK-FAC) to LLMs up to 52B and studies what training data drives behaviour; reference for LLM data attribution. |
+| 14 | Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting | 2023 | 2305.04388 | interpretability/explainability | Shows chain-of-thought explanations can omit the real cause of an answer (biasing features); started the CoT-faithfulness line (follow-up Reasoning Models Don't Always Say What They Think is already in the library). |
+| 15 | Rethinking Interpretability in the Era of Large Language Models | 2024 | 2402.01761 | interpretability/explainability | Survey and position paper on explaining LLMs in natural language and on LLMs as explainers; the best map of explainability for LLMs. |
+| 16 | Zoom In: An Introduction to Circuits | 2020 | https://distill.pub/2020/circuits/zoom-in/ | interpretability/mechanistic | The founding statement of the circuits agenda (features, circuits, universality); framing for all later mechanistic work. |
+| 17 | Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 small | 2022 | 2211.00593 | interpretability/mechanistic | The reference end-to-end circuit analysis of a language model behaviour, introducing the path-patching methodology. |
+| 18 | Progress measures for grokking via mechanistic interpretability | 2023 | 2301.05217 | interpretability/mechanistic | Fully reverse-engineers a modular-addition transformer and uses it to explain the phases of grokking; the model case of mech interp used to explain training dynamics. |
+| 19 | Emergent World Representations: Exploring a Sequence Model Trained on a Synthetic Task | 2022 | 2210.13382 | interpretability/mechanistic | Othello-GPT: probes and interventions show a sequence model builds an internal board state; the key evidence for world models inside LLMs. |
+| 20 | Towards Automated Circuit Discovery for Mechanistic Interpretability | 2023 | 2304.14997 | interpretability/mechanistic | ACDC: automates activation patching to find the subgraph implementing a behaviour; baseline for circuit discovery. |
+| 21 | Refusal in Language Models Is Mediated by a Single Direction | 2024 | 2406.11717 | interpretability/mechanistic | Shows refusal is one residual-stream direction that can be ablated or added; the best-known example of direction-based analysis and steering of LLM behaviour. |
+| 22 | Representation Engineering: A Top-Down Approach to AI Transparency | 2023 | 2310.01405 | interpretability/mechanistic | Reads and controls high-level concepts (honesty, power-seeking) via population-level representations; foundation of activation steering and probe-based monitoring. |
+| 23 | Patchscopes: A Unifying Framework for Inspecting Hidden Representations of Language Models | 2024 | 2401.06102 | interpretability/mechanistic | Inspects hidden states by patching them into the model's own prompts; unifies logit lens-style readouts and underlies later self-explaining approaches. |
+| 24 | Retrieval Head Mechanistically Explains Long-Context Factuality | 2024 | 2404.15574 | interpretability/mechanistic | Finds a sparse set of attention heads that copy information from long context; directly relevant to retrieval, RAG and KV-cache compression. |
+| 25 | Sparse Autoencoders Find Highly Interpretable Features in Language Models | 2023 | 2309.08600 | interpretability/mechanistic | Shows SAEs find causally relevant, more interpretable features than neurons in GPT-2/Pythia; the paper that made SAEs the default tool (with Towards Monosemanticity, already in library). |
+| 26 | Scaling and evaluating sparse autoencoders | 2024 | 2406.04093 | interpretability/mechanistic | OpenAI's TopK SAE recipe, scaling laws and evaluation metrics up to 16M latents; the standard training reference. |
+| 27 | AxBench: Steering LLMs? Even Simple Baselines Outperform Sparse Autoencoders | 2025 | 2501.17148 | interpretability/mechanistic | Benchmark showing prompting and simple probes-based steering beat SAE steering; the main critical evaluation of SAEs (follow-up 2605.31183 disputes it). |
+| 28 | Sparse Feature Circuits: Discovering and Editing Interpretable Causal Graphs in Language Models | 2024 | 2403.19647 | interpretability/mechanistic | Builds causal graphs over SAE features rather than neurons and uses them to remove a classifier's reliance on spurious signal; bridge to attribution graphs. |
+| 29 | Transcoders Find Interpretable LLM Feature Circuits | 2024 | 2406.11944 | interpretability/mechanistic | Transcoders replace MLPs with sparse approximations to separate input-dependent from input-invariant circuit structure; the building block of Circuit Tracing (in library). |
+| 30 | Sparse Crosscoders for Cross-Layer Features and Model Diffing | 2024 | https://transformer-circuits.pub/2024/crosscoders/index.html | interpretability/mechanistic | Crosscoders read and write several layers or models; basis of cross-layer transcoders and of model diffing across fine-tunes. |
+| 31 | Open Problems in Mechanistic Interpretability | 2025 | 2501.16496 | interpretability/mechanistic | Cross-lab 2025 review of what is unsolved in methods, applications and socio-technical questions; a map of where the field stands. |
+| 32 | Emergent Introspective Awareness in Large Language Models | 2025 | https://transformer-circuits.pub/2025/introspection/index.html | interpretability/mechanistic | Injects known concepts into activations and tests whether models can report them; first causal evidence for limited introspection. |
+| 33 | Natural Language Autoencoders Produce Unsupervised Explanations of LLM Activations | 2026 | https://transformer-circuits.pub/2026/nla/index.html | interpretability/mechanistic | Trains a model to verbalise activations and reconstruct them from the text, giving unsupervised natural-language explanations; the 2026 alternative to SAE features. |
+
+## Added from "Considered" at Anton's request (2026-10-01)
+
+| # | Paper | Year | arXiv / URL | Folder | Why |
+|--:|---|--:|---|---|---|
+| 34 | Emotion Concepts and their Function in a Large Language Model | 2026 | https://transformer-circuits.pub/2026/emotions/index.html | interpretability/mechanistic | Moved in from Considered by Anton. |
+| 35 | Mechanistic Interpretability for AI Safety -- A Review | 2024 | 2404.14082 | interpretability/mechanistic | Moved in from Considered by Anton. |
+| 36 | Language Models Represent Space and Time | 2023 | 2310.02207 | interpretability/mechanistic | Moved in from Considered by Anton. |
+| 37 | Finding Neurons in a Haystack: Case Studies with Sparse Probing | 2023 | 2305.01610 | interpretability/mechanistic | Moved in from Considered by Anton. |
+| 38 | Discovering Latent Knowledge in Language Models Without Supervision | 2022 | 2212.03827 | interpretability/mechanistic | Moved in from Considered by Anton. |
+
+## Considered, not proposed
+
+| Paper | Year | arXiv / URL | Folder | Why not |
+|---|--:|---|---|---|
+| Deep Inside Convolutional Networks: Visualising Image Classification Models and Saliency Maps | 2013 | 1312.6034 | interpretability/explainability | Superseded by Grad-CAM and Sanity Checks, which are the references now. |
+| SmoothGrad: removing noise by adding noise | 2017 | 1706.03825 | interpretability/explainability | Incremental noise-averaging trick for saliency maps. |
+| ERASER: A Benchmark to Evaluate Rationalized NLP Models | 2019 | 1911.03429 | interpretability/explainability | Rationale benchmark for NLP classifiers; little uptake in the LLM era. |
+| Label-Free Concept Bottleneck Models | 2023 | 2304.06129 | interpretability/explainability | Incremental variant of Concept Bottleneck Models. |
+| Transformer Interpretability Beyond Attention Visualization | 2020 | 2012.09838 | interpretability/explainability | Vision-transformer relevance propagation; niche next to the attention debate papers already present. |
+| llmSHAP: A Principled Approach to LLM Explainability | 2025 | 2511.01311 | interpretability/explainability | Little uptake so far. |
+| Feature Visualization (Distill) | 2017 | https://distill.pub/2017/feature-visualization/ | interpretability/explainability | Covered by The Building Blocks of Interpretability already in the library. |
+| Multimodal Neurons in Artificial Neural Networks | 2021 | https://distill.pub/2021/multimodal-neurons/ | interpretability/mechanistic | Vision-specific; lower priority than the language-model circuit papers. |
+| Towards Best Practices of Activation Patching in Language Models: Metrics and Methods | 2023 | 2309.16042 | interpretability/mechanistic | Methodological detail; ACDC and IOI cover patching. |
+| Attribution Patching Outperforms Automated Circuit Discovery | 2023 | 2310.10348 | interpretability/mechanistic | Incremental approximation of patching. |
+| SAEBench: A Comprehensive Benchmark for Sparse Autoencoders in Language Model Interpretability | 2025 | 2503.09532 | interpretability/mechanistic | Useful but AxBench and Scaling SAEs cover evaluation; add if SAEs become a focus. |
+| Improving Dictionary Learning with Gated Sparse Autoencoders / BatchTopK / Matryoshka SAEs | 2024 | 2404.16014 | interpretability/mechanistic | SAE architecture variants; JumpReLU and TopK already represent the line. |
+| Steering LLMs? Actually, Sparse Autoencoders can outperform simple baselines | 2026 | 2605.31183 | interpretability/mechanistic | Rebuttal to AxBench; too fresh to know uptake. |
+| The Linear Representation Hypothesis and the Geometry of Large Language Models | 2023 | 2311.03658 | interpretability/mechanistic | Theoretical framing; the refusal-direction and RepE papers carry the practical content. |
+| Eliciting Latent Predictions from Transformers with the Tuned Lens | 2023 | 2303.08112 | interpretability/mechanistic | Patchscopes subsumes it; logit-lens analyses already present. |
+| Transformer Feed-Forward Layers Are Key-Value Memories | 2020 | 2012.14913 | interpretability/mechanistic | Seminal, but ROME and Toy Models cover the same ground; reasonable to add if wanted. |
+| Persona Vectors: Monitoring and Controlling Character Traits in Language Models | 2025 | 2507.21509 | interpretability/mechanistic | Better filed under llm/behaviour next to the steering papers. |
+| Emergent Misalignment: Narrow finetuning can produce broadly misaligned LLMs | 2025 | 2502.17424 | interpretability/mechanistic | Alignment, not interpretability; belongs in llm/ folders. |
+| Activation Oracles: Training and Evaluating LLMs as General-Purpose Activation Explainers | 2025 | 2512.15674 | interpretability/mechanistic | Close to Natural Language Autoencoders and Patchscopes; one of the three is enough. |
+| Emotion Concepts and their Function in a Large Language Model | 2026 | https://transformer-circuits.pub/2026/emotions/index.html | interpretability/mechanistic | Case study; little track record yet. |
+| Mechanistic Interpretability for AI Safety -- A Review | 2024 | 2404.14082 | interpretability/mechanistic | Second survey; Open Problems is the better one. |
+| Language Models Represent Space and Time | 2023 | 2310.02207 | interpretability/mechanistic | Probing study; OthelloGPT covers world-model evidence. |
+| Finding Neurons in a Haystack: Case Studies with Sparse Probing | 2023 | 2305.01610 | interpretability/mechanistic | Narrower than the SAE line. |
+| Function Vectors in Large Language Models | 2023 | 2310.15213 | interpretability/mechanistic | Narrower; steering covered. |
+| Discovering Latent Knowledge in Language Models Without Supervision | 2022 | 2212.03827 | interpretability/mechanistic | Alignment-flavoured probing. |
+| Inference-Time Intervention: Eliciting Truthful Answers from a Language Model | 2023 | 2306.03341 | interpretability/mechanistic | Steering variant; steering is already represented. |
+| Does Localization Inform Editing? Surprising Differences in Causality-Based Localization vs. Knowledge Editing in Language Models | 2023 | 2301.04213 | interpretability/mechanistic | Critique of ROME; narrow. |
+| Mass-Editing Memory in a Transformer | 2022 | 2210.07229 | interpretability/mechanistic | Editing variant of ROME, which is in the library. |
