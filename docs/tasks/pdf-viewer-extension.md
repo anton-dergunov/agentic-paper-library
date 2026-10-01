@@ -1,101 +1,69 @@
 # Task: PDF viewer extension with page links from the Claude chat
 
-A small personal VS Code extension that opens a paper's PDF **inside VS Code at a given page or
-section**. Two ways in:
+**Status (2026-10-01):** built. The last check is still to do: Anton clicks a link in the real Claude
+panel. The extension is `~/projects/prototypes/vscode-pdf-viewer` (`anton.vscode-pdf-viewer`); its
+README has the link format and the setup. `AGENTS.md` ("Linking to a place in a paper") tells the
+agent how to write the links.
 
-1. **Clickable links in the Claude Code chat panel.** Claude writes
-   `[p. 7, Table 2](http://paper.link/open?file=...&page=7&dest=table.2)`. Clicking it opens the PDF
-   tab at that spot, not a browser tab.
-2. **An agent action.** Claude runs `scripts/open-pdf <file> --page 7` via Bash, which opens the same
-   tab.
+## What it does
 
-It is for desktop only. Install it locally from a `.vsix`; it is not for the marketplace.
+- A pdf.js-based custom editor for `*.pdf`. It has highlighting saved into the PDF, search, and
+  zoom. It reloads when the file changes on disk (e.g. highlights synced from the tablets). A tab
+  with unsaved highlights is left alone, with a warning.
+- **Clickable links in the Claude chat:**
+  `[p. 7, Table 2](http://pdf.invalid/<topic path>/<Title>.pdf?dest=table.2&page=7)`.
+  - Clicking one opens the PDF at that spot in a VS Code tab, next to the chat if the chat is an
+    editor tab. A link to an open paper navigates its tab.
+  - Papers open as regular tabs, not preview tabs, so opening another paper doesn't replace one.
+  - `search=<phrase>` marks a phrase on that page.
+- `dest` is preferred; `page` is the fallback when the name is not in the PDF.
+- The same links also work as `vscode://anton.vscode-pdf-viewer/<path>?…`, for notes outside VS Code.
+  VS Code asks once before letting the extension open them.
+- No agent action and no Skim: Anton opens links himself, and the agent never opens PDFs.
 
-## Why it has to be built this way
+## How chat links reach the viewer
 
-These were established on 2026-09-29 by reading the source of the installed extensions:
-`anthropic.claude-code` 2.1.284 and `tomoki1207.pdf` 1.2.2, both in `~/.vscode/extensions/`.
-Re-check them if the Claude Code extension version has moved on.
+Checked on 2026-10-01 against `anthropic.claude-code` 2.1.286 and VS Code 1.138, by reading
+their code and by clicking links in a webview in a test instance. Re-check after big updates of
+either.
 
-**File-path links can't open a PDF viewer.**
+- **The panel's link handling.** The panel renders markdown links as
+  `<a href target="_blank">` with its own click handler (`qc0` in `webview/index.js`).
+  - That handler acts only on hrefs it parses as file paths (`path`, `path:12`, `path#L12`,
+    `path#heading`). Those go to `openFile()` → `showTextDocument`, which opens a PDF as binary
+    text and drops `#page`.
+  - Any `http(s)` URL falls through to the browser's default navigation. VS Code's webview host
+    catches that and opens the link with `openerService.open(link, { allowContributedOpeners: true })`.
+- **Correction to the 2026-09-29 notes.** Chat links do *not* go through the extension's
+  `openURL()` → `vscode.env.openExternal`. That route would not work: `openExternal` without
+  `allowContributedOpeners` never consults extension openers.
+- **Claiming the link.** An extension can claim the link with `window.registerExternalUriOpener`,
+  a **proposed** API.
+  - Stable VS Code allows it for one extension listed in `~/.vscode/argv.json`:
+    `"enable-proposed-api": ["anton.vscode-pdf-viewer"]`.
+  - With `ExternalUriOpenerPriority.Preferred` no `workbench.externalUriOpeners` setting is needed.
+- **The host is `pdf.invalid`, not `*.localhost`.** VS Code 1.138's integrated browser
+  (`workbench.browser.openLocalhostLinks`, on by default) claims `localhost` and `*.localhost`
+  links before any extension opener sees them. `.invalid` is reserved and never resolves.
+- **The file goes in the URL path, not a `file=` query parameter.** `vscode.Uri` hands the query
+  over already percent-decoded, so `%26` becomes `&`. 14 PDFs have `&` or `+` in their names
+  ("Wide & Deep …"). Paths are decoded separately and are safe.
+- **The extension activates on startup.** It does not wait for `onOpenExternalUri:http`, so the
+  opener is registered before the first click.
 
-- The Claude panel sends a clicked file link to `openFile()`.
-- `openFile()` calls `vscode.window.showTextDocument` first. It only falls back to `vscode.open`, which
-  respects custom editors, if that call throws.
-- For a PDF, the call doesn't throw, so the PDF opens as binary text. Confirmed by clicking.
-- `#page=N` on a file link is dropped as well.
+## Named destinations
 
-**Only some link types survive.** The panel's HTML sanitizer allows `http(s)`, `mailto`, `tel`,
-`callto`, `sms`, `cid`, `xmpp` and scheme-less paths. It strips `vscode://`, `file://` and `skim://`.
-So a clickable link must be `http(s)`.
-
-**Where http links go.** Clicked `http(s)` links go through the extension's `openURL()`:
-
-- It honours `$BROWSER` only when `vscode.env.remoteName` is set, i.e. in remote sessions.
-- Locally it calls `vscode.env.openExternal`.
-- `openExternal` goes through VS Code's opener service, which respects the
-  `workbench.externalUriOpeners` setting. **That is the hook for clickable links.**
-
-**The existing viewer ignores page numbers.** `tomoki1207.pdf` builds its pdf.js webview from the
-document URI and ignores any fragment. It also has no highlight saving.
-
-**Tested alternatives.**
-
-- A pdf.js generic viewer served over http honours `#page=7` and `#nameddest=table.2`. But links
-  to it open in the browser, and the user rejected that.
-- `vscode-pdf-editor` (yasin-dev) rendered poorly.
-- **PDF Phoenix** (`harshankur.pdf-phoenix`) is the best existing one: pdf.js, highlights saved into
-  the file. But it has no page-link entry point.
-
-## What to build
-
-1. **Custom editor for `*.pdf`**, based on pdf.js:
-   - Open at a page, a named destination, or a search term.
-   - Highlight tool; save the annotations **into the PDF file** (pdf.js `saveDocument()`), since the
-     user's highlights live in the PDF.
-   - Reload when the file changes on disk.
-   - If an open tab is asked for a new page, navigate it rather than opening a second tab.
-   - Start by checking PDF Phoenix's licence. If a fork is allowed, adding an entry point to it is
-     likely the shortest path. Otherwise build on the pdf.js generic viewer (Apache-2.0).
-2. **Command** `paperViewer.open` with arguments `{ file, page?, dest?, search? }`.
-3. **URI handler** (stable API `window.registerUriHandler`):
-   `vscode://<publisher>.<name>/open?file=...&page=7&dest=table.2`.
-   Plus `scripts/open-pdf`, which builds that URI and runs `open` on it. The agent uses this script.
-4. **External URI opener for `http://paper.link/open?...`**, which makes chat links clickable.
-   - This is the risky part. `window.registerExternalUriOpener` is a *proposed* API.
-   - Enable it for this one extension through `~/.vscode/argv.json`:
-     `"enable-proposed-api": ["<publisher>.<name>"]`.
-   - Map the host with `"workbench.externalUriOpeners": { "paper.link": "<opener id>" }`.
-   - **Build this first, as a spike**, with a stub that just shows the parsed URL. Confirm that a
-     link clicked in the Claude panel reaches the opener without opening a browser tab. Only then
-     build the rest.
-   - If the proposed API can't be enabled, report back rather than working around it.
-5. **Resolving `file`.** Accept an absolute path, or a path relative to a configurable PDF root.
-   Papers live outside the repo, in `~/Yandex.Disk.localized/Papers/<topic path>/`, mirroring
-   `library/`. Default `paperViewer.pdfRoot` to that folder. Links should use paths relative to
-   it, so they keep working on another machine.
-
-Prefer `dest` over `page` when both are given. arXiv PDFs built with hyperref carry named
-destinations (`section.4.3`, `subsection.4.3`, `table.2`, `figure.3`), so the agent can link a
-section straight from the section number in the markdown. `page` is the fallback for PDFs without
-them.
-
-## Fallback idea: Skim
-
-If the clickable links in item 4 can't be made to work, Skim gives a weaker version outside VS
-Code. Skim is installed and registers `skim://`: `open "skim:///abs/path/file.pdf#page=7"` opens
-Skim at that page. Fragments can be combined with `&`, and `search=<term>` also works. Opening
-Zep at page 7 this way was confirmed on 2026-09-29.
-
-The chat panel strips `skim://` links, so this only works as an agent action: Claude runs the
-`open` command itself, and only when Anton asks it to open a paper. If it comes to that, give
-`scripts/open-pdf` a `--skim` flag. Until this task is done, `AGENTS.md` says nothing about
-opening PDFs.
+- Of 40 sampled library PDFs, 34 have named destinations. LaTeX/hyperref names sections
+  `section.4`, `subsection.4.3` and `subsubsection.2.2.3`, and appendices `appendix.A` and
+  `subsection.A.1`.
+- `table.N` and `figure.N` exist in many papers. Others only have `figure.caption.N`, a running
+  counter that does not match the figure number. So links always carry `page` too.
 
 ## Test fixture
 
-Use Zep (arXiv 2501.13956), at `llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.pdf` under the PDF root. It has 12 pages and 70 named
-destinations. Its markdown in `library/` carries the same page numbers on its headings.
+Zep (arXiv 2501.13956), `llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent
+Memory.pdf` under the PDF root: 12 pages, 70 named destinations (`pdfinfo -dests`; pdf.js's
+`getDestinations()` lists none for it, but `getDestination(name)` resolves each one).
 
 | Target | Page | Named destination |
 |---|--:|---|
@@ -106,10 +74,9 @@ destinations. Its markdown in `library/` carries the same page numbers on its he
 | Table 2: LongMemEval results | 7 | `table.2` |
 | §6.1 Graph construction prompts | 8 | `subsection.6.1` |
 
-## Done when
+## Left to check
 
-- A link written in the Claude chat panel opens Zep at Table 2 in a VS Code tab, with no browser
-  tab. For example: `[Table 2](http://paper.link/open?file=llm/memory/agent/Zep%20A%20Temporal%20Knowledge%20Graph%20Architecture%20for%20Agent%20Memory.pdf&dest=table.2)`.
-- `scripts/open-pdf "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.pdf" --page 3` does the same from a terminal.
-- A highlight made in the tab is saved into the PDF and is visible in Skim or Preview afterwards.
-- A short section in `AGENTS.md` tells the agent the link format and when to use it.
+- A link written by Claude in the real chat panel opens Zep at Table 2 with no browser tab. This
+  needs the `argv.json` line and the installed `.vsix`.
+- A highlight saved in the viewer shows in Preview or Skim, and survives a round trip through
+  the tablets.
