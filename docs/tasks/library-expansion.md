@@ -45,7 +45,9 @@ It runs over many sessions. This file is the plan and the progress record. Its o
     Beyond the 80/20 Rule were taken off the skip list for it). 789 added with summaries
     (719 from arXiv HTML, 65 from PDF text, 5 web articles); the considered papers went to
     `catalog/skipped.yaml` (732 entries now). 2,200 papers in the library.
-- [ ] 7. Wrap-up
+- [x] 7. Wrap-up (2026-10-01): `docs/proposal.md` and `AGENTS.md` describe the finished
+  library. All 546 `Papers_old/` files map to a resolved inventory row (458 added, 17 already
+  in the library, 71 skipped); Anton was told, and deleting the folder is his call.
 
 ## Decisions
 
@@ -230,9 +232,9 @@ in Decisions.
 - Update the description of the tree in `AGENTS.md`.
 - Tell Anton when every `Papers_old/` file is resolved. Deleting that folder is his call.
 
-## Handoff: where things stand (2026-10-01, afternoon)
+## Handoff: where things stand (2026-10-01, evening)
 
-Read this first in a new session.
+The task is complete. What remains below is optional.
 
 ### Done
 
@@ -271,9 +273,8 @@ Read this first in a new session.
 
 ### Next steps
 
-1. **Phase 7 wrap-up**:
-   - update "Next" in `docs/proposal.md` and the tree description in `AGENTS.md`;
-   - tell Anton that `Papers_old/` is fully resolved. Deleting it is his call.
+1. **Optional:** delete `~/Yandex.Disk.localized/Papers_old/` (Anton's call). If he does,
+   drop its row from `AGENTS.md` and the `Papers_old/` input from the `add-paper` skill.
 2. **Optional:** retry the figures that still link to arXiv (`scripts/localize-figures.py`
    on papers containing `arxiv.org/html/`). About 160 are broken on arXiv itself (404 or
    truncated files: GANformer 127, GPT-3 12, StyleGAN2 6, single figures elsewhere), so a

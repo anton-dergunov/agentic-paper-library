@@ -56,12 +56,13 @@ the Claude app on iPad or Android.
 | Paper notes | Obsidian `10 Knowledge/ML & AI/Papers/<Title>.md` | Overview plus what I took from the paper. Named after the library file; flat, grouped by a `topic` property. |
 | Agent memory | `~/papers/notes/<Title>.md` | What the agent learned about a paper (digest, related papers, Q&A), so later sessions don't re-read it. |
 | Conversations | Claude Code session transcripts | The durable part goes into Obsidian at the end of a session. |
-| Backlog | Yandex Disk `Papers_old/` | 546 older PDFs, converted one at a time when picked up. Temporary. |
+| Backlog | `INBOX.txt` | Links and titles waiting to be added. The 546 older PDFs in Yandex Disk `Papers_old/` were all migrated on 2026-10-01 (`docs/tasks/library-expansion.md`). |
 
 The repo is a private GitHub repo (`anton-dergunov/papers`). Git gives history for
 reorganisations and is how a second host such as the NAS gets and returns changes. GitHub's
-10 GB repo limit is far away: about 240 papers take 45 MB. The repo lives at `~/papers`, not in
-Dropbox or Yandex, because git repos inside sync folders get corrupted.
+10 GB repo limit is far away: 2,200 papers take 2.6 GB on disk and 1.4 GB in `.git`. The repo
+lives at `~/papers`, not in Dropbox or Yandex, because git repos inside sync folders get
+corrupted.
 
 ## The reading loop
 
@@ -101,11 +102,17 @@ next piece of work.
 
 ## Next
 
-1. Paper-note format and the `overview` skill: done, see `.claude/skills/overview/`. Next
-   are the `read` and `wrap` skills.
-2. The viewer extension (`docs/tasks/pdf-viewer-extension.md`).
+Done: the `overview` skill (`.claude/skills/overview/`), and the library expansion
+(`docs/tasks/library-expansion.md`), which grew the library from 240 LLM papers to 2,200
+across the whole field.
+
+1. The `read` and `wrap` skills.
+2. The viewer extension (`docs/tasks/pdf-viewer-extension.md`): built; the last check is
+   clicking a link in the real Claude panel.
 3. The literature review (`docs/tasks/literature-review.md`).
-4. Run the session on the NAS, so it is always on:
+4. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
+   arXiv id or title, and now nearly all of them have a library copy.
+5. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone this repo and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,
