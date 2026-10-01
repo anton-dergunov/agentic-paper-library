@@ -1,6 +1,6 @@
 ---
 name: literature-review
-description: Write or update the literature review of an area of the library — a narrative of what its papers find, how they relate and where the evidence is weak, kept in reviews/<scope>.md for Anton to read and for agents to start from. Use for "literature review of llm/memory", "/literature-review search-and-ranking", "update the review of X", "which reviews are stale", "what's the state of research in X" when no review exists yet. Not for single papers (that is overview).
+description: Write or update the literature review of an area of the library — a narrative of the kinds of approaches, what the papers find, how they relate and where the evidence is weak, kept in reviews/<scope>.md for Anton to read and for agents to start from. Use for "literature review of llm/memory", "/literature-review search-and-ranking", "update the review of X", "I've added papers to X, update the review", "a year has passed, what's new in X", "which reviews are stale", "what's the state of research in X". Not for single papers (that is overview).
 ---
 
 # /literature-review — the state of an area, from the papers here
@@ -16,7 +16,11 @@ per top-level area, except `llm/`, which has one per subarea (`llm/memory`,
 `docs/tasks/literature-review.md` while the first pass is running.
 
 **Modes.** `write <scope>` (there is no review yet), `update <scope>` (bring one up to
-date) and `status`. With no mode, pick by whether `reviews/<scope>.md` exists.
+date: new papers were added, or time has passed) and `status`. With no mode, pick by
+whether `reviews/<scope>.md` exists.
+
+`format.md` also records what Anton liked in the first review and what he found missing.
+Read that part before writing or updating, so each review keeps what worked.
 
 ## write
 
@@ -50,6 +54,9 @@ until the review is written.
    `catalog/conversion-issues.yaml` (`paper`: the stem, `problem`, `found`). Don't fix the
    papers; that is a separate pass.
 6. **Write** `reviews/<scope>.md` as `format.md` describes, from the batch digests.
+   - Build the "Kinds of …" taxonomy from the digests' `family` and `mechanism` lines:
+     find the few questions on which the approaches differ, then group the papers into
+     families by their answers.
    - Open a paper again only to check a claim the review leans on.
    - Start the paper map from `scripts/review-status.py --links <scope>`.
    - Look up the exact page of each cited number in the digest; never guess one.
@@ -94,6 +101,8 @@ The subagent prompt has these parts. Fill in the list of papers and the batch nu
 > - pdf: <the pdf.invalid base for this paper>
 > - kind: method | survey | benchmark | study | system | position | theory
 > - claim: <what it does or finds, one sentence>
+> - family: <the kind of approach it belongs to, in a few words (e.g. "extract-and-
+>   consolidate pipeline", "graph memory"); name a new one if none fits>
 > - mechanism: <how, in two plain sentences>
 > - evidence: <what it was tested on, against what>; strength: <replicated / one benchmark /
 >   vendor-run / no ablations / …>
@@ -112,14 +121,49 @@ The subagent prompt has these parts. Fill in the list of papers and the batch nu
 
 ## update
 
-1. `scripts/review-status.py --fix-links` (it lists links to renamed papers, which need a
-   manual fix), then `scripts/review-status.py <scope>` for the uncovered papers.
-2. Read the uncovered papers (their `notes/` digest first, if there is one), as reading
-   batches when there are more than a few.
-3. Add each paper to the paper map. Revise the findings, the comparison and the history
-   where it changes them, and mark what it overturns.
-4. Fold the lasting points from `## Q&A` into the narrative and remove them from there.
-5. Bump `updated`, then check and report as in write (steps 5, 7 and 8).
+Two situations lead here, and the steps are the same:
+
+- **Anton added papers** ("I've added some papers to X, update the review").
+  `review-status.py` lists them as not covered.
+- **Time has passed** ("a year has passed, what's going on in X"). The review only covers
+  papers in the library, so first check how current the library is for the area. Look at
+  the newest `published` dates in scope and at how many papers were added since the
+  review's `updated` date. If few were, offer `/literature-pass <scope>` to find the recent
+  work first. Continue once the approved papers are added, or straight away if he
+  declines.
+
+Steps:
+
+1. **Links and coverage.** Run `scripts/review-status.py --fix-links`; it lists links to
+   renamed papers, which need a manual fix. Then run `scripts/review-status.py <scope>`,
+   which lists the uncovered papers and, if a reading pass is under way, which of them are
+   still unread.
+2. **Format.** Compare the review with `format.md`. A review written under an older format
+   gets the sections it lacks in this update.
+3. **Read** the uncovered papers. Read their `notes/` digest first, if there is one. For
+   more than a few papers, use reading batches with the prompt above, kept in
+   `reviews/.work/<scope>/`.
+4. **Revise** the review:
+   - Place each paper in the map and in its family under "Kinds of …". A new family gets
+     its own subsection and a row in the side-by-side table.
+   - History: add a period for the new papers; don't rewrite the old ones.
+   - Findings: when new evidence changes a finding, rewrite it and say in place what
+     changed ("until 2026 …; the 2027 papers show …"). Add new findings, and update each
+     **How strong the evidence is** line.
+   - Comparison tables, open questions (mark what is now resolved), where to start
+     reading (swap in a newer paper if it is now the better entry point) and connections.
+   - The abstract, if the state of the area has changed.
+   - Fold the lasting points from `## Q&A` into the narrative, and remove them there.
+5. **Log.** Add a line to `## Updates` saying what came in and what changed, and bump
+   `updated`.
+6. **Check** as in write: steps 5 and 7.
+7. **Report.**
+   - A link to the review.
+   - **What changed since <previous updated date>**, a few lines for Anton: new kinds of
+     approaches, findings overturned or strengthened, and the two or three new papers to
+     read first.
+   - Any conversion problems flagged.
+   - A commit message. Never commit.
 
 ## status
 

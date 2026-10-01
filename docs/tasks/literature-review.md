@@ -19,7 +19,7 @@ literature review to "Done".
 
 The first review sets the format. Anton reads it and corrects it before the next one starts.
 
-- [ ] `llm/memory` (70): written, waiting for Anton's read
+- [ ] `llm/memory` (70): revised after Anton's first read (kinds-of-systems section added); format corrections are in format.md
 
 ## Primary areas
 

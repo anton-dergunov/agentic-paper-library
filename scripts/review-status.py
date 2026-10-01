@@ -2,8 +2,9 @@
 """Report on the literature reviews in reviews/, and help write and repair them.
 
     ./scripts/review-status.py                 every review: coverage and broken links
-    ./scripts/review-status.py <scope>         one scope: its review, or the reading
-                                               progress in reviews/.work/<scope>/
+    ./scripts/review-status.py <scope>         one scope: its review and the papers it
+                                               does not cover, and the reading progress
+                                               in reviews/.work/<scope>/
     ./scripts/review-status.py --links <scope> every paper in the scope as a markdown
                                                link from reviews/<scope>.md, with its
                                                pdf.invalid base, grouped by folder
@@ -68,17 +69,22 @@ def scope_report(scope):
     topics, reviews = load_topics(), load_reviews()
     if scope not in topics:
         sys.exit(f"error: `{scope}` is not a folder in catalog/topics.yaml")
+    papers = paper_files(LIBRARY_DIR / scope)
+    in_scope_stems = {p.stem for p in papers}
     if scope in reviews:
         report(scope, reviews[scope])
-    papers = paper_files(LIBRARY_DIR / scope)
+        # An update reads only the papers the review does not cover yet.
+        in_scope, listed = review_coverage(reviews[scope])
+        papers = sorted(in_scope - listed)
     read, batches = work_progress(scope)
     if scope not in reviews or batches:
         remaining = [p for p in papers if p.stem not in read]
-        print(f"{scope}: {len(papers)} papers; reading: {len(papers) - len(remaining)} read "
-              f"in {batches} batches, {len(remaining)} remaining")
+        to_read = "uncovered papers" if scope in reviews else "papers"
+        print(f"{scope}: {len(papers)} {to_read}; reading: {len(papers) - len(remaining)} "
+              f"read in {batches} batches, {len(remaining)} remaining")
         for p in remaining:
             print(f"  remaining: {p.relative_to(LIBRARY_DIR)}")
-        stale = read - {p.stem for p in papers}
+        stale = read - in_scope_stems
         for stem in sorted(stale):
             print(f"  read but no longer in scope: {stem}")
 
