@@ -107,6 +107,23 @@ What follows from it:
 - Headings carry the PDF page they start on, so the agent can cite pages in the PDF Anton is
   reading.
 
+Where arXiv's HTML itself loses content, the converter recovers it (since 2026-10-01; see the
+docstring of `html-to-markdown.py`):
+
+- **Boxed text** (definitions, findings, takeaways, prompt templates) is drawn by LaTeXML as an
+  SVG frame with the text inside. It becomes a quote, so the agent can read it; only drawings
+  with real shapes stay images. Small text badges in tables become their text.
+- **Tables in `\resizebox` or `\scalebox`** come out of LaTeXML as inline spans and are rebuilt
+  as tables. A header row LaTeXML did not mark is recognised by the rule under it.
+- **Taxonomy trees drawn with `forest`**, which LaTeXML cannot render, are taken from the
+  paper's LaTeX source on arXiv and written as nested lists.
+- **Equation tables** keep their text: `\intertext` prose, a left-hand side set as text, and
+  several equations on one row.
+- A paper converted from PDF text gets its HTML conversion once arXiv renders it
+  (`reconvert.py` tries the HTML first).
+
+`scripts/test_conversion.py` checks each of these on small fixtures.
+
 Known limitations of PDF-text papers: tables and figures are lost; plot and legend text is
 sometimes fenced as code; most have no headings, so no page numbers; grids of numbers in old
 two-dimensional figures come out jumbled.

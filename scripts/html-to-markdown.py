@@ -26,19 +26,31 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
    figure that fails to download keeps a link to arXiv.
 6. Figures LaTeXML embeds as <object data="..."> (SVG plots, mostly) become
    <img>s first; pandoc drops <object> elements without a trace.
+7. Tables inside \\resizebox or \\scalebox, which LaTeXML writes as <span>s,
+   become real tables (see span_tabulars_to_tables).
+8. Boxed text (definitions, findings, prompt templates), which LaTeXML draws
+   as an SVG frame with the text inside, becomes a quote, and small text
+   badges become their text (see picture_text).
+9. Trees drawn with the forest package, which LaTeXML cannot render, are
+   taken from the paper's LaTeX source as nested lists (see forest_trees).
+10. Cross-references LaTeXML could not resolve keep their label as text.
 """
 
 import base64
+import gzip
+import html
 import html.entities
+import io
 import re
 import subprocess
 import sys
+import tarfile
 from urllib.parse import quote
 from pathlib import Path
 
 from lxml import etree
 
-from paperlib import localize_figures, to_webp
+from paperlib import fetch, localize_figures, to_webp
 
 FILTER = Path(__file__).with_name("arxiv-html.lua")
 EXTS = {"svg+xml": "svg", "png": "png", "jpeg": "jpg", "gif": "gif", "webp": "webp"}
@@ -146,6 +158,9 @@ def extract_svgs(article, save):
     Done here rather than left to pandoc because LaTeXML nests pictures (an
     <svg> inside another's <foreignObject>), and pandoc's HTML reader ends the
     outer picture at the inner one's </svg>, truncating the file.
+
+    A picture that is a frame around text (see picture_text) is replaced by
+    the text instead.
     """
     out, pos = [], 0
     tokens = re.compile(r"<svg\b|</svg\s*>")
@@ -165,8 +180,115 @@ def extract_svgs(article, save):
             out.append(article[pos:])
             return "".join(out)
         out.append(article[pos:begin])
-        out.append(f'<img src="{save("svg+xml", article[begin:end].encode("utf-8"))}" alt="" />')
+        out.append(picture_text(article[begin:end], save))
         pos = end
+
+
+FOREIGN = re.compile(r"<foreignObject\b[^>]*>|</foreignObject\s*>|<svg\b|</svg\s*>", re.I)
+
+
+def foreign_objects(svg):
+    """The inner HTML of each foreignObject of a picture, not of pictures nested in it."""
+    found, depth, start = [], 0, None
+    fo_depth = 0
+    for m in FOREIGN.finditer(svg):
+        tag = m.group().lower()
+        if tag.startswith("<svg"):
+            depth += 1
+        elif tag.startswith("</svg"):
+            depth -= 1
+        elif tag.startswith("<foreignobject"):
+            fo_depth += 1
+            if depth == 1 and fo_depth == 1:
+                start = m.end()
+        else:
+            fo_depth -= 1
+            if depth == 1 and fo_depth == 0 and start is not None:
+                found.append(svg[start:m.start()])
+                start = None
+    return found
+
+
+def words(html_text):
+    """Words of text in an HTML fragment, a formula counting as one."""
+    text = re.sub(r"<math\b.*?</math>", " x ", html_text, flags=re.S)
+    return len(re.sub(r"<[^>]+>", " ", text).split())
+
+
+# How the spans LaTeXML writes inside a picture's text read as blocks.
+BLOCK_SPANS = {
+    "ltx_p": "p", "ltx_item": "p",
+    "ltx_para": "div", "ltx_inline-block": "div", "ltx_minipage": "div",
+    "ltx_foreignobject_container": "div", "ltx_foreignobject_content": "div",
+    "ltx_itemize": "div", "ltx_enumerate": "div", "ltx_description": "div",
+    "ltx_logical-block": "div", "ltx_inline-logical-block": "div", "ltx_parbox": "div",
+}
+
+
+def spans_to_blocks(html_text):
+    """Turn paragraph and list spans into <p>/<div>, so a box's paragraphs and
+    list items stay apart. Inside a list item (a <p>) everything stays inline."""
+    stack = []  # closing tag of each open span, and whether it opened an item
+
+    def rename(t):
+        if t.group(0).startswith("</"):
+            return stack.pop()[0] if stack else t.group(0)
+        in_item = any(item for _, item in stack)
+        classes = re.search(r'\bclass="([^"]*)"', t.group(1) or "")
+        block = None
+        if not in_item:
+            block = next((BLOCK_SPANS[c] for c in (classes.group(1).split() if classes else [])
+                          if c in BLOCK_SPANS), None)
+        if not block:
+            stack.append(("</span>", False))
+            return t.group(0)
+        stack.append((f"</{block}>", "ltx_item" in classes.group(1).split()))
+        return f"<{block}{t.group(1)}>"
+
+    return SPAN_TAG.sub(rename, html_text)
+
+
+def picture_text(svg, save):
+    """What to put in the markdown for one LaTeXML picture.
+
+    LaTeX boxes (tcolorbox and the like: definitions, findings, takeaways,
+    prompt templates) come out of LaTeXML as an <svg> frame whose text sits in
+    <foreignObject>s, so as an image their text would be lost. A picture
+    is such a box when its text is mostly one block of at least twelve words,
+    or when it is a plain frame (a few shapes) around a few blocks of text: it
+    becomes a quote, its title (a short first block) in bold. Drawn with more
+    than a few shapes, it is a diagram that holds a text block, and the image
+    is kept too. A tiny picture holding a few words (a badge such as
+    "+ MaTTS" in a table) becomes its text. Anything else is saved as an image.
+    """
+    def image():
+        return f'<img src="{save("svg+xml", svg.encode("utf-8"))}" alt="" />'
+
+    blocks = foreign_objects(svg)
+    counts = [words(b) for b in blocks]
+    total = sum(counts)
+    paths = len(re.findall(r"<path\b", svg))
+    height = re.match(r"<svg\b[^>]*?\bheight=\"([\d.]+)", svg)
+    height = float(height.group(1)) if height else 1000
+    if total and total < 8 and len(blocks) <= 2 and paths <= 4 and height < 25:
+        return f"<span>{' '.join(blocks)}</span>"
+    simple_frame = paths <= 6 and len(blocks) <= 4 and total >= 6
+    one_block = bool(counts) and max(counts) >= 12 and max(counts) >= 0.6 * total
+    if not (simple_frame or one_block):
+        return image()
+    parts = []
+    for k, (block, n) in enumerate(zip(blocks, counts)):
+        if not n:
+            continue
+        if k == 0 and len(blocks) > 1 and n < 12:
+            title = re.sub(r"<[^>]+>", " ", re.sub(r"<annotation\b.*?</annotation>", "", block, flags=re.S))
+            parts.append(f"<p><strong>{' '.join(title.split())}</strong></p>")
+        else:
+            # A list item's label ("1.") is a span of its own; keep it apart from the text.
+            block = re.sub(r'(<span\b[^>]*class="ltx_tag\b[^"]*"[^>]*>[^<]*</span>)', r"\1 ", block)
+            parts.append(f"<div>{spans_to_blocks(extract_svgs(block, save))}</div>")
+    quote = f"<blockquote {LIFT}>{''.join(parts)}</blockquote>"
+    return image() + quote if paths > 15 else quote
 
 
 PYTHON = re.compile(r"^\s*(def \w+\(.*\):\s*$|import \w|from [\w.]+ import \w|class \w+.*:\s*$)", re.M)
@@ -236,6 +358,280 @@ def convert_listings(article):
         pos = end
 
 
+TABULAR_PARTS = {
+    "ltx_tabular": "table", "ltx_thead": "thead", "ltx_tbody": "tbody", "ltx_tfoot": "tfoot",
+    "ltx_tr": "tr", "ltx_td": "td", "ltx_th": "th",
+}
+SPAN_TAG = re.compile(r"<span\b([^>]*)>|</span\s*>")
+
+
+def tabular_tag(attrs):
+    """The table element a LaTeXML <span> stands for, with its spans, or None."""
+    classes = re.search(r'\bclass="([^"]*)"', attrs)
+    classes = classes.group(1).split() if classes else []
+    tag = next((TABULAR_PARTS[c] for c in ("ltx_th", "ltx_td", "ltx_tr", "ltx_thead",
+                                           "ltx_tbody", "ltx_tfoot", "ltx_tabular")
+                if c in classes), None)
+    if not tag:
+        return None
+    extra = "".join(
+        f' {kind}span="{n}"'
+        for kind, n in re.findall(r"\bltx_(col|row)span_(\d+)\b", " ".join(classes))
+    )
+    return f"<{tag}{attrs}{extra}>", f"</{tag}>"
+
+
+def span_tabulars_to_tables(article):
+    """Rewrite tables LaTeXML wrote as <span>s into real <table>s.
+
+    A tabular inside \\resizebox or \\scalebox sits in an inline context, so
+    LaTeXML builds it from <span class="ltx_tabular">, "ltx_tr" and "ltx_td"
+    spans, which pandoc unwraps into one line of text. The table also has to
+    leave the <p> it sits in (see lift_blocks).
+    """
+    out, pos = [], 0
+    start = re.compile(r'<span\b[^>]*\bclass="[^"]*\bltx_tabular\b[^"]*"[^>]*>')
+    while True:
+        m = start.search(article, pos)
+        end = balanced_end(article, m.start(), "span") if m else None
+        if end is None:
+            out.append(article[pos:])
+            return "".join(out)
+        out.append(article[pos:m.start()])
+        stack = []
+
+        def rename(t):
+            if t.group(0).startswith("</"):
+                return stack.pop() if stack else t.group(0)
+            tag = tabular_tag(t.group(1))
+            stack.append(tag[1] if tag else "</span>")
+            return tag[0] if tag else t.group(0)
+
+        segment = article[m.start():end]
+        if is_layout_tabular(m.group(0), segment):
+            out.append(segment)
+        else:
+            segment = SPAN_TAG.sub(rename, segment)
+            out.append(segment.replace("<table", f"<table {LIFT}", 1))
+        pos = end
+
+
+def is_layout_tabular(opening, segment):
+    """Whether a span tabular is layout inside running text or math, not a table:
+    a symbol stacked over a letter (esvect's \\vv), a \\makecell line break."""
+    rows = len(re.findall(r'class="ltx_tr\b', segment))
+    cells = len(re.findall(r'class="ltx_td\b', segment))
+    return "ltx_markedasmath" in opening or rows < 2 or cells < 2 * rows
+
+
+LIFT = 'data-lift="1"'
+# A <p> or <span> whose whole content is a marked block or an already lifted wrapper.
+WRAPPER = re.compile(rf"<(p|span)\b([^>]*)>(\s*)(?=<(?:table|blockquote|div) {LIFT})")
+
+
+def lift_blocks(article):
+    """Turn the inline wrappers around a rewritten table or box into <div>s.
+
+    A table or quote inside a paragraph is not a block to pandoc. Each <p> or
+    <span> that holds nothing but such a block (or a wrapper already lifted)
+    becomes a <div>, innermost first; pandoc unwraps divs (arxiv-html.lua).
+    """
+    while True:
+        out, pos = [], 0
+        for m in WRAPPER.finditer(article):
+            if m.start() < pos:
+                continue
+            end = balanced_end(article, m.start(), m.group(1))
+            if end is None:
+                continue
+            inner = re.sub(rf"</{m.group(1)}\s*>\Z", "", article[m.end():end])
+            tag = re.match(r"<(table|blockquote|div)\b", inner).group(1)
+            if balanced_end(inner, 0, tag) != len(inner.rstrip()):
+                continue
+            out.append(article[pos:m.start()])
+            out.append(f"<div {LIFT}{m.group(2)}>{m.group(3)}{inner}</div>")
+            pos = end
+        if not out:
+            return article.replace(f" {LIFT}", "")
+        out.append(article[pos:])
+        article = "".join(out)
+
+
+def paper_version(page):
+    """The arXiv id and version a rendering is of ("2505.00675v3"), or None."""
+    for pattern in (
+        r'<base href="/html/(\d{4}\.\d{4,5}v\d+)/"',
+        r"(\d{4}\.\d{4,5}v\d+) \[[\w.-]+\]",  # the stamp in the margin
+        r'"(\d{4}\.\d{4,5}v\d+)/[^"]+"',      # a figure's path
+    ):
+        m = re.search(pattern, page)
+        if m:
+            return m.group(1)
+    return None
+
+
+def latex_source(version):
+    """The paper's LaTeX, \\input files spliced in and comments removed, or None."""
+    data = fetch(f"https://arxiv.org/e-print/{version}")
+    if not data:
+        return None
+    files = {}
+    try:
+        with tarfile.open(fileobj=io.BytesIO(data), mode="r:*") as tar:
+            for member in tar.getmembers():
+                if member.isfile() and member.name.endswith(".tex"):
+                    files[member.name.removeprefix("./")] = tar.extractfile(member).read()
+    except tarfile.TarError:
+        try:
+            files["main.tex"] = gzip.decompress(data)
+        except OSError:
+            return None
+    files = {name: re.sub(r"(?<!\\)%.*", "", text.decode("utf-8", "replace")) for name, text in files.items()}
+    main = next((n for n, t in files.items() if r"\documentclass" in t), None)
+    if not main:
+        return None
+
+    def splice(name, depth=0):
+        text = files.get(name) or files.get(name + ".tex") or ""
+        if depth > 10:
+            return text
+        return re.sub(
+            r"\\(?:input|include|subfile)\s*\{([^}]+)\}",
+            lambda m: splice(m.group(1).strip(), depth + 1),
+            text,
+        )
+
+    return splice(main)
+
+
+def forest_nodes(tex):
+    """Parse one forest tree ("[Root, options [Child] [Child [Leaf]]]").
+
+    Returns (text, children) for the root. A node's text runs to the first
+    "," "[" or "]" outside braces ("{,}" is a literal comma); what follows a
+    comma is options.
+    """
+    depth, i = 0, 0
+    while i < len(tex) and not (tex[i] == "[" and depth == 0):  # skip the preamble
+        depth += {"{": 1, "}": -1}.get(tex[i], 0)
+        i += 1
+
+    def node(i):
+        i += 1
+        text, depth = [], 0
+        while i < len(tex) and not (depth == 0 and tex[i] in ",[]"):
+            depth += {"{": 1, "}": -1}.get(tex[i], 0)
+            text.append(tex[i])
+            i += 1
+        while i < len(tex) and not (depth == 0 and tex[i] in "[]"):  # options
+            depth += {"{": 1, "}": -1}.get(tex[i], 0)
+            i += 1
+        children = []
+        while i < len(tex) and tex[i] == "[":
+            child, i = node(i)
+            children.append(child)
+            while i < len(tex) and tex[i].isspace():
+                i += 1
+        return ("".join(text).strip(), children), i + 1
+
+    return node(i)[0] if i < len(tex) else None
+
+
+CITE = re.compile(r"~?\\(?:cite|citep|citet|citealp|citeauthor|citeyear|parencite|textcite|autocite)\*?(?:\[[^\]]*\])*\{([^}]*)\}")
+# A cross-reference ("\S\ref{sec:x}"): the HTML has no numbers to resolve it to.
+REF = re.compile(r"(?:\\S|§)?~?\s*\\(?:ref|autoref|cref|Cref|eqref)\{[^}]*\}")
+
+
+def forest_html(trees, macros):
+    """Nested <ul>s for parsed trees, the node text converted from LaTeX by pandoc."""
+    texts = []
+
+    def collect(n):
+        text = REF.sub("", re.sub(r"\{,\s*\}", ", ", n[0]).replace("\\\\", " "))
+        # Citations go when the node names its papers anyway ("MemGPT \cite{x}").
+        if re.sub(r"[\W\d_]", "", CITE.sub("", text).replace("\\", "")):
+            text = CITE.sub("", text)
+        else:
+            text = CITE.sub(lambda m: m.group(1).replace(",", ", "), text)
+        texts.append(re.sub(r"\s+(?=[,;.)])", "", text).strip())
+        for c in n[1]:
+            collect(c)
+
+    for t in trees:
+        collect(t)
+    sep = "FORESTNODESEPARATOR"
+    # The paper's own macros help (\method{}), unless a definition the
+    # one-line grep cut short breaks the parse.
+    for preamble in (macros, ""):
+        html_out = subprocess.run(
+            ["pandoc", "-f", "latex", "-t", "html", "--mathjax", "--wrap=none"],
+            input=preamble + "\n\n" + f"\n\n{sep}\n\n".join(texts), capture_output=True, text=True,
+        ).stdout
+        parts = [re.sub(r"\A\s*<p>|</p>\s*\Z", "", p.strip()) for p in re.split(rf"<p>{sep}</p>", html_out)]
+        if len(parts) == len(texts):
+            break
+    else:
+        parts = [html.escape(t) for t in texts]
+    parts = [
+        re.sub(
+            r'<span class="math inline">\\\((.*?)\\\)</span>',
+            lambda m: '<math display="inline"><semantics><mrow></mrow>'
+            f'<annotation encoding="application/x-tex">{m.group(1)}</annotation></semantics></math>',
+            p,
+        )
+        for p in parts
+    ]
+    it = iter(parts)
+
+    def render(n):
+        label = next(it)
+        kids = "".join(render(c) for c in n[1])
+        return f"<li>{label}{f'<ul>{kids}</ul>' if kids else ''}</li>"
+
+    return [f"<ul>{render(t)}</ul>" for t in trees]
+
+
+def forest_trees(article, page):
+    """Fill in the trees LaTeXML could not draw from the paper's LaTeX source.
+
+    LaTeXML has no support for the forest package (taxonomy trees in surveys)
+    and leaves an empty "{forest}" in their place. The trees are taken from
+    the source on arXiv, in document order, as nested lists.
+    """
+    placeholder = re.compile(r'<span\b[^>]*class="ltx_ERROR[^"]*"[^>]*>\{forest\}</span>')
+    found = placeholder.findall(article)
+    if not found:
+        return article
+    version = paper_version(page)
+    tex = latex_source(version) if version else None
+    envs = re.findall(r"\\begin\{forest\}(.*?)\\end\{forest\}", tex or "", re.S)
+    trees = [t for t in (forest_nodes(e) for e in envs) if t]
+    if len(trees) != len(found):
+        print(f"warning: {len(found)} forest trees, {len(trees)} in the LaTeX source; left out",
+              file=sys.stderr)
+        return article
+    macros = "\n".join(re.findall(r"^\s*\\(?:re)?newcommand\b.*$|^\s*\\DeclareMathOperator\b.*$", tex, re.M))
+    lists = iter(forest_html(trees, macros))
+    return placeholder.sub(lambda m: f"<div {LIFT}>{next(lists)}</div>", article)
+
+
+REF_KINDS = {"sec": "§", "ssec": "§", "subsec": "§", "app": "Appendix", "fig": "Figure",
+             "tab": "Table", "eq": "Eq.", "alg": "Algorithm", "thm": "Theorem", "def": "Definition"}
+
+
+def unresolved_refs(article):
+    r"""A \Cref LaTeXML did not know ("\Cref" then the bare label "sec:what-memory")
+    becomes "§ what-memory": the target's kind and name, as no number exists."""
+    def label(m):
+        kind, _, name = m.group(2).partition(":")
+        return (m.group(1) or "") + (f"{REF_KINDS.get(kind, '')} {name}".strip() if name else m.group(2))
+
+    return re.sub(
+        r'<span\b[^>]*class="ltx_ERROR undefined"[^>]*>\\(?:[Cc]ref|autoref|vref)</span>(<span\b[^>]*>)?([\w:-]+(?:\.[\w-]+)*)',
+        label, article,
+    )
+
+
 def objects_to_images(article):
     """Replace each image <object data="..."> with an <img> of the same file."""
     return re.sub(
@@ -277,7 +673,11 @@ def main(html_path, body_path, images_dir, basename):
     base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
     article = extract_article(page)
     article = convert_listings(article)
+    article = span_tabulars_to_tables(article)
+    article = forest_trees(article, page)
+    article = unresolved_refs(article)
     article = extract_svgs(article, save)
+    article = lift_blocks(article)
     article = objects_to_images(article)
     body = subprocess.run(
         [
@@ -286,16 +686,19 @@ def main(html_path, body_path, images_dir, basename):
         ],
         input=article, capture_output=True, text=True, check=True,
     ).stdout
+    # LaTeXML sometimes repeats a heading with nothing under the first copy
+    # (an "Abstract" set both by the class and by the author).
+    body = re.sub(r"^(#{1,6} .+)\n\n(?=\1\n)", "", body, flags=re.M)
 
     # Raster figures arXiv inlines as base64 data URIs.
     body = re.sub(
-        r"!\[[^\]]*\]\(data:image/([a-zA-Z0-9+.-]+);base64,([A-Za-z0-9+/=]+)\)",
+        r"!\[(?:\\.|[^\]\\])*\]\(data:image/([a-zA-Z0-9+.-]+);base64,([A-Za-z0-9+/=]+)\)",
         lambda m: f"![]({save_raster(m.group(1), base64.b64decode(m.group(2)))})",
         body,
     )
     if base:
         body = re.sub(
-            r'(!\[[^\]]*\]\(|<img\s[^>]*?src=")(?![a-z]+:|images/|/|\d{4}\.\d{4,5}v\d+/)([^)"\s]+)',
+            r'(!\[(?:\\.|[^\]\\])*\]\(|<img\s[^>]*?src=")(?![a-z]+:|images/|/|\d{4}\.\d{4,5}v\d+/)([^)"\s]+)',
             lambda m: m.group(1) + base.group(1) + m.group(2),
             body,
         )

@@ -172,7 +172,8 @@ else
     echo "Skipping the HTML rendering as asked (--from-pdf)."
   else
     echo "Fetching HTML rendering..."
-    curl -sL "https://arxiv.org/html/$VID" -o "$WORK/paper.html"
+    # With retries: a throttled request must not send a paper to PDF text.
+    python3 "$REPO_ROOT/scripts/paperlib.py" fetch "https://arxiv.org/html/$VID" "$WORK/paper.html"
 
     SOURCE=html
     if ! grep -q 'ltx_page_content' "$WORK/paper.html"; then

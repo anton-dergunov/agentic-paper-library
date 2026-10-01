@@ -18,11 +18,12 @@ Three ways to place a heading, in order:
    headings are not matched to bookmarks: a paragraph heading ("User Consent")
    often shares its words with a bookmark for a different, later section.
 3. Searching the page text for the heading, starting from the page of the
-   previous placed heading, since headings appear in reading order. A heading
-   counts as found when a line of the page is the heading, or (for numbered
-   headings) when "<number> <title>" appears in the page text, or (for
-   unnumbered headings of five or more words) when a line starts the heading
-   and the next few lines finish it. Pages that look
+   previous placed heading, since headings appear in reading order. A
+   numbered heading counts as found when "<number> <title>" appears in the
+   page text, the number printed as the PDF prints it ("4.3", "4.3.", "II.",
+   "A." under an IEEE Roman section); an unnumbered one when a line of the
+   page is the heading, or (five or more words) when a line starts the
+   heading and the next few lines finish it. Pages that look
    like a table of contents (five or more dot-leader lines) are never searched,
    since every numbered heading appears there too (a "Contents" heading is the
    exception). Unnumbered headings are
@@ -42,6 +43,10 @@ import pymupdf
 HEADING = re.compile(r"^(#{2,6}) (.+?)\s*$")
 PAGE_SUFFIX = re.compile(r"\s*\(p\. \d+\)$")
 NUMBER = re.compile(r"^(?:Appendix\s+)?((?:\d+|[A-Z])(?:\.\d+)*)\.?\s+(.+)$")
+# IEEE numbering: "II Background", "II-A Surveys", "IV-B1 Details".
+ROMAN = re.compile(r"^([IVXL]+)(?:-([A-Z])(\d+)?)?\.?\s+(.+)$")
+ROMAN_PAPER = re.compile(r"^(?:II|III|IV|VI?)(?:-[A-Z]\d*)?\s")
+ROMAN_VALUES = {"I": 1, "V": 5, "X": 10, "L": 50}
 DEPTH_NAMES = ["section", "subsection", "subsubsection"]
 # A table-of-contents line: a title run out to its page number with dots.
 DOT_LEADER = re.compile(r"(?:\.\s*){4,}\d*\s*$", re.M)
@@ -93,6 +98,35 @@ class Outline:
         return None
 
 
+def roman_to_int(roman):
+    values = [ROMAN_VALUES[c] for c in roman]
+    return sum(-v if i + 1 < len(values) and v < values[i + 1] else v for i, v in enumerate(values))
+
+
+def heading_number(text, top_level, roman):
+    """(section number as in destinations, title, the number as printed) or None.
+
+    The number as printed is one or more forms ("ii", "a" for "II-A") that the
+    search tries before the title.
+    """
+    m = ROMAN.match(text) if roman else None
+    if m:
+        number, printed = [str(roman_to_int(m.group(1)))], [m.group(1).lower()]
+        if m.group(2):
+            number.append(str(ord(m.group(2)) - ord("A") + 1))
+            printed = [m.group(2).lower(), f"{m.group(1)}-{m.group(2)}".lower()]
+        if m.group(3):
+            number.append(m.group(3))
+            printed = [m.group(3), f"{m.group(2)}{m.group(3)}".lower()]
+        return ".".join(number), m.group(4), printed
+    m = NUMBER.match(text)
+    # A bare letter is an appendix number only on a top-level heading
+    # ("## B Proofs"); deeper down, "A Harmless Assistant" is just an article.
+    if not m or (m.group(1).isalpha() and not text.startswith("Appendix") and not top_level):
+        return None
+    return m.group(1), m.group(2), [m.group(1).lower()]
+
+
 def dest_candidates(number):
     parts = number.split(".")
     depth = len(parts) - 1
@@ -121,6 +155,10 @@ def main(pdf_path, md_path):
     page_lines = [set(lines) for lines in ordered_lines]
 
     lines = Path(md_path).read_text(encoding="utf-8").split("\n")
+    roman = any(
+        (m := HEADING.match(line)) and ROMAN_PAPER.match(PAGE_SUFFIX.sub("", m.group(2)))
+        for line in lines
+    )
 
     # First pass: every heading, and the exact page of those a destination or a
     # bookmark names. The outline is matched even when a destination already
@@ -138,23 +176,14 @@ def main(pdf_path, md_path):
         if not m:
             continue
         text = PAGE_SUFFIX.sub("", m.group(2))
-        numbered = NUMBER.match(text)
-        # A bare letter is an appendix number only on a top-level heading
-        # ("## B Proofs"); deeper down, "A Harmless Assistant" is just an article.
-        if (
-            numbered
-            and numbered.group(1).isalpha()
-            and not text.startswith("Appendix")
-            and m.group(1) != "##"
-        ):
-            numbered = None
+        numbered = heading_number(text, m.group(1) == "##", roman)
         dest_page = None
         if numbered:
-            for name in dest_candidates(numbered.group(1)):
+            for name in dest_candidates(numbered[0]):
                 if name in dests:
                     dest_page = dests[name]
                     break
-        outline_page = outline.page_of(numbered.group(1), exact_so_far) if numbered else None
+        outline_page = outline.page_of(numbered[0], exact_so_far) if numbered else None
         if dest_page is None and outline_page is not None:
             dest_page = outline_page
             from_outline += 1
@@ -177,7 +206,7 @@ def main(pdf_path, md_path):
             # the next exactly-known heading, and may wrap across lines in the
             # PDF, so it also counts when a line starts it and the next few
             # finish it.
-            title = plain_title(numbered.group(2) if numbered else text)
+            title = plain_title(numbered[1] if numbered else text)
             wraps = bool(title) and not numbered and len(title.split()) >= 5
             upper = len(pages)
             if not numbered:
@@ -186,14 +215,15 @@ def main(pdf_path, md_path):
                 if not wraps:
                     upper = min(upper, last_page + 2)
             if title:
-                full = f"{numbered.group(1).lower()} {title}" if numbered else None
+                # "4.3 title", "4.3. title", and IEEE's "1) title".
+                full = [f"{n}{sep} {title}" for n in numbered[2] for sep in ("", ".", ")")] if numbered else []
                 for p in range(last_page - 1, upper):
                     if p in contents and title not in ("contents", "table of contents"):
                         continue
-                    if title in page_lines[p] or (full and full in page_lines[p]):
+                    if not numbered and title in page_lines[p]:
                         page = p + 1
                         break
-                    if full and full in pages[p]:
+                    if any(f in pages[p] for f in full):
                         page = p + 1
                         break
                     if wraps and starts_a_line(title, ordered_lines[p]):

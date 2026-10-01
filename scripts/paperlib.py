@@ -9,10 +9,12 @@ Also usable from the shell scripts:
     paperlib.py set-summary <paper.md> <summary>
     paperlib.py filename <title>
     paperlib.py set-type <paper.md> <type>
+    paperlib.py fetch <url> <out-file>
 
 The first two print a complete YAML frontmatter block (with the --- fences) to
 stdout; set-summary and set-type rewrite the paper's `summary:` or `type:` field
-in place; filename prints the filename stem for a title.
+in place; filename prints the filename stem for a title; fetch downloads a URL
+with fetch()'s retries, writing an empty file on 404 or repeated failure.
 """
 
 import datetime
@@ -315,7 +317,7 @@ SVG_MAX_BYTES = 300_000
 # image or an <img>, with the link either relative to the rendering
 # ("2501.13956v1/x1.png") or already absolute.
 ARXIV_FIGURE = re.compile(
-    r"(!\[[^\]]*\]\(|<img\s[^>]*?src=\")"
+    r"(!\[(?:\\.|[^\]\\])*\]\(|<img\s[^>]*?src=\")"
     r"(?:https://arxiv\.org/html/)?(\d{4}\.\d{4,5}v\d+/[^)\"\s]+)"
 )
 
@@ -431,6 +433,8 @@ def _main(argv):
             sys.exit(f"error: {path} has no frontmatter")
         meta["type"] = kind
         write_paper(path, meta, body)
+    elif len(argv) == 4 and argv[1] == "fetch":
+        Path(argv[3]).write_bytes(fetch(argv[2]) or b"")
     else:
         sys.exit(__doc__)
 

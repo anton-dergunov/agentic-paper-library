@@ -37,6 +37,10 @@ local EQUIVALENT = {
   -- Cross-references and citations: keep the label or key as text.
   ref = "\\text", eqref = "\\text", cref = "\\text", Cref = "\\text",
   autoref = "\\text", cite = "\\text", citep = "\\text", citet = "\\text",
+  -- The LaTeX kernel's math-mode section and paragraph signs.
+  mathsection = "\\S", mathparagraph = "\\P",
+  -- KaTeX has these, MathJax (GitHub, Obsidian) does not.
+  argmax = "\\operatorname*{arg\\,max}", argmin = "\\operatorname*{arg\\,min}",
 }
 
 -- Commands whose braced argument is text, not math.
@@ -46,8 +50,62 @@ local TEXT_CMDS = {
   hbox = true, emph = true,
 }
 
--- LaTeX layout commands that mean nothing in a rendered equation.
-local LAYOUT = { "vskip", "hskip", "penalty", "hfil", "hfill", "indent", "noindent", "nobreak", "allowbreak" }
+-- LaTeX layout commands that mean nothing in a rendered equation, with the
+-- length or number some of them take. \hskip is the exception: it separates
+-- two expressions on one line ("a=1,\hskip 9.24994pt b=2"), so it is kept as
+-- the \hspace KaTeX understands.
+local LAYOUT = {
+  vskip = true, hskip = true, penalty = true, hfil = true, hfill = true,
+  indent = true, noindent = true, nobreak = true, allowbreak = true,
+}
+local UNITS = {
+  pt = true, em = true, ex = true, mu = true, bp = true, cm = true, mm = true,
+  ["in"] = true, pc = true, dd = true, cc = true, sp = true,
+}
+
+-- The end of a TeX length starting at i ("-3.5pt", "1fil"), or nil.
+local function length_end(t, i)
+  local num = t:match("^[%-+]?%s*%d*%.?%d+", i)
+  if not num then return nil end
+  local j = i + #num
+  j = j + #(t:match("^%s*", j))
+  local fil = t:match("^fil+", j)
+  if fil then return j + #fil end
+  if UNITS[t:sub(j, j + 1)] then return j + 2 end
+  return i + #num  -- a bare number (\penalty 10000)
+end
+
+local function strip_layout(t)
+  local out, i = {}, 1
+  while true do
+    local s, e, name = t:find("\\(%a+)", i)
+    if not s then break end
+    table.insert(out, t:sub(i, s - 1))
+    if not LAYOUT[name] then
+      table.insert(out, t:sub(s, e))
+      i = e + 1
+    else
+      local j = e + 1 + #(t:match("^%s*", e + 1))
+      local len_end = length_end(t, j)
+      local len = len_end and t:sub(j, len_end - 1):gsub("%s", "") or nil
+      j = len_end or j
+      -- Glue: "plus 1fil minus 2pt".
+      while true do
+        local k = j + #(t:match("^%s*", j))
+        local kw = t:match("^plus", k) or t:match("^minus", k)
+        local glue_end = kw and length_end(t, k + #kw + #(t:match("^%s*", k + #kw)))
+        if not glue_end then break end
+        j = glue_end
+      end
+      if name == "hskip" and len and UNITS[len:sub(-2)] then
+        table.insert(out, "\\hspace{" .. len .. "}")
+      end
+      i = j
+    end
+  end
+  table.insert(out, t:sub(i))
+  return table.concat(out)
+end
 
 -- One pass over the TeX that knows, at each point, whether it is in math or in
 -- the text argument of \text{...}, and fixes two things that depend on it:
@@ -75,10 +133,10 @@ local function rewrite_commands(t)
       if name then
         i = i + 1 + #name
         local cmd = "\\" .. name
-        if not SUPPORTED[name] then
-          if EQUIVALENT[name] then
-            cmd = EQUIVALENT[name]
-          elseif mode() == "text" then
+        if EQUIVALENT[name] then
+          cmd = EQUIVALENT[name]
+        elseif not SUPPORTED[name] then
+          if mode() == "text" then
             cmd = "\\textrm{" .. name .. "}"
           else
             cmd = "\\operatorname{" .. name .. "}"
@@ -128,10 +186,7 @@ local function normalise_math(t)
   t = t:gsub("\\lx@sectionsign", "\\S ")
   t = t:gsub("\\addcontentsline%b{}%b{}%b{}", "")
   t = t:gsub("\\begin{array}%[%]", "\\begin{array}")
-  for _, cmd in ipairs(LAYOUT) do
-    t = t:gsub("\\" .. cmd .. "%s*%-?[%d.]*%a?%a?%f[^%a]", "")
-  end
-  return rewrite_commands(t)
+  return rewrite_commands(strip_layout(t))
 end
 
 function Math(m)
@@ -139,14 +194,33 @@ function Math(m)
   return m
 end
 
--- Two things that go wrong when math is written next to other text:
+-- esvect's \vv{n} arrives as two pieces: the arrow's expanded internals
+-- (\montraita ... \fldr), which LaTeXML could not parse, then the argument.
+local function is_vv_arrow(el)
+  return el.t == "Math" and el.text:find("montrait", 1, true) and el.text:find("fldr", 1, true)
+end
+
+-- Three things that go wrong when math is written next to other text:
 -- LaTeXML sometimes splits one expression into adjacent pieces, and "$a$$b$"
--- would open a display equation, so merge them; and a currency sign before
--- math ("\$" then "$15$") becomes "\$$15$", so move the sign into the math.
+-- would open a display equation, so merge them; a currency sign before math
+-- ("\$" then "$15$") becomes "\$$15$", so move the sign into the math; and a
+-- \vv arrow is put back on its argument as \vec.
 function Inlines(inlines)
   local out = pandoc.List()
+  local vv = false
   for _, el in ipairs(inlines) do
     local prev = out[#out]
+    if is_vv_arrow(el) then
+      vv = true
+      goto continue
+    end
+    if vv then
+      if el.t == "Space" or el.t == "SoftBreak" or (el.t == "Str" and el.text == "") then goto continue end
+      vv = false
+      if el.t == "Math" then
+        el.text = "\\vec{" .. el.text:gsub("^\\textstyle%s*", "") .. "}"
+      end
+    end
     if el.t == "Math" and el.mathtype == "InlineMath" and prev then
       if prev.t == "Math" and prev.mathtype == "InlineMath" then
         prev.text = prev.text .. " " .. el.text
@@ -175,8 +249,16 @@ function Link(el)
   return el
 end
 
+-- arXiv's alt text is mostly a placeholder ("Refer to caption",
+-- "[Uncaptioned image]"), which goes; an author's own description of the
+-- figure (\Description in ACM papers) stays.
+local PLACEHOLDER_ALT = { ["Refer to caption"] = true, ["[Uncaptioned image]"] = true, image = true }
+
 function Image(el)
   el.attr = pandoc.Attr()
+  if PLACEHOLDER_ALT[pandoc.utils.stringify(el.caption)] then
+    el.caption = {}
+  end
   return el
 end
 
@@ -198,24 +280,104 @@ local function is_equation(tbl)
   return false
 end
 
+-- Text that goes inside \text{...} in an equation.
+local function tex_text(s)
+  return (s:gsub("[\\{}#$%%&_^~]", function(c)
+    if c == "\\" then return "\\textbackslash{}" end
+    if c == "^" or c == "~" then return "\\" .. c .. "{}" end
+    return "\\" .. c
+  end))
+end
+
+-- A cell's content in reading order, as a list of {math=...} and {text=...}.
+local function cell_parts(blocks)
+  local parts = {}
+  local function add_text(s)
+    local last = parts[#parts]
+    if last and last.text then last.text = last.text .. s else table.insert(parts, { text = s }) end
+  end
+  local inlines
+  local function blocks_of(bs)
+    for _, b in ipairs(bs) do
+      if b.t == "Plain" or b.t == "Para" then inlines(b.content)
+      elseif b.t == "Div" then blocks_of(b.content)
+      else add_text(pandoc.utils.stringify(b)) end
+    end
+  end
+  inlines = function(ils)
+    for _, el in ipairs(ils) do
+      if el.t == "Math" then table.insert(parts, { math = el.text })
+      elseif el.t == "Str" or el.t == "Code" then add_text(el.text)
+      elseif el.t == "Space" or el.t == "SoftBreak" or el.t == "LineBreak" then add_text(" ")
+      elseif el.content and type(el.content) ~= "string" then inlines(el.content)
+      end
+    end
+  end
+  blocks_of(blocks)
+  return parts
+end
+
+-- Whether a cell's TeX continues the previous cell ("=b" after "a").
+local function continues(tex)
+  tex = tex:gsub("^\\displaystyle", ""):gsub("^[%s{}]+", "")
+  if tex:match("^[=<>+%-:,;]") then return true end
+  local cmd = tex:match("^\\(%a+)")
+  return cmd ~= nil and (cmd:match("eq$") or cmd:match("arrow$") or ({
+    le = true, ge = true, leqslant = true, geqslant = true, lesssim = true, gtrsim = true,
+    prec = true, succ = true, mid = true, models = true, vdash = true, approx = true, sim = true, simeq = true, equiv = true, propto = true,
+    ["in"] = true, notin = true, to = true, mapsto = true, subset = true, subseteq = true,
+    ll = true, gg = true, cong = true, cdot = true, times = true, pm = true, mp = true,
+    coloneqq = true, triangleq = true, defeq = true, vdots = true, ldots = true, cdots = true,
+  })[cmd]) or false
+end
+
 -- LaTeXML lays out numbered equations as tables whose cells hold the math and
--- the equation number. Turn each row into one display equation, with \tag{n}.
+-- the equation number. Turn each row into one display equation, with \tag{n}:
+-- an aligned "a" & "= b" pair is joined, separate equations on one row
+-- ("I = ..., s = ..., y = ...") are spaced apart, and text in a cell ("output",
+-- a "# comment") is kept as \text. A row that is prose (\intertext, the
+-- "where ... denotes ..." between two equations) becomes a paragraph.
 local function equation_rows(tbl)
   local out = {}
   for _, body in ipairs(tbl.bodies) do
     for _, row in ipairs(body.body) do
-      local maths, number = {}, nil
+      local cells, number, has_math, wide = {}, nil, false, nil
       for _, cell in ipairs(row.cells) do
-        pandoc.walk_block(pandoc.Div(cell.contents), {
-          Math = function(m) table.insert(maths, m.text) end,
-          Str = function(s)
-            local n = s.text:match("^%((%w+)%)$")
-            if n then number = n end
-          end,
-        })
+        local parts = cell_parts(cell.contents)
+        local tex, plain = {}, {}
+        for _, p in ipairs(parts) do
+          if p.math then
+            has_math = true
+            table.insert(tex, p.math)
+          else
+            local s = p.text:gsub("%s+", " ")
+            if s:match("%S") then
+              table.insert(plain, s)
+              table.insert(tex, "\\text{" .. tex_text(s) .. "}")
+            end
+          end
+        end
+        local tag = #parts == 1 and parts[1].text
+          and parts[1].text:match("^%s*%(([%w.%-]+)%)%s*$")
+        if tag then
+          number = tag
+        elseif #tex > 0 then
+          table.insert(cells, table.concat(tex, " "))
+          if cell.col_span > 1 then wide = cell end
+        end
       end
-      if #maths > 0 then
-        local tex = table.concat(maths, " ")
+      if wide and #cells == 1 or not has_math and #cells > 0 then
+        -- Prose: keep the cells' own inlines, inline math included.
+        for _, cell in ipairs(row.cells) do
+          for _, b in ipairs(cell.contents) do
+            table.insert(out, b.t == "Plain" and pandoc.Para(b.content) or b)
+          end
+        end
+      elseif #cells > 0 then
+        local tex = cells[1]
+        for k = 2, #cells do
+          tex = tex .. (continues(cells[k]) and "" or " \\qquad ") .. cells[k]
+        end
         if number then tex = tex .. " \\tag{" .. number .. "}" end
         table.insert(out, pandoc.Para({ pandoc.Math("DisplayMath", tex) }))
       end
@@ -262,11 +424,60 @@ local function clean_row(row)
   end
 end
 
+local function has_class(row, class)
+  for _, cell in ipairs(row.cells) do
+    if cell.classes:includes(class) then return true end
+  end
+  return false
+end
+
+-- LaTeXML marks a header row (<thead>, <th>) only sometimes; without one,
+-- pandoc writes an empty header and the real header becomes the first data
+-- row. The rule under the header is the cue: up to three leading rows ending
+-- in a bottom rule, or followed by a row with a top rule (\midrule), become
+-- the head. The head grows to take in the rows a header cell spans
+-- ("Length" over "Memory" / "Ability"), as long as it stays within three.
+local function promote_header(tbl)
+  if #tbl.head.rows > 0 or #tbl.bodies == 0 then return end
+  local rows = tbl.bodies[1].body
+  local k
+  for r = 1, math.min(3, #rows - 1) do
+    if has_class(rows[r], "ltx_border_b") or has_class(rows[r], "ltx_border_bb")
+        or has_class(rows[r + 1], "ltx_border_t") then
+      k = r
+      break
+    end
+  end
+  if not k then return end
+  local r = 1
+  while r <= k do
+    for _, cell in ipairs(rows[r].cells) do
+      k = math.max(k, r + cell.row_span - 1)
+    end
+    r = r + 1
+  end
+  if k > 3 or k >= #rows then return end
+  local head, rest = pandoc.List(), pandoc.List()
+  for r, row in ipairs(rows) do
+    if r <= k then head:insert(row) else rest:insert(row) end
+  end
+  tbl.head.rows = head
+  tbl.bodies[1].body = rest
+end
+
 function Table(tbl)
   if is_equation(tbl) then
     return equation_rows(tbl)
   end
+  -- A table with nothing in it (title-page layout) would be an empty grid.
+  local has_image = false
+  pandoc.walk_block(pandoc.Div({ tbl }), { Image = function() has_image = true end })
+  if not has_image and not pandoc.utils.stringify(tbl):match("%S") then
+    return {}
+  end
+  promote_header(tbl)
   tbl.attr = pandoc.Attr()
+  tbl.head.attr = pandoc.Attr()
   for i, spec in ipairs(tbl.colspecs) do
     tbl.colspecs[i] = { spec[1], pandoc.ColWidthDefault }
   end

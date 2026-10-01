@@ -9,11 +9,13 @@
 For when the conversion improves: the frontmatter (summary included) and the
 PDF are kept; the body and the paper's images/ files are regenerated. The HTML
 is fetched at the arXiv version printed on the PDF's first page, so headings
-get page numbers from the PDF actually being read. Papers converted from PDF
-text are skipped unless --pdf-text is given, which regenerates their body
-from the PDF with the current scripts/pdf-to-markdown.py (keeping the warning
-banner); `--all --pdf-text` does just those papers. Papers containing
-`<!-- hand-edited -->` are skipped, since a reconversion would drop the edit.
+get page numbers from the PDF actually being read. A paper converted from
+PDF text that is on arXiv is converted from the HTML instead once arXiv has a
+rendering of it (it becomes `source: html`). Otherwise it is skipped unless
+--pdf-text is given, which regenerates its body from the PDF with the current
+scripts/pdf-to-markdown.py (keeping the warning banner); `--all --pdf-text`
+does just those papers. Papers containing `<!-- hand-edited -->` are skipped,
+since a reconversion would drop the edit.
 """
 
 import re
@@ -63,10 +65,17 @@ def reconvert(md, force, pdf_text=False):
     if HAND_EDITED in body and not force:
         return "skip (hand-edited; use --force)"
     if meta.get("source") == "pdf-text":
+        result = from_html(md, dict(meta, source="html"), arxiv_id) if arxiv_id else None
+        if result and result.startswith("ok"):
+            return result + " (was PDF text)"
         return reconvert_pdf_text(md, meta, body) if pdf_text else "skip (PDF text; use --pdf-text)"
     if meta.get("source") != "html" or not arxiv_id:
         return "skip (not converted from arXiv HTML)"
+    return from_html(md, meta, arxiv_id)
 
+
+def from_html(md, meta, arxiv_id):
+    """Rewrite the body from arXiv's HTML at the PDF's version, with `meta` as frontmatter."""
     pdf = pdf_path_for(md)
     version = pdf_version(pdf, arxiv_id)
     page = fetch_page(f"https://arxiv.org/html/{arxiv_id}{version}")
@@ -116,14 +125,13 @@ def main(argv):
     force, pdf_text = "--force" in argv, "--pdf-text" in argv
     args = [a for a in argv if not a.startswith("--")]
     papers = paper_files() if "--all" in argv else [Path(a).resolve() for a in args]
-    if pdf_text and "--all" in argv:  # only the PDF-text papers, which need no network
+    if pdf_text and "--all" in argv:  # only the PDF-text papers
         papers = [p for p in papers if read_paper(p)[0].get("source") == "pdf-text"]
     if not papers:
         sys.exit(__doc__)
     for i, md in enumerate(papers):
         print(f"[{i + 1}/{len(papers)}] {md.stem[:70]}: {reconvert(md, force, pdf_text)}", flush=True)
-        if not pdf_text:
-            time.sleep(1)
+        time.sleep(1)
 
 
 if __name__ == "__main__":
