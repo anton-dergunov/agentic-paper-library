@@ -2,6 +2,7 @@
 """Convert a PDF into markdown, for papers that have no HTML rendering.
 
     ./scripts/pdf-to-markdown.py <input.pdf> <output.md> [<images-dir> <basename>]
+    ./scripts/pdf-to-markdown.py --raw-equations <input.pdf> <output.md> ...
     ./scripts/pdf-to-markdown.py --text-layer <input.pdf> <output.md>
 
 Used by `add-arxiv-paper.sh` when arXiv has no HTML for a paper, by
@@ -20,9 +21,17 @@ this script writes:
 - tables as markdown tables, lists, code blocks and footnotes;
 - figures as files in <images-dir>, named <basename>-figNN.webp, followed by
   their captions (left out when no images dir is given);
-- equations as LaTeX when docling's formula model is on (--formulas), which
-  reads the equation's image; otherwise as the PDF's raw text in a block
-  marked as such, since a flattened equation is better than an invented one.
+- equations as LaTeX, read from each equation's image by the model marker
+  uses (scripts/pdf-equations.py, about two seconds an equation). A PDF's
+  text layer holds an equation only as scattered glyphs, so a model is the
+  only way to get it; it can misread, and the note at the top says so. With
+  --raw-equations, or when that model is not installed, an equation is the
+  PDF's raw text in a block marked as such.
+
+docling does everything but the equations because it scored best against
+arXiv's HTML on papers that have both (docs/library.md): every table number in
+its table, the PDF's own digits. marker reads equations far better than
+docling's own formula model, but splits decimals across table cells.
 
 --text-layer, and any PDF docling fails on, uses the older extraction of the
 text layer alone (convert_text_layer below), which keeps the prose but loses
@@ -48,7 +57,10 @@ numbers) are dropped.
 """
 
 import io
+import json
+import os
 import re
+import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
@@ -244,9 +256,14 @@ def convert_text_layer(pdf_path):
 
 LAYOUT_NOTE = """> **Converted from the PDF by layout analysis** (docling), because this paper
 > has no HTML rendering. The text and the numbers are the PDF's own; the
-> structure of tables and the reading order are reconstructed by a model, and
-> {equations}. Check the PDF (same path under `Papers/`)
-> before quoting an equation, or a table whose columns look misaligned."""
+> structure of tables and the reading order are reconstructed by a model.
+> {equations}Check the PDF (same path under `Papers/`) before
+> relying on a table whose columns look misaligned."""
+EQUATION_NOTES = {
+    "model": "Equations were read from their images by a model and can be\n> wrong in a symbol or an index: check the PDF before quoting one.\n> ",
+    "raw": "Equations are the PDF's raw text, not LaTeX: read them in the PDF.\n> ",
+    None: "",
+}
 TEXT_LAYER_NOTE = """> **Converted from the PDF text layer**, because this paper has no HTML
 > rendering. Section structure, tables and figures did not survive the
 > conversion; check the original PDF (same path under `Papers/`) before
@@ -288,8 +305,39 @@ def tidy(text):
     return re.sub(r"(?<=\d) \. (?=\d)", ".", text)  # "32 . 3", a number set in math mode
 
 
-def convert_layout(pdf_path, images_dir=None, basename=None, formulas=False):
-    """Markdown from docling's document for the PDF; see the module docstring."""
+# The Python of the environment marker is installed in (pdf-equations.py runs there).
+MARKER_PYTHON = Path(os.environ.get(
+    "PAPERS_MARKER_PYTHON", Path.home() / ".cache" / "papers" / "venvs" / "marker" / "bin" / "python"))
+
+
+def read_equations(pdf_path, boxes):
+    """LaTeX for each equation box, from pdf-equations.py; None if it cannot run."""
+    if not boxes or not MARKER_PYTHON.exists():
+        return None
+    try:
+        run = subprocess.run(
+            [str(MARKER_PYTHON), str(Path(__file__).with_name("pdf-equations.py")), str(pdf_path)],
+            input=json.dumps(boxes), capture_output=True, text=True, timeout=1800,
+        )
+    except subprocess.TimeoutExpired:
+        print("warning: equation model failed: timed out", file=sys.stderr)
+        return None
+    try:
+        latex = json.loads(run.stdout)
+    except ValueError:
+        latex = None
+    if run.returncode or not isinstance(latex, list) or len(latex) != len(boxes):
+        print(f"warning: equation model failed: {run.stderr.strip().splitlines()[-1:]}", file=sys.stderr)
+        return None
+    return latex
+
+
+def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True):
+    """(markdown, how equations were written) from docling's document for the PDF.
+
+    The second value is "model", "raw" or None (the paper has no equations);
+    see the module docstring.
+    """
     from docling.datamodel.base_models import InputFormat
     from docling.datamodel.pipeline_options import PdfPipelineOptions
     from docling.document_converter import DocumentConverter, PdfFormatOption
@@ -298,7 +346,6 @@ def convert_layout(pdf_path, images_dir=None, basename=None, formulas=False):
     options = PdfPipelineOptions()
     options.generate_picture_images = bool(images_dir)
     options.images_scale = 2.0
-    options.do_formula_enrichment = formulas
     converter = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=options)})
     doc = converter.convert(pdf_path).document
 
@@ -307,6 +354,16 @@ def convert_layout(pdf_path, images_dir=None, basename=None, formulas=False):
     # "I.INTRODUCTION": IEEE numbering, sometimes set without the space.
     headings = [re.sub(r"^([IVXL]+\.)(?=\S)", r"\1 ", h) for h in headings]
     roman = any(re.match(r"(?:II|III|IV|VI?)\.?\s", h) for h in headings)
+
+    # Equations: where docling found them, read by the equation model.
+    boxes = []
+    for item in items:
+        if item.label == Label.FORMULA and item.prov:
+            prov = item.prov[0]
+            box = prov.bbox.to_top_left_origin(page_height=doc.pages[prov.page_no].size.height)
+            boxes.append({"page": prov.page_no, "bbox": [box.l, box.t, box.r, box.b]})
+    latex = iter(read_equations(pdf_path, boxes) or []) if equation_model else iter(())
+    equations = None
 
     from paperlib import to_webp
 
@@ -342,13 +399,17 @@ def convert_layout(pdf_path, images_dir=None, basename=None, formulas=False):
             (Path(images_dir) / name).write_bytes(to_webp(buffer.getvalue()))
             parts.append(f"![](images/{quote(name)})")
         elif label == Label.FORMULA:
-            latex = item.text.strip()
+            tex = next(latex, "").strip() if item.prov else ""
             raw = " ".join((item.orig or "").split())
-            if latex:
-                parts.append(f"$${latex}$$")
+            if tex:
+                lines = [line.strip() for line in tex.split("\n") if line.strip()]
+                tex = lines[0] if len(lines) == 1 else "\\begin{gathered}" + " \\\\ ".join(lines) + "\\end{gathered}"
+                parts.append(f"$${tex}$$")
+                equations = "model"
             elif raw:
                 parts.append(f"<!-- equation: the PDF's raw text, not LaTeX; check the PDF"
                              + (f", p. {page}" if page else "") + f" -->\n```text\n{raw}\n```")
+                equations = equations or "raw"
         elif label == Label.CODE:
             parts.append(f"```text\n{item.text}\n```")
         elif label == Label.LIST_ITEM:
@@ -368,29 +429,27 @@ def convert_layout(pdf_path, images_dir=None, basename=None, formulas=False):
         is_item = re.match(r"(?:-|\d+[.)]) ", part) is not None
         was_item = re.match(r"(?:-|\d+[.)]) ", prev) is not None
         out.append(("\n" if is_item and was_item else "\n\n") + part)
-    return "".join(out).strip() + "\n"
+    return "".join(out).strip() + "\n", equations
 
 
 def main():
     args = sys.argv[1:]
     text_layer = "--text-layer" in args
-    formulas = "--formulas" in args
+    raw_equations = "--raw-equations" in args
     args = [a for a in args if not a.startswith("--")]
     if len(args) not in (2, 4):
         sys.exit(__doc__)
     pdf_path, out_path = args[0], args[1]
     images_dir, basename = (args[2], args[3]) if len(args) == 4 else (None, None)
-    body = None
+    body, equations = None, None
     if not text_layer:
         try:
-            body = convert_layout(pdf_path, images_dir, basename, formulas)
+            body, equations = convert_layout(pdf_path, images_dir, basename, not raw_equations)
         except Exception as e:  # docling missing, or a PDF it cannot read
             print(f"warning: layout conversion failed ({type(e).__name__}: {e}); using the text layer",
                   file=sys.stderr)
     if body is not None and len(body.split()) >= 200:
-        equations = ("equations are decoded from their images by a model" if formulas
-                     else "equations are the PDF's raw text")
-        note = LAYOUT_NOTE.format(equations=equations)
+        note = LAYOUT_NOTE.format(equations=EQUATION_NOTES[equations])
     else:
         if body is not None:
             print("warning: layout conversion found almost no text; using the text layer", file=sys.stderr)

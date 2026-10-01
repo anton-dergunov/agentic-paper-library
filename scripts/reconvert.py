@@ -14,9 +14,8 @@ get page numbers from the PDF actually being read. A paper converted from
 PDF text that is on arXiv is converted from the HTML instead once arXiv has a
 rendering of it (it becomes `source: html`). Otherwise it is skipped unless
 --pdf-text is given, which regenerates its body, figures and conversion note
-from the PDF with the current scripts/pdf-to-markdown.py (--formulas also
-decodes equations with a model, slowly); `--all --pdf-text` does just those
-papers. Papers containing `<!-- hand-edited -->` are skipped,
+from the PDF with the current scripts/pdf-to-markdown.py; `--all --pdf-text`
+does just those papers. Papers containing `<!-- hand-edited -->` are skipped,
 since a reconversion would drop the edit.
 
 Downloads are cached (paperlib.CACHE_DIR), so reconverting again later needs
@@ -76,14 +75,13 @@ def replace_images(md, new_images):
         images.rmdir()
 
 
-def reconvert_pdf_text(md, meta, formulas=False):
+def reconvert_pdf_text(md, meta):
     """Regenerate a PDF paper's body, figures and conversion note from its PDF."""
     with tempfile.TemporaryDirectory() as tmp:
         out, new_images = Path(tmp) / "body.md", Path(tmp) / "images"
         run = subprocess.run(
-            [sys.executable, SCRIPTS / "pdf-to-markdown.py", *(["--formulas"] if formulas else []),
-             pdf_path_for(md), out, new_images, md.stem],
-            capture_output=True, text=True,
+            [sys.executable, SCRIPTS / "pdf-to-markdown.py", pdf_path_for(md), out, new_images, md.stem],
+            capture_output=True, text=True, timeout=3600,  # a PDF that hangs must not stop a long run
         )
         if run.returncode:
             raise RuntimeError(f"pdf-to-markdown: {run.stderr.strip().splitlines()[-1:]}")
@@ -91,10 +89,11 @@ def reconvert_pdf_text(md, meta, formulas=False):
         replace_images(md, new_images)
     write_paper(md, meta, "\n" + text)
     fallback = "; fell back to the text layer" if "using the text layer" in run.stderr else ""
+    fallback += "; equation model failed, equations are raw text" if "equation model failed" in run.stderr else ""
     return f"from the PDF, {len(text.split())} words{fallback}"
 
 
-def reconvert(md, force, pdf_text=False, formulas=False):
+def reconvert(md, force, pdf_text=False):
     """Reconvert one paper. Returns (status, message); the status is "ok",
     "partial" (some figures did not download), "failed" (no HTML fetched, or
     an error), or "skipped" (nothing to do, and a retry would not change that)."""
@@ -107,7 +106,7 @@ def reconvert(md, force, pdf_text=False, formulas=False):
         if status in ("ok", "partial"):
             return status, message + " (was PDF text)"
         if pdf_text:
-            return "ok", reconvert_pdf_text(md, meta, formulas)
+            return "ok", reconvert_pdf_text(md, meta)
         return "skipped", "PDF text, no arXiv HTML; use --pdf-text"
     if meta.get("source") != "html" or not arxiv_id:
         return "skipped", "not converted from arXiv HTML"
@@ -187,7 +186,7 @@ def main(argv):
     jobs = int(option(argv, "--jobs", "1"))
     state = option(argv, "--state")
     state = Path(state).expanduser().resolve() if state else None
-    force, pdf_text, formulas = "--force" in argv, "--pdf-text" in argv, "--formulas" in argv
+    force, pdf_text = "--force" in argv, "--pdf-text" in argv
     args = [a for a in argv if not a.startswith("--")]
     if "--all" in argv:
         papers = paper_files()
@@ -213,7 +212,7 @@ def main(argv):
 
     def work(md):
         try:
-            result = reconvert(md, force, pdf_text, formulas)
+            result = reconvert(md, force, pdf_text)
         except Exception as e:  # one paper's failure must not stop the run
             result = "failed", f"{type(e).__name__}: {e}"
         time.sleep(1)  # be gentle with arXiv

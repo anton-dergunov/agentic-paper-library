@@ -207,7 +207,7 @@ fi
 if [ "${SOURCE:-}" = pdf ]; then
   # No HTML: convert the PDF by layout analysis (see pdf-to-markdown.py), which
   # writes the note on how the paper was converted, and the page markers, itself.
-  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" --formulas "$PDF" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
+  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" "$PDF" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
 
   {
     python3 "$REPO_ROOT/scripts/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" pdf-text

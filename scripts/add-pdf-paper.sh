@@ -89,7 +89,7 @@ else
   trap 'rm -rf "$WORK"' EXIT
   # Layout analysis (docling): headings with their pages, tables, figures. It
   # writes the note on how the paper was converted, and the page markers, itself.
-  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" --formulas "$PDF" "$WORK/body.md" \
+  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" "$PDF" "$WORK/body.md" \
     "$(dirname "$MD")/images" "$(basename "$MD" .md)"
   {
     python3 "$REPO_ROOT/scripts/paperlib.py" frontmatter-manual "$TITLE" pdf-text "$SOURCE_URL"

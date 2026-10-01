@@ -98,10 +98,8 @@ What follows from it:
 - `add-arxiv-paper.sh` converts arXiv's HTML with pandoc: maths as `$...$`, merged-cell tables
   as HTML, figures saved to `images/`. Plots arXiv embeds as SVG objects are kept, as WebP when
   the SVG is over 300 KB.
-- Papers without arXiv HTML fall back to the PDF's text layer (`source: pdf-text`): PyMuPDF's
-  raw text in pymupdf4llm's column order. Their prose is reliable; equations, tables and
-  numbers are not, and the paper says so at the top. An ML-based converter (MinerU, marker,
-  docling) is the thing to test if these papers start to matter.
+- Papers without arXiv HTML are converted from the PDF (`source: pdf-text`) by layout
+  analysis: see "PDF-only papers" below.
 - Web-only papers (Distill, transformer-circuits.pub, blogs) are converted from the page, and
   the PDF is the page printed by Chrome (`source: web`).
 - Headings carry the PDF page they start on, so the agent can cite pages in the PDF Anton is
@@ -119,14 +117,54 @@ docstring of `html-to-markdown.py`):
   paper's LaTeX source on arXiv and written as nested lists.
 - **Equation tables** keep their text: `\intertext` prose, a left-hand side set as text, and
   several equations on one row.
+- **siunitx numbers** arrive unrounded with digit groups; the groups are joined and raw
+  input is rounded to four decimals.
+- **Inline icons** (a check mark in a table cell) keep their file's name as alt text.
+- **Citations arXiv left as BibTeX keys**, when a paper shipped its `.bib` uncompiled, are
+  rebuilt with the reference list by pandoc's citeproc.
 - A paper converted from PDF text gets its HTML conversion once arXiv renders it
   (`reconvert.py` tries the HTML first).
 
 `scripts/test_conversion.py` checks each of these on small fixtures.
 
-Known limitations of PDF-text papers: tables and figures are lost; plot and legend text is
-sometimes fenced as code; most have no headings, so no page numbers; grids of numbers in old
-two-dimensional figures come out jumbled.
+### PDF-only papers
+
+About 280 papers have no arXiv HTML (older papers, and papers never on arXiv). Until
+2026-10-01 they were converted from the PDF's text layer alone, which kept the prose but
+lost headings, tables and figures. A comparison on 2026-10-01 against arXiv's HTML, on papers
+that have both (DPO, SimPO, Zep, Larimar, Memory Layers, HippoRAG):
+
+| | Table numbers in a table | Display equations close to arXiv's LaTeX | Headings found | Prose recovered | Time per paper |
+|---|---|---|---|---|---|
+| Text layer (the old conversion) | 0% | none | 0% | 91% | seconds |
+| docling | 100% | none (not decoded) | 75% | 93% | 15–70 s |
+| docling with its formula model | 100% | 1 of 2, one misread (`\sinu` for silu) | 74% | 96% | 5 min |
+| marker | 83% | 68% | 69% | 90% | 1–5 min |
+| **docling + marker's equation model** (in use) | **100%** | **71%** | 68% | 93% | 0.5–2 min |
+
+- **docling** takes words and numbers from the PDF's own text layer, so a number cannot be
+  misread, and its table model put every table number in its table.
+- **marker** reads equations well but re-reads whole pages with a vision model, and in
+  HippoRAG's tables it split every decimal across two cells ("34 | 8" for 34.8).
+- **So each does what it is best at.** docling converts the paper and marks where the
+  equations are; `scripts/pdf-equations.py` crops each one and has marker's model (surya)
+  read it, about two seconds an equation. A paper without equations never loads that model.
+- An equation read by a model can be wrong in a symbol or an index (about three in ten differ
+  from arXiv's LaTeX somewhere), so the note at the top of such a paper says to check the PDF
+  before quoting one. That is still far better than the text layer, where an equation is
+  scattered glyphs.
+- MinerU was installed but not evaluated: its command line changed and the run did not
+  complete. It is the one to try if this needs improving.
+
+Setup, once per machine: docling in the Python the scripts run with (`pip install docling`);
+marker in its own environment, because the two pin different versions of the same libraries
+(`uv venv --python 3.12 ~/.cache/papers/venvs/marker && uv pip install --python
+~/.cache/papers/venvs/marker/bin/python marker-pdf`, or set `PAPERS_MARKER_PYTHON`); and
+`brew install llama.cpp`, which serves marker's model. Without marker, equations are written
+as the PDF's raw text and marked so.
+
+Known limitations: headings set as run-in bold text (PNAS) are not found; a table's caption
+can appear a paragraph away from it; plots keep their image but not their numbers.
 
 ## Paper metadata services
 
