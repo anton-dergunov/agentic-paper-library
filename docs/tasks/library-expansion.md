@@ -33,6 +33,12 @@ It runs over many sessions. This file is the plan and the progress record. Its o
     inventory row is resolved: 860 added, 28 already in the library, 93 skipped; every
     `Papers_old/` file is accounted for. 1,100 papers in the library.
 - [ ] 6. Literature pass, one reading list per area (list the areas here as they are done)
+  - 2026-10-01: the five primary areas (`llm/evaluation`, `llm/post-training`,
+    `search-and-ranking`, `recommender-systems`, `experimentation-and-metrics`). Anton
+    approved every proposed paper and added 18 from "considered"; 309 added with summaries
+    (37 from PDF text), 1 withdrawn from arXiv and skipped, 230 considered papers recorded in
+    `catalog/skipped.yaml`. 1,409 papers in the library.
+  - Left: the other areas, at 5–15 papers per folder (see Handoff).
 - [ ] 7. Wrap-up
 
 ## Decisions
@@ -216,6 +222,89 @@ in Decisions.
 - Update "Next" in `docs/proposal.md`.
 - Update the description of the tree in `AGENTS.md`.
 - Tell Anton when every `Papers_old/` file is resolved. Deleting that folder is his call.
+
+## Handoff: where things stand (end of 2026-10-01)
+
+Read this first in a new session.
+
+### Done
+
+- Phases 1–5 are complete: every inventory row from the old sources is resolved, and every
+  `Papers_old/` file is accounted for.
+- Phase 6, primary areas, is complete. The five reading lists are in
+  [reading-lists/](library-expansion/reading-lists/), each with an "Added from Considered"
+  section for the 18 papers Anton moved in. All 310 approved papers are resolved: 309 added
+  with summaries (272 from arXiv HTML, 37 from PDF text) and 1 skipped (360Brew: every arXiv
+  version withdrawn). The two blog posts Anton asked for, Netflix's foundation model and
+  Meta's GEM, have no paper and were not added.
+- The library holds 1,409 papers. `check-library.py` passes, and `build-index.py` is stable
+  when run twice.
+- Tooling added or fixed along the way:
+  - `catalog/topics.yaml` and `catalog/skipped.yaml`, and the checks that use them.
+  - `add-web-article.py`: web articles such as Distill and transformer-circuits.pub
+    (`source: web`).
+  - `rename-papers.py`: filenames follow `paperlib.title_to_filename`, where a colon
+    becomes ". ".
+  - `reconvert.py --pdf-text`: regenerates PDF-text papers from their PDFs.
+  - `library-expansion/import_reading_list.py`: turns a reviewed list into inventory rows and
+    skip records (see Next steps).
+  - Converter fixes: code listings, `<base>`-relative figure links, withdrawn arXiv
+    versions, LaTeX in filenames, two-column PDFs, PDF-text code blocks, running headers.
+
+### Next steps
+
+1. **Reading lists for the other areas** (phase 6, second half): 63 leaf folders at 5–15
+   papers each, roughly 300–450 papers. One Sonnet subagent per group, with a short prompt
+   that points to [reading-lists/README.md](library-expansion/reading-lists/README.md),
+   names the group's folders and scopes, the depth, and what Anton cares about. Run them in
+   **two waves of four or five**: five at once hit the session usage limit on 2026-09-30.
+   Tell each subagent to write its `.md` incrementally, to check ids with
+   `arxiv-lookup.py --no-abstract` in batches of about 20, and not to use `--title`.
+   - LLM (rest): foundation models (including DeepSeek-V4, GLM-5 and Kimi K2.5, left out of
+     the post-training list), architecture, pretraining, prompting and context, reasoning,
+     agents, RAG, memory, personalization, behaviour, uncertainty, safety, routing,
+     efficiency, text-analytics.
+   - `deep-learning` and `representation-learning`.
+   - `nlp` and `graphs`.
+   - `vision-and-multimodal` and `generative-models`.
+   - `interpretability`.
+   - `ml-foundations`, `data-centric-ml` and `trustworthy-ml`.
+   - `ml-systems` and `computer-systems`.
+   - `reinforcement-learning` and `robotics-and-embodied`.
+   - `ai-and-society` and `research-practice` (`curiosities`: none unless Anton asks).
+2. **Anton reviews** the lists and strikes items by number; he may also move "considered"
+   papers in. Append those to the list's `.tsv` (continuing the numbering) and to an "Added
+   from Considered" section of the `.md`, placed before "Considered, not proposed".
+3. **Add them**, as for the primary areas:
+   1. `import_reading_list.py <area> --strike <numbers>` for each list: a dry run that
+      prints what it would do; add `--write` to save. It appends the approved rows to
+      `inventory.tsv` (`status: todo`, `sources: literature-pass:<area>`), and the struck
+      and considered papers to `catalog/skipped.yaml` with their arXiv titles.
+   2. `add_batch.py <topic-prefixes>` in the background, about 3–4 papers a minute. Rows
+      that fail on an arXiv API error stay `failed: …`: set them back to `todo` and rerun.
+   3. Papers not on arXiv: a Sonnet subagent finds open PDFs and writes a
+      `<key>\t<pdf>\t<url>` map for `add_batch.py --pdfs`. Author pages, Microsoft's
+      exp-platform site and Wayback `id_` URLs work; ACM blocks scripts (Cloudflare), so
+      what is left goes to Anton to download in a browser.
+   4. Summaries: `pending_summaries.py` → Sonnet subagent → `apply_summaries.py`, about
+      150 papers per subagent.
+   5. `build-index.py`, `check-library.py`, and a spot-check of a few conversions.
+4. **Phase 7 wrap-up**:
+   - update "Next" in `docs/proposal.md` and the tree description in `AGENTS.md`;
+   - tell Anton that `Papers_old/` is fully resolved. Deleting it is his call.
+
+Work in one session at a time: on 2026-09-30 two sessions ran the same lists and one
+overwrote the other's files.
+
+### Known limitations, not worth fixing now
+
+- PDF-text papers still lose tables and figures. Plot and legend text is sometimes fenced as
+  a code block, and the BLEU paper's first-page header is fenced by mistake.
+- `arxiv-lookup.py` with 60+ ids printed one entry and stopped; batches of about 20 work.
+- `add-web-article.py`'s date fallback for transformer-circuits pages did not parse; the four
+  dates were set by hand. Authors are extracted.
+- Figure grids of numbers in old PDFs (e.g. the prefix-sums paper) are jumbled, since they are
+  two-dimensional in the PDF.
 
 ## Notes for later sessions
 

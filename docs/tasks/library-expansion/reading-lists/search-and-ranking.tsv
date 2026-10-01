@@ -1,0 +1,65 @@
+1		https://doi.org/10.1561/1500000019	The Probabilistic Relevance Framework: BM25 and Beyond	2009	search-and-ranking/indexing-and-classical-ir
+2		https://doi.org/10.1145/956863.956944	Efficient Query Evaluation using a Two-Level Retrieval Process (WAND)	2003	search-and-ranking/indexing-and-classical-ir
+3		https://www.microsoft.com/en-us/research/publication/learning-to-rank-using-gradient-descent/	Learning to Rank using Gradient Descent (RankNet)	2005	search-and-ranking/learning-to-rank
+4		https://doi.org/10.1145/3269206.3271784	The LambdaLoss Framework for Ranking Metric Optimization	2018	search-and-ranking/learning-to-rank
+5	1911.09798		An Alternative Cross Entropy Loss for Learning-to-Rank	2019	search-and-ranking/learning-to-rank
+6	1706.09516		CatBoost: unbiased boosting with categorical features	2017	search-and-ranking/learning-to-rank
+7	1901.04085		Passage Re-ranking with BERT	2019	search-and-ranking/neural-ranking
+8	2304.09542		Is ChatGPT Good at Search? Investigating Large Language Models as Re-Ranking Agents	2023	search-and-ranking/neural-ranking
+9	2306.17563		Large Language Models are Effective Text Rankers with Pairwise Ranking Prompting	2023	search-and-ranking/neural-ranking
+10	2312.02724		RankZephyr: Effective and Robust Zero-Shot Listwise Reranking is a Breeze!	2023	search-and-ranking/neural-ranking
+11	2502.18418		Rank1: Test-Time Compute for Reranking in Information Retrieval	2025	search-and-ranking/neural-ranking
+12	2303.07678		Query2doc: Query Expansion with Large Language Models	2023	search-and-ranking/neural-ranking
+13	2308.07107		Large Language Models for Information Retrieval: A Survey	2023	search-and-ranking/neural-ranking
+14	2202.06991		Transformer Memory as a Differentiable Search Index	2022	search-and-ranking/neural-ranking
+15	2403.06789		SPLADE-v3: New baselines for SPLADE	2024	search-and-ranking/dense-retrieval
+16	2005.00181		Sparse, Dense, and Attentional Representations for Text Retrieval	2020	search-and-ranking/dense-retrieval
+17	2112.01488		ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction	2021	search-and-ranking/dense-retrieval
+18	2205.09707		PLAID: An Efficient Engine for Late Interaction Retrieval	2022	search-and-ranking/dense-retrieval
+19	2010.08191		RocketQA: An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question Answering	2020	search-and-ranking/dense-retrieval
+20	2104.06967		Efficiently Teaching an Effective Dense Retriever with Balanced Topic Aware Sampling	2021	search-and-ranking/dense-retrieval
+21	2407.15831		NV-Retriever: Improving text embedding models with effective hard-negative mining	2024	search-and-ranking/dense-retrieval
+22	2112.09118		Unsupervised Dense Information Retrieval with Contrastive Learning (Contriever)	2021	search-and-ranking/dense-retrieval
+23	2212.03533		Text Embeddings by Weakly-Supervised Contrastive Pre-training (E5)	2022	search-and-ranking/dense-retrieval
+24	2402.03216		M3-Embedding: Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation	2024	search-and-ranking/dense-retrieval
+25	2401.00368		Improving Text Embeddings with Large Language Models	2023	search-and-ranking/dense-retrieval
+26	2310.08319		Fine-Tuning LLaMA for Multi-Stage Text Retrieval	2023	search-and-ranking/dense-retrieval
+27	2405.17428		NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models	2024	search-and-ranking/dense-retrieval
+28	2506.05176		Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models	2025	search-and-ranking/dense-retrieval
+29	2503.07891		Gemini Embedding: Generalizable Embeddings from Gemini	2025	search-and-ranking/dense-retrieval
+30	2209.11755		Promptagator: Few-shot Dense Retrieval From 8 Examples	2022	search-and-ranking/dense-retrieval
+31	2104.08663		BEIR: A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models	2021	search-and-ranking/dense-retrieval
+32	2210.07316		MTEB: Massive Text Embedding Benchmark	2022	search-and-ranking/dense-retrieval
+33	2407.12883		BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval	2024	search-and-ranking/dense-retrieval
+34	2211.14876		Dense Text Retrieval based on Pretrained Language Models: A Survey	2022	search-and-ranking/dense-retrieval
+35	1603.09320		Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs (HNSW)	2016	search-and-ranking/dense-retrieval
+36		https://papers.nips.cc/paper/2019/hash/09853c7fb1d3f8ee67a61b6bf4a7f8e6-Abstract.html	DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node	2019	search-and-ranking/dense-retrieval
+37	1908.10396		Accelerating Large-Scale Inference with Anisotropic Vector Quantization (ScaNN)	2019	search-and-ranking/dense-retrieval
+38	1702.08734		Billion-scale similarity search with GPUs	2017	search-and-ranking/dense-retrieval
+39	1807.05614		ANN-Benchmarks: A Benchmarking Tool for Approximate Nearest Neighbor Algorithms	2018	search-and-ranking/dense-retrieval
+40		https://doi.org/10.1145/1341531.1341545	An Experimental Comparison of Click Position-Bias Models	2008	search-and-ranking/click-models-and-unbiased-ltr
+41		https://doi.org/10.1145/1526709.1526711	A Dynamic Bayesian Network Click Model for Web Search Ranking	2009	search-and-ranking/click-models-and-unbiased-ltr
+42		https://doi.org/10.1145/775047.775067	Optimizing Search Engines using Clickthrough Data	2002	search-and-ranking/click-models-and-unbiased-ltr
+43	1809.05818		Unbiased LambdaMART: An Unbiased Pairwise Learning-to-Rank Algorithm	2018	search-and-ranking/click-models-and-unbiased-ltr
+44	2005.09035		Policy-Aware Unbiased Learning to Rank for Top-k Rankings	2020	search-and-ranking/click-models-and-unbiased-ltr
+45	2203.17118		Doubly-Robust Estimation for Correcting Position-Bias in Click Feedback for Unbiased Learning to Rank	2022	search-and-ranking/click-models-and-unbiased-ltr
+46	2207.03051		A Large Scale Search Dataset for Unbiased Learning to Rank	2022	search-and-ranking/click-models-and-unbiased-ltr
+47	2212.13937		Towards Disentangling Relevance and Bias in Unbiased Learning to Rank	2022	search-and-ranking/click-models-and-unbiased-ltr
+48		https://doi.org/10.1145/582415.582418	Cumulated Gain-Based Evaluation of IR Techniques	2002	search-and-ranking/evaluation
+49		https://doi.org/10.1145/1645953.1646033	Expected Reciprocal Rank for Graded Relevance	2009	search-and-ranking/evaluation
+50	1611.09268		MS MARCO: A Human Generated MAchine Reading COmprehension Dataset	2016	search-and-ranking/evaluation
+51	2003.07820		Overview of the TREC 2019 Deep Learning Track	2020	search-and-ranking/evaluation
+52	2109.00062		Shallow pooling for sparse labels	2021	search-and-ranking/evaluation
+53	2309.10621		Large language models can accurately predict searcher preferences	2023	search-and-ranking/evaluation
+54	2406.06519		UMBRELA: UMbrela is the (Open-Source Reproduction of the) Bing RELevance Assessor	2024	search-and-ranking/evaluation
+55	2409.15133		Don't Use LLMs to Make Relevance Judgments	2024	search-and-ranking/evaluation
+56		http://infolab.stanford.edu/~backrub/google.html	The Anatomy of a Large-Scale Hypertextual Web Search Engine	1998	search-and-ranking/search-systems
+57	2310.14587		Large Search Model: Redefining Search Stack in the Era of LLMs	2023	search-and-ranking/search-systems
+58	2105.11108		Pre-trained Language Model based Ranking in Baidu Search	2021	search-and-ranking/search-systems
+59	2108.08252		Deep Natural Language Processing for LinkedIn Search Systems	2021	search-and-ranking/search-systems
+60		https://doi.org/10.1145/2648584.2648589	Practical Lessons from Predicting Clicks on Ads at Facebook	2014	search-and-ranking/ads
+61	2002.05515		Improving Deep Learning For Airbnb Search	2020	search-and-ranking/search-systems
+62	2106.03373		Pre-trained Language Model for Web-scale Retrieval in Baidu Search	2021	search-and-ranking/dense-retrieval
+63	2304.09161		Perspectives on Large Language Models for Relevance Judgment	2023	search-and-ranking/evaluation
+64	2405.07767		Synthetic Test Collections for Retrieval Evaluation	2024	search-and-ranking/evaluation
+65	2412.13663		Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference	2024	nlp/pretrained-language-models
