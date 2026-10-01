@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Write summaries back into the papers.
 
-    python3 docs/tasks/library-expansion/apply_summaries.py <pending.md> <summaries.tsv>
+    ./scripts/apply-summaries.py <pending.md> <summaries.tsv>
 
 <summaries.tsv> has one line per paper, `<number>\\t<summary>`, numbered as in
-the <pending.md> file from pending_summaries.py. Papers that already have a
+the <pending.md> file from pending-summaries.py. Papers that already have a
 summary are left alone.
 """
 
@@ -12,9 +12,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "scripts"))
-from paperlib import LIBRARY_DIR, read_paper, write_paper  # noqa: E402
+from paperlib import LIBRARY_DIR, read_paper, write_paper
 
 
 def main(argv):

@@ -15,7 +15,7 @@ page is split into text regions in reading order, so a two-column paper reads
 down the left column and then the right, instead of interleaving the two line
 by line as a plain position sort does. The text itself is still PyMuPDF's raw
 extraction, which keeps equations (flattened) where pymupdf4llm's own markdown
-drops display maths (docs/experiments/pdf-vs-html-conversion.md). A page whose
+drops display maths (docs/library.md). A page whose
 regions miss much of its text falls back to the plain sort.
 
 Within a region, lines are rebuilt into:

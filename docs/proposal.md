@@ -38,8 +38,8 @@ the Claude app on iPad or Android.
    Yandex Disk  Papers/<topic path>/<Title>.pdf ◀─────────────────┘ (add-paper downloads here)
 ```
 
-- **Desk:** VS Code with the Claude Code panel in `~/papers`. PDFs open in a VS Code PDF viewer
-  or in Skim.
+- **Desk:** VS Code with the Claude Code panel in `~/papers`. PDFs open in my own VS Code PDF
+  viewer (`~/projects/prototypes/vscode-pdf-viewer`), where page links in the chat land.
 - **iPad:** a native PDF app for reading and highlighting, plus the Claude app on a Remote
   Control session. They can be side by side, switched between, or on two devices: the iPad Air
   for the PDF and the iPad mini for the chat.
@@ -50,13 +50,13 @@ the Claude app on iPad or Android.
 | What | Where | Why |
 |---|---|---|
 | PDFs (for me) | Yandex Disk `Papers/<topic path>/<Title>.pdf` | Synced to every tablet and to the NAS (Cloud Sync). Highlights live in the PDF. Not in git. |
-| Markdown (for the agent) | `~/papers/library/<topic path>/<Title>.md` + `images/` | Converted from arXiv HTML, which is measurably better than PDF text for maths and tables (`docs/experiments/pdf-vs-html-conversion.md`). Same path as the PDF. |
+| Markdown (for the agent) | `~/papers/library/<topic path>/<Title>.md` + `images/` | Converted from arXiv HTML, which is measurably better than PDF text for maths and tables (`docs/library.md`). Same path as the PDF. |
 | Indexes | a generated `README.md` per folder | Lets the agent (and me) find papers without reading them all. |
 | Workflow | `AGENTS.md`, `scripts/`, `.claude/skills/` | Adding, moving and checking papers. |
 | Paper notes | Obsidian `10 Knowledge/ML & AI/Papers/<Title>.md` | Overview plus what I took from the paper. Named after the library file; flat, grouped by a `topic` property. |
 | Agent memory | `~/papers/notes/<Title>.md` | What the agent learned about a paper (digest, related papers, Q&A), so later sessions don't re-read it. |
 | Conversations | Claude Code session transcripts | The durable part goes into Obsidian at the end of a session. |
-| Backlog | `INBOX.txt` | Links and titles waiting to be added. The 546 older PDFs in Yandex Disk `Papers_old/` were all migrated on 2026-10-01 (`docs/tasks/library-expansion.md`). |
+| Backlog | `INBOX.txt` | Links and titles waiting to be added. |
 
 The repo is a private GitHub repo (`anton-dergunov/papers`). Git gives history for
 reorganisations and is how a second host such as the NAS gets and returns changes. GitHub's
@@ -94,25 +94,24 @@ next piece of work.
 - **VS Code on the iPad: ruled out.** Tested in the browser and over a `code tunnel`: PDF
   rendering, pinch-zoom and highlighting were poor, and the Claude panel worked worse.
 - **Page links from chat:** file-path links in the Claude panel open PDFs as text, and it strips
-  every link type except `http(s)`. So clickable page links need a small VS Code extension:
-  see `docs/tasks/pdf-viewer-extension.md`. Until then, answers give page numbers.
+  every link type except `http(s)`. So page links are `http://pdf.invalid/<path>?page=…`
+  URLs, which my PDF viewer extension claims and opens at the spot, next to the chat. Its
+  README (`~/projects/prototypes/vscode-pdf-viewer`) has the format and the setup.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this repo does), Paperless-ngx (a document archive, not a reader).
 
 ## Next
 
-Done: the `overview` skill (`.claude/skills/overview/`), and the library expansion
-(`docs/tasks/library-expansion.md`), which grew the library from 240 LLM papers to 2,200
-across the whole field.
+Done: the `overview` skill (`.claude/skills/overview/`); the PDF viewer extension
+(`~/projects/prototypes/vscode-pdf-viewer`); and the library expansion, which grew the
+library from 240 LLM papers to 2,200 across the whole field (`docs/library.md`).
 
 1. The `read` and `wrap` skills.
-2. The viewer extension (`docs/tasks/pdf-viewer-extension.md`): built; the last check is
-   clicking a link in the real Claude panel.
-3. The literature review (`docs/tasks/literature-review.md`).
-4. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
+2. The literature review (`docs/tasks/literature-review.md`).
+3. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
    arXiv id or title, and now nearly all of them have a library copy.
-5. Run the session on the NAS, so it is always on:
+4. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone this repo and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,

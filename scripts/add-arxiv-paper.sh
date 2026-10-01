@@ -22,7 +22,7 @@
 #
 # Markdown is converted from arXiv's own HTML rendering (arxiv.org/html/<id>),
 # which comes through far cleaner than PDF text extraction — see
-# docs/experiments/pdf-vs-html-conversion.md. The PDF and the HTML are fetched
+# docs/library.md. The PDF and the HTML are fetched
 # at the same arXiv version. scripts/html-to-markdown.py does the conversion:
 # math as $...$, complex tables as HTML, figures saved to images/ as repaired
 # standalone SVGs. Existing files are left alone unless --force is given, and a

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Collect the papers that still need a summary, with their abstracts.
 
-    python3 docs/tasks/library-expansion/pending_summaries.py <out.md> [<topic-prefix> ...]
+    ./scripts/pending-summaries.py <out.md> [<topic-prefix> ...]
 
 Writes one numbered block per paper with an empty `summary:` (under the given
 topics, or anywhere): its path, title and abstract. Abstracts of arXiv papers
 come from the export API, 100 per request; the others are read from the
 markdown (the Abstract section, or the opening text). The file is what a
-summary writer reads instead of the papers; apply_summaries.py takes the
+summary writer reads instead of the papers; apply-summaries.py takes the
 numbered answers back.
 """
 
@@ -16,9 +16,7 @@ import sys
 import time
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO / "scripts"))
-from paperlib import LIBRARY_DIR, fetch, paper_files, parse_arxiv_entries, read_paper  # noqa: E402
+from paperlib import LIBRARY_DIR, fetch, paper_files, parse_arxiv_entries, read_paper
 
 API = "https://export.arxiv.org/api/query"
 

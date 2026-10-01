@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
-"""Turn a reviewed reading list into inventory rows and skip records.
+"""Record what a reviewed reading list leaves out in catalog/skipped.yaml.
 
-    python3 docs/tasks/library-expansion/import_reading_list.py <area>
-            [--strike 3,7,12-15] [--reason "..."] [--write]
+    ./scripts/reading-list-skips.py <list.md> [--strike 3,7,12-15] [--reason "..."] [--write]
 
-Reads reading-lists/<area>.tsv and <area>.md. Every proposed paper not struck
-becomes an inventory.tsv row with action `add`, status `todo`, sources
-`literature-pass:<area>` and the list's folder as topic, keyed `arxiv:<id>` or
-`title:<normalised title>`; add_batch.py then adds it. Struck papers and the
-"Considered, not proposed" table go to catalog/skipped.yaml, with --reason (or
-a default) for struck ones and the list's "Why not" for the others; their
-titles come from arXiv where there is an id.
+Reads <list.md> and the <list.tsv> next to it. Papers struck by number go to
+skipped.yaml with --reason (or a default naming the list), and their status in
+the TSV becomes `struck`, so add-batch.py passes them over. The rows of the
+"Considered, not proposed" table go to skipped.yaml with the table's "Why not";
+their titles come from arXiv where there is an id.
 
-Papers already in the inventory, the library or skipped.yaml are left out, so a
-rerun adds nothing twice; a considered paper that any list proposes is not skipped. Without --write it only prints what it would do.
+Papers already in the library or in skipped.yaml are left out, and so is a
+considered paper that any list in the same folder proposes, so a rerun records
+nothing twice. Without --write it only prints what it would do.
 """
 
-import csv
 import datetime
 import re
 import sys
@@ -24,18 +21,14 @@ from pathlib import Path
 
 import yaml
 
-HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[2]
-sys.path.insert(0, str(REPO / "scripts"))
-from paperlib import (  # noqa: E402
+from paperlib import (
     SKIPPED_FILE, fetch, library_arxiv_ids, load_topics, norm_title, paper_files,
     parse_arxiv_entries, read_paper, skipped_index,
 )
 
-INVENTORY = HERE / "inventory.tsv"
-LISTS = HERE / "reading-lists"
 ARXIV_ID = re.compile(r"\b(\d{4}\.\d{4,5})\b")
 URL = re.compile(r"https?://\S+")
+COLUMNS = ["number", "arxiv", "url", "title", "year", "folder", "source", "status"]
 
 
 class NoAliases(yaml.SafeDumper):
@@ -53,20 +46,18 @@ def parse_numbers(spec):
     return out
 
 
-def proposed(area):
+def proposed(tsv):
     rows = []
-    for line in (LISTS / f"{area}.tsv").read_text().splitlines():
+    for line in tsv.read_text(encoding="utf-8").splitlines():
         if line.strip():
-            num, arxiv, url, title, year, folder = (line.split("\t") + [""] * 6)[:6]
-            rows.append(dict(num=int(num), arxiv=arxiv.strip(), url=url.strip(),
-                             title=title.strip(), year=year.strip(), folder=folder.strip()))
+            cells = (line.split("\t") + [""] * len(COLUMNS))[:len(COLUMNS)]
+            rows.append(dict(zip(COLUMNS, (c.strip() for c in cells))))
     return rows
 
 
-def considered(area):
+def considered(md):
     """Rows of the "Considered, not proposed" table: (title, year, ids cell, folder, why)."""
-    text = (LISTS / f"{area}.md").read_text()
-    section = text.split("## Considered, not proposed", 1)
+    section = md.read_text(encoding="utf-8").split("## Considered, not proposed", 1)
     if len(section) < 2:
         return []
     rows = []
@@ -120,95 +111,65 @@ def main(argv):
         argv = argv[:i] + argv[i + 2:]
     if len(argv) != 1:
         sys.exit(__doc__)
-    area = argv[0]
-    reason = reason or f"Struck by Anton from the {area} reading list"
+    md = Path(argv[0])
+    tsv = md.with_suffix(".tsv")
+    reason = reason or f"Struck by Anton from the {md.stem} reading list"
     today = datetime.date.today()
 
     topics = load_topics()
-    with INVENTORY.open() as f:
-        reader = csv.DictReader(f, delimiter="\t")
-        fields, inventory = reader.fieldnames, list(reader)
-    inv_keys = {r["key"] for r in inventory}
-    inv_ids = {r["arxiv"] for r in inventory if r["arxiv"]}
-    inv_titles = {norm_title(r["title"]) for r in inventory}
     lib_ids = set(library_arxiv_ids())
-    lib_titles = {norm_title(read_paper(md)[0].get("title")) for md in paper_files()}
+    lib_titles = {norm_title(read_paper(p)[0].get("title")) for p in paper_files()}
     skip_ids, skip_titles = skipped_index()
 
     def known(arxiv, title):
-        """Why a paper is left out, or None when it is new."""
-        if arxiv and arxiv in lib_ids or norm_title(title) in lib_titles:
-            return "in library"
-        if arxiv and arxiv in skip_ids or norm_title(title) in skip_titles:
-            return "skipped earlier"
-        if arxiv and arxiv in inv_ids or norm_title(title) in inv_titles:
-            return "in inventory"
-        return None
+        return (arxiv and (arxiv in lib_ids or arxiv in skip_ids)
+                or norm_title(title) in lib_titles or norm_title(title) in skip_titles)
 
-    rows = proposed(area)
-    unknown = strike - {r["num"] for r in rows}
+    rows = proposed(tsv)
+    unknown = strike - {int(r["number"]) for r in rows}
     if unknown:
         sys.exit(f"--strike names numbers not in the list: {sorted(unknown)}")
-    new_rows, skips, left_out = [], [], []
+    skips = []
     for r in rows:
-        why = known(r["arxiv"], r["title"])
-        if why:
-            left_out.append(f"  {r['num']:>3}  {why}: {r['title']}")
+        if int(r["number"]) not in strike:
             continue
-        if r["folder"] not in topics:
-            sys.exit(f"#{r['num']} {r['title']}: undeclared folder {r['folder']}")
-        if r["num"] in strike:
+        r["status"] = "struck"
+        if not known(r["arxiv"], r["title"]):
             skips.append(dict(title=r["title"], arxiv=r["arxiv"] or None, url=r["url"] or None,
                               year=int(r["year"]) if r["year"].isdigit() else None,
-                              topic=r["folder"], reason=reason, date=today))
-            continue
-        key = f"arxiv:{r['arxiv']}" if r["arxiv"] else f"title:{norm_title(r['title'])}"
-        if key in inv_keys:
-            left_out.append(f"  {r['num']:>3}  in inventory: {r['title']}")
-            continue
-        row = dict.fromkeys(fields, "")
-        row.update(key=key, title=r["title"], year=r["year"], arxiv=r["arxiv"],
-                   url=r["url"] or (f"https://arxiv.org/abs/{r['arxiv']}" if r["arxiv"] else ""),
-                   sources=f"literature-pass:{area}", topic=r["folder"], action="add",
-                   status="todo")
-        new_rows.append(row)
-        inv_keys.add(key)
+                              topic=nearest_topic(r["folder"], topics), reason=reason, date=today))
 
-    # A paper another list proposes is not skipped here, whichever list is imported first.
-    every_list = [r for tsv in LISTS.glob("*.tsv") for r in proposed(tsv.stem)]
+    # A paper another list proposes is not skipped here, whichever list is reviewed first.
+    every_list = [r for other in md.parent.glob("*.tsv") for r in proposed(other)]
     proposed_ids = {r["arxiv"] for r in every_list if r["arxiv"]}
     proposed_titles = {norm_title(r["title"]) for r in every_list}
-    cons = considered(area)
+    cons = considered(md)
     real_titles = arxiv_titles({i for c in cons for i in ARXIV_ID.findall(c[2])} - proposed_ids)
     for title, year, ids_cell, folder, why_not in cons:
         ids = ARXIV_ID.findall(ids_cell)
         urls = URL.findall(ids_cell)
         m = re.search(r"\d{4}", year)
-        topic = nearest_topic(folder, topics)
         for part, arxiv in zip(split_titles(title, len(ids)), ids or [None]):
             name = real_titles.get(arxiv, part)
             if arxiv in proposed_ids or norm_title(name) in proposed_titles or known(arxiv, name):
                 continue
             skips.append(dict(title=name, arxiv=arxiv, url=None if arxiv else (urls[0] if urls else None),
-                              year=int(m.group()) if m else None, topic=topic,
+                              year=int(m.group()) if m else None, topic=nearest_topic(folder, topics),
                               reason=why_not, date=today))
             skip_titles[norm_title(name)] = True
             if arxiv:
                 skip_ids[arxiv] = True
 
-    print(f"{area}: {len(rows)} proposed, {len(strike)} struck, {len(cons)} considered rows")
-    print(f"  to inventory: {len(new_rows)}")
+    print(f"{md.stem}: {len(rows)} proposed, {len(strike)} struck, {len(cons)} considered rows")
     print(f"  to skipped.yaml: {len(skips)}")
-    if left_out:
-        print("  left out of the inventory:\n" + "\n".join(left_out))
     if not write:
         for s in skips:
             print(f"    skip {s['arxiv'] or s['url'] or '-'}  {s['title']}  [{s['topic']}]")
         print("dry run; pass --write to save")
         return
-    if new_rows:
-        with INVENTORY.open("a", newline="") as f:
-            csv.DictWriter(f, fieldnames=fields, delimiter="\t", lineterminator="\n").writerows(new_rows)
+    if strike:
+        lines = ["\t".join(r[c] for c in COLUMNS).rstrip("\t") for r in rows]
+        tsv.write_text("\n".join(lines) + "\n", encoding="utf-8")
     if skips:
         entries = [{k: v for k, v in s.items() if v is not None} for s in skips]
         with SKIPPED_FILE.open("a", encoding="utf-8") as f:

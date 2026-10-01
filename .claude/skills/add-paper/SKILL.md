@@ -1,6 +1,6 @@
 ---
 name: add-paper
-description: Add a paper to the library — from an arXiv link or id, a local PDF, or a paper in the unconverted Papers_old/ folder named by title. Picks the topic folder, runs the add script, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF", "convert <title> from my old papers". Also use to drain INBOX.txt, for "add papers from my inbox", "process the inbox", "/add-paper inbox".
+description: Add a paper to the library — from an arXiv link or id, a web article, a local PDF, or a title. Picks the topic folder, runs the add script, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF". Also use to drain INBOX.txt, for "add papers from my inbox", "process the inbox", "/add-paper inbox".
 ---
 
 # /add-paper — add a paper to the library
@@ -12,7 +12,7 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
 1. **Identify the paper** with `scripts/arxiv-lookup.py`, which prints the id and latest
    version, date, title, abstract, and the path if the paper is already in the library.
    - arXiv URLs or ids: `scripts/arxiv-lookup.py <id-or-url> [...]`, all in one call.
-   - A title, or a file in `~/Yandex.Disk.localized/Papers_old/`:
+   - A title, or a local PDF named by its title:
      `scripts/arxiv-lookup.py --title "<title>"`. Confirm the match with Anton if the
      title differs. If it is not on arXiv, use the local PDF.
    - A paper marked `already in library` is not added again.
@@ -33,7 +33,7 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
      `scripts/add-web-article.py <url> <topic>`; pass `--title`, `--authors "A; B"` or
      `--published YYYY-MM-DD` when the page's metadata lacks them.
    - Local PDF: `scripts/add-pdf-paper.sh <file.pdf> <topic> --title "<exact title>"
-     [--source "<url>"]`. It copies the PDF; files in `Papers_old/` stay where they are.
+     [--source "<url>"]`. It copies the PDF and leaves the original where it is.
 4. **Write the summary.** Read the paper's markdown (abstract, introduction, conclusion) and
    write one neutral sentence on what the paper does or finds — a mechanism or result,
    not "this paper is about". Match the style of the summaries already in the folder. Set
