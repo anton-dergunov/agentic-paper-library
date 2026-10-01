@@ -157,6 +157,23 @@ that have both (DPO, SimPO, Zep, Larimar, Memory Layers, HippoRAG):
   where the mathematics was) is read by the same model, block by block, and replaces the
   text layer's text only when it keeps the block's words and every number. An equation
   docling took for text is caught the same way.
+- **Inline mathematics.** The text layer gives "$q \in \mathbb{R}^n$" as bare letters
+  ("q ∈ R n"). So every paragraph with text in a mathematics font is read by the model too,
+  under the same guard. Measured on 2026-10-02 against arXiv's inline formulas:
+
+  | | Memory Layers | Larimar | DPO |
+  |---|---|---|---|
+  | Inline formulas in arXiv's HTML | 17 | 87 | 86 |
+  | Reproduced closely, text layer only | 0% | 0% | 31% |
+  | Reproduced closely, with the model | 76% | 84% | 98% |
+  | Paragraphs read, all accepted by the guard | 6 | 50 | 56 |
+  | Prose recovered, before → after | 96% → 96% | 92% → 93% | 95% → 97% |
+
+  Numbers in prose, tables and display equations were unchanged. It costs about eight seconds
+  a paragraph: one to ten minutes for most papers, hours for a book. The add scripts always
+  do it. `reconvert.py --pdf-text` does not unless given `--inline-math`, so that converting
+  hundreds of papers stays a matter of hours; the ~280 PDF papers hold about 11,700 such
+  paragraphs, a day or more of model time.
 - MinerU was installed but not evaluated: its command line changed and the run did not
   complete. It is the one to try if this needs improving.
 

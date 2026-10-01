@@ -206,7 +206,9 @@ def checks():
         pdf.needs_reading("as a task _ ~ ( ), drawn from", False)
         and pdf.needs_reading("a support set ᵢˢᵘᵖᵖᵒʳᵗ", False)
         and not pdf.needs_reading("The learning rate α is small.", False)
-        and pdf.needs_reading("where θ ∈ ℝ and α > 0", True))
+        and pdf.needs_reading("where θ ∈ ℝ and α > 0", True)
+        and pdf.needs_reading("Given a query q and keys K", True, math_font=True)
+        and not pdf.needs_reading("Given a query q and keys K", False, math_font=True))
     yield "a model reading must keep the words and numbers", (
         pdf.trusted_reading("accuracy rises from 0.702 to 0.748 after _ steps",
                             "accuracy rises from 0.702 to 0.748 after $k$ steps")

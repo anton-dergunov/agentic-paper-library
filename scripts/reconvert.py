@@ -5,6 +5,7 @@
     ./scripts/reconvert.py --all
     ./scripts/reconvert.py --all --force     # also papers marked hand-edited
     ./scripts/reconvert.py --all --pdf-text  # re-extract the PDF-text papers
+    ./scripts/reconvert.py --pdf-text --inline-math <paper.md>   # the thorough PDF conversion
     ./scripts/reconvert.py --all --jobs 3 --state run.jsonl   # a long run, resumable
 
 For when the conversion improves: the frontmatter (summary included) and the
@@ -15,7 +16,9 @@ PDF text that is on arXiv is converted from the HTML instead once arXiv has a
 rendering of it (it becomes `source: html`). Otherwise it is skipped unless
 --pdf-text is given, which regenerates its body, figures and conversion note
 from the PDF with the current scripts/pdf-to-markdown.py; `--all --pdf-text`
-does just those papers. Papers containing `<!-- hand-edited -->` are skipped,
+does just those papers. That is the quick PDF conversion; add --inline-math
+for the one the add scripts use, which also has the model read every
+paragraph with mathematics (minutes more for a paper with much of it). Papers containing `<!-- hand-edited -->` are skipped,
 since a reconversion would drop the edit.
 
 Downloads are cached (paperlib.CACHE_DIR), so reconverting again later needs
@@ -75,12 +78,13 @@ def replace_images(md, new_images):
         images.rmdir()
 
 
-def reconvert_pdf_text(md, meta):
+def reconvert_pdf_text(md, meta, inline_math=False):
     """Regenerate a PDF paper's body, figures and conversion note from its PDF."""
     with tempfile.TemporaryDirectory() as tmp:
         out, new_images = Path(tmp) / "body.md", Path(tmp) / "images"
         run = subprocess.run(
-            [sys.executable, SCRIPTS / "pdf-to-markdown.py", pdf_path_for(md), out, new_images, md.stem],
+            [sys.executable, SCRIPTS / "pdf-to-markdown.py", *([] if inline_math else ["--fast"]),
+             pdf_path_for(md), out, new_images, md.stem],
             capture_output=True, text=True, timeout=3600,  # a PDF that hangs must not stop a long run
         )
         if run.returncode:
@@ -93,7 +97,7 @@ def reconvert_pdf_text(md, meta):
     return f"from the PDF, {len(text.split())} words{fallback}"
 
 
-def reconvert(md, force, pdf_text=False):
+def reconvert(md, force, pdf_text=False, inline_math=False):
     """Reconvert one paper. Returns (status, message); the status is "ok",
     "partial" (some figures did not download), "failed" (no HTML fetched, or
     an error), or "skipped" (nothing to do, and a retry would not change that)."""
@@ -106,7 +110,7 @@ def reconvert(md, force, pdf_text=False):
         if status in ("ok", "partial"):
             return status, message + " (was PDF text)"
         if pdf_text:
-            return "ok", reconvert_pdf_text(md, meta)
+            return "ok", reconvert_pdf_text(md, meta, inline_math)
         return "skipped", "PDF text, no arXiv HTML; use --pdf-text"
     if meta.get("source") != "html" or not arxiv_id:
         return "skipped", "not converted from arXiv HTML"
@@ -186,7 +190,7 @@ def main(argv):
     jobs = int(option(argv, "--jobs", "1"))
     state = option(argv, "--state")
     state = Path(state).expanduser().resolve() if state else None
-    force, pdf_text = "--force" in argv, "--pdf-text" in argv
+    force, pdf_text, inline_math = "--force" in argv, "--pdf-text" in argv, "--inline-math" in argv
     args = [a for a in argv if not a.startswith("--")]
     if "--all" in argv:
         papers = paper_files()
@@ -212,7 +216,7 @@ def main(argv):
 
     def work(md):
         try:
-            result = reconvert(md, force, pdf_text)
+            result = reconvert(md, force, pdf_text, inline_math)
         except Exception as e:  # one paper's failure must not stop the run
             result = "failed", f"{type(e).__name__}: {e}"
         time.sleep(1)  # be gentle with arXiv

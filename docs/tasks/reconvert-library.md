@@ -82,12 +82,18 @@ in `~/.cache/papers/arxiv/` (about 10 GB), so reconverting again needs no networ
 
 ## Left for later
 
-- `pdf-to-markdown.py --inline-math` has the model read every text block with mathematics in
-  it, to get inline LaTeX instead of the text layer's Unicode ("θ ∈ ℝ"). It works on the one
-  paper tried, takes about ten seconds a paragraph, and is off by default because it has not
-  been measured: compare inline maths on DPO and SimPO with arXiv's HTML, check that no prose
-  or number changes, then decide whether it becomes the default for newly added papers.
-
+- **Inline mathematics for the PDF papers.** The overnight run converts PDF papers the quick
+  way: structure, tables, figures, display equations, and text with lost symbols. The thorough
+  conversion, which also writes every paragraph's inline mathematics as LaTeX, is what newly
+  added papers get (see "PDF-only papers" in `docs/library.md` for the measurements). For the
+  existing ~280 it is about 11,700 paragraphs at eight seconds each, a day or more, so it is a
+  run of its own, after the merge, in `~/papers`:
+  ```sh
+  caffeinate -i python3 scripts/reconvert.py --all --pdf-text --inline-math --state ~/.cache/papers/reconvert-pdf-inline.jsonl
+  ```
+  It resumes where it stopped, so it can run over several nights, or area by area
+  (`scripts/reconvert.py --pdf-text --inline-math library/llm/evaluation ...`) before each
+  literature review.
 - A repo `.venv` with the scripts' dependencies declared (docling, pymupdf, tqdm, pyyaml,
   lxml, pillow); marker stays in its own environment. Today the scripts run on the system
   Python, and marker lives in `~/.cache/papers/venvs/marker`.

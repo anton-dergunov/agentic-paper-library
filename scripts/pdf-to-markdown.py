@@ -2,7 +2,7 @@
 """Convert a PDF into markdown, for papers that have no HTML rendering.
 
     ./scripts/pdf-to-markdown.py <input.pdf> <output.md> [<images-dir> <basename>]
-    ./scripts/pdf-to-markdown.py --inline-math <input.pdf> <output.md> ...
+    ./scripts/pdf-to-markdown.py --fast <input.pdf> <output.md> ...
     ./scripts/pdf-to-markdown.py --raw-equations <input.pdf> <output.md> ...
     ./scripts/pdf-to-markdown.py --text-layer <input.pdf> <output.md>
 
@@ -31,10 +31,14 @@ this script writes:
 - text blocks whose mathematics the text layer lost (a PDF made with Word
   leaves "a task _ ~ ( )" where the symbols were) read by the same model, with
   the mathematics as $...$. A reading replaces the text layer's text only if
-  it keeps the block's words and every number in it. --inline-math also has
-  the model read blocks whose mathematics survived as Unicode, to get LaTeX;
-  it takes about ten seconds a paragraph and is not yet measured against
-  arXiv's HTML, so it is off by default.
+  it keeps the block's words and every number in it.
+- every other text block with mathematics in it (text set in a mathematics
+  font) read the same way, so that inline mathematics is LaTeX ("$q \\in
+  \\mathbb{R}^n$") instead of the text layer's bare letters ("q ∈ R n"). On
+  papers that also have arXiv HTML this reproduced 76-84% of the inline
+  formulas and changed no prose or number (docs/library.md). It takes about
+  eight seconds a paragraph, minutes for a paper with much mathematics;
+  --fast leaves it out, for converting hundreds of papers at once.
 
 docling does everything but the equations because it scored best against
 arXiv's HTML on papers that have both (docs/library.md): every table number in
@@ -328,13 +332,29 @@ WORD = re.compile(r"[A-Za-z]{3,}")
 NUMBER = re.compile(r"\d+\.\d+|\d{2,}")
 
 
-def needs_reading(text, inline_math):
+# Fonts mathematics is set in (the same hints marker uses): a block using one
+# has inline mathematics, which the text layer gives as plain letters ("K q").
+MATH_FONT = re.compile(r"cmmi|cmsy|cmex|msam|msbm|stix|mathjax|math|symbol", re.I)
+
+
+def has_math_font(page, box):
+    """Whether any text inside the box (top-left origin, points) is in a mathematics font."""
+    for block in page.get_text("dict", clip=pymupdf.Rect(*box))["blocks"]:
+        for line in block.get("lines", []):
+            for span in line["spans"]:
+                if span["text"].strip() and MATH_FONT.search(span["font"]):
+                    return True
+    return False
+
+
+def needs_reading(text, inline_math, math_font=False):
     """Whether a text block should be read from the page image instead: its
-    mathematics is garbled in the text layer, or (with --inline-math) it has
-    enough of it to be worth writing as LaTeX."""
+    mathematics is garbled in the text layer, or (unless --fast) it has
+    mathematics worth writing as LaTeX: text in a mathematics font, or more
+    than 2% mathematical characters."""
     if GARBLED.search(text):
         return True
-    return inline_math and len(MATH_CHARS.findall(text)) >= max(2, 0.02 * len(text))
+    return inline_math and (math_font or len(MATH_CHARS.findall(text)) > 0.02 * len(text))
 
 
 def trusted_reading(original, reading):
@@ -375,7 +395,7 @@ def read_blocks(pdf_path, boxes):
     return latex
 
 
-def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True, inline_math=False):
+def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True, inline_math=True):
     """(markdown, how equations were written) from docling's document for the PDF.
 
     The second value is "model", "raw" or None (the paper has no equations);
@@ -405,17 +425,23 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     readable = (Label.TEXT, Label.PARAGRAPH, Label.LIST_ITEM, Label.CAPTION, Label.FOOTNOTE)
     boxes, owners = [], []  # owners[k]: the index in items of the block box k belongs to
     kinds = {}
+    pages = pymupdf.open(pdf_path) if inline_math else None
     for n, item in enumerate(items):
         text = getattr(item, "text", "") or ""
+        item_boxes = []
+        for prov in item.prov:
+            box = prov.bbox.to_top_left_origin(page_height=doc.pages[prov.page_no].size.height)
+            item_boxes.append((prov.page_no, [box.l, box.t, box.r, box.b]))
         if item.label == Label.FORMULA:
             kinds[n] = "equation"
-        elif item.label in readable and needs_reading(text, inline_math):
+        elif item.label in readable and needs_reading(
+                text, inline_math,
+                inline_math and any(has_math_font(pages[page_no - 1], box) for page_no, box in item_boxes)):
             kinds[n] = "text" if len(WORD.findall(text)) >= 3 else "equation"
         else:
             continue
-        for prov in item.prov:
-            box = prov.bbox.to_top_left_origin(page_height=doc.pages[prov.page_no].size.height)
-            boxes.append({"page": prov.page_no, "bbox": [box.l, box.t, box.r, box.b], "kind": kinds[n]})
+        for page_no, box in item_boxes:
+            boxes.append({"page": page_no, "bbox": box, "kind": kinds[n]})
             owners.append(n)
     readings = {}
     for n, reading in zip(owners, (read_blocks(pdf_path, boxes) or []) if equation_model else []):
@@ -520,17 +546,24 @@ def join_split_tables(parts):
     return out
 
 
+READ = Counter()  # text blocks the model read: "kept", or "rejected" for the text layer's text
+
+
 def reading_or_text(item, reading):
     """A text block's text: the model's reading if there is one to trust, else the text layer's."""
     text = tidy(item.text)
     reading = " ".join(reading or [])
-    return reading if reading and trusted_reading(text, reading) else text
+    if not reading:
+        return text
+    trusted = trusted_reading(text, reading)
+    READ["kept" if trusted else "rejected"] += 1
+    return reading if trusted else text
 
 
 def main():
     args = sys.argv[1:]
     text_layer = "--text-layer" in args
-    raw_equations, inline_math = "--raw-equations" in args, "--inline-math" in args
+    raw_equations, inline_math = "--raw-equations" in args, "--fast" not in args
     args = [a for a in args if not a.startswith("--")]
     if len(args) not in (2, 4):
         sys.exit(__doc__)
@@ -551,6 +584,9 @@ def main():
         note, body = TEXT_LAYER_NOTE, convert_text_layer(pdf_path)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(note + "\n\n" + body)
+    if READ:
+        print(f"text blocks read by the model: {READ['kept']} kept, {READ['rejected']} rejected "
+              "(words or numbers differed from the text layer)", file=sys.stderr)
 
 
 if __name__ == "__main__":
