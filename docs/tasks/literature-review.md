@@ -23,7 +23,7 @@ The first review sets the format. Anton reads it and corrects it before the next
 
 ## Primary areas
 
-- [ ] `llm/personalization` (71): written
+- [ ] `llm/personalization` (70): written
 - [ ] `llm/evaluation` (109): todo
 - [ ] `llm/post-training` (110): todo
 - [ ] `search-and-ranking` (127): todo
