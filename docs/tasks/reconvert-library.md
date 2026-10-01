@@ -82,6 +82,12 @@ in `~/.cache/papers/arxiv/` (about 10 GB), so reconverting again needs no networ
 
 ## Left for later
 
+- `pdf-to-markdown.py --inline-math` has the model read every text block with mathematics in
+  it, to get inline LaTeX instead of the text layer's Unicode ("θ ∈ ℝ"). It works on the one
+  paper tried, takes about ten seconds a paragraph, and is off by default because it has not
+  been measured: compare inline maths on DPO and SimPO with arXiv's HTML, check that no prose
+  or number changes, then decide whether it becomes the default for newly added papers.
+
 - A repo `.venv` with the scripts' dependencies declared (docling, pymupdf, tqdm, pyyaml,
   lxml, pillow); marker stays in its own environment. Today the scripts run on the system
   Python, and marker lives in `~/.cache/papers/venvs/marker`.

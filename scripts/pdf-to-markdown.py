@@ -2,6 +2,7 @@
 """Convert a PDF into markdown, for papers that have no HTML rendering.
 
     ./scripts/pdf-to-markdown.py <input.pdf> <output.md> [<images-dir> <basename>]
+    ./scripts/pdf-to-markdown.py --inline-math <input.pdf> <output.md> ...
     ./scripts/pdf-to-markdown.py --raw-equations <input.pdf> <output.md> ...
     ./scripts/pdf-to-markdown.py --text-layer <input.pdf> <output.md>
 
@@ -27,6 +28,13 @@ this script writes:
   only way to get it; it can misread, and the note at the top says so. With
   --raw-equations, or when that model is not installed, an equation is the
   PDF's raw text in a block marked as such.
+- text blocks whose mathematics the text layer lost (a PDF made with Word
+  leaves "a task _ ~ ( )" where the symbols were) read by the same model, with
+  the mathematics as $...$. A reading replaces the text layer's text only if
+  it keeps the block's words and every number in it. --inline-math also has
+  the model read blocks whose mathematics survived as Unicode, to get LaTeX;
+  it takes about ten seconds a paragraph and is not yet measured against
+  arXiv's HTML, so it is off by default.
 
 docling does everything but the equations because it scored best against
 arXiv's HTML on papers that have both (docs/library.md): every table number in
@@ -260,7 +268,7 @@ LAYOUT_NOTE = """> **Converted from the PDF by layout analysis** (docling), beca
 > {equations}Check the PDF (same path under `Papers/`) before
 > relying on a table whose columns look misaligned."""
 EQUATION_NOTES = {
-    "model": "Equations were read from their images by a model and can be\n> wrong in a symbol or an index: check the PDF before quoting one.\n> ",
+    "model": "Equations, and text whose symbols the PDF's text layer lacks, were read\n> from the page image by a model and can be wrong in a symbol or an index:\n> check the PDF before quoting one.\n> ",
     "raw": "Equations are the PDF's raw text, not LaTeX: read them in the PDF.\n> ",
     None: "",
 }
@@ -310,8 +318,43 @@ MARKER_PYTHON = Path(os.environ.get(
     "PAPERS_MARKER_PYTHON", Path.home() / ".cache" / "papers" / "venvs" / "marker" / "bin" / "python"))
 
 
-def read_equations(pdf_path, boxes):
-    """LaTeX for each equation box, from pdf-equations.py; None if it cannot run."""
+# Signs that the text layer lost a block's mathematics: an underscore standing
+# alone where a symbol was ("a task _ ~ ( )"), a replacement character, or the
+# Unicode sub- and superscripts a Word-made PDF writes ("ᵢˢᵘᵖᵖᵒʳᵗ").
+GARBLED = re.compile(r"(?<![\w\\])_(?![\w{])|\ufffd|[\u2070-\u209f\u1d2c-\u1d6a\u02b0-\u02e4]")
+# Mathematics the text layer kept as Unicode: Greek, operators, letterlike symbols.
+MATH_CHARS = re.compile(r"[\u0370-\u03ff\u2100-\u214f\u2190-\u22ff\u27c0-\u27ef\U0001d400-\U0001d7ff]")
+WORD = re.compile(r"[A-Za-z]{3,}")
+NUMBER = re.compile(r"\d+\.\d+|\d{2,}")
+
+
+def needs_reading(text, inline_math):
+    """Whether a text block should be read from the page image instead: its
+    mathematics is garbled in the text layer, or (with --inline-math) it has
+    enough of it to be worth writing as LaTeX."""
+    if GARBLED.search(text):
+        return True
+    return inline_math and len(MATH_CHARS.findall(text)) >= max(2, 0.02 * len(text))
+
+
+def trusted_reading(original, reading):
+    """Whether the model's reading of a text block can replace the text layer's.
+
+    The text layer is exact where it has the characters, so the reading must
+    keep the block's words (it was not cut short and did not wander) and every
+    number in it (a digit misread would be silent).
+    """
+    words = Counter(w.lower() for w in WORD.findall(original))
+    read_words = Counter(w.lower() for w in WORD.findall(reading))
+    kept = sum((words & read_words).values())
+    if words and kept < 0.8 * sum(words.values()):
+        return False
+    plain = re.sub(r"[\s,{}\\]", "", reading)
+    return all(n in plain for n in NUMBER.findall(original))
+
+
+def read_blocks(pdf_path, boxes):
+    """What pdf-equations.py reads in each box; None if it cannot run."""
     if not boxes or not MARKER_PYTHON.exists():
         return None
     try:
@@ -332,7 +375,7 @@ def read_equations(pdf_path, boxes):
     return latex
 
 
-def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True):
+def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True, inline_math=False):
     """(markdown, how equations were written) from docling's document for the PDF.
 
     The second value is "model", "raw" or None (the paper has no equations);
@@ -355,23 +398,40 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     headings = [re.sub(r"^([IVXL]+\.)(?=\S)", r"\1 ", h) for h in headings]
     roman = any(re.match(r"(?:II|III|IV|VI?)\.?\s", h) for h in headings)
 
-    # Equations: where docling found them, read by the equation model.
-    boxes = []
-    for item in items:
-        if item.label == Label.FORMULA and item.prov:
-            prov = item.prov[0]
+    # What the model reads from the page image: every equation docling found,
+    # and the text blocks whose mathematics the text layer lost. A block with
+    # hardly a word in it is an equation docling took for text. A paragraph
+    # running over a column or page break has a box for each part.
+    readable = (Label.TEXT, Label.PARAGRAPH, Label.LIST_ITEM, Label.CAPTION, Label.FOOTNOTE)
+    boxes, owners = [], []  # owners[k]: the index in items of the block box k belongs to
+    kinds = {}
+    for n, item in enumerate(items):
+        text = getattr(item, "text", "") or ""
+        if item.label == Label.FORMULA:
+            kinds[n] = "equation"
+        elif item.label in readable and needs_reading(text, inline_math):
+            kinds[n] = "text" if len(WORD.findall(text)) >= 3 else "equation"
+        else:
+            continue
+        for prov in item.prov:
             box = prov.bbox.to_top_left_origin(page_height=doc.pages[prov.page_no].size.height)
-            boxes.append({"page": prov.page_no, "bbox": [box.l, box.t, box.r, box.b]})
-    latex = iter(read_equations(pdf_path, boxes) or []) if equation_model else iter(())
+            boxes.append({"page": prov.page_no, "bbox": [box.l, box.t, box.r, box.b], "kind": kinds[n]})
+            owners.append(n)
+    readings = {}
+    for n, reading in zip(owners, (read_blocks(pdf_path, boxes) or []) if equation_model else []):
+        if reading.strip():
+            readings.setdefault(n, []).append(reading.strip())
     equations = None
 
     from paperlib import to_webp
 
     parts, figures, last_numbered, titled = [], 0, None, False
     captions = set()  # docling yields a caption with its table or figure, and again on its own
-    for item in items:
+    for n, item in enumerate(items):
         page = item.prov[0].page_no if item.prov else None
         label = item.label
+        if kinds.get(n) == "equation" and label != Label.FORMULA:
+            label = Label.FORMULA  # an equation docling took for text
         if label in (Label.SECTION_HEADER, Label.TITLE):
             text = re.sub(r"^([IVXL]+\.)(?=\S)", r"\1 ", tidy(item.text))
             text = re.sub(r"^(\d+) ?\. ?(\d)", r"\1.\2", text)  # "4 .1 Evaluation"
@@ -385,8 +445,9 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
                 last_numbered = level
             parts.append(f"{'#' * level} {text}" + (f" (p. {page})" if page else ""))
         elif label == Label.TABLE:
-            table = item.export_to_markdown(doc)
-            parts.append(re.sub(r"(?<=\d) \. (?=\d)", ".", table))
+            table = item.export_to_markdown(doc).strip()
+            if table:  # docling sometimes finds empty fragments around a table
+                parts.append(re.sub(r"(?<=\d) \. (?=\d)", ".", table))
         elif label in (Label.PICTURE, Label.CHART):
             image = item.get_image(doc) if images_dir else None
             if image is None or min(image.size) < 120:  # a logo or an icon
@@ -399,10 +460,11 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             (Path(images_dir) / name).write_bytes(to_webp(buffer.getvalue()))
             parts.append(f"![](images/{quote(name)})")
         elif label == Label.FORMULA:
-            tex = next(latex, "").strip() if item.prov else ""
-            raw = " ".join((item.orig or "").split())
-            if tex:
-                lines = [line.strip() for line in tex.split("\n") if line.strip()]
+            raw = " ".join((getattr(item, "orig", "") or item.text or "").split())
+            lines = [line.strip() for part in readings.get(n, []) for line in part.split("\n") if line.strip()]
+            if len(lines) > 1:  # a lone character is a neighbouring line the crop clipped
+                lines = [line for line in lines if len(line.replace(" ", "")) >= 3] or lines
+            if lines:
                 tex = lines[0] if len(lines) == 1 else "\\begin{gathered}" + " \\\\ ".join(lines) + "\\end{gathered}"
                 parts.append(f"$${tex}$$")
                 equations = "model"
@@ -414,15 +476,20 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             parts.append(f"```text\n{item.text}\n```")
         elif label == Label.LIST_ITEM:
             marker = item.marker if getattr(item, "enumerated", False) and item.marker else "-"
-            parts.append(f"{marker} {tidy(item.text)}")
+            parts.append(f"{marker} {reading_or_text(item, readings.get(n))}")
+            equations = "model" if n in readings else equations
         elif getattr(item, "text", "").strip():
-            text = tidy(item.text)
+            text = reading_or_text(item, readings.get(n))
+            if not any(c.isalnum() for c in text):  # a stray bullet glyph, a rule
+                continue
+            equations = "model" if n in readings else equations
             if label == Label.CAPTION:
                 if text in captions:
                     continue
                 captions.add(text)
             parts.append(text)
 
+    parts = join_split_tables(parts)
     # Consecutive list items form one list.
     out = []
     for prev, part in zip([""] + parts, parts):
@@ -432,10 +499,38 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     return "".join(out).strip() + "\n", equations
 
 
+def join_split_tables(parts):
+    """Rejoin a table docling split in two.
+
+    The second piece then has a row of data where its header should be
+    ("| SFT | 0.699 | 0.537 |" above the rule). Two tables in a row with the
+    same number of columns, the second headed by numbers, are one table.
+    """
+    out = []
+    for part in parts:
+        lines = part.split("\n")
+        if out and part.startswith("|") and out[-1].startswith("|") and len(lines) >= 2:
+            cells = [c.strip() for c in lines[0].strip("|").split("|")]
+            numeric = sum(bool(re.fullmatch(r"[-+]?[\d.,]+%?", c)) for c in cells[1:])
+            same_width = lines[0].count("|") == out[-1].split("\n")[0].count("|")
+            if same_width and cells[1:] and numeric >= 0.5 * len(cells[1:]):
+                out[-1] += "\n" + "\n".join([lines[0]] + lines[2:])
+                continue
+        out.append(part)
+    return out
+
+
+def reading_or_text(item, reading):
+    """A text block's text: the model's reading if there is one to trust, else the text layer's."""
+    text = tidy(item.text)
+    reading = " ".join(reading or [])
+    return reading if reading and trusted_reading(text, reading) else text
+
+
 def main():
     args = sys.argv[1:]
     text_layer = "--text-layer" in args
-    raw_equations = "--raw-equations" in args
+    raw_equations, inline_math = "--raw-equations" in args, "--inline-math" in args
     args = [a for a in args if not a.startswith("--")]
     if len(args) not in (2, 4):
         sys.exit(__doc__)
@@ -444,7 +539,7 @@ def main():
     body, equations = None, None
     if not text_layer:
         try:
-            body, equations = convert_layout(pdf_path, images_dir, basename, not raw_equations)
+            body, equations = convert_layout(pdf_path, images_dir, basename, not raw_equations, inline_math)
         except Exception as e:  # docling missing, or a PDF it cannot read
             print(f"warning: layout conversion failed ({type(e).__name__}: {e}); using the text layer",
                   file=sys.stderr)

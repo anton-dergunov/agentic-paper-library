@@ -153,6 +153,10 @@ that have both (DPO, SimPO, Zep, Larimar, Memory Layers, HippoRAG):
   from arXiv's LaTeX somewhere), so the note at the top of such a paper says to check the PDF
   before quoting one. That is still far better than the text layer, where an equation is
   scattered glyphs.
+- **Text whose symbols the text layer lacks** (a PDF made with Word leaves "a task _ ~ ( )"
+  where the mathematics was) is read by the same model, block by block, and replaces the
+  text layer's text only when it keeps the block's words and every number. An equation
+  docling took for text is caught the same way.
 - MinerU was installed but not evaluated: its command line changed and the run did not
   complete. It is the one to try if this needs improving.
 

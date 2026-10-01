@@ -202,6 +202,20 @@ def checks():
         pdf.heading_level(t, True, 2) for t in ("II. RELATED WORK", "A. Surveys", "1) Details")] == [2, 3, 4]
     yield "PDF numbers set in math mode are rejoined", pdf.tidy("BM25  32 . 3   41 . 2") == "BM25 32.3 41.2"
 
+    yield "PDF text with lost symbols is sent to the model", (
+        pdf.needs_reading("as a task _ ~ ( ), drawn from", False)
+        and pdf.needs_reading("a support set ᵢˢᵘᵖᵖᵒʳᵗ", False)
+        and not pdf.needs_reading("The learning rate α is small.", False)
+        and pdf.needs_reading("where θ ∈ ℝ and α > 0", True))
+    yield "a model reading must keep the words and numbers", (
+        pdf.trusted_reading("accuracy rises from 0.702 to 0.748 after _ steps",
+                            "accuracy rises from 0.702 to 0.748 after $k$ steps")
+        and not pdf.trusted_reading("accuracy rises from 0.702 to 0.748", "accuracy rises from 0.702 to 0.743")
+        and not pdf.trusted_reading("a long paragraph about memory layers and retrieval quality", "a long"))
+    yield "a table docling split in two is rejoined", pdf.join_split_tables(
+        ["| Model | Hit |\n|---|---|\n| A | 0.4 |", "| B | 0.6 |\n|---|---|\n| C | 0.7 |"]
+    ) == ["| Model | Hit |\n|---|---|\n| A | 0.4 |\n| B | 0.6 |\n| C | 0.7 |"]
+
     page_map = load("page-map")
     yield "ICML heading number", page_map.heading_number("1 Introduction", True, False) == ("1", "Introduction", ["1"])
     yield "IEEE section", page_map.heading_number("IV Method", True, True) == ("4", "Method", ["iv"])
