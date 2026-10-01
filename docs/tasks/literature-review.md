@@ -1,49 +1,75 @@
-# Task: literature review of LLM memory and personalisation
+# Task: a literature review of every area
 
-Write a synthesis of what the papers in `library/llm/` say about memory and personalisation
-for LLMs and agents. It should be what I read to know what is settled, what is open, and how
-the systems compare, without re-reading 150 papers.
+Write one review per area with the `literature-review` skill (`.claude/skills/literature-review/`),
+which also defines the format. A review covers a top-level area, or a subarea of `llm/`.
+The order follows Anton's priorities.
 
-## Scope
+Any session can pick up the next scope: `/literature-review <scope>`. Reading is split into
+batches whose results are kept in `reviews/.work/<scope>/`, so an area can be read across
+several sessions or by several agents; `scripts/review-status.py <scope>` shows how far it
+got. After each review, update its line below.
 
-Mainly these folders, with the rest of `llm/` pulled in where relevant:
+Status: `todo` · `reading` (some batches done) · `written` · `checked` (Anton has read it and
+the format corrections are in `format.md`).
 
-- `memory/` (`agent/`, `parametric/`, `benchmarks/`)
-- `personalization/` (`methods/`, `user-modelling/`, `benchmarks/`), `text-analytics/`
-- `evaluation/methods/`, `uncertainty-and-hallucination/`
-- `post-training/preference-learning/`, `context/`, `safety-and-privacy/`
+When every line is `checked`: delete this file, and in `docs/proposal.md` move the
+literature review to "Done".
 
-## Framing
+## Pilot
 
-General and neutral. It is written for someone who wants to understand the field, not to
-design a particular product, so:
+The first review sets the format. Anton reads it and corrects it before the next one starts.
 
-- no "our system", no design recommendations, no product vocabulary;
-- claims come from the papers here, each cited as a relative link into `library/`, with a page
-  number where it helps;
-- say where the evidence is thin, contradictory, vendor-reported, or rests on one benchmark;
-- say what changed recently. Many of these papers are from 2025–2026, so mark findings that
-  overturn older ones.
+- [ ] `llm/memory` (70): written, waiting for Anton's read
 
-## Suggested shape
+## Primary areas
 
-Findings-first sections, each a claim the papers support, then the evidence. For example:
+- [ ] `llm/personalization` (71): todo
+- [ ] `llm/evaluation` (109): todo
+- [ ] `llm/post-training` (110): todo
+- [ ] `search-and-ranking` (127): todo
+- [ ] `recommender-systems` (97): todo
+- [ ] `experimentation-and-metrics` (71): todo
 
-- how far long-horizon personalisation benchmarks put current models;
-- compact profiles versus full history;
-- the memory lifecycle (extract, consolidate, retrieve, forget) and where systems diverge;
-- memory in text, in the KV cache or in weights;
-- belief updating and staleness;
-- over-personalisation and restraint;
-- evaluation: simulated versus real users, LLM judges, rubrics;
-- personalised rewards and preference learning;
-- privacy and memory as an attack surface.
+## Systems and the rest of `llm/`
 
-Plus one comparison table of memory systems by mechanism: what is stored, how it is written,
-how it is retrieved, how it is forgotten, and how it was evaluated.
+- [ ] `ml-systems` (74): todo
+- [ ] `llm/context` (20): todo
+- [ ] `llm/uncertainty-and-hallucination` (24): todo
+- [ ] `llm/safety-and-privacy` (48): todo
+- [ ] `llm/behaviour` (24): todo
+- [ ] `llm/agents` (48): todo
+- [ ] `llm/retrieval-augmented` (28): todo
+- [ ] `llm/reasoning` (35): todo
+- [ ] `llm/prompting-and-in-context` (28): todo
+- [ ] `llm/pretraining` (35): todo
+- [ ] `llm/architecture` (62): todo
+- [ ] `llm/foundation-models` (39): todo
+- [ ] `llm/efficiency` (19): todo
+- [ ] `llm/routing` (16): todo
+- [ ] `llm/text-analytics` (12): todo
 
-## Output
+## Other areas
 
-`reviews/llm-memory-and-personalization.md` at the repo root. If it grows past about 600
-lines, make it a folder of one file per section with an `index.md`. Read the markdown copies,
-not the PDFs. Suggest a commit message when done.
+- [ ] `data-centric-ml` (79): todo
+- [ ] `deep-learning` (185): todo
+- [ ] `representation-learning` (76): todo
+- [ ] `nlp` (87): todo
+- [ ] `graphs` (57): todo
+- [ ] `interpretability` (78): todo
+- [ ] `vision-and-multimodal` (112): todo
+- [ ] `generative-models` (49): todo
+- [ ] `ml-foundations` (77): todo
+- [ ] `trustworthy-ml` (62): todo
+- [ ] `reinforcement-learning` (74): todo
+- [ ] `robotics-and-embodied` (21): todo
+- [ ] `computer-systems` (28): todo
+- [ ] `ai-and-society` (19): todo
+- [ ] `research-practice` (27): todo
+
+`curiosities` (2 papers) gets no review.
+
+## Separately: conversion fixes
+
+Reading flags broken conversions into `catalog/conversion-issues.yaml`. Fix them in their own
+pass, not while writing reviews: `scripts/reconvert.py <paper.md>` first, then by hand,
+marked `<!-- hand-edited -->`.

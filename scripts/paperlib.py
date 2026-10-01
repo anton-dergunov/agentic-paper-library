@@ -49,6 +49,14 @@ SOURCES = {"html", "pdf-text", "web"}
 TYPES = {"method", "survey", "benchmark", "study", "system", "position", "theory"}
 # Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
 NOTES_DIR = REPO_ROOT / "notes"
+# Literature reviews, one per scope (a declared folder): reviews/<scope>.md, or
+# reviews/<scope>/index.md plus section files once a review is split. Partial
+# reading results live in reviews/.work/ (ignored) until the review is written.
+REVIEWS_DIR = REPO_ROOT / "reviews"
+# Papers whose markdown conversion needs fixing, keyed by stem like notes/.
+CONVERSION_ISSUES_FILE = CATALOG_DIR / "conversion-issues.yaml"
+# Page links that open a paper's PDF in Anton's viewer (see AGENTS.md).
+PDF_LINK_BASE = "http://pdf.invalid/"
 
 _FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 ATOM = {"a": "http://www.w3.org/2005/Atom"}
@@ -191,6 +199,87 @@ def load_skipped():
 def norm_title(title):
     """A title reduced to lowercase words, for matching across sources."""
     return " ".join(re.sub(r"[^a-z0-9]+", " ", str(title or "").lower()).split())
+
+
+def load_conversion_issues():
+    """The list of flagged conversion problems (dicts with paper, problem, found)."""
+    if not CONVERSION_ISSUES_FILE.exists():
+        return []
+    return yaml.safe_load(CONVERSION_ISSUES_FILE.read_text(encoding="utf-8")) or []
+
+
+# A markdown link's target, and the paper-map section of a review.
+_LINK = re.compile(r"\]\(([^)\s]+)\)")
+_PAPER_MAP = re.compile(r"^## Paper map\s*$(.*?)(?=^## |\Z)", re.M | re.S)
+
+
+def load_reviews():
+    """Every literature review: {scope: {"main": path, "files": [paths], "meta": dict}}.
+
+    A review is a markdown file under reviews/ whose frontmatter names a
+    `scope`. A split review is reviews/<scope>/index.md; the other markdown files
+    in its folder are its sections.
+    """
+    reviews = {}
+    if not REVIEWS_DIR.exists():
+        return reviews
+    for path in sorted(REVIEWS_DIR.rglob("*.md")):
+        if ".work" in path.relative_to(REVIEWS_DIR).parts:
+            continue
+        meta = read_paper(path)[0]
+        if not meta.get("scope"):
+            continue
+        files = [path]
+        if path.name == "index.md":
+            files += sorted(p for p in path.parent.glob("*.md") if p != path)
+        reviews[str(meta["scope"])] = {"main": path, "files": files, "meta": meta}
+    return reviews
+
+
+def review_links(path):
+    """Links in a review file to local files: [(target, resolved path, exists)].
+
+    Covers relative links (to papers, other reviews, docs) and pdf.invalid page
+    links, which resolve to the paper's markdown. Web links and in-page anchors
+    are left out.
+    """
+    from urllib.parse import unquote, urlsplit
+
+    out = []
+    for target in _LINK.findall(Path(path).read_text(encoding="utf-8")):
+        if target.startswith(PDF_LINK_BASE):
+            rel = unquote(urlsplit(target).path).lstrip("/")
+            resolved = (LIBRARY_DIR / rel).with_suffix(".md")
+        elif re.match(r"^[a-z]+:", target) or target.startswith("#"):
+            continue
+        else:
+            resolved = (Path(path).parent / unquote(target.split("#")[0])).resolve()
+        out.append((target, resolved, resolved.exists()))
+    return out
+
+
+def review_coverage(review):
+    """(papers in the review's scope, those listed in its paper map)."""
+    from urllib.parse import unquote
+
+    in_scope = set(paper_files(LIBRARY_DIR / review["meta"]["scope"]))
+    listed = set()
+    for path in review["files"]:
+        for section in _PAPER_MAP.findall(Path(path).read_text(encoding="utf-8")):
+            for target in _LINK.findall(section):
+                if not re.match(r"^[a-z]+:", target):
+                    listed.add((path.parent / unquote(target.split("#")[0])).resolve())
+    return in_scope, {p for p in in_scope if p.resolve() in listed}
+
+
+def review_for(topic, reviews):
+    """The review covering a folder: its own, or the nearest ancestor's."""
+    parts = topic.split("/")
+    for i in range(len(parts), 0, -1):
+        scope = "/".join(parts[:i])
+        if scope in reviews:
+            return scope
+    return None
 
 
 def skipped_index():

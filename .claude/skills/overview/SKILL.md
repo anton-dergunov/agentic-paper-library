@@ -32,9 +32,10 @@ uses. Reorganising the vault means changing only this line.
 4. **Set the type** (table in `format.md`) with
    `scripts/paperlib.py set-type <paper.md> <type>`. Don't touch any other frontmatter field,
    in particular `summary`.
-5. **Find links cheaply**: at most two greps over the indexes
-   (`grep -il "<name1>\|<name2>" library --include=README.md`) for the closest works the
-   paper names, and one vault-name search
+5. **Find links cheaply**: if the folder's `README.md` links a literature review, read the
+   paper's line in its paper map and the lines around it. Otherwise, at most two greps over
+   the indexes (`grep -il "<name1>\|<name2>" library --include=README.md`) for the closest
+   works the paper names. Then one vault-name search
    (`find ~/obsidian -name '*.md' -not -path '*/.*' | grep -iE 'puct|lora|alphaevolve'`).
    An existing vault note: link its exact name. None: link the natural name anyway. Don't
    open other papers.

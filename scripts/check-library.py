@@ -16,7 +16,11 @@ Checks:
   declared, every declared folder exists, and every paper is in a declared
   folder;
 - every entry in catalog/skipped.yaml has a title and a reason, names a
-  declared topic if it names one, and is not a paper that is in the library.
+  declared topic if it names one, and is not a paper that is in the library;
+- every review in reviews/ names a declared scope, and every local link in it
+  (to a paper, a page in a paper's PDF, another review) resolves;
+- every entry in catalog/conversion-issues.yaml names a paper in the library
+  by its stem and says what the problem is.
 """
 
 import re
@@ -26,7 +30,8 @@ from urllib.parse import unquote
 
 from paperlib import (
     LIBRARY_DIR, NOTES_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, TOPIC_PATH, TYPES,
-    load_skipped, load_topics, norm_title, paper_files, pdf_path_for, read_paper,
+    load_conversion_issues, load_reviews, load_skipped, load_topics, norm_title, paper_files,
+    pdf_path_for, read_paper, review_links,
 )
 
 # Markdown images, and <img> tags (used inside the HTML tables of complex tables).
@@ -87,6 +92,27 @@ def check_catalog(papers):
     return problems
 
 
+def check_reviews(stems):
+    problems = []
+    topics = load_topics()
+    for scope, review in load_reviews().items():
+        name = review["main"].relative_to(REPO_ROOT)
+        if scope not in topics:
+            problems.append(f"{name}: scope `{scope}` is not in catalog/topics.yaml")
+        for f in review["files"]:
+            for target, _, ok in review_links(f):
+                if not ok:
+                    problems.append(f"{f.relative_to(REPO_ROOT)}: broken link {target} "
+                                    "(scripts/review-status.py --fix-links)")
+    for i, entry in enumerate(load_conversion_issues()):
+        name = f"catalog/conversion-issues.yaml entry {i + 1}"
+        if not isinstance(entry, dict) or not entry.get("paper") or not entry.get("problem"):
+            problems.append(f"{name}: needs a paper and a problem")
+        elif entry["paper"] not in stems:
+            problems.append(f"{name}: no paper named `{entry['paper']}` in the library")
+    return problems
+
+
 def main():
     problems = []
     papers = paper_files()
@@ -135,6 +161,8 @@ def main():
     for note in sorted(NOTES_DIR.glob("*.md")):
         if note.name != "README.md" and note.stem not in stems:
             problems.append(f"notes/{note.name}: no paper with this name in the library")
+
+    problems += check_reviews(stems)
 
     for pdf in REPO_ROOT.rglob("*.pdf"):
         if ".git" not in pdf.parts:

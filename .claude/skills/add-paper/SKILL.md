@@ -46,6 +46,9 @@ Read `AGENTS.md` first if you have not: it has the layout, the rules and the top
    - the page-map line (headings placed / unplaced);
    - two or three sentences on what the paper is and how it relates to papers already in
      the library, with links;
+   - if the folder's `README.md` links a literature review, one line: "Not yet in
+     `reviews/<scope>.md`; `/literature-review update <scope>` adds it." (For several
+     papers, one line per review.)
    - a suggested commit message. Never commit.
 
 ## Several papers at once

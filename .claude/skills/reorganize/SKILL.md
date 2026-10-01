@@ -35,7 +35,9 @@ Read `AGENTS.md` first if you have not: it has the topic rules and the intended 
    - Remove folders that no longer exist from `catalog/topics.yaml`, and update the `topic`
      of any `catalog/skipped.yaml` entry that pointed at them (`check-library.py` fails on
      both). Adjust the scopes of folders whose content changed.
-6. **Rebuild and check.** `scripts/build-index.py`, then `scripts/check-library.py`, which
-   must pass.
-7. **Report** what moved, and suggest a commit message. Never commit. If other files link
-   to moved papers (`docs/`, `reviews/`), list them so the links can be updated.
+6. **Rebuild and check.** `scripts/review-status.py --fix-links` (repairs the review links to
+   moved papers), then `scripts/build-index.py`, then `scripts/check-library.py`, which
+   must pass. A review whose scope folder was renamed or removed gets its `scope` updated
+   and its file moved to match.
+7. **Report** what moved, and suggest a commit message. Never commit. If files in `docs/`
+   link to moved papers, list them so the links can be updated.
