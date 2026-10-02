@@ -72,4 +72,5 @@ The first review sets the format. Anton reads it and corrects it before the next
 
 Reading flags broken conversions into `catalog/conversion-issues.yaml`. Fix them in their own
 pass, not while writing reviews: `scripts/reconvert.py <paper.md>` first, then by hand,
-marked `<!-- hand-edited -->`.
+marked `<!-- hand-edited -->`. What the library-wide reconversion of 2026-10-02 left open is
+in `conversion-follow-ups.md`.

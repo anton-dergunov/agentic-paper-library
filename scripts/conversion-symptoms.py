@@ -59,17 +59,21 @@ CHECKS = {
 
 
 def svg_kinds(md, body):
-    """"box" and "badge" for linked SVGs the converter would now write as text."""
+    """"box" and "badge" for linked SVGs the converter would now write as text.
+
+    A diagram keeps its image and gets its text as a quote under it, so it
+    counts only while that quote is missing.
+    """
     kinds = set()
-    for link in re.findall(r'images/([^)"\s]+\.svg)', body):
-        f = md.parent / "images" / unquote(link)
+    for m in re.finditer(r'images/([^)"\s]+\.svg)[^\n]*\n\s*(>?)', body):
+        f = md.parent / "images" / unquote(m.group(1))
         if not f.exists():
             continue
         svg = f.read_text(encoding="utf-8", errors="replace")
         if "foreignobject" not in svg.lower():
             continue
         kind = converter.picture_kind(svg[svg.find("<svg"):])
-        if kind in ("box", "diagram"):
+        if kind == "box" or kind == "diagram" and not m.group(2):
             kinds.add("box")
         elif kind == "badge":
             kinds.add("badge")

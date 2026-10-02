@@ -500,9 +500,11 @@ function Table(tbl)
     return equation_rows(tbl)
   end
   -- A table with nothing in it (title-page layout) would be an empty grid.
-  local has_image = false
-  pandoc.walk_block(pandoc.Div({ tbl }), { Image = function() has_image = true end })
-  if not has_image and not pandoc.utils.stringify(tbl):match("%S") then
+  -- An image or a code listing is content, though it has no text to stringify.
+  local has_content = false
+  local function found() has_content = true end
+  pandoc.walk_block(pandoc.Div({ tbl }), { Image = found, CodeBlock = found })
+  if not has_content and not pandoc.utils.stringify(tbl):match("%S") then
     return {}
   end
   promote_header(tbl)

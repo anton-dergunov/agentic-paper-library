@@ -550,8 +550,9 @@ READ = Counter()  # text blocks the model read: "kept", or "rejected" for the te
 
 
 def reading_or_text(item, reading):
-    """A text block's text: the model's reading if there is one to trust, else the text layer's."""
-    text = tidy(item.text)
+    """A text block's text: the model's reading if there is one to trust, else the text layer's.
+    A leading "#" is escaped ("# weights" in a table's legend is not a heading)."""
+    text = re.sub(r"^#", r"\\#", tidy(item.text))
     reading = " ".join(reading or [])
     if not reading:
         return text

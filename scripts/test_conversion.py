@@ -13,6 +13,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from types import SimpleNamespace
 
 SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
@@ -100,6 +101,14 @@ def checks():
     yield "scaled table keeps spans", 'rowspan="2"' in md and 'colspan="2"' in md
     yield "scaled table gets its header rows", "<thead>" in md and md.index("Vanilla") < md.index("</thead>")
 
+    md, _ = convert('<p class="ltx_p"><span class="ltx_tabular">'
+                    '<span class="ltx_tr">' + td("7B Models", "ltx_colspan ltx_colspan_2") + "</span>"
+                    '<span class="ltx_tr">' + td("FLAN") + td("50%") + "</span>"
+                    '<span class="ltx_tr">' + td("13B Models", "ltx_colspan ltx_colspan_2") + "</span>"
+                    '<span class="ltx_tr">' + td("Vicuna") + td("64.1%") + "</span>"
+                    "</span></p>")
+    yield "scaled table with full-width group rows is a table", "<table>" in md and "FLAN 50%" not in md
+
     md, _ = convert(BORDER_TABLE)
     yield "header row above \\midrule becomes the header", md.lstrip().startswith("| Model | PPL")
 
@@ -108,6 +117,11 @@ def checks():
 
     md, _ = convert('<table class="ltx_tabular"><tr><td></td><td></td></tr></table><p>Text.</p>')
     yield "empty layout table is dropped", "|" not in md
+
+    md, _ = convert('<table class="ltx_tabular"><tr><td><span class="ltx_listing ltx_lstlisting">'
+                    '<span class="ltx_listingline"># Task</span><span class="ltx_listingline">Answer (A).</span>'
+                    "</span></td></tr></table><p>Text.</p>")
+    yield "table holding only a listing is kept", "Answer (A)." in md
 
     md, _ = convert('<table class="ltx_equation ltx_eqn_table"><tbody>'
                     + eqn_row(math(r"\displaystyle a=1,\hskip 9.24994ptb=2"), number=1) + "</tbody></table>")
@@ -214,6 +228,8 @@ def checks():
                             "accuracy rises from 0.702 to 0.748 after $k$ steps")
         and not pdf.trusted_reading("accuracy rises from 0.702 to 0.748", "accuracy rises from 0.702 to 0.743")
         and not pdf.trusted_reading("a long paragraph about memory layers and retrieval quality", "a long"))
+    yield "PDF text starting with # is not a heading", (
+        pdf.reading_or_text(SimpleNamespace(text="# weights  learning rate"), None) == "\\# weights learning rate")
     yield "a table docling split in two is rejoined", pdf.join_split_tables(
         ["| Model | Hit |\n|---|---|\n| A | 0.4 |", "| B | 0.6 |\n|---|---|\n| C | 0.7 |"]
     ) == ["| Model | Hit |\n|---|---|\n| A | 0.4 |\n| B | 0.6 |\n| C | 0.7 |"]

@@ -433,9 +433,12 @@ def span_tabulars_to_tables(article):
 
 def is_layout_tabular(opening, segment):
     """Whether a span tabular is layout inside running text or math, not a table:
-    a symbol stacked over a letter (esvect's \\vv), a \\makecell line break."""
+    a symbol stacked over a letter (esvect's \\vv), a \\makecell line break.
+    A cell spanning columns counts as that many, so a table with full-width
+    group rows ("7B Models") is still a table."""
     rows = len(re.findall(r'class="ltx_tr\b', segment))
     cells = len(re.findall(r'class="ltx_td\b', segment))
+    cells += sum(int(n) - 1 for n in re.findall(r"\bltx_colspan_(\d+)\b", segment))
     return "ltx_markedasmath" in opening or rows < 2 or cells < 2 * rows
 
 

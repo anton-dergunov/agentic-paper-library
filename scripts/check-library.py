@@ -25,6 +25,7 @@ Checks:
 
 import re
 import sys
+import unicodedata
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -35,7 +36,8 @@ from paperlib import (
 )
 
 # Markdown images, and <img> tags (used inside the HTML tables of complex tables).
-IMAGE_LINK = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
+# Alt text may hold an escaped bracket ("Low (8, 12\]").
+IMAGE_LINK = re.compile(r"!\[(?:\\.|[^\]\\])*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
 # Fenced code can show image markup as text (a paper's HTML examples).
 FENCE = re.compile(r"^(`{3,}|~{3,})")
 
@@ -149,10 +151,11 @@ def main():
         if img.resolve() not in referenced:
             problems.append(f"image not used by any paper: {img.relative_to(LIBRARY_DIR)}")
 
-    expected = {pdf_path_for(md) for md in papers}
+    # A synced folder may store a name decomposed ("й" as two code points).
+    expected = {unicodedata.normalize("NFC", str(pdf_path_for(md))) for md in papers}
     if PDF_ROOT.exists():
         for pdf in PDF_ROOT.rglob("*.pdf"):
-            if pdf not in expected:
+            if unicodedata.normalize("NFC", str(pdf)) not in expected:
                 problems.append(f"PDF without a paper: {pdf.relative_to(PDF_ROOT)}")
 
     problems += check_catalog(papers)
