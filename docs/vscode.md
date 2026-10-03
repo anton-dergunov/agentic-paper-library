@@ -10,12 +10,12 @@ Open the library folder itself, for example `code ~/papers`, rather than a multi
 - **`.claude/skills/`** links the engine's skills, so the Claude Code panel in this window has `/add-paper`, `/overview` and the rest.
 - **`.vscode/settings.json`**:
   - sets the PDF viewer's root to `pdf_root`, so that page links resolve;
-  - keeps `images/` and the skill links out of quick open and search.
+  - keeps `images/` and the skill links out of quick open and search, and stops VS Code from applying `.gitignore` there, which would otherwise hide the PDFs (git ignores `*.pdf` and the `pdf/` link).
 
 ## Finding a paper
 
 - **From the indexes.** Open `library/README.md` in the markdown preview (⇧⌘V) and follow the tree. Each paper row links the markdown (the title) and the PDF (**PDF**). A click on **PDF** opens it in the viewer.
-- **By name.** ⌘P with words from the title. The markdown and the PDF both match; the figures don't.
+- **By name.** ⌘P with words from the title. The markdown, the PDF and the paper's notes file match; the figures don't.
 - **By content.** Ask the agent ("what do my papers say about X") or use ⇧⌘F, which searches the markdown, PDFs aside.
 
 A command that opens a paper by title, without the duplicates, is planned: see [tasks/vscode-extension.md](tasks/vscode-extension.md).

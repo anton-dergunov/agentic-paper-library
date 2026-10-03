@@ -149,7 +149,11 @@ def main(argv):
     home = Path.home()
     wanted = {
         "pdfViewer.pdfRoot": "~/" + pdfs.relative_to(home).as_posix() if pdfs.is_relative_to(home) else str(pdfs),
-        "search.exclude": {"**/images": True, ".claude/skills": True},
+        # .gitignore keeps the PDFs out of git, but they should show in quick open and
+        # search, so VS Code is told not to apply it; what it hid is excluded here instead.
+        "search.useIgnoreFiles": False,
+        "search.exclude": {"**/images": True, ".claude/skills": True, "reviews/.work": True,
+                           "**/.DS_Store": True},
         "git.ignoreLimitWarning": True,
     }
     added = {k: v for k, v in wanted.items() if k not in settings}
