@@ -116,16 +116,15 @@ next piece of work.
 
 Done: the `overview` skill; the PDF viewer extension; the library expansion, which grew my
 library from 240 LLM papers to 2,200 across the whole field (the `literature-pass` skill); the
-`literature-review` skill; and the split of the engine from the library.
+`literature-review` skill; the split of the engine from the library; and the Paper Library
+VS Code extension, which opens a paper by title ([tasks/vscode-extension.md](tasks/vscode-extension.md)).
 
 1. The `read` and `wrap` skills.
-2. A "Paper library" VS Code extension: open a paper by title, search the library's text
-   ([tasks/vscode-extension.md](tasks/vscode-extension.md)).
-3. Running a library from a cloud session (Claude Code on the web), which needs the engine
+2. Running a library from a cloud session (Claude Code on the web), which needs the engine
    installed by a setup step.
-4. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
+3. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
    arXiv id or title, and now nearly all of them have a library copy.
-5. Run the session on the NAS, so it is always on:
+4. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone the engine, the library and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,

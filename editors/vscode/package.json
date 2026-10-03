@@ -1,0 +1,98 @@
+{
+  "name": "paper-library",
+  "displayName": "Paper Library",
+  "description": "Open a paper of an agentic paper library by its title, switch between its PDF, markdown and notes, and search the papers' text.",
+  "version": "0.1.0",
+  "publisher": "anton",
+  "license": "MIT",
+  "author": {
+    "name": "Anton Dergunov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anton-dergunov/agentic-paper-library.git",
+    "directory": "editors/vscode"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "papers",
+    "research",
+    "library",
+    "pdf"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "workspaceContains:paper-library.yaml"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "paperLibrary.openPaper",
+        "title": "Open Paper",
+        "category": "Paper Library"
+      },
+      {
+        "command": "paperLibrary.searchText",
+        "title": "Search Library Text",
+        "category": "Paper Library"
+      },
+      {
+        "command": "paperLibrary.revealInLibrary",
+        "title": "Reveal in Library",
+        "category": "Paper Library"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "paperLibrary.openPaper",
+          "when": "paperLibrary.active"
+        },
+        {
+          "command": "paperLibrary.searchText",
+          "when": "paperLibrary.active"
+        },
+        {
+          "command": "paperLibrary.revealInLibrary",
+          "when": "paperLibrary.active"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "paperLibrary.revealInLibrary",
+          "when": "paperLibrary.active && resourceExtname =~ /^\\.(md|pdf)$/",
+          "group": "navigation@90"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "paperLibrary.openPaper",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p",
+        "when": "paperLibrary.active"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "check": "tsc -p .",
+    "test": "esbuild test/*.test.ts --bundle --platform=node --packages=external --format=esm --outdir=out/test --out-extension:.js=.mjs --log-level=warning && node --test out/test/*.mjs",
+    "package": "vsce package --no-dependencies --skip-license --out paper-library.vsix",
+    "vscode:prepublish": "npm run check && node esbuild.mjs --production"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/vscode": "^1.90.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "yaml": "^2.8.1"
+  }
+}

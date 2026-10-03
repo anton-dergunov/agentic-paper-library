@@ -54,7 +54,8 @@ def usage():
     lines += [f"  {name:<{width}}{about}" for name, (_, _, about) in COMMANDS.items()]
     lines += [f"  {'init':<{width}}set up a library here: config, folders, skills, PDF link",
               f"  {'test':<{width}}run the engine's tests",
-              f"  {'setup-equations':<{width}}install marker (its equation model) in its own environment"]
+              f"  {'setup-equations':<{width}}install marker (its equation model) in its own environment",
+              f"  {'install-vscode':<{width}}build and install the Paper Library extension for VS Code"]
     return "\n".join(lines)
 
 
@@ -85,6 +86,8 @@ def main(argv):
         return code or run([sys.executable, str(ENGINE / "tests" / "test_example_library.py")], env)
     if name == "setup-equations":
         return setup_equations()
+    if name == "install-vscode":
+        return install_vscode()
     if name not in COMMANDS:
         print(f"paperlib: unknown command `{name}`\n\n{usage()}", file=sys.stderr)
         return 2
@@ -114,6 +117,20 @@ def setup_equations():
     if not code and not shutil.which("llama-server"):
         print("Also install llama.cpp, which serves marker's model (brew install llama.cpp).")
     return code
+
+
+def install_vscode():
+    """Build the extension in editors/vscode into a .vsix and install it into VS Code."""
+    missing = [tool for tool in ("npm", "code") if not shutil.which(tool)]
+    if missing:
+        print(f"install-vscode needs {' and '.join(missing)} on the PATH (Node.js: https://nodejs.org; "
+              "code: VS Code's 'Shell Command: Install code command in PATH').", file=sys.stderr)
+        return 1
+    folder = ENGINE / "editors" / "vscode"
+    npm = ["npm", "--prefix", str(folder)]
+    code = run(npm + ["ci" if (folder / "package-lock.json").exists() else "install"])
+    code = code or run(npm + ["run", "package"])
+    return code or run(["code", "--install-extension", str(folder / "paper-library.vsix"), "--force"])
 
 
 if __name__ == "__main__":

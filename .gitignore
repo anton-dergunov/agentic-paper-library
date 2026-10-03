@@ -8,3 +8,7 @@ examples/library/pdfs/
 examples/library/pdf
 examples/library/.claude/skills/
 examples/library/.vscode/
+# The VS Code extension's build output
+editors/vscode/dist/
+editors/vscode/out/
+*.vsix

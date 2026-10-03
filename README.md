@@ -43,6 +43,7 @@ ln -s ~/projects/agentic-paper-library/bin/paperlib ~/.local/bin/paperlib
 paperlib init ~/papers --pdf-root ~/Dropbox/Papers   # a new library: config, folders, skills, VS Code settings
 cd ~/papers
 paperlib setup-equations                             # optional: marker's equation model for PDF-only papers
+paperlib install-vscode                              # optional: the VS Code extension that opens papers by title
 ```
 
 Declare a topic or two in `catalog/topics.yaml`, then add papers, from the shell or by asking Claude Code (`/add-paper 2305.18290`):
@@ -62,14 +63,13 @@ paperlib build-index && paperlib check
 
 - [Conversion](docs/conversion.md): how each kind of paper is converted, and why.
 - [Design](docs/design.md): the reading workflow, where things live, and the tools considered.
-- [Working in VS Code](docs/vscode.md): one window on the library, PDFs beside the markdown, page links from the chat.
+- [Working in VS Code](docs/vscode.md): one window on the library, PDFs beside the markdown, papers opened by title, page links from the chat.
 - [Experiments](experiments/README.md): the measurements behind the converters.
 - [Configuration](docs/configuration.md): `paper-library.yaml`.
 - The agent guide: [guide/library-guide.md](guide/library-guide.md), rendered into each library as `.claude/library-guide.md`.
 
 ## Next
 
-- A "Paper library" VS Code extension: open a paper by title, search the library's text ([plan](docs/tasks/vscode-extension.md)).
 - Conversion follow-ups: incomplete arXiv renderings, equations KaTeX can't draw, OCR crashes ([list](docs/tasks/conversion-follow-ups.md)).
 - Running a library from Claude Code on the web, which needs the engine installed by a setup step.
 - `read` and `wrap` skills for reading a paper with the agent and keeping what you took from it.
