@@ -1,0 +1,6 @@
+# Run times with --inline-math (pdf-to-markdown.py), 2 Oct 2026, M1 under load from the library-wide reconversion.
+memlayers 97s | text blocks read by the model: 6 kept, 0 rejected (words or numbers differed from the text layer)
+larimar 467s | text blocks read by the model: 50 kept, 0 rejected (words or numbers differed from the text layer) 
+dpo 639s | text blocks read by the model: 56 kept, 0 rejected (words or numbers differed from the text layer) 
+# Without --inline-math, same converter, same evening: memlayers 41s, larimar 66s, dpo 148s.
+# SimPO was stopped before it finished, to give the CPU back to the reconversion.

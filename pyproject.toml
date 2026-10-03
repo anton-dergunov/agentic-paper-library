@@ -1,0 +1,27 @@
+[project]
+name = "agentic-paper-library"
+version = "0.1.0"
+description = "Read and organise a research-paper library with a coding agent: papers converted to Markdown the agent can read and cite, and skills for adding, reading and reviewing them."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+# The converters are pinned: a new docling or PyMuPDF changes the markdown of
+# papers already in a library, so upgrading them is a measured change (see
+# experiments/), not a side effect of a fresh install.
+dependencies = [
+    "docling==2.117.0",            # layout analysis for papers that exist only as PDFs
+    "docling-core==2.89.0",
+    "docling-ibm-models==3.13.3",
+    "docling-parse==7.8.1",
+    "pymupdf==1.28.0",             # PDF text, destinations and page images
+    "pymupdf-layout==1.28.0",
+    "pymupdf4llm==1.28.0",         # column detection for the text-layer fallback
+    "rapidocr==3.9.2",
+    "lxml>=6",                     # arXiv HTML and web articles
+    "pillow>=12",                  # figures to WebP
+    "pyyaml>=6",
+    "tqdm>=4",
+]
+
+[tool.uv]
+package = false

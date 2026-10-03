@@ -1,0 +1,11 @@
+{
+  "name": "agentic-paper-library",
+  "owner": { "name": "Anton Dergunov" },
+  "plugins": [
+    {
+      "name": "agentic-paper-library",
+      "source": "./",
+      "description": "Skills for a research-paper library read with a coding agent."
+    }
+  ]
+}

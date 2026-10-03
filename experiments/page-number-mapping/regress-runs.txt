@@ -1,0 +1,136 @@
+# pagemap_regress.py runs, 30 Sep 2026, 240 papers; baseline = the library's page numbers at that moment
+# (destinations + text search, Beyond Recall already remapped). Each run is a cumulative change to page-map.py.
+# Recovered from the session transcript; run 1's full output is regress-run1.txt.
+
+== 1. Outline for numbered and unnumbered headings (by words); table-of-contents pages skipped
+{'gained': 64, 'lost': 18, 'changed': 29, 'papers_changed': 35, 'outline_papers': 49}
+MOVED WildChat 1M ChatGPT Interaction Logs in the Wild | ### User Consent p.2 -> p.13
+LOST  WildChat 1M ChatGPT Interaction Logs in the Wild | ### Data Preprocessing (was p.2)
+MOVED Agentic Context Engineering Evolving Contexts for  | #### Robustness to Reflection Quality p.9 -> p.19
+LOST  Agentic Context Engineering Evolving Contexts for  | #### Sensitivity to Hyperparameter Choice (was p.9)
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Content Constraints p.3 -> p.13
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Situation Constraints p.4 -> p.13
+LOST  FollowBench A Multi-level Fine-grained Constraints | #### Style Constraints (was p.4)
+LOST  FollowBench A Multi-level Fine-grained Constraints | #### Format Constraints (was p.4)
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Example Constraints p.5 -> p.14
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Mixed Constraints p.5 -> p.14
+LOST  FollowBench A Multi-level Fine-grained Constraints | #### Data Quality Control (was p.5)
+MOVED Reflexion Language Agents with Verbal Reinforcemen | ##### Programming p.3 -> p.7
+LOST  TextGrad Automatic Differentiation via Text | #### Dataset (was p.40)
+LOST  TextGrad Automatic Differentiation via Text | #### Method (was p.40)
+MOVED TextGrad Automatic Differentiation via Text | #### Initialization p.40 -> p.35
+LOST  A Survey of Context Engineering for Large Language | ###### Contents (was p.2)
+MOVED A Survey of Context Engineering for Large Language | ##### Foundational Components p.5 -> p.12
+LOST  A Survey of Context Engineering for Large Language | ##### System Implementation (was p.7)
+MOVED A Survey of Context Engineering for Large Language | ##### Evaluation p.7 -> p.45
+LOST  A Survey of Context Engineering for Large Language | ##### Our Contribution (was p.7)
+MOVED LongLLMLingua Accelerating and Enhancing LLMs in L | #### ZeroSCROLLS p.12 -> p.14
+MOVED LongLLMLingua Accelerating and Enhancing LLMs in L | #### MuSiQue p.13 -> p.15
+MOVED LongLLMLingua Accelerating and Enhancing LLMs in L | #### LooGLE p.13 -> p.16
+MOVED RECOMP Improving Retrieval-Augmented LMs with Comp | ##### Language modeling p.6 -> p.5
+MOVED RECOMP Improving Retrieval-Augmented LMs with Comp | ##### Open-domain QA p.7 -> p.5
+LOST  Holistic Evaluation of Language Models | ###### Contents (was p.11)
+MOVED Holistic Evaluation of Language Models | ##### Language. p.67 -> p.141
+MOVED Holistic Evaluation of Language Models | ##### Knowledge. p.68 -> p.144
+MOVED Holistic Evaluation of Language Models | ##### Reasoning. p.69 -> p.144
+LOST  Externalization in LLM Agents A Unified Review of  | ###### Contents (was p.2)
+MOVED Memory OS of AI Agent | #### MemoryOS: p.6 -> p.3
+LOST  Memory in the Age of AI Agents | ###### Contents (was p.2)
+MOVED Memory in the Age of AI Agents | ##### Token-level Memory p.30 -> p.13
+MOVED Memory in the Age of AI Agents | ##### Parametric Memory p.30 -> p.22
+MOVED Memory in the Age of AI Agents | ##### Latent Memory p.31 -> p.25
+MOVED Toward Personalized LLM-Powered Agents Foundations | ##### Generalization p.17 -> p.25
+LOST  Toward Personalized LLM-Powered Agents Foundations | ##### Robustness (was p.17)
+LOST  Toward Personalized LLM-Powered Agents Foundations | ##### Risk (was p.17)
+LOST  Uncertainty Distillation Teaching Language Models  | #### Dataset (was p.20)
+LOST  Uncertainty Distillation Teaching Language Models  | #### Model (was p.20)
+MOVED Uncertainty Distillation Teaching Language Models  | #### Results p.20 -> p.19
+MOVED Large Language Model Routing with Benchmark Datase | #### Reducing the OOD gap p.7 -> p.14
+MOVED Design Patterns for Securing LLM Agents against Pr | ## Acknowledgments p.32 -> p.28
+MOVED MemGuard Preventing Memory Contamination in Long-T | #### Analysis p.3 -> p.8
+MOVED MemGuard Preventing Memory Contamination in Long-T | #### Implementation Details p.6 -> p.24
+MOVED MemGuard Preventing Memory Contamination in Long-T | #### Evaluation Metrics p.6 -> p.24
+LOST  Scalable Extraction of Training Data from (Product | ##### Would the base model have been testable? (was p.13)
+47 lost/moved in total
+
+== 2. + a bookmark may not point before the last exactly placed heading
+{'gained': 59, 'lost': 11, 'changed': 19, 'papers_changed': 28, 'outline_papers': 39}
+MOVED WildChat 1M ChatGPT Interaction Logs in the Wild | ### User Consent p.2 -> p.13
+LOST  WildChat 1M ChatGPT Interaction Logs in the Wild | ### Data Preprocessing (was p.2)
+MOVED Agentic Context Engineering Evolving Contexts for  | #### Robustness to Reflection Quality p.9 -> p.19
+LOST  Agentic Context Engineering Evolving Contexts for  | #### Sensitivity to Hyperparameter Choice (was p.9)
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Content Constraints p.3 -> p.13
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Situation Constraints p.4 -> p.13
+LOST  FollowBench A Multi-level Fine-grained Constraints | #### Style Constraints (was p.4)
+LOST  FollowBench A Multi-level Fine-grained Constraints | #### Format Constraints (was p.4)
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Example Constraints p.5 -> p.14
+MOVED FollowBench A Multi-level Fine-grained Constraints | #### Mixed Constraints p.5 -> p.14
+LOST  FollowBench A Multi-level Fine-grained Constraints | #### Data Quality Control (was p.5)
+MOVED Reflexion Language Agents with Verbal Reinforcemen | ##### Programming p.3 -> p.7
+LOST  A Survey of Context Engineering for Large Language | ###### Contents (was p.2)
+MOVED A Survey of Context Engineering for Large Language | ##### Foundational Components p.5 -> p.12
+LOST  A Survey of Context Engineering for Large Language | ##### System Implementation (was p.7)
+MOVED A Survey of Context Engineering for Large Language | ##### Evaluation p.7 -> p.45
+LOST  A Survey of Context Engineering for Large Language | ##### Our Contribution (was p.7)
+MOVED LongLLMLingua Accelerating and Enhancing LLMs in L | #### ZeroSCROLLS p.12 -> p.14
+MOVED LongLLMLingua Accelerating and Enhancing LLMs in L | #### MuSiQue p.13 -> p.15
+MOVED LongLLMLingua Accelerating and Enhancing LLMs in L | #### LooGLE p.13 -> p.16
+LOST  Holistic Evaluation of Language Models | ###### Contents (was p.11)
+MOVED Holistic Evaluation of Language Models | ##### Language. p.67 -> p.141
+MOVED Holistic Evaluation of Language Models | ##### Knowledge. p.68 -> p.144
+MOVED Holistic Evaluation of Language Models | ##### Reasoning. p.69 -> p.144
+LOST  Externalization in LLM Agents A Unified Review of  | ###### Contents (was p.2)
+LOST  Memory in the Age of AI Agents | ###### Contents (was p.2)
+MOVED Large Language Model Routing with Benchmark Datase | #### Reducing the OOD gap p.7 -> p.14
+MOVED MemGuard Preventing Memory Contamination in Long-T | #### Analysis p.3 -> p.8
+MOVED MemGuard Preventing Memory Contamination in Long-T | #### Implementation Details p.6 -> p.24
+MOVED MemGuard Preventing Memory Contamination in Long-T | #### Evaluation Metrics p.6 -> p.24
+30 lost/moved in total
+
+== 3. Outline for numbered headings only
+{'gained': 6, 'lost': 3, 'changed': 0, 'papers_changed': 3, 'outline_papers': 3}
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Worked examples: Wrong-Referent (Fukuzawa), Directional  (was p.42)
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Compression examples: Hamerton (Spec succeeds), Ebers (S (was p.57)
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Wrong-Spec examples: Ebers Q7 (identity), Bernal Díaz Q1 (was p.61)
+3 lost/moved in total
+
+== 4. + an unnumbered heading of 5+ words matches anywhere in the page text
+{'gained': 579, 'lost': 3, 'changed': 0, 'papers_changed': 101, 'outline_papers': 3}
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Worked examples: Wrong-Referent (Fukuzawa), Directional  (was p.42)
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Compression examples: Hamerton (Spec succeeds), Ebers (S (was p.57)
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Wrong-Spec examples: Ebers Q7 (identity), Bernal Díaz Q1 (was p.61)
+3 lost/moved in total
+
+== 5. Long unnumbered headings must start a line (and may wrap over the next 3 lines)
+{'gained': 533, 'lost': 3, 'changed': 0, 'papers_changed': 95, 'outline_papers': 3}
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Worked examples: Wrong-Referent (Fukuzawa), Directional  (was p.42)
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Compression examples: Hamerton (Spec succeeds), Ebers (S (was p.57)
+LOST  Beyond Recall Behavioral Specification as an Inter | ### Wrong-Spec examples: Ebers Q7 (identity), Bernal Díaz Q1 (was p.61)
+3 lost/moved in total
+
+== 6. + long headings searched up to the next exactly placed heading, not 2 pages; hyphenated line breaks rejoined (shipped in 49be320b)
+{'gained': 591, 'lost': 0, 'changed': 0, 'papers_changed': 100, 'outline_papers': 3}
+
+0 lost/moved in total
+
+== Check after run 4: where in the page text the gained headings matched
+gained 579; match at a line start: 528; elsewhere: 51
+('Lost in the Middle How Language Models U', 'Extended-context models are not necessarily better at using input cont', 5, '1st 5th 10th position of document with the answer 50 55 60 65 70 75 accuracy 10 total retrie')
+('Optimizing User Profiles via Contextual ', 'PURPLE consistently outperforms strong baselines across LLM scales.', 7, '0 10 20 throughput (examples/sec) 0.1650 0.1675 0.1700 0.1725 0.1750 0.1775 rouge-1 n')
+('TopicGPT A Prompt-based Topic Modeling F', 'Open-source LLMs are competent topic assigners but bad topic generator', 2, '. . . corpus example topics (2-3 topics) - media - economy [example topics] [document] [de')
+('State of What Art. A Call for Multi-Prom', 'Average performance is lower than that observed in the original benchm', 10, 'figure 6: the performance of various models according to the metrics proposed in section 5, evaluated on ')
+('HORIZON A Benchmark for In-the-wild User', 'Task 3 - LLM-Based Long-Horizon User Modeling.', 5, 'we instantiate this framework through three tasks, beginning wit')
+('Lost in the Middle How Language Models U', 'Model performance is highest when relevant information occurs at the b', 5, '1st 5th 10th position of document with the answer 50 55 60 65 70 75 accuracy 10 total retrieved documents (~2k tokens) 1st 5t')
+('Control-Plane Placement Shapes Forgettin', 'Comparison to public LongMemEval-S numbers.', 21, 'headline (table 2) bypasses it and stores the literal text on')
+('Lost in Simulation LLM-Simulated Users a', 'Demographic Skews in NLP Datasets and Models', 2, 'typically rely on a single user simulation model, yet results m')
+('Building Self-Evolving Agents via Experi', 'Step 3: Solution Generation and Verification.', 12, 'c task is formulated based on the generated background. (c) step 3: solution generation and verification, where a correct so')
+('AirGapAgent Protecting Privacy-Conscious', 'Conversational prediction prompt for multiple choice questions', 22, ' to answer a question given a task and privacy directive. • conversational prediction prompt for multiple choice questions: used by both basel')
+('PERMA Benchmarking Personalized Memory A', 'Agents with RAG and Memory Systems.', 12, 'rma, categorized into two paradigms: 1) standalone llms, 2) agents with rag and memory systems. standalone llms. i')
+('Evaluating Very Long-Term Conversational', 'Image Sharing & Image Reaction.', 4, 'the agent has two functions: (1) reflect & respond; and (2) image sharing & image reaction. the agent is asked')
+('State of What Art. A Call for Multi-Prom', 'Model rankings diverge between the different metrics and original inst', 11, 'change model p1 acc. p2 acc. diff. {...} –> “{...}” td002 which word has a greater number of letters, {wor')
+('MemGuard Preventing Memory Contamination', 'Functional Boundaries Require Both Structure and Routing.', 8, '(a) memory type separation. (b) query routing results. figure 4: analysis o')
+('Offline RL for Natural Language Generati', 'Ablations on per-token vs. per-utterance actions.', 9, 'published as a conference paper at iclr 2023 the second lowest hype')
+
+== Check after run 6: headings whose page is lower than the previous heading's (reading-order violations)
+backward page steps: before 0 after 0
+[]

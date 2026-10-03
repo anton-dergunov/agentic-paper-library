@@ -1,0 +1,5 @@
+# Fonts by characters in the three test PDFs (top 12), 2 Oct 2026 (recovered from the session transcript).
+# Memory Layers sets its text in CM-Super (SF*) fonts; only 78 characters are in a maths font (CMMI10), consistent with only 6 paragraphs being read.
+memlayers [('SFRM1000', 24627), ('SFRM0900', 10493), ('SFVT0900', 1730), ('OptimisticDisp-Bd', 1079), ('SFTI0900', 358), ('SFVT1000', 259), ('Arial-BoldMT', 219), ('CMR10', 109), ('ArialMT', 97), ('SFTI1000', 97), ('CMMI10', 78), ('Times-Roman', 40)]
+dpo [('NimbusRomNo9L-Regu', 75184), ('NimbusRomNo9L-ReguItal', 4024), ('SFTT1000', 3666), ('NimbusRomNo9L-Medi', 2465), ('CMMI10', 1747), ('CMR10', 1453), ('DejaVuSans', 938), ('CMMI7', 472), ('CMSY10', 315), ('CMR7', 245), ('SFTT0900', 219), ('CMEX10', 171)]
+larimar [('NimbusRomNo9L-Regu', 69343), ('NimbusRomNo9L-Medi', 2787), ('NimbusRomNo9L-ReguItal', 1946), ('NimbusMonL-Regu', 667), ('CMR10', 406), ('TimesNewRomanPSMT', 400), ('CMMI10', 369), ('CMBX10', 215), ('CMR7', 209), ('CMMI7', 171), ('NimbusRomNo9L-Regu-Slant', 171), ('NimbusRoman-Regular', 143)]

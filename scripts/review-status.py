@@ -24,13 +24,13 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 
 from paperlib import (
-    LIBRARY_DIR, PDF_LINK_BASE, REPO_ROOT, REVIEWS_DIR, load_reviews, load_topics,
+    LIBRARY_DIR, LIBRARY_ROOT, PDF_LINK_BASE, REVIEWS_DIR, load_reviews, load_topics,
     paper_files, read_paper, review_coverage, review_links,
 )
 
 
 def rel(path):
-    return Path(path).relative_to(REPO_ROOT).as_posix()
+    return Path(path).relative_to(LIBRARY_ROOT).as_posix()
 
 
 def md_link(paper, from_file):

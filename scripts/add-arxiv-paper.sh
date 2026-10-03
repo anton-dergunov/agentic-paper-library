@@ -173,7 +173,7 @@ else
   else
     echo "Fetching HTML rendering..."
     # With retries: a throttled request must not send a paper to PDF text.
-    python3 "$REPO_ROOT/scripts/paperlib.py" fetch "https://arxiv.org/html/$VID" "$WORK/paper.html"
+    python3 "$SCRIPTS_DIR/paperlib.py" fetch "https://arxiv.org/html/$VID" "$WORK/paper.html"
 
     SOURCE=html
     if ! grep -q 'ltx_page_content' "$WORK/paper.html"; then
@@ -186,7 +186,7 @@ fi
 if [ "${SOURCE:-}" = html ]; then
   # Article extraction, pandoc, figure extraction and SVG repair: see the
   # docstring of html-to-markdown.py for what each step fixes.
-  python3 "$REPO_ROOT/scripts/html-to-markdown.py" "$WORK/paper.html" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
+  python3 "$SCRIPTS_DIR/html-to-markdown.py" "$WORK/paper.html" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
 
   # For submissions uploaded as a PDF rather than as LaTeX source, arXiv still
   # serves an HTML page — but its body is a one-line "see the PDF" pointer. The
@@ -197,7 +197,7 @@ if [ "${SOURCE:-}" = html ]; then
     SOURCE=pdf
   else
     {
-      python3 "$REPO_ROOT/scripts/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" html
+      python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" html
       echo
       cat "$WORK/body.md"
     } > "$MD"
@@ -207,17 +207,17 @@ fi
 if [ "${SOURCE:-}" = pdf ]; then
   # No HTML: convert the PDF by layout analysis (see pdf-to-markdown.py), which
   # writes the note on how the paper was converted, and the page markers, itself.
-  python3 "$REPO_ROOT/scripts/pdf-to-markdown.py" "$PDF" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
+  python3 "$SCRIPTS_DIR/pdf-to-markdown.py" "$PDF" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
 
   {
-    python3 "$REPO_ROOT/scripts/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" pdf-text
+    python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" pdf-text
     echo
     cat "$WORK/body.md"
   } > "$MD"
 fi
 
 if [ "${SOURCE:-}" = html ]; then
-  python3 "$REPO_ROOT/scripts/page-map.py" "$PDF" "$MD"
+  python3 "$SCRIPTS_DIR/page-map.py" "$PDF" "$MD"
 fi
 
 echo "Done: $PDF"

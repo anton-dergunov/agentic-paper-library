@@ -1,0 +1,268 @@
+{
+ "file": "reconvert-pass2.jsonl",
+ "records": 2216,
+ "invocations": [
+  {
+   "first_record": "2026-10-02T00:05:52",
+   "last_record": "2026-10-02T02:04:53",
+   "elapsed_min": 119.0,
+   "records": 2200,
+   "status": {
+    "skipped": 296,
+    "ok": 1888,
+    "partial": 16
+   },
+   "converted_per_hour": 960,
+   "seconds_between_records": {
+    "median": 2.0,
+    "mean": 3.2,
+    "p90": 7.0,
+    "max": 92.0,
+    "slowest": [
+     {
+      "seconds": 92.0,
+      "paper": "deep-learning/theory/Visualizing the Loss Landscape of Neural Nets.md",
+      "message": "1712.09913v3: page-map: 34 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 53.0,
+      "paper": "deep-learning/theory/Provable Scaling Laws of Feature Emergence from Learning Dynamics of Grokking.md",
+      "message": "2509.21519v5: page-map: 52 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 40.0,
+      "paper": "deep-learning/normalization-and-regularization/Peri-LN. Revisiting Normalization Layer in the Transformer Architecture.md",
+      "message": "2502.02732v3: page-map: 69 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+     },
+     {
+      "seconds": 40.0,
+      "paper": "generative-models/gans-and-vaes/Generative Adversarial Transformers.md",
+      "message": "2103.01209v4: page-map: 21 headings placed, 0 numbered headings unplaced; 127 figures could not be downloaded and still link to arXiv"
+     },
+     {
+      "seconds": 37.0,
+      "paper": "deep-learning/uncertainty-and-robustness/Revisiting the Calibration of Modern Neural Networks.md",
+      "message": "2106.07998v2: page-map: 24 headings placed, 0 numbered headings unplaced"
+     }
+    ]
+   }
+  },
+  {
+   "first_record": "2026-10-02T02:05:05",
+   "last_record": "2026-10-02T02:09:13",
+   "elapsed_min": 4.1,
+   "records": 16,
+   "status": {
+    "partial": 16
+   },
+   "converted_per_hour": 232
+  }
+ ],
+ "papers": 2200,
+ "last_status": {
+  "skipped": 296,
+  "ok": 1888,
+  "partial": 16
+ },
+ "skip_reasons": {
+  "PDF text, no arXiv HTML; use --pdf-text": 277,
+  "not converted from arXiv HTML": 16,
+  "hand-edited; use --force": 3
+ },
+ "not_ok": [
+  {
+   "paper": "data-centric-ml/augmentation-and-synthetic-data/Effective Data Augmentation With Diffusion Models.md",
+   "status": "partial",
+   "message": "2302.07944v3: page-map: 39 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "data-centric-ml/data-quality-and-shift/A systematic study of the class imbalance problem in convolutional neural networks.md",
+   "status": "partial",
+   "message": "1710.05381v2: page-map: 23 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "data-centric-ml/data-quality-and-shift/Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift.md",
+   "status": "partial",
+   "message": "1810.11953v4: page-map: 22 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "deep-learning/normalization-and-regularization/Peri-LN. Revisiting Normalization Layer in the Transformer Architecture.md",
+   "status": "partial",
+   "message": "2502.02732v3: page-map: 69 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "deep-learning/theory/Deep Double Descent. Where Bigger Models and More Data Hurt.md",
+   "status": "partial",
+   "message": "1912.02292v1: page-map: 33 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Analyzing and Improving the Image Quality of StyleGAN.md",
+   "status": "partial",
+   "message": "1912.04958v2: page-map: 28 headings placed, 0 numbered headings unplaced; 6 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Generative Adversarial Transformers.md",
+   "status": "partial",
+   "message": "2103.01209v4: page-map: 21 headings placed, 0 numbered headings unplaced; 127 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Taming Transformers for High-Resolution Image Synthesis.md",
+   "status": "partial",
+   "message": "2012.09841v3: page-map: 34 headings placed, 0 numbered headings unplaced; 40 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "interpretability/mechanistic/Towards Automated Circuit Discovery for Mechanistic Interpretability.md",
+   "status": "partial",
+   "message": "2304.14997v4: page-map: 47 headings placed, 0 numbered headings unplaced; 7 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "llm/agents/UI-TARS. Pioneering Automated GUI Interaction with Native Agents.md",
+   "status": "partial",
+   "message": "2501.12326v1: page-map: 58 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "llm/foundation-models/Language Models are Few-Shot Learners.md",
+   "status": "partial",
+   "message": "2005.14165v4: page-map: 56 headings placed, 0 numbered headings unplaced; 12 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "llm/post-training/rl-for-reasoning/Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model.md",
+   "status": "partial",
+   "message": "2504.13837v5: page-map: 38 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "reinforcement-learning/world-models/Genie. Generative Interactive Environments.md",
+   "status": "partial",
+   "message": "2402.15391v1: page-map: 38 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "research-practice/Improving Reproducibility in Machine Learning Research (A Report from the NeurIPS 2019.md",
+   "status": "partial",
+   "message": "2003.12206v4: page-map: 14 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "search-and-ranking/search-systems/Pre-trained Language Model based Ranking in Baidu Search.md",
+   "status": "partial",
+   "message": "2105.11108v3: page-map: 28 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "vision-and-multimodal/vision/NeRF. Representing Scenes as Neural Radiance Fields for View Synthesis.md",
+   "status": "partial",
+   "message": "2003.08934v2: page-map: 17 headings placed, 0 numbered headings unplaced; 4 figures could not be downloaded and still link to arXiv"
+  }
+ ],
+ "retried": [
+  {
+   "paper": "data-centric-ml/augmentation-and-synthetic-data/Effective Data Augmentation With Diffusion Models.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "data-centric-ml/data-quality-and-shift/A systematic study of the class imbalance problem in convolutional neural networks.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "data-centric-ml/data-quality-and-shift/Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "deep-learning/normalization-and-regularization/Peri-LN. Revisiting Normalization Layer in the Transformer Architecture.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "deep-learning/theory/Deep Double Descent. Where Bigger Models and More Data Hurt.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Analyzing and Improving the Image Quality of StyleGAN.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Generative Adversarial Transformers.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Taming Transformers for High-Resolution Image Synthesis.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "interpretability/mechanistic/Towards Automated Circuit Discovery for Mechanistic Interpretability.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "llm/agents/UI-TARS. Pioneering Automated GUI Interaction with Native Agents.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "llm/foundation-models/Language Models are Few-Shot Learners.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "llm/post-training/rl-for-reasoning/Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "reinforcement-learning/world-models/Genie. Generative Interactive Environments.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "research-practice/Improving Reproducibility in Machine Learning Research (A Report from the NeurIPS 2019.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "search-and-ranking/search-systems/Pre-trained Language Model based Ranking in Baidu Search.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  },
+  {
+   "paper": "vision-and-multimodal/vision/NeRF. Representing Scenes as Neural Radiance Fields for View Synthesis.md",
+   "statuses": [
+    "partial",
+    "partial"
+   ]
+  }
+ ]
+}

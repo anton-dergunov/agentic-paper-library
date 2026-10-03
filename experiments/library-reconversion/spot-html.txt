@@ -1,0 +1,10 @@
+generative-models/diffusion/VASA-1. Lifelike Audio-Driven Talking Faces Generated in Real Time.md
+nlp/tasks-and-methods/An Empirical Study on Large-Scale Multi-Label Text Classification Including Few and Zero-Shot Labels.md
+experimentation-and-metrics/metric-design/Choosing a Proxy Metric from Past Experiments.md
+trustworthy-ml/fairness-and-bias/Fairness of Exposure in Rankings.md
+vision-and-multimodal/vision-language/Contrastive Learning of Medical Visual Representations from Paired Images and Text.md
+llm/reasoning/Training Large Language Models to Reason in a Continuous Latent Space.md
+llm/foundation-models/PaLM 2 Technical Report.md
+llm/memory/parametric/Memorizing Transformers.md
+recommender-systems/deep-and-sequential/DeepFM. A Factorization-Machine based Neural Network for CTR Prediction.md
+llm/evaluation/methods/The Coin Flip Judge. Reliability and Bias in LLM-as-a-Judge Evaluation.md

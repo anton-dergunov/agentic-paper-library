@@ -1,0 +1,20 @@
+# the twelve display equations sampled for the equation spot check (two per PDF paper, random.seed(3))
+=== [0] Adam. A Method for Stochastic Optimization
+  eq0 (section starts p.6, rendered p.6) -> p0_0_page6.png
+  eq1 (section starts p.12, rendered p.12) -> p0_1_page12.png
+=== [1] Learning deep structured semantic models for web search usin
+  eq0 (section starts p.7, rendered p.7) -> p1_0_page7.png
+  eq1 (section starts p.4, rendered p.4) -> p1_1_page4.png
+=== [2] Factorization Machines
+  eq0 (section starts p.4, rendered p.4) -> p2_0_page4.png
+  eq1 (section starts p.6, rendered p.6) -> p2_1_page6.png
+=== [3] Random Search for Hyper-Parameter Optimization
+  eq0 (section starts p.5, rendered p.6) -> p3_0_page6.png
+  eq1 (section starts p.1, rendered p.2) -> p3_1_page2.png
+=== [4] The LambdaLoss Framework for Ranking Metric Optimization
+  eq0 (section starts p.2, rendered p.2) -> p4_0_page2.png
+  eq1 (section starts p.6, rendered p.6) -> p4_1_page6.png
+=== [5] Approximate Statistical Tests for Comparing Supervised Class
+  eq0 (section starts p.9, rendered p.9) -> p5_0_page9.png
+  eq1 (section starts p.8, rendered p.8) -> p5_1_page8.png
+

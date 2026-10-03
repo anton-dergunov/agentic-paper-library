@@ -1,0 +1,9 @@
+# eqtest.py output, 1 Oct 2026 (recovered from the session transcript).
+# The first configuration's 585 s includes starting the model server under heavy load; later runs reused it.
+dpi 192 pad 0: larimar 585s decoded 10/10  >=.85: 0.70  mean 0.79
+   metalearn 32s ["\\theta_i i' = \\theta - \\alpha \\nabla_{\\theta} L_i T_i(\\theta)", "\\theta_i' = \\theta - \\alpha \\nabla_{\\theta} L_i(f_{\\theta}; D_i^{support})", '\\min_{\\theta} \\sum_i L_{-}T_i(f_{\\{\\theta_i\\}}; D_i^{\\varphi^{uery}})']
+dpi 300 pad 3: larimar 23s decoded 10/10  >=.85: 0.70  mean 0.80
+   metalearn 10s ["\\theta_{i'} = \\theta - \\alpha \\nabla_{\\theta} L_T i(\\theta)", "\\theta_i' = \\theta - \\alpha \\nabla_{\\theta} L T_i(f_{\\theta}; D_i^{support})", '\\min_{\\theta} \\sum_i L_i T_i(f_{\\{\\theta_i\\}}; D_i^{\\varphi^{uery}})\nf']
+dpi 300 pad 8: larimar 18s decoded 10/10  >=.85: 0.60  mean 0.77
+   metalearn 10s ['\\theta_{it} = \\theta - \\alpha \\nabla_{\\theta} L_{Ti}(\\theta)', "\\theta_i' = \\theta - \\alpha \\nabla_{\\theta} L_{T_i}(f_{\\theta}; D_i^{support})", '\\theta\n\\sum_i L_{T_i}(f_{\\{\\theta_i\\}}; D_i^{\\varphi^{uery}})\nf_{\\theta}']
+

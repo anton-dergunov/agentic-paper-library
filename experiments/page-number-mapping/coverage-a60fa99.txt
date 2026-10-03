@@ -1,0 +1,19 @@
+# coverage.py over the library at commit a60fa99 (30 Sep 2026, before the outline/wrapping changes)
+[all] papers 240; headings 12149, with a page 9442 (77.7%)
+    numbered     7441 of   7508 (99.1%)
+    unnumbered   2001 of   4641 (43.1%)
+[html] papers 233; headings 12148, with a page 9442 (77.7%)
+    numbered     7441 of   7508 (99.1%)
+    unnumbered   2001 of   4640 (43.1%)
+[pdf-text] papers 7; headings 1, with a page 0 (0.0%)
+    numbered        0 of      0 (0.0%)
+    unnumbered      0 of      1 (0.0%)
+papers with numbered headings lacking a page: 8
+    31  Beyond Recall Behavioral Specification as an Interpretive Layer for AI Personalization
+    21  Larimar Large Language Models with Episodic Memory Control
+     7  LLMs Get Lost In Multi-Turn Conversation
+     3  Membership Inference Attacks against Machine Learning Models
+     2  Memanto Typed Semantic Memory with Information-Theoretic Retrieval for Long-Horizon Agents
+     1  RecToM A Benchmark for Evaluating Machine Theory of Mind in LLM-based Conversational Recom
+     1  State of What Art. A Call for Multi-Prompt LLM Evaluation
+     1  Selective Annotation Makes Language Models Better Few-Shot Learners

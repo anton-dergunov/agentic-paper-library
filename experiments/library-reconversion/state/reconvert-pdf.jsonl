@@ -1,0 +1,279 @@
+{"paper": "ai-and-society/Canaries in the Coal Mine. Six Facts about the Recent Employment Effects of Artificial Intelligence.md", "status": "failed", "message": "RuntimeError: pdf-to-markdown: ['  warnings.warn(']", "at": "2026-10-02T02:10:36"}
+{"paper": "ai-and-society/Generative AI at Work.md", "status": "ok", "message": "from the PDF, 19173 words", "at": "2026-10-02T02:11:27"}
+{"paper": "ai-and-society/Guidelines for Human-AI Interaction.md", "status": "ok", "message": "from the PDF, 14706 words", "at": "2026-10-02T02:12:15"}
+{"paper": "ai-and-society/How People Use ChatGPT.md", "status": "ok", "message": "from the PDF, 18865 words", "at": "2026-10-02T02:13:26"}
+{"paper": "ai-and-society/We Won't Be Missed. Work and Growth in the Era of AGI.md", "status": "ok", "message": "from the PDF, 7560 words", "at": "2026-10-02T02:14:37"}
+{"paper": "ai-and-society/Will You Accept an Imperfect AI. - Exploring Designs for Adjusting End-user.md", "status": "ok", "message": "from the PDF, 11288 words", "at": "2026-10-02T02:14:54"}
+{"paper": "computer-systems/An Improved Data Stream Summary. The Count-Min Sketch and its Applications.md", "status": "ok", "message": "from the PDF, 6023 words", "at": "2026-10-02T02:15:50"}
+{"paper": "computer-systems/Bigtable. A Distributed Storage System for Structured Data.md", "status": "ok", "message": "from the PDF, 11663 words", "at": "2026-10-02T02:16:05"}
+{"paper": "computer-systems/Cache-Oblivious Algorithms and Data Structures.md", "status": "ok", "message": "from the PDF, 13755 words", "at": "2026-10-02T02:16:55"}
+{"paper": "computer-systems/Dapper, a Large-Scale Distributed Systems Tracing Infrastructure.md", "status": "ok", "message": "from the PDF, 10217 words", "at": "2026-10-02T02:17:13"}
+{"paper": "computer-systems/Dremel. Interactive Analysis of Web-Scale Datasets.md", "status": "ok", "message": "from the PDF, 9281 words", "at": "2026-10-02T02:17:46"}
+{"paper": "computer-systems/Dynamo. Amazon's Highly Available Key-value Store.md", "status": "ok", "message": "from the PDF, 15119 words", "at": "2026-10-02T02:18:03"}
+{"paper": "computer-systems/How Complex Systems Fail.md", "status": "ok", "message": "from the PDF, 2126 words", "at": "2026-10-02T02:18:14"}
+{"paper": "computer-systems/HyperLogLog in Practice. Algorithmic Engineering of a State of The Art Cardinality Estimation.md", "status": "ok", "message": "from the PDF, 8619 words", "at": "2026-10-02T02:18:45"}
+{"paper": "computer-systems/HyperLogLog. the analysis of a near-optimal cardinality estimation algorithm.md", "status": "ok", "message": "from the PDF, 9210 words", "at": "2026-10-02T02:20:38"}
+{"paper": "computer-systems/In Search of an Understandable Consensus Algorithm.md", "status": "ok", "message": "from the PDF, 14869 words", "at": "2026-10-02T02:21:19"}
+{"paper": "computer-systems/Kafka. a Distributed Messaging System for Log Processing.md", "status": "ok", "message": "from the PDF, 6082 words", "at": "2026-10-02T02:21:33"}
+{"paper": "computer-systems/Large-scale cluster management at Google with Borg.md", "status": "ok", "message": "from the PDF, 13926 words", "at": "2026-10-02T02:22:09"}
+{"paper": "computer-systems/MapReduce. Simplified Data Processing on Large Clusters.md", "status": "ok", "message": "from the PDF, 9087 words", "at": "2026-10-02T02:22:40"}
+{"paper": "computer-systems/Prefix sums and their applications.md", "status": "ok", "message": "from the PDF, 9214 words", "at": "2026-10-02T02:24:09"}
+{"paper": "computer-systems/Resilient Distributed Datasets. A Fault-Tolerant Abstraction for In-Memory Cluster Computing.md", "status": "ok", "message": "from the PDF, 11460 words", "at": "2026-10-02T02:28:30"}
+{"paper": "computer-systems/Scaling Memcache at Facebook.md", "status": "ok", "message": "from the PDF, 10004 words", "at": "2026-10-02T02:28:44"}
+{"paper": "computer-systems/Skip lists. a probabilistic alternative to balanced trees.md", "status": "ok", "message": "from the PDF, 6627 words", "at": "2026-10-02T02:29:24"}
+{"paper": "computer-systems/Spanner. Google's Globally-Distributed Database.md", "status": "ok", "message": "from the PDF, 12382 words", "at": "2026-10-02T02:32:22"}
+{"paper": "computer-systems/TAO. Facebook's Distributed Data Store for the Social Graph.md", "status": "ok", "message": "from the PDF, 10081 words", "at": "2026-10-02T02:32:55"}
+{"paper": "computer-systems/The Chubby lock service for loosely-coupled distributed systems.md", "status": "ok", "message": "from the PDF, 13761 words", "at": "2026-10-02T02:33:10"}
+{"paper": "computer-systems/The Dataflow Model. A Practical Approach to Balancing Correctness, Latency, and Cost in.md", "status": "ok", "message": "from the PDF, 10232 words", "at": "2026-10-02T02:33:22"}
+{"paper": "computer-systems/The Google File System.md", "status": "ok", "message": "from the PDF, 14770 words", "at": "2026-10-02T02:33:43"}
+{"paper": "computer-systems/The Log-Structured Merge-Tree (LSM-Tree).md", "status": "ok", "message": "from the PDF, 21050 words", "at": "2026-10-02T02:34:24"}
+{"paper": "computer-systems/The Tail at Scale.md", "status": "ok", "message": "from the PDF, 5008 words", "at": "2026-10-02T02:34:38"}
+{"paper": "computer-systems/The power of two random choices. a survey of tech-niques and results.md", "status": "ok", "message": "from the PDF, 25164 words", "at": "2026-10-02T02:36:48"}
+{"paper": "computer-systems/Time, Clocks, and the Ordering of Events in a Distributed System.md", "status": "ok", "message": "from the PDF, 7530 words", "at": "2026-10-02T02:38:53"}
+{"paper": "computer-systems/Why Functional Programming Matters.md", "status": "ok", "message": "from the PDF, 9268 words", "at": "2026-10-02T02:42:09"}
+{"paper": "computer-systems/ZooKeeper. Wait-free coordination for Internet-scale systems.md", "status": "ok", "message": "from the PDF, 11465 words", "at": "2026-10-02T02:42:46"}
+{"paper": "curiosities/Gender Differences in Mate Selection. Evidence From a Speed Dating Experiment.md", "status": "ok", "message": "from the PDF, 10486 words", "at": "2026-10-02T02:43:36"}
+{"paper": "data-centric-ml/The Unreasonable Effectiveness of Data.md", "status": "ok", "message": "from the PDF, 3805 words", "at": "2026-10-02T02:43:47"}
+{"paper": "data-centric-ml/augmentation-and-synthetic-data/A Survey on Image Data Augmentation for Deep Learning.md", "status": "ok", "message": "from the PDF, 20473 words", "at": "2026-10-02T02:44:32"}
+{"paper": "data-centric-ml/augmentation-and-synthetic-data/Text Data Augmentation for Deep Learning.md", "status": "ok", "message": "from the PDF, 17831 words", "at": "2026-10-02T02:44:56"}
+{"paper": "data-centric-ml/data-quality-and-shift/Unbiased Look at Dataset Bias.md", "status": "ok", "message": "from the PDF, 7016 words", "at": "2026-10-02T02:45:19"}
+{"paper": "data-centric-ml/data-quality-and-shift/“Everyone wants to do the model work, not the data work”. Data Cascades in High-Stakes AI.md", "status": "ok", "message": "from the PDF, 15277 words", "at": "2026-10-02T02:45:32"}
+{"paper": "data-centric-ml/labels-and-annotation/Active Learning Literature Survey.md", "status": "ok", "message": "from the PDF, 22319 words", "at": "2026-10-02T02:48:30"}
+{"paper": "data-centric-ml/labels-and-annotation/Cheap and Fast - But is it Good. Evaluating Non-Expert Annotations for Natural Language Tasks.md", "status": "ok", "message": "from the PDF, 6612 words", "at": "2026-10-02T02:49:08"}
+{"paper": "data-centric-ml/labels-and-annotation/Learning From Crowds.md", "status": "ok", "message": "from the PDF, 10435 words", "at": "2026-10-02T02:51:03"}
+{"paper": "data-centric-ml/labels-and-annotation/Learning from Disagreement. A Survey.md", "status": "ok", "message": "from the PDF, 44961 words", "at": "2026-10-02T02:53:18"}
+{"paper": "data-centric-ml/labels-and-annotation/Maximum Likelihood Estimation of Observer Error-Rates Using the EM Algorithm.md", "status": "ok", "message": "from the PDF, 5961 words", "at": "2026-10-02T02:54:51"}
+{"paper": "data-centric-ml/labels-and-annotation/Survey Article. Inter-Coder Agreement for Computational Linguistics.md", "status": "ok", "message": "from the PDF, 23464 words", "at": "2026-10-02T02:57:27"}
+{"paper": "data-centric-ml/labels-and-annotation/Using Expert Patterns in Assisted Interactive Machine Learning. A Study in Machine Teaching.md", "status": "ok", "message": "from the PDF, 9835 words", "at": "2026-10-02T02:57:50"}
+{"paper": "data-centric-ml/weak-supervision/A Brief Introduction to Weakly Supervised Learning.md", "status": "ok", "message": "from the PDF, 6964 words", "at": "2026-10-02T02:58:22"}
+{"paper": "data-centric-ml/weak-supervision/Training Complex Models with Multi-Task Weak Supervision.md", "status": "ok", "message": "from the PDF, 20212 words", "at": "2026-10-02T03:05:05"}
+{"paper": "deep-learning/architectures/Adaptive Mixtures of Local Experts.md", "status": "ok", "message": "from the PDF, 3473 words", "at": "2026-10-02T03:06:12"}
+{"paper": "deep-learning/architectures/Finding Structure in Time.md", "status": "ok", "message": "from the PDF, 11779 words", "at": "2026-10-02T03:08:00"}
+{"paper": "deep-learning/architectures/ImageNet classification with deep convolutional neural networks.md", "status": "ok", "message": "from the PDF, 5978 words", "at": "2026-10-02T03:08:33"}
+{"paper": "deep-learning/architectures/Long Short-Term Memory.md", "status": "ok", "message": "from the PDF, 18102 words", "at": "2026-10-02T03:13:29"}
+{"paper": "deep-learning/efficiency-and-compression/From Research to Production and Back. Ludicrously Fast Neural Machine Translation.md", "status": "ok", "message": "from the PDF, 5971 words", "at": "2026-10-02T03:14:11"}
+{"paper": "deep-learning/normalization-and-regularization/Dropout. A Simple Way to Prevent Neural Networks from Overfitting.md", "status": "ok", "message": "from the PDF, 13492 words", "at": "2026-10-02T03:15:37"}
+{"paper": "deep-learning/normalization-and-regularization/L2 Regularization versus Batch and Weight Normalization.md", "status": "ok", "message": "from the PDF, 4043 words", "at": "2026-10-02T03:16:42"}
+{"paper": "deep-learning/normalization-and-regularization/Understanding the difficulty of training deep feedforward neural networks.md", "status": "ok", "message": "from the PDF, 5516 words", "at": "2026-10-02T03:17:41"}
+{"paper": "deep-learning/optimizers-and-schedules/Adam. A Method for Stochastic Optimization.md", "status": "ok", "message": "from the PDF, 7785 words", "at": "2026-10-02T03:19:52"}
+{"paper": "deep-learning/optimizers-and-schedules/Adaptive Subgradient Methods for Online Learning and Stochastic Optimization.md", "status": "ok", "message": "from the PDF, 20095 words", "at": "2026-10-02T03:24:24"}
+{"paper": "deep-learning/optimizers-and-schedules/Curriculum learning.md", "status": "ok", "message": "from the PDF, 6079 words", "at": "2026-10-02T03:25:50"}
+{"paper": "deep-learning/theory/Understanding deep learning requires rethinking generalization.md", "status": "ok", "message": "from the PDF, 8765 words", "at": "2026-10-02T03:27:11"}
+{"paper": "experimentation-and-metrics/ab-testing/A B testing intuition busters. common misunderstandings in online controlled experiments.md", "status": "ok", "message": "from the PDF, 8869 words", "at": "2026-10-02T03:27:57"}
+{"paper": "experimentation-and-metrics/ab-testing/Anytime-Valid Linear Models and Regression Adjusted Causal Inference in Randomized Experiments.md", "status": "ok", "message": "from the PDF, 19787 words", "at": "2026-10-02T03:41:45"}
+{"paper": "experimentation-and-metrics/ab-testing/Controlled experiments on the web. survey and practical guide.md", "status": "ok", "message": "from the PDF, 18075 words", "at": "2026-10-02T03:42:50"}
+{"paper": "experimentation-and-metrics/ab-testing/Diagnosing sample ratio mismatch in online controlled experiments. a taxonomy and rules of thumb.md", "status": "ok", "message": "from the PDF, 9488 words", "at": "2026-10-02T03:43:06"}
+{"paper": "experimentation-and-metrics/ab-testing/How A B tests could go wrong. automatic diagnosis of invalid online experiments.md", "status": "ok", "message": "from the PDF, 7785 words", "at": "2026-10-02T03:44:02"}
+{"paper": "experimentation-and-metrics/ab-testing/Online Experimentation at Microsoft.md", "status": "ok", "message": "from the PDF, 10648 words", "at": "2026-10-02T03:44:29"}
+{"paper": "experimentation-and-metrics/ab-testing/Online controlled experiments at large scale.md", "status": "ok", "message": "from the PDF, 9159 words", "at": "2026-10-02T03:44:43"}
+{"paper": "experimentation-and-metrics/ab-testing/Seven rules of thumb for web site experimenters.md", "status": "ok", "message": "from the PDF, 9962 words", "at": "2026-10-02T03:45:17"}
+{"paper": "experimentation-and-metrics/ab-testing/Top challenges from the first practical online controlled experiments summit.md", "status": "ok", "message": "from the PDF, 15548 words", "at": "2026-10-02T03:45:48"}
+{"paper": "experimentation-and-metrics/ab-testing/Trustworthy analysis of online A B tests. pitfalls, challenges and solutions.md", "status": "ok", "message": "from the PDF, 9403 words", "at": "2026-10-02T03:47:02"}
+{"paper": "experimentation-and-metrics/ab-testing/Trustworthy online controlled experiments. five puzzling outcomes explained.md", "status": "ok", "message": "from the PDF, 7989 words", "at": "2026-10-02T03:47:33"}
+{"paper": "experimentation-and-metrics/ab-testing/Why marketplace experimentation is harder than it seems. the role of test-control interference.md", "status": "ok", "message": "from the PDF, 7911 words", "at": "2026-10-02T03:48:13"}
+{"paper": "experimentation-and-metrics/causal-inference/The Churn Dynamics of Young Brands.md", "status": "ok", "message": "from the PDF, 13142 words", "at": "2026-10-02T03:48:56"}
+{"paper": "experimentation-and-metrics/metric-design/A dirty dozen. twelve common metric interpretation pitfalls in online controlled experiments.md", "status": "ok", "message": "from the PDF, 9671 words", "at": "2026-10-02T03:49:27"}
+{"paper": "experimentation-and-metrics/metric-design/Data-driven metric development for online controlled experiments. seven lessons learned.md", "status": "ok", "message": "from the PDF, 11043 words", "at": "2026-10-02T03:50:04"}
+{"paper": "experimentation-and-metrics/metric-design/Deconfounding User Satisfaction Estimation from Response Rate Bias.md", "status": "ok", "message": "from the PDF, 4973 words", "at": "2026-10-02T03:51:13"}
+{"paper": "experimentation-and-metrics/metric-design/Focus on the Long-Term. It's better for Users and Business.md", "status": "ok", "message": "from the PDF, 9990 words", "at": "2026-10-02T03:53:58"}
+{"paper": "experimentation-and-metrics/metric-design/Measuring Metrics.md", "status": "ok", "message": "from the PDF, 8694 words", "at": "2026-10-02T03:54:40"}
+{"paper": "experimentation-and-metrics/variance-reduction/Boosted decision tree regression adjustment for variance reduction in online controlled experiments.md", "status": "ok", "message": "from the PDF, 11611 words", "at": "2026-10-02T03:56:50"}
+{"paper": "experimentation-and-metrics/variance-reduction/Consistent Transformation of Ratio Metrics for Efficient Online Controlled Experiments.md", "status": "ok", "message": "from the PDF, 11499 words", "at": "2026-10-02T03:58:34"}
+{"paper": "experimentation-and-metrics/variance-reduction/Improving the Sensitivity of Online Controlled Experiments. Case Studies at Netflix.md", "status": "ok", "message": "from the PDF, 8353 words", "at": "2026-10-02T03:59:55"}
+{"paper": "experimentation-and-metrics/variance-reduction/Improving the sensitivity of online controlled experiments by utilizing pre-experiment data.md", "status": "ok", "message": "from the PDF, 8497 words", "at": "2026-10-02T04:01:08"}
+{"paper": "generative-models/diffusion/Elucidating the Design Space of Diffusion-Based Generative Models.md", "status": "ok", "message": "from the PDF, 25966 words", "at": "2026-10-02T04:07:56"}
+{"paper": "generative-models/gans-and-vaes/GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium.md", "status": "ok", "message": "from the PDF, 19690 words", "at": "2026-10-02T04:13:59"}
+{"paper": "generative-models/gans-and-vaes/Training Products of Experts by Minimizing Contrastive Divergence.md", "status": "ok", "message": "from the PDF, 11337 words", "at": "2026-10-02T04:15:02"}
+{"paper": "graphs/graph-embeddings/A Review of Relational Machine Learning for Knowledge Graphs.md", "status": "ok", "message": "from the PDF, 21006 words", "at": "2026-10-02T04:16:32"}
+{"paper": "graphs/graph-embeddings/Network Embedding as Matrix Factorization. Unifying DeepWalk, LINE, PTE, and node2vec.md", "status": "ok", "message": "from the PDF, 10327 words", "at": "2026-10-02T04:19:04"}
+{"paper": "graphs/graph-embeddings/Translating Embeddings for Modeling Multi-relational Data.md", "status": "ok", "message": "from the PDF, 6856 words", "at": "2026-10-02T04:19:42"}
+{"paper": "graphs/graph-embeddings/metapath2vec. Scalable Representation Learning for Heterogeneous Networks.md", "status": "ok", "message": "from the PDF, 9586 words", "at": "2026-10-02T04:20:38"}
+{"paper": "graphs/graph-neural-networks/Graph Foundation Models. Challenges, Methods, and Open Questions.md", "status": "ok", "message": "from the PDF, 10098 words", "at": "2026-10-02T04:20:51"}
+{"paper": "graphs/graph-neural-networks/Graph Neural Networks. A Review of Methods and Applications.md", "status": "ok", "message": "from the PDF, 27331 words", "at": "2026-10-02T04:26:15"}
+{"paper": "graphs/graph-neural-networks/GraphSAINT. Graph Sampling Based Inductive Learning Method.md", "status": "ok", "message": "from the PDF, 11148 words", "at": "2026-10-02T04:29:14"}
+{"paper": "interpretability/explainability/Accurate intelligible models with pairwise interactions.md", "status": "ok", "message": "from the PDF, 8744 words", "at": "2026-10-02T04:30:18"}
+{"paper": "interpretability/explainability/Analysis of regression in game theory approach.md", "status": "ok", "message": "from the PDF, 6941 words", "at": "2026-10-02T04:31:23"}
+{"paper": "interpretability/explainability/Counterfactual Explanations without Opening the Black Box. Automated Decisions and the GDPR.md", "status": "ok", "message": "from the PDF, 20325 words", "at": "2026-10-02T04:32:17"}
+{"paper": "interpretability/explainability/Evaluating Feature Importance Estimates.md", "status": "ok", "message": "from the PDF, 9342 words", "at": "2026-10-02T04:33:13"}
+{"paper": "interpretability/mechanistic/In-context Learning and Induction Heads.md", "status": "ok", "message": "from the PDF, 24453 words", "at": "2026-10-02T04:42:24"}
+{"paper": "interpretability/mechanistic/Toy Models of Superposition.md", "status": "ok", "message": "from the PDF, 27200 words", "at": "2026-10-02T04:46:04"}
+{"paper": "llm/architecture/Fishing for Magikarp. Automatically Detecting Under-trained Tokens in Large Language Models.md", "status": "ok", "message": "from the PDF, 9697 words", "at": "2026-10-02T04:47:27"}
+{"paper": "llm/architecture/Language Model Tokenizers Introduce Unfairness Between Languages.md", "status": "ok", "message": "from the PDF, 26096 words", "at": "2026-10-02T04:50:45"}
+{"paper": "llm/architecture/efficient-attention-and-long-context/LongNet. Scaling Transformers to 1,000,000,000 Tokens.md", "status": "ok", "message": "from the PDF, 6244 words", "at": "2026-10-02T04:51:40"}
+{"paper": "llm/behaviour/Large language models are not zero-shot communicators.md", "status": "ok", "message": "from the PDF, 26904 words", "at": "2026-10-02T04:55:37"}
+{"paper": "llm/context/Multi-Component Automatic Context Window Optimization for Personalization in Large Language Models.md", "status": "ok", "message": "from the PDF, 18605 words", "at": "2026-10-02T04:56:37"}
+{"paper": "llm/evaluation/benchmarks/Text-to-SQL Benchmarks are Broken. An In-Depth Analysis of Annotation Errors.md", "status": "ok", "message": "from the PDF, 4842 words", "at": "2026-10-02T04:56:55"}
+{"paper": "llm/evaluation/methods/Decomposing Physician Disagreement in HealthBench.md", "status": "ok", "message": "from the PDF, 6929 words", "at": "2026-10-02T04:57:29"}
+{"paper": "llm/foundation-models/Command A. An Enterprise-Ready Large Language Model.md", "status": "ok", "message": "from the PDF, 32299 words", "at": "2026-10-02T04:59:40"}
+{"paper": "llm/foundation-models/Improving Language Understanding by Generative Pre-Training.md", "status": "ok", "message": "from the PDF, 6690 words", "at": "2026-10-02T05:00:22"}
+{"paper": "llm/foundation-models/Language Models are Unsupervised Multitask Learners.md", "status": "ok", "message": "from the PDF, 15968 words", "at": "2026-10-02T05:01:08"}
+{"paper": "llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.md", "status": "ok", "message": "from the PDF, 4390 words", "at": "2026-10-02T05:02:15"}
+{"paper": "llm/personalization/methods/When does text prediction benefit from additional context. An exploration of contextual signals for.md", "status": "ok", "message": "from the PDF, 6109 words", "at": "2026-10-02T05:03:00"}
+{"paper": "llm/personalization/user-modelling/Evaluating Large Language Models in Theory of Mind Tasks.md", "status": "ok", "message": "from the PDF, 11752 words", "at": "2026-10-02T05:03:15"}
+{"paper": "llm/post-training/rl-for-reasoning/Reinforcement Learning for LLM Post-Training. A Survey.md", "status": "ok", "message": "from the PDF, 62306 words", "at": "2026-10-02T05:14:04"}
+{"paper": "llm/reasoning/How Well Can Reasoning Models Identify and Recover from Unhelpful Thoughts.md", "status": "ok", "message": "from the PDF, 15800 words", "at": "2026-10-02T05:14:29"}
+{"paper": "llm/retrieval-augmented/Towards Agentic RAG with Deep Reasoning. A Survey of RAG-Reasoning Systems in LLMs.md", "status": "ok", "message": "from the PDF, 17339 words", "at": "2026-10-02T05:15:01"}
+{"paper": "llm/safety-and-privacy/Scalable watermarking for identifying large language model outputs.md", "status": "ok", "message": "from the PDF, 10500 words", "at": "2026-10-02T05:15:43"}
+{"paper": "llm/uncertainty-and-hallucination/Detecting hallucinations in large language models using semantic entropy.md", "status": "ok", "message": "from the PDF, 11651 words", "at": "2026-10-02T05:16:18"}
+{"paper": "llm/uncertainty-and-hallucination/Navigating the Grey Area. Expressions of Overconfidence and Uncertainty in.md", "status": "ok", "message": "from the PDF, 9792 words", "at": "2026-10-02T05:16:45"}
+{"paper": "ml-foundations/classical-ml/A Density-Based Algorithm for Discovering Clusters in Large Spatial Databases with Noise.md", "status": "ok", "message": "from the PDF, 5328 words", "at": "2026-10-02T05:17:45"}
+{"paper": "ml-foundations/classical-ml/A Few Useful Things to Know About Machine Learning.md", "status": "ok", "message": "from the PDF, 8149 words", "at": "2026-10-02T05:18:09"}
+{"paper": "ml-foundations/classical-ml/An Introduction to Locally Linear Embedding.md", "status": "ok", "message": "from the PDF, 4047 words", "at": "2026-10-02T05:18:48"}
+{"paper": "ml-foundations/classical-ml/DBSCAN Revisited, Revisited.md", "status": "ok", "message": "from the PDF, 11829 words", "at": "2026-10-02T05:19:12"}
+{"paper": "ml-foundations/classical-ml/Density-Based Clustering Based on Hierarchical Density Estimates.md", "status": "ok", "message": "from the PDF, 6524 words", "at": "2026-10-02T05:20:14"}
+{"paper": "ml-foundations/classical-ml/Do we Need Hundreds of Classifiers to Solve Real World Classification Problems.md", "status": "ok", "message": "from the PDF, 25957 words", "at": "2026-10-02T05:21:34"}
+{"paper": "ml-foundations/classical-ml/Greedy function approximation. A gradient boosting machine..md", "status": "ok", "message": "from the PDF, 16983 words", "at": "2026-10-02T05:30:47"}
+{"paper": "ml-foundations/classical-ml/LightGBM. A Highly Efficient Gradient Boosting Decision Tree.md", "status": "ok", "message": "from the PDF, 6630 words", "at": "2026-10-02T05:32:02"}
+{"paper": "ml-foundations/classical-ml/Random Forests.md", "status": "ok", "message": "from the PDF, 11145 words", "at": "2026-10-02T05:33:39"}
+{"paper": "ml-foundations/classical-ml/SMOTE. Synthetic Minority Over-sampling Technique.md", "status": "ok", "message": "from the PDF, 10699 words", "at": "2026-10-02T05:34:23"}
+{"paper": "ml-foundations/classical-ml/Stochastic Neighbor Embedding.md", "status": "ok", "message": "from the PDF, 3908 words", "at": "2026-10-02T05:35:15"}
+{"paper": "ml-foundations/classical-ml/Support-Vector Networks.md", "status": "ok", "message": "from the PDF, 8567 words", "at": "2026-10-02T05:38:33"}
+{"paper": "ml-foundations/classical-ml/The Optimality of Naive Bayes.md", "status": "ok", "message": "from the PDF, 5274 words", "at": "2026-10-02T05:39:40"}
+{"paper": "ml-foundations/classical-ml/The Use of Multiple Measurements in Taxonomic Problems.md", "status": "ok", "message": "from the PDF, 5417 words", "at": "2026-10-02T05:41:29"}
+{"paper": "ml-foundations/classical-ml/Visualizing Data using t-SNE.md", "status": "ok", "message": "from the PDF, 11922 words", "at": "2026-10-02T05:43:01"}
+{"paper": "ml-foundations/classical-ml/k-means++. The Advantages of Careful Seeding.md", "status": "ok", "message": "from the PDF, 7205 words", "at": "2026-10-02T05:44:13"}
+{"paper": "ml-foundations/evaluation-and-model-selection/A Unified View of Performance Metrics. Translating Threshold Choice into Expected Classification.md", "status": "ok", "message": "from the PDF, 28703 words", "at": "2026-10-02T05:50:00"}
+{"paper": "ml-foundations/evaluation-and-model-selection/A note on using the F-measure for evaluating record linkage algorithms.md", "status": "ok", "message": "from the PDF, 6777 words", "at": "2026-10-02T05:50:35"}
+{"paper": "ml-foundations/evaluation-and-model-selection/Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms.md", "status": "ok", "message": "from the PDF, 11061 words", "at": "2026-10-02T05:53:10"}
+{"paper": "ml-foundations/evaluation-and-model-selection/Random Search for Hyper-Parameter Optimization.md", "status": "ok", "message": "from the PDF, 11264 words", "at": "2026-10-02T05:54:22"}
+{"paper": "ml-foundations/evaluation-and-model-selection/Statistical Comparisons of Classifiers over Multiple Data Sets.md", "status": "ok", "message": "from the PDF, 14764 words", "at": "2026-10-02T05:55:53"}
+{"paper": "ml-foundations/evaluation-and-model-selection/Strictly Proper Scoring Rules, Prediction, and Estimation.md", "status": "ok", "message": "from the PDF, 20726 words", "at": "2026-10-02T05:59:40"}
+{"paper": "ml-foundations/evaluation-and-model-selection/The Precision-Recall Plot Is More Informative than the ROC Plot When Evaluating Binary Classifiers.md", "status": "ok", "message": "from the PDF, 10329 words", "at": "2026-10-02T06:00:12"}
+{"paper": "ml-foundations/evaluation-and-model-selection/The relationship between Precision-Recall and ROC curves.md", "status": "ok", "message": "from the PDF, 4893 words", "at": "2026-10-02T06:00:46"}
+{"paper": "ml-foundations/probabilistic-and-statistics/A Tutorial on Markov Chain Monte-Carlo and Bayesian Modeling.md", "status": "ok", "message": "from the PDF, 40369 words", "at": "2026-10-02T06:07:04"}
+{"paper": "ml-foundations/probabilistic-and-statistics/A simple introduction to Markov Chain Monte–Carlo sampling.md", "status": "ok", "message": "from the PDF, 7841 words", "at": "2026-10-02T06:08:04"}
+{"paper": "ml-foundations/probabilistic-and-statistics/Stan. A Probabilistic Programming Language.md", "status": "ok", "message": "from the PDF, 12649 words", "at": "2026-10-02T06:08:55"}
+{"paper": "ml-foundations/probabilistic-and-statistics/Statistical Modeling. The Two Cultures.md", "status": "ok", "message": "from the PDF, 11939 words", "at": "2026-10-02T06:10:59"}
+{"paper": "ml-foundations/probabilistic-and-statistics/The ASA Statement on p-Values. Context, Process, and Purpose.md", "status": "ok", "message": "from the PDF, 4375 words", "at": "2026-10-02T06:11:12"}
+{"paper": "ml-foundations/probabilistic-and-statistics/The garden of forking paths. Why multiple comparisons can be a problem, even when there is no.md", "status": "ok", "message": "from the PDF, 10183 words", "at": "2026-10-02T06:11:25"}
+{"paper": "ml-foundations/tabular/Accurate predictions on small data with a tabular foundation model.md", "status": "ok", "message": "from the PDF, 17208 words", "at": "2026-10-02T06:12:56"}
+{"paper": "ml-systems/distributed-training/Large Scale Distributed Deep Networks.md", "status": "ok", "message": "from the PDF, 5973 words", "at": "2026-10-02T06:13:26"}
+{"paper": "ml-systems/distributed-training/Scaling Distributed Machine Learning with the Parameter Server.md", "status": "ok", "message": "from the PDF, 11369 words", "at": "2026-10-02T06:14:09"}
+{"paper": "ml-systems/inference-and-serving/Orca. A Distributed Serving System for Transformer-Based Generative Models.md", "status": "ok", "message": "from the PDF, 13468 words", "at": "2026-10-02T06:16:51"}
+{"paper": "ml-systems/production-ml/Data Validation for Machine Learning.md", "status": "ok", "message": "from the PDF, 10942 words", "at": "2026-10-02T06:17:50"}
+{"paper": "ml-systems/production-ml/Hidden Technical Debt in Machine Learning Systems.md", "status": "ok", "message": "from the PDF, 5877 words", "at": "2026-10-02T06:18:24"}
+{"paper": "ml-systems/production-ml/Machine Learning Operations (MLOps). Overview, Definition, and Architecture.md", "status": "ok", "message": "from the PDF, 8288 words", "at": "2026-10-02T06:18:43"}
+{"paper": "ml-systems/production-ml/Machine Learning. The High Interest Credit Card of Technical Debt.md", "status": "ok", "message": "from the PDF, 5751 words", "at": "2026-10-02T06:19:15"}
+{"paper": "ml-systems/production-ml/Rules of Machine Learning. Best Practices for ML Engineering.md", "status": "ok", "message": "from the PDF, 10851 words", "at": "2026-10-02T06:19:31"}
+{"paper": "ml-systems/production-ml/Software Engineering for Machine Learning. A Case Study.md", "status": "ok", "message": "from the PDF, 9414 words", "at": "2026-10-02T06:19:45"}
+{"paper": "ml-systems/production-ml/Towards ML Engineering. A Brief History Of TensorFlow Extended (TFX).md", "status": "ok", "message": "from the PDF, 7901 words", "at": "2026-10-02T06:19:58"}
+{"paper": "ml-systems/production-ml/What’s your ML test score. A rubric for ML production systems.md", "status": "ok", "message": "from the PDF, 2590 words", "at": "2026-10-02T06:20:07"}
+{"paper": "nlp/generation-metrics/Bleu. a Method for Automatic Evaluation of Machine Translation.md", "status": "ok", "message": "from the PDF, 4642 words", "at": "2026-10-02T06:20:39"}
+{"paper": "nlp/generation-metrics/ROUGE. A Package for Automatic Evaluation of Summaries.md", "status": "ok", "message": "from the PDF, 5612 words", "at": "2026-10-02T06:21:40"}
+{"paper": "nlp/tasks-and-methods/Boilerplate detection using shallow text features.md", "status": "ok", "message": "from the PDF, 9669 words", "at": "2026-10-02T06:22:17"}
+{"paper": "nlp/tasks-and-methods/Climbing towards NLU. On Meaning, Form, and Understanding in the Age of Data.md", "status": "ok", "message": "from the PDF, 10571 words", "at": "2026-10-02T06:22:54"}
+{"paper": "nlp/tasks-and-methods/Extreme Multi-label Loss Functions for Recommendation, Tagging, Ranking & Other Missing Label.md", "status": "ok", "message": "from the PDF, 10032 words", "at": "2026-10-02T06:24:49"}
+{"paper": "nlp/tasks-and-methods/LexRank. Graph-based Lexical Centrality as Salience in Text Summarization.md", "status": "ok", "message": "from the PDF, 10454 words", "at": "2026-10-02T06:25:44"}
+{"paper": "nlp/tasks-and-methods/REBEL. Relation Extraction By End-to-end Language generation.md", "status": "ok", "message": "from the PDF, 8086 words", "at": "2026-10-02T06:26:55"}
+{"paper": "nlp/tasks-and-methods/SQuAD. 100,000+ Questions for Machine Comprehension of Text.md", "status": "ok", "message": "from the PDF, 6631 words", "at": "2026-10-02T06:27:33"}
+{"paper": "nlp/tasks-and-methods/Scaling to Very Very Large Corpora for Natural Language Disambiguation.md", "status": "ok", "message": "from the PDF, 4253 words", "at": "2026-10-02T06:27:46"}
+{"paper": "nlp/tasks-and-methods/TextRank. Bringing Order into Text.md", "status": "ok", "message": "from the PDF, 6136 words", "at": "2026-10-02T06:28:19"}
+{"paper": "recommender-systems/collaborative-filtering/BPR. Bayesian Personalized Ranking from Implicit Feedback.md", "status": "ok", "message": "from the PDF, 6848 words", "at": "2026-10-02T06:30:37"}
+{"paper": "recommender-systems/collaborative-filtering/Beyond Globally Optimal. Focused Learning for Improved Recommendations.md", "status": "ok", "message": "from the PDF, 9479 words", "at": "2026-10-02T06:31:37"}
+{"paper": "recommender-systems/collaborative-filtering/Collaborative Filtering for Implicit Feedback Datasets.md", "status": "ok", "message": "from the PDF, 8140 words", "at": "2026-10-02T06:33:30"}
+{"paper": "recommender-systems/collaborative-filtering/Factorization Machines.md", "status": "ok", "message": "from the PDF, 5839 words", "at": "2026-10-02T06:35:01"}
+{"paper": "recommender-systems/collaborative-filtering/The BellKor Solution to the Netflix Grand Prize.md", "status": "ok", "message": "from the PDF, 9634 words", "at": "2026-10-02T06:36:28"}
+{"paper": "recommender-systems/deep-and-sequential/Deep Neural Networks for YouTube Recommendations.md", "status": "ok", "message": "from the PDF, 5872 words", "at": "2026-10-02T06:37:13"}
+{"paper": "recommender-systems/deep-and-sequential/Modeling Task Relationships in Multi-task Learning with Multi-gate Mixture-of-Experts.md", "status": "ok", "message": "from the PDF, 8252 words", "at": "2026-10-02T06:38:08"}
+{"paper": "recommender-systems/deep-and-sequential/Progressive Layered Extraction (PLE). A Novel Multi-Task Learning Model for Personalized.md", "status": "ok", "message": "from the PDF, 7960 words", "at": "2026-10-02T06:39:07"}
+{"paper": "recommender-systems/deep-and-sequential/Recommending What Video to Watch Next. A Multitask Ranking System.md", "status": "ok", "message": "from the PDF, 8120 words", "at": "2026-10-02T06:39:44"}
+{"paper": "recommender-systems/deep-and-sequential/Sampling-Bias-Corrected Neural Modeling for Large Corpus Item Recommendations.md", "status": "ok", "message": "from the PDF, 8834 words", "at": "2026-10-02T06:41:02"}
+{"paper": "recommender-systems/deep-and-sequential/Transformers4Rec. Bridging the Gap between NLP and Sequential Session-Based Recommendation.md", "status": "ok", "message": "from the PDF, 10523 words", "at": "2026-10-02T06:41:36"}
+{"paper": "recommender-systems/evaluation/A Survey of Accuracy Evaluation Metrics of Recommendation Tasks.md", "status": "ok", "message": "from the PDF, 14186 words", "at": "2026-10-02T06:43:03"}
+{"paper": "recommender-systems/evaluation/Are We Really Making Much Progress. A Worrying Analysis of Recent Neural Recommendation Approaches.md", "status": "ok", "message": "from the PDF, 9369 words", "at": "2026-10-02T06:43:40"}
+{"paper": "recommender-systems/evaluation/Diversity, Serendipity, Novelty, and Coverage. A Survey and Empirical Analysis of Beyond-Accuracy.md", "status": "ok", "message": "from the PDF, 22590 words", "at": "2026-10-02T06:44:52"}
+{"paper": "recommender-systems/evaluation/Effects of Position Bias on Click-Based Recommender Evaluation.md", "status": "ok", "message": "from the PDF, 3678 words", "at": "2026-10-02T06:45:05"}
+{"paper": "recommender-systems/evaluation/Improving Accountability in Recommender Systems Research Through Reproducibility.md", "status": "ok", "message": "from the PDF, 17692 words", "at": "2026-10-02T06:45:59"}
+{"paper": "recommender-systems/evaluation/On Sampled Metrics for Item Recommendation.md", "status": "ok", "message": "from the PDF, 3894 words", "at": "2026-10-02T06:48:53"}
+{"paper": "recommender-systems/evaluation/Setting Goals and Choosing Metrics for Recommender System Evaluations.md", "status": "ok", "message": "from the PDF, 7194 words", "at": "2026-10-02T06:49:47"}
+{"paper": "recommender-systems/evaluation/Towards Understanding The Gaps of Offline And Online Evaluation Metrics. Impact of Series vs. Movie.md", "status": "ok", "message": "from the PDF, 2505 words", "at": "2026-10-02T06:50:28"}
+{"paper": "recommender-systems/industrial-systems/Calendar-Aware Proactive Email Recommendation.md", "status": "ok", "message": "from the PDF, 10758 words", "at": "2026-10-02T06:51:00"}
+{"paper": "recommender-systems/industrial-systems/Co-optimize Content Generation and Consumption in a Large Scale Video Recommendation System.md", "status": "ok", "message": "from the PDF, 2583 words", "at": "2026-10-02T06:51:26"}
+{"paper": "recommender-systems/industrial-systems/Improving Recommendation Quality in Google Drive.md", "status": "ok", "message": "from the PDF, 8267 words", "at": "2026-10-02T06:51:59"}
+{"paper": "recommender-systems/industrial-systems/Quick Access. Building a Smart Experience for Google Drive.md", "status": "ok", "message": "from the PDF, 7855 words", "at": "2026-10-02T06:52:14"}
+{"paper": "recommender-systems/industrial-systems/Short-form Video Needs Long-term Interests. An Industrial Solution for Serving Large User Sequence.md", "status": "ok", "message": "from the PDF, 2272 words", "at": "2026-10-02T06:52:25"}
+{"paper": "reinforcement-learning/bandits/Deploying an Artificial Intelligence System for COVID-19 Testing at the Greek Border.md", "status": "ok", "message": "from the PDF, 6396 words", "at": "2026-10-02T06:52:41"}
+{"paper": "reinforcement-learning/deep-rl/Human-level control through deep reinforcement learning.md", "status": "ok", "message": "from the PDF, 8964 words", "at": "2026-10-02T06:53:44"}
+{"paper": "reinforcement-learning/deep-rl/Proximal Policy Optimization Algorithms.md", "status": "ok", "message": "from the PDF, 4777 words", "at": "2026-10-02T06:55:14"}
+{"paper": "reinforcement-learning/deep-rl/Reward is enough.md", "status": "ok", "message": "from the PDF, 10327 words", "at": "2026-10-02T06:55:29"}
+{"paper": "reinforcement-learning/deep-rl/Welcome to the Era of Experience.md", "status": "ok", "message": "from the PDF, 6405 words", "at": "2026-10-02T06:56:16"}
+{"paper": "reinforcement-learning/world-models/A Path Towards Autonomous Machine Intelligence.md", "status": "ok", "message": "from the PDF, 27287 words", "at": "2026-10-02T07:03:17"}
+{"paper": "reinforcement-learning/world-models/Benchmarking World-Model Learning with Environment-Level Queries.md", "status": "ok", "message": "from the PDF, 23776 words", "at": "2026-10-02T07:04:50"}
+{"paper": "representation-learning/embeddings/A Simple but Tough-to-Beat Baseline for Sentence Embeddings.md", "status": "ok", "message": "from the PDF, 10146 words", "at": "2026-10-02T07:06:42"}
+{"paper": "representation-learning/embeddings/GloVe. Global Vectors for Word Representation.md", "status": "ok", "message": "from the PDF, 8323 words", "at": "2026-10-02T07:08:09"}
+{"paper": "representation-learning/embeddings/In Defense of the Triplet Loss for Person Re-Identification.md", "status": "ok", "message": "from the PDF, 12653 words", "at": "2026-10-02T07:09:19"}
+{"paper": "representation-learning/embeddings/Joint Word and Entity Embeddings for Entity Retrieval from a Knowledge Graph.md", "status": "ok", "message": "from the PDF, 7266 words", "at": "2026-10-02T07:10:35"}
+{"paper": "representation-learning/embeddings/Linguistic Regularities in Sparse and Explicit Word Representations.md", "status": "ok", "message": "from the PDF, 7091 words", "at": "2026-10-02T07:11:14"}
+{"paper": "representation-learning/embeddings/Metric Learning. A Survey.md", "status": "ok", "message": "from the PDF, 24430 words", "at": "2026-10-02T07:15:09"}
+{"paper": "representation-learning/embeddings/SemAxis. A Lightweight Framework to Characterize Domain-Specific Word Semantics Beyond Sentiment.md", "status": "ok", "message": "from the PDF, 7468 words", "at": "2026-10-02T07:15:52"}
+{"paper": "representation-learning/embeddings/Unsupervised Random Walk Sentence Embeddings. A Strong but Simple Baseline.md", "status": "ok", "message": "from the PDF, 7587 words", "at": "2026-10-02T07:17:20"}
+{"paper": "research-practice/Algorithm for writing a scientific manuscript.md", "status": "ok", "message": "from the PDF, 4487 words", "at": "2026-10-02T07:17:32"}
+{"paper": "research-practice/Deep Learning. A Critical Appraisal.md", "status": "ok", "message": "from the PDF, 11178 words", "at": "2026-10-02T07:17:48"}
+{"paper": "research-practice/How to read a paper.md", "status": "ok", "message": "from the PDF, 1733 words", "at": "2026-10-02T07:17:56"}
+{"paper": "research-practice/Machine Learning Research Communication via Illustrated and Interactive Web Articles.md", "status": "ok", "message": "from the PDF, 4002 words", "at": "2026-10-02T07:18:35"}
+{"paper": "research-practice/Machine Learning that Matters.md", "status": "ok", "message": "from the PDF, 4503 words", "at": "2026-10-02T07:18:46"}
+{"paper": "research-practice/Proof by Experimentation. Towards Better IR Research.md", "status": "ok", "message": "from the PDF, 1599 words", "at": "2026-10-02T07:18:55"}
+{"paper": "research-practice/Recommended reading for IR research students.md", "status": "ok", "message": "from the PDF, 12413 words", "at": "2026-10-02T07:19:07"}
+{"paper": "research-practice/Why Most Published Research Findings Are False.md", "status": "ok", "message": "from the PDF, 6425 words", "at": "2026-10-02T07:19:22"}
+{"paper": "search-and-ranking/ads/Ad Click Prediction. a View from the Trenches.md", "status": "ok", "message": "from the PDF, 9282 words", "at": "2026-10-02T07:20:14"}
+{"paper": "search-and-ranking/ads/Learning Optimal Personalised Reservation Prices in Impression Ad Auctions with Mixture Density.md", "status": "ok", "message": "from the PDF, 9876 words", "at": "2026-10-02T07:21:48"}
+{"paper": "search-and-ranking/ads/Practical Lessons from Predicting Clicks on Ads at Facebook.md", "status": "ok", "message": "from the PDF, 7271 words", "at": "2026-10-02T07:22:35"}
+{"paper": "search-and-ranking/ads/Методы персонализации показа объявлений в рекламной сети.md", "status": "ok", "message": "from the PDF, 4152 words", "at": "2026-10-02T07:23:09"}
+{"paper": "search-and-ranking/click-models-and-unbiased-ltr/A Dynamic Bayesian Network Click Model for Web Search Ranking.md", "status": "ok", "message": "from the PDF, 9532 words", "at": "2026-10-02T07:24:06"}
+{"paper": "search-and-ranking/click-models-and-unbiased-ltr/An Experimental Comparison of Click Position-Bias Models.md", "status": "ok", "message": "from the PDF, 6178 words", "at": "2026-10-02T07:24:52"}
+{"paper": "search-and-ranking/click-models-and-unbiased-ltr/Optimizing Search Engines using Clickthrough Data.md", "status": "ok", "message": "from the PDF, 8904 words", "at": "2026-10-02T07:26:08"}
+{"paper": "search-and-ranking/click-models-and-unbiased-ltr/Unbiased Learning to Rank. On Recent Advances and Practical Applications.md", "status": "ok", "message": "from the PDF, 4461 words", "at": "2026-10-02T07:26:21"}
+{"paper": "search-and-ranking/dense-retrieval/DiskANN. Fast Accurate Billion-point Nearest Neighbor Search on a Single Node.md", "status": "ok", "message": "from the PDF, 7625 words", "at": "2026-10-02T07:27:19"}
+{"paper": "search-and-ranking/dense-retrieval/Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World.md", "status": "ok", "message": "from the PDF, 10642 words", "at": "2026-10-02T07:27:53"}
+{"paper": "search-and-ranking/dense-retrieval/Embedding based retrieval for long tail search queries in ecommerce.md", "status": "ok", "message": "from the PDF, 2668 words", "at": "2026-10-02T07:28:03"}
+{"paper": "search-and-ranking/evaluation/Cumulated Gain-Based Evaluation of IR Techniques.md", "status": "ok", "message": "from the PDF, 11561 words", "at": "2026-10-02T07:28:50"}
+{"paper": "search-and-ranking/evaluation/Evaluation measures for preference judgments.md", "status": "ok", "message": "from the PDF, 2010 words", "at": "2026-10-02T07:29:16"}
+{"paper": "search-and-ranking/evaluation/Expected Reciprocal Rank for Graded Relevance.md", "status": "ok", "message": "from the PDF, 9912 words", "at": "2026-10-02T07:30:04"}
+{"paper": "search-and-ranking/evaluation/Information Retrieval System Evaluation. Effort, Sensitivity, and Reliability.md", "status": "ok", "message": "from the PDF, 7497 words", "at": "2026-10-02T07:30:16"}
+{"paper": "search-and-ranking/evaluation/Large-scale validation and analysis of interleaved search evaluation.md", "status": "ok", "message": "from the PDF, 24583 words", "at": "2026-10-02T07:32:03"}
+{"paper": "search-and-ranking/evaluation/Predicting Search Satisfaction Metrics with Interleaved Comparisons.md", "status": "ok", "message": "from the PDF, 12593 words", "at": "2026-10-02T07:33:44"}
+{"paper": "search-and-ranking/evaluation/Search Snippet Evaluation at Yandex. Lessons Learned and Future Directions.md", "status": "ok", "message": "from the PDF, 5252 words", "at": "2026-10-02T07:34:02"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/BitFunnel. Revisiting Signatures for Search.md", "status": "ok", "message": "from the PDF, 9645 words", "at": "2026-10-02T07:34:53"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/Efficient Query Evaluation using a Two-Level Retrieval Process (WAND).md", "status": "ok", "message": "from the PDF, 8666 words", "at": "2026-10-02T07:35:34"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/Efficient set intersection for inverted indexing.md", "status": "ok", "message": "from the PDF, 13801 words", "at": "2026-10-02T07:36:23"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/Reciprocal rank fusion outperforms condorcet and individual rank learning methods.md", "status": "ok", "message": "from the PDF, 1884 words", "at": "2026-10-02T07:36:52"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/Term Frequency Normalisation Tuning for BM25 and DFR Models.md", "status": "ok", "message": "from the PDF, 7070 words", "at": "2026-10-02T07:37:49"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/The Probabilistic Relevance Framework. BM25 and Beyond.md", "status": "ok", "message": "from the PDF, 17007 words", "at": "2026-10-02T07:40:07"}
+{"paper": "search-and-ranking/indexing-and-classical-ir/The Use of MMR, Diversity-Based Reranking for Reordering Documents and Producing Summaries.md", "status": "ok", "message": "from the PDF, 8849 words", "at": "2026-10-02T07:41:41"}
+{"paper": "search-and-ranking/learning-to-rank/Accuracy at the Top.md", "status": "ok", "message": "from the PDF, 7617 words", "at": "2026-10-02T07:43:09"}
+{"paper": "search-and-ranking/learning-to-rank/Are Neural Rankers still Outperformed by Gradient Boosted Decision Trees.md", "status": "ok", "message": "from the PDF, 9921 words", "at": "2026-10-02T07:44:05"}
+{"paper": "search-and-ranking/learning-to-rank/CatBoost. unbiased boosting with categorical features.md", "status": "ok", "message": "from the PDF, 14913 words", "at": "2026-10-02T07:47:11"}
+{"paper": "search-and-ranking/learning-to-rank/From RankNet to LambdaRank to LambdaMART. An Overview.md", "status": "ok", "message": "from the PDF, 7478 words", "at": "2026-10-02T07:48:44"}
+{"paper": "search-and-ranking/learning-to-rank/Learning to Rank using Gradient Descent (RankNet).md", "status": "ok", "message": "from the PDF, 6556 words", "at": "2026-10-02T07:49:41"}
+{"paper": "search-and-ranking/learning-to-rank/The LambdaLoss Framework for Ranking Metric Optimization.md", "status": "ok", "message": "from the PDF, 9458 words", "at": "2026-10-02T07:51:40"}
+{"paper": "search-and-ranking/learning-to-rank/Winning The Transfer Learning Track of Yahoo!’s Learning To Rank Challenge with.md", "status": "ok", "message": "from the PDF, 6047 words", "at": "2026-10-02T07:52:57"}
+{"paper": "search-and-ranking/learning-to-rank/Yahoo! Learning to Rank Challenge Overview.md", "status": "ok", "message": "from the PDF, 9699 words", "at": "2026-10-02T07:53:43"}
+{"paper": "search-and-ranking/neural-ranking/A Latent Semantic Model with Convolutional-Pooling Structure for Information Retrieval.md", "status": "ok", "message": "from the PDF, 9707 words", "at": "2026-10-02T07:54:38"}
+{"paper": "search-and-ranking/neural-ranking/An Introduction to Neural Information Retrieval t.md", "status": "ok", "message": "from the PDF, 35190 words", "at": "2026-10-02T07:57:58"}
+{"paper": "search-and-ranking/neural-ranking/Learning deep structured semantic models for web search using clickthrough data.md", "status": "ok", "message": "from the PDF, 7242 words", "at": "2026-10-02T07:58:45"}
+{"paper": "search-and-ranking/neural-ranking/The Neural Hype, Justiﬁed! A Recantation.md", "status": "ok", "message": "from the PDF, 2552 words", "at": "2026-10-02T07:58:56"}
+{"paper": "search-and-ranking/search-systems/Anatomy of a Privacy-Safe Large-Scale Information Extraction System Over Email.md", "status": "ok", "message": "from the PDF, 9424 words", "at": "2026-10-02T07:59:10"}
+{"paper": "search-and-ranking/search-systems/Assigning people to tasks identified in email. The EPA dataset for addressee tagging for detected.md", "status": "ok", "message": "from the PDF, 3435 words", "at": "2026-10-02T07:59:22"}
+{"paper": "search-and-ranking/search-systems/Beyond Ranking. Optimizing Whole-Page Presentation.md", "status": "ok", "message": "from the PDF, 9716 words", "at": "2026-10-02T08:00:12"}
+{"paper": "search-and-ranking/search-systems/Improving Cloud Storage Search with User Activity.md", "status": "ok", "message": "from the PDF, 9246 words", "at": "2026-10-02T08:01:04"}
+{"paper": "search-and-ranking/search-systems/Introducing the Enron Corpus.md", "status": "ok", "message": "from the PDF, 967 words", "at": "2026-10-02T08:01:14"}
+{"paper": "search-and-ranking/search-systems/Privacy-Aware Personalized Entity Representations for Improved User.md", "status": "ok", "message": "from the PDF, 8353 words", "at": "2026-10-02T08:02:00"}
+{"paper": "search-and-ranking/search-systems/Ranking Relevance in Yahoo Search.md", "status": "ok", "message": "from the PDF, 11661 words", "at": "2026-10-02T08:03:25"}
+{"paper": "search-and-ranking/search-systems/The Anatomy of a Large-Scale Hypertextual Web Search Engine.md", "status": "ok", "message": "from the PDF, 7022 words", "at": "2026-10-02T08:04:41"}
+{"paper": "search-and-ranking/search-systems/The Lifetime of Email Messages. A Large-Scale Analysis of Email Revisitation.md", "status": "ok", "message": "from the PDF, 9551 words", "at": "2026-10-02T08:04:59"}
+{"paper": "search-and-ranking/search-systems/Toward Activity Discovery in the Personal Web.md", "status": "ok", "message": "from the PDF, 9966 words", "at": "2026-10-02T08:06:45"}
+{"paper": "trustworthy-ml/ai-safety/Failure Modes in Machine Learning Systems.md", "status": "ok", "message": "from the PDF, 4430 words", "at": "2026-10-02T08:07:04"}
+{"paper": "trustworthy-ml/ai-safety/International AI Safety Report 2026.md", "status": "ok", "message": "from the PDF, 111213 words; equation model failed, equations are raw text", "at": "2026-10-02T08:39:13"}
+{"paper": "trustworthy-ml/fairness-and-bias/Fairness Through Awareness.md", "status": "ok", "message": "from the PDF, 12979 words", "at": "2026-10-02T08:40:45"}
+{"paper": "trustworthy-ml/fairness-and-bias/Gender Shades. Intersectional Accuracy Disparities in Commercial Gender Classification.md", "status": "ok", "message": "from the PDF, 8891 words", "at": "2026-10-02T08:41:10"}
+{"paper": "trustworthy-ml/fairness-and-bias/Semantics derived automatically from language corpora contain human-like biases.md", "status": "ok", "message": "from the PDF, 10131 words", "at": "2026-10-02T08:41:36"}
+{"paper": "trustworthy-ml/privacy-and-federated/Calibrating Noise to Sensitivity in Private Data Analysis.md", "status": "ok", "message": "from the PDF, 11021 words", "at": "2026-10-02T08:43:15"}
+{"paper": "trustworthy-ml/privacy-and-federated/Practical Secure Aggregation for Privacy-Preserving Machine Learning.md", "status": "ok", "message": "from the PDF, 17776 words", "at": "2026-10-02T08:45:03"}
+{"paper": "trustworthy-ml/privacy-and-federated/The Algorithmic Foundations of Differential Privacy.md", "status": "ok", "message": "from the PDF, 98916 words", "at": "2026-10-02T08:59:32"}
+{"paper": "vision-and-multimodal/speech-and-audio/Leveraging tropical reef, bird and unrelated sounds for superior transfer learning in marine.md", "status": "ok", "message": "from the PDF, 11261 words", "at": "2026-10-02T09:00:28"}
+{"paper": "vision-and-multimodal/speech-and-audio/Performance MIDI-to-score conversion by neural beat tracking.md", "status": "ok", "message": "from the PDF, 6504 words", "at": "2026-10-02T09:01:02"}
+{"paper": "vision-and-multimodal/vision/Image quality assessment. from error visibility to structural similarity.md", "status": "ok", "message": "from the PDF, 9850 words", "at": "2026-10-02T09:02:18"}
+{"paper": "vision-and-multimodal/vision-language/From image descriptions to visual denotations. New similarity metrics for semantic inference over.md", "status": "ok", "message": "from the PDF, 9516 words", "at": "2026-10-02T09:03:38"}
+{"paper": "vision-and-multimodal/vision-language/Sigmoid Loss for Language Image Pre-Training.md", "status": "ok", "message": "from the PDF, 11934 words", "at": "2026-10-02T09:04:29"}
+{"paper": "ai-and-society/Canaries in the Coal Mine. Six Facts about the Recent Employment Effects of Artificial Intelligence.md", "status": "failed", "message": "RuntimeError: pdf-to-markdown: ['  warnings.warn(']", "at": "2026-10-02T09:16:50"}
+{"paper": "ai-and-society/Canaries in the Coal Mine. Six Facts about the Recent Employment Effects of Artificial Intelligence.md", "status": "ok", "message": "from the PDF, 11285 words", "at": "2026-10-02T09:19:41"}

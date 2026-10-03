@@ -1,0 +1,178 @@
+267	Defeating Prompt Injections by Design.md
+30	Fishing for Magikarp. Automatically Detecting Under-tra
+27	The relationship between Precision-Recall and ROC curve
+14	Efficient set intersection for inverted indexing.md
+13	LexRank. Graph-based Lexical Centrality as Salience in 
+12	Text-to-SQL Benchmarks are Broken. An In-Depth Analysis
+12	Prefix sums and their applications.md
+11	Scaling to Very Very Large Corpora for Natural Language
+11	A Tutorial on Markov Chain Monte-Carlo and Bayesian Mod
+9	HyperLogLog in Practice. Algorithmic Engineering of a S
+8	Long Short-Term Memory.md
+7	Bleu. a Method for Automatic Evaluation of Machine Tran
+6	Practical Secure Aggregation for Privacy-Preserving Mac
+6	HyperLogLog. the analysis of a near-optimal cardinality
+6	Accurate intelligible models with pairwise interactions
+5	The power of two random choices. a survey of tech-nique
+5	GraphSAINT. Graph Sampling Based Inductive Learning Met
+4	metapath2vec. Scalable Representation Learning for Hete
+4	Skip lists. a probabilistic alternative to balanced tre
+4	Predicting Search Satisfaction Metrics with Interleaved
+4	Learning Optimal Personalised Reservation Prices in Imp
+4	Improving the sensitivity of online controlled experime
+3	Yahoo! Learning to Rank Challenge Overview.md
+3	Proximal Policy Optimization Algorithms.md
+3	Large-scale validation and analysis of interleaved sear
+3	L2 Regularization versus Batch and Weight Normalization
+3	Greedy function approximation. A gradient boosting mach
+3	DBSCAN Revisited, Revisited.md
+3	Adaptive Subgradient Methods for Online Learning and St
+3	Ad Click Prediction. a View from the Trenches.md
+2	Winning The Transfer Learning Track of Yahoo!’s Learnin
+2	Training Complex Models with Multi-Task Weak Supervisio
+2	Toy Models of Superposition.md
+2	The garden of forking paths. Why multiple comparisons c
+2	Performance MIDI-to-score conversion by neural beat tra
+2	Language Model Tokenizers Introduce Unfairness Between 
+2	How Well Can Reasoning Models Identify and Recover from
+2	GANs Trained by a Two Time-Scale Update Rule Converge t
+2	From Research to Production and Back. Ludicrously Fast 
+2	Diversity, Serendipity, Novelty, and Coverage. A Survey
+2	BitFunnel. Revisiting Signatures for Search.md
+2	Bigtable. A Distributed Storage System for Structured D
+2	Beyond Ranking. Optimizing Whole-Page Presentation.md
+2	Adam. A Method for Stochastic Optimization.md
+1	Why Functional Programming Matters.md
+1	Visualizing Data using t-SNE.md
+1	Unsupervised Random Walk Sentence Embeddings. A Strong 
+1	Stochastic Neighbor Embedding.md
+1	Spanner. Google's Globally-Distributed Database.md
+1	Scalable watermarking for identifying large language mo
+1	SQuAD. 100,000+ Questions for Machine Comprehension of 
+1	SMOTE. Synthetic Minority Over-sampling Technique.md
+1	REBEL. Relation Extraction By End-to-end Language gener
+1	Metric Learning. A Survey.md
+1	Machine Learning. The High Interest Credit Card of Tech
+1	In-context Learning and Induction Heads.md
+1	Improving the Sensitivity of Online Controlled Experime
+1	Image quality assessment. from error visibility to stru
+1	Human-level control through deep reinforcement learning
+1	Graph Neural Networks. A Review of Methods and Applicat
+1	From image descriptions to visual denotations. New simi
+1	From RankNet to LambdaRank to LambdaMART. An Overview.m
+1	Focus on the Long-Term. It's better for Users and Busin
+1	Deep Neural Networks for YouTube Recommendations.md
+1	Boilerplate detection using shallow text features.md
+1	Benchmarking World-Model Learning with Environment-Leve
+1	A note on using the F-measure for evaluating record lin
+1	A Path Towards Autonomous Machine Intelligence.md
+0	“Everyone wants to do the model work, not the data work
+0	Методы персонализации показа объявлений в рекламной с
+0	Will You Accept an Imperfect AI. - Exploring Designs fo
+0	Why Most Published Research Findings Are False.md
+0	When does text prediction benefit from additional conte
+0	What’s your ML test score. A rubric for ML production s
+0	Welcome to the Era of Experience.md
+0	We Won't Be Missed. Work and Growth in the Era of AGI.m
+0	Using Expert Patterns in Assisted Interactive Machine L
+0	Understanding the difficulty of training deep feedforwa
+0	Unbiased Learning to Rank. On Recent Advances and Pract
+0	Trustworthy online controlled experiments. five puzzlin
+0	Transformers4Rec. Bridging the Gap between NLP and Sequ
+0	Training Products of Experts by Minimizing Contrastive 
+0	Towards Understanding The Gaps of Offline And Online Ev
+0	Toward Activity Discovery in the Personal Web.md
+0	The Use of Multiple Measurements in Taxonomic Problems.
+0	The Use of MMR, Diversity-Based Reranking for Reorderin
+0	The Unreasonable Effectiveness of Data.md
+0	The Precision-Recall Plot Is More Informative than the 
+0	The Optimality of Naive Bayes.md
+0	The Neural Hype, Justiﬁed! A Recantation.md
+0	The Lifetime of Email Messages. A Large-Scale Analysis 
+0	The Google File System.md
+0	The Churn Dynamics of Young Brands.md
+0	The Chubby lock service for loosely-coupled distributed
+0	The BiGGen Bench. A Principled Benchmark for Fine-grain
+0	The BellKor Solution to the Netflix Grand Prize.md
+0	The ASA Statement on p-Values. Context, Process, and Pu
+0	TextRank. Bringing Order into Text.md
+0	Text Data Augmentation for Deep Learning.md
+0	Term Frequency Normalisation Tuning for BM25 and DFR Mo
+0	Software Engineering for Machine Learning. A Case Study
+0	Short-form Video Needs Long-term Interests. An Industri
+0	Setting Goals and Choosing Metrics for Recommender Syst
+0	SemAxis. A Lightweight Framework to Characterize Domain
+0	Search Snippet Evaluation at Yandex. Lessons Learned an
+0	Scaling Memcache at Facebook.md
+0	Rules of Machine Learning. Best Practices for ML Engine
+0	Reward is enough.md
+0	Recommended reading for IR research students.md
+0	Reciprocal rank fusion outperforms condorcet and indivi
+0	Ranking Relevance in Yahoo Search.md
+0	Quick Access. Building a Smart Experience for Google Dr
+0	Proof by Experimentation. Towards Better IR Research.md
+0	Privacy-Aware Personalized Entity Representations for I
+0	Online Experimentation at Microsoft.md
+0	On Sampled Metrics for Item Recommendation.md
+0	Navigating the Grey Area. Expressions of Overconfidence
+0	Multi-Component Automatic Context Window Optimization f
+0	Meta-Learning for Cold-Start Personalization in Prompt-
+0	MemGPT. Towards LLMs as Operating Systems.md
+0	Machine Learning that Matters.md
+0	Machine Learning Research Communication via Illustrated
+0	LongNet. Scaling Transformers to 1,000,000,000 Tokens.m
+0	Linguistic Regularities in Sparse and Explicit Word Rep
+0	Leveraging tropical reef, bird and unrelated sounds for
+0	Learning deep structured semantic models for web search
+0	Large language models are not zero-shot communicators.m
+0	Language Models are Unsupervised Multitask Learners.md
+0	Joint Word and Entity Embeddings for Entity Retrieval f
+0	Introducing the Enron Corpus.md
+0	Information Retrieval System Evaluation. Effort, Sensit
+0	Improving Recommendation Quality in Google Drive.md
+0	Improving Language Understanding by Generative Pre-Trai
+0	Improving Cloud Storage Search with User Activity.md
+0	Improving Accountability in Recommender Systems Researc
+0	ImageNet classification with deep convolutional neural 
+0	How to read a paper.md
+0	How Complex Systems Fail.md
+0	Hidden Technical Debt in Machine Learning Systems.md
+0	Guidelines for Human-AI Interaction.md
+0	Graph Foundation Models. Challenges, Methods, and Open 
+0	Gender Differences in Mate Selection. Evidence From a S
+0	Finding Structure in Time.md
+0	Failure Modes in Machine Learning Systems.md
+0	Extreme Multi-label Loss Functions for Recommendation, 
+0	Evaluation measures for preference judgments.md
+0	Evaluating Feature Importance Estimates.md
+0	Embedding based retrieval for long tail search queries 
+0	Effects of Position Bias on Click-Based Recommender Eva
+0	Dropout. A Simple Way to Prevent Neural Networks from O
+0	Detecting hallucinations in large language models using
+0	Deploying an Artificial Intelligence System for COVID-1
+0	Deep Learning. A Critical Appraisal.md
+0	Deconfounding User Satisfaction Estimation from Respons
+0	Decomposing Physician Disagreement in HealthBench.md
+0	Curriculum learning.md
+0	Command A. An Enterprise-Ready Large Language Model.md
+0	Co-optimize Content Generation and Consumption in a Lar
+0	Climbing towards NLU. On Meaning, Form, and Understandi
+0	Calendar-Aware Proactive Email Recommendation.md
+0	Cache-Oblivious Algorithms and Data Structures.md
+0	Beyond Globally Optimal. Focused Learning for Improved 
+0	Assigning people to tasks identified in email. The EPA 
+0	Are We Really Making Much Progress. A Worrying Analysis
+0	Are Neural Rankers still Outperformed by Gradient Boost
+0	Anatomy of a Privacy-Safe Large-Scale Information Extra
+0	Analysis of regression in game theory approach.md
+0	An Introduction to Neural Information Retrieval t.md
+0	An Introduction to Locally Linear Embedding.md
+0	Algorithm for writing a scientific manuscript.md
+0	Adaptive Mixtures of Local Experts.md
+0	Accurate predictions on small data with a tabular found
+0	Accuracy at the Top.md
+0	A simple introduction to Markov Chain Monte–Carlo sampl
+0	A Survey of Accuracy Evaluation Metrics of Recommendati
+0	A Simple but Tough-to-Beat Baseline for Sentence Embedd
+0	A Latent Semantic Model with Convolutional-Pooling Stru
+0	A Density-Based Algorithm for Discovering Clusters in L

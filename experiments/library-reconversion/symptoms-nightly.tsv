@@ -1,0 +1,362 @@
+empty-header	ai-and-society/Shifting Work Patterns with Generative AI.md
+flat-table	curiosities/Real numbers, data science and chaos. How to fit any dataset with a single parameter.md
+flat-table,empty-header	data-centric-ml/augmentation-and-synthetic-data/A Survey of Data Augmentation Approaches for NLP.md
+empty-header	data-centric-ml/augmentation-and-synthetic-data/Data Augmentation Approaches in Natural Language Processing. A Survey.md
+figure-link	data-centric-ml/augmentation-and-synthetic-data/Effective Data Augmentation With Diffusion Models.md
+empty-header	data-centric-ml/augmentation-and-synthetic-data/Fake it till you make it. Learning transferable representations from synthetic ImageNet clones.md
+empty-header	data-centric-ml/augmentation-and-synthetic-data/RandAugment. Practical automated data augmentation with a reduced search space.md
+empty-header	data-centric-ml/augmentation-and-synthetic-data/Synthetic Data Generation with Large Language Models for Text Classification. Potential and.md
+figure-link	data-centric-ml/data-quality-and-shift/A systematic study of the class imbalance problem in convolutional neural networks.md
+empty-header	data-centric-ml/data-quality-and-shift/Annotation Artifacts in Natural Language Inference Data.md
+figure-link	data-centric-ml/data-quality-and-shift/Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift.md
+empty-header	data-centric-ml/data-quality-and-shift/Learning under Concept Drift. A Review.md
+empty-header	data-centric-ml/data-quality-and-shift/Shortcut Learning in Deep Neural Networks.md
+empty-header	data-centric-ml/labels-and-annotation/Deep learning with noisy labels. exploring techniques and remedies in medical image analysis.md
+empty-header	data-centric-ml/labels-and-annotation/Large Language Model Hacking. Quantifying the Hidden Risks of Using LLMs for Text Annotation.md
+empty-header	deep-learning/A continual learning survey. Defying forgetting in classification tasks.md
+empty-header	deep-learning/efficiency-and-compression/Distilling the Knowledge in a Neural Network.md
+empty-header	deep-learning/efficiency-and-compression/Is Label Smoothing Truly Incompatible with Knowledge Distillation. An Empirical Study.md
+empty-header	deep-learning/normalization-and-regularization/Batch Normalization. Accelerating Deep Network Training by Reducing Internal Covariate Shift.md
+empty-header	deep-learning/normalization-and-regularization/DropBlock. A regularization method for convolutional networks.md
+empty-header	deep-learning/normalization-and-regularization/Fixup Initialization. Residual Learning Without Normalization.md
+empty-header	deep-learning/normalization-and-regularization/How Does Batch Normalization Help Optimization.md
+figure-link,empty-header	deep-learning/normalization-and-regularization/Peri-LN. Revisiting Normalization Layer in the Transformer Architecture.md
+empty-header	deep-learning/normalization-and-regularization/Root Mean Square Layer Normalization.md
+empty-header	deep-learning/normalization-and-regularization/Self-Normalizing Neural Networks.md
+flat-table	deep-learning/optimizers-and-schedules/Large Batch Optimization for Deep Learning. Training BERT in 76 minutes.md
+empty-header	deep-learning/optimizers-and-schedules/On the Variance of the Adaptive Learning Rate and Beyond.md
+empty-header	deep-learning/optimizers-and-schedules/Sharpness-Aware Minimization for Efficiently Improving Generalization.md
+empty-header	deep-learning/theory/Deconstructing Lottery Tickets. Zeros, Signs, and the Supermask.md
+figure-link	deep-learning/theory/Deep Double Descent. Where Bigger Models and More Data Hurt.md
+forest,empty-header	deep-learning/theory/Reconciling modern machine learning practice and the bias-variance trade-off.md
+empty-header	deep-learning/theory/The Implicit Bias of Gradient Descent on Separable Data.md
+empty-header	deep-learning/theory/Visualizing the Loss Landscape of Neural Nets.md
+flat-table	deep-learning/uncertainty-and-robustness/Batch Normalization is a Cause of Adversarial Vulnerability.md
+empty-header	deep-learning/uncertainty-and-robustness/Entropic Out-of-Distribution Detection. Seamless Detection of Unknown Examples.md
+empty-header	deep-learning/uncertainty-and-robustness/Epistemic Neural Networks.md
+empty-header	deep-learning/uncertainty-and-robustness/Explaining and Harnessing Adversarial Examples.md
+empty-header	deep-learning/uncertainty-and-robustness/Towards Deep Learning Models Resistant to Adversarial Attacks.md
+empty-header	experimentation-and-metrics/ab-testing/Experimental Design in Two-Sided Platforms. An Analysis of Bias.md
+empty-header	experimentation-and-metrics/ab-testing/Hypothesis testing with e-values.md
+flat-table	experimentation-and-metrics/ab-testing/Time-uniform central limit theory and asymptotic confidence sequences.md
+empty-header	experimentation-and-metrics/causal-inference/Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes.md
+empty-header	experimentation-and-metrics/causal-inference/Generalized Random Forests.md
+empty-header	experimentation-and-metrics/causal-inference/Offline A B testing for Recommender Systems.md
+empty-header	experimentation-and-metrics/causal-inference/Open Bandit Dataset and Pipeline. Towards Realistic and Reproducible Off-Policy Evaluation.md
+empty-header	experimentation-and-metrics/causal-inference/Quasi-Oracle Estimation of Heterogeneous Treatment Effects.md
+empty-header	experimentation-and-metrics/metric-design/Estimating Treatment Effects using Multiple Surrogates. The Role of the Surrogate Score and the.md
+empty-header	generative-models/diffusion/Adding Conditional Control to Text-to-Image Diffusion Models.md
+empty-header	generative-models/diffusion/Classifier-Free Diffusion Guidance.md
+empty-header	generative-models/diffusion/Diffusion Model Alignment Using Direct Preference Optimization.md
+empty-header	generative-models/diffusion/Flow Matching for Generative Modeling.md
+empty-header	generative-models/diffusion/Flow Straight and Fast. Learning to Generate and Transfer Data with Rectified Flow.md
+empty-header	generative-models/diffusion/Hierarchical Text-Conditional Image Generation with CLIP Latents.md
+empty-header	generative-models/diffusion/High-Resolution Image Synthesis with Latent Diffusion Models.md
+empty-header	generative-models/diffusion/Movie Gen. A Cast of Media Foundation Models.md
+empty-header	generative-models/diffusion/Muse. Text-To-Image Generation via Masked Generative Transformers.md
+empty-header	generative-models/diffusion/Scaling Rectified Flow Transformers for High-Resolution Image Synthesis.md
+empty-header	generative-models/diffusion/Stable Video Diffusion. Scaling Latent Video Diffusion Models to Large Datasets.md
+figure-link	generative-models/gans-and-vaes/Analyzing and Improving the Image Quality of StyleGAN.md
+empty-header	generative-models/gans-and-vaes/AttnGAN. Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks.md
+empty-header	generative-models/gans-and-vaes/Generative Adversarial Networks.md
+figure-link,empty-header	generative-models/gans-and-vaes/Generative Adversarial Transformers.md
+empty-header	generative-models/gans-and-vaes/Large Scale GAN Training for High Fidelity Natural Image Synthesis.md
+empty-header	generative-models/gans-and-vaes/Normalizing Flows. An Introduction and Review of Current Methods.md
+figure-link,empty-header	generative-models/gans-and-vaes/Taming Transformers for High-Resolution Image Synthesis.md
+empty-header	generative-models/gans-and-vaes/The GAN is dead; long live the GAN! A Modern GAN Baseline.md
+empty-header	graphs/graph-neural-networks/Deep Learning on Graphs. A Survey.md
+empty-header	graphs/graph-neural-networks/Gated Graph Sequence Neural Networks.md
+empty-header	graphs/graph-neural-networks/Geometric deep learning. going beyond Euclidean data.md
+empty-header	graphs/graph-neural-networks/Graph Contrastive Learning with Augmentations.md
+empty-header	graphs/graph-neural-networks/Graph Transformer Networks. Learning Meta-path Graphs to Improve GNNs.md
+empty-header	graphs/graph-neural-networks/Graph Transformers. A Survey.md
+empty-header	interpretability/explainability/A Survey on Neural Network Interpretability.md
+empty-header	interpretability/explainability/Attention is not not Explanation.md
+empty-header	interpretability/explainability/Concept Whitening for Interpretable Image Recognition.md
+flat-table,empty-header	interpretability/explainability/Language Models Don't Always Say What They Think. Unfaithful Explanations in Chain-of-Thought.md
+empty-header	interpretability/explainability/Network Dissection. Quantifying Interpretability of Deep Visual Representations.md
+empty-header	interpretability/explainability/Visualizing and Understanding Convolutional Networks.md
+empty-header	interpretability/explainability/What do Vision Transformers Learn. A Visual Exploration.md
+empty-header	interpretability/mechanistic/Are Sixteen Heads Really Better than One.md
+empty-header	interpretability/mechanistic/Emergent World Representations. Exploring a Sequence Model Trained on a Synthetic Task.md
+empty-header	interpretability/mechanistic/Gemma Scope. Open Sparse Autoencoders Everywhere All At Once on Gemma 2.md
+empty-header	interpretability/mechanistic/Representation Engineering. A Top-Down Approach to AI Transparency.md
+empty-header	interpretability/mechanistic/Spectral Filters, Dark Signals, and Attention Sinks.md
+figure-link	interpretability/mechanistic/Towards Automated Circuit Discovery for Mechanistic Interpretability.md
+empty-header	llm/agents/Assisting in Writing Wikipedia-like Articles From Scratch with Large Language Models.md
+empty-header	llm/agents/HuggingGPT. Solving AI Tasks with ChatGPT and its Friends in Hugging Face.md
+empty-header	llm/agents/Into the Unknown Unknowns. Engaged Human Learning through Participation in Language Model Agent.md
+empty-header	llm/agents/MetaGPT. Meta Programming for A Multi-Agent Collaborative Framework.md
+empty-header	llm/agents/Mixture-of-Agents Enhances Large Language Model Capabilities.md
+empty-header	llm/agents/OpenHands. An Open Platform for AI Software Developers as Generalist Agents.md
+empty-header	llm/agents/ReAct. Synergizing Reasoning and Acting in Language Models.md
+empty-header	llm/agents/Search-R1. Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning.md
+empty-header	llm/agents/Tongyi DeepResearch Technical Report.md
+figure-link	llm/agents/UI-TARS. Pioneering Automated GUI Interaction with Native Agents.md
+empty-header	llm/agents/WebGPT. Browser-assisted question-answering with human feedback.md
+empty-header	llm/architecture/Large Language Diffusion Models.md
+empty-header	llm/architecture/efficient-attention-and-long-context/Big Bird. Transformers for Longer Sequences.md
+empty-header	llm/architecture/efficient-attention-and-long-context/Reformer. The Efficient Transformer.md
+empty-header	llm/architecture/efficient-attention-and-long-context/infty-former. Infinite Memory Transformer.md
+empty-header	llm/architecture/recurrent-and-state-space/Gated Linear Attention Transformers with Hardware-Efficient Training.md
+empty-header	llm/architecture/recurrent-and-state-space/Hyena Hierarchy. Towards Larger Convolutional Language Models.md
+empty-header	llm/architecture/recurrent-and-state-space/Kimi Linear. An Expressive, Efficient Attention Architecture.md
+empty-header	llm/architecture/recurrent-and-state-space/Mamba. Linear-Time Sequence Modeling with Selective State Spaces.md
+empty-header	llm/architecture/recurrent-and-state-space/RWKV-7 Goose with Expressive Dynamic State Evolution.md
+empty-header	llm/behaviour/How Well Do Models Follow Their Constitutions.md
+empty-header	llm/behaviour/Inverse Scaling. When Bigger Isn't Better.md
+empty-header	llm/behaviour/Natural Emergent Misalignment from Reward Hacking in Production RL.md
+empty-header	llm/behaviour/Sleeper Agents. Training Deceptive LLMs that Persist Through Safety Training.md
+empty-header	llm/behaviour/Steering Llama 2 via Contrastive Activation Addition.md
+empty-header	llm/behaviour/Towards Understanding Sycophancy in Language Models.md
+empty-header	llm/context/In-context Autoencoder for Context Compression in a Large Language Model.md
+empty-header	llm/efficiency/Sheared LLaMA. Accelerating Language Model Pre-training via Structured Pruning.md
+empty-header	llm/evaluation/benchmarks/AbsenceBench. Language Models Can't Tell What's Missing.md
+empty-header	llm/evaluation/benchmarks/BIG-Bench Extra Hard.md
+empty-header	llm/evaluation/benchmarks/BrowseComp. A Simple Yet Challenging Benchmark for Browsing Agents.md
+empty-header	llm/evaluation/benchmarks/FrontierMath. A Benchmark for Evaluating Advanced Mathematical Reasoning in AI.md
+empty-header	llm/evaluation/benchmarks/HELMET. How to Evaluate Long-Context Language Models Effectively and Thoroughly.md
+empty-header	llm/evaluation/benchmarks/HellaSwag. Can a Machine Really Finish Your Sentence.md
+empty-header	llm/evaluation/benchmarks/Large Language Models Encode Clinical Knowledge.md
+empty-header	llm/evaluation/benchmarks/LiveCodeBench. Holistic and Contamination Free Evaluation of Large Language Models for Code.md
+empty-header	llm/evaluation/benchmarks/MLE-bench. Evaluating Machine Learning Agents on Machine Learning Engineering.md
+empty-header	llm/evaluation/benchmarks/MMLU-Pro. A More Robust and Challenging Multi-Task Language Understanding Benchmark.md
+empty-header	llm/evaluation/benchmarks/Measuring Mathematical Problem Solving With the MATH Dataset.md
+empty-header	llm/evaluation/benchmarks/QASC. A Dataset for Question Answering via Sentence Composition.md
+empty-header	llm/evaluation/benchmarks/SWE-bench. Can Language Models Resolve Real-World GitHub Issues.md
+flat-table,empty-header	llm/evaluation/benchmarks/Spider 2.0. Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows.md
+pt-residue,empty-header	llm/evaluation/benchmarks/TheAgentCompany. Benchmarking LLM Agents on Consequential Real World Tasks.md
+empty-header	llm/evaluation/methods/A Sober Look at Progress in Language Model Reasoning. Pitfalls and Paths to Reproducibility.md
+empty-header	llm/evaluation/methods/AI Agents That Matter.md
+empty-header	llm/evaluation/methods/Cheating Automatic LLM Benchmarks. Null Models Achieve High Win Rates.md
+empty-header	llm/evaluation/methods/FLASK. Fine-grained Language Model Evaluation based on Alignment Skill Sets.md
+empty-header	llm/evaluation/methods/Holistic Evaluation of Language Models.md
+empty-header	llm/evaluation/methods/LLM Evaluators Recognize and Favor Their Own Generations.md
+empty-header	llm/evaluation/methods/Position. Don't Use the CLT in LLM Evals With Fewer Than a Few Hundred Datapoints.md
+empty-header	llm/evaluation/methods/Prometheus 2. An Open Source Language Model Specialized in Evaluating Other Language Models.md
+empty-header	llm/evaluation/methods/Replacing Judges with Juries. Evaluating LLM Generations with a Panel of Diverse Models.md
+empty-header	llm/evaluation/methods/Style Outweighs Substance. Failure Modes of LLM Judges in Alignment Benchmarking.md
+empty-header	llm/evaluation/methods/The BiGGen Bench. A Principled Benchmark for Fine-grained Evaluation of Language Models with.md
+empty-header	llm/evaluation/methods/When AI Benchmarks Plateau. A Systematic Study of Benchmark Saturation.md
+empty-header	llm/evaluation/methods/With Little Power Comes Great Responsibility.md
+flat-table	llm/foundation-models/2 OLMo 2 Furious.md
+empty-header	llm/foundation-models/BloombergGPT. A Large Language Model for Finance.md
+empty-header	llm/foundation-models/DeepSeek LLM. Scaling Open-Source Language Models with Longtermism.md
+empty-header	llm/foundation-models/DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model.md
+empty-header	llm/foundation-models/GPT-4 Technical Report.md
+flat-table,empty-header	llm/foundation-models/Gemini 1.5. Unlocking multimodal understanding across millions of tokens of context.md
+empty-header	llm/foundation-models/Gemma 3 Technical Report.md
+empty-header	llm/foundation-models/LLaMA. Open and Efficient Foundation Language Models.md
+figure-link,empty-header	llm/foundation-models/Language Models are Few-Shot Learners.md
+empty-header	llm/foundation-models/Llama 2. Open Foundation and Fine-Tuned Chat Models.md
+empty-header	llm/foundation-models/LongCat-Flash Technical Report.md
+empty-header	llm/foundation-models/MiniMax-01. Scaling Foundation Models with Lightning Attention.md
+empty-header	llm/foundation-models/Phi-3 Technical Report. A Highly Capable Language Model Locally on Your Phone.md
+empty-header	llm/foundation-models/Phi-4 Technical Report.md
+empty-header	llm/foundation-models/Qwen3 Technical Report.md
+empty-header	llm/foundation-models/Sparks of Artificial General Intelligence. Early experiments with GPT-4.md
+flat-table	llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md
+empty-header	llm/memory/agent/MemAgent. Reshaping Long-Context LLM with Multi-Conv RL-based Memory Agent.md
+empty-header	llm/memory/agent/Rethinking Memory in LLM based Agents. Representations, Operations, and Emerging Topics.md
+flat-table	llm/memory/agent/SAGE. A Novelty Gate for Efficient Memory Evolution in Agentic LLMs.md
+empty-header	llm/memory/benchmarks/LongMemEval. Benchmarking Chat Assistants on Long-Term Interactive Memory.md
+empty-header	llm/memory/parametric/Cartridges. Lightweight and general-purpose long context representations via self-study.md
+empty-header	llm/memory/parametric/FlashMem. Distilling Intrinsic Latent Memory via Computation Reuse.md
+empty-header	llm/memory/parametric/Mass-Editing Memory in a Transformer.md
+empty-header	llm/personalization/benchmarks/CUPID. Evaluating Personalized and Contextualized Alignment of LLMs from Interactions.md
+empty-header	llm/personalization/benchmarks/The PRISM Alignment Dataset. What Participatory, Representative and Individualised Human Feedback.md
+empty-header	llm/personalization/methods/A Roadmap to Pluralistic Alignment.md
+empty-header	llm/personalization/methods/Mitigating Over-Personalization in LLMs via Structured Memory.md
+empty-header	llm/personalization/methods/Personalized Language Modeling from Personalized Human Feedback.md
+flat-table	llm/personalization/user-modelling/Bayesian Teaching Enables Probabilistic Reasoning in Large Language Models.md
+empty-header	llm/personalization/user-modelling/Clever Hans or Neural Theory of Mind. Stress Testing Social Reasoning in Large Language Models.md
+empty-header	llm/personalization/user-modelling/Eliciting Human Preferences with Language Models.md
+empty-header	llm/personalization/user-modelling/FANToM. A Benchmark for Stress-testing Machine Theory of Mind in Interactions.md
+empty-header	llm/personalization/user-modelling/Modeling Future Conversation Turns to Teach LLMs to Ask Clarifying Questions.md
+empty-header	llm/personalization/user-modelling/OmniToM. Benchmarking Theory of Mind in LLMs via Explicit Belief Modeling.md
+empty-header	llm/post-training/data/Enhancing Chat Language Models by Scaling High-quality Instructional Conversations.md
+empty-header	llm/post-training/data/LIMA. Less Is More for Alignment.md
+empty-header	llm/post-training/data/Nemotron-4 340B Technical Report.md
+empty-header	llm/post-training/data/s1. Simple test-time scaling.md
+empty-header	llm/post-training/fine-tuning/Finetuned Language Models Are Zero-Shot Learners.md
+empty-header	llm/post-training/fine-tuning/Instruction Tuning for Large Language Models. A Survey.md
+empty-header	llm/post-training/fine-tuning/Large Language Models Can Self-Improve.md
+empty-header	llm/post-training/fine-tuning/Olmo 3.md
+empty-header	llm/post-training/fine-tuning/Parameter-Efficient Transfer Learning for NLP.md
+empty-header	llm/post-training/fine-tuning/Tulu 3. Pushing Frontiers in Open Language Model Post-Training.md
+empty-header	llm/post-training/preference-learning/Active Preference Learning for Large Language Models.md
+empty-header	llm/post-training/preference-learning/Direct Preference Optimization. Your Language Model is Secretly a Reward Model.md
+empty-header	llm/post-training/preference-learning/Learning to summarize from human feedback.md
+empty-header	llm/post-training/preference-learning/RewardBench. Evaluating Reward Models for Language Modeling.md
+empty-header	llm/post-training/preference-learning/Scaling Laws for Reward Model Overoptimization.md
+empty-header	llm/post-training/preference-learning/Skywork-Reward-V2. Scaling Preference Data Curation via Human-AI Synergy.md
+flat-table,empty-header	llm/post-training/preference-learning/Training language models to follow instructions with human feedback.md
+empty-header	llm/post-training/rl-for-reasoning/Absolute Zero. Reinforced Self-play Reasoning with Zero Data.md
+empty-header	llm/post-training/rl-for-reasoning/Beyond the 80 20 Rule. High-Entropy Minority Tokens Drive Effective Reinforcement Learning for LLM.md
+empty-header	llm/post-training/rl-for-reasoning/DeepSeek-R1. Incentivizing Reasoning Capability in LLMs via Reinforcement Learning.md
+figure-link	llm/post-training/rl-for-reasoning/Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model.md
+empty-header	llm/post-training/rl-for-reasoning/Llama-Nemotron. Efficient Reasoning Models.md
+flat-table,empty-header	llm/post-training/rl-for-reasoning/ProRL. Prolonged Reinforcement Learning Expands Reasoning Boundaries in Large Language Models.md
+empty-header	llm/post-training/rl-for-reasoning/Supervised Reinforcement Learning. From Expert Trajectories to Step-wise Reasoning.md
+empty-header	llm/pretraining/Dolma. an Open Corpus of Three Trillion Tokens for Language Model Pretraining Research.md
+empty-header	llm/pretraining/How much do language models memorize.md
+empty-header	llm/pretraining/Infini-gram. Scaling Unbounded n-gram Language Models to a Trillion Tokens.md
+empty-header	llm/pretraining/The FineWeb Datasets. Decanting the Web for the Finest Text Data at Scale.md
+empty-header	llm/prompting-and-in-context/Automatic Prompt Optimization with Gradient Descent and Beam Search.md
+empty-header	llm/prompting-and-in-context/Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.md
+empty-header	llm/prompting-and-in-context/DSPy. Compiling Declarative Language Model Calls into Self-Improving Pipelines.md
+empty-header	llm/prompting-and-in-context/Large Language Models are Zero-Shot Reasoners.md
+flat-table	llm/prompting-and-in-context/Least-to-Most Prompting Enables Complex Reasoning in Large Language Models.md
+empty-header	llm/prompting-and-in-context/PAL. Program-aided Language Models.md
+raw-citations	llm/prompting-and-in-context/Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or. How I learned to.md
+empty-header	llm/prompting-and-in-context/Rethinking the Role of Demonstrations. What Makes In-Context Learning Work.md
+empty-header	llm/prompting-and-in-context/Self-Consistency Improves Chain of Thought Reasoning in Language Models.md
+empty-header	llm/prompting-and-in-context/UPRISE. Universal Prompt Retrieval for Improving Zero-Shot Evaluation.md
+empty-header	llm/reasoning/Chain of Thought Monitorability. A New and Fragile Opportunity for AI Safety.md
+empty-header	llm/reasoning/DeepSeek-R1 Thoughtology. Let's think about LLM Reasoning.md
+empty-header	llm/reasoning/Explanations from Large Language Models Make Small Reasoners Better.md
+flat-table	llm/reasoning/Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation.md
+empty-header	llm/retrieval-augmented/Active Retrieval Augmented Generation.md
+empty-header	llm/retrieval-augmented/Corrective Retrieval Augmented Generation.md
+empty-header	llm/retrieval-augmented/From Local to Global. A Graph RAG Approach to Query-Focused Summarization.md
+empty-header	llm/retrieval-augmented/Improving language models by retrieving from trillions of tokens.md
+empty-header	llm/retrieval-augmented/REPLUG. Retrieval-Augmented Black-Box Language Models.md
+empty-header	llm/routing/Adaptive-RAG. Learning to Adapt Retrieval-Augmented Large Language Models through Question.md
+empty-header	llm/routing/GraphRouter. A Graph-based Router for LLM Selections.md
+empty-header	llm/routing/LLM-Blender. Ensembling Large Language Models with Pairwise Ranking and Generative Fusion.md
+raw-citations	llm/safety-and-privacy/Beyond Memorization. Violating Privacy Via Inference with Large Language Models.md
+empty-header	llm/safety-and-privacy/Can AI-Generated Text be Reliably Detected.md
+empty-header	llm/safety-and-privacy/Constitutional Classifiers. Defending against Universal Jailbreaks across Thousands of Hours of Red.md
+empty-header	llm/safety-and-privacy/Defeating Prompt Injections by Design.md
+empty-header	llm/safety-and-privacy/Jailbreaking Black Box Large Language Models in Twenty Queries.md
+empty-header	llm/safety-and-privacy/Poisoning Attacks on LLMs Require a Near-constant Number of Poison Samples.md
+flat-table,empty-header	llm/safety-and-privacy/Privacy-Preserving Instructions for Aligning Large Language Models.md
+empty-header	llm/text-analytics/Clio. Privacy-Preserving Insights into Real-World AI Use.md
+empty-header	llm/text-analytics/TopicGPT. A Prompt-based Topic Modeling Framework.md
+empty-header	llm/uncertainty-and-hallucination/Anthropomimetic Uncertainty. What Verbalized Uncertainty in Language Models is Missing.md
+empty-header	llm/uncertainty-and-hallucination/Chain-of-Verification Reduces Hallucination in Large Language Models.md
+empty-header	llm/uncertainty-and-hallucination/Know When To Stop. A Study of Semantic Drift in Text Generation.md
+empty-header	llm/uncertainty-and-hallucination/Teaching Models to Express Their Uncertainty in Words.md
+empty-header	llm/uncertainty-and-hallucination/Why Language Models Hallucinate.md
+empty-header	ml-foundations/classical-ml/TriMap. Large-scale Dimensionality Reduction Using Triplets.md
+empty-header	ml-foundations/tabular/Language Models are Realistic Tabular Data Generators.md
+empty-header	ml-foundations/tabular/Revisiting Deep Learning Models for Tabular Data.md
+empty-header	ml-systems/distributed-training/Harmony. Overcoming the Hurdles of GPU Memory Capacity to Train Massive DNN Models on Commodity.md
+empty-header	ml-systems/distributed-training/Megatron-LM. Training Multi-Billion Parameter Language Models Using Model Parallelism.md
+empty-header	ml-systems/distributed-training/Reducing Activation Recomputation in Large Transformer Models.md
+empty-header	ml-systems/production-ml/Model Cards for Model Reporting.md
+empty-header	nlp/generation-metrics/Asking and Answering Questions to Evaluate the Factual Consistency of Summaries.md
+empty-header	nlp/generation-metrics/COMET. A Neural Framework for MT Evaluation.md
+empty-header	nlp/pretrained-language-models/Out of Order. How Important Is The Sequential Order of Words in a Sentence in Natural Language.md
+empty-header	nlp/tasks-and-methods/An Introduction to Conditional Random Fields.md
+empty-header	nlp/tasks-and-methods/CrossRE. A Cross-Domain Dataset for Relation Extraction.md
+empty-header	nlp/tasks-and-methods/DocRED. A Large-Scale Document-Level Relation Extraction Dataset.md
+empty-header	nlp/tasks-and-methods/Large-Scale Multi-Label Text Classification on EU Legislation.md
+empty-header	nlp/tasks-and-methods/Matching the Blanks. Distributional Similarity for Relation Learning.md
+empty-header	nlp/tasks-and-methods/Neural Machine Translation of Rare Words with Subword Units.md
+empty-header	nlp/tasks-and-methods/PEGASUS. Pre-training with Extracted Gap-sentences for Abstractive Summarization.md
+empty-header	nlp/tasks-and-methods/Revisiting DocRED -- Addressing the False Negative Problem in Relation Extraction.md
+empty-header	nlp/tasks-and-methods/SOLOIST. Building Task Bots at Scale with Transfer Learning and Machine Teaching.md
+empty-header	nlp/tasks-and-methods/The Harvard USPTO Patent Dataset. A Large-Scale, Well-Structured, and Multi-Purpose Corpus of.md
+empty-header	recommender-systems/collaborative-filtering/Neural Collaborative Filtering vs. Matrix Factorization Revisited.md
+empty-header	recommender-systems/collaborative-filtering/Variational Autoencoders for Collaborative Filtering.md
+empty-header	recommender-systems/evaluation/Off-policy evaluation for slate recommendation.md
+empty-header	recommender-systems/industrial-systems/Pixie. A System for Recommending 3+ Billion Items to 200+ Million Users in Real-Time.md
+empty-header	recommender-systems/industrial-systems/TWIN. TWo-stage Interest Network for Lifelong User Behavior Modeling in CTR Prediction at Kuaishou.md
+empty-header	reinforcement-learning/bandits/Introduction to Multi-Armed Bandits.md
+empty-header	reinforcement-learning/deep-rl/AWAC. Accelerating Online Reinforcement Learning with Offline Datasets.md
+empty-header	reinforcement-learning/deep-rl/Asynchronous Methods for Deep Reinforcement Learning.md
+empty-header	reinforcement-learning/deep-rl/Deep Reinforcement Learning, a textbook.md
+empty-header	reinforcement-learning/deep-rl/Reinforcement Learning. An Overview.md
+empty-header	reinforcement-learning/deep-rl/Stop Regressing. Training Value Functions via Classification for Scalable Deep RL.md
+empty-header	reinforcement-learning/world-models/A Comprehensive Survey on World Models for Embodied AI.md
+empty-header	reinforcement-learning/world-models/Cosmos World Foundation Model Platform for Physical AI.md
+empty-header	reinforcement-learning/world-models/Dream to Control. Learning Behaviors by Latent Imagination.md
+figure-link	reinforcement-learning/world-models/Genie. Generative Interactive Environments.md
+empty-header	reinforcement-learning/world-models/Learning Latent Dynamics for Planning from Pixels.md
+empty-header	reinforcement-learning/world-models/Training Agents Inside of Scalable World Models.md
+empty-header	representation-learning/embeddings/Advances in Pre-Training Distributed Word Representations.md
+empty-header	representation-learning/embeddings/ArcFace. Additive Angular Margin Loss for Deep Face Recognition.md
+empty-header	representation-learning/embeddings/Diffusion vs. Autoregressive Language Models. A Text Embedding Perspective.md
+empty-header	representation-learning/embeddings/FaceNet. A Unified Embedding for Face Recognition and Clustering.md
+empty-header	representation-learning/embeddings/Matryoshka Representation Learning.md
+empty-header	representation-learning/embeddings/Sampling Matters in Deep Embedding Learning.md
+empty-header	representation-learning/self-supervised/BEiT. BERT Pre-Training of Image Transformers.md
+empty-header	representation-learning/self-supervised/Bootstrap your own latent. A new approach to self-supervised Learning.md
+empty-header	representation-learning/self-supervised/DINOv3.md
+empty-header	representation-learning/self-supervised/Emerging Properties in Self-Supervised Vision Transformers.md
+empty-header	representation-learning/self-supervised/Provable Guarantees for Self-Supervised Deep Learning with Spectral Contrastive Loss.md
+empty-header	representation-learning/self-supervised/Representation Learning with Contrastive Predictive Coding.md
+flat-table,empty-header	representation-learning/self-supervised/The Platonic Representation Hypothesis.md
+empty-header	representation-learning/self-supervised/Understanding Contrastive Representation Learning through Alignment and Uniformity on the.md
+empty-header	representation-learning/self-supervised/Unsupervised Feature Learning via Non-Parametric Instance-level Discrimination.md
+empty-header	representation-learning/self-supervised/Unsupervised Learning of Visual Features by Contrasting Cluster Assignments.md
+empty-header	representation-learning/self-supervised/iBOT. Image BERT Pre-Training with Online Tokenizer.md
+empty-header	research-practice/Evaluating Sakana's AI Scientist. Bold Claims, Mixed Results, and a Promising Future.md
+figure-link	research-practice/Improving Reproducibility in Machine Learning Research (A Report from the NeurIPS 2019.md
+empty-header	research-practice/Leakage and the Reproducibility Crisis in ML-based Science.md
+empty-header	research-practice/Real Deep Research for AI, Robotics and Beyond.md
+empty-header	research-practice/The More You Automate, the Less You See. Hidden Pitfalls of AI Scientist Systems.md
+empty-header	robotics-and-embodied/Do As I Can, Not As I Say. Grounding Language in Robotic Affordances.md
+empty-header	robotics-and-embodied/Gemini Robotics. Bringing AI into the Physical World.md
+empty-header	robotics-and-embodied/Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware.md
+raw-citations	search-and-ranking/ads/Feature Hashing for Large Scale Multitask Learning.md
+empty-header	search-and-ranking/click-models-and-unbiased-ltr/Off-Policy Evaluation for Ranking Policies under Deterministic Logging Policies.md
+empty-header	search-and-ranking/click-models-and-unbiased-ltr/Unbiased LambdaMART. An Unbiased Pairwise Learning-to-Rank Algorithm.md
+empty-header	search-and-ranking/dense-retrieval/BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.md
+empty-header	search-and-ranking/dense-retrieval/ColBERT. Efficient and Effective Passage Search via Contextualized Late Interaction over BERT.md
+empty-header	search-and-ranking/dense-retrieval/Document Expansion by Query Prediction.md
+empty-header	search-and-ranking/dense-retrieval/Improving Text Embeddings with Large Language Models.md
+empty-header	search-and-ranking/dense-retrieval/MTEB. Massive Text Embedding Benchmark.md
+empty-header	search-and-ranking/dense-retrieval/NV-Embed. Improved Techniques for Training LLMs as Generalist Embedding Models.md
+empty-header	search-and-ranking/dense-retrieval/Qwen3 Embedding. Advancing Text Embedding and Reranking Through Foundation Models.md
+empty-header	search-and-ranking/dense-retrieval/Unsupervised Dense Information Retrieval with Contrastive Learning.md
+empty-header	search-and-ranking/evaluation/Large language models can accurately predict searcher preferences.md
+empty-header	search-and-ranking/indexing-and-classical-ir/Decoding billions of integers per second through vectorization.md
+empty-header	search-and-ranking/indexing-and-classical-ir/SIMD Compression and the Intersection of Sorted Integers.md
+empty-header	search-and-ranking/neural-ranking/DeText. A Deep Text Ranking Framework with BERT.md
+empty-header	search-and-ranking/neural-ranking/Deeper Text Understanding for IR with Contextual Neural Language Modeling.md
+empty-header	search-and-ranking/neural-ranking/Is ChatGPT Good at Search. Investigating Large Language Models as Re-Ranking Agents.md
+empty-header	search-and-ranking/neural-ranking/Pretrained Transformers for Text Ranking. BERT and Beyond.md
+figure-link	search-and-ranking/search-systems/Pre-trained Language Model based Ranking in Baidu Search.md
+empty-header	trustworthy-ml/ai-safety/Scalable agent alignment via reward modeling. a research direction.md
+empty-header	trustworthy-ml/fairness-and-bias/Fairness in Ranking. A Survey.md
+empty-header	trustworthy-ml/fairness-and-bias/Man is to Computer Programmer as Woman is to Homemaker. Debiasing Word Embeddings.md
+empty-header	trustworthy-ml/privacy-and-federated/Advances and Open Problems in Federated Learning.md
+empty-header	trustworthy-ml/privacy-and-federated/Deep Leakage from Gradients.md
+empty-header	trustworthy-ml/privacy-and-federated/Deep Learning with Differential Privacy.md
+empty-header	trustworthy-ml/privacy-and-federated/Differentially Private Generative Adversarial Network.md
+empty-header	trustworthy-ml/privacy-and-federated/Federated Learning Of Out-Of-Vocabulary Words.md
+flat-table,empty-header	vision-and-multimodal/speech-and-audio/CapSpeech. Enabling Downstream Applications in Style-Captioned Text-to-Speech.md
+empty-header	vision-and-multimodal/speech-and-audio/Conformer. Convolution-augmented Transformer for Speech Recognition.md
+empty-header	vision-and-multimodal/speech-and-audio/Moshi. a speech-text foundation model for real-time dialogue.md
+empty-header	vision-and-multimodal/speech-and-audio/Qwen2.5-Omni Technical Report.md
+empty-header	vision-and-multimodal/speech-and-audio/Voicebox. Text-Guided Multilingual Universal Speech Generation at Scale.md
+empty-header	vision-and-multimodal/vision/3D Gaussian Splatting for Real-Time Radiance Field Rendering.md
+empty-header	vision-and-multimodal/vision/An Image is Worth 16x16 Words. Transformers for Image Recognition at Scale.md
+flat-table,empty-header	vision-and-multimodal/vision/DETRs Beat YOLOs on Real-time Object Detection.md
+empty-header	vision-and-multimodal/vision/Depth Anything V2.md
+empty-header	vision-and-multimodal/vision/Do Vision Transformers See Like Convolutional Neural Networks.md
+figure-link,empty-header	vision-and-multimodal/vision/NeRF. Representing Scenes as Neural Radiance Fields for View Synthesis.md
+empty-header	vision-and-multimodal/vision/OpenPose. Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields.md
+empty-header	vision-and-multimodal/vision/SAM 2. Segment Anything in Images and Videos.md
+empty-header	vision-and-multimodal/vision/SAM 3. Segment Anything with Concepts.md
+empty-header	vision-and-multimodal/vision/Scaling Vision Transformers to 22 Billion Parameters.md
+empty-header	vision-and-multimodal/vision/Segment Anything.md
+empty-header	vision-and-multimodal/vision/The Unreasonable Effectiveness of Deep Features as a Perceptual Metric.md
+empty-header	vision-and-multimodal/vision/Training data-efficient image transformers & distillation through attention.md
+empty-header	vision-and-multimodal/vision/Vision Transformers Need Registers.md
+pt-residue	vision-and-multimodal/vision-language/BLINK. Multimodal Large Language Models Can See but Not Perceive.md
+empty-header	vision-and-multimodal/vision-language/Cambrian-1. A Fully Open, Vision-Centric Exploration of Multimodal LLMs.md
+empty-header	vision-and-multimodal/vision-language/Eyes Wide Shut. Exploring the Visual Shortcomings of Multimodal LLMs.md
+box	vision-and-multimodal/vision-language/Flamingo. a Visual Language Model for Few-Shot Learning.md
+empty-header	vision-and-multimodal/vision-language/GME. Improving Universal Multimodal Retrieval by Multimodal LLMs.md
+empty-header	vision-and-multimodal/vision-language/MMMU. A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark for Expert AGI.md
+empty-header	vision-and-multimodal/vision-language/Making the V in VQA Matter. Elevating the Role of Image Understanding in Visual Question Answering.md
+empty-header	vision-and-multimodal/vision-language/No Zero-Shot Without Exponential Data. Pretraining Concept Frequency Determines Multimodal Model.md
+empty-header	vision-and-multimodal/vision-language/Perception Encoder. The best visual embeddings are not at the output of the network.md
+empty-header	vision-and-multimodal/vision-language/Qwen2.5-VL Technical Report.md
+empty-header	vision-and-multimodal/vision-language/Qwen3-VL Technical Report.md
+flat-table,empty-header	vision-and-multimodal/vision-language/Visual Instruction Tuning.md
+empty-header	vision-and-multimodal/vision-language/Words That Make Language Models Perceive.md
+empty-header	vision-and-multimodal/vision-language/jina-embeddings-v4. Universal Embeddings for Multimodal Multilingual Retrieval.md

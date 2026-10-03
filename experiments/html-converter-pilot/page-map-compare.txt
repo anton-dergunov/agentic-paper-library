@@ -1,0 +1,49 @@
+# pm_compare.py output, 1 Oct 2026 (recovered from the session transcript).
+# Old = page-map.py at d791f1a^, new = page-map.py at d791f1a; Larimar, Memanto and 80 random arXiv-HTML papers (seed 3).
+# Only papers whose heading lines differ are listed, with up to four changed headings each.
+Memanto. Typed Semantic Memory with Information-Th: old (0, 2) new (36, 0)
+    ## I Introduction
+ -> ## I Introduction (p. 1)
+    ### I-A Contributions
+ -> ### I-A Contributions (p. 2)
+    ## II Background and Related Work
+ -> ## II Background and Related Work (p. 2)
+    ### II-A Cognitive Foundations of Memory Taxonomy
+ -> ### II-A Cognitive Foundations of Memory Taxonomy (p. 2)
+Larimar. Large Language Models with Episodic Memor: old (9, 21) new (40, 0)
+    ## 1 Introduction
+ -> ## 1 Introduction (p. 1)
+    ## 2 Model Details
+ -> ## 2 Model Details (p. 2)
+    ### 2.1 Training
+ -> ### 2.1 Training (p. 3)
+    ### 2.2 Memory inference
+ -> ### 2.2 Memory inference (p. 3)
+Transformers in Vision. A Survey: old (4, 0) new (46, 0)
+    ## II Foundations
+ -> ## II Foundations (p. 2)
+    ### II-A Self-Attention in Transformers
+ -> ### II-A Self-Attention in Transformers (p. 2)
+    ### II-B (Self) Supervised Pre-training
+ -> ### II-B (Self) Supervised Pre-training (p. 3)
+    ### II-C Transformer Model
+ -> ### II-C Transformer Model (p. 4)
+Revisiting Reliability in Large-Scale Machine Lear: old (0, 2) new (16, 0)
+    ## I Introduction
+ -> ## I Introduction (p. 1)
+    ## II System Infrastructure
+ -> ## II System Infrastructure (p. 2)
+    ### II-A Scheduler and Storage Infrastructure Overview
+ -> ### II-A Scheduler and Storage Infrastructure Overview (p. 2)
+    ### II-B Compute and Network Infrastructure Overview
+ -> ### II-B Compute and Network Infrastructure Overview (p. 3)
+Large Language Models. A Survey: old (4, 0) new (71, 0)
+    ## II Large Language Models
+ -> ## II Large Language Models (p. 2)
+    ### II-A Early Pre-trained Neural Language Models
+ -> ### II-A Early Pre-trained Neural Language Models (p. 2)
+    #### II-A1 Encoder-only PLMs
+ -> #### II-A1 Encoder-only PLMs (p. 2)
+    #### II-A2 Decoder-only PLMs
+ -> #### II-A2 Decoder-only PLMs (p. 3)
+totals placed/unplaced {'old': [2786, 25], 'new': [2978, 0]} papers changed 5

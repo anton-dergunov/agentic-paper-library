@@ -1,0 +1,3 @@
+dpo: HTML display eqs=25, inline math=236, tables=104 | pdftext eq-numbers found=21 | p4llm eq-numbers found=0, tables=10
+simpo: HTML display eqs=10, inline math=148, tables=74 | pdftext eq-numbers found=5 | p4llm eq-numbers found=1, tables=15
+zep: HTML display eqs=0, inline math=73, tables=7 | pdftext eq-numbers found=0 | p4llm eq-numbers found=0, tables=3

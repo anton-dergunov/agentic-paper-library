@@ -1,0 +1,6 @@
+# classify.py over every SVG with a <foreignObject> in the library's images/, 1 Oct 2026
+# (recovered from the session transcript). First pass, then after formulas were counted as one word.
+Counter({'box': 3163, 'image': 1397, 'badge': 1151, 'diagram+text': 18})
+Counter({'box': 3140, 'image': 1387, 'badge': 1187, 'diagram+text': 15})
+# Of the 1,387 left as images, 312 hold a text block of six or more words; a sample of 15 was read
+# by hand and held plots and real diagrams, not missed boxes.

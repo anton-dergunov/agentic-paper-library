@@ -26,7 +26,7 @@ import sys
 import time
 from pathlib import Path
 
-from paperlib import LIBRARY_DIR, REPO_ROOT, library_arxiv_ids, norm_title, paper_files, read_paper, write_paper
+from paperlib import LIBRARY_DIR, LIBRARY_ROOT, SCRIPTS_DIR, library_arxiv_ids, norm_title, paper_files, read_paper, write_paper
 
 COLUMNS = ["number", "arxiv", "url", "title", "year", "folder", "source", "status"]
 DONE = {"added", "in library", "struck"}
@@ -49,7 +49,7 @@ def save(path, rows):
 
 
 def command(row):
-    script = REPO_ROOT / "scripts"
+    script = SCRIPTS_DIR
     if row["arxiv"]:
         return [str(script / "add-arxiv-paper.sh"), row["arxiv"], row["folder"]]
     if row["source"] == "web" and row["url"]:
@@ -67,7 +67,7 @@ def set_year(stdout, row):
     if not lines or not row["year"].isdigit():
         return
     md = Path(lines[-1])
-    md = md if md.is_absolute() else REPO_ROOT / md
+    md = md if md.is_absolute() else LIBRARY_ROOT / md
     if md.exists() and LIBRARY_DIR in md.parents:
         meta, body = read_paper(md)
         if not meta.get("published"):
@@ -101,7 +101,7 @@ def main(argv):
             row["status"] = "needs a PDF"
         else:
             tried += 1
-            result = subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_ROOT)
+            result = subprocess.run(cmd, capture_output=True, text=True, cwd=LIBRARY_ROOT)
             out = (result.stdout + result.stderr).strip().splitlines()
             if result.returncode == 0:
                 row["status"] = "added"

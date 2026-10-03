@@ -11,7 +11,7 @@ Checks:
 - every paper has its PDF at the mirrored path under PDF_ROOT, and every PDF
   there has a paper (README files aside);
 - every relative image link in a paper resolves, and every image is used;
-- no PDF is inside the repository;
+- no PDF is inside the library's repository;
 - catalog/topics.yaml declares well-formed folder paths whose parents are also
   declared, every declared folder exists, and every paper is in a declared
   folder;
@@ -23,6 +23,7 @@ Checks:
   by its stem and says what the problem is.
 """
 
+import os
 import re
 import sys
 import unicodedata
@@ -30,7 +31,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from paperlib import (
-    LIBRARY_DIR, NOTES_DIR, PDF_ROOT, REPO_ROOT, REQUIRED, SOURCES, TOPIC_PATH, TYPES,
+    LIBRARY_DIR, NOTES_DIR, PDF_ROOT, LIBRARY_ROOT, REQUIRED, SOURCES, TOPIC_PATH, TYPES,
     load_conversion_issues, load_reviews, load_skipped, load_topics, norm_title, paper_files,
     pdf_path_for, read_paper, review_links,
 )
@@ -61,7 +62,8 @@ def check_catalog(papers):
     problems = []
     topics = load_topics()
     if not topics:
-        return ["catalog/topics.yaml is missing or empty"]
+        # A new library has no topics yet; papers without one are reported below.
+        return ["catalog/topics.yaml is missing or empty"] if papers else []
     for topic in topics:
         if not TOPIC_PATH.match(topic):
             problems.append(f"catalog/topics.yaml: malformed folder path `{topic}`")
@@ -98,13 +100,13 @@ def check_reviews(stems):
     problems = []
     topics = load_topics()
     for scope, review in load_reviews().items():
-        name = review["main"].relative_to(REPO_ROOT)
+        name = review["main"].relative_to(LIBRARY_ROOT)
         if scope not in topics:
             problems.append(f"{name}: scope `{scope}` is not in catalog/topics.yaml")
         for f in review["files"]:
             for target, _, ok in review_links(f):
                 if not ok:
-                    problems.append(f"{f.relative_to(REPO_ROOT)}: broken link {target} "
+                    problems.append(f"{f.relative_to(LIBRARY_ROOT)}: broken link {target} "
                                     "(scripts/review-status.py --fix-links)")
     for i, entry in enumerate(load_conversion_issues()):
         name = f"catalog/conversion-issues.yaml entry {i + 1}"
@@ -118,6 +120,11 @@ def check_reviews(stems):
 def main():
     problems = []
     papers = paper_files()
+    # A PDF tree with no PDFs in it means they are not on this machine (a fresh
+    # clone, a cloud session): the markdown is still checked, the PDFs are not.
+    have_pdfs = PDF_ROOT.exists() and next(PDF_ROOT.rglob("*.pdf"), None) is not None
+    if not have_pdfs:
+        print(f"check-library: no PDFs under {PDF_ROOT}; PDF checks skipped")
 
     for md in papers:
         rel = md.relative_to(LIBRARY_DIR)
@@ -132,7 +139,7 @@ def main():
                 problems.append(f"{rel}: unknown source `{meta['source']}`")
             if meta.get("type") and meta["type"] not in TYPES:
                 problems.append(f"{rel}: unknown type `{meta['type']}`")
-        if not pdf_path_for(md).exists():
+        if have_pdfs and not pdf_path_for(md).exists():
             problems.append(f"{rel}: no PDF at {pdf_path_for(md)}")
         for groups in image_links(body):
             target = groups[0] or groups[1]
@@ -167,9 +174,14 @@ def main():
 
     problems += check_reviews(stems)
 
-    for pdf in REPO_ROOT.rglob("*.pdf"):
-        if ".git" not in pdf.parts:
-            problems.append(f"PDF inside the repository: {pdf.relative_to(REPO_ROOT)}")
+    # os.walk does not follow symlinks, so the pdf/ link to PDF_ROOT is skipped,
+    # and so is PDF_ROOT itself when it is a (git-ignored) folder in the library.
+    for folder, dirs, files in os.walk(LIBRARY_ROOT):
+        dirs[:] = [d for d in dirs if d != ".git" and Path(folder, d) != PDF_ROOT]
+        for name in files:
+            if name.lower().endswith(".pdf"):
+                pdf = Path(folder) / name
+                problems.append(f"PDF inside the repository: {pdf.relative_to(LIBRARY_ROOT)}")
 
     for p in problems:
         print(p)

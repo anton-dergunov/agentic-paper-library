@@ -1,0 +1,9 @@
+papers scanned (source: html, with an arXiv id): 1185
+no HTML rendering found: 0
+papers with image <object> figures: 831 (70%)
+figures: 10016; per paper median 6, p90 23, max 591
+  1-5 objects: 381 papers
+  6-20 objects: 350 papers
+  21-50 objects: 75 papers
+  51- objects: 25 papers
+hand-edited papers with objects: 0

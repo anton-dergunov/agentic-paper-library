@@ -31,7 +31,9 @@ import datetime
 import html
 import importlib.util
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -42,11 +44,15 @@ import lxml.html
 from lxml import etree
 
 from paperlib import (
-    LIBRARY_DIR, PDF_ROOT, fetch, load_topics, render_frontmatter, title_to_filename, to_webp,
+    CONFIG, LIBRARY_DIR, PDF_ROOT, fetch, load_topics, render_frontmatter, title_to_filename, to_webp,
 )
 
 SCRIPTS = Path(__file__).resolve().parent
-CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# Headless Chrome prints the page to PDF and dumps its rendered DOM. Set
+# `chrome:` in paper-library.yaml (or $CHROME) where it is installed elsewhere.
+CHROME = (os.environ.get("CHROME") or CONFIG.get("chrome")
+          or shutil.which("google-chrome") or shutil.which("chromium")
+          or "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 # Headless Chrome announces itself as "HeadlessChrome", which Cloudflare-fronted
 # blogs (Medium, the Netflix Tech Blog) answer with a bot check; a desktop
 # user agent gets the article.

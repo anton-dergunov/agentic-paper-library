@@ -1,0 +1,52 @@
+{
+  "titles": {
+    "total": 819,
+    "arxiv": 623,
+    "crossref": 100,
+    "none": 96,
+    "crossref_types": {
+      "journal-article": 43,
+      "proceedings-article": 42,
+      "book-chapter": 9,
+      "posted-content": 4,
+      "monograph": 2
+    }
+  },
+  "s2_batch": {
+    "ARXIV": {
+      "asked": 802,
+      "found": 795
+    },
+    "DOI": {
+      "asked": 104,
+      "found": 93
+    },
+    "ACL": {
+      "asked": 5,
+      "found": 5
+    },
+    "records_with": {
+      "year": 892,
+      "venue": 867,
+      "citationCount": 893
+    }
+  },
+  "s2_title_search": {
+    "asked": 20,
+    "found": 19
+  },
+  "last_run_seconds_per_title": {
+    "-": {
+      "n": 81,
+      "median": 7.4
+    },
+    "arxiv": {
+      "n": 544,
+      "median": 3.3
+    },
+    "crossref": {
+      "n": 84,
+      "median": 7.4
+    }
+  }
+}

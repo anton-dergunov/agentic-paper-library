@@ -1,0 +1,169 @@
+{
+ "file": "reconvert-2026-10-01.jsonl",
+ "records": 1408,
+ "invocations": [
+  {
+   "first_record": "2026-10-01T20:26:34",
+   "last_record": "2026-10-01T20:29:34",
+   "elapsed_min": 3.0,
+   "records": 71,
+   "status": {
+    "ok": 67,
+    "skipped": 4
+   },
+   "converted_per_hour": 1340,
+   "seconds_between_records": {
+    "median": 2.0,
+    "mean": 2.6,
+    "p90": 6.0,
+    "max": 10.0,
+    "slowest": [
+     {
+      "seconds": 10.0,
+      "paper": "llm/personalization/benchmarks/PERMA. Benchmarking Personalized Memory Agents via Event-Driven Preference and Realistic Task.md",
+      "message": "2603.23231v2: page-map: 40 headings placed, 2 numbered headings unplaced"
+     },
+     {
+      "seconds": 9.0,
+      "paper": "llm/personalization/benchmarks/PERSONA. A Reproducible Testbed for Pluralistic Alignment.md",
+      "message": "2407.17387v1: page-map: 23 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 8.0,
+      "paper": "llm/personalization/user-modelling/Mind Reading or Misreading. LLMs on the Big Five Personality Test.md",
+      "message": "2511.23101v1: page-map: 24 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 7.0,
+      "paper": "llm/personalization/user-modelling/OmniToM. Benchmarking Theory of Mind in LLMs via Explicit Belief Modeling.md",
+      "message": "2605.26322v1: page-map: 38 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 6.0,
+      "paper": "llm/personalization/benchmarks/Do LLMs Recognize Your Preferences. Evaluating Personalized Preference Following in LLMs.md",
+      "message": "2502.09597v1: page-map: 52 headings placed, 0 numbered headings unplaced"
+     }
+    ]
+   }
+  },
+  {
+   "first_record": "2026-10-01T20:53:11",
+   "last_record": "2026-10-01T23:00:40",
+   "elapsed_min": 127.5,
+   "records": 1337,
+   "status": {
+    "skipped": 157,
+    "ok": 1168,
+    "partial": 12
+   },
+   "converted_per_hour": 555,
+   "seconds_between_records": {
+    "median": 4.0,
+    "mean": 5.7,
+    "p90": 13.0,
+    "max": 63.0,
+    "slowest": [
+     {
+      "seconds": 63.0,
+      "paper": "ml-foundations/classical-ml/Understanding How Dimension Reduction Tools Work. An Empirical Approach to Deciphering t-SNE, UMAP.md",
+      "message": "2012.04456v2: page-map: 36 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 60.0,
+      "paper": "llm/memory/agent/Dynamic Cheatsheet. Test-Time Learning with Adaptive Memory.md",
+      "message": "2504.07952v1: page-map: 35 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 55.0,
+      "paper": "llm/post-training/data/Scaling Synthetic Data Creation with 1,000,000,000 Personas.md",
+      "message": "2406.20094v3: page-map: 30 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 55.0,
+      "paper": "llm/post-training/rl-for-reasoning/Spurious Rewards. Rethinking Training Signals in RLVR.md",
+      "message": "2506.10947v2: page-map: 51 headings placed, 0 numbered headings unplaced"
+     },
+     {
+      "seconds": 53.0,
+      "paper": "llm/memory/agent/MIRIX. Multi-Agent Memory System for LLM-Based Agents.md",
+      "message": "2507.07957v1: page-map: 39 headings placed, 0 numbered headings unplaced"
+     }
+    ]
+   }
+  }
+ ],
+ "papers": 1408,
+ "last_status": {
+  "ok": 1235,
+  "skipped": 161,
+  "partial": 12
+ },
+ "skip_reasons": {
+  "hand-edited; use --force": 3,
+  "PDF text, no arXiv HTML; use --pdf-text": 144,
+  "not converted from arXiv HTML": 14
+ },
+ "not_ok": [
+  {
+   "paper": "data-centric-ml/augmentation-and-synthetic-data/Effective Data Augmentation With Diffusion Models.md",
+   "status": "partial",
+   "message": "2302.07944v3: page-map: 39 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "data-centric-ml/data-quality-and-shift/A systematic study of the class imbalance problem in convolutional neural networks.md",
+   "status": "partial",
+   "message": "1710.05381v2: page-map: 23 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "data-centric-ml/data-quality-and-shift/Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift.md",
+   "status": "partial",
+   "message": "1810.11953v4: page-map: 22 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "deep-learning/normalization-and-regularization/Peri-LN. Revisiting Normalization Layer in the Transformer Architecture.md",
+   "status": "partial",
+   "message": "2502.02732v3: page-map: 69 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "deep-learning/theory/Deep Double Descent. Where Bigger Models and More Data Hurt.md",
+   "status": "partial",
+   "message": "1912.02292v1: page-map: 33 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Analyzing and Improving the Image Quality of StyleGAN.md",
+   "status": "partial",
+   "message": "1912.04958v2: page-map: 28 headings placed, 0 numbered headings unplaced; 6 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Generative Adversarial Transformers.md",
+   "status": "partial",
+   "message": "2103.01209v4: page-map: 21 headings placed, 0 numbered headings unplaced; 127 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "generative-models/gans-and-vaes/Taming Transformers for High-Resolution Image Synthesis.md",
+   "status": "partial",
+   "message": "2012.09841v3: page-map: 34 headings placed, 0 numbered headings unplaced; 40 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "interpretability/mechanistic/Towards Automated Circuit Discovery for Mechanistic Interpretability.md",
+   "status": "partial",
+   "message": "2304.14997v4: page-map: 47 headings placed, 0 numbered headings unplaced; 7 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "llm/agents/UI-TARS. Pioneering Automated GUI Interaction with Native Agents.md",
+   "status": "partial",
+   "message": "2501.12326v1: page-map: 58 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "llm/foundation-models/Language Models are Few-Shot Learners.md",
+   "status": "partial",
+   "message": "2005.14165v4: page-map: 56 headings placed, 0 numbered headings unplaced; 12 figures could not be downloaded and still link to arXiv"
+  },
+  {
+   "paper": "llm/post-training/rl-for-reasoning/Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model.md",
+   "status": "partial",
+   "message": "2504.13837v5: page-map: 38 headings placed, 0 numbered headings unplaced; 1 figures could not be downloaded and still link to arXiv"
+  }
+ ],
+ "retried": []
+}

@@ -1,0 +1,8 @@
+7 papers shrank by more than 5% since main
+-13.4%	17802 -> 15421 words	llm/architecture/Large Language Diffusion Models.md
+-11.4%	21540 -> 19075 words	llm/evaluation/benchmarks/Humanity's Last Exam.md
+-16.8%	41934 -> 34897 words	llm/foundation-models/Gemini 2.5. Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next.md
+-15.7%	5075 -> 4280 words	llm/foundation-models/NVIDIA Nemotron 3. Efficient and Open Intelligence.md
+-8.9%	732 -> 667 words	llm/post-training/rl-for-reasoning/Group Sequence Policy Optimization.md
+-10.6%	19827 -> 17728 words	llm/prompting-and-in-context/SCULPT. Systematic Tuning of Long Prompts.md
+-6.1%	10463 -> 9828 words	robotics-and-embodied/Open X-Embodiment. Robotic Learning Datasets and RT-X Models.md

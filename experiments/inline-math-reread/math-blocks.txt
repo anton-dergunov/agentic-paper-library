@@ -1,0 +1,8 @@
+# count_math_blocks.py output, 2 Oct 2026 (recovered from the session transcript). Tuples: (maths blocks, blocks, pages, title).
+279 PDF papers; blocks with a maths font: total 11738 median 16 mean 42 max 1216
+papers with 0: 79  1-20: 75  21-100: 105  >100: 20
+   (1216, 1764, 281, 'The Algorithmic Foundations of Differential Privac')
+   (599, 1420, 106, 'Reinforcement Learning for LLM Post-Training. A Su')
+   (533, 887, 75, 'A Tutorial on Markov Chain Monte-Carlo and Bayesia')
+   (511, 764, 66, 'Anytime-Valid Linear Models and Regression Adjuste')
+   (280, 464, 47, 'Elucidating the Design Space of Diffusion-Based Ge')

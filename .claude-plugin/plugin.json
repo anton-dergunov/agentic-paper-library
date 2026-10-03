@@ -1,0 +1,10 @@
+{
+  "name": "agentic-paper-library",
+  "version": "0.1.0",
+  "description": "Skills for a research-paper library read with a coding agent: add papers, write per-paper overviews and notes, run literature passes and reviews, reorganise the topic tree. Needs the paperlib command from this repository on PATH.",
+  "author": { "name": "Anton Dergunov" },
+  "homepage": "https://github.com/anton-dergunov/agentic-paper-library",
+  "repository": "https://github.com/anton-dergunov/agentic-paper-library",
+  "license": "MIT",
+  "keywords": ["research-papers", "pdf-extraction", "literature-review", "context-engineering"]
+}

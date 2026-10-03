@@ -1,0 +1,82 @@
+# python3 pages.py pages.json  (2 Oct 2026; listing truncated in the session transcript)
+1907 papers; 80 with 3+ uncovered pages; 223 with 1+
+103 of 117 text pages missing (pp. 10-55,57-64,66-69,71-109,111-112,114,116,118-119) | interpretability/explainability/Studying Large Language Model Generalization with Influence Functions.md
+125 of 152 text pages missing (pp. 2,26-61,64-108,110-114,116-126,128-154) | llm/foundation-models/Sparks of Artificial General Intelligence. Early experiments with GPT-4.md
+ 33 of  41 text pages missing (pp. 9-12,14-15,17,19,22-46) | llm/safety-and-privacy/Beyond Memorization. Violating Privacy Via Inference with Large Language Models.md
+ 29 of  37 text pages missing (pp. 4-24,30-33,35-38) | data-centric-ml/labels-and-annotation/Confident Learning. Estimating Uncertainty in Dataset Labels.md
+ 75 of 101 text pages missing (pp. 22-23,25,27,29-30,32-33,35-40,42-52,54-55,58,60-64,66-71,73-) | vision-and-multimodal/vision-language/MMMU. A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark 
+ 62 of 105 text pages missing (pp. 33-37,43-51,55-60,65-71,75-79,81-82,84,92-97,103-104,106,111) | llm/agents/The Ideation-Execution Gap. Execution Outcomes of LLM-Generated versus Human Research Ideas.md
+ 24 of  41 text pages missing (pp. 17-22,28,30-42,44-47) | llm/evaluation/benchmarks/Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them.md
+ 51 of  89 text pages missing (pp. 41-61,63-64,66-69,71-78,80,82-91,93-94,96,99-100) | llm/foundation-models/GPT-4 Technical Report.md
+ 12 of  22 text pages missing (pp. 10-16,18-22) | llm/architecture/recurrent-and-state-space/Gated Linear Attention Transformers with Hardware-Efficient Training.md
+ 81 of 171 text pages missing (pp. 62-63,65-71,75-76,78-83,89-93,100-108,114-121,123,129-132,13) | llm/agents/The AI Scientist. Towards Fully Automated Open-Ended Scientific Discovery.md
+ 11 of  27 text pages missing (pp. 13-17,22-25,27,29) | reinforcement-learning/world-models/Training Agents Inside of Scalable World Models.md
+ 13 of  37 text pages missing (pp. 24-27,29-37) | llm/post-training/rl-for-reasoning/SimpleRL-Zoo. Investigating and Taming Zero Reinforcement Learning for Open Base Mode
+ 16 of  46 text pages missing (pp. 29-33,35-36,42-50) | llm/post-training/rl-for-reasoning/Absolute Zero. Reinforced Self-play Reasoning with Zero Data.md
+ 29 of  84 text pages missing (pp. 56-81,84-86) | llm/memory/benchmarks/Beyond a Million Tokens. Benchmarking and Enhancing Long-Term Memory in LLMs.md
+  6 of  18 text pages missing (pp. 13-18) | recommender-systems/llm-and-generative/Recommendation as Language Processing (RLP). A Unified Pretrain, Personalized Pro
+  9 of  28 text pages missing (pp. 14-22) | llm/evaluation/methods/Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.md
+  8 of  26 text pages missing (pp. 15,17-18,20-22,25-26) | llm/agents/Improving Factuality and Reasoning in Language Models through Multiagent Debate.md
+ 11 of  37 text pages missing (pp. 27-37) | ml-foundations/tabular/TabM. Advancing Tabular Deep Learning with Parameter-Efficient Ensembling.md
+ 11 of  37 text pages missing (pp. 27-37) | vision-and-multimodal/vision-language/BLINK. Multimodal Large Language Models Can See but Not Perceive.md
+  8 of  27 text pages missing (pp. 19-20,22-27) | llm/agents/HuggingGPT. Solving AI Tasks with ChatGPT and its Friends in Hugging Face.md
+ 18 of  63 text pages missing (pp. 34-40,47-51,59-64) | llm/agents/The AI Scientist-v2. Workshop-Level Automated Scientific Discovery via Agentic Tree Search.md
+  9 of  32 text pages missing (pp. 24-32) | llm/context/Agentic Context Engineering. Evolving Contexts for Self-Improving Language Models.md
+  6 of  23 text pages missing (pp. 18-23) | reinforcement-learning/world-models/A Comprehensive Survey on World Models for Embodied AI.md
+  6 of  23 text pages missing (pp. 18-20,22,30,32) | reinforcement-learning/world-models/Mastering Diverse Domains through World Models.md
+  4 of  16 text pages missing (pp. 13-16) | llm/evaluation/benchmarks/QASC. A Dataset for Question Answering via Sentence Composition.md
+  7 of  28 text pages missing (pp. 18-19,22-26) | llm/memory/parametric/Text-to-LoRA. Instant Transformer Adaption.md
+ 13 of  54 text pages missing (pp. 42,44,46,48,50-54,56,58-60) | llm/pretraining/Dolma. an Open Corpus of Three Trillion Tokens for Language Model Pretraining Research.md
+  6 of  26 text pages missing (pp. 22,24-28) | llm/memory/agent/MemAgent. Reshaping Long-Context LLM with Multi-Conv RL-based Memory Agent.md
+  6 of  26 text pages missing (pp. 21-26) | llm/post-training/rl-for-reasoning/ProRL. Prolonged Reinforcement Learning Expands Reasoning Boundaries in Large Languag
+  5 of  22 text pages missing (pp. 20-24) | llm/post-training/rl-for-reasoning/Beyond the 80 20 Rule. High-Entropy Minority Tokens Drive Effective Reinforcement Lea
+  4 of  19 text pages missing (pp. 13,16-18) | llm/agents/A Practitioner's Guide to Multi-turn Agentic Reinforcement Learning.md
+  4 of  19 text pages missing (pp. 16-19) | llm/safety-and-privacy/Quantifying Memorization Across Neural Language Models.md
+  5 of  24 text pages missing (pp. 10-14) | llm/post-training/data/WildFeedback. Aligning LLMs With In-situ User Interactions And Feedback.md
+  4 of  20 text pages missing (pp. 16-19) | llm/evaluation/methods/Are Large Language Model-based Evaluators the Solution to Scaling Up Multilingual Evaluation.md
+  5 of  26 text pages missing (pp. 22-26) | llm/pretraining/Textbooks Are All You Need.md
+  4 of  21 text pages missing (pp. 13,15,18,20) | llm/personalization/benchmarks/LaMP-QA. A Benchmark for Personalized Long-form Question Answering.md
+  4 of  21 text pages missing (pp. 19-22) | nlp/pretrained-language-models/Revisiting Few-sample BERT Fine-tuning.md
+  4 of  22 text pages missing (pp. 19-22) | llm/personalization/methods/POPI. Personalizing LLMs via Optimized Natural Language Preference Inference.md
+  3 of  17 text pages missing (pp. 7-8,10) | llm/agents/Visual ChatGPT. Talking, Drawing and Editing with Visual Foundation Models.md
+  3 of  17 text pages missing (pp. 13-15) | research-practice/Are GANs Created Equal. A Large-Scale Study.md
+  3 of  19 text pages missing (pp. 12,15-16) | llm/evaluation/methods/Checklists Are Better Than Reward Models For Aligning Language Models.md
+  4 of  26 text pages missing (pp. 24-25,28-29) | llm/behaviour/Large Language Models Often Know When They Are Being Evaluated.md
+  4 of  27 text pages missing (pp. 25-28) | llm/pretraining/Rho-1. Not All Tokens Are What You Need.md
+  3 of  21 text pages missing (pp. 3,21-22) | generative-models/diffusion/Transfusion. Predict the Next Token and Diffuse Images with One Multi-Modal Model.md
+  4 of  29 text pages missing (pp. 25-28) | llm/safety-and-privacy/Jailbroken. How Does LLM Safety Training Fail.md
+  4 of  29 text pages missing (pp. 21-24) | vision-and-multimodal/vision-language/Molmo and PixMo. Open Weights and Open Data for State-of-the-Art Vision-Language M
+  3 of  22 text pages missing (pp. 21-23) | llm/post-training/data/UltraFeedback. Boosting Language Models with Scaled AI Feedback.md
+  4 of  31 text pages missing (pp. 12-13,18-19) | llm/evaluation/methods/Lessons from the Trenches on Reproducible Evaluation of Language Models.md
+  4 of  31 text pages missing (pp. 29-32) | llm/evaluation/methods/With Little Power Comes Great Responsibility.md
+  4 of  34 text pages missing (pp. 28,30-31,41) | ai-and-society/When combinations of humans and AI are useful. A systematic review and meta-analysis.md
+  4 of  34 text pages missing (pp. 21-24) | llm/evaluation/methods/Justice or Prejudice. Quantifying Biases in LLM-as-a-Judge.md
+ 18 of 155 text pages missing (pp. 149-166) | deep-learning/theory/Understanding Optimization in Deep Learning with Central Flows.md
+  3 of  26 text pages missing (pp. 23,27-28) | deep-learning/uncertainty-and-robustness/Revisiting the Calibration of Modern Neural Networks.md
+  3 of  26 text pages missing (pp. 17,21,23) | generative-models/diffusion/Consistency Models.md
+  3 of  27 text pages missing (pp. 26-28) | llm/post-training/preference-learning/Offline RL for Natural Language Generation with Implicit Language Q Learning.md
+  3 of  27 text pages missing (pp. 11-12,14) | llm/uncertainty-and-hallucination/Uncertainty Distillation. Teaching Language Models to Express Semantic Confidence.md
+  6 of  54 text pages missing (pp. 48-49,51-54) | robotics-and-embodied/A Survey on Vision-Language-Action Models for Embodied AI.md
+  3 of  27 text pages missing (pp. 24-26) | trustworthy-ml/ai-safety/The Alignment Problem from a Deep Learning Perspective.md
+  4 of  37 text pages missing (pp. 12-15) | llm/context/Recursive Language Models.md
+  3 of  29 text pages missing (pp. 29-31) | graphs/graph-neural-networks/RelBench. A Benchmark for Deep Learning on Relational Databases.md
+  3 of  29 text pages missing (pp. 21-22,31) | llm/memory/agent/HippoRAG. Neurobiologically Inspired Long-Term Memory for Large Language Models.md
+  3 of  30 text pages missing (pp. 28,33-34) | interpretability/mechanistic/Locating and Editing Factual Associations in GPT.md
+  3 of  30 text pages missing (pp. 33-35) | representation-learning/self-supervised/Bootstrap your own latent. A new approach to self-supervised Learning.md
+  4 of  41 text pages missing (pp. 37-40) | llm/safety-and-privacy/HarmBench. A Standardized Evaluation Framework for Automated Red Teaming and Robust Refusal.md
+  3 of  32 text pages missing (pp. 30,42-43) | nlp/generation-metrics/BERTScore. Evaluating Text Generation with BERT.md
+  3 of  35 text pages missing (pp. 36-38) | ml-foundations/tabular/Mitra. Mixed Synthetic Priors for Enhancing Tabular Foundation Models.md
+  3 of  37 text pages missing (pp. 41-42,44) | llm/agents/UI-TARS. Pioneering Automated GUI Interaction with Native Agents.md
+  4 of  51 text pages missing (pp. 45-48) | llm/evaluation/benchmarks/HELMET. How to Evaluate Long-Context Language Models Effectively and Thoroughly.md
+  3 of  40 text pages missing (pp. 25-26,49) | llm/post-training/fine-tuning/Scaling Instruction-Finetuned Language Models.md
+  3 of  40 text pages missing (pp. 18,26,31) | llm/pretraining/Physics of Language Models. Part 3.3, Knowledge Capacity Scaling Laws.md
+  3 of  41 text pages missing (pp. 21-23) | llm/personalization/benchmarks/OP-Bench. Benchmarking Over-Personalization for Memory-Augmented Personalized Conversatio
+  3 of  46 text pages missing (pp. 44-46) | llm/evaluation/benchmarks/τ^2-Bench. Evaluating Conversational Agents in a Dual-Control Environment.md
+  4 of  63 text pages missing (pp. 23-26) | llm/safety-and-privacy/Scalable Extraction of Training Data from (Production) Language Models.md
+  3 of  56 text pages missing (pp. 12-13,15) | llm/safety-and-privacy/Language Models are Injective and Hence Invertible.md
+  3 of  60 text pages missing (pp. 28,34,43) | interpretability/mechanistic/Scaling Monosemanticity. Extracting Interpretable Features from Claude 3 Sonnet.md
+  3 of  63 text pages missing (pp. 25-27) | deep-learning/theory/Towards Understanding Ensemble, Knowledge Distillation and Self-Distillation in Deep Learning.md
+  3 of  79 text pages missing (pp. 6,83-84) | llm/foundation-models/PaLM 2 Technical Report.md
+  4 of 126 text pages missing (pp. 57-58,72-73) | llm/reasoning/DeepSeek-R1 Thoughtology. Let's think about LLM Reasoning.md
+  3 of  95 text pages missing (pp. 55,73,81) | llm/agents/The Landscape of Agentic Reinforcement Learning for LLMs. A Survey.md
+  3 of 118 text pages missing (pp. 50-51,125) | llm/safety-and-privacy/Defeating Prompt Injections by Design.md

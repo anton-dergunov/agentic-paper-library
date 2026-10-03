@@ -1,0 +1,63 @@
+# python3 spot.py spot-html.txt; python3 spot.py spot-pdf.txt  (2 Oct 2026, 08:44 UTC)
+######## HTML
+== VASA-1. Lifelike Audio-Driven Talking Faces Generated in Real  [html, 19 pp]
+   headings 39, with page 19; title found on stated page 19, on another page 0 
+   figures 11 local (0 missing files), 0 remote | tables: 3 pipe (0 empty header), 1 html (1 with thead) | quotes 0 | display equations 2, raw 0
+== An Empirical Study on Large-Scale Multi-Label Text Classificat [html, 13 pp]
+   headings 26, with page 25; title found on stated page 25, on another page 0 
+   figures 1 local (0 missing files), 0 remote | tables: 1 pipe (0 empty header), 6 html (4 with thead) | quotes 0 | display equations 9, raw 0
+== Choosing a Proxy Metric from Past Experiments [html, 16 pp]
+   headings 19, with page 18; title found on stated page 18, on another page 0 
+   figures 8 local (0 missing files), 0 remote | tables: 1 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 20, raw 0
+== Fairness of Exposure in Rankings [html, 10 pp]
+   headings 34, with page 23; title found on stated page 23, on another page 0 
+   figures 8 local (0 missing files), 0 remote | tables: 0 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 44, raw 0
+== Contrastive Learning of Medical Visual Representations from Pa [html, 24 pp]
+   headings 37, with page 25; title found on stated page 25, on another page 0 
+   figures 6 local (0 missing files), 0 remote | tables: 3 pipe (0 empty header), 3 html (3 with thead) | quotes 0 | display equations 4, raw 0
+== Training Large Language Models to Reason in a Continuous Laten [html, 18 pp]
+   headings 24, with page 22; title found on stated page 21, on another page 1 [('Appendix B Clock-Time Reasoning Efficien', 16, [17])]
+   figures 9 local (0 missing files), 0 remote | tables: 4 pipe (0 empty header), 1 html (1 with thead) | quotes 3 | display equations 2, raw 0
+== PaLM 2 Technical Report [html, 93 pp]
+   headings 94, with page 83; title found on stated page 83, on another page 0 
+   figures 36 local (0 missing files), 0 remote | tables: 15 pipe (0 empty header), 16 html (16 with thead) | quotes 30 | display equations 0, raw 0
+== Memorizing Transformers [html, 19 pp]
+   headings 47, with page 43; title found on stated page 42, on another page 0 
+   figures 14 local (0 missing files), 0 remote | tables: 8 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 2, raw 0
+== DeepFM. A Factorization-Machine based Neural Network for CTR P [html, 8 pp]
+   headings 26, with page 12; title found on stated page 12, on another page 0 
+   figures 17 local (0 missing files), 0 remote | tables: 1 pipe (0 empty header), 1 html (1 with thead) | quotes 0 | display equations 4, raw 0
+== The Coin Flip Judge. Reliability and Bias in LLM-as-a-Judge Ev [html, 24 pp]
+   headings 41, with page 40; title found on stated page 40, on another page 0 
+   figures 7 local (0 missing files), 0 remote | tables: 10 pipe (0 empty header), 1 html (1 with thead) | quotes 2 | display equations 5, raw 0
+######## PDF
+== Adam. A Method for Stochastic Optimization [pdf-text, 15 pp]
+   headings 22, with page 21; title found on stated page 21, on another page 0 
+   figures 4 local (0 missing files), 0 remote | tables: 0 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 38, raw 0
+== Learning deep structured semantic models for web search using  [pdf-text, 8 pp]
+   headings 23, with page 22; title found on stated page 22, on another page 0 
+   figures 1 local (0 missing files), 0 remote | tables: 5 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 18, raw 0
+== Factorization Machines [pdf-text, 6 pp]
+   headings 21, with page 20; title found on stated page 20, on another page 0 
+   figures 3 local (0 missing files), 0 remote | tables: 0 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 26, raw 0
+== Random Search for Hyper-Parameter Optimization [pdf-text, 25 pp]
+   headings 16, with page 15; title found on stated page 15, on another page 0 
+   figures 9 local (0 missing files), 0 remote | tables: 0 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 11, raw 0
+== The LambdaLoss Framework for Ranking Metric Optimization [pdf-text, 10 pp]
+   headings 31, with page 30; title found on stated page 30, on another page 0 
+   figures 6 local (0 missing files), 0 remote | tables: 5 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 42, raw 0
+== Approximate Statistical Tests for Comparing Supervised Classif [pdf-text, 24 pp]
+   headings 22, with page 21; title found on stated page 21, on another page 0 
+   figures 11 local (0 missing files), 0 remote | tables: 4 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 12, raw 0
+== How People Use ChatGPT [pdf-text, 64 pp]
+   headings 49, with page 47; title found on stated page 46, on another page 0 
+   figures 43 local (0 missing files), 0 remote | tables: 9 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 0, raw 0
+== Why Most Published Research Findings Are False [pdf-text, 6 pp]
+   headings 12, with page 11; title found on stated page 11, on another page 0 
+   figures 2 local (0 missing files), 0 remote | tables: 4 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 0, raw 0
+== Command A. An Enterprise-Ready Large Language Model [pdf-text, 55 pp]
+   headings 94, with page 93; title found on stated page 93, on another page 0 
+   figures 17 local (0 missing files), 0 remote | tables: 27 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 3, raw 0
+== Accurate predictions on small data with a tabular foundation m [pdf-text, 23 pp]
+   headings 44, with page 43; title found on stated page 43, on another page 0 
+   figures 16 local (0 missing files), 0 remote | tables: 8 pipe (0 empty header), 0 html (0 with thead) | quotes 0 | display equations 4, raw 0

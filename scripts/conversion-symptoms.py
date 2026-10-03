@@ -33,7 +33,7 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-from paperlib import LIBRARY_DIR, REPO_ROOT, paper_files, read_paper
+from paperlib import LIBRARY_DIR, paper_files, read_paper
 
 SCRIPTS = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("html_to_markdown", SCRIPTS / "html-to-markdown.py")
@@ -100,8 +100,9 @@ def html_papers(folders):
 def compare(ref, folders):
     shrunk = 0
     for md, body in html_papers(folders):
-        rel = md.resolve().relative_to(REPO_ROOT)
-        old = subprocess.run(["git", "show", f"{ref}:{rel}"], cwd=REPO_ROOT, capture_output=True, text=True)
+        # The library's own git history: a path starting with ./ is relative to cwd.
+        old = subprocess.run(["git", "show", f"{ref}:./{md.name}"], cwd=md.parent,
+                             capture_output=True, text=True)
         if old.returncode:
             continue  # not in that commit (added or moved since)
         before, after = prose_words(old.stdout), prose_words(body)

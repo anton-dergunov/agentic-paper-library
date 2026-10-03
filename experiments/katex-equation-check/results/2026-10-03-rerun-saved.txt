@@ -1,0 +1,55 @@
+# Re-run 3 Oct 2026 of check.js (KaTeX 0.16.47) on the conversions saved on 30 Sep. No conversion was re-run.
+# Each count matches the 30 Sep run in 2026-09-30-runs.txt (sections 4, 6 and 8).
+
+## section 6, before ($ node check.js mathfix/before)
+files 10, math spans 2022, failed 146
+    37 Expected EOF, got '}'   e.g. ["ExpeL LLM Agents Are Experiential Learners.md","}"]
+    24 Undefined control sequence: \montraita   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\displaystyle{\\montraita}"]
+    21 Undefined control sequence: \mathbbm   e.g. ["Snorkel Rapid Training Data Creation with Weak Supervision.md","\\displaystyle A_{w}(\\Lambda,y)=\\frac{1}{m}\\sum_{i=1}^{m}\\left(\\mathbbm{1}\\left\\{y_{i}f_{w}(\\Lambda_{i})>0\\wedge y_{i}f_{1}(\\Lambda_{i})\\leq 0\\right\\}\\right."]
+    11 Undefined control sequence: \defeq   e.g. ["Is Model Collapse Inevitable. Breaking the Curse of Recursion by Accumulating Real and Synthetic.md","E_{test}(w)\\defeq\\mathbb{E}\\left[(x_{test}^{T}w-y_{test})^{2}\\right]-\\sigma^{2}=\\mathbb{E}[\\|w-w^{*}\\|_{\\Sigma}^{2}] \\tag{1}"]
+     6 Unexpected end of input in a macro argument, expected '}' at end of input: …choice{{}\hbox{   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{"]
+     6 Undefined control sequence: \hfil   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\hfil\\textstyle n\\hfil"]
+     5 Undefined control sequence: \penalty   e.g. ["ArCHer Training Language Model Agents via Hierarchical Multi-Turn RL.md","\\displaystyle f_{k}\\leftarrow\\mathop{\\mathrm{argmin}}_{f\\in\\mathcal{F}}\\penalty\\ \\widehat{\\mathbb{E}}_{\\mathcal{D}_{k}}[(f(s,a)-r-\\gamma f_{k-1}(s^{\\prime},\\pi("]
+     5 Invalid color: '['   e.g. ["Is Model Collapse Inevitable. Breaking the Curse of Recursion by Accumulating Real and Synthetic.md","E_{\\text{test}}^{\\text{Replace}}(\\hat{w}_{n})=\\frac{\\sigma^{2}d}{T-d-1}\\times\\color[rgb]{1,0,0}n\\color[rgb]{0,0,0} \\tag{4}"]
+     5 Undefined control sequence: \maximize   e.g. ["Prompt-to-Leaderboard.md","\\begin{aligned} \\maximize_{\\begin{subarray}{c}\\tilde{\\pi}\\in\\Delta^{M}\\end{subarray}}\\quad&\\mathbb{P}_{A\\sim q,B\\sim\\tilde{\\pi},Y\\sim\\mathrm{Bern}(\\sigma(\\theta"]
+     4 Undefined control sequence: \bin   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","\\widehat{R}^{+}(\\lambda)=\\sup\\big\\{R:P(\\bin(n(\\lambda),R)\\leq\\lceil n(\\lambda)\\widehat{R}(\\lambda)\\rceil)\\geq\\delta\\big\\}. \\tag{4}"]
+     3 Undefined control sequence: \addcontentsline   e.g. ["ArCHer Training Language Model Agents via Hierarchical Multi-Turn RL.md","\\displaystyle\\addcontentsline{lla}{section}{\\numberline quation:reinforce}J_{\\phi}(\\pi)=\\mathbb{E}_{s_{c}\\sim\\mathcal{D},a_{t}^{1:L}\\sim\\pi(\\cdot|s_{c})}\\left[\\"]
+     3 Undefined control sequence: \calibratesingle   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","\\lambda_{i}\\leftarrow\\calibratesingle(M_{i},D,\\alpha,\\frac{\\delta}{|\\mathcal{M}|})"]
+     2 Undefined control sequence: \rank   e.g. ["Chatbot Arena An Open Platform for Evaluating LLMs by Human Preference.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     2 Unexpected end of input in a macro argument, expected '}' at end of input: …text{env.reset(   e.g. ["ExpeL LLM Agents Are Experiential Learners.md","o_{0}\\leftarrow\\text{env.reset("]
+     2 Unexpected end of input in a macro argument, expected '}' at end of input: …alpha_{\text{bo   e.g. ["Scaling Laws for Reward Model Overoptimization.md","\\alpha_{\\text{bo"]
+     2 Undefined control sequence: \calibrate   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","\\Lambda\\leftarrow\\calibrate(\\mathcal{M},D_{\\textit{cal}},\\alpha,\\delta)"]
+     1 Undefined control sequence: \indent   e.g. ["ArCHer Training Language Model Agents via Hierarchical Multi-Turn RL.md","\\displaystyle+\\indent\\indent\\mathbb{E}_{s,a\\sim d^{\\pi}}[({\\mathcal{T}}^{\\pi}\\bar{f}(s,a)-Q^{\\pi}(s,a))^{2}]"]
+     1 Unexpected end of input in a macro argument, expected '}' at end of input: …leftarrow\text{   e.g. ["ExpeL LLM Agents Are Experiential Learners.md","\\mathcal{B}\\leftarrow\\text{"]
+     1 Can't use function '$' in math mode   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","15$ more expensive for every $10,000$ passages <sup>7</sup><sup>7</sup> 7 To speed up indexing, we use $10$ threads querying gpt-3.5-turbo-1106 through the Open"]
+     1 Undefined control sequence: \minimize   e.g. ["Prompt-to-Leaderboard.md","\\displaystyle\\minimize_{\\begin{subarray}{c}\\tilde{\\pi}\\in\\mathbb{R}^{M}\\end{subarray}} \\displaystyle-\\tilde{\\pi}^{\\top}\\mathbf{W}^{*}q \\tag{13}"]
+     1 Undefined control sequence: \st   e.g. ["Prompt-to-Leaderboard.md","\\displaystyle\\st \\displaystyle\\tilde{\\pi}^{\\top}c\\leq C,"]
+     1 Unexpected end of input in a macro argument, expected '}' at end of input: \beta_{\text{bo   e.g. ["Scaling Laws for Reward Model Overoptimization.md","\\beta_{\\text{bo"]
+     1 Undefined control sequence: \ber   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","y_{i,j}\\sim\\ber(0.5)"]
+     1 Undefined control sequence: \textsc   e.g. ["Whose Opinions Do Language Models Reflect.md","\\mathcal{S}^{G}_{m}(Q)=\\frac{1}{|Q|}\\sum_{q\\in Q}\\max_{c_{G}\\in\\small{[\\textsc{QA},\\textsc{BIO},\\textsc{POR}]}}\\mathcal{A}(D_{m}(q;c_{G}),D_{G}(q))"]
+
+## section 6, after ($ node check.js mathfix/after)
+files 10, math spans 1964, failed 6
+     6 Can't use function '\operatorname@' in text mode   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{}\\displaystyle{\\operatorname{montraitd}}\\text{}}{{}\\hbox{}\\textstyle{\\operatorname{montraitd}}\\text{}}{{}\\hbo"]
+
+## section 8 ($ node check.js mathfix2/out)
+files 8, math spans 1308, failed 6
+     6 Mismatched \)   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{\\(\\displaystyle{\\operatorname{montraitd}}\\)}}{{}\\hbox{\\(\\textstyle{\\operatorname{montraitd}}\\)}}{{}\\hbox{\\(\\s"]
+
+## section 4, a ($ node check.js mml/a)
+files 3, math spans 577, failed 15
+     4 Undefined control sequence: \bin   e.g. ["2407.18370.md","\\widehat{R}^{+}(\\lambda)=\\sup\\big\\{R:P(\\bin(n(\\lambda),R)\\leq\\lceil n(\\lambda)\\widehat{R}(\\lambda)\\rceil)\\geq\\delta\\big\\}. \\tag{4}"]
+     3 Undefined control sequence: \mathbbm   e.g. ["2407.18370.md","\\widehat{R}(\\lambda)=\\frac{1}{n(\\lambda)}\\sum_{(x,y_{\\textit{human}})\\in D_{\\textit{cal}}}\\mathbbm{1}\\{f_{\\textit{LM}}(x)\\neq y_{\\textit{human}}\\land c_{\\textit"]
+     3 Undefined control sequence: \calibratesingle   e.g. ["2407.18370.md","\\lambda_{i}\\leftarrow\\calibratesingle(M_{i},D,\\alpha,\\frac{\\delta}{|\\mathcal{M}|})"]
+     2 Undefined control sequence: \rank   e.g. ["2403.04132v1.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     2 Undefined control sequence: \calibrate   e.g. ["2407.18370.md","\\Lambda\\leftarrow\\calibrate(\\mathcal{M},D_{\\textit{cal}},\\alpha,\\delta)"]
+     1 Undefined control sequence: \ber   e.g. ["2407.18370.md","y_{i,j}\\sim\\ber(0.5)"]
+
+## section 4, b ($ node check.js mml/b)
+files 3, math spans 577, failed 15
+     4 Undefined control sequence: \bin   e.g. ["2407.18370.md","\\widehat{R}^{+}(\\lambda)=\\sup\\big\\{R:P(\\bin(n(\\lambda),R)\\leq\\lceil n(\\lambda)\\widehat{R}(\\lambda)\\rceil)\\geq\\delta\\big\\}. \\tag{4}"]
+     3 Undefined control sequence: \mathbbm   e.g. ["2407.18370.md","\\widehat{R}(\\lambda)=\\frac{1}{n(\\lambda)}\\sum_{(x,y_{\\textit{human}})\\in D_{\\textit{cal}}}\\mathbbm{1}\\{f_{\\textit{LM}}(x)\\neq y_{\\textit{human}}\\land c_{\\textit"]
+     3 Undefined control sequence: \calibratesingle   e.g. ["2407.18370.md","\\lambda_{i}\\leftarrow\\calibratesingle(M_{i},D,\\alpha,\\frac{\\delta}{|\\mathcal{M}|})"]
+     2 Undefined control sequence: \rank   e.g. ["2403.04132v1.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     2 Undefined control sequence: \calibrate   e.g. ["2407.18370.md","\\Lambda\\leftarrow\\calibrate(\\mathcal{M},D_{\\textit{cal}},\\alpha,\\delta)"]
+     1 Undefined control sequence: \ber   e.g. ["2407.18370.md","y_{i,j}\\sim\\ber(0.5)"]

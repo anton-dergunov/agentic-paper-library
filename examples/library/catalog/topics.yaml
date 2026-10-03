@@ -1,0 +1,8 @@
+# Every topic folder, with its scope: <path>: <scope>
+deep-learning: Deep learning as a field — architectures, training, theory.
+deep-learning/optimizers-and-schedules: Optimizers, learning-rate and batch-size schedules, hyperparameter transfer, curricula, training diagnostics.
+llm: Large language models — how they are built, adapted, used and evaluated.
+llm/post-training: Adapting pretrained models after pretraining.
+llm/post-training/preference-learning: RLHF, reward models, DPO and other preference-optimization methods.
+llm/memory: Memory for LLMs and agents.
+llm/memory/parametric: Memory held in weights or activations — knowledge editing, memorizing transformers, test-time training.

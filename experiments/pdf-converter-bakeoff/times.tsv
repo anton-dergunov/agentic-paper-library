@@ -1,0 +1,31 @@
+docling	dpo	24s
+docling	hipporag	29s
+docling	kosinski	6s
+docling	larimar	26s
+docling	memlayers	15s
+docling	metalearn	5s
+docling	simpo	70s
+docling	textpred	13s
+docling	zep	49s
+marker	dpo	146s FAILED
+marker	hipporag	35s FAILED
+marker	kosinski	17s FAILED
+marker	larimar	23s FAILED
+marker	memlayers	156s ok
+marker	metalearn	1222s ok
+marker	simpo	257s ok
+marker	textpred	84s ok
+marker	zep	68s ok
+mineru	dpo	6s FAILED
+mineru	hipporag	3s FAILED
+mineru	kosinski	3s FAILED
+mineru	larimar	1s FAILED
+mineru	memlayers	2s FAILED
+mineru	metalearn	1s FAILED
+mineru	simpo	2s FAILED
+mineru	textpred	3s FAILED
+mineru	zep	1s FAILED
+rest-done
+marker	larimar	336s ok
+marker	dpo	300s ok
+marker	hipporag	198s ok

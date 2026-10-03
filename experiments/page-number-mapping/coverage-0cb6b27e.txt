@@ -1,0 +1,18 @@
+# coverage.py over the library at commit 0cb6b27e (29 Sep 2026, setup: destinations + text search)
+[all] papers 238; headings 11943, with a page 9293 (77.8%)
+    numbered     7302 of   7340 (99.5%)
+    unnumbered   1991 of   4603 (43.3%)
+[html] papers 231; headings 11942, with a page 9293 (77.8%)
+    numbered     7302 of   7340 (99.5%)
+    unnumbered   1991 of   4602 (43.3%)
+[pdf-text] papers 7; headings 1, with a page 0 (0.0%)
+    numbered        0 of      0 (0.0%)
+    unnumbered      0 of      1 (0.0%)
+papers with numbered headings lacking a page: 7
+    21  Larimar Large Language Models with Episodic Memory Control
+     7  LLMs Get Lost In Multi-Turn Conversation
+     3  State of What Art A Call for Multi-Prompt LLM Evaluation
+     3  Membership Inference Attacks against Machine Learning Models
+     2  Memanto Typed Semantic Memory with Information-Theoretic Retrieval for Long-Horizon Agents
+     1  RecToM A Benchmark for Evaluating Machine Theory of Mind in LLM-based Conversational Recom
+     1  Selective Annotation Makes Language Models Better Few-Shot Learners

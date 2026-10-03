@@ -1,0 +1,12 @@
+# numeric table cells of the ten sampled PDF papers found in the PDF text layer
+0/   0 numeric table cells found in the PDF text | Adam. A Method for Stochastic Optimization
+  41/  41 numeric table cells found in the PDF text | Learning deep structured semantic models for web search usin
+   0/   0 numeric table cells found in the PDF text | Factorization Machines
+   0/   0 numeric table cells found in the PDF text | Random Search for Hyper-Parameter Optimization
+  80/  80 numeric table cells found in the PDF text | The LambdaLoss Framework for Ranking Metric Optimization
+   2/   2 numeric table cells found in the PDF text | Approximate Statistical Tests for Comparing Supervised Class
+  22/  22 numeric table cells found in the PDF text | How People Use ChatGPT
+  27/  27 numeric table cells found in the PDF text | Why Most Published Research Findings Are False
+2124/2124 numeric table cells found in the PDF text | Command A. An Enterprise-Ready Large Language Model
+ 161/ 298 numeric table cells found in the PDF text | Accurate predictions on small data with a tabular foundation
+total 2457 / 2594

@@ -1,0 +1,20 @@
+# MinerU 4.0.10, every paper, run_all.sh / run_rest.sh (mineru -p <pdf> -o mineru -b pipeline):
+Usage: mineru [OPTIONS] COMMAND [ARGS]...
+Try 'mineru --help' for help.
+╭─ Error ──────────────────────────────────────────────────────────────────────╮
+│ No such option: -p                                                           │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+# mineru parse --help (excerpt): the 4.x command line, a document library with a local server
+ Usage: mineru parse [OPTIONS] {path}                                           
+                                                                                
+ Parse a document file.                                                         
+                                                                                
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│ *    path      <str>  Path to the document file [required]                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --tier               <flash|basic|standard|adva  Parse tier: flash, basic,   │
+│                      nced>                       standard, advanced          │
+│                                                  (default: server decides)   │
+│ --pages      -p      <str>                       PDF pages: '1-5,8', 'r3-r1' │

@@ -1,0 +1,27 @@
+# Symptom counts in the 25 reconverted library papers after the pilot (recovered from the session transcript).
+# nopage = headings without a page marker (unnumbered paragraph and definition headings, which page-map leaves alone).
+A Survey of Agent Memory in the Second Half.  forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=18 quotes=18
+A Survey on Long-Term Memory Security in LLM  forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=1 quotes=0
+A-TMA. Decoupling State-Aware Memory Failures forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=0 quotes=38
+Are We Ready For An Agent-Native Memory Syste forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=4 nopage=0 quotes=9
+Building Self-Evolving Agents via Experience- forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=87 quotes=200
+ExpeL. LLM Agents Are Experiential Learners   forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=2 quotes=2
+From Storage to Experience. A Survey on the E forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=1 nopage=0 quotes=15
+HippoRAG. Neurobiologically Inspired Long-Ter forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=3 nopage=1 quotes=0
+Mem-α. Learning Memory Construction via Reinf forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=0 quotes=127
+MemAgent. Reshaping Long-Context LLM with Mul forest=0 pt=0 flat=0 emptyhdr=2 nothead=0 rel=0 svgimg=6 nopage=0 quotes=17
+MemGPT. Towards LLMs as Operating Systems     forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=5 nopage=1 quotes=0
+Memanto. Typed Semantic Memory with Informati forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=8 nopage=6 quotes=0
+Memory in the Age of AI Agents                forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=5 quotes=64
+O-Mem. Omni Memory System for Personalized, L forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=0 quotes=224
+ReasoningBank. Scaling Agent Self-Evolving wi forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=2 nopage=8 quotes=0
+Rethinking Memory in LLM based Agents. Repres forest=0 pt=0 flat=0 emptyhdr=3 nothead=12 rel=0 svgimg=284 nopage=10 quotes=35
+Beyond a Million Tokens. Benchmarking and Enh forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=0 nopage=6 quotes=218
+Cartridges. Lightweight and general-purpose l forest=0 pt=0 flat=0 emptyhdr=1 nothead=0 rel=0 svgimg=6 nopage=22 quotes=82
+Continual Learning via Sparse Memory Finetuni forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=7 nopage=2 quotes=1
+Larimar. Large Language Models with Episodic  forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=1 nopage=0 quotes=0
+M+. Extending MemoryLLM with Scalable Long-Te forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=8 nopage=1 quotes=0
+Mass-Editing Memory in a Transformer          forest=0 pt=0 flat=0 emptyhdr=1 nothead=0 rel=0 svgimg=9 nopage=1 quotes=0
+Memorizing Transformers                       forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=4 nopage=2 quotes=0
+Memory Layers at Scale                        forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=6 nopage=1 quotes=0
+Text-to-LoRA. Instant Transformer Adaption    forest=0 pt=0 flat=0 emptyhdr=0 nothead=0 rel=0 svgimg=17 nopage=1 quotes=2

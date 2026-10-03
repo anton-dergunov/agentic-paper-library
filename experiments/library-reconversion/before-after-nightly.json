@@ -1,0 +1,137 @@
+{
+ "html_papers": {
+  "old": 1905,
+  "new": 1907,
+  "in_both": 1905
+ },
+ "papers_with_a_symptom": {
+  "old": 1370,
+  "new": 362
+ },
+ "moves_between_copies": {
+  "clean -> clean": 533,
+  "symptom -> clean": 1012,
+  "symptom -> symptom": 358,
+  "clean -> symptom": 2
+ },
+ "symptom_counts_in_both": {
+  "badge": {
+   "before": 43,
+   "after": 0
+  },
+  "box": {
+   "before": 283,
+   "after": 1
+  },
+  "digit-groups": {
+   "before": 4,
+   "after": 0
+  },
+  "empty-header": {
+   "before": 1213,
+   "after": 334
+  },
+  "figure-link": {
+   "before": 192,
+   "after": 16
+  },
+  "flat-table": {
+   "before": 113,
+   "after": 21
+  },
+  "forest": {
+   "before": 29,
+   "after": 1
+  },
+  "macro": {
+   "before": 1,
+   "after": 0
+  },
+  "pt-residue": {
+   "before": 33,
+   "after": 2
+  },
+  "raw-citations": {
+   "before": 5,
+   "after": 3
+  }
+ },
+ "symptoms_new_to_a_paper": {
+  "empty-header": 5,
+  "flat-table": 1
+ },
+ "prose_word_change_bodies_tags": {
+  "median": 0.0,
+  "p5": -0.001,
+  "p95": 0.107,
+  "grew_over_5pct": 145
+ },
+ "shrank_over_5pct": {
+  "as_run": [
+   {
+    "paper": "llm/foundation-models/Gemini 2.5. Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next.md",
+    "before": 41934,
+    "after": 34897,
+    "change": -0.168
+   },
+   {
+    "paper": "llm/foundation-models/NVIDIA Nemotron 3. Efficient and Open Intelligence.md",
+    "before": 5075,
+    "after": 4280,
+    "change": -0.157
+   },
+   {
+    "paper": "llm/architecture/Large Language Diffusion Models.md",
+    "before": 17802,
+    "after": 15421,
+    "change": -0.134
+   },
+   {
+    "paper": "llm/evaluation/benchmarks/Humanity's Last Exam.md",
+    "before": 21540,
+    "after": 19075,
+    "change": -0.114
+   },
+   {
+    "paper": "llm/prompting-and-in-context/SCULPT. Systematic Tuning of Long Prompts.md",
+    "before": 19827,
+    "after": 17728,
+    "change": -0.106
+   },
+   {
+    "paper": "llm/post-training/rl-for-reasoning/Group Sequence Policy Optimization.md",
+    "before": 732,
+    "after": 667,
+    "change": -0.089
+   },
+   {
+    "paper": "robotics-and-embodied/Open X-Embodiment. Robotic Learning Datasets and RT-X Models.md",
+    "before": 10463,
+    "after": 9828,
+    "change": -0.061
+   }
+  ],
+  "bodies": [
+   {
+    "paper": "llm/architecture/Large Language Diffusion Models.md",
+    "before": 17740,
+    "after": 15421,
+    "change": -0.131
+   },
+   {
+    "paper": "llm/prompting-and-in-context/SCULPT. Systematic Tuning of Long Prompts.md",
+    "before": 19776,
+    "after": 17728,
+    "change": -0.104
+   }
+  ],
+  "bodies_tags": [
+   {
+    "paper": "llm/prompting-and-in-context/SCULPT. Systematic Tuning of Long Prompts.md",
+    "before": 19888,
+    "after": 17840,
+    "change": -0.103
+   }
+  ]
+ }
+}

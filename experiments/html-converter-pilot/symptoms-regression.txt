@@ -1,0 +1,46 @@
+paper                                      words            imgs          forest              pt            flat        emptyhdr           thead          quotes          remote
+A Survey of Lottery Ticket Hypot     16151→16199             2→1             0→0             0→0             0→0             1→0             0→0             0→1             0→0
+Applied Federated Learning. Impr       5455→5443             6→6             0→0             0→0             0→0             0→0             0→0             0→0             0→0
+Are GANs Created Equal. A Large-       8557→8534           28→28             0→0             0→0             0→0             2→0             0→2             0→0             0→0
+Automatic Prompt Optimization wi       7707→7697             4→4             0→0             0→0             0→0             1→1             0→2             0→0             0→0
+Averaging Weights Leads to Wider       8440→8439           16→16             0→0             0→0             0→0             0→0             0→2             0→0             0→0
+Challenges in Deploying Machine      18102→18102             0→0             0→0             0→0             0→0             0→0             0→0             0→0             0→0
+Concept Induction. Analyzing Uns     22988→22740           33→24             0→0             0→0             0→0             0→0             0→0             0→0             1→0
+Constitutional AI. Harmlessness      19770→19702           15→15             0→0             0→0             0→0            21→0             0→0             0→0             0→0
+Domain Randomization for Transfe       6635→6619             7→7             0→0             0→0             0→0             0→0             0→2             0→0             0→0
+Dynamic Routing Between Capsules       6429→6369            5→33             0→0             0→0             0→0             4→0             0→0             0→0            28→0
+Emerging Properties in Self-Supe     25307→23853         492→493             0→0             0→0             0→0            16→5            0→17             0→0             1→0
+Estimating Treatment Effects usi     23067→23137            9→11             0→0             2→0             0→0             3→2             0→5             0→0             2→0
+Evaluating Very Long-Term Conver     12655→12632           11→11             0→0             0→0             0→0             0→0             0→4             0→0             0→0
+Faith and Fate. Limits of Transf     19782→19752           33→33             0→0             6→6             0→0             0→0             0→4             0→0             0→0
+FineTuneBench. How well do comme       6509→6481             6→6             0→0             0→0             0→0             4→0             0→0             0→0             0→0
+Finetuned Language Models Are Ze     23061→23037           22→22             0→0             0→0             0→0           45→40             0→4             0→0             0→0
+Generating and Imputing Tabular      15920→15836            4→47             0→0             0→0             0→0             4→0             0→1             0→0            43→0
+Inference-Time Intervention. Eli     47641→47625             8→8             0→0             0→0             0→0             0→0             0→0             0→0             0→0
+Instruction Tuning for Large Lan     28630→29046           16→16             0→0             0→0             0→0             1→1             0→4             0→0             0→0
+KumoRFM-2. Scaling Foundation Mo     14003→14007           13→13             0→0             0→0             0→0             0→0             0→9             0→0             0→0
+MegaScale-MoE. Large-Scale Commu     12555→12554           20→20             0→0             0→0             0→0             0→0             0→2             0→0             0→0
+Mixed-Type Tabular Data Synthesi     17232→17148           10→10             0→0             0→0             0→0            13→0             0→2             0→0             0→0
+Modeling Relational Data with Gr       7115→7113             5→5             0→0             0→0             0→0             1→0             0→2             0→0             0→0
+Movement Pruning. Adaptive Spars       7227→7201             8→8             0→0             0→0             0→0             1→0             0→2             0→0             0→0
+Neural Collaborative Filtering         9056→9054           19→19             0→0             0→0             0→0             0→0             0→3             0→0             0→0
+Offline Reinforcement Learning.      29808→29777             9→9             0→0             0→0             0→0             2→0             0→0             0→0             0→0
+Prompt-to-Leaderboard                  8761→8752           11→11             0→0             0→0             0→0             1→0             0→0             0→0             0→0
+RT-1. Robotics Transformer for R     19081→19063           18→22             0→0             0→0             0→0             3→0             0→7             0→0             4→0
+Reducing Activation Recomputatio       9779→9751           10→10             0→0             0→0             0→0             2→1             0→3             0→0             0→0
+RelBench. A Benchmark for Deep L     17044→17038           20→21             0→0             0→0             0→0             5→0            0→12             0→0             1→0
+Rubrics as Rewards. Reinforcemen       7184→9939            13→3             0→0             0→0             0→0             1→0             0→0           0→138             0→0
+Safety Cases. How to Justify the     26432→26358           16→58             0→0             0→0             0→0             0→0             0→0             0→0            42→0
+Scalable Diffusion Models with T       8999→8950           31→33             0→0             0→0             0→0             0→0             0→3             0→0             2→0
+Scaling Synthetic Data Creation        8832→8811           18→18             0→0             0→0             0→0             2→0             0→2             0→0             0→0
+SigLIP 2. Multilingual Vision-La     11039→11049             6→6             0→0             0→0             0→0             0→0             0→8             0→0             0→0
+Sparse, Dense, and Attentional R     11008→11008             8→8             0→0             0→0             0→0             1→0             0→2             0→0             0→0
+SpinQuant. LLM quantization with     14482→14462           13→13             0→0             0→0             0→0             2→0            0→19             0→0             0→0
+Tensor Programs V. Tuning Large      33321→33307           22→23             0→0             0→0             0→0             2→0             0→8             0→0             1→0
+Textbooks Are All You Need            8314→10823            14→2             0→0             0→0             0→0             1→0             0→1           0→451             0→0
+The Alignment Problem from a Dee     16406→16406             2→2             0→0             0→0             0→0             0→0             0→0             0→0             0→0
+Thought Anchors. Which LLM Reaso     14758→14707           23→23             0→0             0→0             0→0             2→0             0→0             0→0             0→0
+Transformer-Based Rhythm Quantiz       7231→7232             2→2             0→0             0→0             0→0             0→0             0→2             0→0             0→0
+Unsupervised Data Augmentation f     12037→12069           15→15             0→0             0→0             0→0             1→0             0→2             0→0             0→0
+We Have No Idea How Models will      22655→22649             3→3             0→0             0→0             0→0             1→0             0→1           45→45             0→0
+Why do tree-based models still o     11793→11700           38→38             0→0             0→0             0→0             5→0             0→0             0→0             0→0

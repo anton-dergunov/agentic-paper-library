@@ -10,11 +10,14 @@ Also usable from the shell scripts:
     paperlib.py filename <title>
     paperlib.py set-type <paper.md> <type>
     paperlib.py fetch <url> <out-file>
+    paperlib.py shell-config
 
 The first two print a complete YAML frontmatter block (with the --- fences) to
 stdout; set-summary and set-type rewrite the paper's `summary:` or `type:` field
 in place; filename prints the filename stem for a title; fetch downloads a URL
-with fetch()'s retries, writing an empty file on 404 or repeated failure.
+with fetch()'s retries, writing an empty file on 404 or repeated failure;
+shell-config prints the library's paths as shell assignments for config.sh,
+and fails outside a library.
 """
 
 import datetime
@@ -32,22 +35,85 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-LIBRARY_DIR = Path(os.environ.get("LIBRARY_DIR", REPO_ROOT / "library"))
-PDF_ROOT = Path(
-    os.environ.get("PDF_ROOT", Path.home() / "Yandex.Disk.localized" / "Papers")
-)
+# The engine: these scripts, the skills and the guide. Everything a library
+# holds is found from the library root instead (see below).
+SCRIPTS_DIR = Path(__file__).resolve().parent
+ENGINE_ROOT = SCRIPTS_DIR.parent
+
+# A library is a folder with a paper-library.yaml at its root (usually its own
+# git repository): the markdown tree, the catalog, notes and reviews live under
+# it, and the config says where its PDFs are. The root is $PAPER_LIBRARY, or
+# the nearest folder at or above the working directory that has the config.
+CONFIG_NAME = "paper-library.yaml"
+
+
+def find_library_root(start=None):
+    """The library root for `start` (default: the working directory), or None."""
+    if os.environ.get("PAPER_LIBRARY"):
+        return Path(os.environ["PAPER_LIBRARY"]).expanduser().resolve()
+    here = Path(start or Path.cwd()).resolve()
+    for folder in [here, *here.parents]:
+        if (folder / CONFIG_NAME).is_file():
+            return folder
+    return None
+
+
+def load_config(root):
+    """The library's paper-library.yaml as a dict ({} when there is none)."""
+    path = Path(root) / CONFIG_NAME if root else None
+    if not path or not path.is_file():
+        return {}
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+
+
+def _path(value, base):
+    """A configured path: ~ expanded, relative paths taken from the library root."""
+    value = Path(os.path.expanduser(str(value)))
+    return value if value.is_absolute() else base / value
+
+
+# Scripts that only convert (html-to-markdown, the tests) work without a
+# library; the paths below then point into the working directory, unused.
+IN_LIBRARY = find_library_root()
+CONFIG = load_config(IN_LIBRARY)
+LIBRARY_ROOT = _BASE = IN_LIBRARY or Path.cwd()
+
+# The markdown copies (committed) and the PDFs (kept outside git, often in a
+# synced folder). The two trees mirror each other. Environment variables
+# override the config, e.g. on a machine where the PDFs are mounted elsewhere.
+LIBRARY_DIR = Path(os.environ.get("LIBRARY_DIR") or _path(CONFIG.get("library", "library"), _BASE))
+PDF_ROOT = Path(os.environ.get("PDF_ROOT") or _path(CONFIG.get("pdf_root", "pdfs"), _BASE))
+# A link inside the library root that points at PDF_ROOT (a symlink made by
+# `paperlib init`, kept out of git), so an editor opened on the library shows
+# both trees and the indexes link each paper's PDF with a relative path. Off
+# unless `pdf_link:` names it in the config.
+PDF_LINK_DIR = _path(CONFIG["pdf_link"], _BASE) if CONFIG.get("pdf_link") else None
 # Downloads from arXiv's HTML renderings (pages and figures) and LaTeX sources
-# are kept here (outside the repo, about 10 GB for the whole library), so a
+# are kept here (about 10 GB for 2,000 papers), shared by every library, so a
 # later reconversion needs no network. Delete a file, or the folder, to fetch
 # it again; failed downloads are never kept.
-CACHE_DIR = Path(os.environ.get("PAPERS_CACHE", Path.home() / ".cache" / "papers"))
-# Hand-maintained data the scripts read: the declared topic tree and the papers
-# deliberately not added.
-CATALOG_DIR = REPO_ROOT / "catalog"
+CACHE_DIR = Path(os.environ.get("PAPERS_CACHE") or _path(CONFIG.get("cache", "~/.cache/papers"), _BASE))
+# Hand-maintained data the scripts read: the declared topic tree, the papers
+# deliberately not added, and the papers whose conversion needs fixing.
+CATALOG_DIR = _path(CONFIG.get("catalog", "catalog"), _BASE)
 TOPICS_FILE = CATALOG_DIR / "topics.yaml"
 SKIPPED_FILE = CATALOG_DIR / "skipped.yaml"
+CONVERSION_ISSUES_FILE = CATALOG_DIR / "conversion-issues.yaml"
 TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
+# Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
+NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)
+# Literature reviews, one per scope (a declared folder): reviews/<scope>.md, or
+# reviews/<scope>/index.md plus section files once a review is split. Partial
+# reading results live in reviews/.work/ (ignored) until the review is written.
+REVIEWS_DIR = _path(CONFIG.get("reviews", "reviews"), _BASE)
+# Papers waiting to be added: raw links or titles, one per line.
+INBOX_FILE = _path(CONFIG.get("inbox", "INBOX.txt"), _BASE)
+# The reader's own notes on papers (the overview skill writes one per paper),
+# e.g. a folder in an Obsidian vault. Optional.
+OVERVIEW_DIR = _path(CONFIG["overview_dir"], _BASE) if CONFIG.get("overview_dir") else None
+# Page links that open a paper's PDF at a page or section in the VS Code PDF
+# viewer (see the guide): http://pdf.invalid/<path under PDF_ROOT>?page=N.
+PDF_LINK_BASE = "http://pdf.invalid/"
 
 # Field order in every paper's frontmatter. `summary` is written by whoever
 # files the paper (the add-paper skill), so the add scripts leave it empty.
@@ -56,16 +122,6 @@ REQUIRED = ["title", "source", "summary", "added"]
 SOURCES = {"html", "pdf-text", "web"}
 # Kind of paper, set by the overview skill when it classifies one (optional).
 TYPES = {"method", "survey", "benchmark", "study", "system", "position", "theory"}
-# Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
-NOTES_DIR = REPO_ROOT / "notes"
-# Literature reviews, one per scope (a declared folder): reviews/<scope>.md, or
-# reviews/<scope>/index.md plus section files once a review is split. Partial
-# reading results live in reviews/.work/ (ignored) until the review is written.
-REVIEWS_DIR = REPO_ROOT / "reviews"
-# Papers whose markdown conversion needs fixing, keyed by stem like notes/.
-CONVERSION_ISSUES_FILE = CATALOG_DIR / "conversion-issues.yaml"
-# Page links that open a paper's PDF in Anton's viewer (see AGENTS.md).
-PDF_LINK_BASE = "http://pdf.invalid/"
 
 _FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 ATOM = {"a": "http://www.w3.org/2005/Atom"}
@@ -467,6 +523,14 @@ def _main(argv):
         write_paper(path, meta, body)
     elif len(argv) == 4 and argv[1] == "fetch":
         Path(argv[3]).write_bytes(fetch(argv[2]) or b"")
+    elif len(argv) == 2 and argv[1] == "shell-config":
+        if not IN_LIBRARY:
+            sys.exit(f"error: not inside a paper library (no {CONFIG_NAME} here or above, "
+                     "and PAPER_LIBRARY is not set)")
+        import shlex
+        for name, value in [("LIBRARY_ROOT", LIBRARY_ROOT), ("LIBRARY_DIR", LIBRARY_DIR),
+                            ("PDF_ROOT", PDF_ROOT), ("TOPICS_FILE", TOPICS_FILE)]:
+            print(f"{name}={shlex.quote(str(value))}")
     else:
         sys.exit(__doc__)
 

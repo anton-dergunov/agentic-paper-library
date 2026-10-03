@@ -7,18 +7,18 @@ For every paper (or the ones given), the expected filename stem is
 title_to_filename(<frontmatter title>). When it differs, the markdown, its
 figures in images/, the PDF under PDF_ROOT and the notes/ memory file move to
 the new stem together, and the figure links inside the markdown are updated.
-Run after the filename rule changes; rebuild the indexes afterwards. Papers in
-the Obsidian vault are not touched: the ones that exist are listed at the end.
+Run after the filename rule changes; rebuild the indexes afterwards. The
+reader's own notes (overview_dir in the config) are not touched: the ones that
+exist are listed at the end.
 """
 
 import sys
 from pathlib import Path
 from urllib.parse import quote
 
-from paperlib import LIBRARY_DIR, REPO_ROOT, paper_files, pdf_path_for, read_paper, title_to_filename
-
-NOTES_DIR = REPO_ROOT / "notes"
-VAULT_PAPERS = Path.home() / "obsidian" / "ML & AI" / "Papers"
+from paperlib import (
+    LIBRARY_DIR, NOTES_DIR, OVERVIEW_DIR, paper_files, pdf_path_for, read_paper, title_to_filename,
+)
 
 
 def rename(md, stem, dry_run):
@@ -59,11 +59,11 @@ def main(argv):
             continue
         print(rename(md, stem, dry_run))
         renamed += 1
-        if (VAULT_PAPERS / f"{md.stem}.md").exists():
+        if OVERVIEW_DIR and (OVERVIEW_DIR / f"{md.stem}.md").exists():
             vault.append((md.stem, stem))
     print(f"rename-papers: {renamed} papers {'would be ' if dry_run else ''}renamed")
     for old, new in vault:
-        print(f"  vault note to rename by hand: {VAULT_PAPERS / old}.md -> {new}.md")
+        print(f"  overview note to rename by hand: {OVERVIEW_DIR / old}.md -> {new}.md")
 
 
 if __name__ == "__main__":

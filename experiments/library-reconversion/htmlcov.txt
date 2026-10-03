@@ -1,0 +1,81 @@
+html text covered by md | html words | md words | LaTeXML errors | missing pdf pages
+ 0.81 |  16036 |  38536 |    0 |   3/ 63 | Towards Understanding Ensemble, Knowledge Distillation and Self-Distil <== converter?
+ 0.81 |   8647 |  15463 |    0 |   3/ 26 | Consistency Models <== converter?
+ 0.81 |   4718 |   8687 |  171 |  12/ 22 | Gated Linear Attention Transformers with Hardware-Efficient Training <== converter?
+ 0.82 |  17348 |  33083 |    0 |   3/ 56 | Language Models are Injective and Hence Invertible <== converter?
+ 0.85 |  31679 |  52572 |    0 |  18/155 | Understanding Optimization in Deep Learning with Central Flows <== converter?
+ 0.86 |   9561 |  17764 |    0 |   3/ 32 | BERTScore. Evaluating Text Generation with BERT <== converter?
+ 0.87 |   1090 |   1736 |    0 |  29/ 37 | Confident Learning. Estimating Uncertainty in Dataset Labels <== converter?
+ 0.87 |  10311 |  16979 |    0 |   3/ 35 | Mitra. Mixed Synthetic Priors for Enhancing Tabular Foundation Models <== converter?
+ 0.88 |  11426 |  17688 |    0 |   3/ 40 | Physics of Language Models. Part 3.3, Knowledge Capacity Scaling Laws <== converter?
+ 0.88 |  10755 |  19271 |    0 |  75/101 | MMMU. A Massive Multi-discipline Multimodal Understanding and Reasonin <== converter?
+ 0.88 |   9078 |  32173 |    0 |  11/ 37 | TabM. Advancing Tabular Deep Learning with Parameter-Efficient Ensembl <== converter?
+ 0.88 |  38302 |  63538 |    1 |   3/ 95 | The Landscape of Agentic Reinforcement Learning for LLMs. A Survey <== converter?
+ 0.89 |  10966 |  17987 |    0 |   3/ 30 | Bootstrap your own latent. A new approach to self-supervised Learning <== converter?
+ 0.90 |   6819 |   9397 |    0 |   4/ 22 | POPI. Personalizing LLMs via Optimized Natural Language Preference Inf
+ 0.91 |   5970 |   9264 |    0 |   6/ 26 | MemAgent. Reshaping Long-Context LLM with Multi-Conv RL-based Memory A
+ 0.92 |   7027 |   9301 |    0 |   4/ 21 | Revisiting Few-sample BERT Fine-tuning
+ 0.92 |   8444 |  12748 |    0 |   9/ 32 | Agentic Context Engineering. Evolving Contexts for Self-Improving Lang
+ 0.92 |   9731 |  12621 |    0 |   3/ 30 | Locating and Editing Factual Associations in GPT
+ 0.92 |   7787 |   9981 |    0 |   3/ 26 | Revisiting the Calibration of Modern Neural Networks
+ 0.93 |   8657 |  13829 |    0 |   4/ 34 | Justice or Prejudice. Quantifying Biases in LLM-as-a-Judge
+ 0.93 |   6556 |   9836 |    0 |   3/ 19 | Checklists Are Better Than Reward Models For Aligning Language Models
+ 0.93 |  11127 |  14921 |    0 |   3/ 27 | Offline RL for Natural Language Generation with Implicit Language Q Le
+ 0.93 |   7423 |   9456 |    0 |   4/ 21 | LaMP-QA. A Benchmark for Personalized Long-form Question Answering
+ 0.93 |   4266 |   5720 |    3 |  11/ 27 | Training Agents Inside of Scalable World Models
+ 0.93 |  24284 |  48284 |    0 |   4/126 | DeepSeek-R1 Thoughtology. Let's think about LLM Reasoning
+ 0.93 |  14352 |  21612 |    0 |  29/ 84 | Beyond a Million Tokens. Benchmarking and Enhancing Long-Term Memory i
+ 0.93 |   7967 |  10916 |    0 |   3/ 21 | Transfusion. Predict the Next Token and Diffuse Images with One Multi-
+ 0.93 |  25389 |  32945 |    0 |  13/ 54 | Dolma. an Open Corpus of Three Trillion Tokens for Language Model Pret
+ 0.93 |  12641 |  15424 |    0 |   4/ 31 | With Little Power Comes Great Responsibility
+ 0.94 |  13814 |  15727 |    0 |   3/ 40 | Scaling Instruction-Finetuned Language Models
+ 0.94 |  15939 |  24355 |  204 |   3/ 60 | Scaling Monosemanticity. Extracting Interpretable Features from Claude
+ 0.94 |   9156 |  11016 |   66 |   4/ 29 | Jailbroken. How Does LLM Safety Training Fail
+ 0.94 |   7563 |   9316 |    0 |  11/ 37 | BLINK. Multimodal Large Language Models Can See but Not Perceive
+ 0.94 |   5899 |   7530 |    0 |   4/ 19 | A Practitioner's Guide to Multi-turn Agentic Reinforcement Learning
+ 0.94 |  10259 |  15464 |    0 |   3/ 29 | RelBench. A Benchmark for Deep Learning on Relational Databases
+ 0.94 |  34698 |  39130 |    1 |   6/ 54 | A Survey on Vision-Language-Action Models for Embodied AI
+ 0.94 |  13745 |  16975 |    0 |  16/ 46 | Absolute Zero. Reinforced Self-play Reasoning with Zero Data
+ 0.94 |   7359 |  13956 |    0 |   3/ 41 | OP-Bench. Benchmarking Over-Personalization for Memory-Augmented Perso
+ 0.94 |   9793 |  12125 |    0 |   3/ 27 | Uncertainty Distillation. Teaching Language Models to Express Semantic
+ 0.94 |   9701 |  12451 |    0 |   5/ 24 | WildFeedback. Aligning LLMs With In-situ User Interactions And Feedbac
+ 0.94 |   9251 |  10717 |    0 |   4/ 27 | Rho-1. Not All Tokens Are What You Need
+ 0.94 |   5703 |   7122 |    0 |   3/ 17 | Are GANs Created Equal. A Large-Scale Study
+ 0.95 |   7823 |   9190 |    0 |   7/ 28 | Text-to-LoRA. Instant Transformer Adaption
+ 0.95 |  13172 |  17154 |    0 |   4/ 31 | Lessons from the Trenches on Reproducible Evaluation of Language Model
+ 0.95 |  16275 |  22343 |    0 |   3/ 37 | UI-TARS. Pioneering Automated GUI Interaction with Native Agents
+ 0.95 |   6100 |   8137 |    0 |   5/ 26 | Textbooks Are All You Need
+ 0.95 |   8519 |  10886 |    0 |   5/ 22 | Beyond the 80 20 Rule. High-Entropy Minority Tokens Drive Effective Re
+ 0.95 |  14697 |  17491 |    0 |   4/ 29 | Molmo and PixMo. Open Weights and Open Data for State-of-the-Art Visio
+ 0.95 |  10266 |  14044 |    0 |   3/ 29 | HippoRAG. Neurobiologically Inspired Long-Term Memory for Large Langua
+ 0.95 |   2980 |   3861 |    1 | 103/117 | Studying Large Language Model Generalization with Influence Functions
+ 0.95 |  13537 |  15380 |    0 |   4/ 41 | HarmBench. A Standardized Evaluation Framework for Automated Red Teami
+ 0.95 |   6621 |   8394 |    6 |   4/ 20 | Are Large Language Model-based Evaluators the Solution to Scaling Up M
+ 0.95 |   8073 |  11401 |    0 |  13/ 37 | SimpleRL-Zoo. Investigating and Taming Zero Reinforcement Learning for
+ 0.95 |   5815 |   7331 |    6 |   6/ 23 | Mastering Diverse Domains through World Models
+ 0.95 |   5546 |  11929 |    0 | 125/152 | Sparks of Artificial General Intelligence. Early experiments with GPT-
+ 0.95 |  15888 |  45165 |    3 |   3/118 | Defeating Prompt Injections by Design
+ 0.95 |   9179 |  10089 |    0 |   3/ 22 | UltraFeedback. Boosting Language Models with Scaled AI Feedback
+ 0.95 |  24302 |  28830 |    0 |   3/ 79 | PaLM 2 Technical Report
+ 0.95 |   5014 |   6292 |    0 |   8/ 26 | Improving Factuality and Reasoning in Language Models through Multiage
+ 0.95 |   6471 |   7736 |    0 |  24/ 41 | Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve The
+ 0.95 |   7508 |   8834 |    0 |   9/ 28 | Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena
+ 0.95 |   6615 |   7221 |    0 |   3/ 17 | Visual ChatGPT. Talking, Drawing and Editing with Visual Foundation Mo
+ 0.95 |   7072 |   7881 |    0 |   4/ 16 | QASC. A Dataset for Question Answering via Sentence Composition
+ 0.95 |   7856 |   8855 |    0 |   6/ 18 | Recommendation as Language Processing (RLP). A Unified Pretrain, Perso
+ 0.96 |  11938 |  26573 |    0 |  81/171 | The AI Scientist. Towards Fully Automated Open-Ended Scientific Discov
+ 0.96 |   6779 |   7660 |    0 |   4/ 19 | Quantifying Memorization Across Neural Language Models
+ 0.96 |   3558 |   4195 |    0 |  33/ 41 | Beyond Memorization. Violating Privacy Via Inference with Large Langua
+ 0.96 |   8127 |   9582 |    0 |   4/ 26 | Large Language Models Often Know When They Are Being Evaluated
+ 0.96 |  16027 |  18492 |    0 |   4/ 37 | Recursive Language Models
+ 0.96 |  12941 |  13898 |    0 |   3/ 27 | The Alignment Problem from a Deep Learning Perspective
+ 0.96 |  13452 |  14675 |    0 |  51/ 89 | GPT-4 Technical Report
+ 0.96 |  20657 |  23628 |    0 |   4/ 51 | HELMET. How to Evaluate Long-Context Language Models Effectively and T
+ 0.97 |   8199 |   9421 |    0 |   8/ 27 | HuggingGPT. Solving AI Tasks with ChatGPT and its Friends in Hugging F
+ 0.97 |   8476 |  10543 |    0 |   6/ 26 | ProRL. Prolonged Reinforcement Learning Expands Reasoning Boundaries i
+ 0.97 |  11362 |  12313 |    0 |   6/ 23 | A Comprehensive Survey on World Models for Embodied AI
+ 0.98 |   9350 |  16132 |    0 |  18/ 63 | The AI Scientist-v2. Workshop-Level Automated Scientific Discovery via
+ 0.98 |   9505 |   9971 |    0 |   4/ 34 | When combinations of humans and AI are useful. A systematic review and
+ 0.98 |   9197 |  17146 |    0 |  62/105 | The Ideation-Execution Gap. Execution Outcomes of LLM-Generated versus
+ 0.98 |  15544 |  16345 |    0 |   3/ 46 | τ^2-Bench. Evaluating Conversational Agents in a Dual-Control Environm
+ 0.99 |  36398 |  37875 |    0 |   4/ 63 | Scalable Extraction of Training Data from (Production) Language Models

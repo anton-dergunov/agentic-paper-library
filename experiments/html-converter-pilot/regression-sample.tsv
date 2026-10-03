@@ -1,0 +1,45 @@
+2109.01652	html	library/llm/post-training/fine-tuning/Finetuned Language Models Are Zero-Shot Learners.md
+1812.02903	html	library/trustworthy-ml/privacy-and-federated/Applied Federated Learning. Improving Google Keyboard Query Suggestions.md
+2502.14855	html	library/llm/routing/Prompt-to-Leaderboard.md
+2209.00626	html	library/trustworthy-ml/ai-safety/The Alignment Problem from a Deep Learning Perspective.md
+2502.14786	html	library/vision-and-multimodal/vision-language/SigLIP 2. Multilingual Vision-Language Encoders with Improved Semantic Understanding, Localization.md
+2104.14294	html	library/representation-learning/self-supervised/Emerging Properties in Self-Supervised Vision Transformers.md
+2212.08073	html	library/llm/post-training/preference-learning/Constitutional AI. Harmlessness from AI Feedback.md
+2411.05059	html	library/llm/post-training/fine-tuning/FineTuneBench. How well do commercial fine-tuning APIs infuse knowledge into LLMs.md
+2306.11644	html	library/llm/pretraining/Textbooks Are All You Need.md
+2403.10462	html	library/trustworthy-ml/ai-safety/Safety Cases. How to Justify the Safety of Advanced AI Systems.md
+2404.12259	html	library/llm/text-analytics/Concept Induction. Analyzing Unstructured Text with High-Level Concepts Using LLooM.md
+2407.20060	html	library/graphs/graph-neural-networks/RelBench. A Benchmark for Deep Learning on Relational Databases.md
+2604.12596	html	library/graphs/graph-neural-networks/KumoRFM-2. Scaling Foundation Models for Relational Learning.md
+1703.06907	html	library/robotics-and-embodied/Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World.md
+2305.03495	html	library/llm/prompting-and-in-context/Automatic Prompt Optimization with Gradient Descent and Beam Search.md
+2507.17746	html	library/llm/post-training/preference-learning/Rubrics as Rewards. Reinforcement Learning Beyond Verifiable Domains.md
+2505.11432	html	library/ml-systems/distributed-training/MegaScale-MoE. Large-Scale Communication-Efficient Training of Mixture-of-Experts Models in.md
+2309.09968	html	library/ml-foundations/tabular/Generating and Imputing Tabular Data via Diffusion and Flow-based Gradient-Boosted Trees.md
+1711.10337	html	library/research-practice/Are GANs Created Equal. A Large-Scale Study.md
+1703.06103	html	library/graphs/graph-neural-networks/Modeling Relational Data with Graph Convolutional Networks.md
+2403.04861	html	library/deep-learning/theory/A Survey of Lottery Ticket Hypothesis.md
+2406.20094	html	library/llm/post-training/data/Scaling Synthetic Data Creation with 1,000,000,000 Personas.md
+2405.16406	html	library/llm/efficiency/SpinQuant. LLM quantization with learned rotations.md
+1603.09326	html	library/experimentation-and-metrics/metric-design/Estimating Treatment Effects using Multiple Surrogates. The Role of the Surrogate Score and the.md
+2203.03466	html	library/deep-learning/optimizers-and-schedules/Tensor Programs V. Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer.md
+2506.19143	html	library/llm/reasoning/Thought Anchors. Which LLM Reasoning Steps Matter.md
+2212.06817	html	library/robotics-and-embodied/RT-1. Robotics Transformer for Real-World Control at Scale.md
+2604.22290	html	library/vision-and-multimodal/speech-and-audio/Transformer-Based Rhythm Quantization of Performance MIDI Using Beat Annotations.md
+1708.05031	html	library/recommender-systems/collaborative-filtering/Neural Collaborative Filtering.md
+2205.05198	html	library/ml-systems/distributed-training/Reducing Activation Recomputation in Large Transformer Models.md
+1710.09829	html	library/deep-learning/architectures/Dynamic Routing Between Capsules.md
+2306.03341	html	library/llm/uncertainty-and-hallucination/Inference-Time Intervention. Eliciting Truthful Answers from a Language Model.md
+2402.17753	html	library/llm/memory/benchmarks/Evaluating Very Long-Term Conversational Memory of LLM Agents.md
+2308.10792	html	library/llm/post-training/fine-tuning/Instruction Tuning for Large Language Models. A Survey.md
+2403.16795	html	library/ml-systems/production-ml/We Have No Idea How Models will Behave in Production until Production . How Engineers.md
+2005.01643	html	library/reinforcement-learning/deep-rl/Offline Reinforcement Learning. Tutorial, Review, and Perspectives on Open Problems.md
+2310.09656	html	library/ml-foundations/tabular/Mixed-Type Tabular Data Synthesis with Score-based Diffusion in Latent Space.md
+2011.09926	html	library/ml-systems/production-ml/Challenges in Deploying Machine Learning. a Survey of Case Studies.md
+2212.09748	html	library/generative-models/diffusion/Scalable Diffusion Models with Transformers.md
+2207.08815	html	library/ml-foundations/tabular/Why do tree-based models still outperform deep learning on tabular data.md
+1904.12848	html	library/data-centric-ml/augmentation-and-synthetic-data/Unsupervised Data Augmentation for Consistency Training.md
+2005.00181	html	library/search-and-ranking/dense-retrieval/Sparse, Dense, and Attentional Representations for Text Retrieval.md
+2305.18654	html	library/llm/reasoning/Faith and Fate. Limits of Transformers on Compositionality.md
+1803.05407	html	library/deep-learning/normalization-and-regularization/Averaging Weights Leads to Wider Optima and Better Generalization.md
+2005.07683	html	library/deep-learning/efficiency-and-compression/Movement Pruning. Adaptive Sparsity by Fine-Tuning.md

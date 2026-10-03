@@ -1,0 +1,6 @@
+94 files: svg 235KB, zlib 44KB, webp 61KB, 38s
+threshold 1000000KB: rasterized  0/94; per figure disk  235KB git  44KB -> 10016 figs disk 2.24GB git 435MB
+threshold     500KB: rasterized  9/94; per figure disk  119KB git  34KB -> 10016 figs disk 1.14GB git 328MB
+threshold     300KB: rasterized 17/94; per figure disk   95KB git  33KB -> 10016 figs disk 0.91GB git 326MB
+threshold     200KB: rasterized 20/94; per figure disk   90KB git  34KB -> 10016 figs disk 0.86GB git 329MB
+threshold     100KB: rasterized 47/94; per figure disk   67KB git  42KB -> 10016 figs disk 0.64GB git 409MB

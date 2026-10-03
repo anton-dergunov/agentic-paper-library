@@ -1,0 +1,59 @@
+# coverage.py over the library at commit 23947512 (3 Oct 2026, 2,202 papers after the PDF-only reconversion)
+[all] papers 2202; headings 95058, with a page 78920 (83.0%)
+    numbered    55905 of  56389 (99.1%)
+    unnumbered  23015 of  38669 (59.5%)
+[html] papers 1909; headings 86780, with a page 70809 (81.6%)
+    numbered    51215 of  51693 (99.1%)
+    unnumbered  19594 of  35087 (55.8%)
+[pdf-text] papers 277; headings 7741, with a page 7741 (100.0%)
+    numbered     4690 of   4690 (100.0%)
+    unnumbered   3051 of   3051 (100.0%)
+[web] papers 16; headings 537, with a page 370 (68.9%)
+    numbered        0 of      6 (0.0%)
+    unnumbered    370 of    531 (69.7%)
+papers with numbered headings lacking a page: 45
+   148  Deep Reinforcement Learning, a textbook
+    96  Introduction to Multi-Armed Bandits
+    37  Design and Analysis of Switchback Experiments
+    23  An Introduction to Conditional Random Fields
+    18  LLM Pruning and Distillation in Practice. The Minitron Approach
+    18  The Implicit Bias of Gradient Descent on Separable Data
+    16  graph2vec. Learning Distributed Representations of Graphs
+    13  DeepFM. A Factorization-Machine based Neural Network for CTR Prediction
+    10  A Farewell to the Bias-Variance Tradeoff. An Overview of the Theory of Overparameterized M
+     8  Measuring what Matters. Construct Validity in Large Language Model Benchmarks
+     7  Data-Driven Switchback Experiments. Theoretical Tradeoffs and Empirical Bayes Designs
+     7  Simple and Effective Masked Diffusion Language Models
+     7  LLMs Get Lost In Multi-Turn Conversation
+     6  TabNet. Attentive Interpretable Tabular Learning
+     6  How to Use t-SNE Effectively
+     6  How Good is the Bayes Posterior in Deep Neural Networks Really
+     5  A Tutorial on Spectral Clustering
+     4  Revisiting the Arcade Learning Environment. Evaluation Protocols and Open Problems for Gen
+     4  Experimental Design in Two-Sided Platforms. An Analysis of Bias
+     4  Long-term Causal Inference Under Persistent Confounding via Data Combination
+     4  Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distilla
+     4  The Perception-Distortion Tradeoff
+     3  Better by Default. Strong Pre-Tuned MLPs and Boosted Trees on Tabular Data
+     3  Emerging Properties in Self-Supervised Vision Transformers
+     3  Always Valid Inference. Bringing Sequential Analysis to A B Testing
+     2  Hypothesis testing with e-values
+     2  Advances and Challenges in Foundation Agents. From Brain-Inspired Intelligence to Evolutio
+     2  RecToM. A Benchmark for Evaluating Machine Theory of Mind in LLM-based Conversational Reco
+     2  PERMA. Benchmarking Personalized Memory Agents via Event-Driven Preference and Realistic T
+     1  Data-driven Advice for Applying Machine Learning to Bioinformatics Problems
+     1  The Arcade Learning Environment. An Evaluation Platform for General Agents
+     1  Renyi Differential Privacy
+     1  Understanding Black-box Predictions via Influence Functions
+     1  Entity Embeddings of Categorical Variables
+     1  Design and analysis of experiments in networks. Reducing bias from interference
+     1  An Introduction to Variational Autoencoders
+     1  Generative Adversarial Networks
+     1  ReTool. Reinforcement Learning for Strategic Tool Use in LLMs
+     1  Faith and Fate. Limits of Transformers on Compositionality
+     1  A Statistical Framework for Ranking LLM-Based Chatbots
+     1  State of What Art. A Call for Multi-Prompt LLM Evaluation
+     1  MMMU. A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark for Expe
+     1  Modular Deep Learning
+     1  A Simple Baseline for Bayesian Uncertainty in Deep Learning
+     1  Deep Anomaly Detection with Outlier Exposure

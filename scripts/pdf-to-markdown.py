@@ -269,7 +269,7 @@ def convert_text_layer(pdf_path):
 LAYOUT_NOTE = """> **Converted from the PDF by layout analysis** (docling), because this paper
 > has no HTML rendering. The text and the numbers are the PDF's own; the
 > structure of tables and the reading order are reconstructed by a model.
-> {equations}Check the PDF (same path under `Papers/`) before
+> {equations}Check the PDF (same topic path in the PDF folder) before
 > relying on a table whose columns look misaligned."""
 EQUATION_NOTES = {
     "model": "Equations, and text whose symbols the PDF's text layer lacks, were read\n> from the page image by a model and can be wrong in a symbol or an index:\n> check the PDF before quoting one.\n> ",
@@ -278,7 +278,7 @@ EQUATION_NOTES = {
 }
 TEXT_LAYER_NOTE = """> **Converted from the PDF text layer**, because this paper has no HTML
 > rendering. Section structure, tables and figures did not survive the
-> conversion; check the original PDF (same path under `Papers/`) before
+> conversion; check the original PDF (same topic path in the PDF folder) before
 > relying on any number or table from this file."""
 
 # Unnumbered headings that are sections of their own, not parts of the one before.
@@ -318,8 +318,12 @@ def tidy(text):
 
 
 # The Python of the environment marker is installed in (pdf-equations.py runs there).
-MARKER_PYTHON = Path(os.environ.get(
-    "PAPERS_MARKER_PYTHON", Path.home() / ".cache" / "papers" / "venvs" / "marker" / "bin" / "python"))
+def _marker_python():
+    from paperlib import CACHE_DIR  # the venv lives next to the download cache
+    return Path(os.environ.get("PAPERS_MARKER_PYTHON") or CACHE_DIR / "venvs" / "marker" / "bin" / "python")
+
+
+MARKER_PYTHON = _marker_python()
 
 
 # Signs that the text layer lost a block's mathematics: an underscore standing

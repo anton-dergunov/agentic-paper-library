@@ -1,0 +1,14 @@
+# score.py final inline over the three papers with both versions (display equations, tables, headings, prose).
+# Means left out: the bake-off's final/ also holds SimPO, which has no inline version.
+
+== final
+paper      tbl-nums any-nums  eqs(gt/found) eq>=.85 eq-mean  heads prose  secs
+dpo         1.00     1.00    46/34        0.63    0.88   0.75  0.95  
+larimar     1.00     1.00    10/10        0.70    0.80   0.81  0.92  
+memlayers   1.00     1.00     2/2         0.50    0.91   0.74  0.96  
+
+== inline
+paper      tbl-nums any-nums  eqs(gt/found) eq>=.85 eq-mean  heads prose  secs
+dpo         1.00     1.00    46/131       0.65    0.89   0.75  0.97  
+larimar     1.00     1.00    10/101       0.70    0.80   0.81  0.93  
+memlayers   1.00     1.00     2/17        0.50    0.91   0.74  0.96  

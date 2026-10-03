@@ -85,4 +85,4 @@ prune "$OLD_DIR" "$LIBRARY_DIR"
 prune "$PDF_ROOT/$OLD_TOPIC" "$PDF_ROOT"
 
 echo "Moved: $OLD_TOPIC/$STEM -> $NEW_TOPIC/"
-python3 "$REPO_ROOT/scripts/build-index.py"
+python3 "$SCRIPTS_DIR/build-index.py"

@@ -1,0 +1,4 @@
+# detect.py --counts over the library's arXiv-HTML papers, 1 Oct 2026 (recovered from the session transcript).
+# A paper is counted once in the first line, and once per symptom it shows in the second.
+1618 papers
+[('empty-header', 1256), ('no-thead', 1071), ('box', 317), ('figure-link', 207), ('flat-table', 131), ('pt-residue', 49), ('badge', 45), ('forest', 35), ('macro', 4)]

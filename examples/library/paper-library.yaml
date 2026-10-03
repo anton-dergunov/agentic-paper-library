@@ -1,0 +1,6 @@
+# An example library: three openly licensed papers (CC BY 4.0), one per
+# converter. Run `paperlib init examples/library` once to link the skills.
+reader: the reader
+# The PDFs are not committed; `paperlib add-*` downloads them here again.
+pdf_root: pdfs
+pdf_link: pdfs

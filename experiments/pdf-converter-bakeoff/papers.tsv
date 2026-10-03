@@ -1,0 +1,9 @@
+dpo	llm/post-training/preference-learning/Direct Preference Optimization. Your Language Model is Secretly a Reward Model.md
+simpo	llm/post-training/preference-learning/SimPO. Simple Preference Optimization with a Reference-Free Reward.md
+zep	llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md
+larimar	llm/memory/parametric/Larimar. Large Language Models with Episodic Memory Control.md
+memlayers	llm/memory/parametric/Memory Layers at Scale.md
+hipporag	llm/memory/agent/HippoRAG. Neurobiologically Inspired Long-Term Memory for Large Language Models.md
+metalearn	llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.md
+textpred	llm/personalization/methods/When does text prediction benefit from additional context. An exploration of contextual signals for.md
+kosinski	llm/personalization/user-modelling/Evaluating Large Language Models in Theory of Mind Tasks.md

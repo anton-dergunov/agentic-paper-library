@@ -1,0 +1,110 @@
+- paper: Absolute Zero. Reinforced Self-play Reasoning with Zero Data
+  problem: Incomplete: arXiv's HTML lacks the text of 16 of the PDF's 46 text pages (pp. 29–33,
+    35–36, 42–50), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: Agentic Context Engineering. Evolving Contexts for Self-Improving Language Models
+  problem: Truncated: arXiv's HTML lacks the text of 9 of the PDF's 32 text pages (pp. 24–32); the
+    markdown's last section is 'Appendix F Prompts' (p. 24).
+  found: '2026-10-02'
+- paper: Beyond a Million Tokens. Benchmarking and Enhancing Long-Term Memory in LLMs
+  problem: Truncated: arXiv's HTML lacks the text of 29 of the PDF's 84 text pages (pp. 56–81,
+    84–86); the markdown's last section is 'CRITICAL REQUIREMENT: CONTENT-BASED ANALYSIS' (p. 50).
+  found: '2026-10-02'
+- paper: Beyond Memorization. Violating Privacy Via Inference with Large Language Models
+  problem: Truncated: arXiv's HTML lacks the text of 32 of the PDF's 41 text pages (pp. 9–46, with
+    gaps); the markdown's last section is 'Client-Side Anonymization' (p. 8).
+  found: '2026-10-02'
+- paper: BLINK. Multimodal Large Language Models Can See but Not Perceive
+  problem: Truncated: arXiv's HTML lacks the text of 11 of the PDF's 37 text pages (pp. 27–37); the
+    markdown's last section is 'Appendix 0.D Limitations' (p. 15).
+  found: '2026-10-02'
+- paper: Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them
+  problem: Incomplete: arXiv's HTML lacks the text of 24 of the PDF's 41 text pages (pp. 17–22, 28,
+    30–42, 44–47), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: Confident Learning. Estimating Uncertainty in Dataset Labels
+  problem: Truncated: arXiv's HTML lacks the text of 29 of the PDF's 37 text pages (pp. 4–24, 30–33,
+    35–38); the markdown's last section is 'Assumptions' (p. 3).
+  found: '2026-10-02'
+- paper: Dolma. an Open Corpus of Three Trillion Tokens for Language Model Pretraining Research
+  problem: Incomplete: arXiv's HTML lacks the text of 13 of the PDF's 54 text pages (pp. 42–60, with
+    gaps), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: Gated Linear Attention Transformers with Hardware-Efficient Training
+  problem: Truncated: arXiv's HTML lacks the text of 7 of the PDF's 22 text pages (pp. 15–16,
+    18–22); the markdown's last section is '' (p. 9).
+  found: '2026-10-02'
+- paper: GPT-4 Technical Report
+  problem: Truncated: arXiv's HTML lacks the text of 45 of the PDF's 89 text pages (pp. 41–100, with
+    gaps); the markdown's last section is 'Appendix H System Card' (p. 40).
+  found: '2026-10-02'
+- paper: HuggingGPT. Solving AI Tasks with ChatGPT and its Friends in Hugging Face
+  problem: Truncated: arXiv's HTML lacks the text of 8 of the PDF's 27 text pages (pp. 19–20,
+    22–27); the markdown's last section is 'Tools' (p. 17).
+  found: '2026-10-02'
+- paper: Improving Factuality and Reasoning in Language Models through Multiagent Debate
+  problem: Truncated: arXiv's HTML lacks the text of 8 of the PDF's 26 text pages (pp. 15, 17–18,
+    20–22, 25–26); the markdown's last section is 'Chess Validity.' (p. 14).
+  found: '2026-10-02'
+- paper: Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena
+  problem: Incomplete: arXiv's HTML lacks the text of 9 of the PDF's 28 text pages (pp. 14–22),
+    appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: Mastering Diverse Domains through World Models
+  problem: Truncated: arXiv's HTML lacks the text of 6 of the PDF's 23 text pages (pp. 18–20, 22,
+    30, 32); the markdown's last section is 'Baselines' (p. 8).
+  found: '2026-10-02'
+- paper: MMMU. A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark for Expert AGI
+  problem: Incomplete: arXiv's HTML lacks the text of 75 of the PDF's 101 text pages (pp. 22–111,
+    with gaps), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: QASC. A Dataset for Question Answering via Sentence Composition
+  problem: Truncated: arXiv's HTML lacks the text of 4 of the PDF's 16 text pages (pp. 13–16); the
+    markdown's last section is 'Appendix E Overlap Statistics' (p. 12).
+  found: '2026-10-02'
+- paper: Recommendation as Language Processing (RLP). A Unified Pretrain, Personalized Prompt & Predict
+  problem: Truncated: arXiv's HTML lacks the text of 6 of the PDF's 18 text pages (pp. 13–18); the
+    markdown's last section is 'Acknowledgment' (p. 11).
+  found: '2026-10-02'
+- paper: SimpleRL-Zoo. Investigating and Taming Zero Reinforcement Learning for Open Base Models in the Wild
+  problem: Truncated: arXiv's HTML lacks the text of 13 of the PDF's 37 text pages (pp. 24–27,
+    29–37); the markdown's last section is 'I.3 Reasoning Behavior Variations Across Different
+    Models' (p. 23).
+  found: '2026-10-02'
+- paper: Sparks of Artificial General Intelligence. Early experiments with GPT-4
+  problem: Truncated: arXiv's HTML lacks the text of 121 of the PDF's 152 text pages (pp. 2–154,
+    with gaps); the markdown's last section is 'Interfacing with LaT<span
+    class="smallcaps">e</span>X.' (p. 24).
+  found: '2026-10-02'
+- paper: Studying Large Language Model Generalization with Influence Functions
+  problem: Truncated: arXiv's HTML lacks the text of 98 of the PDF's 117 text pages (pp. 10–119,
+    with gaps); the markdown's last section is '2.1 Influence Functions' (p. 9).
+  found: '2026-10-02'
+- paper: TabM. Advancing Tabular Deep Learning with Parameter-Efficient Ensembling
+  problem: Truncated: arXiv's HTML lacks the text of 11 of the PDF's 37 text pages (pp. 27–37); the
+    markdown's last section is 'Appendix E Per-dataset results with standard deviations' (p. 26).
+  found: '2026-10-02'
+- paper: Text-to-LoRA. Instant Transformer Adaption
+  problem: Incomplete: arXiv's HTML lacks the text of 7 of the PDF's 28 text pages (pp. 18–19,
+    22–26), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: The AI Scientist-v2. Workshop-Level Automated Scientific Discovery via Agentic Tree Search
+  problem: Incomplete: arXiv's HTML lacks the text of 17 of the PDF's 63 text pages (pp. 34–40,
+    47–49, 51, 59–64), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: The AI Scientist. Towards Fully Automated Open-Ended Scientific Discovery
+  problem: Incomplete: arXiv's HTML lacks the text of 80 of the PDF's 171 text pages (pp. 62–184,
+    with gaps), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: The Ideation-Execution Gap. Execution Outcomes of LLM-Generated versus Human Research Ideas
+  problem: Incomplete: arXiv's HTML lacks the text of 58 of the PDF's 105 text pages (pp. 33–130,
+    with gaps), appendix material such as prompts, examples or per-dataset tables.
+  found: '2026-10-02'
+- paper: Training Agents Inside of Scalable World Models
+  problem: Truncated: arXiv's HTML lacks the text of 9 of the PDF's 27 text pages (pp. 13–17, 24–25,
+    27, 29); the markdown's last section is '4.2. Human Interaction' (p. 12).
+  found: '2026-10-02'
+- paper: Understanding Optimization in Deep Learning with Central Flows
+  problem: Truncated: arXiv's HTML lacks the text of 18 of the PDF's 155 text pages (pp. 149–166);
+    the markdown's last section is 'E.3 RMSProp' (p. 147).
+  found: '2026-10-02'

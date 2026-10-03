@@ -1,0 +1,97 @@
+{
+ "file": "reconvert-pdf.jsonl",
+ "records": 279,
+ "invocations": [
+  {
+   "first_record": "2026-10-02T02:10:36",
+   "last_record": "2026-10-02T09:04:29",
+   "elapsed_min": 413.9,
+   "records": 277,
+   "status": {
+    "failed": 1,
+    "ok": 276
+   },
+   "converted_per_hour": 40,
+   "seconds_between_records": {
+    "median": 52.0,
+    "mean": 90.0,
+    "p90": 178.0,
+    "max": 1929.0,
+    "slowest": [
+     {
+      "seconds": 1929.0,
+      "paper": "trustworthy-ml/ai-safety/International AI Safety Report 2026.md",
+      "message": "from the PDF, 111213 words; equation model failed, equations are raw text"
+     },
+     {
+      "seconds": 869.0,
+      "paper": "trustworthy-ml/privacy-and-federated/The Algorithmic Foundations of Differential Privacy.md",
+      "message": "from the PDF, 98916 words"
+     },
+     {
+      "seconds": 828.0,
+      "paper": "experimentation-and-metrics/ab-testing/Anytime-Valid Linear Models and Regression Adjusted Causal Inference in Randomized Experiments.md",
+      "message": "from the PDF, 19787 words"
+     },
+     {
+      "seconds": 649.0,
+      "paper": "llm/post-training/rl-for-reasoning/Reinforcement Learning for LLM Post-Training. A Survey.md",
+      "message": "from the PDF, 62306 words"
+     },
+     {
+      "seconds": 553.0,
+      "paper": "ml-foundations/classical-ml/Greedy function approximation. A gradient boosting machine..md",
+      "message": "from the PDF, 16983 words"
+     }
+    ]
+   }
+  },
+  {
+   "first_record": "2026-10-02T09:16:50",
+   "last_record": "2026-10-02T09:16:50",
+   "elapsed_min": 0.0,
+   "records": 1,
+   "status": {
+    "failed": 1
+   },
+   "converted_per_hour": null
+  },
+  {
+   "first_record": "2026-10-02T09:19:41",
+   "last_record": "2026-10-02T09:19:41",
+   "elapsed_min": 0.0,
+   "records": 1,
+   "status": {
+    "ok": 1
+   },
+   "converted_per_hour": null
+  }
+ ],
+ "papers": 277,
+ "last_status": {
+  "ok": 277
+ },
+ "skip_reasons": {},
+ "not_ok": [],
+ "retried": [
+  {
+   "paper": "ai-and-society/Canaries in the Coal Mine. Six Facts about the Recent Employment Effects of Artificial Intelligence.md",
+   "statuses": [
+    "failed",
+    "failed",
+    "ok"
+   ]
+  }
+ ],
+ "pdf_words": {
+  "papers": 277,
+  "total": 3217778,
+  "median": 9516
+ },
+ "pdf_notes": [
+  {
+   "paper": "trustworthy-ml/ai-safety/International AI Safety Report 2026.md",
+   "message": "from the PDF, 111213 words; equation model failed, equations are raw text"
+  }
+ ]
+}

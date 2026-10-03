@@ -1,0 +1,19 @@
+277 PDF papers now, 277 with the layout-analysis note; 277 also PDF papers before
+median new/old words 1.048
+ 0.69  26240 ->  18102 | deep-learning/architectures/Long Short-Term Memory.md
+ 0.76  32947 ->  25164 | computer-systems/The power of two random choices. a survey of tech-niques and results.md
+ 0.78  14467 ->  11285 | ai-and-society/Canaries in the Coal Mine. Six Facts about the Recent Employment Effects of Artificial Intelligence.md
+ 0.81   6900 ->   5612 | nlp/generation-metrics/ROUGE. A Package for Automatic Evaluation of Summaries.md
+ 0.92  10487 ->   9645 | search-and-ranking/indexing-and-classical-ir/BitFunnel. Revisiting Signatures for Search.md
+ 0.94  15748 ->  14764 | ml-foundations/evaluation-and-model-selection/Statistical Comparisons of Classifiers over Multiple Data Sets.md
+ 0.94   4300 ->   4047 | ml-foundations/classical-ml/An Introduction to Locally Linear Embedding.md
+ 0.94   4152 ->   3908 | ml-foundations/classical-ml/Stochastic Neighbor Embedding.md
+papers with raw-text equations: 8
+  2 raw of 101 display equations | Metric Learning. A Survey
+  2 raw of 98 display equations | Training Complex Models with Multi-Task Weak Supervision
+  1 raw of 333 display equations | The Algorithmic Foundations of Differential Privacy
+  1 raw of 252 display equations | Elucidating the Design Space of Diffusion-Based Generative Models
+  1 raw of 218 display equations | A Tutorial on Markov Chain Monte-Carlo and Bayesian Modeling
+  1 raw of 173 display equations | Anytime-Valid Linear Models and Regression Adjusted Causal Inference in Randomized Experiments
+  1 raw of 14 display equations | Dropout. A Simple Way to Prevent Neural Networks from Overfitting
+  1 raw of 0 display equations | Spanner. Google's Globally-Distributed Database

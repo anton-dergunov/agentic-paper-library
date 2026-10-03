@@ -1,0 +1,10 @@
+deep-learning/optimizers-and-schedules/Adam. A Method for Stochastic Optimization.md
+search-and-ranking/neural-ranking/Learning deep structured semantic models for web search using clickthrough data.md
+recommender-systems/collaborative-filtering/Factorization Machines.md
+ml-foundations/evaluation-and-model-selection/Random Search for Hyper-Parameter Optimization.md
+search-and-ranking/learning-to-rank/The LambdaLoss Framework for Ranking Metric Optimization.md
+ml-foundations/evaluation-and-model-selection/Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms.md
+ai-and-society/How People Use ChatGPT.md
+research-practice/Why Most Published Research Findings Are False.md
+llm/foundation-models/Command A. An Enterprise-Ready Large Language Model.md
+ml-foundations/tabular/Accurate predictions on small data with a tabular foundation model.md

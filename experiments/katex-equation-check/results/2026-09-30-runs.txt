@@ -1,0 +1,121 @@
+# KaTeX checks run on 29-30 Sep 2026 (times are UTC), copied from the session transcript.
+# Commands are shown with scratchpad paths shortened; output is verbatim except that KaTeX's
+# 'No character metrics' warnings (printed to stderr, not failures) are dropped and the
+# conversion and SVG messages printed by the same command are cut.
+
+## 1. Pilot, 22:57: three freshly converted papers (2505.00675, 2403.04132v1, 2402.08114v2), converter as of the first reconversion
+$ node check.js mathtest
+files 3, math spans 336, failed 14
+     8 Undefined control sequence: \mathds   e.g. ["2403.04132v1.md","p_{i}=\\frac{1}{|\\mathcal{H}_{A^{\\prime}_{i}}|+1}\\left(1+\\sum\\limits_{h\\in\\mathcal{H}_{A^{\\prime}_{i}}}\\mathds{1}\\left\\{h\\geq H^{\\prime}_{i}\\right\\}\\right). \\tag"]
+     3 Can't use function '$' in math mode   e.g. ["2505.00675.md","\\backslash$alpha$\\}$: Learning Memory Construction via Reinforcement Learning. *arXiv preprint arXiv:2509.25911* (2025).\n- Wang et al. (2025h) Yaxuan Wang, Jiah"]
+     2 Undefined control sequence: \rank   e.g. ["2403.04132v1.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathds{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     1 Expected EOF, got '#'   e.g. ["2505.00675.md","\n\nWe collect papers from past 3 years (2022 to 2025) from Top NLP and ML conferences (i.e., ACL, NAACL, EMNLP, NeurIPS, ICML, ICLR). To reduce the bias from dif"]
+
+## 2. Pilot, 22:59: five papers (adds 2309.11998v4, 2212.10450v2) after \mathds -> \mathbb and merging adjacent inline math
+$ node check.js mathtest
+files 5, math spans 368, failed 2
+     2 Undefined control sequence: \rank   e.g. ["2403.04132v1.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+
+## 3. Whole library, 23:12: 238 papers after the first full reconversion (dollar delimiters, \mathds fix)
+$ node check.js library
+files 238, math spans 35486, failed 830
+   233 Invalid color: '['   e.g. ["Is Model Collapse Inevitable. Breaking the Curse of Recursion by Accumulating Real and Synthetic.md","E_{\\text{test}}^{\\text{Replace}}(\\hat{w}_{n})=\\frac{\\sigma^{2}d}{T-d-1}\\times\\color[rgb]{1,0,0}n\\color[rgb]{0,0,0} \\tag{4}"]
+   216 Undefined control sequence: \textsc   e.g. ["Whose Opinions Do Language Models Reflect.md","\\mathcal{S}^{G}_{m}(Q)=\\frac{1}{|Q|}\\sum_{q\\in Q}\\max_{c_{G}\\in\\small{[\\textsc{QA},\\textsc{BIO},\\textsc{POR}]}}\\mathcal{A}(D_{m}(q;c_{G}),D_{G}(q))"]
+    70 Undefined control sequence: \mathbbm   e.g. ["Snorkel Rapid Training Data Creation with Weak Supervision.md","\\displaystyle A_{w}(\\Lambda,y)=\\frac{1}{m}\\sum_{i=1}^{m}\\left(\\mathbbm{1}\\left\\{y_{i}f_{w}(\\Lambda_{i})>0\\wedge y_{i}f_{1}(\\Lambda_{i})\\leq 0\\right\\}\\right."]
+    50 Expected EOF, got '}'   e.g. ["Scaling Laws for Reward Model Overoptimization.md","}}"]
+    37 Undefined control sequence: \mbox   e.g. ["A General Theoretical Paradigm to Understand Learning from Human Preferences.md","p^{*}(y\\succ y^{\\prime}|x)=\\mathop{\\mathbb{E}}_{h}[\\mathbb{I}\\{h\\mbox{ prefers }y\\mbox{ to }y^{\\prime}\\mbox{ given }x\\}]"]
+    37 Can't use function '$' in math mode   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","15$ more expensive for every $10,000$ passages <sup>7</sup><sup>7</sup> 7 To speed up indexing, we use $10$ threads querying gpt-3.5-turbo-1106 through the Open"]
+    28 Undefined control sequence: \textless   e.g. ["WildFeedback Aligning LLMs With In-situ User Interactions And Feedback.md","\\textless|\\text{begin\\_of\\_history}|\\textgreater"]
+    24 Undefined control sequence: \montraita   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\displaystyle{\\montraita}"]
+    18 Undefined control sequence: \nicefrac   e.g. ["Universal Model Routing for Efficient LLM Inference.md","\\nicefrac{{2}}{{3}}"]
+    13 Undefined control sequence: \degen   e.g. ["Remember the Decision, Not the Description A Rate-Distortion Framework for Agent Memory.md","\\alpha_{e}\\;\\leq\\;\\inf\\bigl\\{\\alpha\\geq 0:\\;\\degen(G_{\\alpha})+1\\leq K\\bigr\\}. \\tag{24}"]
+    11 Undefined control sequence: \defeq   e.g. ["Is Model Collapse Inevitable. Breaking the Curse of Recursion by Accumulating Real and Synthetic.md","E_{test}(w)\\defeq\\mathbb{E}\\left[(x_{test}^{T}w-y_{test})^{2}\\right]-\\sigma^{2}=\\mathbb{E}[\\|w-w^{*}\\|_{\\Sigma}^{2}] \\tag{1}"]
+     7 Undefined control sequence: \lx@sectionsign   e.g. ["A Survey on LLM-based Conversational User Simulation.md","\\lx@sectionsign"]
+     6 Undefined control sequence: \bias   e.g. ["Off-Policy Evaluation for Ranking Policies under Deterministic Logging Policies.md","\\displaystyle\\bias\\left[\\hat{V}(\\pi;\\mathcal{D})\\right]:=\\mathbb{E}_{p(\\mathcal{D})}\\left[\\hat{V}(\\pi;\\mathcal{D})\\right]-V(\\pi),\\,\\var\\left[\\hat{V}(\\pi;\\mathca"]
+     6 Unexpected end of input in a macro argument, expected '}' at end of input: …choice{{}\hbox{   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{"]
+     6 Undefined control sequence: \hfil   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\hfil\\textstyle n\\hfil"]
+     6 Unexpected end of input in a macro argument, expected '}' at end of input: \textbf{   e.g. ["Stress Detection from Multimodal Wearable Sensor Data.md","\\textbf{"]
+     5 Unknown column alignment: [   e.g. ["A Shared Low-Rank Adaptation Approach to Personalized RLHF.md","\\displaystyle V_{i,j}=\\left\\{\\begin{array}[]{lll}\\frac{\\Phi^{\\prime}(r_{\\theta_{i}^{\\star}}(\\tau_{i,0}^{(j)})-r_{\\theta_{i}^{\\star}}(\\tau_{i,1}^{(j)}))}{\\Phi(r_"]
+     5 Undefined control sequence: \penalty   e.g. ["ArCHer Training Language Model Agents via Hierarchical Multi-Turn RL.md","\\displaystyle f_{k}\\leftarrow\\mathop{\\mathrm{argmin}}_{f\\in\\mathcal{F}}\\penalty\\ \\widehat{\\mathbb{E}}_{\\mathcal{D}_{k}}[(f(s,a)-r-\\gamma f_{k-1}(s^{\\prime},\\pi("]
+     5 Undefined control sequence: \vskip   e.g. ["SimPO Simple Preference Optimization with a Reference-Free Reward.md","p_{\\theta}(y\\mid x)=\\frac{1}{|y|}\\log\\pi_{\\theta}(y\\mid x)=\\frac{1}{|y|}\\sum_{i=1}^{|y|}\\log\\pi_{\\theta}(y_{i}\\mid x,y_{<i}).\\vskip-5.0pt \\tag{3}"]
+     5 Undefined control sequence: \maximize   e.g. ["Prompt-to-Leaderboard.md","\\begin{aligned} \\maximize_{\\begin{subarray}{c}\\tilde{\\pi}\\in\\Delta^{M}\\end{subarray}}\\quad&\\mathbb{P}_{A\\sim q,B\\sim\\tilde{\\pi},Y\\sim\\mathrm{Bern}(\\sigma(\\theta"]
+     4 Undefined control sequence: \rank   e.g. ["Chatbot Arena An Open Platform for Evaluating LLMs by Human Preference.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     4 Unexpected end of input in a macro argument, expected '}' at end of input: S_{m,P}^{\text{   e.g. ["ELEPHANT Measuring and understanding social sycophancy in LLMs.md","S_{m,P}^{\\text{"]
+     4 Undefined control sequence: \bin   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","\\widehat{R}^{+}(\\lambda)=\\sup\\big\\{R:P(\\bin(n(\\lambda),R)\\leq\\lceil n(\\lambda)\\widehat{R}(\\lambda)\\rceil)\\geq\\delta\\big\\}. \\tag{4}"]
+     3 Undefined control sequence: \addcontentsline   e.g. ["ArCHer Training Language Model Agents via Hierarchical Multi-Turn RL.md","\\displaystyle\\addcontentsline{lla}{section}{\\numberline quation:reinforce}J_{\\phi}(\\pi)=\\mathbb{E}_{s_{c}\\sim\\mathcal{D},a_{t}^{1:L}\\sim\\pi(\\cdot|s_{c})}\\left[\\"]
+     3 Undefined control sequence: \ref   e.g. ["Direct Preference Optimization Your Language Model is Secretly a Reward Model.md","\\sum_{y}\\underbrace{\\pi_{\\text{ref}}(y\\mid x)\\exp\\left(\\frac{1}{\\beta}r(x,y)\\right)}_{=\\pi(y\\mid x)\\text{, using Thm.~\\ref{thm:main} reparam.}}=1, \\tag{9}"]
+     3 Undefined control sequence: \calibratesingle   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","\\lambda_{i}\\leftarrow\\calibratesingle(M_{i},D,\\alpha,\\frac{\\delta}{|\\mathcal{M}|})"]
+     2 Unexpected end of input in a macro argument, expected '}' at end of input: …alpha_{\text{bo   e.g. ["Scaling Laws for Reward Model Overoptimization.md","\\alpha_{\\text{bo"]
+     2 Unexpected end of input in a macro argument, expected '}' at end of input: …bf{1}_{\{\text{   e.g. ["HealthBench Evaluating Large Language Models Towards Improved Human Health.md","\\mathbf{1}_{\\{\\text{"]
+     2 Undefined control sequence: \calibrate   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","\\Lambda\\leftarrow\\calibrate(\\mathcal{M},D_{\\textit{cal}},\\alpha,\\delta)"]
+     2 Unexpected end of input in a macro argument, expected '}' at end of input: …text{env.reset(   e.g. ["ExpeL LLM Agents Are Experiential Learners.md","o_{0}\\leftarrow\\text{env.reset("]
+     1 Undefined control sequence: \indent   e.g. ["ArCHer Training Language Model Agents via Hierarchical Multi-Turn RL.md","\\displaystyle+\\indent\\indent\\mathbb{E}_{s,a\\sim d^{\\pi}}[({\\mathcal{T}}^{\\pi}\\bar{f}(s,a)-Q^{\\pi}(s,a))^{2}]"]
+     1 Unexpected end of input in a macro argument, expected '}' at end of input: \beta_{\text{bo   e.g. ["Scaling Laws for Reward Model Overoptimization.md","\\beta_{\\text{bo"]
+     1 Undefined control sequence: \textvisiblespace   e.g. ["Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or How I learned to.md","\\displaystyle\\mathcal{F}_{\\text{item1}} \\displaystyle=\\mathtt{\\{x\\mapsto(x),x\\mapsto x.,x\\mapsto x),x\\mapsto x\\textvisiblespace),x\\mapsto[x],x\\mapsto<x>\\}}"]
+     1 Undefined control sequence: \makebox   e.g. ["The PRISM Alignment Dataset What Participatory, Representative and Individualised Human Feedback.md","\\overbrace{\\makebox[20.00003pt]{}}^{\\text{\\rotatebox{90.0}{{interaction}}}}"]
+     1 Undefined control sequence: \mse   e.g. ["Off-Policy Evaluation for Ranking Policies under Deterministic Logging Policies.md","\\displaystyle\\mse(\\hat{V}) \\displaystyle:=\\mathbb{E}_{p(\\mathcal{D})}\\left[\\left(\\hat{V}(\\pi;\\mathcal{D})-V(\\pi)\\right)^{2}\\right]=\\bias\\left[\\hat{V}(\\pi;\\mathc"]
+     1 Undefined control sequence: \ber   e.g. ["Trust or Escalate LLM Judges with Provable Guarantees for Human Agreement.md","y_{i,j}\\sim\\ber(0.5)"]
+     1 Unexpected end of input in a macro argument, expected '}' at end of input: …leftarrow\text{   e.g. ["ExpeL LLM Agents Are Experiential Learners.md","\\mathcal{B}\\leftarrow\\text{"]
+     1 Undefined control sequence: \faIcon   e.g. ["Memory in the Age of AI Agents.md","{}^{\\dagger\\text{\\faIcon{cube}}}"]
+     1 Undefined control sequence: \minimize   e.g. ["Prompt-to-Leaderboard.md","\\displaystyle\\minimize_{\\begin{subarray}{c}\\tilde{\\pi}\\in\\mathbb{R}^{M}\\end{subarray}} \\displaystyle-\\tilde{\\pi}^{\\top}\\mathbf{W}^{*}q \\tag{13}"]
+     1 Undefined control sequence: \st   e.g. ["Prompt-to-Leaderboard.md","\\displaystyle\\st \\displaystyle\\tilde{\\pi}^{\\top}c\\leq C,"]
+
+## 4. 23:13: three papers converted from TeX alttext (a) and with alttext removed (b)
+## NOTE (added 3 Oct 2026): the 'noalt' HTML still carried each equation's TeX in a MathML
+## <annotation encoding="application/x-tex">, so (b) did not test MathML; a and b are identical files.
+== with alttext (current)
+files 3, math spans 577, failed 15
+     4 Undefined control sequence: \bin   e.g. ["2407.18370.md","\\widehat{R}^{+}(\\lambda)=\\sup\\big\\{R:P(\\bin(n(\\lambda),R)\\leq\\lceil n(\\lambda)\\widehat{R}(\\lambda)\\rceil)\\geq\\delta\\big\\}. \\tag{4}"]
+     3 Undefined control sequence: \mathbbm   e.g. ["2407.18370.md","\\widehat{R}(\\lambda)=\\frac{1}{n(\\lambda)}\\sum_{(x,y_{\\textit{human}})\\in D_{\\textit{cal}}}\\mathbbm{1}\\{f_{\\textit{LM}}(x)\\neq y_{\\textit{human}}\\land c_{\\textit"]
+     3 Undefined control sequence: \calibratesingle   e.g. ["2407.18370.md","\\lambda_{i}\\leftarrow\\calibratesingle(M_{i},D,\\alpha,\\frac{\\delta}{|\\mathcal{M}|})"]
+     2 Undefined control sequence: \rank   e.g. ["2403.04132v1.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     2 Undefined control sequence: \calibrate   e.g. ["2407.18370.md","\\Lambda\\leftarrow\\calibrate(\\mathcal{M},D_{\\textit{cal}},\\alpha,\\delta)"]
+     1 Undefined control sequence: \ber   e.g. ["2407.18370.md","y_{i,j}\\sim\\ber(0.5)"]
+== from MathML
+files 3, math spans 577, failed 15
+     4 Undefined control sequence: \bin   e.g. ["2407.18370.md","\\widehat{R}^{+}(\\lambda)=\\sup\\big\\{R:P(\\bin(n(\\lambda),R)\\leq\\lceil n(\\lambda)\\widehat{R}(\\lambda)\\rceil)\\geq\\delta\\big\\}. \\tag{4}"]
+     3 Undefined control sequence: \mathbbm   e.g. ["2407.18370.md","\\widehat{R}(\\lambda)=\\frac{1}{n(\\lambda)}\\sum_{(x,y_{\\textit{human}})\\in D_{\\textit{cal}}}\\mathbbm{1}\\{f_{\\textit{LM}}(x)\\neq y_{\\textit{human}}\\land c_{\\textit"]
+     3 Undefined control sequence: \calibratesingle   e.g. ["2407.18370.md","\\lambda_{i}\\leftarrow\\calibratesingle(M_{i},D,\\alpha,\\frac{\\delta}{|\\mathcal{M}|})"]
+     2 Undefined control sequence: \rank   e.g. ["2403.04132v1.md","\\rank(\\mathbb{P})_{m}=1+\\sum\\limits_{m^{\\prime}\\in[M]}\\mathbb{1}\\left\\{s(\\mathbb{P})_{m^{\\prime}}>s(\\mathbb{P})_{m}\\right\\}. \\tag{1}"]
+     2 Undefined control sequence: \calibrate   e.g. ["2407.18370.md","\\Lambda\\leftarrow\\calibrate(\\mathcal{M},D_{\\textit{cal}},\\alpha,\\delta)"]
+     1 Undefined control sequence: \ber   e.g. ["2407.18370.md","y_{i,j}\\sim\\ber(0.5)"]
+
+## 5. 23:13: control sequences KaTeX supports (katex-commands.js)
+1016 candidates, 976 supported
+rank false
+textsc false
+mbox false
+mathbbm false
+frac true
+operatorname true
+text true
+color true
+tag true
+displaystyle true
+limits true
+bigl true
+boxed true
+mathcal true
+lx false
+
+## 6. 23:15: ten papers with the most failures, before and after the normalisation in arxiv-html.lua
+== before
+files 10, math spans 2022, failed 146
+== after
+files 10, math spans 1964, failed 6
+     6 Can't use function '\operatorname@' in text mode   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{}\\displaystyle{\\operatorname{montraitd}}\\text{}}{{}\\hbox{}\\textstyle{\\operatorname{montraitd}}\\text{}}{{}\\hbo"]
+
+## 7. Whole library, 23:27: after the second full reconversion
+$ node check.js library
+files 238, math spans 35371, failed 84
+    72 Expected EOF, got '}'   e.g. ["Stress Detection from Multimodal Wearable Sensor Data.md","}0.769\\,142\\,111\\,540\\,03\\text{\\pm}0.162\\,334\\,188\\,135\\,945\\,38\\text{"]
+    12 Can't use function '\operatorname@' in text mode   e.g. ["Direct Preference Optimization Your Language Model is Secretly a Reward Model.md","\\sum_{y}\\underbrace{\\pi_{\\text{ref}}(y\\mid x)\\exp\\left(\\frac{1}{\\beta}r(x,y)\\right)}_{=\\pi(y\\mid x)\\text{, using Thm.~\\operatorname{ref}{thm:main} reparam.}}=1,"]
+
+## 8. 23:29: eight papers after the mode-aware rewrite (math vs \text{} argument)
+files 8, math spans 1308, failed 6
+     6 Mismatched \)   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{\\(\\displaystyle{\\operatorname{montraitd}}\\)}}{{}\\hbox{\\(\\textstyle{\\operatorname{montraitd}}\\)}}{{}\\hbox{\\(\\s"]
+
+## 9. Whole library, 23:31: final, after reconverting the 12 papers that still failed
+$ node check.js library
+files 238, math spans 35299, failed 6
+     6 Mismatched \)   e.g. ["HippoRAG Neurobiologically Inspired Long-Term Memory for Large Language Models.md","\\mkern 2.0mu\\textstyle\\mathrel{\\mathchoice{{}\\hbox{\\(\\displaystyle{\\operatorname{montraitd}}\\)}}{{}\\hbox{\\(\\textstyle{\\operatorname{montraitd}}\\)}}{{}\\hbox{\\(\\s"]
