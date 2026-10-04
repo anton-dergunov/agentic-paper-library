@@ -65,6 +65,12 @@ until the review is written.
    - Open a paper again only to check a claim the review leans on.
    - Start the paper map from `paperlib review-status --links <scope>`.
    - Look up the exact page of each cited number in the digest; never guess one.
+   - Choose each diagram's type for what it shows, and use a paper's own figure where it
+     explains better (`format.md`, "Diagrams and figures").
+   - **Write the "In practice" section last**, when everything else is done: decide which
+     one or two topics a practitioner relying on these papers would want recommendations
+     on, derive them from the findings, and open with the provenance note (`format.md`,
+     "The In practice section"). Skip it if the area has none.
 7. **Check.**
    - `paperlib review-status <scope>` must show every paper covered and no broken links.
    - Run `paperlib build-index` (the folder indexes now link the review), then
@@ -160,6 +166,9 @@ Steps:
      **How strong the evidence is** line.
    - Comparison tables, open questions (mark what is now resolved), where to start
      reading (swap in a newer paper if it is now the better entry point) and connections.
+   - The "In practice" section, last: re-derive the recommendations from the revised
+     findings, update the date in its provenance note, and add the section if the review
+     predates it.
    - The abstract, if the state of the area has changed.
    - Fold the lasting points from `## Q&A` into the narrative, and remove them there.
 5. **Log.** Add a line to `## Updates` saying what came in and what changed, and bump

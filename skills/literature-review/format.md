@@ -32,8 +32,9 @@ The `overview` skill's `format.md` sets the voice. These rules carry over:
   parallel. No `---` separators.
 - **Math:** at most a few small formulas in the whole review, each followed by one
   sentence saying what it means.
-- **Diagrams:** a mermaid `flowchart LR` in the introduction when the area has a pipeline
-  or a loop, at most 6 nodes.
+- **Diagrams:** see "Diagrams and figures" below. Draw one where a picture shows something
+  the text cannot, and pick the type that fits; don't default to a left-to-right chain of
+  boxes.
 
 These are different from an overview note:
 
@@ -55,8 +56,9 @@ Framing:
   marked "(not from the library)". The library is a selection, so say "the papers here"
   rather than "the field" when coverage matters.
 - **Neutral and generic.** It is written for someone who wants to understand the area,
-  not to build a particular product: no "our system", no design recommendations, no
-  product vocabulary.
+  not to build a particular product: no "our system", no product vocabulary. Advice on
+  what to do belongs in the "In practice" section and nowhere else; the other sections
+  report what the papers show.
 
 **Length: no cap.** Cover every paper in the scope and explain each family of approaches
 properly; don't cut to hit a word count. The pilot review of 70 papers came to about
@@ -82,6 +84,13 @@ Worked well, keep it:
 - **The paper map**, whose lines were written from reading the papers. They read much
   better than technical one-line summaries.
 - **Flagged conversion problems**, which are fixed separately.
+
+From the reading of the third review (`llm/evaluation`, 2026-10-04):
+- **A practical section** asked for after the review was written ("given all this
+  research, how should I do it?") was the part the reader valued most. It is now the "In
+  practice" section below, written last and marked as the agent's synthesis.
+- **The diagrams had become repetitive**: every one a left-to-right chain of boxes, some
+  of them only a numbered list drawn as boxes. See "Diagrams and figures".
 
 Missing, now required:
 - **A taxonomy of the kinds of approaches**, explained at the level of how each one works,
@@ -128,8 +137,9 @@ The body has these sections, in this order:
    - Optionally a `###` for the one split that decides most (for memory: text, cache or
      weights), with a table of what each side can and cannot do.
    - One `###` per family, named by the family and its best-known members. Each has bold
-     lead-ins **How it works** (plain mechanism, a concrete example, a small mermaid
-     diagram when it is a pipeline), **What it buys**, **What it costs** (with the evidence
+     lead-ins **How it works** (plain mechanism, a concrete example, and a diagram or a
+     figure from one of the papers when it shows the mechanism better than words),
+     **What it buys**, **What it costs** (with the evidence
      against it, if any) and **Fits** (the kind of problem it suits). Name the variants with
      a few words each.
    - `### The families side by side`: one table, a row per family, columns for the
@@ -146,25 +156,28 @@ The body has these sections, in this order:
    claim the papers support, written as a sentence ("Compact memories beat full history
    only when retrieval is good"). Under it: the evidence with citations, then a bold
    **How strong the evidence is** line, and the papers that disagree.
-7. `## Comparison` (when the area has one): a table of the main methods or systems along
+7. `## In practice: <topic>` (when the area has a practical use; one section, or two if
+   there are two distinct topics). **Written last**, after every other section is done.
+   See "The In practice section" below.
+8. `## Comparison` (when the area has one): a table of the main methods or systems along
    the axes that matter for the area. For memory systems these are: what is stored, how it
    is written, how it is retrieved, how it is forgotten, and how it was evaluated. One row
    per paper, linked.
-8. `## Open questions`: what is contested, unmeasured, or rests on thin evidence. Each item
+9. `## Open questions`: what is contested, unmeasured, or rests on thin evidence. Each item
    is a bold-led line plus one or two sentences, with the papers that raise it.
-9. `## Where to start reading`: 5–8 papers in reading order. Each one is a link and a line on
+10. `## Where to start reading`: 5–8 papers in reading order. Each one is a link and a line on
    why it comes at that point ("the clearest statement of the problem", "the system later
    papers compare against").
-10. `## Connections`: neighbouring areas, as links to their reviews (`../<scope>.md`) or their
+11. `## Connections`: neighbouring areas, as links to their reviews (`../<scope>.md`) or their
    folders, each with one line on what they share with this one.
-11. `## Updates`: a dated log, one line per version: what it took in and what it changed
+12. `## Updates`: a dated log, one line per version: what it took in and what it changed
     ("2027-10-03: 14 new papers; the long-context finding now holds only up to 200K tokens;
     new family: …"). The first line records the first version. The reader reads it to see
     what moved since they last looked.
-12. `## Q&A`: cross-paper points settled in later sessions, appended one per line:
+13. `## Q&A`: cross-paper points settled in later sessions, appended one per line:
     `- 2026-10-05: <question> → <short answer, with links>`. An update folds the lasting
     ones into the findings and removes them from here.
-13. `## Paper map`: every paper in the scope, grouped under `### <folder>` headings, one line
+14. `## Paper map`: every paper in the scope, grouped under `### <folder>` headings, one line
     each:
 
     ```markdown
@@ -176,6 +189,69 @@ The body has these sections, in this order:
     index summary. Then `→` and the sections that discuss it (or `→ map only` if none
     does). Every
     paper in the scope must be here: `paperlib review-status` counts this section.
+
+## The In practice section
+
+The rest of the review says what the papers show. This section answers the question a
+practitioner asks next: "given all this, what should I do?" It is the one place where the
+review gives advice.
+
+- **Write it last.** Once every other section is finished, ask which one or two topics
+  someone who relies on these papers in their work would most want recommendations on (for
+  LLM evaluation: how to build an LLM-judge evaluation for an application). Name the
+  section for the topic. Skip the section when the area has no practical use that the
+  papers support (a purely theoretical area, say), and never pad one.
+- **Aim it at practical use**, not at the setting most papers study, when the two differ.
+  Start by saying what is different for the practitioner.
+- **Derive every recommendation from the findings.** Each one carries its evidence, with a
+  paper link and a page link for a number. Where the papers are silent, say "no paper here
+  tests this"; where they disagree, say so and don't pick a side without a reason. Mark
+  anything from general knowledge "(not from the library)".
+- **Open with a provenance note**, as a callout, so the reader never mistakes it for a
+  tested procedure:
+
+  ```markdown
+  > [!warning] Written by an agent from these papers
+  > These recommendations were derived by an LLM agent from the <N> papers in this review
+  > (<M> read in full, the rest skimmed), as the library stood on <date>. They are a
+  > synthesis, not a tested procedure, and nobody has verified them in practice. Recheck
+  > them when the review is updated: new papers may overturn them.
+  ```
+
+- **Shapes that worked:** what is different in practice; a recommended design as numbered
+  steps, each with its evidence; a table of common failures (what happens, the evidence,
+  what helps); "common advice, checked against the papers" (supported, contested, or not
+  supported); and a short version of five to eight lines at the end.
+- **On update**, re-derive it. Change the date in the note, and say in `## Updates` which
+  recommendations changed and why.
+
+## Diagrams and figures
+
+A diagram earns its place when it shows a structure the prose cannot: who talks to whom, a
+loop, a trade-off between two axes, a hierarchy, an order in time. A numbered list drawn as
+a row of boxes adds nothing; write the list.
+
+- **Pick the type that fits.** Mermaid renders all of these:
+  - `flowchart` for a pipeline or loop that branches or feeds back (not for a straight
+    line of steps);
+  - `sequenceDiagram` for interactions between parties (an agent, a user, a tool, a
+    judge);
+  - `quadrantChart` for placing approaches on two axes;
+  - `timeline` for the history;
+  - `mindmap` or a top-down `flowchart TD` for a taxonomy;
+  - `xychart-beta` for a trend that a finding rests on, with the numbers cited in the
+    text.
+- **Vary them.** A review whose diagrams are all the same type is a sign that the type
+  was chosen by habit. Don't copy the diagram types of an earlier review.
+- **Keep them small**: at most 6–8 nodes or participants, labels of a few words.
+- **Figures from the papers** are welcome when a paper's own figure explains a mechanism
+  or shows a result better than a redrawn one. Link the extracted image by a relative path
+  (`../../library/<topic path>/images/<Title>-figNN.<ext>`), and put a caption under it
+  naming the paper and the figure, with a page link: "Figure 3 of [HELMET](…),
+  [p. 7](…)". Open the image to check that it is the figure you mean and is readable
+  on its own. At most a handful per review. `paperlib check` verifies that the file exists.
+- **How many:** one in the introduction when the area has an overall structure, then only
+  where a family or a finding needs one.
 
 ## Links
 
@@ -194,7 +270,7 @@ The body has these sections, in this order:
 
 A long review is fine as one file. Split only when one file becomes unwieldy to edit
 (roughly 1,500 lines): move it to `reviews/<scope>/index.md`, which keeps the frontmatter,
-the abstract, the introduction, the kinds section, the map, the history, open questions,
-where to start, connections, updates and Q&A. Each finding, or each group of findings, becomes its own file
+the abstract, the introduction, the kinds section, the map, the history, the In practice
+section, open questions, where to start, connections, updates and Q&A. Each finding, or each group of findings, becomes its own file
 in the same folder, and the paper map moves to `paper-map.md` (with its `## Paper map`
 heading). Links in the moved files go one level deeper (`../../../library/…`).
