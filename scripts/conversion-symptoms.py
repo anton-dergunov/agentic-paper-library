@@ -3,6 +3,7 @@
 
     ./scripts/conversion-symptoms.py [<folder> ...]          # one line per affected paper
     ./scripts/conversion-symptoms.py --counts [<folder> ...]  # papers per symptom
+    ./scripts/conversion-symptoms.py --katex [<folder> ...]
     ./scripts/conversion-symptoms.py --compare <git-ref> [<folder> ...]
 
 Looks at papers converted from arXiv HTML (all of them, or those under the
@@ -20,20 +21,27 @@ lacks the content:
   digit-groups  siunitx numbers with digit groups ("0.769 142 111 540 03")
   raw-citations citations left as BibTeX keys, or references as "LABEL:tab:x"
 
+--katex instead lists papers of every source with equations KaTeX (VS Code's
+preview) cannot draw, with the number of them and the first error. It needs
+Node; KaTeX is installed into scripts/katex/ on first use.
+
 --compare <git-ref> instead lists papers whose text shrank by more than 5%
-since <git-ref> (words outside markup, so dropped alt text and tags do not
-count), the check that a reconversion lost nothing.
+since <git-ref> (body against body, words outside markup, so frontmatter,
+dropped alt text and tags do not count), the check that a reconversion lost
+nothing.
 """
 
 import collections
 import importlib.util
+import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 from urllib.parse import unquote
 
-from paperlib import LIBRARY_DIR, paper_files, read_paper
+from paperlib import LIBRARY_DIR, paper_files, read_paper, split_frontmatter
 
 SCRIPTS = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("html_to_markdown", SCRIPTS / "html-to-markdown.py")
@@ -80,12 +88,21 @@ def svg_kinds(md, body):
     return kinds
 
 
+MATH = re.compile(r"\$\$.+?\$\$|(?<![\\$])\$(?!\$)(?:\\.|[^$\\\n])+?\$(?!\$)", re.S)
+
+
 def prose_words(body):
-    """Words outside markup: images, tags, table rules and pipes removed."""
+    """Words outside markup: images, tags, table rules and pipes removed.
+
+    Mathematics is counted apart from the rest, so that a "<" in an equation
+    is not read as the start of a tag.
+    """
+    math = MATH.findall(body)
+    body = MATH.sub(" ", body)
     body = re.sub(r"!\[[^\]]*\]\([^)]*\)", " ", body)
-    body = re.sub(r"<[^>]+>", " ", body)
+    body = re.sub(r"</?[A-Za-z][^<>]*>|<!--.*?-->", " ", body, flags=re.S)
     body = re.sub(r"[|]|^[-:| ]+$", " ", body, flags=re.M)
-    return len(body.split())
+    return len(body.split()) + sum(len(m.split()) for m in math)
 
 
 def html_papers(folders):
@@ -105,14 +122,41 @@ def compare(ref, folders):
                              capture_output=True, text=True)
         if old.returncode:
             continue  # not in that commit (added or moved since)
-        before, after = prose_words(old.stdout), prose_words(body)
+        # Body against body: the old copy comes with its frontmatter.
+        before, after = prose_words(split_frontmatter(old.stdout)[1]), prose_words(body)
         if before and after < 0.95 * before:
             shrunk += 1
             print(f"{after / before - 1:+.1%}\t{before} -> {after} words\t{md.relative_to(LIBRARY_DIR)}")
     print(f"{shrunk} papers shrank by more than 5% since {ref}", file=sys.stderr)
 
 
+def katex(folders):
+    """Papers with maths KaTeX cannot parse: count, first error, path."""
+    check = SCRIPTS / "katex"
+    if not shutil.which("node"):
+        sys.exit("symptoms --katex needs Node.js (node and npm)")
+    if not (check / "node_modules" / "katex").exists():
+        subprocess.run(["npm", "ci", "--silent"], cwd=check, check=True)
+    papers = failures = 0
+    for root in [Path(f).resolve() for f in folders] or [LIBRARY_DIR]:
+        out = subprocess.run(["node", check / "check.js", root], env={**os.environ, "ALL": "1"},
+                             capture_output=True, text=True, check=True).stdout
+        first, count = {}, collections.Counter()
+        for line in out.split("\n"):
+            if line.startswith("FAIL\t"):
+                _, path, kind, _ = line.split("\t", 3)
+                count[path] += 1
+                first.setdefault(path, kind)
+        for path, n in sorted(count.items()):
+            print(f"{n}\t{first[path]}\t{Path(path).relative_to(LIBRARY_DIR)}")
+        papers += len(count)
+        failures += sum(count.values())
+    print(f"{failures} equations in {papers} papers do not parse in KaTeX", file=sys.stderr)
+
+
 def main(argv):
+    if "--katex" in argv:
+        return katex([a for a in argv if not a.startswith("--")])
     if "--compare" in argv:
         i = argv.index("--compare")
         return compare(argv[i + 1], argv[:i] + argv[i + 2:])

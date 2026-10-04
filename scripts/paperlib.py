@@ -139,13 +139,17 @@ def pdf_path_for(md_path):
     return PDF_ROOT / rel.with_suffix(".pdf")
 
 
-def read_paper(path):
-    """Return (frontmatter dict, body) for a paper file; ({}, text) if none."""
-    text = Path(path).read_text(encoding="utf-8")
+def split_frontmatter(text):
+    """Return (frontmatter dict, body) for a paper's text; ({}, text) if none."""
     m = _FRONTMATTER.match(text)
     if not m:
         return {}, text
     return yaml.safe_load(m.group(1)) or {}, text[m.end():]
+
+
+def read_paper(path):
+    """Return (frontmatter dict, body) for a paper file; ({}, text) if none."""
+    return split_frontmatter(Path(path).read_text(encoding="utf-8"))
 
 
 def render_frontmatter(meta):

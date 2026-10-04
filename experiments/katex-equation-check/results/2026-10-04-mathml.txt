@@ -1,0 +1,177 @@
+# MathML against TeX as the source of equations, 4 Oct 2026 (mathml.py, mathml_compare.py, scripts/katex/check.js).
+# Sample: the 13 arXiv-HTML papers that still fail the KaTeX check after the fixes of 4 Oct, and 50 other
+# arXiv-HTML papers drawn at random (seed 20261004) from the library's 1,909. Converter as of 4 Oct.
+
+## 1. Papers: arXiv id, maths spans by the TeX route, by the MathML route, whether the two files differ, paper
+# the 13 failing papers
+2112.13495	1924	1924	differ	Multiple Randomization Designs. Estimation and Inference with Interference
+1103.4601	341	341	differ	Doubly Robust Policy Evaluation and Learning
+2209.03003	989	989	differ	Flow Straight and Fast. Learning to Generate and Transfer Data with Rectified Flow
+2210.03629	42	42	differ	ReAct. Synergizing Reasoning and Acting in Language Models
+2512.02556	74	74	differ	DeepSeek-V3.2. Pushing the Frontier of Open Large Language Models
+2511.03492	1056	1056	differ	Why Less is More (Sometimes). A Theory of Data Curation
+2503.11926	50	50	differ	Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation
+2310.11511	208	208	differ	Self-RAG. Learning to Retrieve, Generate, and Critique through Self-Reflection
+1802.01528	734	734	differ	The Matrix Calculus You Need For Deep Learning
+2502.05564	250	250	differ	TabICL. A Tabular Foundation Model for In-Context Learning on Large Data
+1903.10318	64	64	differ	Fine-tune BERT for Extractive Summarization
+1808.09781	208	208	differ	Self-Attentive Sequential Recommendation
+2405.07987	285	285	differ	The Platonic Representation Hypothesis
+# the 50 random papers
+2302.11640	108	108	differ	A critical look at the evaluation of GNNs under heterophily. Are we really making progress
+1910.10699	663	663	differ	Contrastive Representation Distillation
+2209.00588	143	143	differ	Transformers are Sample-Efficient World Models
+2212.09720	101	101	differ	The case for 4-bit precision. k-bit Inference Scaling Laws
+2501.13956	73	73	differ	Zep. A Temporal Knowledge Graph Architecture for Agent Memory
+2503.10965	158	158	differ	Auditing language models for hidden objectives
+2503.24235	158	158	differ	A Survey on Test-Time Scaling in Large Language Models. What, How, Where, and How Well
+2103.06857	43	43	differ	Should Graph Neural Networks Use Features, Edges, Or Both
+2005.00181	316	316	differ	Sparse, Dense, and Attentional Representations for Text Retrieval
+2304.01315	294	294	differ	Empirical Design in Reinforcement Learning
+2007.07203	287	287	differ	Deep Retrieval. Learning A Retrievable Structure for Large-Scale Recommendations
+2010.11934	101	101	differ	mT5. A massively multilingual pre-trained text-to-text transformer
+2010.09686	1671	1671	differ	Estimating means of bounded random variables by betting
+2210.10760	122	122	differ	Scaling Laws for Reward Model Overoptimization
+2110.13406	1270	1270	differ	Towards Optimal Variance Reduction in Online Controlled Experiments
+2608.00009	278	278	differ	AgentMemBench. A Systematic Benchmark for Evaluating Long-Term Memory Management Strategies in
+2309.01219	28	28	differ	Siren's Song in the AI Ocean. A Survey on Hallucination in Large Language Models
+2602.15763	138	138	differ	GLM-5. from Vibe Coding to Agentic Engineering
+2212.03827	252	252	differ	Discovering Latent Knowledge in Language Models Without Supervision
+2301.05217	712	712	differ	Progress measures for grokking via mechanistic interpretability
+2103.03404	326	326	differ	Attention is Not All You Need. Pure Attention Loses Rank Doubly Exponentially with Depth
+2002.04745	431	431	differ	On Layer Normalization in the Transformer Architecture
+2010.13902	242	242	differ	Graph Contrastive Learning with Augmentations
+2603.15569	655	655	differ	Mamba-3. Improved Sequence Modeling using State Space Principles
+2607.01071	15	15	differ	MemSyco-Bench. Benchmarking Sycophancy in Agent Memory
+2309.00071	222	252	differ	YaRN. Efficient Context Window Extension of Large Language Models
+1806.01261	292	292	differ	Relational inductive biases, deep learning, and graph networks
+2512.15603	47	47	differ	Qwen-Image-Layered. Towards Inherent Editability via Layer Decomposition
+2501.01005	122	122	differ	FlashInfer. Efficient and Customizable Attention Engine for LLM Inference Serving
+2502.09992	277	277	differ	Large Language Diffusion Models
+2206.06588	6	6	same	Shopping Queries Dataset. A Large-Scale ESCI Benchmark for Improving Product Search
+1810.12281	220	220	differ	Three Mechanisms of Weight Decay Regularization
+2311.12908	284	284	differ	Diffusion Model Alignment Using Direct Preference Optimization
+2602.15012	269	269	differ	Cold-Start Personalization via Training-Free Priors from Structured World Models
+2410.14001	127	127	differ	Personalized Adaptation via In-Context Preference Learning
+2607.15495	330	330	differ	Verbalizable Representations Form a Global Workspace in Language Models
+2404.14219	31	31	differ	Phi-3 Technical Report. A Highly Capable Language Model Locally on Your Phone
+1911.11134	138	138	differ	Rigging the Lottery. Making All Tickets Winners
+2603.27277	34	34	differ	Codebase-Memory. Tree-Sitter-Based Knowledge Graphs for LLM Code Exploration via MCP
+2306.09479	48	48	differ	Inverse Scaling. When Bigger Isn't Better
+2409.02856	86	86	differ	Building a Scalable, Effective, and Steerable Search and Ranking Platform
+1704.09011	1629	1629	differ	Mostly Exploration-Free Algorithms for Contextual Bandits
+2512.13564	57	57	differ	Memory in the Age of AI Agents
+1802.05814	243	243	differ	Variational Autoencoders for Collaborative Filtering
+2204.02311	394	396	differ	PaLM. Scaling Language Modeling with Pathways
+2405.06624	73	73	differ	Towards Guaranteed Safe AI. A Framework for Ensuring Robust and Reliable AI Systems
+2306.15595	143	147	differ	Extending Context Window of Large Language Models via Positional Interpolation
+2010.08191	124	124	differ	RocketQA. An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question
+2401.05566	133	133	differ	Sleeper Agents. Training Deceptive LLMs that Persist Through Safety Training
+1612.00837	194	194	differ	Making the V in VQA Matter. Elevating the Role of Image Understanding in Visual Question Answering
+
+## 2. KaTeX check, the fail papers, tex route
+files 13, math spans 6225, failed 39
+    16 Expected '}', got '#'   e.g. ["2310.11511.md","f(y_{t},d,\\mathchoice{\\hbox to46.43pt{\\operatorname{vbox} to13.69pt{\\operatorname{pgfpicture}\\operatorname{makeatletter}\\hbox{\\hspace{23.21587pt}\\textrm{lower}-"]
+     7 Undefined control sequence: \perp   e.g. ["2511.03492.md","\\begin{array}{r} w_{g}^{} \\end{array} \\text{� } / \\text{� :=(wg⊤wo)wo,wg⟂:=wg−wg � } / \\text{� } / \\text{� ,ϵ:=wg−w∗,a:=ϵ⊤wg⟂,b:=ϵ⊤wg � } / \\text{� } / \\text{� "]
+     5 No such environment: NiceArray   e.g. ["2112.13495.md","\\mathbf{w}=\\begin{NiceArray}. \\tag{4}"]
+     3 Expected EOF, got '}'   e.g. ["1103.4601.md","\\displaystyle}{\\displaystyle=\\mathbf{E}_{x,\\vec{r},a\\mathbin{|}h}\\Biggl[\\frac{(r_{a}-\\varrho_{a}-\\Delta)\\mathbf{I}}{\\hat{p}}+\\varrho_{\\pi(x)}+\\Delta\\Biggr]"]
+     2 No such environment: tabular   e.g. ["1808.09781.md","\\widehat{{\\bf E}}=\\left[\\begin{tabular}[]{c}{\\bf M}_{s_{1}}+{\\bf P}_{1}\\\\\n{\\bf M}_{s_{2}}+{\\bf P}_{2}\\\\\n\\dots\\\\\n{\\bf M}_{s_{n}}+{\\bf P}_{n}\\end{tabular}\\right] "]
+     2 Expected '\)', got 'EOF'   e.g. ["2209.03003.md","\\displaystyle\\text{ Flow in \\(\\&\\) out}\\!\\left(\\operatorname{vbox}{\\hbox{\\(\\includegraphics\\)[height=25.83325pt]{arxiv\\_figures/arrow11\\_new.png}}}\\right)\\!\\!=\\"]
+     2 \middle without preceding \left   e.g. ["2512.02556.md","\\mathbf{u}_{t}=\\text{Attn}\\operatorname{quantity}(\\mathbf{h}_t, \\operatorname{qty}{ \\mathbf{c}_s \\, \\middle| \\, I_{t, s} \\in\\text{Top-k} \\operatorname{qty}(I_{t"]
+     1 Invalid key: 'scale' in \includegraphics.   e.g. ["1802.01528.md","\\begin{array}{lllllllll}\\frac{\\partial u_{1}(x)}{\\partial x}&=&2x&&&(\\text{same as }\\frac{du_{1}(x)}{dx})\\\\\n\\frac{\\partial u_{2}(x,u_{1})}{\\partial u_{1}}&=&\\fr"]
+     1 Expected EOF, got '&'   e.g. ["2210.03629.md","12.99  Action: click[B0061IVFZE]  Observation:  [Back to Search]  [Prev]  flavor name [asian pear][banana][fuji apple & cinnamon][strawberry  banana] Brothers-A"]
+
+## 3. KaTeX check, the fail papers, mathml route
+files 13, math spans 6225, failed 8
+     7 Undefined control sequence: \perp   e.g. ["2511.03492.md","\\begin{array}{r} w_{g}^{} \\end{array} \\text{� } / \\text{� :=(wg⊤wo)wo,wg⟂:=wg−wg � } / \\text{� } / \\text{� ,ϵ:=wg−w∗,a:=ϵ⊤wg⟂,b:=ϵ⊤wg � } / \\text{� } / \\text{� "]
+     1 Expected EOF, got '&'   e.g. ["2210.03629.md","12.99  Action: click[B0061IVFZE]  Observation:  [Back to Search]  [Prev]  flavor name [asian pear][banana][fuji apple & cinnamon][strawberry  banana] Brothers-A"]
+
+## 4. KaTeX check, the random papers, tex route
+files 50, math spans 14083, failed 0
+
+## 5. KaTeX check, the random papers, mathml route
+files 50, math spans 14119, failed 0
+
+## 6. Span by span, all 63 papers (mathml_compare.py <out> 14)
+      63  papers
+   20333  spans, tex
+   20369  spans, mathml
+    9306  aligned spans identical
+   10268  aligned spans different
+       3  papers with a different number of spans
+  961077  characters of maths, tex
+ 1214568  characters of maths, mathml
+
+feature                                    tex   mathml
+\tag                                       807      807
+aligned, split, cases, array, matrix       261      256
+\text and \textrm                         3273     2320
+\operatorname and named macros            1046       93
+\mathbf, \bm, \boldsymbol                 5087     5397
+\mathcal, \mathbb                         4568     4800
+\left ... \right                          2564     3789
+\frac                                     3388     3388
+\displaystyle                             2484        0
+thin spaces and quads                     2082      788
+
+[2005.00181]
+  tex:    $\leq 1$
+  mathml: $\phantom{} \leq 1$
+
+[1704.09011]
+  tex:    $S^{\text{gb}}(m_{1},K_{1},\sigma,x_{\max},\lambda_{1})$
+  mathml: $S^{\text{gb}}\hspace{0pt}{(m_{1},K_{1},\sigma,x_{\max},\lambda_{1})}$
+
+[2110.13406]
+  tex:    $$\displaystyle\phi_{\delta}(Y_{i},Z_{i},X_{i},T_{i})=T_{i}\phi_{1}(Y_{i}(1),Z_{i}(1),X_{i},T_{i})+(1-T_{i})\phi_{0}(Y_{i}(0),Z_{i}(0),X_{i},T_{i}),$$
+  mathml: $${{\phi_{\delta}\hspace{0pt}{(Y_{i},Z_{i},X_{i},T_{i})}} = {{T_{i}\hspace{0pt}\phi_{1}\hspace{0pt}{({Y_{i}\hspace{0pt}{(1)}},{Z_{i}\hspace{0pt}{(1)}},X_{i},T_{i})}} + {{({1 - T_{i}})}\hspace{0pt}\phi_{0}\hspace{0pt}{({Y_{i}\hspace{0pt}{(0)}},{Z_{i}\hspace{0pt}{(0)}},X_{i},T_{i})}}}},$$
+
+[2112.13495]
+  tex:    $\mathbb{E}[\nu-X(\Pi)]\leq\sqrt{16\boldsymbol{\pi}}L$
+  mathml: ${{\mathbb{E}}{\lbrack{\nu - {X{(\Pi)}}}\rbrack}} \leq {\sqrt{16\hspace{0pt}{\mathbf{π}}}\hspace{0pt}L}$
+
+[2110.13406]
+  tex:    $w\in\{0,1\}$
+  mathml: $w \in {\{{0,1}\}}$
+
+[2501.13956]
+  tex:    $\phi:\mathcal{E}\to\mathcal{N}\times\mathcal{N}$
+  mathml: $\phi:{\mathcal{E}\rightarrow{\mathcal{N} \times \mathcal{N}}}$
+
+[2010.09686]
+  tex:    $\int_{\lambda\in\mathbb{R}}M_{t}^{H}(m)dF(\lambda)$
+  mathml: $\int_{\lambda \in {\mathbb{R}}}{M_{t}^{H}\hspace{0pt}{(m)}\hspace{0pt}{dF}\hspace{0pt}{(\lambda)}}$
+
+[1903.10318]
+  tex:    $$\displaystyle\begin{aligned} C_{i}=&~\sigma(F_{i})\odot C_{i-1}\\
+&+\sigma(I_{i})\odot\mathrm{tanh}(G_{i-1})\\
+h_{i}=&\sigma(O_{t})\odot\mathrm{tanh}(\mathrm{LN}_{c}(C_{t}))\end{aligned}$$
+  mathml: $$\begin{array}{cl}
+{C_{i} = \phantom{}} & {{\sigma{(F_{i})}} \odot C_{i - 1}} \\
+ & {+ \sigma(I{}_{i}) \odot \tanh(G{}_{i - 1})} \\
+{h_{i} = \phantom{}} & {{\sigma{(O_{t})}} \odot {\tanh{({{LN}_{c}\hspace{0pt}{(C_{t})}})}}}
+\end{array}$$
+
+[2301.05217]
+  tex:    $145.5\cos\left(w_{2}a\right)\sin\left(w_{2}b\right)+145.6\sin\left(w_{2}a\right)\cos\left(w_{2}b\right)\approx 145.5\sin\left(w_{2}(a+b)\right)$
+  mathml: ${{145.5\hspace{0pt}{\cos\left( {w_{2}\hspace{0pt}a} \right)}\hspace{0pt}{\sin\left( {w_{2}\hspace{0pt}b} \right)}} + {145.6\hspace{0pt}{\sin\left( {w_{2}\hspace{0pt}a} \right)}\hspace{0pt}{\cos\left( {w_{2}\hspace{0pt}b} \right)}}} \approx {145.5\hspace{0pt}{\sin\left( {w_{2}\hspace{0pt}{({a + b})}
+
+[1910.10699]
+  tex:    $\color{#FF0000}\downarrow$
+  mathml: $\downarrow$
+
+[2112.13495]
+  tex:    $u=z+1\geq 0$
+  mathml: $u = {z + 1} \geq 0$
+
+[2602.15763]
+  tex:    $79.21\to 71.35$
+  mathml: $79.21\rightarrow 71.35$
+
+[2112.13495]
+  tex:    $$\displaystyle+\frac{1}{2(I-1)(J-1)}\left(\sigma^{{\rm B}{\rm S}}_{{\rm tr}}+\sigma^{{\rm B}{\rm S}}_{{{\color{#FF0000}\rm cc}}}-\xi^{{\rm B}{\rm S}}_{{\rm tr},{{\color{#FF0000}\rm cc}}}\right),$$
+  mathml: $${+ {\frac{1}{2\hspace{0pt}{({I - 1})}\hspace{0pt}{({J - 1})}}\hspace{0pt}\left( {{\sigma_{tr}^{BS} + \sigma_{cc}^{BS}} - \xi_{{tr},{cc}}^{BS}} \right)}},$$
+
+[2010.09686]
+  tex:    $(\dot{\lambda}^{-}_{t})_{t=1}^{\infty}$
+  mathml: ${({\overset{˙}{\lambda}}_{t}^{-})}_{t = 1}^{\infty}$

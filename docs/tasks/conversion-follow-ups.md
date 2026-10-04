@@ -43,31 +43,22 @@ the header. What is still open, with the papers of that library as examples:
 
 ## The PDF converter
 
-- **OCR crashes now and then.** docling runs OCR (RapidOCR) on bitmap figures, and OpenCV
-  5.0.0's resize segfaults there on some PDFs, on some attempts ("Canaries in the Coal Mine"
-  crashed three times in five). `paperlib reconvert` then reports `RuntimeError: pdf-to-markdown:
-  ['  warnings.warn(']`; running it again gets through. 5.0.0 is the newest OpenCV, so there is
-  no upgrade to take. Options to compare on real papers: docling's `ocrmac` engine (Apple's
-  OCR, no OpenCV), an earlier OpenCV, or no OCR for PDFs that have a text layer.
+- **OpenCV is held at 4.12.** Later releases segfault in their Arm resize inside RapidOCR, about one conversion in three of "Canaries in the Coal Mine" ([`experiments/ocr-engines`](../../experiments/ocr-engines/README.md)). Lift the pin, and the numpy override that goes with it, when a release converts that paper ten times without a crash.
 - **Equations are right about two times in three.** In the spot check of nine display
   equations against the page image, six were right. The three errors: an exponent written as a
   factor (LambdaLoss, NDCG-Loss2, p. 6), left-hand sides dropped and a subscript swapped
   (DSSM, eq. 16, p. 7), and a figure legend taken for an equation (Adam, p. 6).
-- **Tables that are images.** Their numbers come from OCR, while the note at the top of the
+- **Tables that are images.** Their numbers come from OCR, and differ a little from run to run, while the note at the top of the
   paper says the numbers are the PDF's own (TabPFN's Extended Data tables, pp. 18–23). The
   converter should say so in the note when a table had no text layer under it.
 - **Old PDFs with a broken text layer** ("Long Short-Term Memory", "The power of two random
   choices") lose ligatures and, for LSTM, headings and equations. Replacing the PDF with a
   cleaner copy is the fix.
 
-## The word-shrink check
-
-`paperlib symptoms --compare <ref>` flagged 7 papers after the nightly reconversion, but only one had lost text ([`experiments/library-reconversion`](../../experiments/library-reconversion/README.md)). Two bugs cause the rest: the old copy is counted with its frontmatter and the new one without (Gemini 2.5's author list alone is 7,037 words), and a `<` inside an equation is taken as the start of a tag (Large Language Diffusion Models lost 2,371 words that way). Count body against body, and strip tags only outside maths.
-
 ## Equations KaTeX cannot draw
 
-A re-run of the KaTeX check on 2026-10-03 over the whole library found 600 of 444,047 maths spans that fail to parse: 583 in 100 arXiv-HTML papers and 17 in PDF-only papers ([`experiments/katex-equation-check`](../../experiments/katex-equation-check/README.md)). The converter's list of supported commands ignores mode, so maths commands inside text arguments pass through: `\text{\times}` (115, mostly siunitx), `\mathbin` inside `\raisebox` (84), `\pm` inside `\raisebox` (56). LaTeXML's `\@@bibref` adds 68 more. The fix is mode-aware normalisation in `html-to-markdown.py`, then a reconversion of the affected papers; the check should then run as part of `paperlib symptoms`.
+56 of 444,263 maths spans still fail after the fixes of 2026-10-04 ([`experiments/katex-equation-check`](../../experiments/katex-equation-check/README.md)); `paperlib symptoms --katex` lists them.
 
-## MathML as the source of equations
-
-Whether converting equations from LaTeXML's MathML, rather than its TeX annotation, renders better is still open: the 2026-09-30 test of it was void, because pandoc read the same TeX annotation both times (see the KaTeX experiment).
+- **Pictures and tables inside an equation** (26 spans in 9 arXiv-HTML papers): a TikZ picture, a `NiceArray`, a `tabular` or an image set in maths comes out as its TeX internals. They could be replaced by a placeholder, or by the picture LaTeXML renders for them.
+- **PDF-only papers** (17 spans in 11 papers): the model's reading of an equation has unbalanced braces or delimiters. The check could run after each reading, and a reading that does not parse be read again.
+- **Mathematics inside an HTML table** is written as `<span class="math inline">$…$</span>`. VS Code's preview does not read markdown inside an HTML block, so it may show these as source; not checked.

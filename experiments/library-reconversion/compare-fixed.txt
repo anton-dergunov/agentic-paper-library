@@ -1,0 +1,12 @@
+# conversion-symptoms.py --compare with the check fixed on 4 Oct 2026 (body against body, maths
+# counted apart from tags), run in the library against three commits of its history.
+$ paperlib symptoms --compare 1b6f6dbe~1     # before the nightly pass, where compare.txt flagged 7
+0 papers shrank by more than 5% since 1b6f6dbe~1
+$ paperlib symptoms --compare f8056ad3~1     # before the table fixes (SCULPT)
+0 papers shrank by more than 5% since f8056ad3~1
+$ paperlib symptoms --compare 0b9271dd       # before the whole reconversion
+-6.6%	10874 -> 10161 words	ml-foundations/classical-ml/Stress Detection from Multimodal Wearable Sensor Data.md
+1 papers shrank by more than 5% since 0b9271dd
+# Stress Detection lost no word: every word of four or more letters in the old copy is in the new
+# one. Its tables hold siunitx numbers that were written with digit groups ("0.769 142 111 540 03",
+# five tokens) and are now joined and rounded ("0.7691", one).

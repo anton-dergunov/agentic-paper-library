@@ -9,7 +9,7 @@ arXiv-HTML papers in 2 hours with 3 jobs and 277 PDF-only papers in 6.9 hours on
 showing a conversion symptom fell from 1,370 to 362; one paper actually lost text (SCULPT, 2,318
 words, fixed the same morning); 80 papers lack 3 or more PDF pages because arXiv's HTML lacks
 them, and the 27 worst were catalogued; 6 of 9 spot-checked PDF equations were right.** The
-word-shrink check flagged 7 papers, but 6 of the 7 flags were errors in the check itself.
+word-shrink check flagged 7 papers, but 6 of the 7 flags were errors in the check itself (fixed 4 Oct).
 
 **Serves.** [`docs/conversion.md`](../../docs/conversion.md#reconversion)
 
@@ -175,6 +175,12 @@ all 1,905 papers, the median change in prose words is 0.0%, the 5th percentile â
 95th +10.7%. 145 papers grew by more than 5%, from recovered boxes and tables. Both errors in the
 check are still in `scripts/conversion-symptoms.py`.
 
+**Fixed 4 Oct 2026.** `--compare` now counts body against body, takes the mathematics out before it
+strips tags, and matches only real tags. Against the commit before the nightly pass, where it had
+flagged 7, it flags none; against the commit before the whole reconversion it flags one paper,
+Stress Detection (âˆ’6.6%), which lost no word: its siunitx numbers were written with digit groups,
+five tokens each, and are now one ([`compare-fixed.txt`](compare-fixed.txt)).
+
 The validation also ran a stricter check that ignores the threshold ([`lostall.py`](lostall.py),
 [`lostall.txt`](lostall.txt)): it counts words that occur in the old copy and no longer occur in
 the new one. 13 papers lost 60 or more such words. In xLSTM and others, the lost "words" are
@@ -274,6 +280,7 @@ paper at the time.
 | `symptoms-before.tsv`, `symptoms-nightly.tsv`, `symptoms-after.tsv` | `conversion-symptoms.py` listings: symptoms and path per paper |
 | [`before_after.py`](before_after.py), `before-after*.json` | symptom moves and the three word counts, before against nightly and before against after |
 | `compare.txt` | `--compare main` as run during the validation |
+| `compare-fixed.txt` | `--compare` with the check fixed on 4 Oct, against three commits of the library |
 | [`lost.py`](lost.py), [`lost2.py`](lost2.py), [`lostall.py`](lostall.py), `lostall.txt` | per-paper diagnosis of shrinkage against `main` |
 | [`scan.py`](scan.py), [`scan2.py`](scan2.py) | which papers each of the two table bugs affected, from the cached arXiv HTML |
 | [`truncated.py`](truncated.py), [`pages.py`](pages.py), [`htmlcov.py`](htmlcov.py), [`incomplete.py`](incomplete.py), [`catalog_entries.py`](catalog_entries.py) and their outputs | detection of incomplete arXiv renderings |

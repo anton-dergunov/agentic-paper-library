@@ -1,375 +1,376 @@
-# Control sequences KaTeX supports (generated from KaTeX 0.16.47; see arxiv-html.lua).
+# Control sequences KaTeX supports; "math" marks those it refuses in a text argument
+# (generated from KaTeX 0.16.47 by scripts/katex/katex-commands.js; see arxiv-html.lua).
 AA
-Alpha
-And
-Bbb
-Bbbk
-Beta
-Big
-Bigg
-Biggl
-Biggm
-Biggr
-Bigl
-Bigm
-Bigr
-Box
+Alpha	math
+And	math
+Bbb	math
+Bbbk	math
+Beta	math
+Big	math
+Bigg	math
+Biggl	math
+Biggm	math
+Biggr	math
+Bigl	math
+Bigm	math
+Bigr	math
+Box	math
 Bra
 Braket
-Bumpeq
-Cap
-Chi
-Colonapprox
-Coloneq
-Coloneqq
-Colonsim
-Complex
-Cup
+Bumpeq	math
+Cap	math
+Chi	math
+Colonapprox	math
+Coloneq	math
+Coloneqq	math
+Colonsim	math
+Complex	math
+Cup	math
 DOTSB
 DOTSI
 DOTSX
-Dagger
-Darr
-Delta
-Diamond
-Doteq
-Downarrow
-Epsilon
-Eqcolon
-Eqqcolon
-Eta
-Finv
-Game
-Gamma
+Dagger	math
+Darr	math
+Delta	math
+Diamond	math
+Doteq	math
+Downarrow	math
+Epsilon	math
+Eqcolon	math
+Eqqcolon	math
+Eta	math
+Finv	math
+Game	math
+Gamma	math
 H
-Harr
+Harr	math
 Huge
-Im
-Iota
-Join
+Im	math
+Iota	math
+Join	math
 KaTeX
-Kappa
+Kappa	math
 Ket
 LARGE
 LaTeX
-Lambda
+Lambda	math
 Large
-Larr
-Leftarrow
-Leftrightarrow
-Lleftarrow
-Longleftarrow
-Longleftrightarrow
-Longrightarrow
-Lrarr
-Lsh
-Mu
-N
-Nu
-Omega
-Omicron
-Overrightarrow
+Larr	math
+Leftarrow	math
+Leftrightarrow	math
+Lleftarrow	math
+Longleftarrow	math
+Longleftrightarrow	math
+Longrightarrow	math
+Lrarr	math
+Lsh	math
+Mu	math
+N	math
+Nu	math
+Omega	math
+Omicron	math
+Overrightarrow	math
 P
-Phi
-Pi
-Pr
-Psi
-R
-Rarr
-Re
-Reals
-Rho
-Rightarrow
-Rrightarrow
-Rsh
+Phi	math
+Pi	math
+Pr	math
+Psi	math
+R	math
+Rarr	math
+Re	math
+Reals	math
+Rho	math
+Rightarrow	math
+Rrightarrow	math
+Rsh	math
 S
 Set
-Sigma
-Subset
-Supset
-Tau
+Sigma	math
+Subset	math
+Supset	math
+Tau	math
 TeX
 TextOrMath
-Theta
-Uarr
-Uparrow
-Updownarrow
-Upsilon
-Vdash
-Vert
-Vvdash
-Xi
-Z
-Zeta
+Theta	math
+Uarr	math
+Uparrow	math
+Updownarrow	math
+Upsilon	math
+Vdash	math
+Vert	math
+Vvdash	math
+Xi	math
+Z	math
+Zeta	math
 aa
-above
-acute
-alef
-alefsym
-aleph
-allowbreak
-alpha
-amalg
-angl
-angle
-angln
-approx
-approxcolon
-approxcoloncolon
-approxeq
-arccos
-arcctg
-arcsin
-arctan
-arctg
-arg
-argmax
-argmin
-ast
-asymp
-atop
-backepsilon
-backprime
-backsim
-backsimeq
-backslash
-bar
-barwedge
-bcancel
-because
-begin
+above	math
+acute	math
+alef	math
+alefsym	math
+aleph	math
+allowbreak	math
+alpha	math
+amalg	math
+angl	math
+angle	math
+angln	math
+approx	math
+approxcolon	math
+approxcoloncolon	math
+approxeq	math
+arccos	math
+arcctg	math
+arcsin	math
+arctan	math
+arctg	math
+arg	math
+argmax	math
+argmin	math
+ast	math
+asymp	math
+atop	math
+backepsilon	math
+backprime	math
+backsim	math
+backsimeq	math
+backslash	math
+bar	math
+barwedge	math
+bcancel	math
+because	math
+begin	math
 begingroup
-beta
-beth
-between
+beta	math
+beth	math
+between	math
 bf
 bgroup
-big
-bigcap
-bigcirc
-bigcup
-bigg
-biggl
-biggm
-biggr
-bigl
-bigm
-bigodot
-bigoplus
-bigotimes
-bigr
-bigsqcup
-bigstar
-bigtriangledown
-bigtriangleup
-biguplus
-bigvee
-bigwedge
-binom
-blacklozenge
-blacksquare
-blacktriangle
-blacktriangledown
-blacktriangleleft
-blacktriangleright
+big	math
+bigcap	math
+bigcirc	math
+bigcup	math
+bigg	math
+biggl	math
+biggm	math
+biggr	math
+bigl	math
+bigm	math
+bigodot	math
+bigoplus	math
+bigotimes	math
+bigr	math
+bigsqcup	math
+bigstar	math
+bigtriangledown	math
+bigtriangleup	math
+biguplus	math
+bigvee	math
+bigwedge	math
+binom	math
+blacklozenge	math
+blacksquare	math
+blacktriangle	math
+blacktriangledown	math
+blacktriangleleft	math
+blacktriangleright	math
 blue
 blueA
 blueB
 blueC
 blueD
 blueE
-bm
-bmod
-bold
-boldsymbol
-bot
-bowtie
-boxdot
+bm	math
+bmod	math
+bold	math
+boldsymbol	math
+bot	math
+bowtie	math
+boxdot	math
 boxed
-boxminus
-boxplus
-boxtimes
+boxminus	math
+boxplus	math
+boxtimes	math
 bra
-brace
-brack
+brace	math
+brack	math
 braket
-breve
-bull
-bullet
-bumpeq
+breve	math
+bull	math
+bullet	math
+bumpeq	math
 c
 cal
-cancel
-cap
-cdot
-cdotp
-cdots
-centerdot
-cfrac
-ch
+cancel	math
+cap	math
+cdot	math
+cdotp	math
+cdots	math
+centerdot	math
+cfrac	math
+ch	math
 char
-check
+check	math
 checkmark
-chi
-choose
-circ
-circeq
-circlearrowleft
-circlearrowright
+chi	math
+choose	math
+circ	math
+circeq	math
+circlearrowleft	math
+circlearrowright	math
 circledR
-circledS
-circledast
-circledcirc
-circleddash
+circledS	math
+circledast	math
+circledcirc	math
+circleddash	math
 clap
-clubs
-clubsuit
-cnums
-colon
-colonapprox
-coloncolon
-coloncolonapprox
-coloncolonequals
-coloncolonminus
-coloncolonsim
-coloneq
-coloneqq
-colonequals
-colonminus
-colonsim
+clubs	math
+clubsuit	math
+cnums	math
+colon	math
+colonapprox	math
+coloncolon	math
+coloncolonapprox	math
+coloncolonequals	math
+coloncolonminus	math
+coloncolonsim	math
+coloneq	math
+coloneqq	math
+colonequals	math
+colonminus	math
+colonsim	math
 color
 colorbox
-complement
-cong
-coprod
+complement	math
+cong	math
+coprod	math
 copyright
-cos
-cosec
-cosh
-cot
-cotg
-coth
-csc
-ctg
-cth
-cup
-curlyeqprec
-curlyeqsucc
-curlyvee
-curlywedge
-curvearrowleft
-curvearrowright
-dArr
+cos	math
+cosec	math
+cosh	math
+cot	math
+cotg	math
+coth	math
+csc	math
+ctg	math
+cth	math
+cup	math
+curlyeqprec	math
+curlyeqsucc	math
+curlyvee	math
+curlywedge	math
+curvearrowleft	math
+curvearrowright	math
+dArr	math
 dag
-dagger
-daleth
-darr
-dashleftarrow
-dashrightarrow
-dashv
-dbinom
-dblcolon
+dagger	math
+daleth	math
+darr	math
+dashleftarrow	math
+dashrightarrow	math
+dashv	math
+dbinom	math
+dblcolon	math
 ddag
-ddagger
+ddagger	math
 ddddot
 dddot
-ddot
-ddots
+ddot	math
+ddots	math
 def
-deg
+deg	math
 degree
-delta
-det
-dfrac
-diagdown
-diagup
-diamond
-diamonds
-diamondsuit
-digamma
-dim
+delta	math
+det	math
+dfrac	math
+diagdown	math
+diagup	math
+diamond	math
+diamonds	math
+diamondsuit	math
+digamma	math
+dim	math
 displaystyle
-div
-divideontimes
-dot
-doteq
-doteqdot
-dotplus
+div	math
+divideontimes	math
+dot	math
+doteq	math
+doteqdot	math
+dotplus	math
 dots
-dotsb
+dotsb	math
 dotsc
-dotsi
-dotsm
+dotsi	math
+dotsm	math
 dotso
 dotsx
-doublebarwedge
-doublecap
-doublecup
-downarrow
-downdownarrows
-downharpoonleft
-downharpoonright
+doublebarwedge	math
+doublecap	math
+doublecup	math
+downarrow	math
+downdownarrows	math
+downharpoonleft	math
+downharpoonright	math
 edef
 egroup
-ell
+ell	math
 emph
-empty
-emptyset
+empty	math
+emptyset	math
 end
 endgroup
 enskip
 enspace
-epsilon
-eqcirc
-eqcolon
-eqqcolon
-eqsim
-eqslantgtr
-eqslantless
-equalscolon
-equalscoloncolon
-equiv
+epsilon	math
+eqcirc	math
+eqcolon	math
+eqqcolon	math
+eqsim	math
+eqslantgtr	math
+eqslantless	math
+equalscolon	math
+equalscoloncolon	math
+equiv	math
 errmessage
-eta
-eth
-exist
-exists
-exp
+eta	math
+eth	math
+exist	math
+exists	math
+exp	math
 expandafter
-fallingdotseq
+fallingdotseq	math
 fbox
 fcolorbox
-flat
+flat	math
 footnotesize
-forall
-frac
-frak
-frown
+forall	math
+frac	math
+frak	math
+frown	math
 futurelet
-gamma
-gcd
+gamma	math
+gcd	math
 gdef
-ge
-genfrac
-geq
-geqq
-geqslant
-gets
-gg
-ggg
-gggtr
-gimel
+ge	math
+genfrac	math
+geq	math
+geqq	math
+geqslant	math
+gets	math
+gg	math
+ggg	math
+gggtr	math
+gimel	math
 global
-gnapprox
-gneq
-gneqq
-gnsim
+gnapprox	math
+gneq	math
+gneqq	math
+gnsim	math
 goldA
 goldB
 goldC
 goldD
 goldE
-grave
+grave	math
 gray
 grayA
 grayB
@@ -386,315 +387,315 @@ greenB
 greenC
 greenD
 greenE
-gt
-gtrapprox
-gtrdot
-gtreqless
-gtreqqless
-gtrless
-gtrsim
-gvertneqq
-hArr
-harr
-hat
-hbar
+gt	math
+gtrapprox	math
+gtrdot	math
+gtreqless	math
+gtreqqless	math
+gtrless	math
+gtrsim	math
+gvertneqq	math
+hArr	math
+harr	math
+hat	math
+hbar	math
 hbox
 hdashline
-hearts
-heartsuit
+hearts	math
+heartsuit	math
 hline
-hom
-hookleftarrow
-hookrightarrow
+hom	math
+hookleftarrow	math
+hookrightarrow	math
 hphantom
 href
 hskip
-hslash
+hslash	math
 hspace
 htmlClass
 htmlData
 htmlId
 htmlStyle
 huge
-iff
-iiint
-iint
-image
-imageof
-imath
-impliedby
-implies
-in
-includegraphics
-inf
-infin
-infty
-injlim
-int
-intercal
-intop
-iota
-isin
+iff	math
+iiint	math
+iint	math
+image	math
+imageof	math
+imath	math
+impliedby	math
+implies	math
+in	math
+includegraphics	math
+inf	math
+infin	math
+infty	math
+injlim	math
+int	math
+intercal	math
+intop	math
+iota	math
+isin	math
 it
-jmath
+jmath	math
 kaBlue
 kaGreen
-kappa
-ker
+kappa	math
+ker	math
 kern
 ket
-lArr
-lBrace
-lVert
-lambda
-land
-lang
-langle
+lArr	math
+lBrace	math
+lVert	math
+lambda	math
+land	math
+lang	math
+langle	math
 large
-larr
-lbrace
+larr	math
+lbrace	math
 lbrack
-lceil
-ldotp
+lceil	math
+ldotp	math
 ldots
-le
-leadsto
-left
-leftarrow
-leftarrowtail
-leftharpoondown
-leftharpoonup
-leftleftarrows
-leftrightarrow
-leftrightarrows
-leftrightharpoons
-leftrightsquigarrow
-leftthreetimes
-leq
-leqq
-leqslant
-lessapprox
-lessdot
-lesseqgtr
-lesseqqgtr
-lessgtr
-lesssim
+le	math
+leadsto	math
+left	math
+leftarrow	math
+leftarrowtail	math
+leftharpoondown	math
+leftharpoonup	math
+leftleftarrows	math
+leftrightarrow	math
+leftrightarrows	math
+leftrightharpoons	math
+leftrightsquigarrow	math
+leftthreetimes	math
+leq	math
+leqq	math
+leqslant	math
+lessapprox	math
+lessdot	math
+lesseqgtr	math
+lesseqqgtr	math
+lessgtr	math
+lesssim	math
 let
-lfloor
-lg
-lgroup
-lhd
-lim
-liminf
+lfloor	math
+lg	math
+lgroup	math
+lhd	math
+lim	math
+liminf	math
 limits
-limsup
-ll
+limsup	math
+ll	math
 llap
-llbracket
-llcorner
-lll
-llless
-lmoustache
-ln
-lnapprox
-lneq
-lneqq
-lnot
-lnsim
-log
+llbracket	math
+llcorner	math
+lll	math
+llless	math
+lmoustache	math
+ln	math
+lnapprox	math
+lneq	math
+lneqq	math
+lnot	math
+lnsim	math
+log	math
 long
-longleftarrow
-longleftrightarrow
-longmapsto
-longrightarrow
-looparrowleft
-looparrowright
-lor
-lozenge
-lparen
+longleftarrow	math
+longleftrightarrow	math
+longmapsto	math
+longrightarrow	math
+looparrowleft	math
+looparrowright	math
+lor	math
+lozenge	math
+lparen	math
 lq
-lrArr
-lrarr
-lrcorner
-lt
-ltimes
-lvert
-lvertneqq
+lrArr	math
+lrarr	math
+lrcorner	math
+lt	math
+ltimes	math
+lvert	math
+lvertneqq	math
 maltese
-mapsto
+mapsto	math
 maroonA
 maroonB
 maroonC
 maroonD
 maroonE
-mathbb
-mathbf
-mathbin
-mathcal
-mathchoice
+mathbb	math
+mathbf	math
+mathbin	math
+mathcal	math
+mathchoice	math
 mathclap
-mathclose
-mathellipsis
-mathfrak
-mathinner
-mathit
+mathclose	math
+mathellipsis	math
+mathfrak	math
+mathinner	math
+mathit	math
 mathllap
-mathnormal
-mathop
-mathopen
-mathord
-mathpunct
-mathrel
-mathring
+mathnormal	math
+mathop	math
+mathopen	math
+mathord	math
+mathpunct	math
+mathrel	math
+mathring	math
 mathrlap
-mathrm
-mathscr
-mathsf
-mathsfit
-mathsterling
+mathrm	math
+mathscr	math
+mathsf	math
+mathsfit	math
+mathsterling	math
 mathstrut
-mathtt
-max
-measuredangle
+mathtt	math
+max	math
+measuredangle	math
 medspace
 message
-mho
-mid
-middle
-min
+mho	math
+mid	math
+middle	math
+min	math
 mintA
 mintB
 mintC
-minuscolon
-minuscoloncolon
-minuso
+minuscolon	math
+minuscoloncolon	math
+minuso	math
 mkern
 mod
-models
-mp
+models	math
+mp	math
 mskip
-mu
-multimap
-nLeftarrow
-nLeftrightarrow
-nRightarrow
-nVDash
-nVdash
-nabla
-natnums
-natural
-ncong
-ne
-nearrow
-neg
+mu	math
+multimap	math
+nLeftarrow	math
+nLeftrightarrow	math
+nRightarrow	math
+nVDash	math
+nVdash	math
+nabla	math
+natnums	math
+natural	math
+ncong	math
+ne	math
+nearrow	math
+neg	math
 negmedspace
 negthickspace
 negthinspace
-neq
+neq	math
 newcommand
 newline
-nexists
-ngeq
-ngeqq
-ngeqslant
-ngtr
-ni
-nleftarrow
-nleftrightarrow
-nleq
-nleqq
-nleqslant
-nless
-nmid
-nobreak
+nexists	math
+ngeq	math
+ngeqq	math
+ngeqslant	math
+ngtr	math
+ni	math
+nleftarrow	math
+nleftrightarrow	math
+nleq	math
+nleqq	math
+nleqslant	math
+nless	math
+nmid	math
+nobreak	math
 nobreakspace
 noexpand
 nolimits
 nonumber
 normalsize
-not
+not	math
 notag
-notin
-notni
-nparallel
-nprec
-npreceq
-nrightarrow
-nshortmid
-nshortparallel
-nsim
-nsubseteq
-nsubseteqq
-nsucc
-nsucceq
-nsupseteq
-nsupseteqq
-ntriangleleft
-ntrianglelefteq
-ntriangleright
-ntrianglerighteq
-nu
-nvDash
-nvdash
-nwarrow
-odot
-oiiint
-oiint
-oint
-omega
-omicron
-ominus
-operatorname
-operatornamewithlimits
-oplus
+notin	math
+notni	math
+nparallel	math
+nprec	math
+npreceq	math
+nrightarrow	math
+nshortmid	math
+nshortparallel	math
+nsim	math
+nsubseteq	math
+nsubseteqq	math
+nsucc	math
+nsucceq	math
+nsupseteq	math
+nsupseteqq	math
+ntriangleleft	math
+ntrianglelefteq	math
+ntriangleright	math
+ntrianglerighteq	math
+nu	math
+nvDash	math
+nvdash	math
+nwarrow	math
+odot	math
+oiiint	math
+oiint	math
+oint	math
+omega	math
+omicron	math
+ominus	math
+operatorname	math
+operatornamewithlimits	math
+oplus	math
 orange
 ordinarycolon
-origof
-oslash
-otimes
-over
-overbrace
-overbracket
-overgroup
-overleftarrow
-overleftharpoon
-overleftrightarrow
-overline
-overlinesegment
-overrightarrow
-overrightharpoon
-overset
-owns
-parallel
-partial
-perp
+origof	math
+oslash	math
+otimes	math
+over	math
+overbrace	math
+overbracket	math
+overgroup	math
+overleftarrow	math
+overleftharpoon	math
+overleftrightarrow	math
+overline	math
+overlinesegment	math
+overrightarrow	math
+overrightharpoon	math
+overset	math
+owns	math
+parallel	math
+partial	math
+perp	math
 phantom
-phase
-phi
-pi
+phase	math
+phi	math
+pi	math
 pink
-pitchfork
-plim
-plusmn
-pm
+pitchfork	math
+plim	math
+plusmn	math
+pm	math
 pmb
 pmod
 pod
 pounds
-prec
-precapprox
-preccurlyeq
-preceq
-precnapprox
-precneqq
-precnsim
-precsim
-prime
-prod
-projlim
-propto
+prec	math
+precapprox	math
+preccurlyeq	math
+preceq	math
+precnapprox	math
+precneqq	math
+precnsim	math
+precsim	math
+prime	math
+prod	math
+projlim	math
+propto	math
 providecommand
-psi
+psi	math
 purple
 purpleA
 purpleB
@@ -704,19 +705,19 @@ purpleE
 qquad
 quad
 r
-rArr
-rBrace
-rVert
+rArr	math
+rBrace	math
+rVert	math
 raisebox
-rang
-rangle
-rarr
-ratio
-rbrace
+rang	math
+rangle	math
+rarr	math
+ratio	math
+rbrace	math
 rbrack
-rceil
-real
-reals
+rceil	math
+real	math
+reals	math
 red
 redA
 redB
@@ -725,107 +726,107 @@ redD
 redE
 relax
 renewcommand
-restriction
-rfloor
-rgroup
-rhd
-rho
+restriction	math
+rfloor	math
+rgroup	math
+rhd	math
+rho	math
 right
-rightarrow
-rightarrowtail
-rightharpoondown
-rightharpoonup
-rightleftarrows
-rightleftharpoons
-rightrightarrows
-rightsquigarrow
-rightthreetimes
-risingdotseq
+rightarrow	math
+rightarrowtail	math
+rightharpoondown	math
+rightharpoonup	math
+rightleftarrows	math
+rightleftharpoons	math
+rightrightarrows	math
+rightsquigarrow	math
+rightthreetimes	math
+risingdotseq	math
 rlap
 rm
-rmoustache
-rparen
+rmoustache	math
+rparen	math
 rq
-rrbracket
-rtimes
+rrbracket	math
+rtimes	math
 rule
-rvert
+rvert	math
 scriptscriptstyle
 scriptsize
 scriptstyle
-sdot
-searrow
-sec
+sdot	math
+searrow	math
+sec	math
 sect
 set
-setminus
+setminus	math
 sf
-sh
-sharp
-shortmid
-shortparallel
+sh	math
+sharp	math
+shortmid	math
+shortparallel	math
 show
-sigma
-sim
-simcolon
-simcoloncolon
-simeq
-sin
-sinh
+sigma	math
+sim	math
+simcolon	math
+simcoloncolon	math
+simeq	math
+sin	math
+sinh	math
 sixptsize
 small
-smallfrown
-smallint
-smallsetminus
-smallsmile
+smallfrown	math
+smallint	math
+smallsetminus	math
+smallsmile	math
 smash
-smile
+smile	math
 sout
 space
-spades
-spadesuit
-sphericalangle
-sqcap
-sqcup
-sqrt
-sqsubset
-sqsubseteq
-sqsupset
-sqsupseteq
-square
-stackrel
-star
-sub
-sube
-subset
-subseteq
-subseteqq
-subsetneq
-subsetneqq
+spades	math
+spadesuit	math
+sphericalangle	math
+sqcap	math
+sqcup	math
+sqrt	math
+sqsubset	math
+sqsubseteq	math
+sqsupset	math
+sqsupseteq	math
+square	math
+stackrel	math
+star	math
+sub	math
+sube	math
+subset	math
+subseteq	math
+subseteqq	math
+subsetneq	math
+subsetneqq	math
 substack
-succ
-succapprox
-succcurlyeq
-succeq
-succnapprox
-succneqq
-succnsim
-succsim
-sum
-sup
-supe
-supset
-supseteq
-supseteqq
-supsetneq
-supsetneqq
-surd
-swarrow
+succ	math
+succapprox	math
+succcurlyeq	math
+succeq	math
+succnapprox	math
+succneqq	math
+succnsim	math
+succsim	math
+sum	math
+sup	math
+supe	math
+supset	math
+supseteq	math
+supseteqq	math
+supsetneq	math
+supsetneqq	math
+surd	math
+swarrow	math
 tag
-tan
-tanh
-tau
-tbinom
+tan	math
+tanh	math
+tau	math
+tbinom	math
 tealA
 tealB
 tealC
@@ -845,133 +846,133 @@ textsf
 textstyle
 texttt
 textup
-tfrac
-tg
-th
-therefore
-theta
-thetasym
-thickapprox
-thicksim
+tfrac	math
+tg	math
+th	math
+therefore	math
+theta	math
+thetasym	math
+thickapprox	math
+thicksim	math
 thickspace
 thinspace
-tilde
-times
+tilde	math
+times	math
 tiny
 tmspace
-to
-top
-triangle
-triangledown
-triangleleft
-trianglelefteq
-triangleq
-triangleright
-trianglerighteq
+to	math
+top	math
+triangle	math
+triangledown	math
+triangleleft	math
+trianglelefteq	math
+triangleq	math
+triangleright	math
+trianglerighteq	math
 tt
-twoheadleftarrow
-twoheadrightarrow
+twoheadleftarrow	math
+twoheadrightarrow	math
 u
-uArr
-uarr
-ulcorner
+uArr	math
+uarr	math
+ulcorner	math
 underbar
-underbrace
-underbracket
-undergroup
-underleftarrow
-underleftrightarrow
+underbrace	math
+underbracket	math
+undergroup	math
+underleftarrow	math
+underleftrightarrow	math
 underline
-underlinesegment
-underrightarrow
-underset
-unlhd
-unrhd
-uparrow
-updownarrow
-upharpoonleft
-upharpoonright
-uplus
-upsilon
-upuparrows
-urcorner
+underlinesegment	math
+underrightarrow	math
+underset	math
+unlhd	math
+unrhd	math
+uparrow	math
+updownarrow	math
+upharpoonleft	math
+upharpoonright	math
+uplus	math
+upsilon	math
+upuparrows	math
+urcorner	math
 url
-utilde
+utilde	math
 v
-vDash
-varDelta
-varGamma
-varLambda
-varOmega
-varPhi
-varPi
-varPsi
-varSigma
-varTheta
-varUpsilon
-varXi
-varepsilon
-varinjlim
-varkappa
-varliminf
-varlimsup
-varnothing
-varphi
-varpi
-varprojlim
-varpropto
-varrho
-varsigma
-varsubsetneq
-varsubsetneqq
-varsupsetneq
-varsupsetneqq
-vartheta
-vartriangle
-vartriangleleft
-vartriangleright
+vDash	math
+varDelta	math
+varGamma	math
+varLambda	math
+varOmega	math
+varPhi	math
+varPi	math
+varPsi	math
+varSigma	math
+varTheta	math
+varUpsilon	math
+varXi	math
+varepsilon	math
+varinjlim	math
+varkappa	math
+varliminf	math
+varlimsup	math
+varnothing	math
+varphi	math
+varpi	math
+varprojlim	math
+varpropto	math
+varrho	math
+varsigma	math
+varsubsetneq	math
+varsubsetneqq	math
+varsupsetneq	math
+varsupsetneqq	math
+vartheta	math
+vartriangle	math
+vartriangleleft	math
+vartriangleright	math
 varvdots
-vcentcolon
-vcenter
-vdash
+vcentcolon	math
+vcenter	math
+vdash	math
 vdots
-vec
-vee
-veebar
+vec	math
+vee	math
+veebar	math
 verb
-vert
+vert	math
 vphantom
-wedge
-weierp
-widecheck
-widehat
-widetilde
-wp
-wr
-xLeftarrow
-xLeftrightarrow
-xRightarrow
-xcancel
+wedge	math
+weierp	math
+widecheck	math
+widehat	math
+widetilde	math
+wp	math
+wr	math
+xLeftarrow	math
+xLeftrightarrow	math
+xRightarrow	math
+xcancel	math
 xdef
-xhookleftarrow
-xhookrightarrow
-xi
-xleftarrow
-xleftequilibrium
-xleftharpoondown
-xleftharpoonup
-xleftrightarrow
-xleftrightharpoons
-xlongequal
-xmapsto
-xrightarrow
-xrightequilibrium
-xrightharpoondown
-xrightharpoonup
-xrightleftarrows
-xrightleftharpoons
-xtofrom
-xtwoheadleftarrow
-xtwoheadrightarrow
+xhookleftarrow	math
+xhookrightarrow	math
+xi	math
+xleftarrow	math
+xleftequilibrium	math
+xleftharpoondown	math
+xleftharpoonup	math
+xleftrightarrow	math
+xleftrightharpoons	math
+xlongequal	math
+xmapsto	math
+xrightarrow	math
+xrightequilibrium	math
+xrightharpoondown	math
+xrightharpoonup	math
+xrightleftarrows	math
+xrightleftharpoons	math
+xtofrom	math
+xtwoheadleftarrow	math
+xtwoheadrightarrow	math
 yen
-zeta
+zeta	math

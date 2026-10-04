@@ -1,0 +1,18 @@
+setting    runs  crashed  fell back  seconds (sum)
+rapidocr     16        1          0           1637
+ocrmac       16        0          0           1122
+off          16        0          0           1067
+
+paper | seconds rapidocr/ocrmac/off | words rapidocr/ocrmac/off | lines added, removed against off: rapidocr (in tables), ocrmac (in tables)
+Canaries in the Coal Mine. Six Facts about the Recent E | 112/52/37 | 11288/12258/11288 | +0 (0), -0 (0) | +749 (0), -0 (0)
+The power of two random choices. a survey of tech-nique | 148/80/77 | 25167/27967/25165 | +2 (0), -2 (0) | +342 (0), -20 (0)
+Long Short-Term Memory | 248/215/250 | 18105/18105/18105 | +0 (0), -0 (0) | +0 (0), -0 (0)
+GraphSAINT. Graph Sampling Based Inductive Learning Met | 170/164/155 | 11151/11151/11151 | +0 (0), -0 (0) | +0 (0), -0 (0)
+The Log-Structured Merge-Tree (LSM-Tree) | 32/31/27 | 21053/21053/21053 | +0 (0), -0 (0) | +0 (0), -0 (0)
+Towards ML Engineering. A Brief History Of TensorFlow E | 13/13/12 | 7904/7904/7904 | +0 (0), -0 (0) | +0 (0), -0 (0)
+Joint Word and Entity Embeddings for Entity Retrieval f | 68/63/62 | 7269/7047/7017 | +24 (22), -1 (0) | +20 (0), -2 (0)
+A simple introduction to Markov Chain Monte–Carlo sampl | 53/41/42 | 7844/7853/7335 | +11 (0), -3 (0) | +61 (0), -10 (0)
+Leveraging tropical reef, bird and unrelated sounds for | 47/38/36 | 11264/11443/11264 | +0 (0), -0 (0) | +120 (0), -2 (0)
+Language Model Tokenizers Introduce Unfairness Between  | 179/171/166 | 26053/26178/26063 | +1 (0), -1 (0) | +22 (0), -2 (0)
+Online controlled experiments at large scale | 15/13/11 | 9162/9137/9098 | +5 (4), -0 (0) | +13 (0), -4 (0)
+Accurate predictions on small data with a tabular found | 94/51/43 | 17211/16998/14002 | +157 (137), -3 (0) | +477 (104), -12 (0)

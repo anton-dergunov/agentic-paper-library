@@ -406,11 +406,20 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     see the module docstring.
     """
     from docling.datamodel.base_models import InputFormat
-    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling.datamodel.pipeline_options import OcrMacOptions, PdfPipelineOptions, RapidOcrOptions
     from docling.document_converter import DocumentConverter, PdfFormatOption
     from docling_core.types.doc import DocItemLabel as Label
 
     options = PdfPipelineOptions()
+    # RapidOCR reads tables and code that are images in the PDF. Named here,
+    # because docling's default picks Apple's OCR when ocrmac is installed,
+    # which also reads logos and chart labels into the text. PAPERLIB_OCR
+    # (ocrmac, off) is for comparing them: experiments/ocr-engines.
+    ocr = os.environ.get("PAPERLIB_OCR", "rapidocr")
+    if ocr == "off":
+        options.do_ocr = False
+    else:
+        options.ocr_options = {"ocrmac": OcrMacOptions, "rapidocr": RapidOcrOptions}[ocr]()
     options.generate_picture_images = bool(images_dir)
     options.images_scale = 2.0
     converter = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=options)})

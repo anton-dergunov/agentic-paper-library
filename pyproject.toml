@@ -16,7 +16,10 @@ dependencies = [
     "pymupdf==1.28.0",             # PDF text, destinations and page images
     "pymupdf-layout==1.28.0",
     "pymupdf4llm==1.28.0",         # column detection for the text-layer fallback
-    "rapidocr==3.9.2",
+    "rapidocr==3.9.2",             # OCR for tables and code that are images in a PDF
+    # Not 4.13 or later: their Arm resize (KleidiCV) segfaults inside RapidOCR about one
+    # conversion in three on Apple silicon (experiments/ocr-engines).
+    "opencv-python==4.12.0.88",
     "lxml>=6",                     # arXiv HTML and web articles
     "pillow>=12",                  # figures to WebP
     "pyyaml>=6",
@@ -25,3 +28,6 @@ dependencies = [
 
 [tool.uv]
 package = false
+# opencv-python 4.12 asks for numpy below 2.3, which would also take pandas back a major
+# version. It runs with the numpy the other converters were measured on, so keep that one.
+override-dependencies = ["numpy==2.5.3"]

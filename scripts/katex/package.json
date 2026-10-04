@@ -1,0 +1,8 @@
+{
+  "name": "paperlib-katex-check",
+  "private": true,
+  "description": "KaTeX, pinned, for paperlib symptoms --katex and for regenerating katex-commands.txt",
+  "dependencies": {
+    "katex": "0.16.47"
+  }
+}

@@ -154,6 +154,46 @@ def checks():
     yield "siunitx digit groups joined and rounded", r"$0.7691\pm 0.1623$ of $10000$" in md
     yield "a thin space between indices is kept", r"x_{1\,2}" in md
 
+    md, _ = convert("<p>" + math(r"5\text{\times}{10}^{-4}") + " and "
+                    + math(r"83.1_{\raisebox{-0.5pt}{\tiny\pm1.6}}") + " and "
+                    + math(r"r\mathrel{\raisebox{-1.2pt}{\mathbin{\overset{\text{{def}}}{=}}}}s") + ".</p>")
+    yield "a math command in a text argument is set as math", (
+        r"5\text{\(\times\)}{10}^{-4}" in md and r"{\tiny\(\pm\)1.6}" in md
+        and r"\raisebox{-1.2pt}{\(\mathbin{\overset{\text{{def}}}{=}}\)}}s" in md)
+
+    md, _ = convert("<p>" + math(r"x\quad\text{\text[citep]{[\@@bibref{Number}{smith_2010}{}{}]}}") + " and "
+                    + math(r"\textnormal{(by Eq \ref{eq:chain_rule})}") + " and "
+                    + math(r"\centering{\bm{x}}\@add@centering") + ".</p>")
+    yield "LaTeXML's citation internals keep the key", r"\text{\text{[smith\_2010]}}" in md and "bibref" not in md
+    yield "an underscore in a text label is escaped", r"\text{eq:chain\_rule}" in md
+    yield "\\centering is dropped", r"${\bm{x}}$" in md
+
+    md, _ = convert("<p>" + math(r"\begin{split}a&amp;=b\end{split}") + " and "
+                    + math(r"\begin{multlined}a\\ b\end{multlined}") + " and "
+                    + math(r"\begin{array}{@{}rcl@{\qquad}l}x&amp;=&amp;f&amp;g\end{array}") + ".</p>"
+                    + '<table class="ltx_equation ltx_eqn_table"><tbody>'
+                    + eqn_row(math(r"\displaystyle\begin{split}a&amp;=b\end{split}"), number=1) + "</tbody></table>")
+    yield "split becomes aligned", (
+        r"$\begin{aligned}a&=b\end{aligned}$" in md and r"\begin{aligned}a&=b\end{aligned} \tag{1}" in md)
+    yield "multlined becomes gathered", r"\begin{gathered}a\\ b\end{gathered}" in md
+    yield "@{} is taken out of array columns", r"\begin{array}{rcll}x&=&f&g" in md
+
+    md, _ = convert("<p>" + math(r"y=\sigma\mathopen{}\mathclose{{\left(\sum_{i}{w}_{i}+b}}\right)") + " and "
+                    + math(r"\Tr{\A^\T}") + " and " + math(r"2\--3\times") + " and x " + math(r"\mod") + " y and "
+                    + math("[\\begin{smallmatrix}U\\\\\nV\\end{smallmatrix}]") + ".</p>")
+    yield "\\mleft ... \\mright wrapper is taken off", r"$y=\sigma\left(\sum_{i}{w}_{i}+b\right)$" in md
+    yield "an unknown macro as a script is one group", r"\operatorname{A}^{\operatorname{T}}" in md
+    yield "\\- is dropped, a bare \\mod is a name", r"$2-3\times$" in md and r"$\operatorname{mod}$" in md
+    yield "inline math stays on one line", r"$[\begin{smallmatrix}U\\ V\end{smallmatrix}]$" in md
+
+    md, _ = convert("<p>" + math(r"\raisebox{2pt}{\hbox{\(\hbox{{\kern-0.2pt\bigwedge}}\)}}") + " and "
+                    + math(r"\text{bo$n$ \(\alpha\)}") + ".</p>")
+    yield "a box inside math inside a box is text again", r"\hbox{\(\hbox{{\kern-0.2pt\(\bigwedge\)}}\)}" in md
+    yield "math in a text argument is kept", r"\text{bo\(n\) \(\alpha\)}" in md
+
+    md, _ = convert("<p>cost of " + math(r"\sim") + "$" + math("0.6") + ", the " + math(r"\$") + " value.</p>")
+    yield "a currency sign between two formulas joins them", r"$\sim \$0.6$" in md and r"the \$ value" in md
+
     md, images = convert("<div>" + picture([PROMPT]) + "</div>")
     yield "prompt box becomes a quote", md.startswith("> Please act as an impartial judge") and not images
     yield "box paragraphs stay apart", "\n>\n> \\[\\[User Question\\]\\]" in md
@@ -233,6 +273,12 @@ def checks():
     yield "a table docling split in two is rejoined", pdf.join_split_tables(
         ["| Model | Hit |\n|---|---|\n| A | 0.4 |", "| B | 0.6 |\n|---|---|\n| C | 0.7 |"]
     ) == ["| Model | Hit |\n|---|---|\n| A | 0.4 |\n| B | 0.6 |\n| C | 0.7 |"]
+
+    symptoms = load("conversion-symptoms")
+    yield "a < in an equation is not a tag", symptoms.prose_words(
+        "If $a<b$ then one two three and $c>d$ holds.\n\n$$x<y \\tag{1}$$\n\n<span>four</span> <!-- note -->") == 12
+    yield "frontmatter is split from the body", symptoms.split_frontmatter(
+        "---\ntitle: T\nauthors: [A, B]\n---\nBody text.\n") == ({"title": "T", "authors": ["A", "B"]}, "Body text.\n")
 
     page_map = load("page-map")
     yield "ICML heading number", page_map.heading_number("1 Introduction", True, False) == ("1", "Introduction", ["1"])

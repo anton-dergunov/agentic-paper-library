@@ -36,10 +36,13 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 Maths is written as `$…$` and `$$…$$` for KaTeX, VS Code's renderer, not as pandoc's `` $`…`$ ``. It is normalised for KaTeX during conversion:
 
 - unsupported commands are mapped to an equivalent, or shown upright as their name;
-- layout commands are dropped;
-- a `$` inside the TeX is rewritten according to its mode.
+- layout commands and LaTeXML's internals are dropped;
+- a `$`, a `_`, or a maths-only command such as `\times` inside a text argument is rewritten for its mode;
+- environments KaTeX lacks or restricts (`split` outside a display, `multlined`, `@{}` columns) become ones it draws.
 
-`scripts/katex-commands.txt` is the list of commands KaTeX supports. → [`experiments/katex-equation-check`](../experiments/katex-equation-check/README.md)
+`scripts/katex-commands.txt` is the list of commands KaTeX supports, with those it refuses in a text argument marked; `scripts/katex/katex-commands.js` generates it. In a library of 2,202 papers, 56 of 444,263 equations do not parse: pictures and tables set inside an equation, and equations a model read from a PDF. `paperlib symptoms --katex` lists them.
+
+The equations are converted from the author's TeX, which LaTeXML keeps beside its MathML. Converting from the MathML parses slightly more often but gives machine-written TeX without the author's macros, fonts and alignment, so it is not used. → [`experiments/katex-equation-check`](../experiments/katex-equation-check/README.md)
 
 In papers converted from a PDF, display equations are read from the page image by a model (see the next section). About three in ten differ somewhere from arXiv's LaTeX, so the note at the top of such a paper says to check the PDF before quoting an equation. Inline mathematics is re-read from the page image the same way. → [`experiments/inline-math-reread`](../experiments/inline-math-reread/README.md)
 
@@ -59,6 +62,8 @@ Some papers have no arXiv HTML: older papers, and papers never on arXiv. `script
 This pairing won a comparison with docling alone, docling's own formula model, marker, and the text layer, scored against arXiv's HTML on papers that have both. It is the only one that put all table numbers in tables while still reading most equations. MinerU was installed, but its run failed, so it was never compared; it is the one to try next. → [`experiments/pdf-converter-bakeoff`](../experiments/pdf-converter-bakeoff/README.md)
 
 Before that, papers without HTML were converted from the text layer alone, in column order. That kept the prose but lost headings, tables and figures. It remains as the fallback when docling fails. → [`experiments/two-column-reading-order`](../experiments/two-column-reading-order/README.md)
+
+A table or a code listing that is an image in the PDF is read by OCR (RapidOCR), and comes out as a table or a code block; its numbers are then the OCR's, not the text layer's. Apple's OCR was compared and reads logos and chart labels into the text. OpenCV is pinned to 4.12: later releases crash now and then inside the OCR on Apple silicon. → [`experiments/ocr-engines`](../experiments/ocr-engines/README.md)
 
 Known limitations:
 
@@ -81,7 +86,8 @@ When a converter improves, `paperlib reconvert` regenerates paper bodies and kee
 A whole-library run is validated with:
 
 - `paperlib symptoms`, which detects known conversion problems;
-- `paperlib symptoms --compare <git-ref>`, which flags papers whose prose shrank by more than 5% since that commit;
+- `paperlib symptoms --compare <git-ref>`, which flags papers whose body shrank by more than 5% since that commit;
+- `paperlib symptoms --katex`, which lists papers with equations KaTeX cannot parse (it needs Node);
 - `tests/test_conversion.py`.
 
 The converters are pinned in `pyproject.toml`, so that a fresh install converts a paper exactly as before. Upgrading docling or PyMuPDF changes papers already in a library, so it is a measured step. → [`experiments/library-reconversion`](../experiments/library-reconversion/README.md)
