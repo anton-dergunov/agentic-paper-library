@@ -93,6 +93,7 @@ These files are for the agent, not for {{reader}}. They hold what was learned ab
 # <Title>
 
 type: method
+read: full
 
 ## Digest
 
@@ -108,6 +109,8 @@ re-reading it.
 
 - 2026-10-01: <question> → <short answer> (p. N)
 ```
+
+`read` says how much of the paper the digest rests on: `full` (the main text was read) or `skim` (abstract, introduction, conclusion and headline results only, as a literature-review pass does for most papers). A file without the line was written from a full read. Before leaning on a `skim` digest for a detail, open the paper; after reading it in full, rewrite the digest and change the line.
 
 Merge into an existing file; never drop its Q&A.
 

@@ -37,6 +37,7 @@ COMMANDS = {
     "symptoms": ("conversion-symptoms.py", True, "list papers showing known conversion problems"),
     "localize-figures": ("localize-figures.py", True, "download figures that still link to arXiv"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
+    "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
     "set-summary": ("paperlib.py", True, "set a paper's summary: <paper.md> <summary>"),
     "set-type": ("paperlib.py", True, "set a paper's type: <paper.md> <type>"),
     "filename": ("paperlib.py", False, "the filename stem for a title: <title>"),

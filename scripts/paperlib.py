@@ -302,9 +302,29 @@ def load_conversion_issues():
     return yaml.safe_load(CONVERSION_ISSUES_FILE.read_text(encoding="utf-8")) or []
 
 
-# A markdown link's target, and the paper-map section of a review.
+# A markdown link's target, and the paper-map section of a review. Reviews use
+# reference-style links ("[MMLU][mmlu]", defined once as "[mmlu]: <target>" at the
+# end of the file), so that the long encoded paths stay out of the prose; inline
+# links work too.
 _LINK = re.compile(r"\]\(([^)\s]+)\)")
+REF_USE = re.compile(r"\]\[([^\]\n]+)\]")
+REF_DEF = re.compile(r"^\[([^\]\n]+)\]:[ \t]+(\S+)[ \t]*$", re.M)
 _PAPER_MAP = re.compile(r"^## Paper map\s*$(.*?)(?=^## |\Z)", re.M | re.S)
+
+
+def link_definitions(text):
+    """A file's reference-link definitions: {label (lowercased): target}."""
+    return {label.lower(): target for label, target in REF_DEF.findall(text)}
+
+
+def link_targets(text, definitions=None):
+    """Targets of the links in `text`: inline ones, then reference-style ones looked
+    up in `definitions` (default: those defined in `text`). A reference to a label
+    that is not defined comes back as "[label]", which resolves to nothing."""
+    if definitions is None:
+        definitions = link_definitions(text)
+    return _LINK.findall(text) + [definitions.get(label.lower(), f"[{label}]")
+                                  for label in REF_USE.findall(text)]
 
 
 def load_reviews():
@@ -340,7 +360,9 @@ def review_links(path):
     from urllib.parse import unquote, urlsplit
 
     out = []
-    for target in _LINK.findall(Path(path).read_text(encoding="utf-8")):
+    text = Path(path).read_text(encoding="utf-8")
+    # Definitions nothing refers to are checked as well, so a stale one is noticed.
+    for target in dict.fromkeys(link_targets(text) + list(link_definitions(text).values())):
         if target.startswith(PDF_LINK_BASE):
             rel = unquote(urlsplit(target).path).lstrip("/")
             resolved = (LIBRARY_DIR / rel).with_suffix(".md")
@@ -359,8 +381,10 @@ def review_coverage(review):
     in_scope = set(paper_files(LIBRARY_DIR / review["meta"]["scope"]))
     listed = set()
     for path in review["files"]:
-        for section in _PAPER_MAP.findall(Path(path).read_text(encoding="utf-8")):
-            for target in _LINK.findall(section):
+        text = Path(path).read_text(encoding="utf-8")
+        definitions = link_definitions(text)
+        for section in _PAPER_MAP.findall(text):
+            for target in link_targets(section, definitions):
                 if not re.match(r"^[a-z]+:", target):
                     listed.add((path.parent / unquote(target.split("#")[0])).resolve())
     return in_scope, {p for p in in_scope if p.resolve() in listed}

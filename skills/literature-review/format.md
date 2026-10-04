@@ -44,9 +44,9 @@ These are different from an overview note:
   names, except when they are the finding.
 - **Cite pages for claims** with `pdf.invalid` links (below), so the reader can check them
   in the PDF and an agent can find them.
-- **Weigh the evidence.** Each finding says how well it is supported: replicated across
-  papers; one paper; vendor-reported (the authors sell the system); one benchmark; a
-  benchmark that later papers call saturated or flawed; contradicted by another paper.
+- **Weigh the evidence.** Each finding says how well it is supported, starting with a
+  label from the fixed list under "Evidence labels" below, so that findings can be
+  compared within a review and across reviews.
 - **Mark what changed.** When a recent paper overturns or narrows an older finding, say so
   in place ("this held until 2025, when …").
 
@@ -64,41 +64,6 @@ Framing:
 properly; don't cut to hit a word count. The pilot review of 70 papers came to about
 11,000 words, and its reader said twice that would also be fine. Readability is the limit, not
 length: short paragraphs, bold lead-ins, a table where items compare along the same axes.
-
-## What the reader liked, and what was missing
-
-From the first reader's reading of the pilot review (`llm/memory`, 2026-10-01, in the
-library where this format was developed). Keep what worked; the missing part is now the
-"Kinds of …" section below.
-
-Worked well, keep it:
-- **The introduction** with a mermaid diagram of the area's loop or pipeline, and the
-  short vocabulary list.
-- **The map**, placing every paper in a family with a few words each.
-- **The history by year**: what each period added and what replaced what.
-- **Findings headed by claims**, each with its evidence and how strong that evidence is.
-- **Comparison tables**, of systems by mechanism and of benchmarks.
-- **Where to start reading**, in order, with why each paper comes at that point. The
-  reader called this section very important.
-- **Connections** to neighbouring areas.
-- **The paper map**, whose lines were written from reading the papers. They read much
-  better than technical one-line summaries.
-- **Flagged conversion problems**, which are fixed separately.
-
-From the reading of the third review (`llm/evaluation`, 2026-10-04):
-- **A practical section** asked for after the review was written ("given all this
-  research, how should I do it?") was the part the reader valued most. It is now the "In
-  practice" section below, written last and marked as the agent's synthesis.
-- **The diagrams had become repetitive**: every one a left-to-right chain of boxes, some
-  of them only a numbered list drawn as boxes. See "Diagrams and figures".
-
-Missing, now required:
-- **A taxonomy of the kinds of approaches**, explained at the level of how each one works,
-  as an architecture overview would: the questions that separate the designs, and one
-  subsection per family with how it works, what it buys, what it costs and where it fits.
-  The map alone listed papers by family but did not explain the families.
-- **More introduction to the field**: what types of systems or methods exist, before the
-  findings about them.
 
 ## The file
 
@@ -155,40 +120,74 @@ The body has these sections, in this order:
 6. `## Findings`: 4–8 `###` subsections (more if the area needs them). Each heading is a
    claim the papers support, written as a sentence ("Compact memories beat full history
    only when retrieval is good"). Under it: the evidence with citations, then a bold
-   **How strong the evidence is** line, and the papers that disagree.
-7. `## In practice: <topic>` (when the area has a practical use; one section, or two if
+   **How strong the evidence is** line that opens with one or two evidence labels in
+   italics ("**How strong the evidence is:** *replicated; vendor-run.* …") and then says
+   why, and the papers that disagree. Findings headed by claims are what makes the
+   review usable; never head one with a topic.
+7. `## Where the papers disagree`: every disagreement between papers in one list, so it
+   is easy to find and to revisit on update. One bold-led item each: the question, who
+   says what (with links and the deciding numbers), and what would explain or settle it
+   (different settings, different models, a small sample). The findings mention each
+   disagreement where it arises; this section collects them. Leave it out only if the
+   papers do not disagree.
+8. `## In practice: <topic>` (when the area has a practical use; one section, or two if
    there are two distinct topics). **Written last**, after every other section is done.
    See "The In practice section" below.
-8. `## Comparison` (when the area has one): a table of the main methods or systems along
+9. `## Comparison` (when the area has one): a table of the main methods or systems along
    the axes that matter for the area. For memory systems these are: what is stored, how it
    is written, how it is retrieved, how it is forgotten, and how it was evaluated. One row
-   per paper, linked.
-9. `## Open questions`: what is contested, unmeasured, or rests on thin evidence. Each item
+   per paper, linked. A row that reports numbers ends with one page link to where they
+   come from (a last column headed "Source": "[p. 6, Table 2](…)"); a single link per row
+   is enough, and a row without numbers needs none. Say above the table that the numbers
+   are each paper's own, so rows are not comparable when the setups differ.
+10. `## Open questions`: what is contested, unmeasured, or rests on thin evidence. Each item
    is a bold-led line plus one or two sentences, with the papers that raise it.
-10. `## Where to start reading`: 5–8 papers in reading order. Each one is a link and a line on
+11. `## Where to start reading`: 5–8 papers in reading order. Each one is a link and a line on
    why it comes at that point ("the clearest statement of the problem", "the system later
-   papers compare against").
-11. `## Connections`: neighbouring areas, as links to their reviews (`../<scope>.md`) or their
+   papers compare against"). The reader of the first review called this section very
+   important: choose the order with care, and say when a paper's copy has a conversion
+   problem the reader should know about.
+12. `## Connections`: neighbouring areas, as links to their reviews (`../<scope>.md`) or their
    folders, each with one line on what they share with this one.
-12. `## Updates`: a dated log, one line per version: what it took in and what it changed
+13. `## Updates`: a dated log, one line per version: what it took in and what it changed
     ("2027-10-03: 14 new papers; the long-context finding now holds only up to 200K tokens;
     new family: …"). The first line records the first version. The reader reads it to see
     what moved since they last looked.
-13. `## Q&A`: cross-paper points settled in later sessions, appended one per line:
+14. `## Q&A`: cross-paper points settled in later sessions, appended one per line:
     `- 2026-10-05: <question> → <short answer, with links>`. An update folds the lasting
     ones into the findings and removes them from here.
-14. `## Paper map`: every paper in the scope, grouped under `### <folder>` headings, one line
+15. `## Paper map`: every paper in the scope, grouped under `### <folder>` headings, one line
     each:
 
     ```markdown
-    - [Zep](../../library/llm/memory/agent/Zep.%20A%20Temporal….md): temporal knowledge-graph memory; beats full context on LongMemEval, vendor-run. → Findings: compact vs full history
+    - [Zep][zep]: temporal knowledge-graph memory; beats full context on LongMemEval, vendor-run. → Findings: compact vs full history
+    - [MemoryOS][memoryos] (skimmed): three-tier store with heat-based promotion. → Kinds
     ```
 
-    The link text is the paper's short name. After it come its role and main result in one
-    line, in plain words, written from the reading digest rather than copied from the
-    index summary. Then `→` and the sections that discuss it (or `→ map only` if none
-    does). Every
-    paper in the scope must be here: `paperlib review-status` counts this section.
+    The link text is the paper's short name. A paper that was skimmed, not read in full,
+    is marked "(skimmed)" after the link, so the reader can see when a claim rests on a
+    skim. After that come its role and main result in one line, in plain words, written
+    from the reading digest rather than copied from the index summary: these lines read
+    much better than technical one-line summaries. Then `→` and the sections that discuss
+    it (or `→ map only` if none does). Every paper in the scope must be here:
+    `paperlib review-status` counts this section.
+
+## Evidence labels
+
+Every **How strong the evidence is** line opens with one or two of these, in italics, and
+then explains. Use the same words elsewhere when weighing a claim.
+
+| Label | Means |
+|---|---|
+| *replicated* | several independent papers, on different data, find the same thing |
+| *single study* | one paper, however careful |
+| *single benchmark* | several papers, but all on the same benchmark or dataset |
+| *vendor-run* | the authors built or sell the system or model being measured |
+| *constructed* | shown in a simulation, a worst case or a synthetic setup, not observed in normal use |
+| *small sample* | the result rests on few items, models or raters; say how few |
+| *contested* | another paper here finds otherwise; it is also listed under "Where the papers disagree" |
+| *flawed benchmark* | measured on a benchmark that later papers call saturated, leaky or mislabelled |
+| *superseded* | held until a later paper narrowed or overturned it; say which |
 
 ## The In practice section
 
@@ -255,6 +254,13 @@ a row of boxes adds nothing; write the list.
 
 ## Links
 
+- **Reference-style.** A review links each paper and each page many times and the encoded
+  paths are long, so the prose uses reference-style links, `[MMLU][mmlu]` and
+  `[p. 5, Table 1][mmlu@5:table.1]`, with the definitions in one generated block at the
+  end of the file. Write links inline or reference-style, whichever is easier, and run
+  `paperlib review-refs <scope>` when done: it converts every link to a paper or a PDF
+  page, names the labels and rebuilds the block. Never edit the block by hand.
+  `paperlib review-refs --inline <scope>` turns a review back into inline links.
 - **A paper:** a relative link to its markdown, as `paperlib review-status --links <scope>`
   prints it. The link text is the paper's short name (method or system name, or a few words
   of the title).
@@ -270,7 +276,7 @@ a row of boxes adds nothing; write the list.
 
 A long review is fine as one file. Split only when one file becomes unwieldy to edit
 (roughly 1,500 lines): move it to `reviews/<scope>/index.md`, which keeps the frontmatter,
-the abstract, the introduction, the kinds section, the map, the history, the In practice
-section, open questions, where to start, connections, updates and Q&A. Each finding, or each group of findings, becomes its own file
+the abstract, the introduction, the kinds section, the map, the history, the disagreements,
+the In practice section, open questions, where to start, connections, updates and Q&A. Each finding, or each group of findings, becomes its own file
 in the same folder, and the paper map moves to `paper-map.md` (with its `## Paper map`
 heading). Links in the moved files go one level deeper (`../../../library/…`).

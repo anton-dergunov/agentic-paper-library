@@ -126,6 +126,7 @@ def fix_links():
                     anchor = "#" + target.split("#", 1)[1] if "#" in target else ""
                     replacement = md_link(paper, f) + anchor
                 new = new.replace(f"]({target})", f"]({replacement})")
+                new = new.replace(f"]: {target}\n", f"]: {replacement}\n")
                 fixed += 1
             if new != text:
                 f.write_text(new, encoding="utf-8")

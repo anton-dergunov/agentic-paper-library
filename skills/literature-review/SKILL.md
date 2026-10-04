@@ -22,10 +22,6 @@ while the first pass is running.
 date: new papers were added, or time has passed) and `status`. With no mode, pick by
 whether `reviews/<scope>.md` exists.
 
-`format.md` also records what the reader of the first review liked and what they found
-missing.
-Read that part before writing or updating, so each review keeps what worked.
-
 ## write
 
 Reading an area takes many papers, so it is split into batches that can run in different
@@ -51,7 +47,8 @@ until the review is written.
      possible.
 4. **Read**, with one general-purpose subagent per batch, several in parallel. Give each
    the prompt in "Reading batches" below. Each writes `reviews/.work/<scope>/batch-NN.md`
-   and the `notes/` digests of its full reads, paper by paper. If an agent or the session
+   and a `notes/` digest for every paper it reads, full or skim, paper by paper. The
+   batch files are deleted at the end; the notes are what later sessions keep. If an agent or the session
    stops (a usage limit, for instance), the sections written so far are kept. Resume the
    agent if it is still reachable; otherwise the next run starts again at step 1 and reads
    only the papers that are left.
@@ -63,7 +60,10 @@ until the review is written.
      find the few questions on which the approaches differ, then group the papers into
      families by their answers.
    - Open a paper again only to check a claim the review leans on.
-   - Start the paper map from `paperlib review-status --links <scope>`.
+   - Start the paper map from `paperlib review-status --links <scope>`, and mark the
+     skimmed papers "(skimmed)" from the digests' `read:` lines.
+   - Collect the disagreements between papers as you write the findings, for "Where the
+     papers disagree".
    - Look up the exact page of each cited number in the digest; never guess one.
    - Choose each diagram's type for what it shows, and use a paper's own figure where it
      explains better (`format.md`, "Diagrams and figures").
@@ -72,6 +72,7 @@ until the review is written.
      on, derive them from the findings, and open with the provenance note (`format.md`,
      "The In practice section"). Skip it if the area has none.
 7. **Check.**
+   - `paperlib review-refs <scope>` turns the links into reference-style links.
    - `paperlib review-status <scope>` must show every paper covered and no broken links.
    - Run `paperlib build-index` (the folder indexes now link the review), then
      `paperlib check`, which must pass.
@@ -99,9 +100,11 @@ The subagent prompt has these parts. Fill in the list of papers and the batch nu
 >   main results live there.
 > - Promote a skim paper to full if it turns out to be central.
 >
-> For each full paper, write `notes/<stem>.md` in the notes format from
-> `.claude/library-guide.md`. If the file
-> exists, merge into it and keep its Q&A.
+> For every paper, write `notes/<stem>.md` in the notes format from
+> `.claude/library-guide.md`, with `read: full` or `read: skim`. A skim's digest is
+> shorter: the claim, the mechanism, the evidence and its strength, and the numbers with
+> pages. If the file exists, merge into it and keep its Q&A; never replace a `read: full`
+> digest with a skim.
 >
 > Write `reviews/.work/<scope>/batch-NN.md`. It starts with `# Batch NN` and has one
 > section per paper, headed `## <stem>` (the filename without `.md`, exactly). **Append
@@ -153,17 +156,22 @@ Steps:
    which lists the uncovered papers and, if a reading pass is under way, which of them are
    still unread.
 2. **Format.** Compare the review with `format.md`. A review written under an older format
-   gets the sections it lacks in this update.
+   gets what it lacks in this update: missing sections ("Where the papers disagree", "In
+   practice"), evidence labels, source links in the comparison tables.
 3. **Read** the uncovered papers. Read their `notes/` digest first, if there is one. For
    more than a few papers, use reading batches with the prompt above, kept in
    `reviews/.work/<scope>/`.
 4. **Revise** the review:
-   - Place each paper in the map and in its family under "Kinds of …". A new family gets
+   - Place each paper in the map and in its family under "Kinds of …". When a paper that
+     was skimmed has since been read in full (its note says `read: full`), drop its
+     "(skimmed)" mark. A new family gets
      its own subsection and a row in the side-by-side table.
    - History: add a period for the new papers; don't rewrite the old ones.
    - Findings: when new evidence changes a finding, rewrite it and say in place what
      changed ("until 2026 …; the 2027 papers show …"). Add new findings, and update each
-     **How strong the evidence is** line.
+     **How strong the evidence is** line and its labels.
+   - "Where the papers disagree": add new disagreements, and mark the ones the new papers
+     settle.
    - Comparison tables, open questions (mark what is now resolved), where to start
      reading (swap in a newer paper if it is now the better entry point) and connections.
    - The "In practice" section, last: re-derive the recommendations from the revised
