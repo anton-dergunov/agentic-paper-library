@@ -153,9 +153,10 @@ The body has these sections, in this order:
     ("2027-10-03: 14 new papers; the long-context finding now holds only up to 200K tokens;
     new family: …"). The first line records the first version. The reader reads it to see
     what moved since they last looked.
-14. `## Q&A`: cross-paper points settled in later sessions, appended one per line:
-    `- 2026-10-05: <question> → <short answer, with links>`. An update folds the lasting
-    ones into the findings and removes them from here.
+14. `## Q&A`: cross-paper points settled in later sessions, appended as a `### 2026-10-05: <question>`
+    heading followed by the answer as short paragraphs or bullets, with links, over several
+    lines rather than squashed into one. An update folds the lasting ones into the findings
+    and removes them from here.
 15. `## Paper map`: every paper in the scope, grouped under `### <folder>` headings, one line
     each:
 

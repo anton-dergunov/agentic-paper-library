@@ -111,8 +111,12 @@ without re-reading it.
 
 ## Q&A
 
-- 2026-10-01: <question> → <short answer> (p. N)
+### 2026-10-01: <the question, as a short heading>
+
+<The answer in a few short paragraphs or bullets, with the page of each claim (p. N).>
 ```
+
+Write each Q&A entry as readable markdown over several lines, never as one long line: a `###` heading with the date and the question, then the answer as short paragraphs or a bullet list, a table where the content is a comparison, and a fenced block for an example or a worked calculation. Mark content the session made up, such as a toy example, as ours ("ours, not from the paper"), so a later session doesn't take it for the paper's. The entry is read by the reader as often as by agents, and the extra lines cost few tokens.
 
 `paperlib read <scope or paper.md>` writes these files: one model request per paper, the whole main text, resumable. `paperlib review-status <scope>` lists the papers that have no note yet. `family`, `evidence` and `conversion` are what a literature review groups and weighs papers by; a note written before they existed lacks them.
 
