@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [
+    "\"factorizing model computations into interpretable input-dependent and input-invariant terms\": the abstract says the resulting circuits factorize into input-dependent and input-invariant terms; it does not say model computations are factorized or that the terms themselves are interpretable (it says computations are decomposed into interpretable circuits)."
+   ],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "interpretability/mechanistic/Transcoders Find Interpretable LLM Feature Circuits",
+ "folder_key": {
+  "A": "interpretability/mechanistic"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-opus-5-5",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

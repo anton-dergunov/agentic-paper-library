@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [
+    "\"in a second\": the abstract says \"in less than a second\" (minor imprecision, echoes the title)"
+   ],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [
+    "\"with 230× speedup\": the abstract says \"up to 230× speedup\", an upper bound rather than a flat figure"
+   ],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "ml-foundations/tabular/TabPFN. A Transformer That Solves Small Tabular Classification Problems in a Second",
+ "folder_key": {
+  "A": "ml-foundations/tabular"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

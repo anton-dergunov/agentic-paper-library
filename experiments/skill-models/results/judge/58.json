@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"outperform federated search algorithms\" — generalises beyond the abstract, which says only that simple instantiations outperform one leading algorithm in federated search result presentation"
+   ],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "search-and-ranking/search-systems/Beyond Ranking. Optimizing Whole-Page Presentation",
+ "folder_key": {
+  "A": "search-and-ranking/search-systems"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "representation-learning/embeddings/ArcFace. Additive Angular Margin Loss for Deep Face Recognition",
+ "folder_key": {
+  "A": "representation-learning/embeddings",
+  "B": "vision-and-multimodal/vision"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

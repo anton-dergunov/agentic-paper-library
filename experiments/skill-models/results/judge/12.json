@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [
+    "\"achieving +34% sensitivity improvement\": the abstract says \"up to +34%\" of sensitivity rate improvement, i.e. a maximum, and only for the transformation combined with the best known regression adjustment; the summary states it as the flat result of the transformation."
+   ],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "experimentation-and-metrics/variance-reduction/Consistent Transformation of Ratio Metrics for Efficient Online Controlled Experiments",
+ "folder_key": {
+  "A": "experimentation-and-metrics/variance-reduction"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "stored",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

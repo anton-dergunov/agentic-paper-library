@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "llm/efficiency/LLM Pruning and Distillation in Practice. The Minitron Approach",
+ "folder_key": {
+  "A": "llm/efficiency"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "stored",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

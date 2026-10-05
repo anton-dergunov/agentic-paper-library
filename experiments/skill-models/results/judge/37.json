@@ -1,0 +1,44 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"reconstruction weights\" — the abstract speaks of linear reconstructions and their local symmetries, not of weights being preserved"
+   ],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"to recover low-dimensional manifold structure\" — the abstract says nonlinear structure and does not mention manifolds",
+    "\"preserves each point's linear reconstruction from its neighbours\" — the abstract only says it exploits local symmetries of linear reconstructions and is neighborhood preserving"
+   ],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"by preserving local linear reconstructions of neighbours\" — the abstract says it exploits local symmetries of linear reconstructions, not explicitly that these are preserved"
+   ],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "ml-foundations/classical-ml/An Introduction to Locally Linear Embedding",
+ "folder_key": {
+  "A": "ml-foundations/classical-ml"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "stored",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

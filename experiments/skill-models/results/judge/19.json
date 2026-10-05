@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "llm/architecture/Byte Latent Transformer. Patches Scale Better Than Tokens",
+ "folder_key": {
+  "A": "llm/architecture"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "stored",
+  "C": "claude-haiku-4-5-20251001",
+  "D": "claude-sonnet-5-5"
+ }
+}

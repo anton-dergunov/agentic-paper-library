@@ -123,6 +123,16 @@ next piece of work.
   answers were the most accurate
   ([experiments/review-usefulness](../experiments/review-usefulness/README.md)). The guide
   tells sessions to check the note or the paper before stating a number or its meaning.
+- **Filing a paper is one request to Sonnet (2026-10-05).** Adding a paper through the
+  `add-paper` skill took 228K tokens in a Sonnet session, nearly all of it the session's
+  context sent five times, for a choice of folder and one sentence. Given the topic tree,
+  the title and the abstract in a single request, Sonnet chose a folder a blind judge
+  graded best for 53 of 60 papers (Opus 57, Haiku 49, the folders the papers were in 47)
+  and wrote summaries level with Opus's
+  ([experiments/skill-models](../experiments/skill-models/README.md)). `paperlib add` does
+  that and never creates a folder; the skill stays for new folders, titles, PDFs and the
+  inbox. Each skill now names its model in its frontmatter: Sonnet for `add-paper` and
+  `expand-library`, Opus for the rest. Only the reader and the filing model are measured.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).
@@ -130,7 +140,7 @@ next piece of work.
 ## Next
 
 Done: the `overview` skill; the PDF viewer extension; the library expansion, which grew my
-library from 240 LLM papers to 2,200 across the whole field (the `literature-pass` skill); the
+library from 240 LLM papers to 2,200 across the whole field (the `expand-library` skill); the
 `literature-review` skill; the split of the engine from the library; and the Paper Library
 VS Code extension, which opens a paper by title ([tasks/vscode-extension.md](tasks/vscode-extension.md)).
 

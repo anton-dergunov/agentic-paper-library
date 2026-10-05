@@ -1,0 +1,40 @@
+{
+ "folders": {
+  "A": "wrong"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"a rearranged attention computation\" — the abstract does not say how the mechanism achieves equivalence (reordering the computation is not stated)",
+    "\"linear ... memory and time cost\" — the abstract body only says \"substantially less memory and computational costs\"; linear is stated only in the title"
+   ],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "llm/architecture/efficient-attention-and-long-context/Efficient Attention. Attention with Linear Complexities",
+ "folder_key": {
+  "A": "llm/architecture/efficient-attention-and-long-context"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

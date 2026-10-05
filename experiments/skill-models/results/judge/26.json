@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "llm/foundation-models/NVIDIA Nemotron 3. Efficient and Open Intelligence",
+ "folder_key": {
+  "A": "llm/foundation-models"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-opus-5-5",
+  "C": "stored",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

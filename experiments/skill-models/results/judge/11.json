@@ -1,0 +1,42 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"weighting the satisfaction task with inverse predicted response probability\" — the abstract only says an inverse propensity weighting approach within a multi-task framework with a response rate estimation task; it does not spell out that the predicted response probability is the weight",
+    "\"improving estimates and live recommendation ranking\" — the abstract (as given) reports no results; it only says the satisfaction predictions feed the ranking component"
+   ],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "experimentation-and-metrics/metric-design/Deconfounding User Satisfaction Estimation from Response Rate Bias",
+ "folder_key": {
+  "A": "recommender-systems/industrial-systems",
+  "B": "experimentation-and-metrics/metric-design"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

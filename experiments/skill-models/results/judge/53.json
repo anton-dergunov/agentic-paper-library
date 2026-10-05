@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [
+    "\"they improve click prediction but not ranking quality against expert relevance labels\" — the abstract says ULTR techniques \"struggle to consistently improve ranking performance\" and that click gains \"do not necessarily translate\" into ranking gains; it reports inconsistent improvement, not a flat absence of improvement."
+   ],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "search-and-ranking/click-models-and-unbiased-ltr/Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset",
+ "folder_key": {
+  "A": "search-and-ranking/click-models-and-unbiased-ltr"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

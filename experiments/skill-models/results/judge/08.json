@@ -1,0 +1,44 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [
+    "\"matches ELMo\" — the abstract says only \"comparable results with ELMo\", a slightly weaker claim"
+   ],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [
+    "\"matches ELMo performance\" — the abstract says only \"comparable results with ELMo\"",
+    "\"100× fewer parameters and 15× faster inference\" — the abstract says \"roughly 100 times\" and \"15 times less inference time\"; the summary drops the approximation"
+   ],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "deep-learning/efficiency-and-compression/Distilling Task-Specific Knowledge from BERT into Simple Neural Networks",
+ "folder_key": {
+  "A": "deep-learning/efficiency-and-compression",
+  "B": "nlp/pretrained-language-models"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-sonnet-5-5",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

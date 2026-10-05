@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"at comparable or better accuracy\": the abstract says comparable or better \"performance\" on various downstream tasks and does not name accuracy as the measure"
+   ],
+   "quality": 5
+  }
+ },
+ "paper": "graphs/graph-embeddings/Fast and Accurate Network Embeddings via Very Sparse Random Projection",
+ "folder_key": {
+  "A": "graphs/graph-embeddings"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

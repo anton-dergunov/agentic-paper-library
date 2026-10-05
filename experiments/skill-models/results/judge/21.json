@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"matching Transformer performance at 14 billion parameters\": the abstract says models were scaled up to 14B and that RWKV performs on par with similarly sized Transformers, but it does not say the parity was shown at the 14B size specifically"
+   ],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "llm/architecture/recurrent-and-state-space/RWKV. Reinventing RNNs for the Transformer Era",
+ "folder_key": {
+  "A": "llm/architecture/recurrent-and-state-space"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

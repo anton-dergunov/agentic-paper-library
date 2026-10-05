@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"whose agreements are modelled\" — the abstract says only that Snorkel denoises labeling-function outputs with unknown accuracies and correlations via data programming; it does not say agreements are what is modelled"
+   ],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [
+    "\"enabling 2.8× faster model training\" — the abstract says subject matter experts build models 2.8× faster in a user study (human development speed, not training speed); the speedup tied to execution is up to 1.8× per pipeline execution from the optimizer"
+   ],
+   "beyond": [],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "data-centric-ml/weak-supervision/Snorkel. Rapid Training Data Creation with Weak Supervision",
+ "folder_key": {
+  "A": "data-centric-ml/weak-supervision"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "llm/post-training/rl-for-reasoning/Beyond the 80 20 Rule. High-Entropy Minority Tokens Drive Effective Reinforcement Learning for LLM",
+ "folder_key": {
+  "A": "llm/post-training/rl-for-reasoning"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-sonnet-5-5",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

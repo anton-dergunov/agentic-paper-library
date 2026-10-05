@@ -1,0 +1,43 @@
+{
+ "folders": {
+  "A": "wrong",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"METR time horizons\" — the abstract does not name METR"
+   ],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [
+    "\"finding frontier horizons of about 50 minutes\" — the abstract says frontier models such as o3 have a 50% time horizon of around 110 minutes; the 50 is the success rate, not the horizon length"
+   ],
+   "beyond": [],
+   "quality": 2
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "llm/evaluation/benchmarks/Measuring AI Ability to Complete Long Software Tasks",
+ "folder_key": {
+  "A": "llm/evaluation/benchmarks",
+  "B": "llm/evaluation/methods"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

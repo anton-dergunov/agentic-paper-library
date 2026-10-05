@@ -1,0 +1,46 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"beats GPT-3.5-turbo-16k and Davinci003 on nine long-context tasks\": the abstract claims this only for the average score across the nine tasks, not for each task"
+   ],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"beats GPT-3.5-turbo-16k on nine long-context tasks\": the abstract claims this only for the average score across the nine tasks, not for each task"
+   ],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"beats GPT-3.5-turbo-16k on long-context QA and few-shot tasks\": the abstract claims a win only on the average score over nine tasks (which also include query-based summarization), not on these task types specifically",
+    "\"while being faster\" (said of 4K retrieval vs 16K finetuned models): the abstract says this setup takes much less computation; its \"much faster at generation\" claim is about retrieval-augmented Llama2-70B-32k versus its non-retrieval baseline"
+   ],
+   "quality": 3
+  }
+ },
+ "paper": "llm/context/Retrieval meets Long Context Large Language Models",
+ "folder_key": {
+  "A": "llm/retrieval-augmented",
+  "B": "llm/context"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-opus-5-5",
+  "C": "stored",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

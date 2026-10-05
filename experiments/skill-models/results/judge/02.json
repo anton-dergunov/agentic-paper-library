@@ -1,0 +1,42 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"ImageNet-SD\" as the name of the dataset (the abstract only shows it in the project page URL, not as a named dataset)"
+   ],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [
+    "\"close the gap with real images for classification\" — the abstract says the clones close only \"a large part of the gap\", not the whole gap",
+    "\"ImageNet clones trained from class names alone\" — the abstract says the clones are generated from class names; it is the classification models that are trained, on the clones"
+   ],
+   "beyond": [],
+   "quality": 2
+  }
+ },
+ "paper": "data-centric-ml/augmentation-and-synthetic-data/Fake it till you make it. Learning transferable representations from synthetic ImageNet clones",
+ "folder_key": {
+  "A": "data-centric-ml/augmentation-and-synthetic-data"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "stored",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

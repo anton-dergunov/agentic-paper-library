@@ -23,6 +23,7 @@ and fails outside a library.
 import datetime
 import gzip
 import io
+import json
 import os
 import re
 import subprocess
@@ -319,6 +320,44 @@ def load_topics():
     if not TOPICS_FILE.exists():
         return {}
     return yaml.safe_load(TOPICS_FILE.read_text(encoding="utf-8")) or {}
+
+
+def ask_model(model, system, prompt):
+    """One request to a Claude model through `claude -p`, with no tools.
+
+    Returns (reply text, usage dict); raises RuntimeError on failure.
+    """
+    with tempfile.TemporaryDirectory() as empty:
+        done = subprocess.run(
+            ["claude", "-p", "--model", model, "--tools", "", "--system-prompt", system,
+             "--output-format", "json", "--no-session-persistence"],
+            input=prompt, capture_output=True, text=True, cwd=empty)
+    try:
+        reply = json.loads(done.stdout)
+    except ValueError:
+        raise RuntimeError((done.stderr or done.stdout or "no output").strip()[:300])
+    if reply.get("is_error") or not reply.get("result"):
+        raise RuntimeError(str(reply.get("result") or reply.get("subtype") or "no reply")[:300])
+    usage = reply.get("usage", {})
+    return reply["result"], {
+        "input": sum(usage.get(k, 0) or 0 for k in
+                     ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")),
+        "output": usage.get("output_tokens", 0), "usd": reply.get("total_cost_usd")}
+
+
+def filing_choice(reply, topics):
+    """(folder, reason, summary) from a filing model's JSON reply.
+
+    The folder is None when the model found none, or named one that is not declared: a
+    script never creates a folder, that is the reader's decision.
+    """
+    try:
+        answer = json.loads(reply[reply.index("{"):reply.rindex("}") + 1])
+    except ValueError:
+        raise RuntimeError("the filing model did not reply with JSON: " + reply.strip()[:200])
+    folder = str(answer.get("folder") or "").strip().strip("/")
+    summary = " ".join(str(answer.get("summary") or "").split())
+    return (folder if folder in topics else None), str(answer.get("reason") or "").strip(), summary
 
 
 def load_skipped():

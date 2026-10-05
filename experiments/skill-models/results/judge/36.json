@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"factual knowledge localized to deeper layers\" — the abstract says only that factual knowledge is localized to particular transformer layers, not that those layers are the deeper ones"
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "llm/uncertainty-and-hallucination/DoLa. Decoding by Contrasting Layers Improves Factuality in Large Language Models",
+ "folder_key": {
+  "A": "llm/uncertainty-and-hallucination"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-opus-5-5",
+  "C": "stored",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

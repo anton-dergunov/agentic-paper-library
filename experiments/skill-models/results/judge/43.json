@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "nlp/generation-metrics/MAUVE. Measuring the Gap Between Neural Text and Human Text using Divergence Frontiers",
+ "folder_key": {
+  "A": "nlp/generation-metrics"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

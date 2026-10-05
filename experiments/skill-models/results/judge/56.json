@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "search-and-ranking/learning-to-rank/Accuracy at the Top",
+ "folder_key": {
+  "A": "search-and-ranking/learning-to-rank"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

@@ -21,6 +21,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 # command: (script, needs a library, what it does)
 COMMANDS = {
+    "add": ("add-paper.py", True, "add arXiv papers, a model choosing the folder and summary: <arxiv-url-or-id> ... [--dry-run]"),
     "add-arxiv": ("add-arxiv-paper.sh", True, "add a paper from arXiv: <arxiv-url-or-id> <topic>"),
     "add-pdf": ("add-pdf-paper.sh", True, "add a local PDF: <file.pdf> <topic> [--title ...] [--source ...]"),
     "add-web": ("add-web-article.py", True, "add a paper published as a web page: <url> <topic>"),

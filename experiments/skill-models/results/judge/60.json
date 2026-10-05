@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "vision-and-multimodal/vision/Mask R-CNN",
+ "folder_key": {
+  "A": "vision-and-multimodal/vision"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

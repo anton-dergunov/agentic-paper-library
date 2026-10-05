@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"Studies how many topics and judgments an information retrieval test collection needs\" — the abstract does not frame the paper as determining how many topics or judgments are needed; it only concludes that more topics, each assessed in less detail, is a better use of assessor effort."
+   ],
+   "quality": 2
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "search-and-ranking/evaluation/Information Retrieval System Evaluation. Effort, Sensitivity, and Reliability",
+ "folder_key": {
+  "A": "search-and-ranking/evaluation"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "stored",
+  "D": "claude-sonnet-5-5"
+ }
+}

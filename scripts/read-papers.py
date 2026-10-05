@@ -28,15 +28,14 @@ reached; the papers already written are kept.
 
 import json
 import re
-import subprocess
 import sys
-import tempfile
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from paperlib import (
-    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, paper_files, read_paper, read_view,
+    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, paper_files, read_paper,
+    read_view,
 )
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
@@ -71,33 +70,13 @@ def related_list(paper, scope_dir):
     return "\n".join(lines) or "(none)"
 
 
-def ask(model, prompt):
-    """One request with no tools. Returns (reply text, usage dict); raises on failure."""
-    with tempfile.TemporaryDirectory() as empty:
-        done = subprocess.run(
-            ["claude", "-p", "--model", model, "--tools", "", "--system-prompt", SYSTEM,
-             "--output-format", "json", "--no-session-persistence"],
-            input=prompt, capture_output=True, text=True, cwd=empty)
-    try:
-        reply = json.loads(done.stdout)
-    except ValueError:
-        raise RuntimeError((done.stderr or done.stdout or "no output").strip()[:300])
-    if reply.get("is_error") or not reply.get("result"):
-        raise RuntimeError(str(reply.get("result") or reply.get("subtype") or "no reply")[:300])
-    usage = reply.get("usage", {})
-    return reply["result"], {
-        "input": sum(usage.get(k, 0) or 0 for k in
-                     ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")),
-        "output": usage.get("output_tokens", 0), "usd": reply.get("total_cost_usd")}
-
-
 def read_one(paper, scope_dir, model, focus, template, appendix):
     meta, body = read_paper(paper)
     prompt = (template.replace("{{focus}}", focus)
               .replace("{{related}}", related_list(paper, scope_dir))
               + read_view(meta, body, appendix=appendix))
     start = time.time()
-    note, usage = ask(model, prompt)
+    note, usage = ask_model(model, SYSTEM, prompt)
     note = note.strip()
     if note.startswith("```"):
         note = note.split("\n", 1)[1].rsplit("```", 1)[0].strip()

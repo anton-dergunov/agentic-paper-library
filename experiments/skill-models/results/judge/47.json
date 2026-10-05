@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"a factorization machine component for low-order interactions and a deep component for high-order ones\" — the abstract says the model emphasizes both low- and high-order interactions by combining FM and deep learning, but does not explicitly assign each order to a component"
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "recommender-systems/deep-and-sequential/DeepFM. A Factorization-Machine based Neural Network for CTR Prediction",
+ "folder_key": {
+  "A": "search-and-ranking/ads",
+  "B": "recommender-systems/deep-and-sequential"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-opus-5-5",
+  "C": "claude-haiku-4-5-20251001",
+  "D": "stored"
+ }
+}

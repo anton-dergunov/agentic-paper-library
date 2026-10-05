@@ -1,0 +1,45 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"from Bing experiments\": the abstract mentions Bing only as where experiments affect revenue by millions; it does not say all five outcomes come from Bing experiments."
+   ],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"puzzling outcomes in thousands of online controlled experiments\": the abstract says thousands of experiments have been run and that the root causes generalized to multiple experiments; it does not say the puzzling outcomes were analysed across thousands of experiments (the title says five outcomes)."
+   ],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"from Microsoft and others\": the abstract lists other companies only as users of controlled experiments; it does not say any of the puzzling outcomes come from outside the authors' own experience at Microsoft."
+   ],
+   "quality": 2
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"Bing and other\": the abstract does not say which systems the five outcomes come from; Bing is mentioned only in the context of revenue impact."
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "experimentation-and-metrics/ab-testing/Trustworthy online controlled experiments. five puzzling outcomes explained",
+ "folder_key": {
+  "A": "experimentation-and-metrics/ab-testing"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "stored",
+  "D": "claude-sonnet-5-5"
+ }
+}

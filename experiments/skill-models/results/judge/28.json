@@ -1,0 +1,45 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable",
+  "C": "acceptable",
+  "D": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [
+    "\"standard alignment reduces distributional pluralism\" states this as an established result; the abstract only says standard alignment procedures \"might reduce distributional pluralism\""
+   ],
+   "beyond": [],
+   "quality": 3
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "llm/personalization/methods/A Roadmap to Pluralistic Alignment",
+ "folder_key": {
+  "A": "llm/behaviour",
+  "B": "llm/post-training/preference-learning",
+  "C": "llm/post-training",
+  "D": "llm/personalization/methods"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

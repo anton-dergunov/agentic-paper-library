@@ -1,0 +1,42 @@
+{
+ "folders": {
+  "A": "acceptable",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"to surface disparities\" — the abstract says cards report benchmarked evaluation across groups but never states surfacing disparities as a purpose",
+    "\"guide responsible deployment\" — the abstract speaks of clarifying intended use and \"responsible democratization\", not of guiding deployment"
+   ],
+   "quality": 3
+  }
+ },
+ "paper": "ml-systems/production-ml/Model Cards for Model Reporting",
+ "folder_key": {
+  "A": "ml-systems/production-ml",
+  "B": "trustworthy-ml/fairness-and-bias"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-opus-5-5",
+  "C": "stored",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"Criteo\" — the abstract does not name the data source"
+   ],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"Criteo Uplift\" — the abstract does not name the data source"
+   ],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"Criteo Uplift\" — the abstract does not name the data source"
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "experimentation-and-metrics/causal-inference/A Large Scale Benchmark for Individual Treatment Effect Prediction and Uplift Modeling",
+ "folder_key": {
+  "A": "experimentation-and-metrics/causal-inference"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "claude-sonnet-5-5",
+  "D": "stored"
+ }
+}

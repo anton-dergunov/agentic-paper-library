@@ -1,0 +1,40 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [
+    "\"S4-BP128-D4 achieves 0.7 CPU cycles per decoded 32-bit integer\" — the abstract says it uses \"as little as 0.7 CPU cycles\", a best case rather than a flat figure",
+    "\"vectorized Galloping search with SIMD instructions doubles the speed of posting-list intersection for conjunctive queries\" — the abstract says the combined techniques (SIMD compression, vectorized intersection and SIMD Galloping) \"can double the speed of a state-of-the-art approach\" for conjunctive queries; it does not attribute the doubling to Galloping alone or to the intersection step specifically"
+   ],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "search-and-ranking/indexing-and-classical-ir/SIMD Compression and the Intersection of Sorted Integers",
+ "folder_key": {
+  "A": "search-and-ranking/indexing-and-classical-ir"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "stored",
+  "C": "claude-haiku-4-5-20251001",
+  "D": "claude-sonnet-5-5"
+ }
+}

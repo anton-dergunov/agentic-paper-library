@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"pairwise ranking criterion\" — the abstract does not call the criterion pairwise"
+   ],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"pairwise ranking criterion\" — the abstract does not call the criterion pairwise"
+   ],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "recommender-systems/collaborative-filtering/BPR. Bayesian Personalized Ranking from Implicit Feedback",
+ "folder_key": {
+  "A": "recommender-systems/collaborative-filtering"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "claude-opus-5-5",
+  "D": "stored"
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "acceptable",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "llm/post-training/data/Nemotron-4 340B Technical Report",
+ "folder_key": {
+  "A": "llm/post-training/data",
+  "B": "llm/foundation-models"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "stored",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

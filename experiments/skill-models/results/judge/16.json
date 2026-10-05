@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "interpretability/explainability/Grad-CAM. Visual Explanations from Deep Networks via Gradient-based Localization",
+ "folder_key": {
+  "A": "interpretability/explainability"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "claude-opus-5-5",
+  "D": "claude-sonnet-5-5"
+ }
+}

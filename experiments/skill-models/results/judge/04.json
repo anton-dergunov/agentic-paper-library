@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "data-centric-ml/labels-and-annotation/The Perspectivist Paradigm Shift. Assumptions and Challenges of Capturing Human Labels",
+ "folder_key": {
+  "A": "data-centric-ml/labels-and-annotation"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

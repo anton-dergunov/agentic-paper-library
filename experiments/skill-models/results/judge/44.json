@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"top-layer reinitialisation\" — the abstract only says significant parts of the BERT network have limited applicability to downstream tasks; it does not name top layers or reinitialisation"
+   ],
+   "quality": 3
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"unused upper layers\" — the abstract says only that significant parts of the network have limited applicability; it does not say which layers, nor that they are unused"
+   ],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "nlp/pretrained-language-models/Revisiting Few-sample BERT Fine-tuning",
+ "folder_key": {
+  "A": "nlp/pretrained-language-models"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

@@ -46,6 +46,18 @@ def read_view_problems(root):
     return problems
 
 
+def filing_problems(root):
+    """A filing model's reply is used only when it names a declared folder."""
+    code = ("import json, paperlib as p; t = p.load_topics(); f = next(iter(t)); "
+            "r = lambda folder: p.filing_choice('Here: ' + json.dumps({'folder': folder, 'reason': 'r', "
+            "'summary': 'a  b'}), t); "
+            "assert r(f) == (f, 'r', 'a b'), r(f); assert r('none')[0] is None; "
+            "assert r('not/declared')[0] is None; assert r(f + '/')[0] == f")
+    env = dict(os.environ, PAPER_LIBRARY=str(root), PYTHONPATH=str(ENGINE / "scripts"))
+    result = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, text=True)
+    return result.stderr.strip().splitlines()[-1:] if result.returncode else []
+
+
 def main():
     failures = 0
     with tempfile.TemporaryDirectory() as tmp:
@@ -62,6 +74,9 @@ def main():
         problems = read_view_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} read-view.py: " + ("; ".join(problems) or "main text kept, references cut"))
+        problems = filing_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} filing: " + ("; ".join(problems) or "only a declared folder is accepted"))
         for index in sorted(root.joinpath("library").rglob("README.md")):
             rel = index.relative_to(root)
             committed = EXAMPLE / rel

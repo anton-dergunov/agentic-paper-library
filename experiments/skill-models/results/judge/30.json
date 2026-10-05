@@ -1,0 +1,37 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "llm/post-training/Large Language Model Post-Training. A Unified View of Off-Policy and On-Policy Learning",
+ "folder_key": {
+  "A": "llm/post-training"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "claude-sonnet-5-5",
+  "D": "stored"
+ }
+}

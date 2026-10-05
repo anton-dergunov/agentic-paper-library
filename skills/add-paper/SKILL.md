@@ -1,6 +1,7 @@
 ---
 name: add-paper
 description: Add a paper to the library — from an arXiv link or id, a web article, a local PDF, or a title. Picks the topic folder, runs paperlib's add command, writes the one-line summary, rebuilds the indexes and checks the library. Use for "add this paper", "save 2501.13956", "file this PDF". Also use to drain INBOX.txt, for "add papers from my inbox", "process the inbox", "/add-paper inbox".
+model: sonnet
 ---
 
 # /add-paper — add a paper to the library

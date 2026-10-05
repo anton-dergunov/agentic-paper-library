@@ -9,6 +9,8 @@ A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it
 | `pdf_link` | none (`init` writes `pdf`) | A symlink in the library to `pdf_root`, made by `paperlib init` and ignored by git. An editor opened on the library then shows both trees, and the indexes link each paper's PDF through it. |
 | `overview_dir` | none | A folder for your own note per paper, which the `overview` skill writes, e.g. a folder in an Obsidian vault. Without it, the skill asks where notes should go. |
 | `library`, `catalog`, `notes`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
+| `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder and summary ([measured](../experiments/skill-models/README.md)). |
+| `reader_model` | `opus` | The model `paperlib read` gives each paper to for its note ([measured](../experiments/reading-models/README.md)). |
 | `cache` | `~/.cache/papers` | arXiv downloads (HTML, figures, LaTeX sources) and marker's environment, shared by every library. |
 | `chrome` | found on PATH, then the macOS app | Headless Chrome, for web articles. |
 

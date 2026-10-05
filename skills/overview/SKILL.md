@@ -1,6 +1,7 @@
 ---
 name: overview
 description: Write a short first overview note for a paper that is already in the library, into the reader's own notes folder (overview_dir, e.g. an Obsidian vault) — a 3–5 minute pre-read that gives the intuition behind the paper before they read it. Classifies the paper type and keeps a per-paper memory file in notes/. Use for "overview <paper>", "/overview", "start working on <paper>", "make me a note for <paper>". Not for adding papers (that is add-paper).
+model: opus
 ---
 
 # /overview — a quick pre-read note for a paper

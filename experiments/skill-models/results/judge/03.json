@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"harder image distributions\": the abstract says only slightly \"harder\" images, not a distribution-level claim"
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "data-centric-ml/data-quality-and-shift/Do ImageNet Classifiers Generalize to ImageNet",
+ "folder_key": {
+  "A": "ml-foundations/evaluation-and-model-selection",
+  "B": "data-centric-ml/data-quality-and-shift"
+ },
+ "summary_key": {
+  "A": "claude-opus-5-5",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

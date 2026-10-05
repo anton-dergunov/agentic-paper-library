@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "wrong"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 2
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"over fixed-strategy ... baselines\" — the abstract only says \"relevant baselines including the adaptive retrieval approaches\"; it does not name fixed-strategy baselines"
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "llm/routing/Adaptive-RAG. Learning to Adapt Retrieval-Augmented Large Language Models through Question",
+ "folder_key": {
+  "A": "llm/retrieval-augmented",
+  "B": "llm/routing"
+ },
+ "summary_key": {
+  "A": "claude-sonnet-5-5",
+  "B": "stored",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

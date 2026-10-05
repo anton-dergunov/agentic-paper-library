@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"matrix of scenarios and metrics\" — the abstract describes measuring each metric for each core scenario but does not use the word matrix (minor framing)"
+   ],
+   "quality": 2
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "llm/evaluation/methods/Holistic Evaluation of Language Models",
+ "folder_key": {
+  "A": "llm/evaluation/benchmarks",
+  "B": "llm/evaluation/methods"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

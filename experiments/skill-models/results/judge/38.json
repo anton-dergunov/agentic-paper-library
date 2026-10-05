@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  }
+ },
+ "paper": "ml-foundations/evaluation-and-model-selection/Random Search for Hyper-Parameter Optimization",
+ "folder_key": {
+  "A": "ml-foundations/evaluation-and-model-selection",
+  "B": "deep-learning/optimizers-and-schedules"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-sonnet-5-5",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"Inception blocks combine multi-scale convolutions in parallel\" — the abstract mentions only the intuition of multi-scale processing, not blocks or parallel convolutions"
+   ],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"using multi-scale modules\" — the abstract mentions only the intuition of multi-scale processing, not modules",
+    "\"winning ILSVRC 2014 classification and detection\" — the abstract says it set the new state of the art for classification and detection in ILSVRC'14, not explicitly that it won"
+   ],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "deep-learning/architectures/Going Deeper with Convolutions",
+ "folder_key": {
+  "A": "deep-learning/architectures"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

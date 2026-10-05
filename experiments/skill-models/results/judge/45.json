@@ -1,0 +1,45 @@
+{
+ "folders": {
+  "A": "acceptable",
+  "B": "best",
+  "C": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"Unicode reorderings\": the abstract says only \"reordering\" and does not name Unicode",
+    "\"toxicity, NLI, NER and sentiment models\": the abstract names only machine-translation pipelines and web search engines as examples",
+    "\"Google and Microsoft APIs\": the abstract says \"currently-deployed commercial systems\" from Microsoft and Google, without calling them APIs"
+   ],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "nlp/tasks-and-methods/Bad Characters. Imperceptible NLP Attacks",
+ "folder_key": {
+  "A": "nlp/tasks-and-methods",
+  "B": "deep-learning/uncertainty-and-robustness",
+  "C": "llm/safety-and-privacy"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "stored",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5"
+ }
+}

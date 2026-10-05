@@ -1,0 +1,43 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [
+    "\"gradient-boosted decision tree outputs\" — the abstract says only that the model combines decision trees with logistic regression; it does not say the trees are gradient-boosted or that their outputs are fed into the logistic regression."
+   ],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"decision trees feeding logistic regression\" — the abstract says the model combines the two, not that the trees feed the regression."
+   ],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"gradient boosted trees feeding a logistic regression\" — the abstract says only that decision trees are combined with logistic regression; boosting and the feeding direction are not stated."
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "search-and-ranking/ads/Practical Lessons from Predicting Clicks on Ads at Facebook",
+ "folder_key": {
+  "A": "search-and-ranking/ads"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "claude-opus-5-5",
+  "D": "stored"
+ }
+}

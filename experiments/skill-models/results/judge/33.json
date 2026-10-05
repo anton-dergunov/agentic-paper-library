@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 3
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"Tulu 2.5\" — the abstract never names the study or model suite this way; the name appears only inside the release URL (tulu-v25-suite)."
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "llm/post-training/preference-learning/Unpacking DPO and PPO. Disentangling Best Practices for Learning from Preference Feedback",
+ "folder_key": {
+  "A": "llm/post-training/preference-learning"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-opus-5-5",
+  "C": "claude-haiku-4-5-20251001",
+  "D": "claude-sonnet-5-5"
+ }
+}

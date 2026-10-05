@@ -1,0 +1,42 @@
+{
+ "folders": {
+  "A": "wrong",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [
+    "\"improve single-image super-resolution over per-pixel losses\" is slightly stronger than the abstract, which only says replacing a per-pixel loss with a perceptual loss 'gives visually pleasing results', not a general improvement",
+    "\"at three orders of magnitude lower cost\": the abstract says the network is 'three orders of magnitude faster' (speed), not lower cost; a loose rewording rather than a hard contradiction"
+   ],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "generative-models/gans-and-vaes/Perceptual Losses for Real-Time Style Transfer and Super-Resolution",
+ "folder_key": {
+  "A": "generative-models/gans-and-vaes",
+  "B": "vision-and-multimodal/vision"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-opus-5-5",
+  "C": "claude-sonnet-5-5",
+  "D": "stored"
+ }
+}

@@ -87,6 +87,12 @@ Changes to make to the method, each a weakness of the first run:
   the answerer; a second judge (Sonnet, or a Gemini model, see the reading-models
   experiment for how to call one) on one question would show whether the ranking depends
   on the judge.
+- **Add Sonnet as an answerer, in two conditions.** Which model should answer questions
+  about papers is not measured. Run `python3 run.py <out-dir> --model claude-sonnet-5-5
+  asis=<copy> noreviews=<copy>` once per question (about 3M tokens), and judge its answers
+  in the same pool as the Opus ones. Report it by kind of question: a detail of one paper,
+  a synthesis of an area, a question across areas. The result goes in the "Which model"
+  table of the engine's `README.md`, where questions are marked as not measured.
 - **Disable writes fully.** One session appended to a note through the shell although
   `Edit` and `Write` were disallowed. Allow only read-only shell commands, or make the
   copies' notes and reviews read-only.

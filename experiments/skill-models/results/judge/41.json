@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"4-bit quantization of weights and attention\": the abstract says only that the weights and the attention cache are compressed to 4 bits; it does not name quantization as the method, and it says attention cache, not attention."
+   ],
+   "quality": 4
+  }
+ },
+ "paper": "ml-systems/inference-and-serving/FlexGen. High-Throughput Generative Inference of Large Language Models with a Single GPU",
+ "folder_key": {
+  "A": "ml-systems/inference-and-serving"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-sonnet-5-5",
+  "C": "claude-opus-5-5",
+  "D": "claude-haiku-4-5-20251001"
+ }
+}

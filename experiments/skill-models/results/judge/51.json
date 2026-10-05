@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"assembly tasks\" — the abstract calls them fine manipulation tasks (opening a translucent condiment cup, slotting a battery), not assembly tasks"
+   ],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  }
+ },
+ "paper": "robotics-and-embodied/Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+ "folder_key": {
+  "A": "robotics-and-embodied"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-opus-5-5",
+  "C": "claude-sonnet-5-5",
+  "D": "stored"
+ }
+}

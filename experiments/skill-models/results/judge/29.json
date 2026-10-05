@@ -1,0 +1,39 @@
+{
+ "folders": {
+  "A": "best",
+  "B": "acceptable"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 2
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "llm/personalization/user-modelling/RecToM. A Benchmark for Evaluating Machine Theory of Mind in LLM-based Conversational Recommender",
+ "folder_key": {
+  "A": "llm/personalization/benchmarks",
+  "B": "llm/personalization/user-modelling"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "folders": {
+  "A": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [
+    "\"using Downpour SGD and Sandblaster L-BFGS to train a network 30 times larger than before\" — the abstract credits the 30x network to \"our system\" (DistBelief) and does not say which algorithm, or that both, trained it"
+   ],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [
+    "\"Downpour asynchronous SGD and Sandblaster distributed L-BFGS train a deep network 30x larger than previously reported\" — the abstract credits the 30x network to \"our system\" and does not say both algorithms trained it",
+    "\"on tens of thousands of CPU cores\" as the scale of the 30x/ImageNet run — the abstract gives this as the problem setting considered, not explicitly as the scale of that result"
+   ],
+   "quality": 5
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [
+    "\"asynchronous Downpour SGD and distributed Sandblaster L-BFGS train a network 30x larger than previously reported\" — the abstract credits the 30x network to \"our system\" and does not say both algorithms trained it",
+    "\"on thousands of machines\" as the scale of the 30x run — the abstract gives this as what the framework can utilize, not explicitly as the scale of that result"
+   ],
+   "quality": 5
+  }
+ },
+ "paper": "ml-systems/distributed-training/Large Scale Distributed Deep Networks",
+ "folder_key": {
+  "A": "ml-systems/distributed-training"
+ },
+ "summary_key": {
+  "A": "stored",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "claude-opus-5-5",
+  "D": "claude-sonnet-5-5"
+ }
+}

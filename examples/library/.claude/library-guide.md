@@ -30,7 +30,7 @@ The two trees mirror each other: a paper's markdown and its PDF have the same to
   - `paperlib add-web <url> <topic>` for papers published as web pages (Distill, transformer-circuits.pub);
   - `paperlib add-pdf <file.pdf> <topic> [--title "..."] [--source "..."]` otherwise.
 
-  The `add-paper` skill wraps these. It also adds the papers queued in `INBOX.txt` and removes each one from the file once it is added. To add tens of papers at once, the `literature-pass` skill finds the gaps in an area and adds the approved list with `paperlib add-batch`. Every add writes both files, the frontmatter, and the page numbers on headings.
+  `paperlib add <arxiv-url-or-id> ...` chooses the topic and writes the summary itself, with one model request per paper; it never creates a folder. The `add-paper` skill wraps all of these, and is the way to add a paper that needs a new folder. It also adds the papers queued in `INBOX.txt` and removes each one from the file once it is added. To add tens of papers at once, the `expand-library` skill finds the gaps in an area and adds the approved list with `paperlib add-batch`. Every add writes both files, the frontmatter, and the page numbers on headings.
 - **Move papers only with `paperlib move <paper.md> <topic>`.** It moves the markdown, its figures and the PDF together; a hand `mv` splits the two trees. Filenames follow `paperlib filename "<title>"`, where a colon in a title becomes ". ". After that rule changes, `paperlib rename` renames every paper to match.
 - **Never put a PDF in git.** `*.pdf` is ignored, and `paperlib check` fails on one.
 - **Read the markdown, not the PDF.** PDFs make poor agent input. The markdown comes from arXiv's HTML rendering and keeps equations as LaTeX and tables as tables. Papers converted any other way say so:
@@ -49,8 +49,9 @@ The two trees mirror each other: a paper's markdown and its PDF have the same to
   - arXiv downloads are cached, so reconverting needs no network.
   - `--jobs N --state <file>` runs many papers at once, resumably.
   - `paperlib symptoms` lists papers that still show known conversion problems.
-- **Start from the review.** For a question about an area, a comparison across papers, or "what exists on X", first read the review whose scope covers it: `reviews/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.
-  - Open papers only for what the review doesn't settle.
+- **Start from the review, then check the paper.** For a question about an area, a comparison across papers, or "what exists on X", first read the review whose scope covers it: `reviews/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.
+  - The review is a map, not evidence. Use it to find the papers and the shape of the answer. Before you state a number, or what a result means, read that paper's note or the paper at the cited page: an answer written from the review alone gets the numbers right and their meaning wrong. Say so when a point rests only on the review.
+  - Search a review for the part you need (`grep -n` its headings and the terms) rather than reading it whole; the paper map and the link definitions at the end are for lookup.
   - When a session settles a cross-paper point, append it to the review's `## Q&A`.
   - After papers are added to a reviewed area, offer to update the review.
   - The `literature-review` skill writes and updates reviews, and `paperlib review-status` shows which are stale.
@@ -87,18 +88,22 @@ In the body:
 
 One file per paper, `notes/<stem>.md`, where `<stem>` is the paper's file name without `.md`. The folder is flat, so moving a paper between topics doesn't touch it. `paperlib check` fails on a note whose paper is not in the library.
 
-These files are for the agent, not for the reader. They hold what was learned about a paper, so later sessions and comparisons across papers don't re-read and re-derive it. The `overview` skill creates a paper's file, and any session may append to its Q&A.
+These files are for the agent, not for the reader. They hold what was learned about a paper, so later sessions and comparisons across papers don't re-read and re-derive it. `paperlib read` and the `overview` skill create a paper's file, and any session may append to its Q&A.
 
 ```markdown
 # <Title>
 
 type: method
+read: full
+family: <the kind of approach it belongs to, in a few words>
+evidence: <what it was tested on, against what>; strength: <replicated / one benchmark / vendor-run / …>
+conversion: ok | <what is broken in the markdown, and where (p. N)>
 
 ## Digest
 
-At most 20 lines: the mechanism, key definitions, and the main numbers with their
-baselines, each with its page (p. N). Enough to compare this paper with others without
-re-reading it.
+At most 20 lines: the claim, the mechanism, key definitions, and the main numbers with
+their baselines, each with its page (p. N). Enough to compare this paper with others
+without re-reading it.
 
 ## Related in library
 
@@ -108,6 +113,10 @@ re-reading it.
 
 - 2026-10-01: <question> → <short answer> (p. N)
 ```
+
+`paperlib read <scope or paper.md>` writes these files: one model request per paper, the whole main text, resumable. `paperlib review-status <scope>` lists the papers that have no note yet. `family`, `evidence` and `conversion` are what a literature review groups and weighs papers by; a note written before they existed lacks them.
+
+`read` says how much of the paper the digest rests on: `full` (the main text was read) or `skim` (abstract, introduction, conclusion and headline results only, as the first literature reviews did for most papers). A file without the line was written from a full read. Before leaning on a `skim` digest for a detail, open the paper; `paperlib read --skims <scope>` reads the skimmed papers in full.
 
 Merge into an existing file; never drop its Q&A.
 

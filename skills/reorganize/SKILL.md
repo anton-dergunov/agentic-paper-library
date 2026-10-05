@@ -1,6 +1,7 @@
 ---
 name: reorganize
 description: Review how papers are organised in a folder or the whole library and propose moves, splits, merges or renames of topic folders; carry them out only after the reader approves. Use for "reorganise llm/memory", "this folder is too big", "is this paper in the right place", "restructure the library around X".
+model: opus
 ---
 
 # /reorganize — restructure topic folders

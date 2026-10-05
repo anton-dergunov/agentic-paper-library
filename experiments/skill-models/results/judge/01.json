@@ -1,0 +1,41 @@
+{
+ "folders": {
+  "A": "wrong",
+  "B": "best"
+ },
+ "summaries": {
+  "A": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "B": {
+   "contradicts": [
+    "\"Copilot field experiment\" — the abstract describes a controlled experiment in which recruited developers were given a set task, not a field experiment"
+   ],
+   "beyond": [],
+   "quality": 4
+  },
+  "C": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 4
+  },
+  "D": {
+   "contradicts": [],
+   "beyond": [],
+   "quality": 5
+  }
+ },
+ "paper": "ai-and-society/The Impact of AI on Developer Productivity. Evidence from GitHub Copilot",
+ "folder_key": {
+  "A": "llm/agents",
+  "B": "ai-and-society"
+ },
+ "summary_key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "stored",
+  "D": "claude-opus-5-5"
+ }
+}

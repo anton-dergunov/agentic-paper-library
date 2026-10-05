@@ -1,6 +1,7 @@
 ---
 name: literature-review
 description: Write or update the literature review of an area of the library — a narrative of the kinds of approaches, what the papers find, how they relate and where the evidence is weak, kept in reviews/<scope>.md for the reader to read and for agents to start from. Use for "literature review of llm/memory", "/literature-review search-and-ranking", "update the review of X", "I've added papers to X, update the review", "a year has passed, what's new in X", "which reviews are stale", "what's the state of research in X", and for reading an area into notes ahead of its review ("read llm/agents", "read 30 papers of X"). Not for single papers (that is overview).
+model: opus
 ---
 
 # /literature-review — the state of an area, from the papers here
@@ -113,7 +114,7 @@ Two situations lead here, and the steps are the same:
 - **Time has passed** ("a year has passed, what's going on in X"). The review only covers
   papers in the library, so first check how current the library is for the area. Look at
   the newest `published` dates in scope and at how many papers were added since the
-  review's `updated` date. If few were, offer `/literature-pass <scope>` to find the recent
+  review's `updated` date. If few were, offer `/expand-library <scope>` to find the recent
   work first. Continue once the approved papers are added, or straight away if they
   decline.
 
