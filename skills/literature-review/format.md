@@ -243,6 +243,22 @@ a row of boxes adds nothing; write the list.
 - **Vary them.** A review whose diagrams are all the same type is a sign that the type
   was chosen by habit. Don't copy the diagram types of an earlier review.
 - **Keep them small**: at most 6–8 nodes or participants, labels of a few words.
+- **Pale fills, dark text, a plain sans-serif font.** Every label must be easy to read on a
+  light and on a cream page: pastel backgrounds, text close to black, never a saturated
+  fill. Flowcharts and sequence diagrams are pale by default. `timeline` is not: its
+  default palette is saturated with grey text, so start every timeline with this line
+  (one `cScaleN` and `cScaleLabelN` per period, repeating the five colours if there are
+  more):
+
+  ```
+  %%{init: {"theme": "base", "themeVariables": {"fontFamily": "Helvetica, Arial, sans-serif", "fontSize": "15px", "cScale0": "#dbeafe", "cScale1": "#dcfce7", "cScale2": "#fef3c7", "cScale3": "#fce7f3", "cScale4": "#ede9fe", "cScaleLabel0": "#1f2937", "cScaleLabel1": "#1f2937", "cScaleLabel2": "#1f2937", "cScaleLabel3": "#1f2937", "cScaleLabel4": "#1f2937"}}}%%
+  ```
+
+  When a node needs its own colour (`style` or `classDef` in a flowchart), use the same
+  pastels with `color:#1f2937`.
+- **Look at it before reporting.** If `mmdc` (mermaid-cli) is installed, render each
+  diagram to a PNG in a scratch folder and check that it parses and that every label is
+  readable; say so in the report if it could not be rendered.
 - **Figures from the papers** are welcome when a paper's own figure explains a mechanism
   or shows a result better than a redrawn one. Link the extracted image by a relative path
   (`../../library/<topic path>/images/<Title>-figNN.<ext>`), and put a caption under it
