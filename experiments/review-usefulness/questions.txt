@@ -1,3 +1,5 @@
 q1	What does current research say about managing obsolete facts in LLM memory?
 q2	How does Zep invalidate outdated facts, and what did it score on LongMemEval against which baseline?
 q3	Can an LLM judge replace human raters when evaluating personalised responses?
+q4	What kinds of agent memory systems are there, and how do they differ?
+q5	What do my papers say about prompt compression?

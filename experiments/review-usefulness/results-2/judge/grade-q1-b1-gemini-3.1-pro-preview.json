@@ -1,0 +1,159 @@
+{
+ "answers": {
+  "nonotes-q1-r1": {
+   "makes": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    15,
+    16,
+    20,
+    23,
+    24,
+    25,
+    27,
+    28,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "an earlier version over-corrected on conflict-free questions.",
+     "paper_says": "a weaker auditor over-corrects (LongMemEval knowledge-update .816 -> .579)."
+    }
+   ],
+   "papers_cited": 13,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Accurate coverage of the literature with one minor misattribution regarding the StateAuditor ablation."
+  },
+  "noreviews-q1-r3": {
+   "makes": [
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    27,
+    29,
+    30
+   ],
+   "errors": [],
+   "papers_cited": 17,
+   "review_only": "Six of the most recent papers have no notes yet, so I read their abstracts and the relevant passages, not the full text: A-TMA, MemSyco-Bench, DynamicMem, Belief Memory, Memanto and the StateAuditor paper.",
+   "misleading": "no",
+   "comment": "Very comprehensive and accurately reflects the provided benchmark points and architecture details."
+  },
+  "noreviews-q1@run1": {
+   "makes": [
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    12,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    23,
+    24,
+    25,
+    27,
+    28,
+    29,
+    30
+   ],
+   "errors": [],
+   "papers_cited": 16,
+   "review_only": "A-TMA, the stale-dependency paper, User as Code, Memanto, Belief Memory and DynamicMem have no notes yet; I read their abstracts, method and results sections, not the full text. LightMem's update argument is from the existing digest, not the paper.",
+   "misleading": "no",
+   "comment": "Excellent synthesis that maps perfectly to the evaluated library points without any major errors."
+  },
+  "asis-q1-r2": {
+   "makes": [
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    10,
+    12,
+    14,
+    16,
+    17,
+    18,
+    20,
+    21,
+    27,
+    30
+   ],
+   "errors": [],
+   "papers_cited": 11,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Solid answer correctly reporting on retention vs revision issues and metric artifacts."
+  },
+  "nonotes-q1@run1": {
+   "makes": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    16,
+    18,
+    20,
+    23,
+    24,
+    25,
+    27,
+    28,
+    30
+   ],
+   "errors": [],
+   "papers_cited": 12,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Strong answer mapping directly to the verified points regarding obsolete facts and explicit state roles."
+  }
+ },
+ "cost": {
+  "input": 13674,
+  "output": 22179
+ }
+}

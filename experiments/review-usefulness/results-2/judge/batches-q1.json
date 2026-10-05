@@ -1,0 +1,22 @@
+[
+ [
+  "nonotes-q1-r1",
+  "noreviews-q1-r3",
+  "noreviews-q1@run1",
+  "asis-q1-r2",
+  "nonotes-q1@run1"
+ ],
+ [
+  "noreviews-q1-r2",
+  "noreviews-q1-r1",
+  "asis+claude-sonnet-5-5-q1-r1",
+  "asis-q1-r3",
+  "asis-q1-r1"
+ ],
+ [
+  "noreviews+claude-sonnet-5-5-q1-r1",
+  "asis-q1@run1",
+  "nonotes-q1-r2",
+  "nonotes-q1-r3"
+ ]
+]

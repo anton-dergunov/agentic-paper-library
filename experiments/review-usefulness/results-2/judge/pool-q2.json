@@ -1,0 +1,234 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "Zep never deletes an outdated fact: the contradicted edge stays in the graph as history and only its validity interval is closed.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1): Graphiti updates the graph 'in a non-lossy manner, maintaining a timeline of facts and relationships, including their periods of validity'. §2.2.3 (p. 3): invalidation only sets t_invalid, 'maintaining both current relationship states and historical records of relationship evolution over time'."
+  },
+  {
+   "id": 2,
+   "point": "Each fact is a graph edge carrying four timestamps on two timelines: t_valid and t_invalid (when the fact held in the world, timeline T) and t'_created and t'_expired (when the system created or invalidated it, timeline T').",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.2.3 (p. 3): 'the system tracks four timestamps: t'created and t'expired ∈ T' monitor when facts are created or invalidated in the system, while t_valid and t_invalid ∈ T track the temporal range during which facts held true. These temporal data points are stored on edges'."
+  },
+  {
+   "id": 3,
+   "point": "Temporal extraction: absolute and relative dates ('two weeks ago') are resolved into datetimes against the message's reference timestamp t_ref.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.2.3 (p. 3): 'extracts temporal information about facts from the episode context using t_ref', covering absolute timestamps and relative ones (e.g. 'I started my new job two weeks ago')."
+  },
+  {
+   "id": 4,
+   "point": "The temporal-extraction prompt is given in the appendix (§6.1.5, p. 10) and shows an LLM computing dates from the reference timestamp.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§6.1.5 Temporal Extraction (p. 10): the prompt has a REFERENCE TIMESTAMP field, defines valid_at and invalid_at, and says 'For relative time mentions ... calculate the actual datetime based on the reference timestamp'."
+  },
+  {
+   "id": 5,
+   "point": "Contradiction check: an LLM compares each new edge against semantically related existing edges to find contradictions.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.2.3 (p. 3): 'The system employs an LLM to compare new edges against semantically related existing edges to identify potential contradictions.'"
+  },
+  {
+   "id": 6,
+   "point": "Invalidation rule: when a contradiction overlaps in time, the old edge's t_invalid is set to the new (invalidating) edge's t_valid.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.2.3 (p. 3): 'When the system identifies temporally overlapping contradictions, it invalidates the affected edges by setting their t_invalid to the t_valid of the invalidating edge.'"
+  },
+  {
+   "id": 7,
+   "point": "Newer information always wins, with priority following ingestion (transaction) order.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.2.3 (p. 3): 'Following the transactional timeline T', Graphiti consistently prioritizes new information when determining edge invalidation.'"
+  },
+  {
+   "id": 8,
+   "point": "The contradiction check for invalidation compares a new edge only against existing edges between the same pair of entities, which keeps the check cheap and avoids mixing up similar facts about different entities.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "wrong",
+   "evidence": "The same-entity-pair constraint is stated for edge deduplication, not invalidation. §2.2.2 (p. 3): 'The system performs edge deduplication ... The hybrid search for relevant edges is constrained to edges existing between the same entity pairs', which prevents erroneous combinations and reduces complexity. For invalidation, §2.2.3 (p. 3) says only that new edges are compared 'against semantically related existing edges'."
+  },
+  {
+   "id": 9,
+   "point": "At retrieval, each fact is returned to the agent with its t_valid and t_invalid (a date range), so the answering model can see what is current and what is superseded.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§3 (p. 4): the constructor 'returns the fact and t_valid, t_invalid fields' for each edge. The sample context template reads 'These are the most relevant facts and their valid date ranges ... format: FACT (Date range: from - to)'."
+  },
+  {
+   "id": 10,
+   "point": "The knowledge-graph engine that holds the fact edges and does the invalidation is Graphiti.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): 'its core component Graphiti—a temporally-aware knowledge graph engine'. §2.2.3 (p. 3) describes invalidation as a feature of Graphiti."
+  },
+  {
+   "id": 11,
+   "point": "The LongMemEval evaluation uses the LongMemEval_s dataset, whose conversations average about 115k tokens.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4 (p. 5): 'we use the LongMemEval_s dataset, which provides an extensive conversation context of on average 115,000 tokens'. §4.3 (p. 6) and Table 2 (p. 7): Avg Context Tokens 115k for full-context."
+  },
+  {
+   "id": 12,
+   "point": "The LongMemEval baseline is full-context: the whole conversation placed in the prompt of the same model, with no memory system. It is the only baseline on this benchmark.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7) has only 'Full-context' and 'Zep' rows for gpt-4o-mini and gpt-4o. §4.3 (p. 6): the 115k length 'remains within the context windows of current frontier models, enabling us to establish meaningful baselines'."
+  },
+  {
+   "id": 13,
+   "point": "With gpt-4o-mini, Zep scores 63.8% against 55.4% for full-context.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): Full-context gpt-4o-mini 55.4%; Zep gpt-4o-mini 63.8%."
+  },
+  {
+   "id": 14,
+   "point": "With gpt-4o, Zep scores 71.2% against 60.2% for full-context.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): Full-context gpt-4o 60.2%; Zep gpt-4o 71.2%."
+  },
+  {
+   "id": 15,
+   "point": "The headline '15.2%' (gpt-4o-mini) and '18.5%' (gpt-4o) accuracy improvements are relative; in absolute terms they are +8.4 and +11.0 percentage points.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.3.2 (p. 7): 'Using gpt-4o-mini, Zep achieved a 15.2% accuracy improvement over the baseline, while gpt-4o showed an 18.5% improvement'; the abstract says 'up to 18.5%'. From Table 2: 63.8 − 55.4 = 8.4 and 71.2 − 60.2 = 11.0 points; 63.8/55.4 = 1.152."
+  },
+  {
+   "id": 16,
+   "point": "The gpt-4o relative gain works out to about 18.3% from the table's own numbers, not the 18.5% the paper states.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): 71.2 / 60.2 = 1.1827, i.e. 18.3%. The text of §4.3.2 (p. 7) and the abstract say 18.5%. The discrepancy is the answerers' arithmetic; the paper does not comment on it."
+  },
+  {
+   "id": 17,
+   "point": "Latency falls from 31.3 s to 3.20 s with gpt-4o-mini and from 28.9 s to 2.58 s with gpt-4o, roughly 90% less.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): Latency 31.3 s vs 3.20 s (gpt-4o-mini), 28.9 s vs 2.58 s (gpt-4o). §4.3.2 (p. 7): 'reducing response times by approximately 90%'."
+  },
+  {
+   "id": 18,
+   "point": "Zep's context averages about 1.6k tokens against 115k for full-context.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): Avg Context Tokens 115k for full-context and 1.6k for Zep, for both models."
+  },
+  {
+   "id": 19,
+   "point": "Answers were judged by GPT-4o.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.3 (p. 6): 'For answer evaluation, we employed GPT-4o with the question-specific prompts provided in [7]'."
+  },
+  {
+   "id": 20,
+   "point": "No other memory system is compared on LongMemEval: the authors tried MemGPT, which does not support direct ingestion of an existing message history, and could not get it to answer the questions.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.3.1 (p. 7): 'the current MemGPT framework does not support direct ingestion of existing message histories, we implemented a workaround by adding conversation messages to the archival history. However, we were unable to achieve successful question responses using this approach.'"
+  },
+  {
+   "id": 21,
+   "point": "MemGPT is a baseline only on the DMR benchmark, where Zep scores 94.8% against MemGPT's 93.4% and the full-conversation baseline's 94.4% (gpt-4-turbo).",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 1 (p. 6): MemGPT 93.4%, Full-conversation 94.4%, Zep 94.8%, all gpt-4-turbo. The MemGPT figure is the one reported in the MemGPT paper, not rerun."
+  },
+  {
+   "id": 22,
+   "point": "The authors themselves treat DMR as too easy and the margin over MemGPT as marginal.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.2 (p. 6): 'showing marginal improvements over both MemGPT and the respective full-conversation baselines'; each conversation has only 60 messages, 'easily fitting within current LLM context windows'; they write of 'the benchmark's inadequacy for evaluating memory systems'. 'Too easy' and 'too small to mean much' are paraphrases."
+  },
+  {
+   "id": 23,
+   "point": "On knowledge-update questions, the category the answers single out as the most direct test of invalidation, Zep improves with gpt-4o (78.2% → 83.3%) but gets worse with gpt-4o-mini (76.9% → 74.4%).",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (p. 7): knowledge-update gpt-4o-mini 76.9% → 74.4% (3.36%↓); gpt-4o 78.2% → 83.3% (6.52%↑). §4.3.2 concedes 'additional development may be needed to improve less capable models' understanding of Zep's temporal data'. That this category best tests invalidation is the answerers' reading; the paper does not say it."
+  },
+  {
+   "id": 24,
+   "point": "Knowledge-update is the question type that moves least.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (p. 7), absolute change. gpt-4o: knowledge-update +5.1 points, against +36.7, +17.3, +13.6, +11.5 and −14.2 for the others. gpt-4o-mini: −2.5 points, against +23.3, +17.6, +11.5, +6.8 and −6.8."
+  },
+  {
+   "id": 25,
+   "point": "The large gains are in single-session-preference, temporal-reasoning and multi-session questions; with gpt-4o these go 20.0% → 56.7%, 45.1% → 62.4% and 44.3% → 57.9%.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (p. 7), gpt-4o rows: single-session-preference 20.0% → 56.7%, temporal-reasoning 45.1% → 62.4%, multi-session 44.3% → 57.9%. §4.3.2 (p. 7): 'most substantial gains in complex question types: single-session-preference, multi-session, and temporal-reasoning'."
+  },
+  {
+   "id": 26,
+   "point": "Single-session-assistant questions (what the assistant itself said) get worse with both models: 94.6% → 80.4% with gpt-4o.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (p. 7): single-session-assistant gpt-4o 94.6% → 80.4% (17.7%↓); gpt-4o-mini 81.8% → 75.0% (9.06%↓). §4.3.2 calls this 'a notable exception'."
+  },
+  {
+   "id": 27,
+   "point": "The paper has no ablations, so nothing isolates how much of the gain comes from edge invalidation rather than the shorter context or the graph search.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Absence check: §4 (pp. 5–8) contains only Tables 1–3 (DMR, LongMemEval_s overall, breakdown by question type). No experiment removes or varies a component, and the word 'ablation' does not appear."
+  },
+  {
+   "id": 28,
+   "point": "The paper does not measure how often the LLM contradiction check wrongly expires a fact.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Absence check: §2.2.3 (p. 3) describes the mechanism with no accuracy figures, and §4 reports only end-to-end question-answering accuracy and latency."
+  },
+  {
+   "id": 29,
+   "point": "The evaluation is vendor-run: Zep's own authors tested their own hosted service.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "All five authors are affiliated with Zep AI (author line, p. 1). §4.3 (p. 6): testing was done 'connecting to Zep's service hosted in AWS us-west-2'."
+  },
+  {
+   "id": 30,
+   "point": "Mem0 is a later paper in the library that compares itself against Zep directly.",
+   "paper": "llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md",
+   "verdict": "holds",
+   "evidence": "Mem0 markdown, line 127: 'We incorporate Zep (Rasmussen et al., 2025), a memory management platform designed for AI agents ... we conduct systematic evaluations across the LOCOMO dataset'. Zep appears as a baseline in its results tables, e.g. 'the baseline Zep achieves the highest F1 (49.56) and J (76.60)' in open-domain."
+  }
+ ],
+ "answers": [
+  "nonotes-q2-r2",
+  "noreviews-q2@run1",
+  "noreviews-q2-r1",
+  "asis+claude-sonnet-5-5-q2-r1",
+  "noreviews-q2-r2",
+  "nonotes-q2-r1",
+  "nonotes-q2-r3",
+  "nonotes-q2@run1",
+  "noreviews+claude-sonnet-5-5-q2-r1",
+  "noreviews-q2-r3",
+  "asis-q2-r3",
+  "asis-q2@run1",
+  "asis-q2-r2",
+  "asis-q2-r1"
+ ],
+ "cost": {
+  "usd": 0.5041876,
+  "seconds": 65
+ }
+}

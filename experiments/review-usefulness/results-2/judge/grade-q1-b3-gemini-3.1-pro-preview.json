@@ -1,0 +1,116 @@
+{
+ "answers": {
+  "noreviews+claude-sonnet-5-5-q1-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    11,
+    13,
+    15,
+    16,
+    17,
+    18,
+    20,
+    25,
+    27,
+    30
+   ],
+   "errors": [],
+   "papers_cited": 14,
+   "review_only": "\"I've been reading the library's memory folders and paper notes, and I have enough to answer.\" and \"I only read the abstract and introduction of A-TMA, DynamicMem and Belief Memory, because they have no notes yet.\"",
+   "misleading": "no",
+   "comment": "Accurately represents the content of the library using the notes, and explicitly mentions relying on the notes."
+  },
+  "asis-q1@run1": {
+   "makes": [
+    1,
+    3,
+    5,
+    6,
+    8,
+    10,
+    12,
+    14,
+    15,
+    16,
+    18,
+    20,
+    21,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30
+   ],
+   "errors": [],
+   "papers_cited": 20,
+   "review_only": "\"This comes from the library's two reviews (reviews/llm/memory.md, reviews/llm/personalization.md); I did not reopen the papers, and several of them (A-TMA, Belief Memory, BEAM, DynamicMem, Larimar) were only skimmed for those reviews.\"",
+   "misleading": "no",
+   "comment": "Good synthesis of the literature, acknowledging that it heavily relied on existing review documents rather than reopening the papers themselves."
+  },
+  "nonotes-q1-r2": {
+   "makes": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12,
+    15,
+    16,
+    19,
+    20,
+    23,
+    27,
+    28
+   ],
+   "errors": [],
+   "papers_cited": 11,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Clear, accurate, and concise summary hitting many of the specified evaluation points."
+  },
+  "nonotes-q1-r3": {
+   "makes": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    11,
+    12,
+    15,
+    16,
+    21,
+    23,
+    24,
+    25,
+    27,
+    28
+   ],
+   "errors": [],
+   "papers_cited": 13,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Excellent synthesis that accurately addresses the different aspects of memory obsolescence and failure modes."
+  }
+ },
+ "cost": {
+  "input": 258233,
+  "output": 11547
+ }
+}

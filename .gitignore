@@ -12,3 +12,5 @@ examples/library/.vscode/
 editors/vscode/dist/
 editors/vscode/out/
 *.vsix
+# Event streams of the review-usefulness follow-up (they hold local paths)
+experiments/review-usefulness/results-2/streams/

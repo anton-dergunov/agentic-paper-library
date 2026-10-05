@@ -1,0 +1,151 @@
+{
+ "answers": {
+  "asis-q2@run1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    9,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    23,
+    25,
+    27,
+    29
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "All numbers match Tables 2 and 3 (p. 7) and the mechanism matches §2.2.3 (p. 3) and the constructor in §3 (p. 4). The London/Berlin example is not from the paper and is not labelled as the answer's own, but it is not attributed to the paper either. Names the large-gain categories without figures, and says nothing about the single-session-assistant drop, the judge, the dataset name or Graphiti."
+  },
+  "noreviews-q2-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    9,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    23,
+    26,
+    27,
+    29
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Accurate throughout; 'p. 4–5' for retrieval is within §3 (p. 4, constructor and context template). Labels the example as its own. Gives the single-session-assistant drop for gpt-4o only, and mentions 'no ablations' without spelling out what cannot be attributed. Omits where the large gains are."
+  },
+  "asis-q2-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    9,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+   ],
+   "errors": [
+    {
+     "quote": "This is all in [Zep, p. 3, §2.2.3]",
+     "paper_says": "The list this covers includes the retrieval bullet ('each fact is handed to the agent with its validity range'), which is not in §2.2.3. It is in §3 Memory Retrieval (p. 4): the constructor χ 'returns the fact and t_valid, t_invalid fields', and the context template reads 'FACT (Date range: from - to)'."
+    }
+   ],
+   "papers_cited": 1,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "The most complete answer; all figures match Tables 2 and 3. 'Moves least' checks out: knowledge-update has the smallest change with both models (+5.1 and −2.5 points). One imprecision not listed as an error: it says the 18.5% 'is 71.2 / 60.2', but that ratio gives about 18.3%; the point that the figure is relative is right."
+  },
+  "nonotes-q2-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    23,
+    25,
+    26
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Accurate, and the only answer that names LongMemEval_s, the GPT-4o judge (§4.3, p. 6–7) and the 18.3% versus 18.5% discrepancy. 'An LLM dates each new fact' is supported by the §6.1.5 prompt (p. 10), though the answer does not cite the appendix. Omits the missing ablation and the vendor-run caveat."
+  },
+  "nonotes-q2@run1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20,
+    23,
+    25,
+    26
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Accurate on mechanism and numbers, and labels the example as its own. Does not say that facts are returned to the agent with their validity range, and omits the ablation, judge and vendor-run caveats."
+  }
+ },
+ "cost": {
+  "usd": 0.2969414,
+  "seconds": 36
+ }
+}

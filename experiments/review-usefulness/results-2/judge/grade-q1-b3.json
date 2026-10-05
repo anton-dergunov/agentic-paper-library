@@ -1,0 +1,154 @@
+{
+ "answers": {
+  "noreviews+claude-sonnet-5-5-q1-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    10,
+    11,
+    13,
+    15,
+    16,
+    17,
+    18,
+    20,
+    25,
+    27,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Mem0 with LLM inference on falls to 43.6% overall, because it prefers to link and keep the old fact over deleting it (p. 8).",
+     "paper_says": "Minor page error. The 43.6% figure (168/385, infer=True) is in the Limitations section on p. 9 and in Appendix P on p. 20. §5.7 on p. 8 only says Mem0+v3's link-and-keep collapses on deletion precision, with no overall figure in its text."
+    },
+    {
+     "quote": "The 2026 papers (A-TMA, ForgetEval, HorizonBench) say it spans three levels, and a single QA score hides which one failed: bank maintenance, retrieval, answer-time resolution",
+     "paper_says": "Only A-TMA makes the bank / retrieval / QA split (p. 1 Introduction, §4.2 on p. 6). ForgetEval's axis is where the LLM sits in the pipeline (inscribe time, mutation time or none; §5.7, p. 8). HorizonBench tests 25 models with the full history in context and has no memory layers at all (§6, p. 7–8)."
+    }
+   ],
+   "papers_cited": 15,
+   "review_only": "I've been reading the library's memory folders and paper notes ... I only read the abstract and introduction of A-TMA, DynamicMem and Belief Memory, because they have no notes yet.",
+   "misleading": "no",
+   "comment": "Broadest correct coverage, and its numbers check out (Mem0 s=10, Zep invalidation, A-TMA 0.812/0.425 and +0.24, ForgetEval 43.6 / 7.0 / 9.5 / 63–68 → 92, MemoryAgentBench 100/80 → 61/14, Are We Ready 44.4 / 15.6 / 17.8 / 6.7 / 20.0, editing 0.97 → 0.01, survey p. 59). Point 7 is not counted: it gives only Zep's favourable gpt-4o row (78.2 → 83.3) and omits the gpt-4o-mini drop (76.9 → 74.4), though it does flag the result as vendor-run. Point 19 is not counted: it states the top-10 absence criterion but not the 0/385 recall-versus-forgetting contrast. The 0.812/0.425 pair is from LTP profile000, which the answer does not say. The model-editing figures cited to p. 14 sit in Table 4 under §6.4–6.5 (heading p. 13), within the section's range. I could not check the claims that Mem0's LoCoMo category labels are permuted or that MemoryBank has no forgetting ablation."
+  },
+  "asis-q1@run1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "More than half of failed updates fail because the original fact was never extracted",
+     "paper_says": "HaluMem §6.2.1 (p. 11): \"most systems suffer omission rates above 50%. This issue primarily stems from insufficient coverage in memory extraction\". The 50% is the share of required updates that are omitted, not the share of failed updates caused by missing extraction; the paper does not quantify the cause."
+    },
+    {
+     "quote": "the gain shrinks to 12–18 points on cases from other benchmarks",
+     "paper_says": "The +11.7 / +18.1 pt lift is on a 77-case external-authored subset of ForgetEval, written by four blind contributors (abstract p. 1; Appendix R, p. 21–22). These are not cases from other benchmarks. On the one other forgetting benchmark the reference notes, there is no gain."
+    },
+    {
+     "quote": "Merging memories to stay current destroys what was still true. In DynamicMem, A-Mem falls from 89% to 39%",
+     "paper_says": "The 89% → 39% drop is on the update probe (facts that have changed), not on retention of facts that stayed true (Finding 3, p. 10). On habit retention A-Mem does not decay and ends 5.7 points above C2. The paper attributes the update drop to merging blurring the old/new boundary. The answer also files this under \"The update is never stored\", which is not what the result shows."
+    },
+    {
+     "quote": "Shortening the history to about 95K tokens makes it worse (47.7% outdated answers)",
+     "paper_says": "Minor. 47.7% is the distractor rate: the share of wrong answers on evolved preferences that pick the pre-change value (§6.3, Table 2, p. 8). It is not 47.7% of all answers."
+    },
+    {
+     "quote": "Every result rests on its own synthetic benchmark, so the numbers above do not compare across papers.",
+     "paper_says": "False for results the answer itself cites. Are We Ready is an independent comparison on LongMemEval's knowledge-update slice (§4.3, p. 9), and the answer calls it \"an independent test\". EvoMemBench reruns MemoryAgentBench's FactConsolidation (§5.2.1, p. 6). StateAuditor is scored on the third-party Stale benchmark."
+    }
+   ],
+   "papers_cited": 21,
+   "review_only": "This comes from the library's two reviews (`reviews/llm/memory.md`, `reviews/llm/personalization.md`); I did not reopen the papers, and several of them (A-TMA, Belief Memory, BEAM, DynamicMem, Larimar) were only skimmed for those reviews.",
+   "misleading": "Mildly. Section 2 gives a wrong mechanism for two results (HaluMem's 50% and DynamicMem's 89 → 39), and the closing bullet says no numbers are comparable although some are independent re-runs. The headline picture — no approach is reliable, and behaviour lags the stored update — is still right.",
+   "comment": "Widest coverage and the best table and page citations: A-TMA Tables 2 and 3, Are We Ready Table 2, EvoMemBench Table 3, BEAM 0.053, ForgetEval Table 2, HorizonBench Table 2, StateAuditor Table 1, Larimar Table 4, PersonaMem-v3 p. 17 all check out. It is also the only answer with points 14, 26 and 29. But it openly rests on reviews, and it has the most misreadings. Point 15 is not counted because the HaluMem number is misstated; point 8 is not counted because it gives only the ten-nearest check, not the LLM's ADD/UPDATE/DELETE/NOOP choice. I could not check the DeMem and MEMIT claims in detail."
+  },
+  "nonotes-q1-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    11,
+    12,
+    15,
+    16,
+    19,
+    20,
+    23,
+    27,
+    28
+   ],
+   "errors": [
+    {
+     "quote": "one store does respectably on recall and passes 0 of 385 forgetting cases. One LLM call at update time lifts pass rates from about 70% to about 93% ([ForgetEval, p. 8](...dest=subsection.5.7&page=8))",
+     "paper_says": "Minor page error. MemPalace's 0/385 against 60/150 on Memora is in §5.3 and §5.5 (p. 6, Tables 2–3). The 70.1–70.7% → 93.3–94.2% lift (excluding compound_fact) is in the abstract (p. 1), §5.3 (p. 6) and Limitations (p. 9). §5.7 on p. 8 covers the placement regimes and contains neither figure."
+    }
+   ],
+   "papers_cited": 11,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Compact and accurate; every number checked matches (A-TMA 81% / 42.5% on one profile and 0.48 → 0.72 on full LTP, MemoryAgentBench 28%, HaluMem, 44.4, 91% / 32%, 12 open problems, MemoryLLM §3.1.3 p. 3, ablation on p. 20, ForgetEval caveats on p. 9). It is the only answer besides D with the forget-by-age point, and the only one with the 0/385 recall-versus-forgetting contrast. Point 9 is not counted: it says Memory-R1 trains the choice with RL but not why. Point 10 is not counted: it gives Zep's 44.4 but not that the other systems fall below long context. The claim that Stale and Memora are not in the library is correct. It omits the personalization benchmarks (HorizonBench, DynamicMem) and the Mem0-versus-placement finding."
+  },
+  "nonotes-q1-r3": {
+   "makes": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    8,
+    9,
+    11,
+    12,
+    15,
+    16,
+    21,
+    23,
+    24,
+    25,
+    27,
+    28
+   ],
+   "errors": [
+    {
+     "quote": "The 2026 results (A-TMA, ForgetEval, StateAuditor) are preprints evaluated largely on benchmarks their authors built.",
+     "paper_says": "Wrong for StateAuditor. Its headline result is on Stale, a benchmark by Chao et al. 2026 (other authors; StateAuditor is by Sun and He), reproduced by \"the benchmark's disjoint judge\" (p. 1, §5 Benchmarks p. 4). It also uses LongMemEval and other external sets. The answer's own last line says Stale is by Chao et al."
+    }
+   ],
+   "papers_cited": 15,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Accurate and well organised around three failure stages; every number and page checked holds (A-TMA 81% / 42.5% → 72.5% on a subset, p. 12 conclusion for mixed LoCoMo, Memory-R1 Figure 1, DynamicMem p. 1, HorizonBench 52.8% on p. 2, Are We Ready Finding 3, ForgetEval 63–68 → ~92 on p. 8–9 and 'four systems', Hase §5.3 p. 9, MemoryLLM §3.1). It is the only answer that explains why Memory-R1 trains the update choice. Point 3 is not counted because it gives only the profile-subset numbers, not the full-LTP 0.480 → 0.720. Point 17 is not counted: it says where the LLM sits matters but not that a write-time LLM hurts deletion. The claim that Stale is not in the library is correct."
+  }
+ },
+ "cost": {
+  "usd": 1.6340214,
+  "seconds": 251
+ }
+}

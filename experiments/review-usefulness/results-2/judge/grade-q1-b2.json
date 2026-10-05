@@ -1,0 +1,196 @@
+{
+ "answers": {
+  "noreviews-q1-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    8,
+    10,
+    14,
+    17,
+    20,
+    21,
+    23,
+    24,
+    27,
+    28,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "In HaluMem, update omission exceeds 50% for most systems because the new fact was never extracted",
+     "paper_says": "HaluMem §6.2.1 (p. 11): the omissions stem from the pre-update memories not being extracted, so related updates cannot be processed. It is the old fact that is missing, not the new one."
+    },
+    {
+     "quote": "LightMem's \"sleep-time\" pass, argued on the grounds that online updates wrongly delete non-conflicting facts ([p. 5]",
+     "paper_says": "That argument is in §5.6 Analysis of Sleep-Time Update (p. 9). §3.3 on p. 5 only describes the mechanism and motivates it by latency."
+    },
+    {
+     "quote": "MEMIT has no deletion operation ([p. 9]",
+     "paper_says": "MEMIT p. 9 (§6 Discussion and Conclusion) lists limits on specificity and directional (s,r,o) relations; it says nothing about deletion, and the word does not occur in the paper."
+    },
+    {
+     "quote": "(Mem0 with inference 43.6%, Graphiti 7.0%), while an LLM hook at mutation time reaches about 92% ([p. 6, Table 2]",
+     "paper_says": "Table 2 (p. 6) has only Lethe, Mem0 infer=False (68.3%), LangMem, MemPalace and Lethe+LLM (91.7%); the paper says Graphiti is kept out of it. The 43.6% is in Limitations (p. 9) and Appendix P, the 7.0% in Appendix N (p. 19). The paper attributes Graphiti's score to knowledge-graph abstraction and missing purge/release primitives, not to a write-time LLM."
+    }
+   ],
+   "papers_cited": 17,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Accurate on the main picture, and the claims about what the library lacks hold (Stale, MemTrace and AriadneMem are not in it). The errors are one reversed cause (HaluMem) and three wrong page or table citations. Point 9 is only half stated (Memory-R1 learns the choice, without the reason); points 16, 18 and 19 are touched but not stated. The LightMem 67.78 → 65.39 figure is correct."
+  },
+  "noreviews-q1-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    8,
+    12,
+    17,
+    21,
+    22,
+    23,
+    25,
+    27,
+    28,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Recording that a fact was superseded is largely solved",
+     "paper_says": "The library's papers say otherwise: HaluMem (p. 11) finds update omission above 50% for most systems; ForgetEval's deterministic stores pass only 63–68% of adversarial cases (p. 6, Table 2); Are We Ready (p. 9, Table 2) has Mem0, Letta and SimpleMem below plain long context on knowledge updates."
+    },
+    {
+     "quote": "MEMIT can write 10,000 facts at once but has no delete operation (p. 9)",
+     "paper_says": "10,000 edits is correct (pp. 7–8). Page 9 (§6) does not discuss deletion; the paper never states this."
+    },
+    {
+     "quote": "(Mem0 with inference on: 43.6%), while an LLM hook at mutation time reaches about 92% on adversarial cases ([Control-Plane, p. 6, Table 2]",
+     "paper_says": "Table 2 on p. 6 shows Mem0 with infer=False at 68.3%; the 43.6% infer=True figure is in Limitations (p. 9) and Appendix P (p. 20)."
+    },
+    {
+     "quote": "contradiction resolution is the weakest ability in BEAM, at 0.05 or below for every model and method (Table 1)",
+     "paper_says": "The maximum in Table 1 is 0.053. More importantly, BEAM's contradiction-resolution task tests noticing that the user made two incompatible statements and asking which is correct (ideal answer, Appendix); BEAM scores Knowledge Update as a separate ability, so this number is not evidence on obsolete facts."
+    }
+   ],
+   "papers_cited": 21,
+   "review_only": "no",
+   "misleading": "The opening claim that recording supersession is 'largely solved' and that the only open failure is downstream contradicts the write-side evidence (HaluMem, ForgetEval, Are We Ready). A reader would wrongly conclude the storage step needs no attention. 'Most system numbers are vendor-run' also undersells the evidence: most numbers the answer itself cites come from independent benchmark papers.",
+   "comment": "Strongest on the retrieval and answer layers (MemSyco, HorizonBench, Stale), and the only answer to cite MemSyco's both-versions result. Checked and correct: Zep's 5.0 on MemoryAgentBench selective forgetting, HorizonBench's 56–64% human accuracy, Larimar's forget operation on p. 3. 'About 25 papers' is a little high; it cites 21."
+  },
+  "asis+claude-sonnet-5-5-q1-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    21,
+    22,
+    27
+   ],
+   "errors": [
+    {
+     "quote": "BEAM's contradiction resolution is at most 0.053 for every method.",
+     "paper_says": "The number is right (Table 1), but it is listed under resolving changed facts across hops. BEAM's contradiction task is detecting two incompatible user statements and asking which holds; Knowledge Update is scored separately."
+    },
+    {
+     "quote": "In DynamicMem, plain append-only retrieval tracks preference changes best.",
+     "paper_says": "DynamicMem Finding 3 (p. 10): HippoRAG2 stands out, averaging 68% against 56–59% for the other systems, plain RAG included. RAG only holds up better than the merging systems as history grows (85% → 59%)."
+    },
+    {
+     "quote": "raise Graphiti/Zep's temporal F1 on LoCoMo from 0.03 to 0.17 and conflict accuracy from 0.48 to 0.72",
+     "paper_says": "The conflict-accuracy gain is on the LTP benchmark (p. 10, Table 2), not on LoCoMo; the sentence reads as if both are LoCoMo results."
+    }
+   ],
+   "papers_cited": 17,
+   "review_only": "I answered from the review and did not open the individual papers or their notes, so the numbers and what they mean are the review's, not independently checked.",
+   "misleading": "no",
+   "comment": "Says plainly that it is unverified, and most numbers nevertheless match the papers (the Titans 27.0 → 29.0 ablation is correct: 27.01 → 29.04, Table 5, p. 16). Only one page-level citation is given for Zep and one for Are We Ready. It misses the answer-layer evidence (HorizonBench, Stale) and the HaluMem extraction point."
+  },
+  "asis-q1-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    8,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    24,
+    25,
+    27,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Graphiti passes 7% and HippoRAG 9.5%, and Mem0 with LLM inference 43.6%, because it links new to old instead of removing the old ([ForgetEval, p. 6, Table 2]",
+     "paper_says": "Only the 63–68% and 92–93% figures are in Table 2 on p. 6. The paper keeps Graphiti out of that table; Graphiti is in Appendix N (p. 19), the Mem0 infer=True figure in Limitations (p. 9) and Appendix P, HippoRAG in Fig. 2 (p. 8) and Limitations."
+    }
+   ],
+   "papers_cited": 15,
+   "review_only": "MemoryBank's forgetting curve is hand-set, and the surveys list learned forgetting as open. I have this from the review only.",
+   "misleading": "no",
+   "comment": "The most accurate answer. Its BEAM correction is right: the ideal answer in the paper is to flag the contradiction and ask which statement is correct, and Knowledge Update is a separate ability. Belief Memory (p. 12, A.2, 0.25), the o4-mini length collapse (p. 10, Table 5), HaluMem's cause and the DynamicMem numbers all check out. The claims about missing notes and the unwritable review could not be checked."
+  },
+  "asis-q1-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    27,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "BEAM's best contradiction-resolution score is 0.053 (p. 8, Table 1).",
+     "paper_says": "The number is right, but it is given as evidence that changed facts needing a second reasoning step are unsolved. BEAM's contradiction task is noticing two incompatible user statements and asking which is correct; Knowledge Update is scored separately."
+    },
+    {
+     "quote": "Nothing propagates an update to its consequences in a text store. Belief Memory is a first attempt.",
+     "paper_says": "Belief Memory (§3.3 p. 5, A.2 p. 12) keeps competing candidates with probabilities, cuts a contradicted one to 0.25 and archives the old version; it does not propagate an update to dependent facts. The library does hold a paper on exactly this: When Memory Updates but Behavior Does Not repairs replies that depend on a superseded state (.686 → .736 on Stale, p. 5)."
+    }
+   ],
+   "papers_cited": 18,
+   "review_only": "The review names Larimar as the only in-model memory here that can delete one fact exactly. Its note is a skim and I did not check the paper.",
+   "misleading": "no",
+   "comment": "Broad and mostly accurate on the store-side evidence, and it labels its merge / unlabelled / validity-mark ranking as an inference. It omits the answer-layer papers entirely (HorizonBench, Stale, MemSyco). 'Validity-tracking stores' is a loose label for Zep and Cognee, which the paper calls graph- or relation-organised. The 70-paper count and A-TMA's July 2026 date are correct."
+  }
+ },
+ "cost": {
+  "usd": 1.8043043999999997,
+  "seconds": 264
+ }
+}

@@ -1,0 +1,234 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "A-TMA names the failure 'ghost memory': old, current and transition facts coexist in the bank, stay mixed during retrieval and reach the answer model without a state role (a former address should answer 'where did the user live before?' but not 'where should the package ship?'). It argues deletion loses history and timestamps or relevance alone do not expose which fact to use.",
+   "paper": "llm/memory/agent/A-TMA. Decoupling State-Aware Memory Failures in Long-Term Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Abstract and §1 (p. 1): 'ghost memory, a state coordination failure in which old, current, and transition facts coexist in the memory bank, remain mixed during retrieval, and mislead the answer model … simple deletion loses history, while timestamps or relevance scores alone do not expose which fact sho[uld be used]'. The former-address example is in §1."
+  },
+  {
+   "id": 2,
+   "point": "A-TMA's fix keeps superseded records and labels them active/current, superseded/historical or transition at three levels (bank, retrieval, QA), passing the labels to the answer model and building evidence for the state the query asks about.",
+   "paper": "llm/memory/agent/A-TMA. Decoupling State-Aware Memory Failures in Long-Term Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.2 (p. 6): three modules for bank state maintenance, state-aligned retrieval and QA with explicit state roles. §4.5 (p. 9) and A.8: the QA prompt prepends each retrieved row with 'current memory, historical memory, transition memory, transition linked memory, or retrieved memory'."
+  },
+  {
+   "id": 3,
+   "point": "On the full LTP benchmark, Graphiti/Zep has 0.711 evidence support but only 0.480 conflict accuracy; adding A-TMA raises conflict accuracy to 0.720 (+0.240).",
+   "paper": "llm/memory/agent/A-TMA. Decoupling State-Aware Memory Failures in Long-Term Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 10): Graphiti/Zep evidence support 0.711, QA Acc 0.524, conflict 0.480; +A-TMA evidence support 0.809, Acc 0.635, conflict 0.720 (↑0.240). §1: 'improves conflict accuracy by 0.240 absolute, from 0.480 to 0.720'."
+  },
+  {
+   "id": 4,
+   "point": "On one LTP profile, temporal-KG (Graphiti/Zep) evidence reaches 0.812 evidence support but only 0.425 conflict accuracy; with A-TMA state roles conflict accuracy rises to 0.725, so timestamps and graph labels alone are not enough.",
+   "paper": "llm/memory/agent/A-TMA. Decoupling State-Aware Memory Failures in Long-Term Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1–2), on LTP profile000: 'Temporal KG evidence reaches 0.812 evidence support but only 0.425 conflict accuracy, while Graphiti/Zep +A-TMA raises conflict accuracy to 0.725 by exposing state roles to QA.' This is a single-profile subset, not the full benchmark."
+  },
+  {
+   "id": 5,
+   "point": "A-TMA's evidence is weak or mixed: gains are host- and metric-dependent; on LoCoMo temporal F1 rises only from 0.0295 to 0.1705 (average F1 0.08 to 0.16) while temporal accuracy falls from 0.3707 to 0.3178; the answer model is a 3B model; the component ablation shows small, mixed effects.",
+   "paper": "llm/memory/agent/A-TMA. Decoupling State-Aware Memory Failures in Long-Term Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§5.3 (p. 11): 'A-TMA effects are host and metric dependent: Graphiti/Zep +A-TMA raises temporal F1 from 0.0295 to 0.1705 and average F1 from 0.0809 to 0.1556 … a mixed generalization check'. Tables 3–4 show 0.3707 for Graphiti/Zep and 0.3178 with A-TMA. §4.5: QA uses qwen2.5:3b. A.10 (p. 20): 'The ablation shows small and mixed component effects', on 3 profiles with an A-Mem host."
+  },
+  {
+   "id": 6,
+   "point": "Zep/Graphiti uses a bitemporal model with four timestamps per fact edge (when it was true, when the system learned it). A contradicting new edge invalidates the old one by setting its t_invalid to the new edge's t_valid instead of deleting it, and new information is always prioritised.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.2.3 (p. 3): 'the system tracks four timestamps: t′created and t′expired … while t_valid and t_invalid ∈ T track the temporal range during which facts held true'; 'it invalidates the affected edges by setting their t_invalid to the t_valid of the invalidating edge … Graphiti consistently prioritizes new information'."
+  },
+  {
+   "id": 7,
+   "point": "In Zep's own LongMemEval results, knowledge-update accuracy falls with gpt-4o-mini (76.9% to 74.4%) and rises only with gpt-4o (78.2% to 83.3%); the result is vendor-run.",
+   "paper": "llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.3.2 table (p. 7): knowledge-update gpt-4o-mini 76.9% → 74.4% (3.36%↓); gpt-4o 78.2% → 83.3% (6.52%↑). The text says 'additional development may be needed to improve less capable models' understanding of Zep's temporal data'."
+  },
+  {
+   "id": 8,
+   "point": "Mem0 handles updates at write time: for each extracted fact it retrieves the most similar stored memories (s = 10 in the experiments) and an LLM picks ADD, UPDATE, DELETE or NOOP. Its graph variant marks obsolete relations invalid instead of removing them.",
+   "paper": "llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.1 (p. 3–4): 'retrieves the top s semantically similar memories … The LLM itself determines which of four distinct operations to execute'; 's = 10 similar memories'. §2.2 (p. 5): 'marking them as invalid rather than physically removing them to enable temporal reasoning'."
+  },
+  {
+   "id": 9,
+   "point": "Memory-R1 trains the ADD/UPDATE/DELETE/NOOP choice with RL because the untrained manager misreads complementary facts (two dogs adopted in different sessions) as a contradiction and issues DELETE+ADD.",
+   "paper": "llm/memory/agent/Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement.md",
+   "verdict": "holds",
+   "evidence": "Figure 1 (p. 1): 'the user mentions adopting two dogs across sessions. (Middle) The vanilla Memory Manager misinterprets this as a contradiction and issues DELETE+ADD, fragmenting memory. (Right) The RL-trained Memory Manager issues a single UPDATE'."
+  },
+  {
+   "id": 10,
+   "point": "On LongMemEval knowledge-update questions in an independent comparison, Zep leads with 44.4 Substring EM (Cognee 37.8), while Mem0 (15.6), Letta (17.8) and SimpleMem (6.7) fall below plain long context (20.0).",
+   "paper": "llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "Table 2, §4.3 (p. 9), Knowledge Update Substring EM: Long Context 20.0, Embedding RAG 20.0, Mem0 15.6, Cognee 37.8, Zep 44.4, Letta 17.8, LightMem 15.6, SimpleMem 6.7. Text: 'Zep leads Knowledge Update with 44.4 Substring EM'. The metric is Substring EM, not plain exact match."
+  },
+  {
+   "id": 11,
+   "point": "The same study finds graph-organised stores handle knowledge updates most reliably, while fact-extraction plugins and append-only stores return stale facts ('hallucinations of the past'); reliable post-update behaviour is a pipeline design problem, not a model-capacity one; and consolidation destroys chronological cues, so raw long context still wins on time-dependent queries.",
+   "paper": "llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§1 finding ❸: 'Graph-based methods handle knowledge updates most reliably, whereas popular fact-extraction plugins and append-only stores struggle with targeted overwrites. Systems lacking lifecycle management return stale facts, leading to \"hallucinations of the past\".' Finding ❹: 'standard semantic consolidation often destroys crucial chronological cues'. Finding 3 (p. 9): 'a pipeline-level design problem rather than a pure model-capacity problem'. The study covers 12 systems; Table 2's text says 11."
+  },
+  {
+   "id": 12,
+   "point": "On MemoryAgentBench's FactConsolidation (selective forgetting) task, every method scores at most 28% on multi-hop questions over updated facts.",
+   "paper": "llm/memory/benchmarks/Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.md",
+   "verdict": "holds",
+   "evidence": "§4.2 (p. 8): 'all methods fail on the multi-hop situation (with achieving at most 28% accuracy). Only long context agents can achieve fairly reasonable results on single-hop scenarios.'"
+  },
+  {
+   "id": 13,
+   "point": "FactConsolidation is built from MQuAKE counterfactual edit pairs with an explicit 'newer facts have larger serial numbers' rule, and still collapses with length: o4-mini scores 100 single-hop and 80 multi-hop at 6K tokens, but 61 and 14 at 32K.",
+   "paper": "llm/memory/benchmarks/Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.md",
+   "verdict": "holds",
+   "evidence": "§4.3.4, Table 5 (p. 10): O4-mini FactCon-SH 100.0 (6K) / 61.0 (32K), FactCon-MH 80.0 / 14.0; the authors call performance 'drastically low'. §3: 'newer facts have larger serial numbers'; built from 'counterfactual edit pairs from MQUAKE'."
+  },
+  {
+   "id": 14,
+   "point": "EvoMemBench reruns FactConsolidation on 15 memory methods: no memory method exceeds 7% on multi-hop, and a long-context model reaches 96 on single-hop against at most 54 for memory methods, so retention is far ahead of revision.",
+   "paper": "llm/memory/benchmarks/EvoMemBench. Benchmarking Agent Memory from a Self-Evolving Perspective.md",
+   "verdict": "holds",
+   "evidence": "Table 3, §5.2.1 (p. 6): FC MH is 7.00 for BM25 and Mem0, 5.00 for A-MEM, 3.00 for MemOS, 2.00 for MemoryOS; FC SH is 96.00 for Gemini-3-Flash, 54.00 for BM25, 49.00 for Mem0. Finding 2: 'Existing memory methods are better at retention than revision.' Long-context LLMs themselves score 58, 24 and 10 on FC MH."
+  },
+  {
+   "id": 15,
+   "point": "In HaluMem, most memory systems have update omission rates above 50%, mainly because the pre-update memory was never extracted, so the update cannot be processed.",
+   "paper": "llm/memory/benchmarks/HaluMem. Evaluating Hallucinations in Memory Systems of Agents.md",
+   "verdict": "holds",
+   "evidence": "§6.2.1 (p. 11): 'most systems suffer omission rates above 50%. This issue primarily stems from insufficient coverage in memory extraction: when the pre-update memories are not extracted, related updates cannot be properly processed.' Two answers misstate it: one says the new fact was never extracted, another says 'more than half of failed updates fail because…'; the paper says the omission rate itself exceeds 50%, and the cause is the pre-update memory."
+  },
+  {
+   "id": 16,
+   "point": "ForgetEval: deterministic stores pass 63–68% of the 385 adversarial forgetting cases (about 70% excluding compound_fact), and one LLM call at mutation time lifts this to about 92–93% (93–94% excluding compound_fact).",
+   "paper": "llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "Table 2, §5.3 (p. 6): Lethe 63.4, Mem0 68.3, LangMem 62.9, Lethe+LLM 91.7 on the full 385; 70.7 / 76.2 / 70.1 → 93.3 excluding compound_fact. Abstract: 'deterministic 70.1–70.7% → hook 93.3–94.2% … headline overall 91.7–93.2%'. Both the '63–68 → ~92' and '~70 → ~93' versions are correct for their denominators."
+  },
+  {
+   "id": 17,
+   "point": "ForgetEval's main finding is that where the LLM sits matters: an LLM at write (inscribe) time hurts deletion. Mem0 with LLM inference on drops to 43.6% (68.3% without) because it links and keeps the old fact instead of deleting it; a mutation-time hook recovers intent-aware deletion.",
+   "paper": "llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "Limitations (p. 9): infer=False '263/385 = 68.3%', 'Mem0+v3 43.6%'. §5.7 (p. 8): 'Mem0+v3's LINK-AND-KEEP collapses on deletion-precision'. Appendix P (p. 21): the router 'systematically routes \"A says X\" followed by \"A says Y\" to LINK-AND-KEEP rather than UPDATE-AND-DELETE, leaving the old fact in the store' (a 24.7-pt drop). Inscribe-time LLM does help canonicalisation categories."
+  },
+  {
+   "id": 18,
+   "point": "In ForgetEval, graph memories do worst on targeted forgetting: Graphiti passes 7.0% and HippoRAG 9.5% of evaluable cases, because knowledge-graph abstraction discards the surface wording the tests need and Graphiti lacks purge/release primitives.",
+   "paper": "llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "Appendix N, Table 13 (p. 19): Graphiti 17/242 evaluable (7.0%), strict 4.4%; 'Knowledge-graph abstraction sheds the surface forms our adversarial layer probes … a categorical mismatch, not a parameter-tuning issue'; no query-addressable purge or release. Limitations (p. 9): 'HippoRAG scores 31/326 evaluable (9.5%)'. These numbers are not in Table 2 on p. 6, where several answers place them."
+  },
+  {
+   "id": 19,
+   "point": "ForgetEval shows recall quality says nothing about forgetting: a verbatim-retention store (MemPalace) passes 0 of 385 forgetting cases yet scores respectably on a recall-heavy benchmark; a case passes only if the superseded fact is absent from the top-10 recall.",
+   "paper": "llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "§5.5, Table 3 (p. 6–7): 'MemPalace scores 0/385 on ForgetEval-Adv (forgetting-heavy) vs. 60/150 (40%) on Memora (recall-heavy) — no scalar metric captures both directions.' §3: 'A case passes iff must_contain ⊆ top-10 blob and must_not_contain ∩ top-10 blob = ∅.'"
+  },
+  {
+   "id": 20,
+   "point": "ForgetEval caveats: single author whose own store is a tested system; substring scoring, with 30% of audited failures being scorer artefacts; the hook's lift shrinks to about 12–18 points on externally authored cases; +8 points with Qwen and none with Llama; no gain on MemoryAgentBench's FactConsolidation.",
+   "paper": "llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "Frontmatter: one author (Dongxu Yang). Appendix U (p. 25): '35/50 true failures, 15/50 scorer artifacts'. Appendix R (p. 22): hook lift '+11.7 Lethe, +18.1 LangGraph … attenuated relative to in-house (+28–30)'. Limitations (p. 9): Qwen-2.5-72B 'a smaller +8-pt lift', Llama-3.1-70B 'fails to parse our prompt contract, falling through to the deterministic baseline'. Appendix J (p. 17): hook variants score 'identically' on FactConsolidation. On the same external subset the joint Letta+LLM lift grows to +27.8."
+  },
+  {
+   "id": 21,
+   "point": "DynamicMem: no architecture both retains stable facts and overwrites changed ones. All systems handle a fresh preference change (70–89%), but as history grows merging systems collapse (A-Mem 89% → 39%, SimpleMem 89% → 47%) while append-only ones hold better (HippoRAG2 88% → 63%, RAG 85% → 59%); the authors attribute this to merging blurring the old/new boundary.",
+   "paper": "llm/memory/benchmarks/DynamicMem. A Long-Horizon Memory Benchmark in Real-World Settings.md",
+   "verdict": "holds",
+   "evidence": "Finding 3 (p. 10): 'Retention and update are separate failure modes. No single architecture wins on both'; 'All systems handle a fresh preference change well at C2 (70–89%), but … A-Mem (89% → 39%) and SimpleMem (89% → 47%) decline sharply, while HippoRAG2 (88% → 63%) and RAG (85% → 59%)…'; merge-based approaches 'blur the boundary between new and old as more content accumulates'."
+  },
+  {
+   "id": 22,
+   "point": "MemSyco-Bench: retrieving both versions is the dangerous case. A-Mem retrieves old and updated memories together in 98.6% of update cases yet scores about 24%; Mem0 scores 53.06 when only the updated memory is retrieved and 26.38 when both appear. External memory often raises outdated-memory use over full dialogue (16.3% to 41–49% with Mem0 and LightMem).",
+   "paper": "llm/memory/benchmarks/MemSyco-Bench. Benchmarking Sycophancy in Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "Obs. 9: 'A-Mem retrieves both old and updated memories in 98.57% of cases, but still reaches only 24.06 Acc … Mem0 … Acc is 53.06 when only the updated memory is retrieved, but falls to 26.38 when old and updated memories appear together.' Obs. 3: 'for DeepSeek-V4-Flash from 16.34 to 41.42 with Mem0 and 48.57 with LightMem'. The 16→41–49 figure is for one backbone; for Qwen3-8B the baseline is 56.16."
+  },
+  {
+   "id": 23,
+   "point": "A system can know the update and still act on the old value: the Stale benchmark's write-side prototype resolves the user's current state 91% of the time but adapts open-ended behaviour only 32% of the time, with the updated evidence visible in 67.8% of the failed cases.",
+   "paper": "llm/personalization/methods/When Memory Updates but Behavior Does Not. Repairing Implicit Stale Dependencies in Personalized.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1): 'The benchmark's write-side prototype achieves 91% accuracy on state resolution but only 32% on IPA, and the updated evidence is visible in 67.8% of failed IPA cases.' This is reported second-hand from the Stale benchmark (Chao et al. 2026), which is not in the library."
+  },
+  {
+   "id": 24,
+   "point": "StateAuditor audits from stored state to draft (the stale dependency is usually unsaid) and repairs only on verified old→new transitions, gaining 5 points on Stale (.686 → .736). Limits: no gain on a harder authored set, and a weaker auditor over-corrects (LongMemEval knowledge-update .816 → .579).",
+   "paper": "llm/personalization/methods/When Memory Updates but Behavior Does Not. Repairing Implicit Stale Dependencies in Personalized.md",
+   "verdict": "holds",
+   "evidence": "Abstract and §6.1 (p. 5): 'strict single-query VTA scores .736 against .686 … a +5.0-point paired gain'. §6.4 (p. 7): 'the mid-capability auditor (gpt-4o-mini) sharply lowers conflict-free accuracy (LongMemEval knowledge-update .816 → .579)'. Limitations: the harder 120-scenario set gives 'no accuracy gain'."
+  },
+  {
+   "id": 25,
+   "point": "HorizonBench: with the full history in context and no memory system, the best of 25 frontier models reaches 52.8%; all 25 do worse on evolved than static preferences and pick the pre-change value on over a third of wrong answers (25% by chance). The changes are implied by life events, not restated, so 'most recent statement wins' returns the stale value.",
+   "paper": "llm/personalization/benchmarks/HorizonBench. Long-Horizon Personalization with Evolving Preferences.md",
+   "verdict": "holds",
+   "evidence": "§1 and §6.1 (p. 7): 'the best of 25 frontier models (Claude-opus-4.5) achieves 52.8%'. §6.2 (p. 8): 'selecting the outdated value on over a third of wrong answers, approximately 1.5× the uniform baseline'; 'All 25 models perform worse on evolved preferences than static ones (−2.7 pp average)'. §4: 'retrieving the most recently expressed value yields an outdated answer'. Human majority-vote accuracy is only 56–64%."
+  },
+  {
+   "id": 26,
+   "point": "In HorizonBench, shortening the history to about 95K tokens makes anchoring worse (47.7% of errors pick the outdated value), so the failure is belief revision, not finding the evidence.",
+   "paper": "llm/personalization/benchmarks/HorizonBench. Long-Horizon Personalization with Evolving Preferences.md",
+   "verdict": "holds",
+   "evidence": "§6.3, Table 2 (p. 8): short-horizon variant ('0–14 day recall window, ~95K tokens') has Dist.% 47.7 against 38.2 for the neutral condition, and Evo Δ −5.7 pp (25/25 models). 47.7% is the share of wrong answers on evolved items that pick the pre-evolution distractor, not the share of all answers."
+  },
+  {
+   "id": 27,
+   "point": "Model editing is the parametric version of the problem and is really belief revision (12 open problems). In a controlled testbed (one 83M-parameter model, one editor) the edited fact itself succeeds, but accuracy on downstream facts that should change falls from 0.97 to 0.01.",
+   "paper": "llm/memory/parametric/Fundamental Problems With Model Editing. How Should Rational Belief Revision Work in LLMs.md",
+   "verdict": "holds",
+   "evidence": "Abstract: 'model editing is essentially belief revision … 12 open problems'. Table 4 (§6.4–6.5, p. 13–14), 'Edit Requests w/ Downstream Answer Changes': s1 r1 generative accuracy 0.90 → 1.00, s1 r2 (downstream) 0.97 → 0.01. §6.5: 'model edits totally fail to generalize to downstream probabilistic consequences, achieving just 1% accuracy'. §6.3: 'an 83m parameter autoregressive Transformer'."
+  },
+  {
+   "id": 28,
+   "point": "Parametric memory pools forget by age, not by obsolescence: MemoryLLM randomly drops memory tokens at each update, so older knowledge decays exponentially whether or not it has been superseded.",
+   "paper": "llm/memory/parametric/MEMORYLLM. Towards Self-Updatable Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "§3.1 (p. 2–3), Figure 1: 'We randomly drop K tokens in θ_l'; 'knowledge within the memory pool would be exponentially forgotten at a rate of K/N', inspired by the Ebbinghaus curve. That this ignores whether a fact was superseded is the answers' inference; the paper itself calls it forgetting 'stale knowledge'."
+  },
+  {
+   "id": 29,
+   "point": "PersonaMem-v3: Mem0 with RAG gives an outdated stance in 51.4% of preference-change cases, against 25.7% for a self-rewritten textual memory.",
+   "paper": "llm/personalization/benchmarks/PersonaMem-v3. Toward Omni-Platform Personal Intelligence for Holistic User Understanding.md",
+   "verdict": "holds",
+   "evidence": "Tracking-preference-changes probe: 'GPT-5.5 Textual Memory performs best … 79.9% with a 25.7% outdated rate … Mem0 with RAG is weakest, at 56.9% with a 51.4% outdated-stance rate, showing that a topically relevant retrieved fact can remain too sticky after expiry.' I did not check the page number (p. 17) the answers cite."
+  },
+  {
+   "id": 30,
+   "point": "Other non-destructive designs: Memanto flags a contradiction and asks the agent to supersede, retain or annotate, keeping superseded entries (untested on contradictions); Belief Memory keeps competing candidates with Noisy-OR probabilities, cuts a contradicted one to 0.25, archives the old version and down-weights stale entries at retrieval.",
+   "paper": "llm/memory/agent/Memanto. Typed Semantic Memory with Information-Theoretic Retrieval for Long-Horizon Agents.md",
+   "verdict": "holds",
+   "evidence": "Memanto: 'three resolution options: supersede (replace the old memory), retain (keep the old memory), or annotate'; 'Memory supersession is non-destructive: superseded entries are marked accordingly but retained'; 'neither LongMemEval nor LoCoMo systematically tests contradictory memories'. Belief Memory (llm/memory/agent/Belief Memory. Agent Memory Under Partial Observability.md, §3): 'BeliefMem archives the old version … if the observation supports a competing candidate for the same attribute c, its probability would be reduced to 0.25'; 'an entry's retrieval priority decays with staleness'."
+  }
+ ],
+ "answers": [
+  "nonotes-q1-r2",
+  "noreviews+claude-sonnet-5-5-q1-r1",
+  "nonotes-q1-r1",
+  "nonotes-q1@run1",
+  "asis-q1-r1",
+  "asis-q1-r2",
+  "asis-q1-r3",
+  "noreviews-q1-r1",
+  "noreviews-q1@run1",
+  "nonotes-q1-r3",
+  "noreviews-q1-r2",
+  "noreviews-q1-r3",
+  "asis+claude-sonnet-5-5-q1-r1",
+  "asis-q1@run1"
+ ],
+ "cost": {
+  "usd": 2.0221396,
+  "seconds": 208
+ }
+}

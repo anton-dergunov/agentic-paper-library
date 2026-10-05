@@ -1,0 +1,56 @@
+session	turns	seconds	input	output	tool calls	reviews whole	reviews part	note calls	notes named	papers named	notes after review	papers after review	write attempts
+asis+claude-sonnet-5-5-q1-r1	5	24	144704	2757	4	0	3	0	0	0	0	0	0
+asis+claude-sonnet-5-5-q2-r1	4	14	98920	1838	3	0	0	1	1	1			0
+asis+claude-sonnet-5-5-q3-r1	8	36	228719	4175	7	0	4	1	2	1	2	1	1
+asis+claude-sonnet-5-5-q4-r1	4	22	135583	2318	3	0	3	0	0	0	0	0	0
+asis+claude-sonnet-5-5-q5-r1	7	42	249117	4427	6	0	1	1	2	3	2	3	0
+asis-q1-r1	11	112	629073	9884	10	0	3	1	8	7	8	7	1
+asis-q1-r2	11	71	376259	7301	10	0	3	2	15	5	15	5	0
+asis-q1-r3	17	118	889848	11022	16	0	4	2	15	6	15	6	1
+asis-q2-r1	2	22	70556	2091	1	0	0	1	1	1			0
+asis-q2-r2	3	26	112077	2551	2	0	0	1	1	1			0
+asis-q2-r3	3	23	115240	2155	2	0	0	1	0	0			0
+asis-q3-r1	15	120	542856	10586	14	0	8	3	5	7	5	7	1
+asis-q3-r2	16	122	760932	11252	15	0	8	7	11	5	11	5	1
+asis-q3-r3	11	123	587897	10791	10	0	5	5	6	7	6	7	1
+asis-q4-r1	7	61	316501	6060	6	0	5	1	1	11	1	11	0
+asis-q4-r2	7	49	262740	5025	6	0	6	0	9	0	9	0	0
+asis-q4-r3	6	45	238722	4453	5	0	5	0	3	0	3	0	0
+asis-q5-r1	15	131	860281	12578	14	0	1	1	12	9	12	9	0
+asis-q5-r2	12	98	687288	9082	11	0	1	1	13	6	13	6	0
+asis-q5-r3	13	102	735129	9752	12	0	1	2	6	8	6	8	0
+nonotes-q1-r1	21	160	1205146	13702	20	0	0	0	0	24			0
+nonotes-q1-r2	17	135	1020438	12304	16	0	0	0	0	22			0
+nonotes-q1-r3	16	124	826813	11648	15	0	0	0	0	1			0
+nonotes-q2-r1	2	19	67645	1798	1	0	0	0	0	1			0
+nonotes-q2-r2	3	21	106242	1968	2	0	0	0	0	1			0
+nonotes-q2-r3	2	18	66677	1755	1	0	0	0	0	1			0
+nonotes-q3-r1	18	120	930165	10347	17	0	0	0	0	11			0
+nonotes-q3-r2	14	100	564972	9742	13	0	0	0	1	19			0
+nonotes-q3-r3	14	102	378358	8655	13	0	0	0	0	9			0
+nonotes-q4-r1	8	75	314127	7786	7	0	0	0	0	20			0
+nonotes-q4-r2	8	55	293822	5128	7	0	0	0	0	4			0
+nonotes-q4-r3	12	88	410159	9147	11	0	0	0	0	21			0
+nonotes-q5-r1	23	182	1202209	16821	22	0	0	0	0	18			0
+nonotes-q5-r2	18	124	907485	12125	17	0	0	0	0	13			0
+nonotes-q5-r3	18	142	1208367	13565	17	0	0	0	0	13			0
+noreviews+claude-sonnet-5-5-q1-r1	7	54	336131	6377	6	0	0	4	2	4			0
+noreviews+claude-sonnet-5-5-q2-r1	4	13	97586	1652	3	0	0	1	1	1			0
+noreviews+claude-sonnet-5-5-q3-r1	8	35	269161	4291	7	0	0	0	1	0			0
+noreviews+claude-sonnet-5-5-q4-r1	3	21	104223	2256	2	0	0	1	0	0			0
+noreviews+claude-sonnet-5-5-q5-r1	6	29	217859	3768	5	0	0	1	3	6			0
+noreviews-q1-r1	22	115	876518	10971	21	0	0	1	13	17			0
+noreviews-q1-r2	18	159	1229050	15461	17	0	0	2	11	19			0
+noreviews-q1-r3	18	127	899504	12963	17	0	0	1	12	19			0
+noreviews-q2-r1	3	21	112221	2065	2	0	0	1	1	1			0
+noreviews-q2-r2	3	23	112179	2409	2	0	0	1	1	1			0
+noreviews-q2-r3	3	22	111684	2324	2	0	0	1	1	1			0
+noreviews-q3-r1	13	110	573890	9976	12	0	0	2	20	11			1
+noreviews-q3-r2	15	110	725388	10522	14	0	0	5	11	10			1
+noreviews-q3-r3	12	85	505687	8302	11	0	0	3	21	5			0
+noreviews-q4-r1	12	87	439767	9376	11	0	0	3	4	1			0
+noreviews-q4-r2	9	72	317749	7529	8	0	0	4	0	0			0
+noreviews-q4-r3	8	61	351575	5960	7	0	0	3	0	0			0
+noreviews-q5-r1	18	131	928151	12674	17	0	0	4	12	7			1
+noreviews-q5-r2	16	132	964415	11472	15	0	0	3	12	12			0
+noreviews-q5-r3	18	142	1313281	14220	17	0	0	5	17	6			0
