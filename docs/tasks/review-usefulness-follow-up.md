@@ -3,9 +3,19 @@
 A follow-up to [`experiments/review-usefulness`](../../experiments/review-usefulness/README.md).
 Run it in a fresh session; everything needed is below and in that folder.
 
-## State on 5 Oct 2026, 20:15: paused on the weekly usage limit
+## State on 5 Oct 2026, 20:30: paused on the usage limit; ready to resume at 00:39
 
-Stopped at 97% of the seven-day allowance (resets Sat 10 Oct, 23:00). Resume after that.
+To resume in a new session: "continue the plan in docs/tasks/review-usefulness-follow-up.md".
+Only the Opus judging of q3, q4 and q5 and the write-up are left. Stopped at 97% of the
+seven-day allowance. The plan: start at 00:39 on 6 Oct, when the five-hour window resets,
+run until the weekly allowance is used up, then the user resets it and says "continue".
+
+**Judging is resumable.** Each unit is one file in `results-2/judge/`: `pool-<q>.json` (one
+per question) and `grade-<q>-b<n>.json` (one per batch of up to five answers, 3 batches a
+question; the batches are fixed in `batches-<q>.json` once the pool exists). `judge.py`
+skips every file that exists, a session cut off by a limit writes nothing, and the script
+then exits with "N unit(s) failed; run the same command again". So the same command is
+repeated until it prints no failure; only the units in flight at the cut-off are redone.
 
 Done, all in `experiments/review-usefulness/`:
 
@@ -21,19 +31,48 @@ Done, all in `experiments/review-usefulness/`:
 - Judged with Opus: q1 and q2, pooled with the first run's answers (`results-2/judge/`).
   Gemini 3.1 Pro as second judge on q1 (`judge-q1-gemini-3.1-pro-preview.json`).
 
-Left to do:
+Left to do (run from `experiments/review-usefulness/`):
 
-1. Rebuild the judge's copy (the scratch copies are gone):
-   `python3 copies.py ~/papers <scratch> nonotes`.
-2. Judge q3, q4, q5 (about 3 points of the weekly allowance and 20 of the five-hour one
-   per question): `python3 judge.py results-2/judge <scratch>/lib-nonotes results-2/answers results/answers@run1`.
-   It skips q1 and q2.
-3. `python3 report.py results-2/sessions.tsv results-2/judge`, then apply the decision rule:
-   on q1, q3, q4 the gap is closed if `asis` is within the repeat-to-repeat range of
-   `noreviews` on points made and on wrong statements; cheaper if its mean input tokens
-   are at most 75% of `noreviews`. If not closed, try a wording below in a copy built with
-   `copies.py ... asis-v2=asis` and `--rule`, three repeats on q1, q3, q4.
-4. Everything under "When it is done".
+1. The judge's library copy is built: `/private/tmp/review-usefulness/lib-nonotes` (with
+   `lib-asis` and `lib-noreviews` beside it, for a rule variant), read-only, from the
+   library at `d7dccd40`. If a reboot removed it:
+   `python3 copies.py ~/papers /private/tmp/review-usefulness`.
+2. Judge one question at a time, so that a cut-off loses at most four sessions, in the
+   order the decision needs them. Repeat a command that reports failures (after the
+   allowance is reset):
+
+   ```bash
+   J="python3 judge.py results-2/judge /private/tmp/review-usefulness/lib-nonotes"
+   $J --only q3 results-2/answers results/answers@run1
+   $J --only q4 results-2/answers results/answers@run1
+   $J --only q5 results-2/answers results/answers@run1
+   ```
+
+   A question takes about 5 minutes, 3 points of the weekly allowance and 20 of the
+   five-hour one (measured on q1). All three, the write-up and, if needed, one rule
+   variant should fit in one five-hour window; the variant (9 sessions and 6 grading
+   batches, about 30 points of the window) is what would not fit beside heavy other use.
+3. `python3 report.py results-2/sessions.tsv results-2/judge`, then apply the decision rule,
+   fixed before the grades were seen: on q1, q3, q4 the gap is closed if `asis` is within
+   the repeat-to-repeat range of `noreviews` on points made and on wrong statements;
+   cheaper if its mean input tokens are at most 75% of `noreviews`. q2 is the control, and
+   q5 checks that no session goes looking for a review that is not there.
+4. Only if the gap is not closed: write a wording from the list below to a file, then
+   `python3 copies.py ~/papers /private/tmp/review-usefulness asis-v2=asis`,
+   `python3 copies.py --rule <rule.md> /private/tmp/review-usefulness/lib-asis-v2`,
+   `python3 run.py results-2/streams --repeats 3 --questions q1,q3,q4 asis-v2=/private/tmp/review-usefulness/lib-asis-v2`,
+   `python3 summarize.py results-2/streams ~/papers results-2/answers > results-2/sessions.tsv`,
+   and the judge commands again (new answers go into new batches against the same points).
+5. Everything under "When it is done". For the README: the per-session columns of
+   `results-2/sessions.tsv` (reviews whole/part, notes and papers after the review, write
+   attempts) are read from shell commands and miss some idioms; check the 15 Opus `asis`
+   sessions by eye in `results-2/streams/` before quoting them. `review_only` in the judge
+   files says whether an answer marks points that rest on the review alone. Also in the
+   write-up: copies are now real and read-only (the Method section below still says hard
+   links); the judge runs in the copy without reviews and notes; the stripped copies keep
+   three passing mentions of "review" in the notes section of the guide. Delete
+   `/private/tmp/review-usefulness` (`chmod -R u+w` first), check `git -C ~/papers status`,
+   and run `paperlib test`.
 
 What q1 and q2 show so far (Opus judge; mean and range of three sessions):
 
