@@ -1,0 +1,80 @@
+{
+ "points": [
+  "1 Model scale: MoE with 236B total / 21B activated parameters per token, 128K context (60 layers, hidden dimension 5120).",
+  "2 MLA mechanism: keys and values are jointly low-rank compressed into one latent vector, and only that latent is cached; the up-projections are absorbed into W^Q/W^O at inference; decoupled RoPE carries position through extra per-head queries and one shared key.",
+  "3 KV cache size: (d_c + d_h^R)l ≈ 9/2·d_h·l elements per token against 2·n_h·d_h·l for MHA, equal to GQA with 2.25 groups; 93.3% KV cache reduction versus DeepSeek 67B.",
+  "4 DeepSeekMoE FFN: 2 shared + 160 routed experts with 6 routed active per token; device-limited routing (M=3 of D=8 devices), three auxiliary balance losses and token dropping.",
+  "5 Pre-training data: 8.1T tokens, Chinese about 12% more than English, 100K BBPE tokenizer; corpus sources and mixture are withheld.",
+  "6 Training recipe and long-context extension: AdamW, peak LR 2.4e-4, batch 2304→9216, 4K sequence length, H800 cluster with pipeline/expert/ZeRO-1 parallelism; YaRN plus 1000 steps at 32K to reach 128K, with NIAH as the only evidence.",
+  "7 Efficiency versus DeepSeek 67B: 172.8K against 300.6K GPU hours per trillion tokens (42.5% saving); generation throughput above 50K tokens/s on 8 H800s, 5.76 times the baseline (with FP8 weights and 6-bit KV quantization).",
+  "8 Base-model results (Table 2, authors' internal framework): e.g. MMLU 78.5 against LLaMA3 70B 78.9, Mixtral 8x22B 77.6, Qwen1.5 72B 77.2, DeepSeek 67B 71.3; math/code roughly on par; a conceded English gap to LLaMA3; strong Chinese.",
+  "9 Alignment recipe: SFT on 1.5M instances (1.2M helpfulness, 0.3M safety), 2 epochs, LR 5e-6; critic-free GRPO in two stages (reasoning reward model, then helpful/safety/rule rewards); RL hyper-parameters and reward coefficients are withheld.",
+  "10 Chat results with baselines: Chat (RL) MT-Bench 8.97 against LLaMA3 70B Instruct 8.95; AlpacaEval 2.0 38.9 against 34.4; AlignBench 7.91 against GPT-4-1106-Preview 8.01 and GPT-4-0613 7.53; Table 3 gains of RL over SFT on code/math (e.g. HumanEval 81.1 against 76.8)."
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "reducing the KV cache by 93.3% compared with DeepSeek 67B (p. 2)",
+     "paper": "Page 2 is the Contents. The 93.3% figure is in the Abstract (p. 1), the Introduction (p. 4) and the Conclusion (p. 21)."
+    },
+    {
+     "quote": "On MT-Bench, DeepSeek-V2 Chat (RL) scores 8.97, compared to DeepSeek-V2 Chat (SFT) at 8.62 and LLaMA3 70B Instruct at 8.95 (p. 20, Table 4)",
+     "paper": "Table 4 is in Section 4.3 (p. 18, running to p. 19 before Section 4.4 starts); p. 20 is the Section 4.4 discussion paragraphs. The numbers are correct."
+    },
+    {
+     "quote": "On AlpacaEval 2.0 (length-controlled win rate), DeepSeek-V2 Chat (RL) achieves 38.9, compared to DeepSeek-V2 Chat (SFT) at 30.0 and LLaMA3 70B Instruct at 34.4 (p. 20, Table 4)",
+     "paper": "Same wrong page: Table 4 is in Section 4.3 (pp. 18–19), not p. 20. The numbers are correct."
+    },
+    {
+     "quote": "On the Chinese AlignBench, DeepSeek-V2 Chat (RL) scores 7.91 Overall, outperforming DeepSeek-V2 Chat (SFT) at 7.74 and the baseline GPT-4-0613 at 7.53 (p. 21, Table 5)",
+     "paper": "Table 5 is in Section 4.3 (pp. 18–19), before Section 4.4 (p. 19); p. 21 is Online RL and the Conclusion. The numbers are correct."
+    }
+   ],
+   "missed": [
+    6
+   ],
+   "conversion_flagged": "ok; nothing flagged"
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "Decoupled RoPE: separate position embeddings for compressed and latent attention dimensions",
+     "paper": "Section 2.1.3 (p. 8): decoupled RoPE adds extra multi-head queries q^R and one shared key k^R that carry RoPE, concatenated to the compressed queries and keys. No position embedding is applied to the compressed parts."
+    },
+    {
+     "quote": "MLA achieves lower cache than GQA-2.25 with MHA-level performance",
+     "paper": "Table 1 and Section 2.1.4 (p. 8): the MLA KV cache is \"equal to GQA with only 2.25 groups\", not lower, and its performance is \"stronger than MHA\"."
+    },
+    {
+     "quote": "on AlignBench Chinese tasks (Table 5, p. 20)",
+     "paper": "Table 5 is in Section 4.3 (pp. 18–19), before Section 4.4 starts on p. 19; p. 20 is the SFT-data and alignment-tax discussion. The scores are correct."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "ok; nothing flagged"
+  },
+  "C": {
+   "errors": [],
+   "missed": [],
+   "conversion_flagged": "Main text ok; appendices A–G absent so their claims are uncheckable; bold/underline lost in Tables 2–3; Table 5 flattened but readable; figures carry no data"
+  },
+  "D": {
+   "errors": [],
+   "missed": [],
+   "conversion_flagged": "References and appendices A–G missing; Figures 1–4 are placeholders; bold/underline marks lost; duplicated title with stray \\reportnumber; equations and table values intact"
+  },
+  "E": {
+   "errors": [],
+   "missed": [],
+   "conversion_flagged": "ok, noting appendices B–G are omitted from the body"
+  }
+ },
+ "key": {
+  "A": "gemini-3.1-pro-preview",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "claude-sonnet-5-5",
+  "D": "claude-opus-5-5",
+  "E": "gemini-3.8-flash"
+ }
+}

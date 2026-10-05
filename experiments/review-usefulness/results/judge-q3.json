@@ -1,0 +1,264 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "Humans judged 54.6% of personalised responses no better than the generic one (rating ≤ 3).",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§6.2 (p. 8): '54.6% of personalized responses are judged by humans as no better than their generic counterparts (rating ≤ 3.0)'."
+  },
+  {
+   "id": 2,
+   "point": "Score inflation: every LLM judge rates higher than humans, 3.41–4.02 against a human mean of 3.18.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "Table 6 (App. G, p. 15): Human 3.176; Gemma-4 3.409, Claude-S4.6 3.428, Qwen3.5 3.487, GPT-5.4 3.523, Llama-3.3-70B 4.019."
+  },
+  {
+   "id": 3,
+   "point": "Judge–human Spearman correlation is weak, 0.11–0.38.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "Table 6 (p. 15): ρ = 0.111, 0.182, 0.312, 0.362, 0.376."
+  },
+  {
+   "id": 4,
+   "point": "Several open-weight judges reward explicit attribute mentions that humans do not (human Δ = 0.03); a model's mention rate as generator correlates with its reward for mentions as judge (Spearman r = 0.90, p = 0.04, five models).",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§6.2 (p. 8), Figs 6–7: 'Spearman r=0.90, p=0.04'; humans 'almost no gap … (Δ=0.03)'."
+  },
+  {
+   "id": 5,
+   "point": "Claude Sonnet 4.6 errs the other way and penalises explicit mentions (Δ = −0.39).",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§6.2 (p. 8): 'Claude-S4.6 gives explicit mentions much lower scores (Δ=−0.39)'; GPT-5.4 is at −0.07."
+  },
+  {
+   "id": 6,
+   "point": "Reward models trained on the human ratings reach only about 0.3 Spearman.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§6.3 (p. 9): 'the learned reward models reach only around 0.3 Spearman correlation with human ratings'."
+  },
+  {
+   "id": 7,
+   "point": "On attribute relevance (Stage 2), LLMs agree with each other (κ ≈ 0.60) more than with humans (κ = 0.300; human–human 0.426), and mark 40–60% relevant where humans mark about 20%.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§5.2 (p. 6): human–human κ 0.426, LLM–LLM 0.597, LLM–human 0.300; humans ~20% relevant, LLMs 40–60%."
+  },
+  {
+   "id": 8,
+   "point": "Low human ceiling: the three Stage 3 annotators agree with each other at only Spearman 0.325 (weighted κ 0.310), so the best judges (about 0.36–0.38) are as close to the human average as the annotators are to each other.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§6.1 Human Annotation (p. 8): 'Spearman correlation and weighted Cohen's κ, which gives 0.325 and 0.310'. The ceiling comparison is the answers' own reading; the numbers support it."
+  },
+  {
+   "id": 9,
+   "point": "The raters are three third-party (Prolific) annotators, not the users themselves, and the Stage 3 sample is 80 items and 367 ratings.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "App. G (p. 15): 'A total of 80 items were annotated, producing 367 (item, attribute) ratings across three annotators'; recruited through Prolific. §6.3 (p. 9) says quality 'should ultimately be judged by the user being personalized for'."
+  },
+  {
+   "id": 10,
+   "point": "Text and table disagree: the text says open-weight judges correlate very poorly and proprietary ones best, but Llama-3.3-70B has the highest correlation (0.376) and the worst inflation.",
+   "paper": "Re-Centering Humans in LLM Personalization",
+   "verdict": "holds",
+   "evidence": "§6.2 (p. 8): 'Open-weight judges show very low Spearman correlations … proprietary judges perform better, with the strongest reaching about 0.37'. Table 6 (p. 15): Llama-3.3-70B ρ 0.376, rating 4.019; Claude 0.362."
+  },
+  {
+   "id": 11,
+   "point": "GPT-4o simulations of the real participants recover the aggregate model ranking (r = 0.98–0.99) but not individual judgements: per-trial Kendall τ 0.22 and 0.11 against 0.57 for human self-consistency.",
+   "paper": "PRISM-X",
+   "verdict": "holds",
+   "evidence": "§4.1 (pp. 16–17): Sim-Judgement r=0.99, Sim-Dynamic r=0.98; τ̄ = 0.22 and 0.11; self-consistency τ̄ = 0.57. The study has N=530, but this comparison uses 1,855 matched trials from 497 participants. Sim-Judgement swaps the top two models."
+  },
+  {
+   "id": 12,
+   "point": "The simulator has a strong position bias: first option ranked best 44.9% of the time, fourth 7.2%.",
+   "paper": "PRISM-X",
+   "verdict": "holds",
+   "evidence": "§4.2 (p. 18): Sim-Dynamic 'Position A ranked best in 44.9% of trials versus 7.2% for Position D'. Sim-Judgement is milder (33.8% vs 15.0%); humans are near 25%."
+  },
+  {
+   "id": 13,
+   "point": "8B-class LLM judges classify only 0–19% of correct-but-generic answers correctly, because they score them as personalised.",
+   "paper": "Evaluating LLM Personalization via Semantic Constraint Verification",
+   "verdict": "holds",
+   "evidence": "Table 3, §4.3 (p. 7): Generalized accuracy is Qwen3-8B 18.69%, Llama-3-8B 0.00%, DeepSeek-R1 0.00%. Text: 'collapsing LLM accuracy to 0.00% in the Generalized category'. The data are synthetic MMLU variants."
+  },
+  {
+   "id": 14,
+   "point": "A pairwise LLM judge changes its preferred response in 78% of cases when the order is reversed.",
+   "paper": "LaMP-QA",
+   "verdict": "holds",
+   "evidence": "§5.2 'Effect of Evaluation Method and Auto-Rater Size' (p. 7): Qwen 2.5 32B 'changes its preferred response in 78% of cases when the order of the two responses is reversed'."
+  },
+  {
+   "id": 15,
+   "point": "Aspect-based judging agrees with humans 73% of the time against 58% for direct scoring; smaller judges agree less and score higher (0.5B: 48%, mean 0.94; 32B: 73%, mean 0.44).",
+   "paper": "LaMP-QA",
+   "verdict": "holds",
+   "evidence": "§5.2 (p. 7): 100 examples, two raters, κ 0.726; 73% vs 58%; 0.5B gives 48% and 0.94, 32B gives 73% and 0.44."
+  },
+  {
+   "id": 16,
+   "point": "Judge–human agreement is κ 0.52 on personalisation against 0.78 on task completion.",
+   "paper": "PersonaLens",
+   "verdict": "holds",
+   "evidence": "§4.7, Table 5 (p. 8): Cohen's κ is Task Completion 0.780, Personalization 0.520, the lowest row. 100 dialogues, three annotators."
+  },
+  {
+   "id": 17,
+   "point": "The binary compliance checks (violate, acknowledge, hallucinate the preference) agree with humans at 86–98%.",
+   "paper": "PrefEval (Do LLMs Recognize Your Preferences?)",
+   "verdict": "holds",
+   "evidence": "App. A.17, Table 18 (p. 43): Violate 0.92/0.86/0.95; Acknowledge 0.88/0.90/0.97; Hallucinate 0.98/0.96/0.92; overall preference-following accuracy 0.97/0.92/0.96."
+  },
+  {
+   "id": 18,
+   "point": "The GPT-4o preference-match judge reaches Krippendorff α = 0.769 against the human majority vote.",
+   "paper": "CUPID",
+   "verdict": "holds",
+   "evidence": "§2.3 Metrics (p. 3): 'GPT-4o achieved a Krippendorff's alpha of 0.769' on 230 human-annotated points; details in App. A.1 (p. 15). Human–human α was only 0.467."
+  },
+  {
+   "id": 19,
+   "point": "The LLM judge aligns with human experts at 73–96% across the four tasks.",
+   "paper": "AlpsBench",
+   "verdict": "holds",
+   "evidence": "§3, Step 4 (p. 4): '96% for Task 3, 85% for Task 2, 83% for Task 4, and 73% for Task 1'."
+  },
+  {
+   "id": 20,
+   "point": "Over-personalisation judges (irrelevance, sycophancy) correlate with humans at Spearman 0.60–0.74; the judge actually used, GPT-4o-mini, is at 0.68.",
+   "paper": "OP-Bench",
+   "verdict": "holds",
+   "evidence": "App. A.3.2, Table 5 (p. 14): ρ from 0.60–0.61 (DeepSeek-v3.2) to 0.74 (Claude-Opus-4.5-thinking); GPT-4o-mini 0.68/0.68. 200 responses."
+  }
+ ],
+ "answers": {
+  "A": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    11,
+    13,
+    14,
+    16
+   ],
+   "errors": [
+    {
+     "quote": "three third-party annotators, not the users themselves, with κ 0.31–0.43 between them",
+     "paper_says": "For the Stage 3 quality ratings the agreement is weighted κ 0.310 and Spearman 0.325 (p. 8). The 0.426 is the Stage 2 relevance-selection κ (p. 6), a different task, so the range mixes two stages and overstates agreement on response quality."
+    },
+    {
+     "quote": "GPT-4o \"twins\" of 530 real participants recover the aggregate model ranking",
+     "paper_says": "530 is the size of the human study. The simulated-versus-human comparison uses 1,855 matched trials from 497 participants (p. 16). Sim-Judgement (r = 0.99) also swaps the top two models; only Sim-Dynamic recovers the full order (p. 17)."
+    },
+    {
+     "quote": "No paper in the library has users judge answers to their own questions over time.",
+     "paper_says": "Not checked across the whole library. PRISM-X comes close and is cited in the same answer: 530 users rate models personalised to themselves in multi-turn conversations, re-recruited two years after giving their preferences (abstract, p. 1)."
+    }
+   ],
+   "papers_cited": 5,
+   "misleading": "no",
+   "comment": "Every headline number checks out, and it alone brings in Semantic Constraint Verification and the LaMP-QA order flip. It says it worked from the review and notes and did not reopen the papers, and gives no page for PersonaLens. Its \"what a judge is still good for\" section names objective sub-criteria but cites none of the validation numbers (PrefEval, CUPID, AlpsBench, OP-Bench), so that half of the answer is unsupported."
+  },
+  "B": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "errors": [
+    {
+     "quote": "Six papers in the library bear on this; only one tests the second question directly.",
+     "paper_says": "This is an internal inconsistency, not a paper error: the answer goes on to cite eight library papers (Re-Centering Humans, PRISM-X, PrefEval, CUPID, AlpsBench, OP-Bench, LaMP-QA, PersonaLens)."
+    },
+    {
+     "quote": "These validations are also thin: mostly about 100 samples, third-party annotators, and synthetic personas",
+     "paper_says": "This is true of most but over-general: CUPID uses 230 annotated pairs (p. 3), AlpsBench is built on real WildChat dialogues with expert annotators (p. 4), and LaMP-QA uses real users' own question narratives (p. 7). The word \"mostly\" covers it, so the slip is minor."
+    }
+   ],
+   "papers_cited": 8,
+   "misleading": "no",
+   "comment": "The most complete and most accurate answer: every number, table and page I checked matches the paper. It is the only one to spot the text-versus-table inconsistency on Llama-3.3-70B and to give the p = 0.04, five-model caveat on the 0.90 correlation. It says it read only the PRISM-X abstract, so it gives no τ values, and that it read only summaries of the two general judge papers it names (Prediction-Powered Inference, Trust or Escalate), which I did not count as cited. It treats LaMP-QA's 73% as the judge \"holding up\" and separately uses the judge-size result as inflation evidence; both are in the paper."
+  },
+  "C": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "errors": [
+    {
+     "quote": "CUPID | Does the inferred preference match the ground truth, by checklist? | α = 0.769 (p. 8)",
+     "paper_says": "The α = 0.769 meta-evaluation is in §2.3 Metrics (p. 3), with details in App. A.1 (p. 15). Page 8 reports the PrefMatcher-7B versus GPT-4o Pearson correlation of 0.997, which is not human agreement."
+    },
+    {
+     "quote": "PrefEval | Did the response violate a stated preference? | 0.92–0.97 (p. 43, Table 18)",
+     "paper_says": "The 'Violate Preference?' row is 0.92 / 0.86 / 0.95. The range 0.92–0.97 is the 'Preference Following Accuracy' row, the final metric combining all four checks."
+    },
+    {
+     "quote": "Most of these benchmarks also use synthetic users with planted preferences, which Re-Centering Humans shows are easier than real ones (p. 4).",
+     "paper_says": "Page 4 shows something narrower: attribute extraction from real conversations has a lower acceptance rate than from synthetic datasets. It does not test preference following or judging on synthetic versus real users. AlpsBench, in the same table, is built on real WildChat dialogues."
+    },
+    {
+     "quote": "I added this comparison to the Q&A in `notes/Re-Centering Humans in LLM Personalization.md`.",
+     "paper_says": "This is not a paper claim. The note in the repository has no Q&A entry mentioning PrefEval, CUPID or OP-Bench, and the working tree is clean, so I could not confirm the edit."
+    }
+   ],
+   "papers_cited": 7,
+   "misleading": "no",
+   "comment": "Same structure and conclusion as B, with the full PRISM-X numbers and the position-bias result that B lacks. The Re-Centering Humans and PRISM-X sections are all correct. The errors are in the validation table: one wrong page and one mislabelled row. It omits LaMP-QA and the p-value on the 0.90 correlation."
+  }
+ },
+ "ranking": [
+  "B",
+  "C",
+  "A"
+ ],
+ "why": "All three reach the conclusion the papers support: a judge cannot replace humans on whether a personalised response is better for the user, because it inflates scores and tracks humans weakly, but it is usable for aggregate rankings and compliance checks. None would mislead on the main question, and all 20 pooled points hold. B is first: 17 of the 20 points, eight papers, no wrong number or page, and the sharpest caveats. C is second: 16 points and seven papers, but a wrong CUPID page, a mislabelled PrefEval row and a stretched synthetic-versus-real claim. A is third, and close to C on accuracy: its numbers hold, but it covers 10 points from five papers, conflates the Stage 2 and Stage 3 κ values, gives no evidence for where judges do work, and says it relied on the review and notes without reopening the papers.",
+ "key": {
+  "A": "asis",
+  "B": "nonotes",
+  "C": "noreviews"
+ },
+ "judge_usd": 0.774482
+}

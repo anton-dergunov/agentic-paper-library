@@ -1,0 +1,232 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "Zep does not delete an outdated fact; the old edge stays in the graph with an end to its validity, so history remains queryable.",
+   "paper": "Zep: A Temporal Knowledge Graph Architecture for Agent Memory",
+   "verdict": "holds",
+   "evidence": "p. 3, §2.2.3: invalidation is done by setting t_invalid, and the approach maintains 'both current relationship states and historical records of relationship evolution over time'. The paper never says 'never deletes' in those words; it describes no deletion, and the abstract says 'maintaining historical relationships'."
+  },
+  {
+   "id": 2,
+   "point": "Each fact edge carries four timestamps on two timelines: t_valid/t_invalid (when the fact held in the world, timeline T) and t'_created/t'_expired (when the system created or invalidated it, timeline T').",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 3, §2.2.3: 'the system tracks four timestamps: t'created and t'expired ∈ T' monitor when facts are created or invalidated in the system, while t_valid and t_invalid ∈ T track the temporal range during which facts held true'. The bi-temporal model is introduced on p. 2, §2.1."
+  },
+  {
+   "id": 3,
+   "point": "Relative dates such as 'two weeks ago' are resolved to absolute dates against the message's reference timestamp t_ref.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 2, §2.1: 'Each message includes a reference timestamp t_ref…'. p. 3, §2.2.3: relative timestamps, e.g. 'I started my new job two weeks ago', are extracted using t_ref."
+  },
+  {
+   "id": 4,
+   "point": "The temporal-extraction prompt is in the appendix at p. 10, §6.1.5.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "Heading '6.1.5 Temporal Extraction (p. 10)'; the prompt takes a REFERENCE TIMESTAMP and defines valid_at and invalid_at."
+  },
+  {
+   "id": 5,
+   "point": "When a new edge arrives, an LLM compares it with semantically related existing edges to find contradictions.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 3, §2.2.3: 'The system employs an LLM to compare new edges against semantically related existing edges to identify potential contradictions.'"
+  },
+  {
+   "id": 6,
+   "point": "On a temporally overlapping contradiction, the old edge's t_invalid is set to the new edge's t_valid.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 3, §2.2.3: 'it invalidates the affected edges by setting their t_invalid to the t_valid of the invalidating edge.'"
+  },
+  {
+   "id": 7,
+   "point": "On a conflict, the more recently ingested information wins (transactional order).",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 3, §2.2.3: 'Following the transactional timeline T', Graphiti consistently prioritizes new information when determining edge invalidation.'"
+  },
+  {
+   "id": 8,
+   "point": "At retrieval, facts are given to the agent with their validity date range.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 4, §3: the constructor 'returns the fact and t_valid, t_invalid fields', and the context template says 'FACT (Date range: from - to)'."
+  },
+  {
+   "id": 9,
+   "point": "The LongMemEval baseline is full-context: the whole conversation of about 115k tokens in the prompt, with no memory system.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 6, §4.3: conversations average 'approximately 115,000 tokens', within frontier context windows, 'enabling us to establish meaningful baselines'. p. 7, Table 2: the only rows are Full-context and Zep."
+  },
+  {
+   "id": 10,
+   "point": "The evaluation uses the LongMemEval_s split.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 5, §4: 'we use the LongMemEval_s dataset'. Tables 2 and 3 are captioned LongMemEval_s."
+  },
+  {
+   "id": 11,
+   "point": "With gpt-4o-mini, full-context scores 55.4% and Zep 63.8%.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, Table 2: Full-context gpt-4o-mini 55.4%, Zep gpt-4o-mini 63.8%."
+  },
+  {
+   "id": 12,
+   "point": "With gpt-4o, full-context scores 60.2% and Zep 71.2%.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, Table 2: Full-context gpt-4o 60.2%, Zep gpt-4o 71.2%."
+  },
+  {
+   "id": 13,
+   "point": "Latency falls from 31.3 s to 3.20 s (gpt-4o-mini) and from 28.9 s to 2.58 s (gpt-4o); average context falls from 115k to 1.6k tokens.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, Table 2: latency 31.3 s / 3.20 s / 28.9 s / 2.58 s; average context tokens 115k against 1.6k."
+  },
+  {
+   "id": 14,
+   "point": "The headline 15.2% and 18.5% improvements (abstract: 'up to 18.5%') are relative; the absolute gains are 8.4 and 11.0 points.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, §4.3.2: '15.2% accuracy improvement' for gpt-4o-mini and '18.5%' for gpt-4o. Abstract (p. 1): 'accuracy improvements of up to 18.5%'. Table 2 gives 63.8 − 55.4 = 8.4 and 71.2 − 60.2 = 11.0. The paper does not label the figures as relative: 63.8/55.4 gives +15.2%, while 71.2/60.2 gives +18.3%, slightly off the printed 18.5%."
+  },
+  {
+   "id": 15,
+   "point": "There is no MemGPT comparison on LongMemEval: the authors tried and could not get MemGPT to answer.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, §4.3.1: messages were added to MemGPT's archival history as a workaround, but 'we were unable to achieve successful question responses using this approach.'"
+  },
+  {
+   "id": 16,
+   "point": "MemGPT is a baseline only on DMR, where Zep scores 94.8% against MemGPT's 93.4%.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 6, §4.2 and Table 1: MemGPT 93.4% and Zep 94.8%, both with gpt-4-turbo. The paper itself notes DMR conversations have only 60 messages and fit easily in context."
+  },
+  {
+   "id": 17,
+   "point": "On knowledge-update questions Zep goes from 78.2% to 83.3% with gpt-4o but from 76.9% to 74.4% with gpt-4o-mini.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, Table 3: knowledge-update gpt-4o 78.2% → 83.3% (6.52% up); gpt-4o-mini 76.9% → 74.4% (3.36% down)."
+  },
+  {
+   "id": 18,
+   "point": "The largest gains are in single-session-preference, temporal-reasoning and multi-session questions.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, §4.3.2: 'most substantial gains in complex question types: single-session-preference, multi-session, and temporal-reasoning'. Table 3 with gpt-4o: 20.0 → 56.7, 45.1 → 62.4, 44.3 → 57.9."
+  },
+  {
+   "id": 19,
+   "point": "Single-session-assistant questions get worse with both models (94.6% → 80.4% with gpt-4o).",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "p. 7, Table 3: gpt-4o 94.6% → 80.4% (17.7% down); gpt-4o-mini 81.8% → 75.0% (9.06% down). The text after Table 3 calls it 'a notable exception'."
+  },
+  {
+   "id": 20,
+   "point": "The paper has no ablation isolating invalidation, and it is a vendor paper evaluated on Zep's own hosted service.",
+   "paper": "Zep",
+   "verdict": "holds",
+   "evidence": "The word 'ablation' does not appear in the paper; §4 reports only Zep against baselines. All five authors are affiliated with Zep AI (p. 1). p. 6, §4.3: testing connected 'to Zep's service hosted in AWS us-west-2'."
+  }
+ ],
+ "answers": {
+  "A": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    19
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "misleading": "no",
+   "comment": "Every number, attribution and page checks out, and the worked example is flagged as the answer's own. It is the thinnest of the three: it omits that validity ranges are shown to the model at retrieval and that there is no ablation, so its 'weakly supported' caveat rests only on the knowledge-update row. It is the only answer to say single-session-assistant drops with both models."
+  },
+  "B": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    19,
+    20
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "misleading": "no",
+   "comment": "No errors found; all pages and section references match, including p. 10 §6.1.5, p. 4 §3 and p. 6 for DMR. It is the most complete: it names the LongMemEval_s split, adds the retrieval-time date ranges, the missing ablation and the DMR context for MemGPT. It makes only the 'no ablation' half of point 20 and leaves out the vendor/hosted-service half. It also does not mention that the DMR table has a full-conversation baseline at 94.4%, which is not needed for this question."
+  },
+  "C": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    17,
+    18,
+    20
+   ],
+   "errors": [],
+   "papers_cited": 1,
+   "misleading": "no",
+   "comment": "No errors found. It quotes the abstract's 'up to 18.5%' correctly and gives both absolute gains. It adds the vendor/hosted-service caveat and names the confound (shorter context and graph search) behind the missing ablation. It omits the single-session-assistant regression and the split name."
+  }
+ },
+ "ranking": [
+  "B",
+  "C",
+  "A"
+ ],
+ "why": "All three are accurate against the paper: I found no wrong numbers, attributions or pages, and none would mislead on the main question. The ranking therefore rests on completeness. B covers the most verified points (19 of 20), including the retrieval-time date ranges, the lack of an ablation, the split and the single-session-assistant drop. C covers 16 and adds the vendor/hosted-service caveat, but omits the single-session-assistant regression. A covers 15 and misses both the retrieval-time display of validity ranges and the absence of an ablation, which matter most for judging how far the scores support invalidation. Two limits on the check: the 'never deletes' wording is an inference from §2.2.3 that all three share, and the markdown only fixes Tables 2 and 3 to the section starting on p. 7, not to an exact page.",
+ "key": {
+  "A": "nonotes",
+  "B": "noreviews",
+  "C": "asis"
+ },
+ "judge_usd": 0.34485699999999997
+}

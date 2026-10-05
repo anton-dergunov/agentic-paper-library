@@ -1,0 +1,31 @@
+reader	paper	errors	points missed of 10
+claude-haiku-4-5-20251001	Command A. An Enterprise-Ready	7	0
+claude-haiku-4-5-20251001	DeepSeek-V2. A Strong, Economi	3	0
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	5	1
+claude-haiku-4-5-20251001	Improving Language Understandi	5	1
+claude-haiku-4-5-20251001	OLMo. Accelerating the Science	6	1
+claude-haiku-4-5-20251001	Phi-4 Technical Report	9	2
+claude-opus-5-5	Command A. An Enterprise-Ready	0	1
+claude-opus-5-5	DeepSeek-V2. A Strong, Economi	0	0
+claude-opus-5-5	Gemma 3 Technical Report	0	0
+claude-opus-5-5	Improving Language Understandi	0	0
+claude-opus-5-5	OLMo. Accelerating the Science	1	0
+claude-opus-5-5	Phi-4 Technical Report	0	0
+claude-sonnet-5-5	Command A. An Enterprise-Ready	2	0
+claude-sonnet-5-5	DeepSeek-V2. A Strong, Economi	0	0
+claude-sonnet-5-5	Gemma 3 Technical Report	1	0
+claude-sonnet-5-5	Improving Language Understandi	1	0
+claude-sonnet-5-5	OLMo. Accelerating the Science	1	0
+claude-sonnet-5-5	Phi-4 Technical Report	1	0
+gemini-3.1-pro-preview	Command A. An Enterprise-Ready	0	2
+gemini-3.1-pro-preview	DeepSeek-V2. A Strong, Economi	4	1
+gemini-3.1-pro-preview	Gemma 3 Technical Report	0	1
+gemini-3.1-pro-preview	Improving Language Understandi	0	2
+gemini-3.1-pro-preview	OLMo. Accelerating the Science	1	2
+gemini-3.1-pro-preview	Phi-4 Technical Report	2	0
+gemini-3.8-flash	Command A. An Enterprise-Ready	2	0
+gemini-3.8-flash	DeepSeek-V2. A Strong, Economi	0	0
+gemini-3.8-flash	Gemma 3 Technical Report	3	0
+gemini-3.8-flash	Improving Language Understandi	1	1
+gemini-3.8-flash	OLMo. Accelerating the Science	1	1
+gemini-3.8-flash	Phi-4 Technical Report	2	0

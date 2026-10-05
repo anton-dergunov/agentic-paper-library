@@ -36,6 +36,8 @@ COMMANDS = {
     "reconvert": ("reconvert.py", True, "regenerate paper bodies with the current converter"),
     "symptoms": ("conversion-symptoms.py", True, "list papers showing known conversion problems"),
     "localize-figures": ("localize-figures.py", True, "download figures that still link to arXiv"),
+    "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.md> ... [--limit N]"),
+    "read-view": ("read-view.py", True, "a paper's main text for reading, without references or link targets: <paper.md>"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
     "set-summary": ("paperlib.py", True, "set a paper's summary: <paper.md> <summary>"),

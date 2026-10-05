@@ -1,0 +1,47 @@
+reader	paper	numbers	not found	no page	wrong page
+claude-haiku-4-5-20251001	Command A. An Enterprise-Ready	94	0	85	1
+claude-haiku-4-5-20251001	DeepSeek-V2. A Strong, Economi	50	0	1	3
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	58	5	0	2
+claude-haiku-4-5-20251001	Improving Language Understandi	36	2	0	3
+claude-haiku-4-5-20251001	OLMo. Accelerating the Science	33	0	2	1
+claude-haiku-4-5-20251001	Phi-4 Technical Report	59	1	0	4
+claude-opus-5-5	Command A. An Enterprise-Ready	101	0	0	0
+claude-opus-5-5	DeepSeek-V2. A Strong, Economi	103	0	52	0
+claude-opus-5-5	Gemma 3 Technical Report	76	0	0	0
+claude-opus-5-5	Improving Language Understandi	66	0	0	0
+claude-opus-5-5	OLMo. Accelerating the Science	55	0	0	0
+claude-opus-5-5	Phi-4 Technical Report	127	0	0	0
+claude-sonnet-5-5	Command A. An Enterprise-Ready	194	1	0	0
+claude-sonnet-5-5	DeepSeek-V2. A Strong, Economi	117	0	0	2
+claude-sonnet-5-5	Gemma 3 Technical Report	85	0	0	0
+claude-sonnet-5-5	Improving Language Understandi	58	0	0	0
+claude-sonnet-5-5	OLMo. Accelerating the Science	73	0	0	3
+claude-sonnet-5-5	Phi-4 Technical Report	121	0	0	0
+gemini-3.1-pro-preview	Command A. An Enterprise-Ready	67	0	0	0
+gemini-3.1-pro-preview	DeepSeek-V2. A Strong, Economi	42	0	1	11
+gemini-3.1-pro-preview	Gemma 3 Technical Report	37	0	0	0
+gemini-3.1-pro-preview	Improving Language Understandi	30	0	0	0
+gemini-3.1-pro-preview	OLMo. Accelerating the Science	28	0	0	0
+gemini-3.1-pro-preview	Phi-4 Technical Report	44	0	0	0
+gemini-3.8-flash	Command A. An Enterprise-Ready	106	0	0	2
+gemini-3.8-flash	DeepSeek-V2. A Strong, Economi	67	0	0	0
+gemini-3.8-flash	Gemma 3 Technical Report	45	0	0	0
+gemini-3.8-flash	Improving Language Understandi	54	0	0	0
+gemini-3.8-flash	OLMo. Accelerating the Science	82	1	0	2
+gemini-3.8-flash	Phi-4 Technical Report	89	3	0	0
+
+Numbers not found in the paper's text:
+reader	paper	number	line
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	3.9	**Model sizes:** 1B (1.0B total: 302M embedding), 4B (3.9B), 12B (11.8B), 27B (27.0B); vision encoder 417M (4B/12B/27B only). (p. 2, Table 1)
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	11.8	**Model sizes:** 1B (1.0B total: 302M embedding), 4B (3.9B), 12B (11.8B), 27B (27.0B); vision encoder 417M (4B/12B/27B only). (p. 2, Table 1)
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	27.0	**Model sizes:** 1B (1.0B total: 302M embedding), 4B (3.9B), 12B (11.8B), 27B (27.0B); vision encoder 417M (4B/12B/27B only). (p. 2, Table 1)
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	118	- **Chatbot Arena Elo** (p. 4, Table 5): Gemma-3-27B-IT 1338 (vs Gemma-2-27B-it 1220; +118); ranks 9th overall, above LLaMA-3.1-405B (1269) and Qwen2.5-72B (125
+claude-haiku-4-5-20251001	Gemma 3 Technical Report	0.001%	**Memorization (p. 8, Fig. 9):** Gemma 3 exhibits significantly lower exact memorization (<0.001% on log scale) than all prior Gemma/Gemini models. Approximate 
+claude-haiku-4-5-20251001	Improving Language Understandi	1.9	- MNLI-m: 82.1% vs. 80.2% ensemble (1.9-point gain, p. 5)
+claude-haiku-4-5-20251001	Improving Language Understandi	10.4	- CoLA: 45.4 vs. 35.0 (10.4-point gain, p. 6)
+claude-haiku-4-5-20251001	Phi-4 Technical Report	110	- **Fresh test set** (p. 3, Figure 1): November 2024 AMC-10/12 math contests (150 points max), φ-4 average ~110 points over 4 tests at *t*=0.5 with 2σ error bar
+claude-sonnet-5-5	Command A. An Enterprise-Ready	0.01	- Enterprise benchmarks (p. 32–34): internal, unreleased and LLM-judged. Generative pass rate over 22 tasks is 94.2 against Command R+ Refresh 87.4, Claude 3.5 
+gemini-3.8-flash	OLMo. Accelerating the Science	2.67	- Truly open framework: releases weights, 500+ intermediate checkpoints (every 1000 steps), training code, W&B logs, the 2.67T-token Dolma dataset and curation 
+gemini-3.8-flash	Phi-4 Technical Report	37886	- Preference datasets: PTS DPO uses ~250k pairs (132,859 generic MCQA, 76,552 math, 37,886 code, 3,000 safety) (p. 12, Table 7); judge-guided DPO uses ~850k pai
+gemini-3.8-flash	Phi-4 Technical Report	0.130	- RAI evaluation: Jailbreak (DR1) defect rate is 0.073 (vs phi-3 14B's 0.111 and Llama-3 8B's 0.130), while harmful content continuation (DR3) is 0.036 (vs phi-
+gemini-3.8-flash	Phi-4 Technical Report	0.010	- RAI evaluation: Jailbreak (DR1) defect rate is 0.073 (vs phi-3 14B's 0.111 and Llama-3 8B's 0.130), while harmful content continuation (DR3) is 0.036 (vs phi-

@@ -1,0 +1,30 @@
+{"input": 8005, "output": 2937, "reader": "gemini-3.8-flash", "paper": "Improving Language Understanding by Generative Pre-Training", "seconds": 22, "prompt_chars": 35422, "note_chars": 4797}
+{"input": 16613, "output": 2976, "usd": 0.105718, "reader": "claude-sonnet-5-5", "paper": "Improving Language Understanding by Generative Pre-Training", "seconds": 24, "prompt_chars": 35422, "note_chars": 6981}
+{"input": 8005, "output": 3662, "reader": "gemini-3.1-pro-preview", "paper": "Improving Language Understanding by Generative Pre-Training", "seconds": 28, "prompt_chars": 35422, "note_chars": 4007}
+{"input": 12524, "output": 2656, "usd": 0.047824, "reader": "claude-haiku-4-5-20251001", "paper": "Improving Language Understanding by Generative Pre-Training", "seconds": 30, "prompt_chars": 35422, "note_chars": 3289}
+{"input": 16581, "output": 3638, "usd": 0.21491, "reader": "claude-opus-5-5", "paper": "Improving Language Understanding by Generative Pre-Training", "seconds": 36, "prompt_chars": 35422, "note_chars": 6476}
+{"input": 21149, "output": 3976, "reader": "gemini-3.8-flash", "paper": "DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model", "seconds": 25, "prompt_chars": 71266, "note_chars": 5237}
+{"input": 38687, "output": 4201, "usd": 0.21426900000000002, "reader": "claude-sonnet-5-5", "paper": "DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model", "seconds": 29, "prompt_chars": 71266, "note_chars": 9387}
+{"input": 27674, "output": 3699, "usd": 0.101447, "reader": "claude-haiku-4-5-20251001", "paper": "DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model", "seconds": 37, "prompt_chars": 71266, "note_chars": 5491}
+{"input": 19397, "output": 3451, "reader": "gemini-3.8-flash", "paper": "Phi-4 Technical Report", "seconds": 23, "prompt_chars": 72682, "note_chars": 5321}
+{"input": 21149, "output": 5642, "reader": "gemini-3.1-pro-preview", "paper": "DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model", "seconds": 54, "prompt_chars": 71266, "note_chars": 4404}
+{"input": 11027, "output": 1713, "reader": "gemini-3.8-flash", "paper": "Gemma 3 Technical Report", "seconds": 13, "prompt_chars": 39396, "note_chars": 5191}
+{"input": 38653, "output": 6173, "usd": 0.43953600000000004, "reader": "claude-opus-5-5", "paper": "DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model", "seconds": 57, "prompt_chars": 71266, "note_chars": 10146}
+{"input": 33172, "output": 5872, "usd": 0.20357599999999998, "reader": "claude-sonnet-5-5", "paper": "Phi-4 Technical Report", "seconds": 41, "prompt_chars": 72682, "note_chars": 9012}
+{"input": 11760, "output": 3921, "reader": "gemini-3.8-flash", "paper": "OLMo. Accelerating the Science of Language Models", "seconds": 25, "prompt_chars": 42508, "note_chars": 5192}
+{"input": 19397, "output": 5064, "reader": "gemini-3.1-pro-preview", "paper": "Phi-4 Technical Report", "seconds": 38, "prompt_chars": 72682, "note_chars": 4158}
+{"input": 20769, "output": 3990, "usd": 0.126406, "reader": "claude-sonnet-5-5", "paper": "Gemma 3 Technical Report", "seconds": 29, "prompt_chars": 39396, "note_chars": 9388}
+{"input": 40017, "output": 2724, "reader": "gemini-3.8-flash", "paper": "Command A. An Enterprise-Ready Large Language Model", "seconds": 21, "prompt_chars": 159004, "note_chars": 7759}
+{"input": 22389, "output": 5840, "usd": 0.09624899999999999, "reader": "claude-haiku-4-5-20251001", "paper": "Phi-4 Technical Report", "seconds": 69, "prompt_chars": 72682, "note_chars": 5140}
+{"input": 11027, "output": 3951, "reader": "gemini-3.1-pro-preview", "paper": "Gemma 3 Technical Report", "seconds": 28, "prompt_chars": 39396, "note_chars": 3542}
+{"input": 33144, "output": 6470, "usd": 0.39607600000000004, "reader": "claude-opus-5-5", "paper": "Phi-4 Technical Report", "seconds": 61, "prompt_chars": 72682, "note_chars": 8508}
+{"input": 20797, "output": 4415, "usd": 0.13022199999999998, "reader": "claude-sonnet-5-5", "paper": "OLMo. Accelerating the Science of Language Models", "seconds": 33, "prompt_chars": 42508, "note_chars": 7375}
+{"input": 11760, "output": 3874, "reader": "gemini-3.1-pro-preview", "paper": "OLMo. Accelerating the Science of Language Models", "seconds": 29, "prompt_chars": 42508, "note_chars": 3641}
+{"input": 16576, "output": 3489, "usd": 0.06412999999999999, "reader": "claude-haiku-4-5-20251001", "paper": "Gemma 3 Technical Report", "seconds": 43, "prompt_chars": 39396, "note_chars": 4686}
+{"input": 20745, "output": 4360, "usd": 0.245946, "reader": "claude-opus-5-5", "paper": "Gemma 3 Technical Report", "seconds": 43, "prompt_chars": 39396, "note_chars": 7128}
+{"input": 59546, "output": 5662, "usd": 0.327508, "reader": "claude-sonnet-5-5", "paper": "Command A. An Enterprise-Ready Large Language Model", "seconds": 41, "prompt_chars": 159004, "note_chars": 12969}
+{"input": 40017, "output": 5044, "reader": "gemini-3.1-pro-preview", "paper": "Command A. An Enterprise-Ready Large Language Model", "seconds": 44, "prompt_chars": 159004, "note_chars": 3907}
+{"input": 20774, "output": 3826, "usd": 0.234947, "reader": "claude-opus-5-5", "paper": "OLMo. Accelerating the Science of Language Models", "seconds": 37, "prompt_chars": 42508, "note_chars": 6644}
+{"input": 16024, "output": 4731, "usd": 0.0687, "reader": "claude-haiku-4-5-20251001", "paper": "OLMo. Accelerating the Science of Language Models", "seconds": 57, "prompt_chars": 42508, "note_chars": 3398}
+{"input": 59520, "output": 5595, "usd": 0.61014, "reader": "claude-opus-5-5", "paper": "Command A. An Enterprise-Ready Large Language Model", "seconds": 53, "prompt_chars": 159004, "note_chars": 8153}
+{"input": 45865, "output": 4397, "usd": 0.15654200000000001, "reader": "claude-haiku-4-5-20251001", "paper": "Command A. An Enterprise-Ready Large Language Model", "seconds": 51, "prompt_chars": 159004, "note_chars": 6482}

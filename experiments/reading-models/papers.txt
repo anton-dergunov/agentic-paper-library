@@ -1,0 +1,6 @@
+Improving Language Understanding by Generative Pre-Training
+DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model
+Phi-4 Technical Report
+Gemma 3 Technical Report
+OLMo. Accelerating the Science of Language Models
+Command A. An Enterprise-Ready Large Language Model

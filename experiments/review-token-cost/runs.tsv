@@ -1,0 +1,46 @@
+run	agents	agent write	agent read	agent output (est.)	agent re-cache after a pause	agent cost-eq	mean largest agent context	requests per agent	main write	main read	main re-cache after a pause	main cost-eq
+memory	7	3.80M	57.66M	0.12M	1.82M	11.11M	288K	50	0.54M	19.15M	0.00M	3.32M
+personalization	6	2.22M	63.95M	0.12M	0.00M	9.78M	310K	57	0.42M	9.85M	0.00M	2.03M
+evaluation	10	2.43M	37.97M	0.17M	0.00M	7.69M	242K	27	0.39M	16.10M	0.00M	2.73M
+post-training	11	3.08M	58.88M	0.27M	0.00M	11.11M	295K	31	0.76M	6.09M	0.38M	2.42M
+foundation-models	4	1.53M	33.83M	0.14M	0.00M	5.98M	382K	38	0.40M	6.81M	0.14M	1.70M
+
+run	agent	requests	tool calls	write	read	largest context	re-cache	cost-eq
+memory	1	45	48	543K	7.67M	291K	261K	1.54M
+memory	2	42	43	467K	6.06M	249K	221K	1.26M
+memory	3	44	50	509K	6.85M	268K	241K	1.40M
+memory	4	51	53	647K	9.39M	339K	314K	1.82M
+memory	5	52	51	554K	8.53M	297K	259K	1.65M
+memory	6	56	55	501K	8.86M	267K	236K	1.60M
+memory	7	61	63	576K	10.31M	301K	282K	1.84M
+personalization	1	56	56	250K	8.93M	250K	0K	1.29M
+personalization	2	53	55	321K	9.85M	321K	0K	1.48M
+personalization	3	43	44	312K	7.94M	312K	0K	1.27M
+personalization	4	62	62	345K	12.11M	345K	0K	1.75M
+personalization	5	81	81	756K	18.01M	394K	0K	2.88M
+personalization	6	50	51	237K	7.13M	237K	0K	1.10M
+evaluation	1	20	41	296K	2.98M	296K	0K	0.77M
+evaluation	2	28	35	250K	4.30M	250K	0K	0.84M
+evaluation	3	29	41	229K	3.68M	229K	0K	0.74M
+evaluation	4	33	45	214K	4.34M	214K	0K	0.77M
+evaluation	5	21	35	228K	2.91M	228K	0K	0.65M
+evaluation	6	34	41	235K	4.24M	235K	0K	0.80M
+evaluation	7	27	38	289K	4.79M	289K	0K	0.92M
+evaluation	8	26	38	221K	3.40M	221K	0K	0.71M
+evaluation	9	27	33	236K	3.45M	236K	0K	0.74M
+evaluation	10	32	34	228K	3.87M	228K	0K	0.76M
+post-training	1	29	38	270K	5.32M	287K	0K	0.96M
+post-training	2	35	46	299K	5.98M	316K	0K	1.10M
+post-training	3	45	55	280K	7.08M	297K	0K	1.20M
+post-training	4	23	28	178K	2.67M	195K	0K	0.58M
+post-training	5	36	63	286K	6.70M	303K	0K	1.17M
+post-training	6	24	46	252K	3.72M	252K	0K	0.80M
+post-training	7	34	37	239K	4.56M	256K	0K	0.88M
+post-training	8	29	38	230K	4.29M	247K	0K	0.83M
+post-training	9	19	36	355K	3.21M	372K	0K	0.90M
+post-training	10	46	51	400K	10.37M	418K	0K	1.69M
+post-training	11	29	45	288K	4.96M	306K	0K	0.99M
+foundation-models	1	45	65	482K	12.80M	482K	0K	2.06M
+foundation-models	2	33	40	221K	4.56M	221K	0K	0.83M
+foundation-models	3	35	47	449K	8.40M	449K	0K	1.62M
+foundation-models	4	41	50	377K	8.07M	377K	0K	1.48M

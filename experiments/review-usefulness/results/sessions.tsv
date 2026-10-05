@@ -1,0 +1,10 @@
+session	turns	seconds	cache write	cache read	output	usd	tool calls	reviews	notes	papers named
+asis-q1	8	53	59781	232477	5593	0.64	7	yes	no	0
+asis-q2	3	21	43468	67984	2128	0.40	2	no	yes	1
+asis-q3	9	43	56940	239792	4332	0.59	8	yes	yes	2
+nonotes-q1	22	150	98720	994268	14059	1.27	21	no	no	7
+nonotes-q2	3	17	17433	85635	1855	0.19	2	no	no	1
+nonotes-q3	13	107	61118	465913	9118	0.77	12	no	no	15
+noreviews-q1	16	110	144088	787929	10679	1.52	15	no	yes	25
+noreviews-q2	3	21	22312	88227	2178	0.24	2	no	yes	1
+noreviews-q3	10	101	48773	468806	7199	0.63	9	no	yes	13

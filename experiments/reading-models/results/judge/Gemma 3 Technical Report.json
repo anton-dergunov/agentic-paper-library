@@ -1,0 +1,91 @@
+{
+ "points": [
+  "1 Attention recipe: 5 local sliding-window layers per global layer with a 1024-token local span (Gemma 2 used 1:1), to cut KV-cache memory; QK-norm replaces soft-capping; GQA with pre/post RMSNorm (p. 1)",
+  "2 Long context: 128K tokens (32K for 1B); RoPE base raised from 10k to 1M on global layers only; pre-trained at 32K then scaled to 128K by RoPE rescaling with factor 8; degrades beyond 128K (p. 1, p. 7)",
+  "3 Vision: frozen 400M SigLIP encoder at 896x896, shared by 4B/12B/27B (1B has none), 256 soft tokens per image; Pan & Scan is inference-only cropping; P&S gains e.g. 27B DocVQA 85.6 to 90.4, InfoVQA 59.4 to 76.4 (p. 2, p. 8, Table 8)",
+  "4 Pre-training: knowledge distillation sampling 256 logits per token; token budgets 14T/12T/4T/2T for 27B/12B/4B/1B; Gemini 2.0 SentencePiece tokenizer, 262k entries (p. 2)",
+  "5 Post-training: distillation from a large IT teacher plus RL finetuning on improved BOND/WARM/WARP, with rewards from human-feedback reward models, code execution and ground-truth math (p. 4)",
+  "6 Quantization: QAT for about 5,000 steps into per-channel int4, per-block int4 and switched fp8; memory footprints e.g. 27B 54.0 GB bf16 vs 14.1 GB Int4, 72.7 vs 32.8 GB with 32k KV cache (p. 3, Table 3)",
+  "7 Chatbot Arena: Gemma-3-27B-IT Elo 1338, rank 9, preliminary (March 8, 2025), vs Gemma-2-27B-it 1220 and larger open models such as DeepSeek-V3 1318, Llama-3.1-405B 1269, Qwen2.5-72B 1257 (p. 4, Table 5)",
+  "8 Static zero-shot benchmarks (Table 6) with both baselines, Gemma 2 and Gemini 1.5: e.g. 27B MMLU-Pro 67.5 vs 56.9 (Gemma 2 27B) vs 75.8 (Gemini 1.5 Pro); MATH 89.0 vs 55.6 vs 86.5; external models deliberately not benchmarked (p. 4-5)",
+  "9 Ablations: KV-cache overhead 60% for global-only vs under 15% for 1:3 with sw=1024 at 32k context, with minimal perplexity impact from ratio and window size; smaller teacher better for short training, larger teacher better for long training (p. 6-7)",
+  "10 Withheld: data mixture and sources, teacher identity and size, post-training data/reward models/hyperparameters; safety violation rates and CBRN knowledge reported only as 'low' with no numbers; memorization 'much lower' with rates only in a figure (p. 2-4, p. 8-10)"
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "5:1 ratio of local to global attention layers with 1024-token sliding window (vs 1:1 in Gemma 2), reducing KV-cache from 60% to <15% memory overhead at 32k context",
+     "paper": "The under-15% figure is for a 1:3 configuration with sw=1024, not 5:1: 'reduced to less than 15% with 1:3 and sliding windows of 1024' (Section 5.2, p. 6)."
+    },
+    {
+     "quote": "full 32k context KV-cache memory reduced from 60% overhead (global-only) to <15% (5:1 + sw=1024)",
+     "paper": "Same error repeated: the paper attributes the under-15% overhead to 1:3 with sw=1024 (Section 5.2, p. 6)."
+    },
+    {
+     "quote": "Sliding window can reduce to 512 tokens with <0.2 loss",
+     "paper": "Not in the paper. It says only that 'the sliding window can be reduced significantly without impacting perplexity' (Section 5.2, p. 6); no 512-token or 0.2 figure is printed."
+    },
+    {
+     "quote": "Distillation from larger teacher outperforms smaller teacher after short training",
+     "paper": "As worded, this is reversed: 'for short training horizons, the smaller teacher is better, but the trend is reversed for longer training' (Section 5.4, p. 7)."
+    },
+    {
+     "quote": "significantly lower exact memorization (<0.001% on log scale)",
+     "paper": "No memorization rate is given in the text; it says only 'a much lower rate than prior models (note the log y-axis)', and Fig. 9 is not readable (Section 6, p. 8)."
+    }
+   ],
+   "missed": [
+    8
+   ],
+   "conversion_flagged": "Marked ok; flags only the 256k vs 262k vocabulary inconsistency."
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "Gemma 1 (Gemma Team, 2024a): earlier release; its governance approach and memorization methodology are reused.",
+     "paper": "The memorization methodology follows Gemma Team (2024b), i.e. Gemma 2: 'We follow the methodology described in [Gemma Team (2024b)]' (Section 6, p. 8). Only the risk-assessment approach is credited to Gemma 1 (Section 7.1, p. 9)."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Text and tables ok; figures missing, appendix absent, 256k vs 262k vocabulary, Llama 405B Elo 1269 vs 1257 in text, no safety numbers."
+  },
+  "C": {
+   "errors": [],
+   "missed": [
+    6
+   ],
+   "conversion_flagged": "Marked ok; nothing flagged."
+  },
+  "D": {
+   "errors": [
+    {
+     "quote": "GSM8K-style MATH",
+     "paper": "The paper lists the benchmark only as 'MATH' (Table 6); GSM8K is not mentioned in the main text."
+    },
+    {
+     "quote": "Local-to-global 5:1 ratio and 1024-token sliding window drop KV-cache inference memory overhead from ~60% in global-only down to under 15% at 32k context",
+     "paper": "The under-15% figure is for 1:3 with sw=1024, not 5:1: 'reduced to less than 15% with 1:3 and sliding windows of 1024' (Section 5.2, p. 6)."
+    },
+    {
+     "quote": "expands context from 8K to 128K",
+     "paper": "Gemma 2's context length is not stated anywhere in the paper; it says only 'an increase in context size to 128K tokens' (Section 1, p. 1)."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Marked ok; notes figure placeholders, lightly formatted equations and a clipped citation (Macknight et al.)."
+  },
+  "E": {
+   "errors": [],
+   "missed": [],
+   "conversion_flagged": "All figures are placeholders; appendix and references missing; garbled author footnote and inlined footnote markers; Tables 5 and 6 float so pages are approximate; tables intact."
+  }
+ },
+ "key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-sonnet-5-5",
+  "C": "gemini-3.1-pro-preview",
+  "D": "gemini-3.8-flash",
+  "E": "claude-opus-5-5"
+ }
+}

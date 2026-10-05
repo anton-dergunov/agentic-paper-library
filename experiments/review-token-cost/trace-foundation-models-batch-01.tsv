@@ -1,0 +1,46 @@
+request	time	context	newly cached	tools
+0	01:10:20	34944	34942	Bash
+1	01:10:25	47969	13025	Read Improving Language Understanding by Generative Pre-Training.md (260 lines from 1); Bash
+2	01:10:31	63166	15197	Write Improving Language Understanding by Generative Pre-Training.md; Write batch-01.md; Read Language Models are Unsupervised Multitask Learners.md (305 lines from 1)
+3	01:11:04	83723	20557	Write Language Models are Unsupervised Multitask Learners.md; Bash
+4	01:11:42	92585	8862	Read Language Models are Few-Shot Learners.md (420 lines from 1)
+5	01:11:45	92815	230	Read Language Models are Few-Shot Learners.md (255 lines from 1); Read Language Models are Few-Shot Learners.md (250 lines from 255)
+6	01:11:48	130344	37529	Read Language Models are Few-Shot Learners.md (110 lines from 504); Read Language Models are Few-Shot Learners.md (210 lines from 603); Read Language Models are Few-Shot Learners.md (125 lines from 866)
+7	01:11:53	164649	34305	Write Language Models are Few-Shot Learners.md; Bash
+8	01:12:44	171770	7121	Read PaLM. Scaling Language Modeling with Pathways.md (200 lines from 18); Bash
+9	01:12:50	187409	15639	Bash
+10	01:12:55	188062	653	Bash; Read palm_prose2.txt (150 lines from 1)
+11	01:13:02	210048	21986	Read palm_prose2.txt (140 lines from 151)
+12	01:13:05	234178	24130	Bash
+13	01:13:10	238771	4593	Write PaLM. Scaling Language Modeling with Pathways.md; Bash
+14	01:14:05	246277	7506	Bash
+15	01:14:12	247516	1239	Bash
+16	01:14:13	248373	857	Read bu9pc7snn.txt
+17	01:14:16	265328	16955	Bash
+18	01:14:21	267249	1921	Write PaLM 2 Technical Report.md; Bash
+19	01:14:51	271244	3995	Read GPT-4 Technical Report.md (342 lines from 14); Read GPT-4 Technical Report.md (250 lines from 783)
+20	01:14:55	305246	34002	Write GPT-4 Technical Report.md; Bash
+21	01:15:41	310785	5539	Bash
+22	01:15:47	321886	11101	Bash
+23	01:15:52	325713	3827	Bash
+24	01:16:03	326258	545	Write Sparks of Artificial General Intelligence. Early experiments with GPT-4.md; Bash
+25	01:16:20	332264	6006	Bash
+26	01:16:28	332912	648	Read g15.txt (75 lines from 1)
+27	01:16:31	358030	25118	Bash
+28	01:16:36	358916	886	Read b9hr7pjv5.txt
+29	01:16:37	374663	15747	Bash; Read g15b.txt
+30	01:16:43	391104	16441	Bash
+31	01:16:50	392857	1753	Bash
+32	01:16:53	401294	8437	Bash
+33	01:17:01	404822	3528	Write Gemini 1.5. Unlocking multimodal understanding across millions of tokens of context.md; Bash
+34	01:17:54	412471	7649	Bash
+35	01:18:00	413818	1347	Read bgghejj6b.txt
+36	01:18:02	424274	10456	Bash
+37	01:18:09	425882	1608	Read g25.txt
+38	01:18:15	435284	9402	Write Gemini 2.5. Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next.md; Bash
+39	01:19:01	441950	6666	Bash
+40	01:19:04	443131	1181	Read bim5xeyn4.txt; Bash
+41	01:19:10	456099	12968	Bash
+42	01:19:26	458477	2378	Write BloombergGPT. A Large Language Model for Finance.md; Bash
+43	01:20:36	462488	4011	Bash
+44	01:21:14	482882	20394	SubagentHandback

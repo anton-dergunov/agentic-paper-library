@@ -1,0 +1,3 @@
+q1	What does current research say about managing obsolete facts in LLM memory?
+q2	How does Zep invalidate outdated facts, and what did it score on LongMemEval against which baseline?
+q3	Can an LLM judge replace human raters when evaluating personalised responses?

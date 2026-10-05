@@ -1,0 +1,111 @@
+{
+ "points": [
+  "1 Architecture: 14B decoder-only, near-unchanged from phi-3-medium; tiktoken tokenizer with padded vocab 100,352; full attention over 4K instead of a 2K sliding window; context 4K extended to 16K (p. 7)",
+  "2 Training setup: pretraining ~10T tokens, peak LR 0.0003, weight decay 0.1, global batch 5760, linear warm-up/decay (p. 7); midtraining 250B tokens, LR 10x lower, rope base frequency 250K, 30% new long-context data + 70% recall tokens, evaluated on HELMET at 8K/16K (p. 10, Table 6)",
+  "3 Synthetic data recipe: 50 broad dataset types, ~400B unweighted tokens; seed curation, rewrite/augment, self-revision, instruction reversal, execution validation, plurality-vote question filtering (p. 5); organic data filtered with small classifiers (p. 6)",
+  "4 Final pretraining mixture (Table 5, p. 9): web 15% (1.3T unique, 1.2 epochs), web rewrites 15% (290B, 5.2), synthetic 40% (290B, 13.8), code 20% (820B, 2.4), acquired 10% (580B, 1.7)",
+  "5 Data ablations: more synthetic epochs beat fresh web tokens (Figure 2); synthetic-only 13B model vs phi-3-medium HumanEval +12.1 but TQA -14.8, with web rewrites TQA -7.7 (Table 3, p. 8); mixture ablations at 7B/1T tokens where synthetic-heavy S averages +0.8 over the final mix, which was kept for knowledge benchmarks (Table 4, p. 9)",
+  "6 Post-training recipe: one SFT round (~8B tokens, LR 1e-6, 40 languages, chatml), then pivotal-token DPO, then judge-guided DPO with ~850k pairs from GPT-4o/GPT-4t/own-model responses judged by GPT-4o; pair counts in Tables 7-8 (p. 12)",
+  "7 Pivotal Token Search: estimate p(success | prefix) by sampled rollouts checked by an oracle, recursively subdivide the completion to find single tokens shifting it by >= p_gap, build single-token accepted/rejected DPO pairs; questions filtered to 0.2 <= p(success) <= 0.8 (p. 14)",
+  "8 Headline results and weak spots (Table 1, simple-evals at temperature 0.5): GPQA 56.1 vs GPT-4o 50.6, Qwen-2.5-14B 42.9, phi-3 31.2; MATH 80.4 vs GPT-4o 74.6; MMLU 84.8 vs 88.1; weak on SimpleQA 3.0, IFEval 63.0, DROP 75.5 (p. 1, p. 18)",
+  "9 Post-training ablation (Table 9, p. 16), SFT / DPO stage 1 / stage 2 only / both: GPQA 47.3/53.6/52.4/56.1, MATH 77.1/80.5/77.6/80.4, ArenaHard 56.7/66.5/69.8/75.4; PTS helps reasoning, judge-guided DPO helps ArenaHard, the two are complementary",
+  "10 Contamination evidence and what is withheld: fresh Nov 2024 AMC-10/12 test (four tests, max 150, 100 runs, t=0.5) with phi-4's score only in Figure 1, QwQ 124.5 at 4X more tokens (p. 3); PhiBench is internal and was used for tuning; n-gram decontamination misses rephrasing; generator models, compute, absolute pretraining scores and appendices are not given"
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "single run for Table 1 with no error bars ... Each configuration is a single run, with no variance.",
+     "paper": "The paper never says how many runs lie behind Table 1 or Table 9. It only omits error bars; run counts are given for AMC (100 runs, p. 3) and HELMET (average of 5 runs, p. 10). 'Single run' is not in the text."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Footnote inlined in Table 1 cells; Figures 1, 2, 6 missing; Figure 3 and Figure 4 pseudocode garbled; Table 10 bold lost; appendices absent; two wrong table cross-references (source errors)"
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "MMLU, GPQA, MATH, HumanEval, MGSM, SimpleQA, DROP, MMLUPro, HumanEval+, ArenaHard, LiveBench, IFEval (OpenAI simple-evals framework)",
+     "paper": "Only the first set of benchmarks uses simple-evals (Table 1 caption). MMLU-pro, HumanEval+, ArenaHard and IFEval use an internal framework (p. 18)."
+    },
+    {
+     "quote": "models trained on synthetic-only underperform on knowledge benchmarks (p. 8–9, Tables 2–3)",
+     "paper": "These findings come from Figure 2 and Table 3 (p. 8). Table 2 (p. 7) is pretrained phi-4 vs phi-3-medium and does not show them."
+    },
+    {
+     "quote": "φ-4 average ~110 points over 4 tests at *t*=0.5 with 2σ error bars; outperforms Llama-3.3-70B, Qwen-2.5-72B, and approaches GPT-4o",
+     "paper": "No phi-4 AMC score appears in the text; Figure 1 is a placeholder. The only number given is QwQ's 124.5. The paper says phi-4 outperforms 'much larger frontier models', not that it approaches GPT-4o, and names no compared models (p. 3)."
+    },
+    {
+     "quote": "MATH +3.3",
+     "paper": "Table 9: MATH is 77.1 at SFT and 80.5 at DPO stage 1, a gain of +3.4."
+    },
+    {
+     "quote": "judge-guided DPO (stage 2) best for ArenaHard (+8.7)",
+     "paper": "Table 9: ArenaHard is 56.7 at SFT and 69.8 at stage 2 only (+13.1); 66.5 at stage 1 and 75.4 with both (+8.9). No +8.7 difference exists."
+    },
+    {
+     "quote": "Jailbreak DR1 = 0.073 (phi-3: 0.107–0.117, competitors 0.13–0.156)",
+     "paper": "Table 10: Gemma 7B scores 0.114, so the non-phi range is 0.114–0.156."
+    },
+    {
+     "quote": "expands synthetic data from ~200B to ~400B tokens",
+     "paper": "The paper gives ~400B unweighted synthetic tokens for phi-4 (p. 5) and no synthetic token count for phi-3. The ~200B figure is not in the paper."
+    },
+    {
+     "quote": "phi-4 claims 4× lower inference cost per solution attempt",
+     "paper": "p. 3: QwQ uses 4X more tokens and has more than twice the parameters, so its inference cost is 'an order of magnitude higher'. 4X is tokens, not cost."
+    },
+    {
+     "quote": "DPO (Christiano et al. 2023)",
+     "paper": "The paper cites DPO only as [26] and the reference list is not in the text. No author attribution is given, and this one is not supported."
+    }
+   ],
+   "missed": [
+    2,
+    5
+   ],
+   "conversion_flagged": "Figure 3 garbled by repeated words; Figure 4 pseudocode illegible from [figure] placeholders. Nothing on missing figures, appendices or Table 1 footnote"
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "HELMET (Smith et al., 2024)",
+     "paper": "HELMET is cited only as [35] and the reference list is not in the text. This author attribution is not in the paper."
+    },
+    {
+     "quote": "Direct Preference Optimization (Rafailov et al., 2023)",
+     "paper": "DPO is cited only as [26]. The author and year are not in the supplied text (they are outside knowledge, not from the paper)."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Figure 3 repeated tokens and Figure 4 pseudocode artifacts; claims tables and body intact, which overlooks the missing figures, missing appendices and the footnote inlined in Table 1"
+  },
+  "D": {
+   "errors": [],
+   "missed": [],
+   "conversion_flagged": "Appendices and reference list missing; Figures 1, 2, 6 and chat template dropped; Figure 3 garbled, Figure 4 full of placeholders; Table 1 footnote inlined; fused footnote markers; Table 10 bold lost; two wrong table cross-references"
+  },
+  "E": {
+   "errors": [
+    {
+     "quote": "phi-4 16K achieves 100.0 on Recall",
+     "paper": "Table 6 (p. 10): phi-4 scores 99.0 on Recall at 16K; 100.0 is its 8K score."
+    },
+    {
+     "quote": "where it outperformed Llama-3.3-70B and Qwen-2.5-72B-Instruct",
+     "paper": "The text names no models compared on AMC other than QwQ; Figure 1 is a placeholder. It says only that phi-4 beats similar-size, open-weight and much larger frontier models (p. 3)."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Figure 3 and Figure 4 heavily broken, PTS pseudocode unreadable. Nothing on missing figures, appendices or Table 1 footnote"
+  }
+ },
+ "key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-haiku-4-5-20251001",
+  "C": "gemini-3.8-flash",
+  "D": "claude-opus-5-5",
+  "E": "gemini-3.1-pro-preview"
+ }
+}

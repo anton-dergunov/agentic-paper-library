@@ -1,0 +1,100 @@
+{
+ "points": [
+  "1 Identity and release: Command A is a 111B-parameter decoder-only enterprise model covering 23 languages, with Command R7B as a smaller sibling; weights are released under CC-BY-NC (non-commercial) with an acceptable-use addendum (p. 1-2).",
+  "2 Architecture: SwiGLU, GQA, sliding-window attention (RoPE) and full attention (NoPE) interleaved 3:1, parallel transformer block, shared input/output embeddings, no bias terms (p. 3).",
+  "3 Pre-training recipe: JAX on H100s with FP8 matmuls over FP32 master weights and a BF16 phase; cooldown anneals the learning rate linearly from 2.5e-4 to 1e-6 over 50,000 steps while context grows from 8k (30,000 steps) to 32k, 128k and 256k (10,000, 5,000, 5,000 steps) (p. 4-5).",
+  "4 Post-training pipeline: Instruct model, then six SFT experts (Code, Safety, RAG, Math, Multilingual, General Long-Context), SFT Soup, six RL experts, RL Soup, then polishing (best-of-N SFT, then offline SRPO and online CoPG alternated); SRPO is a min-max self-refinement preference objective and CoPG a KL-regularised reward objective (p. 5-7, 17).",
+  "5 Merging: linear weight averaging with weights found by manual and brute-force search, informed by 500 evaluation metrics; SLERP and task vectors gave no significant improvement; 1.8% average drop versus the best expert, most metrics within 2.5%, code least preserved (p. 16, 34).",
+  "6 Withheld: layer count and widths, vocabulary and window size, pre-training token count (only 'trillions'), data-mixture proportions, merge weights, compute, and nearly all Command R7B specifics; appendices with hyperparameters are not in the main text.",
+  "7 Efficiency: serving footprint of two A100s or H100s; up to 156 tokens/sec, stated as 1.75x GPT-4o and 2.4x DeepSeek V3 (p. 1); KV cache 75% of Llama 3.3 70B's at 8k and 32.9% at 128k (p. 34).",
+  "8 Academic and agentic results with baselines: MMLU 85.5 vs GPT-4o 89.2 (Table 3; 85.7 in Table 1), DeepSeek V3 88.5, Llama 3.3 70B 86.0; MATH 80.0 vs Llama 3.3 70B 77.0, DeepSeek V3 70.2, GPT-4o 68.5; Taubench Retail P@1 60.0 vs GPT-4o 60.6 and Claude 3.5 Sonnet 69.2; BFCL 63.8 vs GPT-4o 72.1.",
+  "9 Human evaluation and polishing: about 800 internal prompts; Command A win rate vs GPT-4o is 50.4 / 51.4 / 46.8 on general / reasoning / code; polishing raised it from 43.2, 41.4 and 30.0 for the pre-polish merge (p. 37).",
+  "10 Enterprise benchmarks (internal): generative pass rate over 22 tasks 94.2% vs Claude 3.5 Sonnet v2 84.2 and GPT-4o 79.1; RAG correctness 4.73 vs Claude 3.5 Sonnet v2 4.72; answerable / unanswerable accuracy 96 / 91 (p. 32-34)."
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "mArenaHard avg 23 languages** (Table 8): 78.9 (Command A) vs 78.7 (Llama 3.3 70B), 65.9 (Llama 3.1 405B), 53.4 (DeepSeek V3)",
+     "paper": "Table 8 gives Command A's win rate against each opponent: 78.9 vs Llama 3.3 70B, 78.7 vs Llama 3.1 405B, 65.9 vs Mistral Large 2, 53.4 vs DeepSeek V3. The numbers are attached to the wrong models, and they are not the opponents' own scores."
+    },
+    {
+     "quote": "**MBPP+** (Table 12): 86.2 (Command A) vs 89.9 (DeepSeek V3), 86.5 (GPT-4o)",
+     "paper": "These baseline figures are from Table 1 (p. 2). Table 12 gives DeepSeek V3 90.0 and has no GPT-4o row."
+    },
+    {
+     "quote": "**RepoQA** (Table 12): 92.6 (Command A) vs 92.2 (DeepSeek V3), 91.2 (GPT-4o)",
+     "paper": "GPT-4o 91.2 is from Table 1; Table 12 has no GPT-4o row."
+    },
+    {
+     "quote": "**Bird-SQL** (Table 14): 59.5 (Command A) vs 53.1 (DeepSeek V3), 50.5 (GPT-4o)",
+     "paper": "GPT-4o 50.5 is from Table 1; Table 14 has no GPT-4o row."
+    },
+    {
+     "quote": "Vendor-run evaluation across 500+ internal metrics ... extensive evaluation across 500+ metrics (p. 15, 18–34)",
+     "paper": "The paper says the final model 'was informed by 500 separate evaluation metrics' (§3.4.3, p. 16), not 500+, and does not call them internal."
+    },
+    {
+     "quote": "human evaluation (65+ annotators, 800 prompts)",
+     "paper": "§4.11.2 (p. 37): 'on average 65 annotators contribute to a single evaluation run', and around 800 prompts."
+    },
+    {
+     "quote": "**Throughput**: 156 tokens/sec on 2 H100s; 1.75× faster than GPT-4o, 2.4× faster than DeepSeek V3 (p. 2)",
+     "paper": "This is in the Introduction (p. 1). The two-A100/H100 serving footprint is stated separately; the paper does not say the 156 tokens/sec was measured on two H100s."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Says 'ok'; flags nothing."
+  },
+  "B": {
+   "errors": [],
+   "missed": [
+    10
+   ],
+   "conversion_flagged": "Flags missing references, appendices and figures; rotated and garbled Tables 7 and 8; lost bold markings; Table 13 stray column; out-of-order §3.1 stage list; π_+ vs π† in the SRPO equation; flattened exponents."
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "Bird-SQL Dev execution accuracy is 59.5% (vs. GPT-4o 50.5%, DeepSeek V3 53.1%, Llama 3.3 70B 58.0%) (p. 25, Table 14)",
+     "paper": "Table 14 has no GPT-4o row; GPT-4o 50.5 is from Table 1 (p. 2)."
+    },
+    {
+     "quote": "Seed merging and base model interpolation are used to recover degraded long-context capability (p. 15).",
+     "paper": "§3.4.2 (p. 15): only interpolation with the original base model is for capability recovery. Seed merging is for reducing random-seed effects and overfitting."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Says 'ok', with header formatting artifacts in Tables 7 and 8; claims text and equations are intact."
+  },
+  "D": {
+   "errors": [
+    {
+     "quote": "Relative safety winrate vs Command A is 49.5 for Command R7B against 26.6 for GPT-4o.",
+     "paper": "Table 16: 49.5 is the Command A row; Command R7B is 49.7. GPT-4o 26.6 is correct."
+    },
+    {
+     "quote": "The text says Command A has the highest aggregate, but Command R+ Refresh scores higher, so the text conflicts with the table.",
+     "paper": "§4.3: 'Command A and its predecessor, Command R+ Refresh, perform very strongly across languages, with the highest and second highest aggregate scores.' It does not say Command A is highest, and it agrees with Table 10 (Command R+ Refresh 95.5, Command A 93.0)."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Mostly ok; flags garbled Tables 7 and 8, stray column in Table 13, a '5.49' cell in Table 6, figures without data, repeated Table 23 header, and inconsistent page numbers."
+  },
+  "E": {
+   "errors": [],
+   "missed": [
+    3,
+    9
+   ],
+   "conversion_flagged": "Says 'ok'; flags nothing."
+  }
+ },
+ "key": {
+  "A": "claude-haiku-4-5-20251001",
+  "B": "claude-opus-5-5",
+  "C": "gemini-3.8-flash",
+  "D": "claude-sonnet-5-5",
+  "E": "gemini-3.1-pro-preview"
+ }
+}

@@ -3,8 +3,8 @@
 
     ./scripts/review-status.py                 every review: coverage and broken links
     ./scripts/review-status.py <scope>         one scope: its review and the papers it
-                                               does not cover, and the reading progress
-                                               in reviews/.work/<scope>/
+                                               does not cover, and which papers have
+                                               no note yet (still to be read)
     ./scripts/review-status.py --links <scope> every paper in the scope as a markdown
                                                link from reviews/<scope>.md, with its
                                                pdf.invalid base, grouped by folder
@@ -13,8 +13,8 @@
 A paper is covered when the review's "## Paper map" section links it. A broken
 link whose filename still exists elsewhere in the library (the paper moved, so
 its stem is unchanged) is rewritten by --fix-links; a renamed paper is reported
-for a manual fix. Reading batches in reviews/.work/<scope>/ hold one
-"## <stem>" section per paper read.
+for a manual fix. A paper has been read when notes/<stem>.md has a "## Digest";
+its "read:" line says whether in full or as a skim.
 """
 
 import os
@@ -24,7 +24,7 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 
 from paperlib import (
-    LIBRARY_DIR, LIBRARY_ROOT, PDF_LINK_BASE, REVIEWS_DIR, load_reviews, load_topics,
+    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_LINK_BASE, REVIEWS_DIR, load_reviews, load_topics,
     paper_files, read_paper, review_coverage, review_links,
 )
 
@@ -42,14 +42,16 @@ def pdf_link(paper):
         paper.relative_to(LIBRARY_DIR).with_suffix(".pdf").as_posix(), safe="/&+")
 
 
-def work_progress(scope):
-    """(stems read so far, number of batch files) from reviews/.work/<scope>/."""
-    folder = REVIEWS_DIR / ".work" / scope
-    batches = sorted(folder.glob("batch-*.md")) if folder.exists() else []
-    read = set()
-    for batch in batches:
-        read |= set(re.findall(r"^## (.+?)\s*$", batch.read_text(encoding="utf-8"), re.M))
-    return read, len(batches)
+def read_depth(stem):
+    """"full" or "skim" for a paper with a digest in its note, None for a paper not read."""
+    note = NOTES_DIR / f"{stem}.md"
+    if not note.exists():
+        return None
+    text = note.read_text(encoding="utf-8")
+    if "## Digest" not in text:
+        return None
+    depth = re.search(r"^read:\s*(\w+)", text, re.M)
+    return depth.group(1) if depth else "full"
 
 
 def report(scope, review):
@@ -70,23 +72,27 @@ def scope_report(scope):
     if scope not in topics:
         sys.exit(f"error: `{scope}` is not a folder in catalog/topics.yaml")
     papers = paper_files(LIBRARY_DIR / scope)
-    in_scope_stems = {p.stem for p in papers}
     if scope in reviews:
         report(scope, reviews[scope])
         # An update reads only the papers the review does not cover yet.
         in_scope, listed = review_coverage(reviews[scope])
+        # Papers the review covers whose reading was not kept: an update or a question
+        # would have to read them again.
+        no_note = sorted(p for p in in_scope & listed if not read_depth(p.stem))
+        if no_note:
+            print(f"{scope}: {len(no_note)} covered papers have no note")
+            for p in no_note:
+                print(f"  no note: {p.relative_to(LIBRARY_DIR)}")
         papers = sorted(in_scope - listed)
-    read, batches = work_progress(scope)
-    if scope not in reviews or batches:
-        remaining = [p for p in papers if p.stem not in read]
+    depths = {p: read_depth(p.stem) for p in papers}
+    remaining = [p for p in papers if not depths[p]]
+    if scope not in reviews or remaining:
         to_read = "uncovered papers" if scope in reviews else "papers"
-        print(f"{scope}: {len(papers)} {to_read}; reading: {len(papers) - len(remaining)} "
-              f"read in {batches} batches, {len(remaining)} remaining")
+        skims = sum(1 for d in depths.values() if d == "skim")
+        print(f"{scope}: {len(papers)} {to_read}; notes: {len(papers) - len(remaining) - skims} read in full, "
+              f"{skims} skimmed, {len(remaining)} not read")
         for p in remaining:
-            print(f"  remaining: {p.relative_to(LIBRARY_DIR)}")
-        stale = read - in_scope_stems
-        for stem in sorted(stale):
-            print(f"  read but no longer in scope: {stem}")
+            print(f"  not read: {p.relative_to(LIBRARY_DIR)}")
 
 
 def links(scope):

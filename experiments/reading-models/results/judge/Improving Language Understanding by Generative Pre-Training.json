@@ -1,0 +1,86 @@
+{
+ "points": [
+  "1 Mechanism: two stages, unsupervised left-to-right LM pre-training (L1), then supervised fine-tuning of the same model with an added linear output layer, plus an auxiliary LM objective weighted λ = 0.5; the only new parameters are W_y and delimiter embeddings (p. 3, pp. 4-5)",
+  "2 Task-specific input transformations (traversal-style) instead of task architectures: entailment = premise $ hypothesis; similarity = both orderings, representations added element-wise; QA/commonsense = [z; q; $; a_k] per answer, softmax over answers (p. 4)",
+  "3 Architecture: 12-layer decoder-only Transformer, masked self-attention, 768-d states, 12 heads, 3072-d feed-forward, GELU, learned position embeddings, BPE with 40,000 merges (p. 4)",
+  "4 Pre-training data: BooksCorpus, over 7,000 unpublished books, chosen for long contiguous text (vs the sentence-shuffled 1B Word Benchmark used by ELMo); token-level perplexity 18.4 (p. 4)",
+  "5 Recipes: pre-training with Adam, max LR 2.5e-4, 2000 warmup updates, cosine annealing, 100 epochs, batches of 64 sequences of 512 tokens, dropout 0.1; fine-tuning with LR 6.25e-5, batch 32, 3 epochs, linear decay with 0.2% warmup (pp. 4-5)",
+  "6 Withheld: no parameter count, compute or training time, and no seeds, run counts or variance are stated",
+  "7 Headline: new state of the art on 9 of 12 datasets with a single task-agnostic model, many baselines being ensembles; GLUE overall 72.8 vs 68.9 previous best (p. 1, pp. 5-7)",
+  "8 Wins with baselines: MNLI-m/mm 82.1/81.4 vs 80.6/80.1 (Stochastic Answer Network 3x); SNLI 89.9 vs 89.3; SciTail 88.3 vs 83.3 (CAFE); QNLI 88.1 vs 82.3 (GenSen); Story Cloze 86.5 vs 77.6; RACE 59.0 vs 53.3 (BiAttention MRU 9x); CoLA 45.4 vs 35.0; STS-B 82.0 vs 81.0; QQP 70.3 vs 66.1 (Tables 2-4)",
+  "9 Losses: RTE 56.0 vs 61.7 (multi-task BiLSTM + Attn); SST-2 91.3 vs 93.2 (Sparse byte mLSTM); MRPC 82.3 vs 86.0 (TF-KLD) (Tables 2 and 4)",
+  "10 Analysis and ablations: full model average 74.7; without pre-training 59.9 (the '14.8% decrease'); without auxiliary LM 75.0 (auxiliary objective helps only NLI tasks and QQP); single-layer 2048-unit LSTM 69.1 (5.6 drop, wins only on MRPC); each transferred layer helps, up to 9% on MultiNLI; zero-shot heuristics improve steadily over pre-training (pp. 7-8, Table 5, Figure 2)"
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "using delimiter tokens (`$`, `<s>`, `<a>`)",
+     "paper": "Sec. 3.3 (p. 4) names start and end tokens ⟨s⟩ and ⟨e⟩ plus the delimiter $; there is no <a> token."
+    }
+   ],
+   "missed": [
+    7
+   ],
+   "conversion_flagged": "Equation 5 formula missing"
+  },
+  "B": {
+   "errors": [],
+   "missed": [],
+   "conversion_flagged": "Eq. 5 missing; Table 1 flattened; blank CAFE cells in Table 2; duplicated captions; author name and footnote displaced into the Introduction"
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "GLUE multi-task benchmark + 11 other NLU datasets",
+     "paper": "There are 12 datasets in total, and several of them are part of GLUE (Sec. 4.2, p. 5; Table 4 says all its tasks were evaluated through GLUE). GLUE is not a 13th benchmark alongside 11 others."
+    },
+    {
+     "quote": "**Architecture** (Sec. 3.1, p. 3): 12-layer Transformer decoder; 768-dim hidden states; 12 attention heads; 3,072-dim feed-forward inner layers; GELU activation; 40,000 BPE vocabulary",
+     "paper": "These specifications are in Sec. 4.1 'Model specifications' (p. 4). Sec. 3.1 (p. 3) gives only the objective and the generic Transformer-decoder equations."
+    },
+    {
+     "quote": "dataset sizes for all 12 tasks",
+     "paper": "Sizes are given for only three datasets: RTE (2490 examples), STS-B (≈5.7k) and SNLI (≈550k) (Sec. 4.2, pp. 5-7)."
+    },
+    {
+     "quote": "MNLI-m: 82.1% vs. 80.2% ensemble (1.9-point gain, p. 5)",
+     "paper": "The previous best on MNLI-m in Table 2 is 80.6 (Stochastic Answer Network 3x), and the paper states a gain of up to 1.5%. The 80.2 figure is CAFE 5x, which is not the best prior result."
+    },
+    {
+     "quote": "this work compares directly and shows Transformer outperforms LSTM by 5.6 avg points",
+     "paper": "The 5.6-point drop is from the paper's own ablation, a single-layer 2048-unit LSTM in the same framework (Sec. 5, Table 5). It is not a comparison with ELMo."
+    }
+   ],
+   "missed": [
+    9
+   ],
+   "conversion_flagged": "ok; nothing flagged, so the missing Eq. 5 goes unnoticed"
+  },
+  "D": {
+   "errors": [
+    {
+     "quote": "Eq. 5 (combined objective L3 = L2 + λ·L1) is blank in the markdown (p. 3)",
+     "paper": "The supplied text shows only '(5)' and says the objective is optimized 'with weight λ' (Sec. 3.2, p. 3). The formula L3 = L2 + λ·L1 is not in the text; the note supplied it from outside."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "says ok, but notes blank Eq. 5, unreliable CAFE row in Table 2, MNLI 82.1 vs 81.8 mismatch, 'Figure 1' cited where Table 1 is meant, figure data absent"
+  },
+  "E": {
+   "errors": [],
+   "missed": [
+    5,
+    9
+   ],
+   "conversion_flagged": "broken: Eq. 5 missing; Table 4 headers flattened but readable"
+  }
+ },
+ "key": {
+  "A": "gemini-3.8-flash",
+  "B": "claude-opus-5-5",
+  "C": "claude-haiku-4-5-20251001",
+  "D": "claude-sonnet-5-5",
+  "E": "gemini-3.1-pro-preview"
+ }
+}

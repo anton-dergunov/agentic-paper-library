@@ -108,6 +108,21 @@ next piece of work.
   directory, links its skills in, and renders its conventions into `.claude/library-guide.md`.
   The library's own `AGENTS.md` holds what is personal: who reads it, their focus, where their
   notes are.
+- **Papers are read one request each, by Opus, into notes (2026-10-05).** The first five
+  literature reviews each used up a usage window. Their reading agents took 70–80% of the
+  tokens, and two thirds of that was an agent re-reading the papers it had already finished
+  ([experiments/review-token-cost](../experiments/review-token-cost/README.md)). `paperlib
+  read` now sends each paper's main text in a single request and writes the note, so a
+  review's reading is resumable and reusable, and every paper is read in full. Opus stays
+  the reader: on six papers its notes had 1 error against 6 for Sonnet, 7 and 9 for two
+  Gemini models and 35 for Haiku
+  ([experiments/reading-models](../experiments/reading-models/README.md)).
+- **A review is a map, not evidence (2026-10-05).** Sessions find reviews and notes on
+  their own. With a review, a synthesis answer took a third of the tokens and had more
+  misreadings, because the session never opened the papers; with notes and no review the
+  answers were the most accurate
+  ([experiments/review-usefulness](../experiments/review-usefulness/README.md)). The guide
+  tells sessions to check the note or the paper before stating a number or its meaning.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

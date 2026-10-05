@@ -1,0 +1,100 @@
+{
+ "points": [
+  "1 Open release: weights, the full Dolma training data, training/evaluation/adaptation code, 500+ intermediate checkpoints at 1000-step intervals and W&B logs, under Apache 2.0 (p. 1-2, 8)",
+  "2 Architecture: decoder-only transformer with no biases, non-parametric layer norm, SwiGLU (about 8/3 d, 11,008 for 7B), RoPE, and a modified GPT-NeoX BPE tokenizer with PII tokens (vocab 50,280, embedding 50,304) (p. 2)",
+  "3 Sizes and optimizer (Table 1, p. 1): 1B has L16, D2048, H16, 2T tokens, peak LR 4.0E-4, weight tying; 7B has L32, D printed as 4086, H32, 2.46T tokens, peak LR 3.0E-4, no tying; AdamW with betas 0.9/0.95, eps 1.0E-5",
+  "4 Training recipe: FSDP/ZeRO with bfloat16 mixed precision, global batch of about 4M tokens (2048 x 2048), 5000-step warmup, linear decay to a tenth of peak LR, gradient clipping at 1.0; run on LUMI (AMD MI250X, up to 256 nodes) and MosaicML (27 nodes of 8x A100) with nearly identical results (p. 4-5)",
+  "5 Final-checkpoint trick: the evaluated 7B checkpoint (2.46T tokens) is tuned 1000 more steps with LR linearly decayed to 0, which boosts perplexity and task scores; the evidence is Figure 1 only (p. 5)",
+  "6 Data: Dolma has 2,668B tokens, 4,367M docs and 11,519 GB, of which Common Crawl is 2,180B tokens; training used a 2T-token sample in a fixed, reconstructible order, with some runs starting a second epoch; curation details are deferred to the Dolma report (p. 3, 5)",
+  "7 Downstream zero-shot results on 8 tasks (Table 3, p. 5): OLMo-7B averages 69.3, against Llama 2 7B 70.5, Falcon-7B 70.3, MPT-7B 69.8, LLaMA 7B 69.6, RPJ-INCITE-7B 66.6 and Pythia 6.9B 63.0; OLMo-1B averages 60.4, against TinyLlama 59.4, Pythia 1B 54.5 and StableLM 1.6B 66.5; competitive, not best",
+  "8 Paloma perplexity: bits per byte on 11 of 18 sources, with OLMo's training data decontaminated against Paloma; results appear only in Figure 2; OLMo leads on C4 (88.8% Common Crawl) and is less sample-efficient on WikiText-103, M2D2 S2ORC and M2D2 Wikipedia; MPT-7B improves ahead on the combined plot (p. 4, 6)",
+  "9 Adaptation with Tülu SFT then DPO (Table 4, p. 7): OLMo base scores MMLU 28.3, ToxiGen 81.4, TruthfulQA 31.6; OLMo+SFT scores 47.3 / 57.0 / 14.4 / 41.2; OLMo+SFT+DPO scores 46.2 / 69.3 / 1.7 / 52.0; it still trails Tülu 2+DPO (50.7 / 85.1 / 0.5) and Llama-2-Chat (46.8 / 87.3 / 0.0)",
+  "10 Withheld and limitations: ablations are mentioned but not shown; no failed or diverged-run logs (p. 9); no compute cost or weight-decay value; the intro's four 7B variants do not match the artifact list (7B, 7B-twin-2T, 1B); English only; evaluations are noisy; a post-release update lifts MMLU by 24 points to 52% without describing the changes (p. 9)"
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "Safety and ToxiGen numbers have large swings that depend on the chat template and tuning mix.",
+     "paper": "Not in the paper. Table 4 (p. 7) only reports the ToxiGen values; nothing is said about chat templates or sensitivity to them."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Appendices and Tables 5/7 absent; 4086 likely a typo; WD column missing; warmup 2000 vs 5000 inconsistency; garbled Table 4 cell; figures unreadable"
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "Tülu chat/safety suite against five chat models and Tülu 2",
+     "paper": "Table 4 (p. 7) has four officially released chat variants (MPT Chat, Falcon Instruct, RPJ-INCITE Chat, Llama-2-Chat), plus Tülu 2 and Tülu 2+DPO."
+    }
+   ],
+   "missed": [],
+   "conversion_flagged": "Duplicated title and scrambled authors; D = 4086 and missing WD column; figures missing; footnote markers fused into text and a Table 4 cell; appendices and references absent"
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "Pythia (Biderman et al., 2023) and BLOOM (BigScience, 2022): open-science predecessors releasing intermediate checkpoints and data, which OLMo surpasses in downstream capability at the 7B scale.",
+     "paper": "Only Pythia is evaluated (Pythia 6.9B 63.0 vs OLMo-7B 69.3, Table 3, p. 5). BLOOM is cited in the introduction (p. 1) as an open release and never compared."
+    }
+   ],
+   "missed": [
+    10
+   ],
+   "conversion_flagged": "Nothing; says ok"
+  },
+  "D": {
+   "errors": [
+    {
+     "quote": "7B: 32 layers, 4096 hidden dim, 2.46T tokens",
+     "paper": "Table 1 (p. 1) prints D = 4086 for 7B. The note silently corrects it."
+    },
+    {
+     "quote": "data curation tools (WIMBD)",
+     "paper": "WIMBD is the dataset-analysis tool (p. 3, p. 8). The curation toolkit is a separate release."
+    },
+    {
+     "quote": "First 7B model with explicit decontamination against evaluation set.",
+     "paper": "The paper says \"OLMo-7B is the largest LM with explicit decontamination for perplexity evaluation\" (p. 4). It says largest, not first."
+    },
+    {
+     "quote": "full transparency goal (unlike LLaMA/Llama-2 proprietary models)",
+     "paper": "The paper does not call LLaMA or Llama 2 proprietary. They are listed among \"publicly available models\" (p. 5), and LLaMA \"came with in-depth adaptation training instructions\" (p. 1)."
+    },
+    {
+     "quote": "Llama-2, LLaMA: main commercial models OLMo positions as open-science alternative; uses same architectural choices (no bias, SwiGLU, RoPE, non-parametric norm)",
+     "paper": "The paper attributes no biases, SwiGLU and RoPE to LLaMA/PaLM (p. 2). Non-parametric layer norm is presented as the authors' own choice over parametric layer norm and RMSNorm, not as following LLaMA. The paper also does not call these \"commercial models\"."
+    },
+    {
+     "quote": "Pythia, BLOOM: prior open model frameworks; OLMo applies lessons from their approaches and narrows capability gap toward SOTA",
+     "paper": "The gap-narrowing claim is about LLM360's models: \"OLMo narrows the gap from their models to state-of-the-art capabilities of models like Llama 2\" (p. 2). It is not made about Pythia or BLOOM."
+    }
+   ],
+   "missed": [
+    5
+   ],
+   "conversion_flagged": "Ok; minor markdown artifacts in numbers such as ~4M"
+  },
+  "E": {
+   "errors": [
+    {
+     "quote": "No significant artifacts are withheld; the release explicitly counters the trend of gated, proprietary models.",
+     "paper": "The Limitations section (p. 9) says \"we did not provide extensive training logs documenting, for example, training runs that diverged or failed to learn\". Ablation results are also only mentioned, not shown (p. 2, 4)."
+    }
+   ],
+   "missed": [
+    8,
+    10
+   ],
+   "conversion_flagged": "Ok; only empty brackets in Table 3, claims text and numbers are intact"
+  }
+ },
+ "key": {
+  "A": "claude-sonnet-5-5",
+  "B": "claude-opus-5-5",
+  "C": "gemini-3.8-flash",
+  "D": "claude-haiku-4-5-20251001",
+  "E": "gemini-3.1-pro-preview"
+ }
+}

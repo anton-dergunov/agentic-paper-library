@@ -152,6 +152,44 @@ def read_paper(path):
     return split_frontmatter(Path(path).read_text(encoding="utf-8"))
 
 
+_REFERENCES = re.compile(r"^#{1,3} +(References|Bibliography|REFERENCES)\b.*$", re.M)
+
+
+def read_view(meta, body, appendix=False):
+    """A paper as a reader needs it: main text only, without link targets or inline tags.
+
+    With `appendix`, the sections after the reference list are kept (for a paper whose
+    main results live there) and only the list itself is cut.
+
+    Cuts at the references heading, turns image links into "[figure]", and ends with a
+    line saying what was left out, so a reader does not report the missing references
+    and appendices as a broken conversion. Headings keep their (p. N), tables stay.
+    """
+    cut = _REFERENCES.search(body)
+    after = ""
+    if cut:
+        body, after = body[:cut.start()], body[cut.end():]
+        if appendix:
+            following = re.search(r"^#{1,3} ", after, re.M)
+            body, after = body + (after[following.start():] if following else ""), ""
+    body = re.sub(r"!\[[^\]]*\]\([^)]*\)", "[figure]", body)
+    body = re.sub(r"\]\((#|https?://)[^)]*\)", "]", body)
+    body = re.sub(r"</?(span|sup|sub|a|div)\b[^>]*>", "", body)
+    body = re.sub(r' (class|style|id)="[^"]*"', "", body)
+    body = re.sub(r"\n{3,}", "\n\n", body).strip()
+    left_out = "the references"
+    later = [h.strip("# ").strip() for h in re.findall(r"^#{1,2} .*$", after, re.M)]
+    if later:
+        sections = "1 section" if len(later) == 1 else f"{len(later)} sections"
+        left_out += f" and {sections} after them (first: {later[0]})"
+    if cut and appendix:
+        left_out = "the reference list only; the appendices are included"
+    note = (f"[End of the main text. Left out of this view: {left_out}.]" if cut
+            else "[No references heading found: this is the whole paper.]")
+    title = " ".join(str(meta.get("title") or "").split())
+    return f"# {title}\n\nsource: {meta.get('source', '?')}\n\n{body}\n\n{note}\n"
+
+
 def render_frontmatter(meta):
     """Block-style YAML in FIELDS order, with lists (authors) kept on one line."""
     keys = [k for k in FIELDS if k in meta] + [k for k in meta if k not in FIELDS]
