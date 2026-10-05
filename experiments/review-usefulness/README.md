@@ -12,13 +12,14 @@
   1. "What does current research say about managing obsolete facts in LLM memory?": a synthesis across the papers of one review.
   2. "How does Zep invalidate outdated facts, and what did it score on LongMemEval against which baseline?": a detail of one paper.
   3. "Can an LLM judge replace human raters when evaluating personalised responses?": a question that spans two reviews.
-- **Conditions.** Three copies of the author's library (2,200 papers, without figures): as it is, with 5 reviews and 322 notes; without `reviews/`; without `reviews/` and `notes/`. In the copies without them, the rules and links that mention them were removed from the agent instructions and the folder indexes.
+- **Conditions.** Three copies of the author's library (2,200 papers, without figures): as it is, with 5 reviews and 322 notes; without `reviews/`; without `reviews/` and `notes/`. In the copies without them, the rules and links that mention them were removed from the agent instructions and the folder indexes. [`copies.py`](copies.py) builds the copies (written after the run, from the commands used in it).
 - **Sessions.** Each question once per copy with `claude -p` (Opus 5.5), in a fresh session started in the copy. A session could read files and run shell commands, and could not edit files, search the web or start subagents. [`run.py`](run.py).
 - **Measures.** From each session's event stream ([`summarize.py`](summarize.py)): seconds, input tokens processed (written to the cache plus read from it), output tokens, tool calls, and whether a review or a note was read. The API price is not used to compare conditions: the nine sessions started together, and the first to start paid to cache the prompt prefix the others then read.
 - **Grading.** [`judge.py`](judge.py): a separate Opus session in the full library gets the three answers to a question, labelled A to C in a shuffled order. It pools the distinct points the answers make (at most 20), checks each against the paper's markdown, not against reviews or notes, and lists per answer the points it makes and the statements that are wrong.
 - **Results.** [`results/sessions.tsv`](results/sessions.tsv), the nine answers in [`results/answers/`](results/answers/), and the judge's findings in `results/judge-q*.json`. The event streams are not committed.
 
 ```bash
+python3 copies.py <library> <scratch-dir>
 python3 run.py <out-dir> asis=<copy> noreviews=<copy> nonotes=<copy>
 python3 summarize.py <out-dir> <library> results/answers > results/sessions.tsv
 python3 judge.py results/answers <library> results
