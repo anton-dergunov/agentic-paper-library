@@ -13,7 +13,8 @@ Three ways to place a heading, in order:
    section (`section.4`, `subsection.4.3`, `subsubsection.2.2.3`, and
    `appendix.A` / `subsection.A.1` for appendices), which is exact.
 2. The PDF's outline (the bookmarks a viewer shows in its sidebar), also
-   exact, for PDFs without such destinations. A numbered heading takes the
+   exact, for PDFs without such destinations. A bookmark is believed only
+   when its page prints the heading. A numbered heading takes the
    page of the next unused bookmark with its section number. Unnumbered
    headings are not matched to bookmarks: a paragraph heading ("User Consent")
    often shares its words with a bookmark for a different, later section.
@@ -22,7 +23,8 @@ Three ways to place a heading, in order:
    numbered heading counts as found when "<number> <title>" appears in the
    page text, the number printed as the PDF prints it ("4.3", "4.3.", "II.",
    "A." under an IEEE Roman section); an unnumbered one when a line of the
-   page is the heading, or (five or more words) when a line starts the
+   page is the heading, or starts with it and a full stop or colon (a run-in
+   paragraph heading), or (five or more words) when a line starts the
    heading and the next few lines finish it. Pages that look
    like a table of contents (five or more dot-leader lines) are never searched,
    since every numbered heading appears there too (a "Contents" heading is the
@@ -184,6 +186,13 @@ def main(pdf_path, md_path):
                     dest_page = dests[name]
                     break
         outline_page = outline.page_of(numbered[0], exact_so_far) if numbered else None
+        # A bookmark can point at the wrong page: hyperref gives appendix "A.7"
+        # the destination of section 7 when the counters collide. Believe it
+        # only when the heading is printed on that page.
+        if outline_page is not None:
+            title = plain_title(numbered[1])
+            if title and title not in pages[outline_page - 1]:
+                outline_page = None
         if dest_page is None and outline_page is not None:
             dest_page = outline_page
             from_outline += 1
@@ -221,6 +230,11 @@ def main(pdf_path, md_path):
                     if p in contents and title not in ("contents", "table of contents"):
                         continue
                     if not numbered and title in page_lines[p]:
+                        page = p + 1
+                        break
+                    # A run-in heading (\paragraph): "Setup. We evaluate ...".
+                    if not numbered and any(line.startswith((title + ". ", title + ": ")) or line in (title + ".", title + ":")
+                                            for line in ordered_lines[p]):
                         page = p + 1
                         break
                     if any(f in pages[p] for f in full):

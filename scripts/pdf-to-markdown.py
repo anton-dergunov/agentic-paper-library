@@ -485,6 +485,17 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             parts.append(f"{'#' * level} {text}" + (f" (p. {page})" if page else ""))
         elif label == Label.TABLE:
             table = item.export_to_markdown(doc).strip()
+            # docling writes the table's caption above it, and yields the
+            # caption again as an item of its own.
+            kept = []
+            for line in table.split("\n"):
+                if line.strip() and not line.lstrip().startswith("|"):
+                    key = " ".join(line.split())
+                    if key in captions:
+                        continue
+                    captions.add(key)
+                kept.append(line)
+            table = "\n".join(kept).strip()
             if table:  # docling sometimes finds empty fragments around a table
                 parts.append(re.sub(r"(?<=\d) \. (?=\d)", ".", table))
         elif label in (Label.PICTURE, Label.CHART):
@@ -522,10 +533,13 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             if not any(c.isalnum() for c in text):  # a stray bullet glyph, a rule
                 continue
             equations = "model" if n in readings else equations
-            if label == Label.CAPTION:
-                if text in captions:
+            # The second copy is not always labelled a caption, so a block
+            # that reads as one ("Table 1: ...") counts too.
+            if label == Label.CAPTION or re.match(r"(?:Table|Figure|Fig\.) \d+[:.] ", text):
+                key = " ".join(text.split())
+                if key in captions:
                     continue
-                captions.add(text)
+                captions.add(key)
             parts.append(text)
 
     parts = join_split_tables(parts)

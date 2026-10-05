@@ -137,7 +137,7 @@ def from_html(md, meta, arxiv_id):
         html_path.write_text(page, encoding="utf-8")
         run = subprocess.run(
             [sys.executable, SCRIPTS / "html-to-markdown.py", html_path, body_path, new_images, md.stem],
-            capture_output=True, text=True,
+            capture_output=True, text=True, timeout=600,  # a page that hangs must not stop a long run
         )
         if run.returncode:
             return "failed", f"html-to-markdown: {run.stderr.strip().splitlines()[-1:]}"
@@ -152,7 +152,12 @@ def from_html(md, meta, arxiv_id):
     out = subprocess.run(
         [sys.executable, SCRIPTS / "page-map.py", pdf, md], capture_output=True, text=True, check=True
     )
+    captions = subprocess.run(
+        [sys.executable, SCRIPTS / "caption-numbers.py", pdf, md], capture_output=True, text=True, check=True
+    ).stdout.splitlines()[0].removeprefix("caption-numbers: ")
     message = f"{arxiv_id}{version or ' (latest)'}{note}: {out.stdout.splitlines()[0]}"
+    if not captions.startswith("0 captions renumbered from the PDF, 0 "):
+        message += f"; {captions}"
     if "could not be downloaded" in warnings:
         return "partial", f"{message}; {warnings}"
     return "ok", message + (f"; {warnings}" if warnings else "")

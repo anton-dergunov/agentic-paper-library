@@ -40,6 +40,8 @@ local EQUIVALENT = {
   textgreater = ">",
   textvisiblespace = "\\text{␣}",
   texttildelow = "\\text{\\textasciitilde}",
+  -- KaTeX draws it, but it is a symbol, so the generated command list lacks it.
+  textasciicircum = "\\textasciicircum",
   -- Cross-references and citations: keep the label or key as text.
   ref = "\\text", eqref = "\\text", cref = "\\text", Cref = "\\text",
   autoref = "\\text", cite = "\\text", citep = "\\text", citet = "\\text",
@@ -104,6 +106,8 @@ local function strip_layout(t)
       local len_end = length_end(t, j)
       local len = len_end and t:sub(j, len_end - 1):gsub("%s", "") or nil
       j = len_end or j
+      -- "\penalty\ ": the control space stood where the number goes.
+      if name == "penalty" and not len_end and t:sub(j, j + 1) == "\\ " then j = j + 2 end
       -- Glue: "plus 1fil minus 2pt".
       while true do
         local k = j + #(t:match("^%s*", j))
@@ -266,6 +270,11 @@ end
 -- ("0.769\,142\,111\,540\,03" where the PDF prints 0.77). Join the groups; a
 -- number with nine or more decimals is such raw input, so round it to four.
 local function join_digit_groups(t)
+  -- \num{2294} with a group separator LaTeXML did not resolve: "2true294".
+  local joined_true
+  repeat
+    t, joined_true = t:gsub("(%d)true(%d%d%d)%f[%D]", "%1%2")
+  until joined_true == 0
   return (t:gsub("%d[%d.]*\\,[%d\\,]*%d", function(number)
     local groups, valid = {}, true
     for group in (number .. "\\,"):gmatch("(.-)\\,") do
@@ -322,6 +331,49 @@ local function unwrap_mleft(t)
   end
 end
 
+-- The braced group at i, as (content, index after it), or nil.
+local function braced(t, i)
+  if t:sub(i, i) ~= "{" then return nil end
+  local depth, j = 0, i
+  while j <= #t do
+    local c = t:sub(j, j)
+    if c == "\\" then j = j + 1
+    elseif c == "{" then depth = depth + 1
+    elseif c == "}" then
+      depth = depth - 1
+      if depth == 0 then return t:sub(i + 1, j - 1), j + 1 end
+    end
+    j = j + 1
+  end
+  return nil
+end
+
+-- \mathchoice{display}{text}{script}{scriptscript} picks a rendering by math
+-- style; a paper's own "\sim" raised in a box arrives as four copies of
+-- "\vbox{\hbox{$\scriptstyle\sim$}}". Keep the text-style one, out of its boxes.
+local function unwrap_mathchoice(t)
+  local from = 1
+  while true do
+    local s, e = t:find("\\mathchoice", from, true)
+    if not s then return t end
+    local groups, i = {}, e + 1
+    for _ = 1, 4 do
+      local content, after = braced(t, i + #(t:match("^%s*", i)))
+      if not content then break end
+      table.insert(groups, content)
+      i = after
+    end
+    if #groups == 4 then
+      local pick = groups[2]
+      local inner = pick:match("^%s*\\vbox%s*{%s*\\hbox%s*{%s*%$(.-)%$%s*}%s*}%s*$")
+      t = t:sub(1, s - 1) .. "{" .. (inner or pick) .. "}" .. t:sub(i)
+      from = s
+    else
+      from = e + 1
+    end
+  end
+end
+
 local function hex(x)
   return string.format("%02X", math.floor(tonumber(x) * 255 + 0.5))
 end
@@ -348,6 +400,7 @@ local function normalise_math(t)
   -- A bare \mod ("$\mod$" between two words) has no argument for KaTeX.
   t = t:gsub("\\mod%s*$", "\\operatorname{mod}")
   t = unwrap_mleft(t)
+  t = unwrap_mathchoice(t)
   return rewrite_commands(strip_layout(join_digit_groups(t)))
 end
 
@@ -357,6 +410,10 @@ function Math(m)
     -- A lone currency sign set as math: "$\$$" reads as the start of a
     -- display equation.
     if m.text:match("^%s*\\%$%s*$") then return pandoc.Str("$") end
+    -- "pass\^{}k" set as text around an empty accent: the caret itself.
+    if m.text:match("^%s*\\hat%s*{%s*}%s*$") then return pandoc.Str("^") end
+    -- A control space at the end would leave "\$", an escaped dollar.
+    m.text = m.text:gsub("^(.-[^\\])\\%s+$", "%1")
     -- A matrix written over several lines: inline math stays on one.
     m.text = m.text:gsub("%s*\n%s*", " ")
   end
@@ -411,6 +468,13 @@ function Inlines(inlines)
     ::continue::
   end
   return out
+end
+
+-- A title broken over two lines ("Terminal-Bench:<br>Benchmarking ...") would be
+-- written as a setext heading with a hard break in it.
+function Header(el)
+  el.content = el.content:walk({ LineBreak = function() return pandoc.Space() end })
+  return el
 end
 
 function Span(el)
@@ -538,7 +602,9 @@ local function equation_rows(tbl)
           number = tag
         elseif #tex > 0 then
           table.insert(cells, table.concat(tex, " "))
-          if cell.col_span > 1 then wide = cell end
+          -- A cell across the columns is prose (\intertext) when it has words
+          -- of its own; one that is all mathematics is a split equation.
+          if cell.col_span > 1 and #plain > 0 then wide = cell end
         end
       end
       if wide and #cells == 1 or not has_math and #cells > 0 then

@@ -20,6 +20,13 @@ lacks the content:
   box, badge    a linked SVG that the converter would now turn into text
   digit-groups  siunitx numbers with digit groups ("0.769 142 111 540 03")
   raw-citations citations left as BibTeX keys, or references as "LABEL:tab:x"
+  true-digits   a number whose digit groups are joined by "true" ("2true294")
+  tex-box       \\mathchoice or \\vbox internals in an equation
+  captionof     a caption left as "\\captionof" with no number
+  empty-ref     a reference with nothing in it ("(Table )", "in Figure .")
+  split-title   the title as two lines over a row of "="
+  year-citation citations showing only a year ("[2018]")
+  input-path    a line that is only a file's path, where \\input was not expanded
 
 --katex instead lists papers of every source with equations KaTeX (VS Code's
 preview) cannot draw, with the number of them and the first error. It needs
@@ -63,6 +70,14 @@ CHECKS = {
     "digit-groups": lambda t: re.search(r"\d\.\d{3}(?:[ \u2006\u2009\u202f]|\\,)\d{3}(?:[ \u2006\u2009\u202f]|\\,)\d", t),
     "raw-citations": lambda t: "LABEL:" in t or len(re.findall(
         r"\((?:[A-Za-z][\w-]*\d{4}[a-z][\w-]*)(?:; [A-Za-z][\w-]*\d{4}[a-z][\w-]*)*\)", t)) >= 5,
+    "true-digits": lambda t: re.search(r"\dtrue\d{3}(?!\d)", t),
+    "tex-box": lambda t: re.search(r"\\mathchoice|operatorname\{vbox\}", t),
+    "captionof": lambda t: "\\captionof" in t,
+    "empty-ref": lambda t: len(re.findall(
+        r"\((?:Table|Figure|Fig\.|Section|Appendix) \)|\b(?:in|see|See) (?:Table|Figure|Section|Appendix) [.,)]", t)) >= 2,
+    "split-title": lambda t: re.search(r"\A\s*\S[^\n]*\\\n[^\n]+\n=+\s*$", t, re.M),
+    "year-citation": lambda t: len(re.findall(r"\[\d{4}[a-z]?\]\(#bib", t)) >= 5,
+    "input-path": lambda t: re.search(r"^(?:sections?|tex|content|chapters?|src)/[\w./-]+$", t, re.M),
 }
 
 

@@ -28,6 +28,23 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **Inline icons**, such as a check mark in a table cell, keep their file's name as alt text.
 - **Citations left as BibTeX keys**, when a paper shipped its `.bib` uncompiled, are rebuilt with the reference list by pandoc's citeproc.
 - **A paper converted from its PDF** gets the HTML conversion once arXiv renders it: `paperlib reconvert` tries the HTML first.
+- **Text set only for its width** is dropped. A `\phantom{5}` that pads a column arrives as a hidden span still holding the "5", which printed as a digit of the number beside it ("53.4" for 3.4); a zero-width `\parbox` arrives holding a TeX length.
+- **Inline code** written with `\lstinline` keeps its text.
+- **Icon-font glyphs** (Font Awesome) are written as the icon's name, `[lock]`, so a column of icons still says what each cell holds.
+- **Several captions in one float** each stay with their own table.
+- **Citations showing only a year**, where LaTeXML did not know the bibliography style, get the first author from the reference list.
+- **References with nothing in them** ("(Table )") are looked up in the paper's LaTeX source by the words before them. The float's number is used when its caption is in the HTML, its label's name otherwise.
+- **The author block** shows a list of affiliations shared by all authors once, not after every name.
+- **A title broken over two lines** is one heading.
+- **Numbers and symbols LaTeXML left half-expanded:** digit groups joined by "true" (`2true294`), a `\mathchoice` of boxed symbols, `\penalty` before a control space, an accent over nothing (`pass\^{}k`), a tilde set on a digit ("5̃5%").
+
+→ [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md)
+
+## Table and figure numbers
+
+arXiv's HTML numbers floats itself, and sometimes differently from the PDF: a plot set beside a table in one float is captioned as a table, a caption written with `\captionof` gets no number, and every later number is then off by one or two. `scripts/caption-numbers.py` matches each caption in the markdown to the PDF caption that starts with the same words, and renames it, with the links that point to it, when the PDF calls it something else. A caption that matches no PDF caption, or two equally well, is left alone. It runs after `page-map.py` on every arXiv-HTML conversion. → [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md)
+
+What it cannot repair is a reference whose target LaTeXML got wrong: four tables in one float share one anchor, so every reference to them names the last. Those are corrected by hand.
 
 → [`experiments/html-converter-pilot`](../experiments/html-converter-pilot/README.md)
 
@@ -48,7 +65,7 @@ In papers converted from a PDF, display equations are read from the page image b
 
 ## Page numbers
 
-Every heading ends with the PDF page it starts on, `(p. N)`, so the agent can cite the page of the PDF the reader has open. `scripts/page-map.py` finds the page from three sources, in order: the PDF's named destinations (LaTeX writes one per section), its outline, and a search of the page text for the heading. → [`experiments/page-number-mapping`](../experiments/page-number-mapping/README.md)
+Every heading ends with the PDF page it starts on, `(p. N)`, so the agent can cite the page of the PDF the reader has open. `scripts/page-map.py` finds the page from three sources, in order: the PDF's named destinations (LaTeX writes one per section), its outline, and a search of the page text for the heading. A bookmark is believed only when its page prints the heading, since hyperref can point appendix "A.7" at section 7. A run-in paragraph heading ("Setup. We evaluate …") is found at the start of a line. → [`experiments/page-number-mapping`](../experiments/page-number-mapping/README.md)
 
 ## PDF-only papers
 
@@ -65,10 +82,13 @@ Before that, papers without HTML were converted from the text layer alone, in co
 
 A table or a code listing that is an image in the PDF is read by OCR (RapidOCR), and comes out as a table or a code block; its numbers are then the OCR's, not the text layer's. Apple's OCR was compared and reads logos and chart labels into the text. OpenCV is pinned to 4.12: later releases crash now and then inside the OCR on Apple silicon. → [`experiments/ocr-engines`](../experiments/ocr-engines/README.md)
 
+docling writes a table's caption with the table and yields it again as an item of its own; the second copy is dropped.
+
 Known limitations:
 
 - Headings set as run-in bold text (as in PNAS) are not found.
 - A table's caption can appear a paragraph away from the table.
+- On a two-column first page the title and authors can land inside the introduction.
 - Plots keep their image but not their numbers.
 
 ## Web articles

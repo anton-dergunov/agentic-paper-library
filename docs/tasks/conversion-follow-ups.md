@@ -41,6 +41,16 @@ the header. What is still open, with the papers of that library as examples:
   `LABEL:` references now do; the paper is hand-edited, so it needs `--force` and its cropped
   Figure 1 put back.
 
+## arXiv HTML
+
+Left open by the fixes of 2026-10-04 ([`experiments/review-flagged-fixes`](../../experiments/review-flagged-fixes/README.md)):
+
+- **A source file LaTeXML did not include.** "Measuring what Matters" (2511.04703) renders `\input{sections/1_intro}` as the path, so the introduction and Figure 1 are missing and every later section number is two low. `paperlib symptoms` flags it (`input-path`); that paper was repaired by hand from its LaTeX source. The converter could do the same: convert the file with pandoc, splice it in, and renumber the sections that follow.
+- **A float LaTeXML dropped.** "Establishing Best Practices for Building Rigorous Agentic Benchmarks" has no table of its 17 benchmarks (a `longtblr`); references to it now show its label ("Table all-benchmarks"). The table could be taken from the PDF.
+- **Named destinations are trusted without a check.** When the HTML's section numbers differ from the PDF's (the case above), `page-map.py` places "1 Methods" on the page of the PDF's section 1. The check that now guards bookmarks (the heading must be printed on the page) could guard destinations too; it needs measuring first, since a heading set in mathematics or small capitals would fail it.
+- **References that share an anchor.** See "Table and figure numbers" in `conversion.md`.
+- **Undefined author macros** leave their names in the author block ("\\multiauthors\\affiliations" in "The Leaderboard Illusion").
+
 ## The PDF converter
 
 - **OpenCV is held at 4.12.** Later releases segfault in their Arm resize inside RapidOCR, about one conversion in three of "Canaries in the Coal Mine" ([`experiments/ocr-engines`](../../experiments/ocr-engines/README.md)). Lift the pin, and the numpy override that goes with it, when a release converts that paper ten times without a crash.

@@ -35,7 +35,7 @@ def convert(fragment):
         subprocess.run(
             [sys.executable, SCRIPTS / "html-to-markdown.py", tmp / "paper.html", tmp / "body.md",
              tmp / "images", "paper"],
-            check=True, capture_output=True,
+            check=True, capture_output=True, timeout=120,
         )
         images = sorted(p.name for p in (tmp / "images").glob("*")) if (tmp / "images").exists() else []
         return (tmp / "body.md").read_text(encoding="utf-8"), images
@@ -247,6 +247,119 @@ def checks():
                  author={Jiang, Bowen and Hao, Zhuoqun and Cho, Young-Min and Li, Bryan}}""")
     yield "citation label from the .bib", labels == {"jiang2025know": "Jiang et al. 2025"}
     yield "reference entry from the .bib", "Know Me, Respond to Me" in entries.get("jiang2025know", "")
+
+    md, _ = convert(f'<p>{math("2true294")} problems, {math("1true558")} lines, {math("x=true0")}.</p>')
+    yield "digit groups joined by \"true\" are one number", "$2294$" in md and "$1558$" in md and "true0" in md
+
+    md, _ = convert('<p>edits <span class="ltx_text ltx_lstlisting ltx_font_typewriter">'
+                    '<span class="ltx_text ltx_lst_identifier">napoleon_use_param</span></span> first.</p>')
+    yield "inline listing keeps its code", "`napoleon_use_param`" in md
+
+    md, _ = convert(f'<p>5.4 {math("+0" + chr(92) + "%")}<span class="ltx_text ltx_phantom">'
+                    '<span style="visibility:hidden">5</span></span> end</p>')
+    yield "phantom text is dropped", "$5" not in md and "end" in md
+
+    sim = r"\mathrel{\mathchoice{\vbox{\hbox{$\scriptstyle\sim$}}}{\vbox{\hbox{$\scriptstyle\sim$}}}" \
+          r"{\vbox{\hbox{$\scriptscriptstyle\sim$}}}{\vbox{\hbox{$\scriptscriptstyle\sim$}}}}2000"
+    md, _ = convert(f"<p>a pool of {math(sim)} problems</p>")
+    yield "\\mathchoice keeps one rendering, unboxed", r"\scriptstyle\sim" in md and "mathchoice" not in md and "vbox" not in md
+
+    md, _ = convert(f'<p>(0% {math(chr(92) + "rightarrow" + chr(92) + "penalty" + chr(92) + " ")}70%)</p>')
+    yield "\\penalty with a control space leaves no escaped dollar", r"$\rightarrow$" in md and r"\$" not in md
+
+    md, _ = convert(f'<p>{math(r"\text{pass\textasciicircum k}=1")}</p>')
+    yield "\\textasciicircum is kept", r"\text{pass\textasciicircum k}" in md
+
+    md, _ = convert('<p><span class="ltx_text">pass</span>\xa0' + math(r"\hat{}") + '\xa0<span class="ltx_text">1</span> '
+                    'and 5\u03035% of failures</p>')
+    yield "an empty accent between words is a caret", "pass^1" in md
+    yield "a tilde set on a digit goes before the number", "~55%" in md
+
+    md, _ = convert(f'<p>indented{chr(160) * 40}{math("y")} line</p>')
+    yield "a run of non-breaking spaces before other math converts", "$y$" in md
+
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td ltx_border_tt">Name</td>'
+                    '<td class="ltx_td ltx_border_tt">Access</td></tr><tr class="ltx_tr"><td class="ltx_td ltx_border_t">Battles</td>'
+                    '<td class="ltx_td ltx_border_t"><span class="ltx_inline-block fas fa-lock" aria-hidden="true"> </span></td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">Prompts</td><td class="ltx_td">'
+                    '<span class="ltx_inline-block fas fa-globe" aria-hidden="true"> </span></td></tr></table>')
+    yield "icon font glyphs are named", "lock" in md and "globe" in md
+
+    md, _ = convert('<div class="ltx_listing"><div class="ltx_listingline">S <span class="ltx_text" style="float:right;">'
+                    '<span class="ltx_inline-block ltx_parbox" style="width:0.0pt;"><span class="ltx_p">196.12387pt</span></span>'
+                    'Calibrate thresholds</span></div></div>')
+    yield "a box's width is not text", "196.12387pt" not in md and "Calibrate" in md
+
+    def float_table(n):
+        return ('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">Model</td><td class="ltx_td">Score</td></tr>'
+                f'<tr class="ltx_tr"><td class="ltx_td">M{n}</td><td class="ltx_td">{n}0.5</td></tr></table>'
+                f'<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table {n}: </span>Results {n}.</figcaption>')
+    md, _ = convert(f'<figure class="ltx_table">{float_table(1)}{float_table(2)}</figure>')
+    yield "each caption stays with its own table", md.index("Table 1: Results") < md.index("M2") < md.index("Table 2: Results")
+
+    bibitem = ('<li id="bib.bibx{n}" class="ltx_bibitem"><span class="ltx_tag ltx_tag_bibitem">[2018]</span> '
+               '<span class="ltx_bibblock">{authors}</span> <span class="ltx_bibblock">2018. A title.</span></li>')
+    md, _ = convert('<p><cite class="ltx_cite">[<a href="#bib.bibx1" class="ltx_ref">2018</a>, '
+                    '<a href="#bib.bibx2" class="ltx_ref">2018</a>]</cite></p><ul>'
+                    + bibitem.format(n=1, authors="Mihaylov, T.; Clark, P.; and Khot, T.")
+                    + bibitem.format(n=2, authors="L. Breiman.") + "</ul>")
+    yield "a bare-year citation gets its first author", "[Mihaylov et al. 2018]" in md and "[Breiman 2018]" in md
+
+    md, _ = convert('<h1 class="ltx_title ltx_title_document">Terminal-Bench:<br class="ltx_break">Benchmarking Agents</h1>'
+                    "<p>Text.</p>")
+    yield "a title broken over two lines is one heading", md.startswith("# Terminal-Bench: Benchmarking Agents\n")
+
+    notes = ('<span class="ltx_author_notes"><span class="ltx_author_notes_content">Affiliation: '
+             + ", ".join(f"<sup>{k}</sup>University {k}" for k in range(1, 9)) + "</span></span>")
+    md, _ = convert('<div class="ltx_authors">' + "".join(
+        f'<span class="ltx_creator ltx_role_author"><span class="ltx_personname">{name}</span>{notes}</span>'
+        for name in ("Ada Lovelace", "Alan Turing", "Grace Hopper")) + "</div><p>Text.</p>")
+    yield "a shared affiliation list is shown once", md.count("University 8") == 1 and "Grace Hopper" in md
+
+    md, _ = convert('<div class="ltx_authors"><span class="ltx_creator ltx_role_author"><span class="ltx_personname">'
+                    'name=Ada Lovelace </span></span> <span class="ltx_author_before"> </span>'
+                    '<span class="ltx_creator ltx_role_author"><span class="ltx_personname">affiliation=1 </span></span>'
+                    "</div><p>Text.</p>")
+    yield "name= and affiliation= are one author", "Ada Lovelace<sup>1</sup>" in md and "name=" not in md
+
+    md, _ = convert('<table class="ltx_equationgroup ltx_eqn_table"><tbody><tr class="ltx_eqn_row">'
+                    f'<td class="ltx_eqn_cell" colspan="2">{math(r"\displaystyle\begin{split}q&=a\\ &+b\end{split}")}</td>'
+                    '<td class="ltx_eqn_cell ltx_eqn_eqno"><span class="ltx_tag">(1)</span></td></tr></tbody></table>')
+    yield "an equation across the columns is a display equation", md.strip().startswith("$$") and r"\tag{1}" in md
+
+    h2m = load("html-to-markdown")
+    tex = r"and 17 widely used \emph{agentic} benchmarks (Table \ref{tab:all}). As shown in Figure~\ref{fig:flow}, we then"
+    yield "an empty reference is found in the LaTeX source", (
+        h2m.label_in_source("17 widely used <em>agentic</em> benchmarks (Table ", tex) == "tab:all"
+        and h2m.label_in_source("held out. As shown in Figure ", tex) == "fig:flow"
+        and h2m.label_in_source("something else entirely in Table ", tex) is None)
+
+    captions = load("caption-numbers")
+    pdf_caps = [("Table 6", captions.words("Agreement between two types of judges on Chatbot Arena.")),
+                ("Figure 2", captions.words("Agreement and win rate difference. Each point")),
+                ("Table 7", captions.words("Category-wise win rate of models."))]
+    yield "caption numbers follow the PDF", (
+        captions.pdf_label("Agreement and win rate difference. Each point corresponds", "Table 7", pdf_caps) == "Figure 2"
+        and captions.pdf_label("Category-wise win rate of models.", "Table 8", pdf_caps) == "Table 7"
+        and captions.pdf_label("Agreement between two types of judges on Chatbot Arena.", "Table 6", pdf_caps) == "Table 6"
+        and captions.pdf_label("Something the PDF does not have at all", "Table 9", pdf_caps) is None)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        import pymupdf
+        pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
+        doc = pymupdf.open()
+        page = doc.new_page()
+        page.insert_text((72, 100), "Figure 2: Agreement and win rate difference of judges.")
+        page.insert_text((72, 300), "Table 7: Category-wise win rate of all models.")
+        doc.save(pdf_file)
+        md_file.write_text("See Table [8](#S4.T8 \"Table 8 ‣ 4 Results\") and [Figure\xa07](#S4.T7 \"In 4 Results\").\n\n"
+                           "Table 7: Agreement and win rate difference of judges.\n\n"
+                           "Table 8: Category-wise win rate of all models.\n", encoding="utf-8")
+        subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
+        out = md_file.read_text(encoding="utf-8")
+    yield "captions and their links are renumbered from the PDF", (
+        "Figure 2: Agreement" in out and "Table 7: Category-wise" in out
+        and 'Table [7](#S4.T8 "Table 7 ‣ 4 Results")' in out and "[Figure\xa07]" in out)
 
     pdf = load("pdf-to-markdown")
     yield "PDF heading levels from numbering", [

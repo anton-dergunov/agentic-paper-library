@@ -218,6 +218,7 @@ fi
 
 if [ "${SOURCE:-}" = html ]; then
   python3 "$SCRIPTS_DIR/page-map.py" "$PDF" "$MD"
+  python3 "$SCRIPTS_DIR/caption-numbers.py" "$PDF" "$MD"
 fi
 
 echo "Done: $PDF"

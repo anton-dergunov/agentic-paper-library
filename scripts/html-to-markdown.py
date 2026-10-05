@@ -335,6 +335,9 @@ def listing_source(block):
             pass
     lines = re.findall(r'<(div|span)[^>]*\bltx_listingline\b[^>]*>(.*?)</\1>', block, re.S)
     lines = [line for _, line in lines]
+    if not lines:
+        # \lstinline in running text has no line elements, only its tokens.
+        lines = [re.sub(r"\A<[^>]+>|</\w+\s*>\Z", "", block)]
     text = [html.unescape(re.sub(r"<[^>]+>", "", line)).strip("\n") for line in lines]
     return "\n".join(text).rstrip("\n")
 
@@ -531,6 +534,24 @@ def latex_source(version):
 
 MISSING_CITATION = re.compile(r'<span class="ltx_ref ltx_missing_citation[^"]*">([^<]+)</span>')
 MISSING_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*">LABEL:([^<]+)</span>')
+# The same, with not even the label left: "(Table )".
+EMPTY_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*"[^>]*>\s*</span>')
+TEX_REF = r"\\(?:ref|cref|Cref|autoref|vref)\*?\{([^}]+)\}"
+# What may stand between two words of a sentence in its LaTeX source.
+TEX_GAP = r"(?:[^a-zA-Z0-9\\]|\\[a-zA-Z]+\*?|\\.)*"
+
+
+def label_in_source(before, tex):
+    """The label of the \\ref that follows the words `before` in the LaTeX source."""
+    said = plain_words(re.sub(r"<math\b.*?</math>", " ", before, flags=re.S))[-5:]
+    while len(said) >= 3:
+        found = {m.group(1) for m in re.finditer(TEX_GAP.join(map(re.escape, said)) + TEX_GAP + TEX_REF, tex, re.I)}
+        if len(found) == 1:
+            return found.pop()
+        if found:
+            return None  # the same words lead to two different floats
+        said = said[1:]
+    return None
 
 
 def citations_from_bibtex(keys, bib):
@@ -563,10 +584,11 @@ def unresolved_citations(article, page):
     Both are rebuilt from the .bib in the paper's source. A reference to a
     table or figure LaTeXML lost ("Table LABEL:tab:x") gets its number from
     the float whose caption follows that \\label in the source, or else
-    shows the label's name.
+    shows the label's name. Where not even the label is left ("Table "), it
+    is the one the same sentence refers to in the source.
     """
     keys = list(dict.fromkeys(k.strip() for k in MISSING_CITATION.findall(article)))
-    labels_missing = MISSING_LABEL.search(article)
+    labels_missing = MISSING_LABEL.search(article) or EMPTY_LABEL.search(article)
     if not keys and not labels_missing:
         return article
     version = paper_version(page)
@@ -597,8 +619,7 @@ def unresolved_citations(article, page):
                     for tag, body in re.findall(
                         r'<figcaption\b[^>]*>\s*<span class="ltx_tag[^"]*">(.*?)</span>(.*?)</figcaption>', article, re.S)]
 
-        def number(m):
-            label = m.group(1)
+        def number(label):
             at = tex.find(f"\\label{{{label}}}")
             # The caption of the float the label sits in: the nearest one before
             # the label within the float, else the first after it.
@@ -611,7 +632,12 @@ def unresolved_citations(article, page):
                         return tag.split()[-1]  # "Table 3" -> "3", after the "Table" already in the text
             return label.split(":", 1)[-1]
 
-        article = MISSING_LABEL.sub(number, article)
+        def from_source(m):
+            label = label_in_source(article[max(0, m.start() - 400):m.start()], tex)
+            return number(label) if label else m.group(0)
+
+        article = EMPTY_LABEL.sub(from_source, article)
+        article = MISSING_LABEL.sub(lambda m: number(m.group(1)), article)
     return article
 
 
@@ -732,6 +758,45 @@ def forest_trees(article, page):
     return placeholder.sub(lambda m: f"<div {LIFT}>{next(lists)}</div>", article)
 
 
+BIBITEM = re.compile(r'<li\b[^>]*\bid="(bib\.[^"]+)"[^>]*\bclass="[^"]*\bltx_bibitem\b[^"]*"[^>]*>(.*?)</li>', re.S)
+
+
+def first_author(names):
+    """ "Mihaylov et al." from a reference's author list, in whichever order
+    it writes names ("Mihaylov, T.; Clark, P.", "T. Mihaylov and P. Clark")."""
+    names = " ".join(re.sub(r"<[^>]+>", " ", html.unescape(names)).split()).rstrip(". ")
+    if not names:
+        return None
+    first = re.split(r"[;,]| and ", names)[0].split()
+    surname = [w for w in first if not re.fullmatch(r"(?:[A-Z]\.)+|[A-Z]", w)] or first
+    several = bool(re.search(r"[;,].*[;,]| and |&| et al", names))
+    return " ".join(surname) + (" et al." if several else "")
+
+
+def bare_year_citations(article):
+    """Put the author back on citations that show only a year.
+
+    A bibliography style LaTeXML does not know leaves each reference's tag
+    as "[2018]", so every citation reads "[2018, 2018, 2018]". The first
+    author is taken from the reference itself.
+    """
+    authors = {}
+    for ref, item in BIBITEM.findall(article):
+        if not re.search(r'ltx_tag_bibitem">\s*\[?\d{4}[a-z]?\]?\s*<', item):
+            continue
+        block = re.search(r'<span class="ltx_bibblock">(.*?)</span>\s*(?=<span class="ltx_bibblock">|\Z)', item, re.S)
+        name = first_author(block.group(1)) if block else None
+        if name:
+            authors[ref] = name
+    if not authors:
+        return article
+    return re.sub(
+        r'(<a\b[^>]*\bhref="#(bib\.[^"]+)"[^>]*>)(\d{4}[a-z]?)(</a>)',
+        lambda m: f"{m.group(1)}{authors[m.group(2)]} {m.group(3)}{m.group(4)}" if m.group(2) in authors else m.group(0),
+        article,
+    )
+
+
 REF_KINDS = {"sec": "§", "ssec": "§", "subsec": "§", "app": "Appendix", "fig": "Figure",
              "tab": "Table", "eq": "Eq.", "alg": "Algorithm", "thm": "Theorem", "def": "Definition"}
 
@@ -771,6 +836,118 @@ def name_uncaptioned_images(article):
         return tag.group(0).replace('alt="[Uncaptioned image]"', f'alt="{html.escape(name)}"')
 
     return re.sub(r'<img\b[^>]*\balt="\[Uncaptioned image\]"[^>]*>', rename, article)
+
+
+def drop_invisible(article):
+    """Remove text LaTeX set only for its width.
+
+    \\phantom{5} arrives as a hidden span that still holds the "5", which
+    would print after the number it pads ("+0%5"). A \\parbox given a zero
+    width in an algorithm line arrives holding a TeX length as its text.
+    """
+    out, pos = [], 0
+    for m in re.finditer(r'<span\b[^>]*\bclass="[^"]*\bltx_phantom\b[^"]*"[^>]*>', article):
+        if m.start() < pos:
+            continue
+        end = balanced_end(article, m.start(), "span")
+        if end:
+            out.append(article[pos:m.start()])
+            pos = end
+    article = "".join(out) + article[pos:]
+    # "pass\\^{}k": an accent over nothing, set between the two words.
+    # One class for the spaces: \s matches \xa0 too, and as two alternatives a run of them backtracks forever.
+    article = re.sub(r'(?:[\s\xa0]|&nbsp;)*<math\b(?:(?!</math>).)*?>\\hat\{\}</annotation>\s*</semantics>\s*</math>'
+                     r'(?:[\s\xa0]|&nbsp;)*', "^", article, flags=re.S)
+    # "\\~55%": the tilde meant "about" but landed on the first digit as an accent.
+    article = re.sub("(\\d)\u0303", r"~\1", article)
+    return re.sub(r'<span\b[^>]*\bclass="ltx_p"[^>]*>\s*-?\d+(?:\.\d+)?pt\s*</span>', "", article)
+
+
+AUTHOR_NOTES = re.compile(r'<span\b[^>]*\bclass="ltx_author_notes"[^>]*>')
+# Notes this long are a shared list (every affiliation of the paper), not one author's own.
+SHARED_NOTES = 100
+
+
+def tidy_authors(article):
+    """Make the author block readable.
+
+    A paper that sets all its affiliations in one \\thanks has the whole list
+    after every author; a list already shown is dropped. An author macro
+    LaTeXML does not know leaves "name=Ada Lovelace" and "affiliation=1" as
+    separate authors; they become the name and its superscript.
+    """
+    begin = article.find('<div class="ltx_authors">')
+    end = balanced_end(article, begin, "div") if begin >= 0 else None
+    if end is None:
+        return article
+    block = article[begin:end]
+    seen, out, pos = set(), [], 0
+    for m in AUTHOR_NOTES.finditer(block):
+        if m.start() < pos:
+            continue
+        close = balanced_end(block, m.start(), "span")
+        if close is None:
+            continue
+        text = " ".join(re.sub(r"<[^>]+>", " ", block[m.start():close]).split())
+        if len(text) >= SHARED_NOTES and text in seen:
+            out.append(block[pos:m.start()])
+            pos = close
+        seen.add(text)
+    block = "".join(out) + block[pos:]
+    block = re.sub(r'(<span class="ltx_personname">\s*)name=', r"\1", block)
+    block = re.sub(
+        r'\s*</span>\s*</span>\s*<span class="ltx_author_before">\s*</span>\s*<span class="ltx_creator ltx_role_author">'
+        r'\s*<span class="ltx_personname">\s*affiliation=([\d,\s]+?)\s*(?=</span>)',
+        r"<sup>\1</sup>", block)
+    return article[:begin] + block + article[end:]
+
+
+FIGURE_PARTS = re.compile(r"<figure\b[^>]*>|</figure\s*>|<figcaption\b[^>]*>|</figcaption\s*>")
+
+
+def split_captions(article):
+    """Keep each caption by its own table when one float holds several.
+
+    Four tables set in one float, each with a \\caption, arrive as one
+    <figure> with four <figcaption>s. pandoc takes them together as the
+    figure's caption, so all four would follow the last table. They become
+    paragraphs, which stay where they are.
+    """
+    stack, captions = [], []  # open figures: [number of own captions]; (start, end, figure)
+    figure_id = 0
+    for m in FIGURE_PARTS.finditer(article):
+        tag = m.group(0)
+        if tag.startswith("<figure"):
+            figure_id += 1
+            stack.append([figure_id, 0])
+        elif tag.startswith("</figure"):
+            if stack:
+                stack.pop()
+        elif stack:
+            if tag.startswith("<figcaption"):
+                stack[-1][1] += 1
+            captions.append((m.start(), m.end(), stack[-1][0], tag.startswith("</")))
+    counts = {}
+    for _, _, figure, closing in captions:
+        counts[figure] = counts.get(figure, 0) + (not closing)
+    out, pos = [], 0
+    for start, end, figure, closing in captions:
+        if counts[figure] < 2:
+            continue
+        out.append(article[pos:start])
+        out.append("</p>" if closing else '<p class="ltx_p">')
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+# Font Awesome's style classes, which precede the icon's own "fa-<name>".
+ICON = re.compile(r'<span\b[^>]*\bclass="[^"]*\bfa[srlbd]?\s[^"]*?\bfa-([a-z0-9-]+)[^"]*"[^>]*>\s*</span>')
+
+
+def name_icons(article):
+    """Write a Font Awesome icon as its name: an empty span "fas fa-lock" is
+    "[lock]", so a table column of icons keeps what each cell says."""
+    return ICON.sub(lambda m: f"[{m.group(1)}]", article)
 
 
 def objects_to_images(article):
@@ -813,11 +990,16 @@ def main(html_path, body_path, images_dir, basename):
     # ("x1.png", "extracted/..."); the figure download needs the full path.
     base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
     article = extract_article(page)
+    article = drop_invisible(article)
+    article = name_icons(article)
+    article = split_captions(article)
+    article = tidy_authors(article)
     article = convert_listings(article)
     article = span_tabulars_to_tables(article)
     article = forest_trees(article, page)
     article = unresolved_refs(article)
     article = unresolved_citations(article, page)
+    article = bare_year_citations(article)
     article = extract_svgs(article, save)
     article = lift_blocks(article)
     article = objects_to_images(article)

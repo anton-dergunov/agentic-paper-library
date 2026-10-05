@@ -44,6 +44,7 @@ COMMANDS = {
     "html-to-markdown": ("html-to-markdown.py", False, "convert an arXiv HTML rendering"),
     "pdf-to-markdown": ("pdf-to-markdown.py", False, "convert a PDF (docling, plus marker's equation model)"),
     "page-map": ("page-map.py", False, "add (p. N) to headings from the PDF: <paper.pdf> <paper.md>"),
+    "caption-numbers": ("caption-numbers.py", False, "number tables and figures as the PDF does: <paper.pdf> <paper.md>"),
 }
 # paperlib.py's own subcommands keep their name.
 PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename"}
