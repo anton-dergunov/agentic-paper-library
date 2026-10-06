@@ -234,6 +234,51 @@ def checks():
     lists = h2m.forest_html([tree], "")
     yield "forest node text cleaned", "MyAgent, MemOS" in lists[0] and "citep" not in lists[0]
     yield "forest math kept", "x-tex" in lists[0] and "_2" in lists[0]
+    article = ('<section id="S4" class="ltx_section"><h2 class="ltx_title ltx_title_section">'
+               '<span class="ltx_tag ltx_tag_section">4 </span>Foundational Components</h2>'
+               '<section id="S4.SS2" class="ltx_subsection"><h3 class="ltx_title ltx_title_subsection">'
+               '<span class="ltx_tag ltx_tag_subsection"><span class="ltx_text">IV-B</span> </span>'
+               '<span class="ltx_text ltx_font_italic">Context &amp; Processing</span></h3></section>'
+               '<section id="S4.SS2.SSS1" class="ltx_subsubsection"><h4 class="ltx_title ltx_title_subsubsection">'
+               '<span class="ltx_tag ltx_tag_subsubsection">4.2.1 </span>Context Processing</h4></section></section>'
+               '<section id="S9" class="ltx_paragraph"><h5 class="ltx_title ltx_title_paragraph">'
+               'Foundational Components</h5></section>')
+    tex = (r"\section{Foundational Components}" "\n" r"\label{sec:found}" "\n"
+           r"\subsection{\textcolor{red}{Context \& Processing}}\vspace{-1mm}" "\n" r"\label{subsec:proc} text" "\n"
+           r"\subsection{Lost in the HTML}\label{subsec:lost}")
+    sections = h2m.section_numbers(article, tex)
+    yield "section labels numbered by title and level", sections == {
+        "sec:found": ("4", "S4"), "subsec:proc": ("IV-B", "S4.SS2")}
+    tree = h2m.forest_nodes(r"""[\ \ Context Engineering\ \ \ , ver
+        [\ \ \ Foundational \\ \ \ Components~(\S\ref{sec:found}),ver
+            [\ \ \ Context \\ \ Processing~(\S\ref{subsec:proc}) [\eg ~Mamba~\citep{a}{,} YaRN~\citep{b}, leaf]]
+            [\ Lost \ (\S\ref{subsec:lost})]]]""")
+    twice = ('<section id="S2.SS2"><h3><span class="ltx_tag ltx_tag_subsection">2.2 </span>Reward Modeling</h3></section>'
+             '<section id="A1.SS2"><h3><span class="ltx_tag ltx_tag_subsection">A.2 </span>Reward Modeling</h3></section>')
+    yield "sections with one title paired in order", h2m.section_numbers(
+        twice, r"\subsection{Reward Modeling}\label{rm} \subsection{Reward Modeling}") == {"rm": ("2.2", "S2.SS2")}
+    yield "sections with one title left alone when the counts differ", h2m.section_numbers(
+        twice, r"\subsection{Reward Modeling}\label{rm}") == {}
+    lists = h2m.forest_html([tree], "", sections)
+    yield "forest section references resolved", (
+        '(<a href="#S4">§4</a>)' in lists[0] and '(<a href="#S4.SS2">§IV-B</a>)' in lists[0])
+    yield "forest padding and empty references dropped", (
+        "<li>Context Engineering<ul>" in lists[0] and "<li>Foundational Components" in lists[0]
+        and "<li>Lost</li>" in lists[0] and "()" not in lists[0] and "Mamba, YaRN" in lists[0])
+
+    md, _ = convert(
+        '<div class="ltx_para ltx_noindent"><p class="ltx_p">marginparsep has been altered.\n<br class="ltx_break">'
+        'topmargin has been altered.\n<br class="ltx_break"></p></div>'
+        '<div class="ltx_para ltx_noindent"><p class="ltx_p">The page layout violates the ICML style.</p></div>'
+        '<div class="ltx_para"><p class="ltx_p">Please do not change the page layout, or include packages like '
+        'geometry, savetrees, or fullpage, which change it for you.\nWe&#8217;re not able to reliably undo arbitrary '
+        'changes to the style. Please remove\nthe offending package(s), or layout-changing commands and try again.</p></div>'
+        '<h1 class="ltx_title ltx_title_document">A Paper</h1>'
+        '<div class="ltx_para"><p class="ltx_p">The learning rate has been altered. Please remove it.</p></div>')
+    yield "style-file warnings dropped", (
+        "violates" not in md and "marginparsep" not in md and "savetrees" not in md
+        and "offending" not in md
+        and "The learning rate has been altered. Please remove it." in md)
     yield "paper version from the margin stamp", h2m.paper_version("<div>arXiv:2505.00675v3 [cs.CL] 24 Dec 2025</div>") == "2505.00675v3"
 
     named = h2m.name_uncaptioned_images(

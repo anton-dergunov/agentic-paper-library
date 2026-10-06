@@ -34,6 +34,8 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
 9. Trees drawn with the forest package, which LaTeXML cannot render, are
    taken from the paper's LaTeX source as nested lists (see forest_trees).
 10. Cross-references LaTeXML could not resolve keep their label as text.
+11. The warnings a conference style file typesets when a paper changed its
+    page layout are dropped (see drop_style_warnings).
 """
 
 import base64
@@ -681,21 +683,67 @@ def forest_nodes(tex):
 
 
 CITE = re.compile(r"~?\\(?:cite|citep|citet|citealp|citeauthor|citeyear|parencite|textcite|autocite)\*?(?:\[[^\]]*\])*\{([^}]*)\}")
-# A cross-reference ("\S\ref{sec:x}"): the HTML has no numbers to resolve it to.
-REF = re.compile(r"(?:\\S|§)?~?\s*\\(?:ref|autoref|cref|Cref|eqref)\{[^}]*\}")
+# A cross-reference ("\S\ref{sec:x}"), with the section sign or word before it.
+REF = re.compile(r"(?:\\S|§|Sec(?:tion|\.)?)?~?\s*\\(?:ref|autoref|cref|Cref|eqref)\{([^}]*)\}")
+SECTIONING = re.compile(r"\\(chapter|(?:sub){0,2}section)\*?\s*(?:\[[^\]]*\])?\s*\{")
+NUMBERED_HEADING = re.compile(
+    r'<section\b[^>]*\bid="([^"]+)"[^>]*>\s*<h\d\b[^>]*>\s*'
+    r'<span class="ltx_tag ltx_tag_(\w+)">((?:<span\b[^>]*>[^<]*</span>|[^<])*)</span>(.*?)</h\d>', re.S)
 
 
-def forest_html(trees, macros):
-    """Nested <ul>s for parsed trees, the node text converted from LaTeX by pandoc."""
-    texts = []
+def section_numbers(article, tex):
+    """{label: (number, id)} for the sections of the LaTeX source the HTML numbers.
+
+    A \\label belongs to the \\section it directly follows; the section is
+    found in the HTML by its level and title. Sections that share both are
+    paired in order when the source and the HTML have as many of them.
+    """
+    headings, labels = {}, {}
+    for sid, level, number, title in NUMBERED_HEADING.findall(article):
+        number = re.sub(r"<[^>]+>", "", number).strip().rstrip(".")
+        words = tuple(plain_words(html.unescape(re.sub(r"<math\b.*?</math>|<[^>]+>", " ", title, flags=re.S))))
+        if number:
+            headings.setdefault((level, words), []).append((number, sid))
+    for m in SECTIONING.finditer(tex):
+        depth, end = 1, m.end()
+        while end < len(tex) and depth:
+            depth += {"{": 1, "}": -1}.get(tex[end], 0)
+            end += 1
+        label = re.match(r"(?:\s|\\vspace\*?\{[^}]*\})*\\label\{([^}]+)\}", tex[end:])
+        title = re.sub(r"\$[^$]*\$|\\(?:text)?color\{[^}]*\}", " ", tex[m.end():end - 1])
+        labels.setdefault((m.group(1), tuple(plain_words(title))), []).append(label.group(1) if label else None)
+    return {label: found
+            for key, names in labels.items() if len(names) == len(headings.get(key, []))
+            for label, found in zip(names, headings[key]) if label}
+
+
+def forest_html(trees, macros, sections=None):
+    """Nested <ul>s for parsed trees, the node text converted from LaTeX by pandoc.
+
+    A reference to a section ("\\S\\ref{sec:x}") becomes a link showing its
+    number when `sections` ({label: (number, id)}) has the label; other
+    references are dropped, with brackets they leave empty.
+    """
+    texts, links = [], []
+
+    def reference(m):
+        if m.group(1) not in (sections or {}):
+            return ""
+        links.append(sections[m.group(1)])
+        return f"FORESTREF{len(links) - 1}X"
 
     def collect(n):
-        text = REF.sub("", re.sub(r"\{,\s*\}", ", ", n[0]).replace("\\\\", " "))
+        # "\\ \\ \\ Context \\\\ \\ \\ Processing": line breaks and the spaces that centre the lines.
+        text = re.sub(r"(?:\\ |\\\Z|\s)+", " ", re.sub(r"\{,\s*\}", ", ", n[0]).replace("\\\\", " "))
+        text = re.sub(r"\s+~\s*|~\s+", "~", text)  # a space beside a tie adds nothing
+        text = re.sub(r"(?<=[\w.,;])(?=FORESTREF)", " ", REF.sub(reference, text))
         # Citations go when the node names its papers anyway ("MemGPT \cite{x}").
         if re.sub(r"[\W\d_]", "", CITE.sub("", text).replace("\\", "")):
             text = CITE.sub("", text)
         else:
             text = CITE.sub(lambda m: m.group(1).replace(",", ", "), text)
+        if "()" not in n[0]:  # brackets that held only a reference; "forward()" stays
+            text = re.sub(r"[\s~]*\(\s*\)", "", text)
         texts.append(re.sub(r"\s+(?=[,;.)])", "", text).strip())
         for c in n[1]:
             collect(c)
@@ -724,6 +772,8 @@ def forest_html(trees, macros):
         )
         for p in parts
     ]
+    parts = [re.sub(r"FORESTREF(\d+)X",
+                    lambda m: '<a href="#{1}">§{0}</a>'.format(*links[int(m.group(1))]), p) for p in parts]
     it = iter(parts)
 
     def render(n):
@@ -754,7 +804,7 @@ def forest_trees(article, page):
               file=sys.stderr)
         return article
     macros = "\n".join(re.findall(r"^\s*\\(?:re)?newcommand\b.*$|^\s*\\DeclareMathOperator\b.*$", tex, re.M))
-    lists = iter(forest_html(trees, macros))
+    lists = iter(forest_html(trees, macros, section_numbers(article, tex)))
     return placeholder.sub(lambda m: f"<div {LIFT}>{next(lists)}</div>", article)
 
 
@@ -861,6 +911,27 @@ def drop_invisible(article):
     # "\\~55%": the tilde meant "about" but landed on the first digit as an accent.
     article = re.sub("(\\d)\u0303", r"~\1", article)
     return re.sub(r'<span\b[^>]*\bclass="ltx_p"[^>]*>\s*-?\d+(?:\.\d+)?pt\s*</span>', "", article)
+
+
+STYLE_WARNING = re.compile(
+    r"(?:\w+ has been altered\.|The page layout violates the \w+ style\."
+    r"|Please do not change the page layout, or include packages like[^.]*\."
+    r"|We.re not able to reliably undo arbitrary changes to the style\."
+    r"|Please remove the offending package\(s\), or layout-changing commands and try again\.|\s)+")
+
+
+def drop_style_warnings(article):
+    """Remove what a conference style file prints when a paper changed its margins.
+
+    The ICML and UAI styles typeset "marginparsep has been altered. ... The
+    page layout violates the ICML style." into the page; LaTeXML keeps the
+    lines as the paper's first paragraphs, above the title.
+    """
+    def keep(m):
+        text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", m.group(0))).split())
+        return m.group(0) if not text or not STYLE_WARNING.fullmatch(text) else ""
+
+    return re.sub(r'<div\b[^>]*class="ltx_para[^"]*"[^>]*>\s*<p\b[^>]*>(?:(?!</p>).)*</p>\s*</div>', keep, article, flags=re.S)
 
 
 AUTHOR_NOTES = re.compile(r'<span\b[^>]*\bclass="ltx_author_notes"[^>]*>')
@@ -991,6 +1062,7 @@ def main(html_path, body_path, images_dir, basename):
     base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
     article = extract_article(page)
     article = drop_invisible(article)
+    article = drop_style_warnings(article)
     article = name_icons(article)
     article = split_captions(article)
     article = tidy_authors(article)

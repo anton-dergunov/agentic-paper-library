@@ -1,0 +1,58 @@
+forest	library/deep-learning/A continual learning survey. Defying forgetting in classification tasks.md
+warning	library/deep-learning/normalization-and-regularization/Averaging Weights Leads to Wider Optima and Better Generalization.md
+warning	library/deep-learning/theory/On the Spectral Bias of Neural Networks.md
+forest	library/deep-learning/theory/Reconciling modern machine learning practice and the bias-variance trade-off.md
+warning	library/deep-learning/efficiency-and-compression/What is the State of Neural Network Pruning.md
+forest	library/vision-and-multimodal/vision/A Survey of Visual Transformers.md
+forest	library/vision-and-multimodal/speech-and-audio/Recent Advances in Speech Language Models. A Survey.md
+forest	library/vision-and-multimodal/vision-language/MM-LLMs. Recent Advances in MultiModal Large Language Models.md
+forest	library/vision-and-multimodal/vision-language/Multimodal Chain-of-Thought Reasoning. A Comprehensive Survey.md
+forest	library/llm/personalization/methods/A Survey on Personalized Alignment -- The Missing Piece for Large Language Models in Real-World.md
+forest	library/llm/personalization/methods/Toward Personalized LLM-Powered Agents. Foundations, Evaluation, and Future Directions.md
+forest	library/llm/context/A Survey of Context Engineering for Large Language Models.md
+forest	library/llm/memory/agent/A Survey of Agent Memory in the Second Half. Towards Self-Evolving and Long-Horizon Agents.md
+forest	library/llm/memory/agent/Memory in the Age of AI Agents.md
+forest	library/llm/memory/agent/A Survey on Long-Term Memory Security in LLM Agents. Attacks, Defenses, and Governance Across the.md
+forest	library/llm/memory/agent/Rethinking Memory in LLM based Agents. Representations, Operations, and Emerging Topics.md
+forest	library/llm/efficiency/A Survey on Efficient Inference for Large Language Models.md
+warning	library/llm/efficiency/SparseGPT. Massive Language Models Can Be Accurately Pruned in One-Shot.md
+warning	library/llm/efficiency/AWQ. Activation-aware Weight Quantization for LLM Compression and Acceleration.md
+forest	library/llm/foundation-models/Challenges and Applications of Large Language Models.md
+forest	library/llm/agents/A Survey of Self-Evolving Agents. What, When, How, and Where to Evolve on the Path to Artificial.md
+forest	library/llm/agents/Advances and Challenges in Foundation Agents. From Brain-Inspired Intelligence to Evolutionary.md
+forest	library/llm/agents/The Landscape of Agentic Reinforcement Learning for LLMs. A Survey.md
+forest	library/llm/reasoning/Towards Reasoning Era. A Survey of Long Chain-of-Thought for Reasoning Large Language Models.md
+forest	library/llm/reasoning/Stop Overthinking. A Survey on Efficient Reasoning for Large Language Models.md
+forest	library/llm/reasoning/A Survey on Test-Time Scaling in Large Language Models. What, How, Where, and How Well.md
+warning	library/llm/architecture/efficient-attention-and-long-context/Generating Long Sequences with Sparse Transformers.md
+forest	library/llm/prompting-and-in-context/The Prompt Report. A Systematic Survey of Prompt Engineering Techniques.md
+forest	library/llm/post-training/preference-learning/A Comprehensive Survey of Direct Preference Optimization. Datasets, Theories, Variants, and.md
+forest	library/llm/post-training/preference-learning/A Comprehensive Survey of Reward Models. Taxonomy, Applications, Challenges, and Future.md
+warning	library/llm/post-training/fine-tuning/Parameter-Efficient Transfer Learning for NLP.md
+forest	library/llm/post-training/fine-tuning/A Survey of On-Policy Distillation for Large Language Models.md
+warning	library/llm/post-training/rl-for-reasoning/Absolute Zero. Reinforced Self-play Reasoning with Zero Data.md
+warning	library/llm/post-training/rl-for-reasoning/Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model.md
+forest	library/llm/evaluation/methods/A Survey on LLM-as-a-Judge.md
+forest	library/llm/evaluation/methods/LLMs-as-Judges. A Comprehensive Survey on LLM-based Evaluation Methods.md
+forest	library/llm/evaluation/benchmarks/A Survey on Large Language Model Benchmarks.md
+forest	library/llm/uncertainty-and-hallucination/A Survey on Hallucination in Large Language Models. Principles, Taxonomy, Challenges, and Open.md
+forest	library/llm/safety-and-privacy/Agents That Know Too Much. A Data-Centric Survey of Privacy in LLM Agents.md
+warning	library/llm/safety-and-privacy/A Watermark for Large Language Models.md
+forest	library/llm/pretraining/A Survey on Data Synthesis and Augmentation for Large Language Models.md
+warning	library/research-practice/Accounting for Variance in Machine Learning Benchmarks.md
+forest	library/data-centric-ml/augmentation-and-synthetic-data/Data Augmentation Approaches in Natural Language Processing. A Survey.md
+warning	library/ml-systems/inference-and-serving/FlashInfer. Efficient and Customizable Attention Engine for LLM Inference Serving.md
+warning	library/ml-systems/inference-and-serving/Efficiently Scaling Transformer Inference.md
+warning	library/ml-systems/inference-and-serving/S-LoRA. Serving Thousands of Concurrent LoRA Adapters.md
+forest	library/ml-systems/inference-and-serving/Towards Efficient Generative Large Language Model Serving. A Survey from Algorithms to Systems.md
+forest	library/ml-systems/distributed-training/Efficient Training of Large Language Models on Distributed Infrastructures. A Survey.md
+warning	library/graphs/graph-neural-networks/Let Your Graph Do the Talking. Encoding Structured Data for LLMs.md
+warning	library/graphs/graph-embeddings/PyTorch-BigGraph. A Large-scale Graph Embedding System.md
+warning	library/robotics-and-embodied/PaLM-E. An Embodied Multimodal Language Model.md
+forest	library/robotics-and-embodied/A Survey on Vision-Language-Action Models for Embodied AI.md
+forest	library/interpretability/mechanistic/Attention Heads of Large Language Models. A Survey.md
+warning	library/interpretability/explainability/Concept Whitening for Interpretable Image Recognition.md
+warning	library/trustworthy-ml/privacy-and-federated/Federated Optimization in Heterogeneous Networks.md
+warning	library/trustworthy-ml/privacy-and-federated/Towards Federated Learning at Scale. System Design.md
+warning	library/reinforcement-learning/bandits/Warm-starting Contextual Bandits. Robustly Combining Supervised and Bandit Feedback.md
+warning	library/reinforcement-learning/world-models/Learning Latent Dynamics for Planning from Pixels.md

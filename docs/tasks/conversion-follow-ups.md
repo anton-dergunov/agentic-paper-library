@@ -37,8 +37,8 @@ the header. What is still open, with the papers of that library as examples:
   It resumes where it stopped, so it can run over several nights, or area by area
   (`paperlib reconvert --pdf-text --inline-math library/llm/evaluation ...`) before each
   literature review.
-- `Memory in the Age of AI Agents`: its `\Cref` targets could get section numbers the way
-  `LABEL:` references now do; the paper is hand-edited, so it needs `--force` and its cropped
+- `Memory in the Age of AI Agents`: its `\Cref` targets could get section numbers from
+  `section_numbers` in `html-to-markdown.py`, which does this for the references in `forest` trees; the paper is hand-edited, so it needs `--force` and its cropped
   Figure 1 put back.
 
 ## arXiv HTML
@@ -49,6 +49,8 @@ Left open by the fixes of 2026-10-04 ([`experiments/review-flagged-fixes`](../..
 - **A float LaTeXML dropped.** "Establishing Best Practices for Building Rigorous Agentic Benchmarks" has no table of its 17 benchmarks (a `longtblr`); references to it now show its label ("Table all-benchmarks"). The table could be taken from the PDF.
 - **Named destinations are trusted without a check.** When the HTML's section numbers differ from the PDF's (the case above), `page-map.py` places "1 Methods" on the page of the PDF's section 1. The check that now guards bookmarks (the heading must be printed on the page) could guard destinations too; it needs measuring first, since a heading set in mathematics or small capitals would fail it.
 - **References that share an anchor.** See "Table and figure numbers" in `conversion.md`.
+- **Indentation written with `\hspace` at the start of a table cell is dropped by LaTeXML.** "AdaGReS" (2512.25052) sets Algorithm 1 as a one-column `tabular` and indents the loop and `if` bodies with `\hspace{1em}`, so the HTML has no nesting; the paper was repaired by hand. The LaTeX source has the widths, and a cell could be matched to its source row by its words. Not done for one paper: of 1,916 cached renderings two set an algorithm this way, and the other (DAPO) indents with spaces that survive.
+- **An algorithm set as a table gets a table's caption.** DAPO's Algorithm 1 is followed by an empty "Table 1:", the number of the paper's real Table 1.
 - **Undefined author macros** leave their names in the author block ("\\multiauthors\\affiliations" in "The Leaderboard Illusion").
 
 ## The PDF converter

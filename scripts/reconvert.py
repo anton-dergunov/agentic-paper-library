@@ -47,7 +47,8 @@ from tqdm import tqdm
 from paperlib import LIBRARY_DIR, fetch, paper_files, pdf_path_for, read_paper, write_paper
 
 SCRIPTS = Path(__file__).resolve().parent
-HAND_EDITED = "<!-- hand-edited -->"
+# The marker, also when it carries a note: "<!-- hand-edited: the title moved to the top -->".
+HAND_EDITED = re.compile(r"<!--\s*hand-edited\b")
 
 
 def pdf_version(pdf, arxiv_id):
@@ -103,7 +104,7 @@ def reconvert(md, force, pdf_text=False, inline_math=False):
     an error), or "skipped" (nothing to do, and a retry would not change that)."""
     meta, body = read_paper(md)
     arxiv_id = str(meta.get("arxiv") or "")
-    if HAND_EDITED in body and not force:
+    if HAND_EDITED.search(body) and not force:
         return "skipped", "hand-edited; use --force"
     if meta.get("source") == "pdf-text":
         status, message = from_html(md, dict(meta, source="html"), arxiv_id) if arxiv_id else (None, "")

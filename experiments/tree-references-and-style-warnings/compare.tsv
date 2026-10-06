@@ -1,0 +1,59 @@
+kind	paper	removed	added	warning lines removed	tree lines changed	section refs added	empty brackets before	empty brackets after	padded tree lines before	other lines changed
+forest	A continual learning survey. Defying forgetting in classification tasks	0	0	0	0	0	0	0	0	0
+warning	Averaging Weights Leads to Wider Optima and Better Generalization	13	0	9	0	0	0	0	0	0
+warning	On the Spectral Bias of Neural Networks	11	0	7	0	0	0	0	0	0
+forest	Reconciling modern machine learning practice and the bias-variance trade-off	0	0	0	0	0	0	0	0	0
+warning	What is the State of Neural Network Pruning	11	0	7	0	0	0	0	0	0
+forest	A Survey of Visual Transformers	4	4	0	0	0	0	0	0	8
+forest	Recent Advances in Speech Language Models. A Survey	3	3	0	3	3	3	0	0	0
+forest	MM-LLMs. Recent Advances in MultiModal Large Language Models	3	3	0	3	0	7	0	0	0
+forest	Multimodal Chain-of-Thought Reasoning. A Comprehensive Survey	0	0	0	0	0	0	0	0	0
+forest	A Survey on Personalized Alignment -- The Missing Piece for Large Language Models in Real-World	3	3	0	3	3	3	0	0	0
+forest	Toward Personalized LLM-Powered Agents. Foundations, Evaluation, and Future Directions	5	5	0	5	5	0	0	0	0
+forest	A Survey of Context Engineering for Large Language Models	18	18	0	18	17	17	0	18	0
+forest	A Survey of Agent Memory in the Second Half. Towards Self-Evolving and Long-Horizon Agents	20	20	0	20	20	0	0	0	0
+forest	Memory in the Age of AI Agents	0	0	0	0	0	0	0	0	0
+forest	A Survey on Long-Term Memory Security in LLM Agents. Attacks, Defenses, and Governance Across the	0	0	0	0	0	0	0	0	0
+forest	Rethinking Memory in LLM based Agents. Representations, Operations, and Emerging Topics	1	1	0	1	0	0	0	0	0
+forest	A Survey on Efficient Inference for Large Language Models	9	9	0	9	9	0	0	0	0
+warning	SparseGPT. Massive Language Models Can Be Accurately Pruned in One-Shot	10	0	6	0	0	0	0	0	0
+warning	AWQ. Activation-aware Weight Quantization for LLM Compression and Acceleration	11	0	7	0	0	0	0	0	0
+forest	Challenges and Applications of Large Language Models	11	11	0	11	11	0	0	0	0
+forest	A Survey of Self-Evolving Agents. What, When, How, and Where to Evolve on the Path to Artificial	0	0	0	0	0	0	0	0	0
+forest	Advances and Challenges in Foundation Agents. From Brain-Inspired Intelligence to Evolutionary	40	10	0	10	0	0	0	0	13
+forest	The Landscape of Agentic Reinforcement Learning for LLMs. A Survey	42	42	0	42	42	0	0	0	0
+forest	Towards Reasoning Era. A Survey of Long Chain-of-Thought for Reasoning Large Language Models	29	29	0	29	9	10	0	27	0
+forest	Stop Overthinking. A Survey on Efficient Reasoning for Large Language Models	0	0	0	0	0	0	0	0	0
+forest	A Survey on Test-Time Scaling in Large Language Models. What, How, Where, and How Well	28	24	0	24	22	22	0	0	2
+warning	Generating Long Sequences with Sparse Transformers	11	0	7	0	0	0	0	0	0
+forest	The Prompt Report. A Systematic Survey of Prompt Engineering Techniques	51	51	0	51	51	0	0	0	0
+forest	A Comprehensive Survey of Direct Preference Optimization. Datasets, Theories, Variants, and	0	0	0	0	0	0	0	0	0
+forest	A Comprehensive Survey of Reward Models. Taxonomy, Applications, Challenges, and Future	40	34	0	34	9	9	0	25	3
+warning	Parameter-Efficient Transfer Learning for NLP	11	0	7	0	0	0	0	0	0
+forest	A Survey of On-Policy Distillation for Large Language Models	3	3	0	3	0	0	0	0	0
+warning	Absolute Zero. Reinforced Self-play Reasoning with Zero Data	10	0	6	0	0	0	0	0	0
+warning	Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model	10	0	6	0	0	0	0	0	0
+forest	A Survey on LLM-as-a-Judge	10	10	0	10	10	0	0	0	0
+forest	LLMs-as-Judges. A Comprehensive Survey on LLM-based Evaluation Methods	58	58	0	58	58	58	0	0	0
+forest	A Survey on Large Language Model Benchmarks	0	0	0	0	0	0	0	0	0
+forest	A Survey on Hallucination in Large Language Models. Principles, Taxonomy, Challenges, and Open	4	4	0	4	3	3	0	1	0
+forest	Agents That Know Too Much. A Data-Centric Survey of Privacy in LLM Agents	3	3	0	3	3	3	0	3	0
+warning	A Watermark for Large Language Models	10	0	6	0	0	0	0	0	0
+forest	A Survey on Data Synthesis and Augmentation for Large Language Models	30	30	0	30	20	21	0	9	0
+warning	Accounting for Variance in Machine Learning Benchmarks	11	0	7	0	0	0	0	0	0
+forest	Data Augmentation Approaches in Natural Language Processing. A Survey	4	4	0	4	0	0	0	4	0
+warning	FlashInfer. Efficient and Customizable Attention Engine for LLM Inference Serving	11	0	7	0	0	0	0	0	0
+warning	Efficiently Scaling Transformer Inference	11	0	7	0	0	0	0	0	0
+warning	S-LoRA. Serving Thousands of Concurrent LoRA Adapters	11	0	7	0	0	0	0	0	0
+forest	Towards Efficient Generative Large Language Model Serving. A Survey from Algorithms to Systems	0	0	0	0	0	0	0	0	0
+forest	Efficient Training of Large Language Models on Distributed Infrastructures. A Survey	4	2	0	2	0	0	0	0	1
+warning	Let Your Graph Do the Talking. Encoding Structured Data for LLMs	10	0	6	0	0	0	0	0	0
+warning	PyTorch-BigGraph. A Large-scale Graph Embedding System	11	0	7	0	0	0	0	0	0
+warning	PaLM-E. An Embodied Multimodal Language Model	10	0	6	0	0	0	0	0	0
+forest	A Survey on Vision-Language-Action Models for Embodied AI	36	36	0	36	36	0	0	0	0
+forest	Attention Heads of Large Language Models. A Survey	11	11	0	11	0	0	0	11	0
+warning	Concept Whitening for Interpretable Image Recognition	11	0	7	0	0	0	0	0	0
+warning	Federated Optimization in Heterogeneous Networks	11	0	7	0	0	0	0	0	0
+warning	Towards Federated Learning at Scale. System Design	11	0	7	0	0	0	0	0	0
+warning	Warm-starting Contextual Bandits. Robustly Combining Supervised and Bandit Feedback	11	0	7	0	0	0	0	0	0
+warning	Learning Latent Dynamics for Planning from Pixels	11	0	7	0	0	0	0	0	0

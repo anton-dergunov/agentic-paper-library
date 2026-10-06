@@ -22,7 +22,7 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 
 - **Boxed text** (definitions, findings, takeaways, prompt templates). LaTeXML draws it as an SVG frame with the text inside; it becomes a quote the agent can read. Only drawings with real shapes stay images, and small text badges in tables become their text.
 - **Tables in `\resizebox` or `\scalebox`.** LaTeXML emits them as inline spans; they are rebuilt as tables. A header row LaTeXML did not mark is recognised by the rule under it.
-- **Taxonomy trees drawn with `forest`.** LaTeXML can't render them, so they are taken from the paper's LaTeX source and written as nested lists.
+- **Taxonomy trees drawn with `forest`.** LaTeXML can't render them, so they are taken from the paper's LaTeX source and written as nested lists. A node's reference to a section (`\S\ref{sec:x}`) shows the section's number, found by the title of the section the label follows; the spaces that centre a node's lines are dropped.
 - **Equation tables** keep their text: `\intertext` prose, a left-hand side set as text, several equations on one row.
 - **siunitx numbers** arrive unrounded with digit groups. The groups are joined, and raw input is rounded to four decimals.
 - **Inline icons**, such as a check mark in a table cell, keep their file's name as alt text.
@@ -36,9 +36,10 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **References with nothing in them** ("(Table )") are looked up in the paper's LaTeX source by the words before them. The float's number is used when its caption is in the HTML, its label's name otherwise.
 - **The author block** shows a list of affiliations shared by all authors once, not after every name.
 - **A title broken over two lines** is one heading.
+- **Warnings a style file typesets** when a paper changed its page layout ("marginparsep has been altered. … The page layout violates the ICML style.") arrive as the paper's first paragraphs, above the title. They are dropped.
 - **Numbers and symbols LaTeXML left half-expanded:** digit groups joined by "true" (`2true294`), a `\mathchoice` of boxed symbols, `\penalty` before a control space, an accent over nothing (`pass\^{}k`), a tilde set on a digit ("5̃5%").
 
-→ [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md)
+→ [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md), [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md)
 
 ## Table and figure numbers
 
@@ -101,7 +102,7 @@ When a converter improves, `paperlib reconvert` regenerates paper bodies and kee
 
 - arXiv downloads are cached in `~/.cache/papers/`, so a reconversion needs no network.
 - `--jobs N --state <file>` runs many papers at once, resumably.
-- A paper containing `<!-- hand-edited -->` is skipped.
+- A paper containing `<!-- hand-edited -->` is skipped, also when the marker carries a note (`<!-- hand-edited: … -->`).
 
 A whole-library run is validated with:
 
