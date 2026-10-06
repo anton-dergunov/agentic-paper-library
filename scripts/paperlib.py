@@ -22,6 +22,7 @@ and fails outside a library.
 
 import datetime
 import gzip
+import hashlib
 import io
 import json
 import os
@@ -377,6 +378,80 @@ def load_conversion_issues():
     if not CONVERSION_ISSUES_FILE.exists():
         return []
     return yaml.safe_load(CONVERSION_ISSUES_FILE.read_text(encoding="utf-8")) or []
+
+
+def append_conversion_issues(entries):
+    """Add entries (dicts with paper, problem, found) to the end of the catalog file.
+
+    Appended as text, so the file's header comments stay as they are.
+    """
+    text = CONVERSION_ISSUES_FILE.read_text(encoding="utf-8") if CONVERSION_ISSUES_FILE.exists() else ""
+    if text and not text.endswith("\n"):
+        text += "\n"
+    text += yaml.safe_dump(entries, allow_unicode=True, sort_keys=False, width=100)
+    CONVERSION_ISSUES_FILE.parent.mkdir(parents=True, exist_ok=True)
+    CONVERSION_ISSUES_FILE.write_text(text, encoding="utf-8")
+
+
+# A note records which text of its paper it was written from (`paper-hash:`), so a note
+# whose paper was reconverted or fixed since can be found and read again.
+NOTE_HASH = re.compile(r"^paper-hash:[ \t]*(\S+)[ \t]*$", re.M)
+
+
+def paper_hash(paper):
+    """A short fingerprint of a paper's body. The frontmatter is left out: a new summary
+    or type does not change what a note was written from."""
+    return hashlib.sha256(read_paper(paper)[1].encode("utf-8")).hexdigest()[:12]
+
+
+def note_path(paper):
+    return NOTES_DIR / f"{Path(paper).stem}.md"
+
+
+def note_is_stale(paper):
+    """True when the paper's body changed after its note was written. A note without
+    `paper-hash:` (written before notes recorded it) is never reported as stale."""
+    note = note_path(paper)
+    if not note.exists():
+        return False
+    m = NOTE_HASH.search(note.read_text(encoding="utf-8"))
+    return bool(m) and m.group(1) != paper_hash(paper)
+
+
+def stamp_note(text, digest):
+    """A note's text with its `paper-hash:` line set: replaced, or added after the
+    header lines (type, read, family, evidence, conversion) that follow the title."""
+    if NOTE_HASH.search(text):
+        return NOTE_HASH.sub(f"paper-hash: {digest}", text, count=1)
+    lines = text.split("\n")
+    insert = 1
+    for i, line in enumerate(lines[1:], start=1):
+        if line.startswith("## "):
+            break
+        if re.match(r"^[a-z-]+:", line):
+            insert = i + 1
+    lines.insert(insert, f"paper-hash: {digest}")
+    return "\n".join(lines)
+
+
+# A note's `conversion:` line is `ok`, `minor: <what>` or `damaged: <what>`. Notes written
+# before the reader graded problems have only the description: "unclassified".
+_CONVERSION = re.compile(r"^conversion:[ \t]*(.*)$", re.M)
+
+
+def note_conversion(text):
+    """(grade, description) from a note's text: grade is ok, minor, damaged,
+    unclassified, or None when the note has no conversion line."""
+    m = _CONVERSION.search(text)
+    if not m:
+        return None, ""
+    value = m.group(1).strip()
+    if re.fullmatch(r"ok\.?", value, re.I):
+        return "ok", ""
+    grade = re.match(r"(minor|damaged)[ \t]*:[ \t]*(.*)$", value, re.I)
+    if grade:
+        return grade.group(1).lower(), grade.group(2).strip()
+    return "unclassified", value
 
 
 # A markdown link's target, and the paper-map section of a review. Reviews use

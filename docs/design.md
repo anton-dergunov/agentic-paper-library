@@ -139,6 +139,16 @@ next piece of work.
   that and never creates a folder; the skill stays for new folders, titles, PDFs and the
   inbox. Each skill now names its model in its frontmatter: Sonnet for `add-paper` and
   `expand-library`, Opus for the rest. Only the reader and the filing model are measured.
+- **Conversion problems are graded, collected and fixed between reading and writing
+  (2026-10-06).** Reading `search-and-ranking` for its review, the reader reported a
+  conversion problem in 46 of 91 papers, 28 of them among the area's PDF-converted papers,
+  but most were garbled equations whose meaning the prose kept, and the notes said what not
+  to trust. The reader now grades each problem `minor` or `damaged`;
+  `paperlib conversion-issues` puts the damaged ones in the catalog with no agent; the
+  `fix-conversions` skill repairs them and reads them again; and a note records the text it
+  was read from (`paper-hash`), so a fixed paper's note shows up as stale. A review is
+  written once its scope's damaged papers are fixed, or the reader says to go ahead.
+  Recurring flaws go to the converter, not to each paper.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).
@@ -155,7 +165,10 @@ VS Code extension, which opens a paper by title ([tasks/vscode-extension.md](tas
    installed by a setup step.
 3. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
    arXiv id or title, and now nearly all of them have a library copy.
-4. Run the session on the NAS, so it is always on:
+4. Make reading a paper cheaper without reading it less: trim the fixed part of the request,
+   then test a cheaper reading for the thinly covered areas
+   ([tasks/reading-cost.md](tasks/reading-cost.md)).
+5. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone the engine, the library and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,

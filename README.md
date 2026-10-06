@@ -30,6 +30,7 @@ It began on 29 September 2026 with 240 papers from a project on LLM memory. With
 | `/overview` | A 3–5 minute pre-read for a paper you're about to read: the intuition, the mechanism, what is new against your library. Written to your notes folder (an Obsidian vault works well). |
 | `/expand-library` | Finds the papers missing from an area, has you strike what you don't want, and adds the rest in bulk. |
 | `/literature-review` | Writes or updates the review of an area: the kinds of approaches, what the papers find, how they relate, where the evidence is weak. |
+| `/fix-conversions` | Repairs the papers whose conversion the reader found damaged (a missing or flattened table, a missing section), by reconverting them or fixing them by hand from the PDF, and reads them again. Run it between reading an area and writing its review. |
 | `/reorganize` | Proposes moves, splits and merges of topic folders as the library grows, and carries out the ones you approve. |
 
 ### Which model
@@ -41,7 +42,7 @@ Each skill sets its model for the turn it runs in, so a session on another model
 | `/add-paper`, `paperlib add` | Sonnet | Measured: in one request Sonnet files and summarises a paper about as well as Opus ([experiment](experiments/skill-models/README.md)). |
 | `/expand-library` | Sonnet | Not measured. The session mostly runs scripts, and the reading lists and summaries were written by Sonnet subagents when the skill was built. |
 | `/literature-review` | Opus | Reading is measured: Opus's notes had 1 error in six papers, Sonnet's 6 ([experiment](experiments/reading-models/README.md)). Writing the review is not measured. |
-| `/overview`, `/reorganize` | Opus | Not measured. Both are short, run rarely, and you read or approve the result. |
+| `/overview`, `/reorganize`, `/fix-conversions` | Opus | Not measured. They are short or run rarely, and you read or approve the result. |
 | Questions about papers | Opus | Measured: Sonnet matches Opus on a detail of one paper, and makes about half the points on a synthesis of an area, at a third of the tokens ([experiment](experiments/review-usefulness/README.md)). |
 
 ## Quick start

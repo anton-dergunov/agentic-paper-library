@@ -11,7 +11,8 @@ again (after updating the engine, or on another machine):
 - AGENTS.md (the reader's own instructions, importing the generated guide) and
   CLAUDE.md, which points Claude Code at AGENTS.md;
 - .claude/skills/<name>: a symlink to each of the engine's skills, so Claude
-  Code opened on the library has them and engine edits show up at once;
+  Code opened on the library has them and engine edits show up at once (links to
+  skills the engine no longer has are removed);
 - the PDF link named by `pdf_link:` (default pdf/), a symlink to the PDF root,
   so an editor opened on the library shows the PDFs next to the markdown;
 - .vscode/settings.json for the PDF viewer, and .gitignore entries for the
@@ -140,6 +141,12 @@ def main(argv):
         for skill in sorted((ENGINE / "skills").iterdir()):
             if (skill / "SKILL.md").exists():
                 symlink(root / ".claude" / "skills" / skill.name, skill)
+        # Links to skills the engine has since removed or renamed.
+        for link in (root / ".claude" / "skills").iterdir():
+            if (link.is_symlink() and not link.exists()
+                    and Path(os.readlink(link)).parent == ENGINE / "skills"):
+                link.unlink()
+                print(f"init: removed the link to a skill that is gone: {link.name}")
     if paperlib.PDF_LINK_DIR and not paperlib.PDF_ROOT.resolve().is_relative_to(root):
         symlink(paperlib.PDF_LINK_DIR, paperlib.PDF_ROOT)
 
