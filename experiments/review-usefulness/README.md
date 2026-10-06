@@ -136,6 +136,20 @@ Summed over the three questions a review covers (1, 3 and 4; 91 points):
 
 The first run's answers, graded again in the same pools: on question 1 the review-only answer makes 19 points with 5 wrong statements, the most of any answer to that question; on question 3 it makes 12 points with none wrong. The first run's judge had found 8 and 3 in the same two answers, so one answer's count moves by three between gradings.
 
+**What the wrong statements are.** The 70 that the judge listed in the Opus answers were read and sorted by hand afterwards, one reading, with no model call. A citation slip is a correct statement whose link names the wrong page or table. An imprecise detail is a range, a count or a list that is off while the point stands. A substantive error says something false about what a paper does or finds, or about what the library holds.
+
+| Copy | Sessions | Citation slips | Imprecise details | Substantive | Substantive, questions 1, 3, 4 |
+|---|---|---|---|---|---|
+| as is | 15 | 3 | 5 | 10 | 9 |
+| as is, rule variant | 9 | 5 | 5 | 1 | 1 |
+| no reviews | 15 | 13 | 6 | 6 | 6 |
+| no reviews, no notes | 15 | 3 | 4 | 9 | 7 |
+
+- **A third of the wrong statements are citation slips**, and ten of the 24 are one fact: the scores of the graph systems and of Mem0 with inference in the ForgetEval paper, which stand in its Limitations and appendix and were linked to the results table or to the section that discusses them. They account for the four wrong statements in each answer to question 1 without reviews: 8 of those 12 are slips.
+- **Substantive errors run at about one in every two answers** in every copy under the current rule: a mechanism given to the wrong system (three systems described by Mem0's procedure), a result read as evidence for something it does not measure, a claim that the library lacks a paper it has. None reverses the main conclusion of its answer; the judge called 8 of the 45 answers misleading, mostly mildly.
+- **The rule variant has one substantive error in nine answers**, against nine for the current rule on the same questions. This is the one measure on which it stands apart, on nine sessions and one person's sorting.
+- **Some errors come from the notes.** The note on the ForgetEval paper says that on outside cases "the band drops to 28–51%"; the paper's band is 28–33%, and 51% is a system with the fix applied. One answer repeats it, and two more turn the note's "external subset" into "cases from other benchmarks".
+
 **Sonnet 5.5 as the answerer**, one session per cell, beside the Opus means:
 
 | Kind of question | Copy | Sonnet: tokens, K | Points | Wrong | Opus: tokens, K | Points | Wrong |
