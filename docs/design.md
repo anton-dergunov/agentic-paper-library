@@ -117,12 +117,18 @@ next piece of work.
   the reader: on six papers its notes had 1 error against 6 for Sonnet, 7 and 9 for two
   Gemini models and 35 for Haiku
   ([experiments/reading-models](../experiments/reading-models/README.md)).
-- **A review is a map, not evidence (2026-10-05).** Sessions find reviews and notes on
-  their own. With a review, a synthesis answer took a third of the tokens and had more
-  misreadings, because the session never opened the papers; with notes and no review the
-  answers were the most accurate
-  ([experiments/review-usefulness](../experiments/review-usefulness/README.md)). The guide
-  tells sessions to check the note or the paper before stating a number or its meaning.
+- **A review is a map, not evidence (2026-10-05, measured again 2026-10-06).** Sessions
+  find reviews and notes on their own. Told to start from the review, a session answered a
+  synthesis question from it alone: a third of the tokens and more misreadings. The guide
+  now tells sessions to search the review, then check the note or the paper before stating
+  a number or its meaning. With that rule, over five questions and three sessions each,
+  they do, and their answers have as few wrong statements as answers written without
+  reviews. They are not more complete, and on a question the review covers they are
+  narrower; the fifth of the tokens saved is within the run-to-run differences. A stronger
+  wording (notes and papers first) cost half again as much for a gain within those
+  differences, so the rule stays. Reviews are written for the reader; an agent gains a way
+  in to an area, not a better answer. Answers from the papers alone, without notes, were as
+  good ([experiments/review-usefulness](../experiments/review-usefulness/README.md)).
 - **Filing a paper is one request to Sonnet (2026-10-05).** Adding a paper through the
   `add-paper` skill took 228K tokens in a Sonnet session, nearly all of it the session's
   context sent five times, for a choice of folder and one sentence. Given the topic tree,

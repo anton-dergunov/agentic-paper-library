@@ -1,0 +1,7 @@
+- **Answer from the notes and the papers; the review tells you which to open.** For a question about an area, a comparison across papers, or "what exists on X", find the review whose scope covers it: `reviews/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.
+  - Search the review for the question's terms (`grep -n` its headings and the terms) and list the papers it names for them. Do not read it whole, and do not take the answer from it: the review is a map, not evidence.
+  - Then read the note of each of those papers in `notes/`, and of the other papers in the folder's `README.md` that bear on the question, whether or not the review names them. Open the paper at the cited page for every number you quote.
+  - A review compresses each finding into a sentence. Do not restate that sentence as the paper's result, or as what the library lacks, without reading the paper's note or the paper. Say so when a point rests only on the review.
+  - When a session settles a cross-paper point, append it to the review's `## Q&A`.
+  - After papers are added to a reviewed area, offer to update the review.
+  - The `literature-review` skill writes and updates reviews, and `paperlib review-status` shows which are stale.

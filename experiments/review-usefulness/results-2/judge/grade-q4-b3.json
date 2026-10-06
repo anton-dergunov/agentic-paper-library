@@ -1,0 +1,118 @@
+{
+ "answers": {
+  "nonotes-q4-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    8,
+    10,
+    12,
+    14,
+    16,
+    17,
+    19,
+    21,
+    25,
+    28
+   ],
+   "errors": [
+    {
+     "quote": "ForgetEval shows a system can saturate recall and fail every deletion test",
+     "paper_says": "The system that fails every deletion case (MemPalace, 0/385) scores 60/150 = 40% on the recall-heavy Memora benchmark, below LangGraph's 45%, so it does not saturate recall (Control-Plane Placement, §5.5, p. 6, Table 3). The paper's 'saturation band' is the 63–68% forgetting pass rate of other systems. This result is in §5.5–5.6 (p. 6–7), not the cited §5.7, p. 8, which holds only the placement finding."
+    },
+    {
+     "quote": "Tiered (\"OS-style\") | ... | MemGPT, MemoryOS, LightMem | Depends on the model promoting and evicting correctly",
+     "paper_says": "MemoryOS does not leave promotion and eviction to the model: segments move between tiers by a computed heat score and thresholds (Memory OS of AI Agent, §3.3, p. 4–5). Only MemGPT relies on the model's own function calls."
+    },
+    {
+     "quote": "Linked notes / hybrid | Notes that link to each other and get rewritten as new ones arrive | A-MEM, MIRIX, MemOS",
+     "paper_says": "MIRIX is not a linked-notes design: it keeps six typed memory components (Core, Episodic, Semantic, Procedural, Resource, Knowledge Vault), each maintained by its own Memory Manager under a Meta Memory Manager (MIRIX, §1 p. 1–2, §3.1 p. 6, §3.3 p. 8). The description fits A-MEM only; MemOS was not checked."
+    }
+   ],
+   "papers_cited": 29,
+   "review_only": "no",
+   "misleading": "Mildly. The six-family table and the comparison findings are sound, but a reader would take MemoryOS to rely on model judgement, MIRIX to be a linked-notes system, and typed stores not to exist as a family. The forgetting bullet overstates the recall side ('saturate' against 40%).",
+   "comment": "Good coverage of the qualitative comparison findings (16, 17, 19, 21, 28), and the only answer giving the cost numbers (116–155 s against 3.7 s, which match p. 10). It has almost no numbers otherwise, and only 4 of the 29 named papers carry a page link. It says openly that per-system descriptions and the EvoMemBench point come from index summaries, not the papers. The 42-paper count, the AgentMemBench caveats (spaCy graph, Qwen2.5-7B generator, p. 10 Table 5) and the finding numbers 3, 4 and 6 all check out. It does not state the MemoryOS heat score (5), typed stores (9) or the ReasoningBank detail (11)."
+  },
+  "noreviews-q4-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    16,
+    20,
+    22,
+    26,
+    27,
+    28,
+    29
+   ],
+   "errors": [
+    {
+     "quote": "**Parametric** | The weights themselves | MEMIT, Titans, sparse memory finetuning, Text-to-LoRA",
+     "paper_says": "The survey whose split this table presents puts Titans under latent memory, not parametric: such works 'rely on parameterized modules' but 'their operational memory units remain latent representations, placing them firmly within this category' (Memory in the Age of AI Agents, §3.3.1, p. 26, and Table 3)."
+    },
+    {
+     "quote": "Graphiti passes 7% of the cases it could be scored on ([Control-Plane Placement, p. 8]",
+     "paper_says": "The number is right (17/242 evaluable, 7.0%) but it is stated in the Limitations section, p. 9, and Appendix N. Page 8 (§5.7, Fig. 2) gives only the per-category rates for the KG-abstraction regime."
+    },
+    {
+     "quote": "LightMem only inserts online and reconciles in a \"sleep-time\" pass, arguing online updates wrongly delete non-conflicting facts ([p. 5]",
+     "paper_says": "The mechanism is on p. 5 (§3.3), but the argument that an LLM may misread related facts as a conflict and delete the older entry is in §5.6, p. 9. On p. 5 the stated motivation is latency."
+    }
+   ],
+   "papers_cited": 33,
+   "review_only": "about 30 have notes with page-level digests, and systems I cite without a page come from the index one-liners only",
+   "misleading": "no",
+   "comment": "The most complete and best-supported answer: 21 points, 16 papers with page links, and every number I checked is right. That covers Mem-α 0.389 against 0.642 (p. 7, Table 3), BM25 41.5 with Mem0, Zep and MemGPT at 21.1, 24.0 and 28.3, Mem0 72.9 against 66.9, EvoMemBench 7% or less, and the three benchmark leaders in Are We Ready §4.1. The LoCoMo label-permutation claim also holds: A-MEM's 27.02 is 'Multi Hop' in its own table and 'Single Hop' in both Mem0's and MemoryOS's. The errors are one classification that contradicts the cited survey and two citations pointing at the wrong page. Point 20 is made only through the LongMemEval half, and 27 without the long-context 60.6 or the weaker-backbone caveat. It omits cost (17, 18), information loss (19), knowledge-update results (21) and the long-history case for memory (24)."
+  },
+  "nonotes-q4-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    16,
+    22,
+    25,
+    28
+   ],
+   "errors": [
+    {
+     "quote": "A study of 12 systems finds graph methods strong on single-hop recall but weak on temporal reasoning, and local maintenance cheaper than global reorganisation: [Are We Ready, p. 7, §4.1]",
+     "paper_says": "Neither finding is in §4.1, p. 7, which reports only which system leads each workload. The single-hop and temporal statement is finding 1 in the introduction (§1), and local against global maintenance is O7 and Finding 5 in §4.5, p. 10."
+    }
+   ],
+   "papers_cited": 24,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "The most accurate description of the families: all of points 3–11 are stated correctly with section-level links that check out, including the heat score, Memanto's thirteen categories and ReasoningBank learning from failures. It is thin on comparisons: no cost numbers, nothing on information loss, knowledge updates, unit of storage or RL-trained writers beyond naming Memory-R1. Two of the four axes it announces (unit stored, when the LLM works) are never developed, so 12, 14 and 15 are not made. Point 28 is made only through the placement half, and the local-maintenance clause of 17 is present without the cost figures. The Mem0 numbers (about 73% against 67%, p95 1.4 s against 17 s) are on p. 13, §4.3 as cited. It discloses which systems come from index summaries only."
+  }
+ },
+ "cost": {
+  "usd": 1.4700305999999999,
+  "seconds": 204
+ }
+}

@@ -1,0 +1,95 @@
+{
+ "answers": {
+  "asis-v2-q4-r3": {
+   "makes": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    10,
+    22,
+    23,
+    24,
+    27,
+    29,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "HippoRAG passes 9.5% of evaluable forgetting cases and Graphiti (Zep's engine) 7.0% ([ForgetEval, p. 6](...dest=section.5&page=6))",
+     "paper_says": "Both figures are correct but the page is wrong. They appear only under '## Limitations (p. 9)' ('Graphiti scores 17/242 evaluable (7.0 %)', 'HippoRAG scores 31/326 evaluable (9.5 %)'), with the Graphiti breakdown in Appendix N (p. 19). Section 5.3 on p. 6 reports Lethe, Mem0 and LangGraph only."
+    }
+   ],
+   "papers_cited": 7,
+   "review_only": "HippoRAG, MIRIX, MemOS, ExpeL and Agent Workflow Memory have no note in `notes/`. Their one-line descriptions above come from the review only; I did not open those papers.",
+   "misleading": "no",
+   "comment": "All checked numbers match the papers: Mem0 72.90/66.88 and 1.44 s/17.12 s, 7k vs 600k tokens (§4.5, p. 14), Zep 71.2/60.2 with 1.6k vs 115k tokens, MemoryAgentBench 60.6/41.5/21.1/24.0/28.3, HaluMem recall below 60% except MemOS (p. 11), ReasoningBank 40.5 to 48.8. Point 3 is counted without the reflection step, and point 4 without the memory-pressure warning. Point 10 is counted on the 'lessons, not facts' half; AWM is only named. SeCom is placed in the extract-and-consolidate family, though it segments rather than choosing add/update/delete; not listed as an error because the row describes the family. It has no functional split, no who-writes or when-work-is-done axis, and no 'no architecture wins' finding. Not checked: the claims about notes, and the permuted LoCoMo column labels."
+  },
+  "asis-v2-q4-r1": {
+   "makes": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    10,
+    12,
+    13,
+    14,
+    16,
+    21,
+    22,
+    24,
+    29
+   ],
+   "errors": [
+    {
+     "quote": "Mem0 stores about 7k tokens per LoCoMo conversation and answers at p95 1.44 s, against 17.12 s for full context ([Mem0, p. 11, Table 2](...dest=table.2&page=11))",
+     "paper_says": "The latency figures are in Table 2, but the 7k-token store size is not. It is in §4.5 'Memory System Overhead: Token Analysis and Construction Time' (p. 14)."
+    }
+   ],
+   "papers_cited": 8,
+   "review_only": "Sixteen of the papers in these folders have no note yet, including HippoRAG, MemOS, MIRIX, SAGE, ExpeL and Agent Workflow Memory; for those, the mechanism descriptions rest on the review and the abstracts only.",
+   "misleading": "no",
+   "comment": "The only answer that states the who-writes axis, the Mem-α training result (0.389 vs 0.642, §4.3, p. 7) and the write-time versus read-time split. Point 12 is counted without the 152 QA pairs, and point 14 without LightMem's sleep-time update. Checked and correct: 70 memory papers in the folders; ForgetEval 7.0%/9.5% on p. 9 (the only answer with the right page); Zep 44.4 vs Mem0 15.6 (Table 2, p. 9); AgentMemBench 0.001 vs 0.573 (p. 10); ReasoningBank 48.8 vs AWM 44.1; ReasoningBank append-only (Appendix A.2, p. 23: 'directly added without additional pruning'); LoCoMo at 26k tokens (Mem0, p. 6). 'Graphs help updates, not recall' leans on AgentMemBench's NER entity graph, which is a narrow basis, but the number is right. Point 23 is not counted because Zep's 600k is missing. Not checked: the sixteen-notes count and the permuted column labels."
+  },
+  "asis-v2-q4-r2": {
+   "makes": [
+    1,
+    3,
+    6,
+    7,
+    10,
+    16,
+    20,
+    21,
+    22,
+    23,
+    24,
+    29,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Graph stores pass only 7–9.5% of deletion cases ([ForgetEval, p. 8](...page=8))",
+     "paper_says": "The 7.0% (Graphiti) and 9.5% (HippoRAG) aggregates are stated under '## Limitations (p. 9)', and Graphiti's again in Appendix N (p. 19). Page 8 (§5.7) has only the per-category Figure 2, which points to Limitations for the totals."
+    },
+    {
+     "quote": "Cartridges matches in-context quality with 38.6× less memory, at about 30 minutes of training per corpus ([Cartridges, p. 1](...page=1))",
+     "paper_says": "38.6× is in the abstract (p. 1), but the '~30 minutes on a single 8×H100 node' figure appears only in the closing limitations paragraph, well after the introduction, not on p. 1."
+    }
+   ],
+   "papers_cited": 9,
+   "review_only": "The numbers above come from the papers' notes, or from the paper itself for AgentMemBench, which has no note. The table rows for HippoRAG, MIRIX, MemOS, Mem-α, SAGE, ExpeL and Agent Workflow Memory rest on the review alone.",
+   "misleading": "no",
+   "comment": "Checked and correct: Mem0 table figures; HaluMem below 60% except MemOS (p. 11); raw 26.0 vs summary 11.7 (Table 3, p. 11); Zep 44.4 / Mem0 15.6 / long context 20.0 (Table 2, p. 9); 600K vs 7K (p. 14); AgentMemBench graph 0.001, summarisation 0.005, vector store 0.573 (p. 10); MemoryLLM 1/e after N/K = 30 updates for the main 30×256 model (§3.1.3, p. 3); 'no single system dominates' (§4.1, p. 7). Both HaluMem and Are We Ready do list MemTensor authors, and MemOS is MemTensor's. 'LoCoMo averages about 9K tokens' matches the figure quoted in A-MEM and SeCom, but Mem0's own paper gives 26,000 tokens for the conversations it evaluates, so 'fits in context' holds while the size is understated for the vendor runs. It is the only answer to mention reflections for point 3. Points 4 and 5 are not counted: the OS row lists 'the model, a usage score, a scheduler or agents' without saying which system does which. Not checked: 'single runs with no variance reported' for ReasoningBank, and the note-based claims."
+  }
+ },
+ "cost": {
+  "usd": 0.7617164,
+  "seconds": 118
+ }
+}

@@ -1,0 +1,231 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "LLMLingua (perplexity-based token deletion with a small LM) keeps GSM8K exact match at 79.08 at 5x and 77.33 at 20x, against 78.85 for the full 2,366-token prompt, so 20x costs about 1.5 points.",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 5–6): Full-shot 78.85 / 2,366 tokens; Ours 79.08 at 446 tokens (5x); Ours 77.33 at 117 tokens (20x)."
+  },
+  {
+   "id": 2,
+   "point": "LLMLingua degrades much faster on BBH: from 70.07 full-shot to 61.60 at 5x and 56.85 at 7x (about 8.5 and 13.2 points lost).",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Table 2: BBH Full-shot 70.07; Ours 70.11 (3x), 61.60 (5x), 56.85 (7x)."
+  },
+  {
+   "id": 3,
+   "point": "All methods, LLMLingua included, drop sharply at around 25–30x compression on GSM8K.",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Limitations (p. 9, Figure 3): 'around 25x-30x, all methods as well as ours will experience a substantial performance drop'."
+  },
+  {
+   "id": 4,
+   "point": "LLMLingua's ablation: removing iterative token-level compression or the budget controller costs about 5–6 EM each, while removing distribution alignment to the target LLM costs about 0.5.",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (§5.4, p. 7): Ours 79.08; w/o Iterative Token-level Compression 72.93; w/o Budget Controller 73.62; w/o Distribution Alignment 78.62."
+  },
+  {
+   "id": 5,
+   "point": "Asking GPT-4 to rewrite the prompt shorter does worse than LLMLingua, because the generated prompt omits reasoning steps.",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Table 2: GPT4 Generation 71.87 (GSM8K, 5x) and 27.13 (BBH, 3x) against 79.08 and 70.11. §5.3 (p. 6): generated prompts 'may omit crucial details from the original prompt, particularly reasoning steps'."
+  },
+  {
+   "id": 6,
+   "point": "Simply keeping one demonstration already scores 77.10 on GSM8K at 6x (422 tokens), so much of LLMLingua's 20x headline reflects redundant few-shot demonstrations.",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Table 2: 1-shot 77.10, 422 tokens, 6x, against Full-shot 78.85. The numbers are the paper's; the redundancy reading is the answers' own inference."
+  },
+  {
+   "id": 7,
+   "point": "LLMLingua's latency gain trails its token saving: 5x fewer tokens gives a 3.3x end-to-end speedup on GSM8K.",
+   "paper": "library/llm/context/LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models.md",
+   "verdict": "holds",
+   "evidence": "Table 6 (p. 8): end-to-end 8.6 s without compression; 2.3 s (3.3x) at 5x; 4.9 s (1.7x) at 2x; 1.3 s (5.7x) at 10x."
+  },
+  {
+   "id": 8,
+   "point": "LongLLMLingua makes compression question-aware: it ranks documents by how well each predicts the question, scores tokens by how much the question changes their perplexity, reorders documents against lost-in-the-middle, and restores entity names with subsequence recovery.",
+   "paper": "library/llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "§4.1 (p. 3) question-aware coarse-grained compression using p(x^que | x^doc) and question-aware fine-grained compression; §4.2 (p. 4) document reordering; §4.4 (p. 5) subsequence recovery of entities in the response."
+  },
+  {
+   "id": 9,
+   "point": "On NaturalQuestions (20 documents, GPT-3.5-Turbo) at 4x with the gold document in 10th position, LongLLMLingua scores 71.2 against 54.1 for the original prompt; the headline '21.4%' boost is 21.4 points, 75.5 with reordering against 54.1.",
+   "paper": "library/llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 1 (p. 5–6), 4x: LongLLMLingua 10th = 71.2, Reorder = 75.5; Original Prompt 10th = 54.1. Main results (p. 6): 'a performance boost of 21.4% on NaturalQuestions with the ground-truth document at the 10th position' at about 4x fewer tokens."
+  },
+  {
+   "id": 10,
+   "point": "Question-blind compression (LLMLingua, Selective-Context) scores below the 56.1 zero-shot result on NaturalQuestions: LLMLingua gets roughly 37–42 at 2x and 23.5–30 at 4x.",
+   "paper": "library/llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 1: LLMLingua 2x = 39.7/39.5/40.4/37.1/42.3; 4x = 25.5/27.5/23.5/26.5/30.0; Selective-Context 19.5–45.4; Zero-shot 56.1. Main results (p. 6) says these are 'worse than the zero-shot setting'. Quoted ranges are slightly loose: the 2x low is 37.1, not 39.7, and the 4x low is 23.5, not 25.5."
+  },
+  {
+   "id": 11,
+   "point": "LongLLMLingua's gain is mostly document selection or reranking: its ranker alone gets 69.3 on NQ (4x, 10th position) against 71.2 for the full method, and 46.3 against 48.3 on LongBench; without question-aware ranking it falls from 77.2 to 42.1, while without question-aware token pruning it falls only to 75.8.",
+   "paper": "library/llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 1, 4x: LongLLMLingua r_k 10th = 69.3. Table 2, 2,000 tokens: r_k AVG 46.3, LongLLMLingua 48.3, Original 44.0. Table 3 (2x, 1st position): full 77.2; w/o Question-awareness 42.1; w/o Question-aware Fine-grained 75.8. 'Mostly reranking' is the answers' interpretation of these numbers."
+  },
+  {
+   "id": 12,
+   "point": "With the gold document in first position, compression gives no accuracy gain: 75.0 for LongLLMLingua against 75.7 for the original prompt, so the 'compression improves accuracy' result is largely a lost-in-the-middle fix.",
+   "paper": "library/llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 1, 4x, GPT-3.5-Turbo, 1st position: LongLLMLingua 75.0, Original Prompt 75.7. The lost-in-the-middle reading is the answers' inference."
+  },
+  {
+   "id": 13,
+   "point": "LongLLMLingua must recompress for every question, so the compressed context cannot be cached, and it costs twice LLMLingua's compute.",
+   "paper": "library/llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Limitation (p. 9): 'requires re-compression for different questions, even with the same context, preventing caching of the context... increases the computation by twice as much as LLMLingua'."
+  },
+  {
+   "id": 14,
+   "point": "LLMLingua-2 replaces perplexity scoring with a small bidirectional encoder (XLM-RoBERTa-large, 355M parameters) that classifies each token keep or drop, trained on GPT-4 extractive compressions of MeetingBank meeting transcripts.",
+   "paper": "library/llm/context/LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): token classification with a Transformer encoder over full bidirectional context; §3 (p. 3–4) data distillation from GPT-4; Implementation details (p. 6): xlm-roberta-large, trained on MeetingBank; Appendix H (p. 14): 355M parameters."
+  },
+  {
+   "id": 15,
+   "point": "On MeetingBank QA, LLMLingua-2 scores 86.92 EM at 3.1x against 87.75 for the original prompt and 67.52 for LLMLingua, but the comparison is not budget-matched (970 tokens against 1,176–1,222 at 2.5x for the baselines).",
+   "paper": "library/llm/context/LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 1 (p. 5): LLMLingua-2 86.92, 970 tokens, 3.1x; LLMLingua 67.52, 1,176 tokens, 2.5x; Selective-Context 66.28, 1,222 tokens, 2.5x; Original 87.75, 3,003 tokens."
+  },
+  {
+   "id": 16,
+   "point": "LLMLingua-2's compressor is 3–6x faster than LLMLingua (0.4–0.5 s against 1.5–2.9 s), gives a 1.6–2.9x end-to-end speedup at 2–5x compression, and uses 2.1 GB of GPU memory against 16.6 GB.",
+   "paper": "library/llm/context/LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 5 (p. 8): LLMLingua-2 0.5/0.4/0.4 s, LLMLingua 2.9/2.1/1.5 s; end-to-end 9.4 s (1.6x), 7.5 s (2.1x), 5.2 s (2.9x) against 14.9 s. Abstract: '3x-6x faster'. Appendix I (p. 14): 2.1GB against 16.6GB."
+  },
+  {
+   "id": 17,
+   "point": "On LongBench at a 2,000-token budget, LLMLingua-2 averages 39.1: above LLMLingua (34.6) but below the original prompt (44.0) and below question-aware LongLLMLingua (48.0), with the Synthetic subset at 21.3 against 37.8. The authors attribute the gap to ignoring the question.",
+   "paper": "library/llm/context/LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 6): LLMLingua-2 AVG 39.1, Synth. 21.3; LLMLingua 34.6; LongLLMLingua 48.0; Original Prompt AVG 44.0, Synth. 37.8. p. 8: it 'falls short when compared to other task-aware compression methods like LongLLMlingua... additional information that they leverage from the question'."
+  },
+  {
+   "id": 18,
+   "point": "LLMLingua-2 only ties LLMLingua on GSM8K and BBH, and its out-of-domain baseline numbers are copied from the LongLLMLingua paper, not re-run.",
+   "paper": "library/llm/context/LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (p. 6): GSM8K 79.08 against 79.08 (1-shot) and 77.79 against 77.41 (half-shot); BBH 70.02 against 70.11 and 61.94 against 61.60. Tables 2 and 3 captions: '†: numbers reported in Jiang et al. (2023b)'."
+  },
+  {
+   "id": 19,
+   "point": "Adding LongLLMLingua's question-aware document-level (coarse-grained) compression to LLMLingua-2 gives an average gain of 25.3% on NaturalQuestions.",
+   "paper": "library/llm/context/LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression.md",
+   "verdict": "holds",
+   "evidence": "Appendix K (p. 14), Table 11: 'LLMLingua-2 with LongLLMLingua coarse-grained compression achieves an average performance gain of 25.3% on NaturalQuestions compared to LLMLingua-2'."
+  },
+  {
+   "id": 20,
+   "point": "RECOMP trains an extractive sentence selector and an abstractive summariser (distilled from a large LM) on the reader's end-task performance; the compressor can return an empty string when retrieval would not help.",
+   "paper": "library/llm/context/RECOMP. Improving Retrieval-Augmented LMs with Compression and Selective Augmentation.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): both compressors 'trained to improve LMs' performance on end tasks'; 'our compressor can return an empty string, implementing selective augmentation'. §3.2 (p. 4): the abstractive compressor is distilled from a teacher model."
+  },
+  {
+   "id": 21,
+   "point": "RECOMP's abstractive compressor reaches 37.04 EM on NQ with 36 tokens against 39.39 with 660 tokens of top-5 documents: about 5–6% of the tokens for about 2 EM lost.",
+   "paper": "library/llm/context/RECOMP. Improving Retrieval-Augmented LMs with Compression and Selective Augmentation.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): Top 5 documents 660 tokens / 39.39 EM; abstractive Ours 36 tokens / 37.04 EM. p. 7: 'a compression ratio of 5% tokens while losing 2 EM points'. Abstract: 'as low as 6% with minimal loss'."
+  },
+  {
+   "id": 22,
+   "point": "Compression removes distractors: with five full documents the reader copies a wrong span from the evidence 81% of the time, with RECOMP's summary 39%, and with GPT-3.5 summaries 85%.",
+   "paper": "library/llm/context/RECOMP. Improving Retrieval-Augmented LMs with Compression and Selective Augmentation.md",
+   "verdict": "holds",
+   "evidence": "Table 3 and §6 (p. 8): 'Prepending top 5 documents has a higher frequency (81%) of copying incorrectly... GPT-3 compression leads to an even higher incorrect copying frequency (85%)... Our compressor successfully reduce such erroneous behavior to 39%.'"
+  },
+  {
+   "id": 23,
+   "point": "An oracle single sentence reaches 60.22 EM on NQ against 39.39 for five full documents, so the headroom is in selection and the trained compressors are far below it.",
+   "paper": "library/llm/context/RECOMP. Improving Retrieval-Augmented LMs with Compression and Selective Augmentation.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (p. 7): extractive Oracle 34 tokens / 60.22 EM; Top 5 documents 39.39; trained extractive 36.57, abstractive 37.04."
+  },
+  {
+   "id": 24,
+   "point": "RECOMP is weaker on multi-hop HotpotQA: the abstractive compressor (28.20 EM) falls below a single uncompressed document (28.80), extraction does better (11% of tokens for −2.4 EM), only 67% of its HotpotQA summaries are faithful (30 samples judged by the authors), and the compressors transfer poorly to a different reader on QA.",
+   "paper": "library/llm/context/RECOMP. Improving Retrieval-Augmented LMs with Compression and Selective Augmentation.md",
+   "verdict": "holds",
+   "evidence": "Table 2: HotpotQA abstractive Ours 28.20, Top 1 document 28.80, extractive Ours 30.40, Top 5 32.80. p. 7: '11% compression rate while losing 2.4 EM points'. Table 4 (p. 9): HQA Ours 67% faithful against 74% for GPT-3.5, 30 samples, annotated by the authors. §6 (p. 8), transfer to LLaMA-13B: 'performance is worse than the LM from which compressors are trained on'."
+  },
+  {
+   "id": 25,
+   "point": "Gisting changes the attention mask during instruction fine-tuning so later tokens see the prompt only through gist tokens; it reaches up to 26x compression (about 26-token instructions into one token) with near-parity quality (human win rate 52.3% for LLaMA-7B) and up to 40% fewer FLOPs.",
+   "paper": "library/llm/context/Learning to Compress Prompts with Gist Tokens.md",
+   "verdict": "holds",
+   "evidence": "Abstract and §1 (p. 1–2): attention-mask modification, 'up to 26x', 'up to 40% FLOPs reduction and 4.2% latency speedups'. §5 (p. 5): human eval on 100 examples, 'average win rates of 52.3% (vs. 48.0%) for LLaMA-7B'. §6 (p. 8): 'compressing 26 tokens into 1'."
+  },
+  {
+   "id": 26,
+   "point": "Against ordinary KV caching of the full instruction, gisting saves only 0.11% of FLOPs and about 1% of wall time; the 40% figure is against no caching, and the real remaining gain is cache storage and context-window space.",
+   "paper": "library/llm/context/Learning to Compress Prompts with Gist Tokens.md",
+   "verdict": "holds",
+   "evidence": "§6 (p. 8), Table 3: 'a negligible decrease in FLOPs (0.11%) and a modest 1% speedup in wall time' when compared with caching the full instruction; 40% FLOPs savings are over unoptimized models; storage and context-window benefits are discussed in the same section."
+  },
+  {
+   "id": 27,
+   "point": "Gisting fails when the instruction holds details that must be copied verbatim, such as a list of allowed categories.",
+   "paper": "library/llm/context/Learning to Compress Prompts with Gist Tokens.md",
+   "verdict": "holds",
+   "evidence": "§5.1 Failure cases (p. 7): 'when the instruction contains specific details, e.g. phrases that must be copied verbatim into the output', with the example 'Give the news title a category. Pick a category from the list of...'."
+  },
+  {
+   "id": 28,
+   "point": "ICAE uses a LoRA-adapted encoder to write about 512 tokens into 128 memory slots (4x) for the LLM; at 4x, the compressed model wins 19.6% and loses 45.4% against the same Llama-2-7b-chat given the full context. Its slots do beat a 128-token GPT-4 summary about 2 to 1.",
+   "paper": "library/llm/context/In-context Autoencoder for Context Compression in a Large Language Model.md",
+   "verdict": "holds",
+   "evidence": "§3.1 (p. 4): LoRA on the encoder, k=128. Table 4 (p. 4–6): Llama-2-7b-chat (ICAE, k=128) against Llama-2-7b-chat: win 19.6, lose 45.4, tie 35.0. §3.2.2 (p. 6): 'still lags behind its counterpart conditioning on the original context'; memory slots beat 128-token GPT-4 summaries 'with ~2x win/lose ratio'."
+  },
+  {
+   "id": 29,
+   "point": "ICAE's reconstruction is near-perfect for contexts up to about 300 tokens (BLEU 99.3 on normal text), declines beyond 400, and degrades sharply with fewer than 128 slots; the authors call more than 4x compression 'rather challenging'.",
+   "paper": "library/llm/context/In-context Autoencoder for Context Compression in a Large Language Model.md",
+   "verdict": "holds",
+   "evidence": "§3.2.1 (p. 4): 'When the context length is within 300, the ICAE can almost perfectly reconstruct... beyond 400, both BLEU and EM scores start to decline'; k=64 and 32 are 'much less satisfactory'; 'achieving over 4× compression is rather challenging'. Table 3: Normal text BLEU 99.3."
+  },
+  {
+   "id": 30,
+   "point": "An independent test finds selection beats compression at a tight budget: on HotpotQA with a 160-token budget and a 3B reader, LLMLingua-2 scores 0.326 F1 against 0.400 for naive top-k packing and 0.451 for a submodular packer, because token dropping destroys the answer span.",
+   "paper": "library/llm/context/Recall Is Not Enough. A Reader-Context Diagnostic for Budget-Constrained Retrieval-Augmented.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (§5, p. 6): llmlingua (compr.) 0.326, chunk_packed (naive) 0.400, chunk_submod 0.451; Qwen2.5-3B reader, budget 160. p. 6: submod beats it by +0.125 F1, naive by +0.075; 'token-level dropping destroys the answer span'. Answer J's details are off: the paper is dated 2026-07-01, not 2025, and the budget is 160 tokens (LLMLingua-2's output lands at about 130)."
+  }
+ ],
+ "answers": [
+  "asis-q5-r1",
+  "noreviews+claude-sonnet-5-5-q5-r1",
+  "nonotes-q5-r2",
+  "noreviews-q5-r3",
+  "nonotes-q5-r1",
+  "asis+claude-sonnet-5-5-q5-r1",
+  "asis-q5-r2",
+  "noreviews-q5-r1",
+  "noreviews-q5-r2",
+  "nonotes-q5-r3",
+  "asis-q5-r3"
+ ],
+ "cost": {
+  "usd": 1.415365,
+  "seconds": 157
+ }
+}

@@ -1,0 +1,120 @@
+{
+ "answers": {
+  "asis-q5-r3": {
+   "makes": [
+    1,
+    3,
+    6,
+    8,
+    9,
+    10,
+    11,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    22,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Recall Is Not Enough (2026) reports that a budgeted evidence packer beats LLMLingua-2 at equal or lower token cost.",
+     "paper_says": "The comparison is at the same 160-token budget, but LLMLingua-2's context is the shorter one: 129.6 tokens against 145.5 for the packer (p. 6, Table 3). The paper's 'fewer tokens' claim is against naive and focused packing (about 145 vs 152), not against LLMLingua-2."
+    }
+   ],
+   "papers_cited": 10,
+   "review_only": "SeCom's note records LOCOMO falling from 69.33 to 59.87 without it (p. 7, Table 2). That figure is from the note, not re-checked in the paper.",
+   "misleading": "no",
+   "comment": "Every number checked for the six core papers matches the markdown, including 446 tokens, 77.10 at 6x, 23.5 and 69.3 on NQ at 4x, 39.1/48.0/44.0 on LongBench, 28.20 vs 28.80 on HotpotQA and 19.6/45.4 for ICAE. The ACE figures (18,282 to 122 tokens, 66.7 to 57.1, 63.7 baseline, p. 3) and the SeCom figure it flags as unchecked (69.33 to 59.87, p. 7, Table 2) are also correct. Points 8, 15, 16, 18, 25, 29 and 30 are stated only in part: for example, 15 gives the unequal-budget caveat without the scores, and 30 gives the finding without numbers, from the abstract and introduction as the answer says. The answer says ICAE and LLMLingua-2 come from notes; this library copy has no notes/ directory, so that could not be checked. Table pages follow the markdown headings; the PDFs place several tables one or two pages later, which I did not count as errors for any answer."
+  },
+  "asis-q5-r1": {
+   "makes": [
+    1,
+    8,
+    9,
+    10,
+    11,
+    12,
+    14,
+    15,
+    16,
+    18,
+    20,
+    21,
+    22,
+    23,
+    25,
+    26,
+    27,
+    28,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "LLMLingua scores 39.7–42.3 on NaturalQuestions at 2x",
+     "paper_says": "The 2x row for LLMLingua with GPT-3.5-Turbo is 39.7, 39.5, 40.4, 37.1 and 42.3 across the five gold positions, so the range is 37.1–42.3 (LongLLMLingua, Table 1). 39.7 is the 1st-position value, not the minimum."
+    }
+   ],
+   "papers_cited": 13,
+   "review_only": "SeCom, from the LLMLingua group, finds removing it costs about 9 points (69.33 to 59.87; p. 7, Table 2, from the note). Also: \"Cartridges match in-context quality at 38.6x less memory, but cost about 30 minutes on 8 H100s per corpus (p. 1, 12, from the note).\"",
+   "misleading": "Mildly. The bolded summary says dropping text 'only reliably helps when it knows the question', but the answer's own table shows question-blind LLMLingua holding GSM8K at 20x and LLMLingua-2 near parity on MeetingBank. It also says vector methods 'reach higher ratios', while ICAE stops at 4x and Gisting's 26x is for roughly 26-token instructions. A reader could under-rate question-blind pruning on redundant prompts and over-rate soft compression.",
+   "comment": "Apart from the one range, the numbers match the papers: LongBench 46.3/48.3/44.0, RECOMP 81% to 39% and oracle 60.22, Gisting 0.11% against KV caching, Recall Is Not Enough 0.326/0.400/0.451 (p. 6, Table 3) and Beyond RAG 36.48 to 34.58 (p. 8, Table 3). Both figures it marks as from notes are correct in the papers: Cartridges 38.6x and about 30 minutes on an 8×H100 node, and SeCom 69.33 to 59.87. It misses the LLMLingua caveats (BBH, the 25–30x collapse, the ablation, the one-shot baseline), LongLLMLingua's no-caching cost, the LLMLingua-2 LongBench gap and RECOMP's HotpotQA weakness. Point 12 is given as its own reading without the 75.0 vs 75.7 figures; points 14, 18 and 20 are stated in part."
+  },
+  "noreviews-q5-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    10,
+    11,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "On NaturalQuestions, LLMLingua and Selective-Context score 25–44, below the 56.1 of no documents at all",
+     "paper_says": "With GPT-3.5-Turbo the two methods range from 19.5 (Selective-Context, 4x, 5th position) to 45.4 (Selective-Context, 2x, 1st position); LLMLingua's lowest is 23.5 (LongLLMLingua, Table 1). All are below 56.1, so the conclusion holds, but the stated range is wrong at both ends."
+    },
+    {
+     "quote": "Everything is measured on GPT-3.5, Claude-v1.3, LLaMA-7B or Flan-UL2 with 4k–16k windows.",
+     "paper_says": "Several results use other models: Gisting also uses FLAN-T5-XXL (p. 4), LLMLingua-2 reports Mistral-7B as a target (p. 8, Table 4), LongLLMLingua reports LongChat-13b (Table 1), and ICAE's headline comparison is on Llama-2-7b-chat and Llama-2-13b-chat (Table 4). The point that all targets are 2023-era models still stands."
+    }
+   ],
+   "papers_cited": 16,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "The most complete answer, and the only one to give the BBH drop, the LLMLingua ablation, the LongLLMLingua ablation (77.2 to 42.1 and 75.8), RECOMP's 67% faithfulness on 30 samples and the reason token dropping loses in Recall Is Not Enough. The outside claims check out: Beyond RAG 36.48 to 34.58 with 1,588 vs 1,979 tokens (p. 8, Table 3), SeCom 69.33 to 59.87 (p. 7, Table 2), Recursive Language Models' median 26% over compaction on GPT-5 (abstract), and Rethinking Memory's finding that context compression trails KV-cache methods (p. 15, Fig. 6). The survey's context-compression section (p. 25) names no token-pruning prompt compressor, and no Selective-Context, AutoCompressors or xRAG paper is in the library. Points 17 and 24 are stated in part (17 without the LongLLMLingua comparison, 24 without the 28.20 vs 28.80 result). It misses the one-shot baseline (6), the wrong-span copying result (22) and the first-position result (12)."
+  }
+ },
+ "cost": {
+  "usd": 1.8439677999999997,
+  "seconds": 252
+ }
+}

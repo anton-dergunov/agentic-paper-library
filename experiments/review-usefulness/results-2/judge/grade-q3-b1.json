@@ -1,0 +1,176 @@
+{
+ "answers": {
+  "nonotes-q3-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    15,
+    18,
+    19,
+    21,
+    22,
+    23,
+    27
+   ],
+   "errors": [
+    {
+     "quote": "both Re-Centering Humans and LaMP-QA say the user is the only real authority",
+     "paper_says": "Only LaMP-QA says this: \"the most reliable evaluator is the original user who posed the question\" (Limitations, p. 10). Re-Centering Humans has no such statement; it argues for grounding evaluation in human data and judgments (§3, p. 3), and its Limitations (p. 9) say only that different users may reasonably prefer different forms of adaptation."
+    }
+   ],
+   "papers_cited": 8,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Table 6 values, the PrefEval, RewardBench, LaMP-QA and PersonaLens figures, the PRISM-X figures (497 participants, r = 0.99, τ 0.22 vs 0.57, 33.8%/15.0% position bias) and all page links check out. Point 27 is counted on the 97.5% and the easy-by-construction caveat; the 76% half is missing. Point 14 is given with the Sim-Judgement numbers only. The answer says openly that Prediction-Powered Inference and Trust or Escalate were not re-read; that is not reliance on a review or note."
+  },
+  "asis-q3-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    9,
+    10,
+    12,
+    13,
+    18,
+    19,
+    20,
+    22,
+    26
+   ],
+   "errors": [
+    {
+     "quote": "ρ about 0.62–0.71 across judge models",
+     "paper_says": "OP-Bench Table 5 (A.3.2, p. 14) gives Spearman ρ from 0.60 (DeepSeek-v3.2: 0.61 irrelevance, 0.60 sycophancy) to 0.74 (Claude-Opus-4.5-thinking). The GPT-4o-mini judge is at 0.68."
+    },
+    {
+     "quote": "No paper in the library has users rate answers to their own questions, so the real target is untested.",
+     "paper_says": "PRISM-X does this: 530 re-recruited participants chose and ranked four models in their own conversations (abstract, p. 1; Fig. 1 caption), and §4.1 (p. 16–17) scores the simulators against those participants' own rankings. The answer itself cites this study."
+    },
+    {
+     "quote": "Simulated twins of 530 real participants recover the aggregate ranking of four models",
+     "paper_says": "Minor: the simulated-versus-human comparison uses 1,855 matched trials from 497 participants (§4.1, p. 16). 530 is the number recruited for the human study."
+    }
+   ],
+   "papers_cited": 5,
+   "review_only": "This figure is from the library's note on the paper; I did not reopen the paper.",
+   "misleading": "Slightly: the closing claim that the real target is untested ignores that PRISM-X compares against the users' own rankings. The main verdict (no replacement; usable for stated criteria and aggregate ranking) matches the papers.",
+   "comment": "Point 10 is counted for 'best-correlated judge is also the most inflated, so correlation does not pick a safe judge'; the answer does not mention that the paper's text and table disagree. Point 26 is counted although the range is misquoted. The 0.40 human-versus-others figure is labelled as the answer's own calculation and is arithmetically right from 0.325. The claim about failing to write to reviews/ could not be checked."
+  },
+  "noreviews+claude-sonnet-5-5-q3-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9,
+    12,
+    13,
+    14,
+    16,
+    17,
+    23,
+    24,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Judges reward explicit mentions of the profile (\"Given your interest in ML…\").",
+     "paper_says": "Only \"several open-weight judges\" do (§6.2, p. 8, Fig. 6). GPT-5.4 shows little sensitivity (Δ = −0.07) and Claude-S4.6 significantly penalises explicit mentions (Δ = −0.39)."
+    },
+    {
+     "quote": "tests GPT-4o simulated users that have the profile, against 530 real users",
+     "paper_says": "Minor: the simulated-versus-human comparison uses 1,855 matched trials from 497 participants (§4.1, p. 16). 530 is the number recruited for the human study."
+    }
+   ],
+   "papers_cited": 7,
+   "review_only": "I read the library's notes on this, not the full papers, so page numbers come from those notes.",
+   "misleading": "no",
+   "comment": "The numbers hold in the papers despite the answer being built from notes: PrefEval 0.92–0.97 (p. 43), CUPID 0.769/0.748 (p. 3), Trust or Escalate 0.815/0.902 (p. 7), PRISM-X 1.57× (p. 13), and Reliability without Validity κ 0.511 against exact match 0.849 (p. 4). The Coin Flip figure is 13.6% (13.3% and 13.9% per judge, p. 7) on deliberately competitive pairs, so '13% on near-tied pairs' is acceptable. Point 4 is counted without the human Δ; point 14 without numbers; point 16 on the sycophancy half only. OP-Bench is named but not cited."
+  },
+  "nonotes-q3-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    16,
+    18,
+    19,
+    22,
+    23,
+    27
+   ],
+   "errors": [
+    {
+     "quote": "Same pairs, but inferring the needs from the user's history | best model about 76%",
+     "paper_says": "The 75.94% is obtained without the user's history: \"Unless otherwise noted, we exclude the user profile u from the reward model input\" (§4.1, p. 6), and §4.3 (p. 7) discusses profiles separately. The models infer the needs from the query and response alone."
+    }
+   ],
+   "papers_cited": 6,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "All other numbers and page links check out, including 44.9%/7.2% (Sim-Dynamic, p. 18), τ 0.22 against 0.57 and 40% against 68.8% (p. 17), and the naive-simulator caveat (p. 25). Point 9 is counted without the 367 ratings; point 16 on the naive-simulator half only; point 27 without the easy-by-construction caveat."
+  },
+  "nonotes-q3@run1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    12,
+    13,
+    18,
+    20,
+    22,
+    23,
+    24,
+    25,
+    26
+   ],
+   "errors": [
+    {
+     "quote": "Six papers in the library bear on this; only one tests the second question directly.",
+     "paper_says": "The answer itself draws on eight library papers that bear on the question (Re-Centering Humans, PRISM-X, PrefEval, CUPID, AlpsBench, OP-Bench, LaMP-QA, PersonaLens) and names two more, so the count of six is wrong."
+    }
+   ],
+   "papers_cited": 10,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Widest coverage, and every number and page link checked holds: AlpsBench 73–96% (p. 4), CUPID 0.769 (p. 3), OP-Bench 0.60–0.74 (p. 14), LaMP-QA 48%/0.94 against 73%/0.44 (p. 7), and Re-Centering 0.325 (p. 8). Points 12 and 13 are stated in words without numbers, from the PRISM-X abstract only, which the answer discloses. It also says it checked only the summaries of Prediction-Powered Inference and Trust or Escalate; that is a disclosed limit, not reliance on a review or note. Papers cited counts those two, which are named without links."
+  }
+ },
+ "cost": {
+  "usd": 1.165102,
+  "seconds": 167
+ }
+}

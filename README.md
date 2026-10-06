@@ -42,7 +42,7 @@ Each skill sets its model for the turn it runs in, so a session on another model
 | `/expand-library` | Sonnet | Not measured. The session mostly runs scripts, and the reading lists and summaries were written by Sonnet subagents when the skill was built. |
 | `/literature-review` | Opus | Reading is measured: Opus's notes had 1 error in six papers, Sonnet's 6 ([experiment](experiments/reading-models/README.md)). Writing the review is not measured. |
 | `/overview`, `/reorganize` | Opus | Not measured. Both are short, run rarely, and you read or approve the result. |
-| Questions about papers | Opus | Not measured for other models; [planned](docs/tasks/review-usefulness-follow-up.md). |
+| Questions about papers | Opus | Measured: Sonnet matches Opus on a detail of one paper, and makes about half the points on a synthesis of an area, at a third of the tokens ([experiment](experiments/review-usefulness/README.md)). |
 
 ## Quick start
 

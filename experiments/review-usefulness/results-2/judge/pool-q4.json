@@ -1,0 +1,231 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "The broadest split is by where memory lives: token-level (external text or records retrieved into the prompt), parametric (weights) and latent (hidden states or KV caches). Almost all agent memory systems are token-level.",
+   "paper": "library/llm/memory/agent/Memory in the Age of AI Agents.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): 'three dominant realizations of agent memory, namely token-level, parametric, and latent memory'; §3 Form (p. 12), with §3.1 Token-level (p. 13), §3.2 Parametric (p. 22), §3.3 Latent (p. 25). The 'almost all are token-level' part is the answers' own framing; I did not find it stated in the survey."
+  },
+  {
+   "id": 2,
+   "point": "The same survey splits memory by function: factual memory (facts about the user and world), experiential memory (what the agent learned from doing tasks) and working memory (context within one task).",
+   "paper": "library/llm/memory/agent/Memory in the Age of AI Agents.md",
+   "verdict": "holds",
+   "evidence": "Abstract: 'a finer-grained taxonomy that distinguishes factual, experiential, and working memory'; §4 Functions (p. 31), with §4.1 Factual (p. 32), §4.2 Experiential (p. 36), §4.3 Working (p. 42)."
+  },
+  {
+   "id": 3,
+   "point": "Memory stream with reflection (Generative Agents): every observation is appended to a natural-language log, retrieval is scored by recency, importance and relevance, and higher-level reflections are periodically synthesised. Nothing is overwritten, so an old and a new fact both stay.",
+   "paper": "library/llm/memory/agent/Generative Agents. Interactive Simulacra of Human Behavior.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 2): the memory stream 'records, in natural language, a comprehensive list of the agent's experiences. A memory retrieval model combines relevance, recency, and importance'; reflection 'synthesizes memories into higher-level inferences over time'. That contradictions are left unreconciled is the answers' inference from this design, not a quoted statement."
+  },
+  {
+   "id": 4,
+   "point": "Tiered, OS-style memory (MemGPT): a small in-context working context and FIFO queue, plus external recall and archival storage. The LLM itself moves data between them by function calls, and a 'memory pressure' warning lets it save what matters before eviction.",
+   "paper": "library/llm/memory/agent/MemGPT. Towards LLMs as Operating Systems.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1): 'MemGPT uses functions to move data between main context and external context (the archival and recall storage databases)'. §2.2 (p. 2): at about 70% of the window the queue manager inserts a 'memory pressure' warning so the LLM can store important information to working context or archival storage."
+  },
+  {
+   "id": 5,
+   "point": "MemoryOS replaces the model's judgement with fixed short-, mid- and long-term tiers, promoting and evicting by a heat score.",
+   "paper": "library/llm/memory/agent/Memory OS of AI Agent.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1): storage is organised 'into short-term, mid-term, and long-term storage units', updated by 'dialogue-chain and heat-based mechanisms'. Memory Updating (p. 3): 'STM-to-MTM updates via dialogue-chain FIFO and MTM-to-LPM updates using a segmented page strategy with heat-based replacement'."
+  },
+  {
+   "id": 6,
+   "point": "Extracted fact store (Mem0): an LLM extracts facts from each exchange, retrieves the 10 most similar stored memories, and chooses ADD, UPDATE, DELETE or NOOP by tool call. A contradicted fact is deleted at write time.",
+   "paper": "library/llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.1 (p. 3): the system 'retrieves the top s semantically similar memories', and the LLM selects ADD, UPDATE, 'DELETE for removal of memories contradicted by new information', or NOOP. Experiments used 's = 10 similar memories'."
+  },
+  {
+   "id": 7,
+   "point": "Temporal knowledge graph (Zep/Graphiti): facts are edges between entities with validity times on two timelines (when a fact was true and when it was ingested). A contradicting new edge invalidates the old one instead of deleting it, so past states stay answerable.",
+   "paper": "library/llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§2.1 (p. 2): 'Zep implements a bi-temporal model', with timeline T for events and T′ for ingestion. §2.2.3 (p. 3): four timestamps are tracked (t′created, t′expired, t_valid, t_invalid), and 'The introduction of new edges can invalidate existing edges', with an LLM detecting contradictions."
+  },
+  {
+   "id": 8,
+   "point": "Linked notes (A-MEM): each memory becomes a note with a description, keywords and tags, is linked to related notes, and can trigger rewrites of existing notes' descriptions ('memory evolution') rather than deletion.",
+   "paper": "library/llm/memory/agent/A-MEM. Agentic Memory for LLM Agents.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): notes carry 'contextual descriptions, keywords, and tags', links are established to historical memories, and 'memory evolution – as new memories are integrated, they can trigger updates to the contextual representations and attributes of existing historical memories'. 'Deletes nothing' is the answers' inference; the grepped passages describe only updates."
+  },
+  {
+   "id": 9,
+   "point": "Typed stores: MIRIX keeps six memory types (Core, Episodic, Semantic, Procedural, Resource, Knowledge Vault) under a multi-agent framework. Memanto uses thirteen typed categories over plain vector search and argues knowledge graphs are unnecessary.",
+   "paper": "library/llm/memory/agent/MIRIX. Multi-Agent Memory System for LLM-Based Agents.md",
+   "verdict": "holds",
+   "evidence": "MIRIX abstract (p. 1): 'six distinct, carefully structured memory types: Core, Episodic, Semantic, Procedural, Resource Memory, and Knowledge Vault, coupled with a multi-agent framework'. Memanto abstract and §I-A (p. 2): it 'challenges the prevailing assumption that knowledge graph complexity is necessary', with 'thirteen predefined memory categories' and a vector-based architecture 'without reliance on knowledge graphs'."
+  },
+  {
+   "id": 10,
+   "point": "Experience (procedural) memory stores how to do tasks, not facts about the user. Agent Workflow Memory induces reusable workflows from past trajectories, offline or online.",
+   "paper": "library/llm/memory/agent/Agent Workflow Memory.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): 'a method for inducing commonly reused routines, i.e., workflows, and selectively providing workflows to the agent', applying 'to both offline and online scenarios'."
+  },
+  {
+   "id": 11,
+   "point": "ReasoningBank distils up to three strategy items per finished task, from failed as well as successful trajectories.",
+   "paper": "library/llm/memory/agent/ReasoningBank. Scaling Agent Self-Evolving with Reasoning Memory.md",
+   "verdict": "holds",
+   "evidence": "Abstract and §1 (p. 1): it distils strategies 'from both successful and failed experiences'. Appendix, Memory Extraction (p. 21): 'For each trajectory, at most 3 memory items could be extracted… from both successful and failed trajectories'. The limit is on p. 21, not p. 4 as one answer links. The append-only claim was not checked."
+  },
+  {
+   "id": 12,
+   "point": "Who controls writes is a separate axis: a fixed pipeline or rules (Mem0, Zep), the LLM itself through tool calls (MemGPT), or a policy trained with RL. Memory-R1 learns ADD/UPDATE/DELETE/NOOP with RL from only 152 training QA pairs.",
+   "paper": "library/llm/memory/agent/Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): agents 'fine-tuned with outcome-driven RL (PPO and GRPO)… With only 152 training QA pairs, Memory-R1 outperforms strong baselines'; the operations are ADD, UPDATE, DELETE and NOOP. The three-way grouping is the answers' synthesis; I did not confirm the heuristic/prompted/learned wording in the Memory for Autonomous LLM Agents survey."
+  },
+  {
+   "id": 13,
+   "point": "In Mem-α the RL training, not the memory design, gives the gain: the same framework scores 0.389 with the untrained base model and 0.642 after training.",
+   "paper": "library/llm/memory/agent/Mem-α. Learning Memory Construction via Reinforcement Learning.md",
+   "verdict": "holds",
+   "evidence": "§4.3 (p. 7), Table 3: 'The base Qwen3-4B model achieves only 0.389 average performance—substantially below both RAG-Top2 (0.567) and Long-Context (0.588)'; the trained row is 0.642."
+  },
+  {
+   "id": 14,
+   "point": "When the work is done differs: Mem0 and Zep pay at write time, long context pays at read time, and LightMem moves consolidation to an offline 'sleep-time' update.",
+   "paper": "library/llm/memory/agent/LightMem. Lightweight and Efficient Memory-Augmented Generation.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): 'long-term memory with sleep-time update employs an offline procedure that decouples consolidation from online inference'. §1 (p. 1): new entries are first stored with timestamps as 'soft' updates and reconciled later offline. The write-time/read-time contrast for Mem0, Zep and long context is the answers' framing."
+  },
+  {
+   "id": 15,
+   "point": "Unit of storage: SeCom finds topical segments are a better memory unit than turns, sessions or summaries.",
+   "paper": "library/llm/memory/agent/On Memory Construction and Retrieval for Personalized Conversational Agents.md",
+   "verdict": "holds",
+   "evidence": "Abstract (p. 1): 'The granularity of memory unit matters: Turn-level, session-level, and summarization-based methods each exhibit limitations'; the paper proposes segment-level memory. I did not check the Table 1 numbers (p. 6)."
+  },
+  {
+   "id": 16,
+   "point": "No architecture wins everywhere. In a study of 12 systems, composite hybrids lead conversational QA, and graph methods excel at single-hop recall but struggle with temporal reasoning. Zep leads LongMemEval, MemOS leads LoCoMo exact match, and long context leads the database workload.",
+   "paper": "library/llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1), finding 1: 'No single memory architecture dominates all scenarios. Composite hybrid systems lead on conversational QA, while graph-based methods excel in single-hop factual recall but struggle with temporal reasoning.' §4.1 (p. 7): Zep reaches 48.0 LLM-judge accuracy on LongMemEval, MemOS 11.5 EM on LoCoMo, and Long Context 48.20 EM on DB-Bench (MemoChat has the higher task success rate there, 55.40)."
+  },
+  {
+   "id": 17,
+   "point": "Structure is costly: Zep and Cognee reach the top utility only at about 155 s and 117 s of amortised latency per query, against 3.7 s for LightMem. The cost driver is how widely each write propagates, not whether there is a graph, and local maintenance is cheaper than global reorganisation.",
+   "paper": "library/llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§4.5 (p. 10), O7: LightMem reaches 48.3 normalised utility at 3.67 s; 'Cognee and Zep exceed 84 utility only after 116.5 s and 155.1 s'; 'operational efficiency is governed less by whether a system uses structure than by how widely each write propagates'. Abstract: 'localized maintenance is more cost-efficient than global reorganization'."
+  },
+  {
+   "id": 18,
+   "point": "In the same cost comparison, Mem0 scores 21.4 normalised utility at 35.9 s.",
+   "paper": "library/llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§4.5 (p. 10): LightMem and MemTree 'are clearly more efficient than MemoChat (28.0 at 15.4 s), Mem0 (21.4 at 35.9 s), and A-MEM (57.7 at 17.9 s)'."
+  },
+  {
+   "id": 19,
+   "point": "Every abstraction layer (compression, summarisation, fact extraction) discards information, and consolidation often destroys chronological cues, so raw long context still beats most memory systems on time-dependent queries.",
+   "paper": "library/llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1), finding 4: 'For time-dependent queries, raw long-context retrieval still outperforms most memory-backed approaches, indicating that standard semantic consolidation often destroys crucial chronological cues.' Finding 6: 'Each layer of abstraction (e.g., compression, summarization, and fact extraction) progressively discards information.'"
+  },
+  {
+   "id": 20,
+   "point": "Raw text beats summaries as the stored value: storing raw user turns scores 26.0 against 11.7 for summaries in an ablation. LongMemEval also finds that compressing sessions into summaries or facts loses information.",
+   "paper": "library/llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§5.1 (p. 11), Table 3: LightMem User-Only Raw 26.0 against User-Only Summary 11.7, LongMemEval substring EM; 'Retaining the original conversational content is more important than increasing abstraction or hierarchy'. LongMemEval, CP 1: Value (p. 7): 'compressing sessions into summaries or user-specific facts… can lead to information loss'."
+  },
+  {
+   "id": 21,
+   "point": "Graph systems handle knowledge updates best: Zep scores 44.4 on LongMemEval knowledge-update questions against 15.6 for Mem0 and 20.0 for long context, with Mem0 and Letta below long context. Fact-extraction and append-only stores struggle with targeted overwrites and return stale facts.",
+   "paper": "library/llm/memory/agent/Are We Ready For An Agent-Native Memory System.md",
+   "verdict": "holds",
+   "evidence": "§4.3 (p. 9), Table 2, Knowledge Update substring EM: Zep 44.4, Long Context 20.0, Mem0 15.6, Letta (MemGPT) 17.8. §1 finding 3: 'Graph-based methods handle knowledge updates most reliably, whereas popular fact-extraction plugins and append-only stores struggle with targeted overwrites.'"
+  },
+  {
+   "id": 22,
+   "point": "Full context beats Mem0 in Mem0's own paper on LoCoMo (72.90 against 66.88 LLM-judge score). Mem0's advantage is latency: p95 of 1.44 s against 17.12 s.",
+   "paper": "library/llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md",
+   "verdict": "holds",
+   "evidence": "Table 2 (under the §4.2 heading, p. 10; linked as p. 11 by the answers): full context 72.90 ± 0.19% with p95 17.117 s; Mem0 66.88 ± 0.15% with p95 1.440 s. §4.3: 'around 1.44 seconds (a 92% reduction)… the full-context approach can provide a slight accuracy edge'."
+  },
+  {
+   "id": 23,
+   "point": "Store size differs greatly: Mem0 keeps about 7K tokens per LoCoMo conversation and Zep's graph more than 600K, and Zep's new memories became usable only after hours. This is Mem0's own measurement of a competitor.",
+   "paper": "library/llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.5: Mem0 'occupies only 7k tokens per conversation on an average… Zep's memory graph consumes in excess of 600k tokens'; 're-running identical searches after a delay of several hours yielded considerably better results'. The heading's page is cut off in my output; the answers cite p. 14."
+  },
+  {
+   "id": 24,
+   "point": "Memory wins once the history is long: on LongMemEval's roughly 115K-token histories, Zep scores 71.2% against 60.2% for full context with gpt-4o, using about 1.6K prompt tokens. The result is vendor-run.",
+   "paper": "library/llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md",
+   "verdict": "holds",
+   "evidence": "§4.3.2 (p. 7), Table 2: Full-context gpt-4o 60.2% at 115k tokens; Zep gpt-4o 71.2% at 1.6k tokens. With gpt-4o-mini the scores are 55.4% and 63.8%."
+  },
+  {
+   "id": 25,
+   "point": "Long context is still a strong baseline across 15 memory methods in EvoMemBench: Gemini-3-Flash on raw context scores 83.0 on the LongMemEval subset against at most 52.0 for any memory method.",
+   "paper": "library/llm/memory/benchmarks/EvoMemBench. Benchmarking Agent Memory from a Self-Evolving Perspective.md",
+   "verdict": "holds",
+   "evidence": "Abstract: '15 representative memory methods… long-context baselines remain highly competitive'. §5.2.1 (p. 6), Table 3, LME (S*) column: Gemini-3-Flash 83.00; the best memory method is Mem0 at 52.00 (A-MEM 51.00, BM25 50.33). Finding 1 (p. 6) says the same."
+  },
+  {
+   "id": 26,
+   "point": "Memory methods are better at retaining than revising: on multi-hop questions over updated facts (FactConsolidation), every memory method scores 7% or less in EvoMemBench.",
+   "paper": "library/llm/memory/benchmarks/EvoMemBench. Benchmarking Agent Memory from a Self-Evolving Perspective.md",
+   "verdict": "holds",
+   "evidence": "§5.2.1 (p. 6), Table 3, FC MH column: BM25 7.00, Mem0 7.00, A-MEM 5.00, GraphRAG 4.00, MemOS 3.00, MemAgent 3.00, MemoryOS 2.00, MemoBrain 1.00; Gemini-3-Flash on long context scores 58.00. Finding 2 (p. 6): 'Existing memory methods are better at retention than revision.'"
+  },
+  {
+   "id": 27,
+   "point": "On MemoryAgentBench, simple baselines beat commercial memory systems: long-context GPT-5-mini scores 60.6 overall and BM25 41.5, against 21.1 for Mem0, 24.0 for Zep and 28.3 for MemGPT. The memory systems ran on the weaker GPT-4o-mini.",
+   "paper": "library/llm/memory/benchmarks/Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions.md",
+   "verdict": "holds",
+   "evidence": "Table 3 (under the §4.1 heading, p. 7; the answers cite p. 8), overall column: GPT-5-mini (400K) 60.6, BM25 41.5, HippoRAG-v2 41.6, Mem0 21.1, Zep 24.0, MemGPT 28.3. Caption: 'All RAG agents and commercial memory agents use GPT-4o-mini as the backbone'; long-context GPT-4o-mini scores 42.2. HippoRAG-v2 at 41.6 is marginally above BM25."
+  },
+  {
+   "id": 28,
+   "point": "Forgetting is a separate capability from recall. In ForgetEval a verbatim store scores 40% on a recall benchmark and 0 of 385 on adversarial deletion. An LLM at write time fixes canonicalisation but not intent-aware deletion, and an LLM at mutation time fixes the reverse.",
+   "paper": "library/llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "§1 (p. 1): 'MemPalace saturates the recall plane (60/150 on Memora) yet fails every control-plane test (0/385 on adversarial forgetting)'. §5.7 (p. 8): 'Inscribe-time LLM… recovers canonicalization (… 100 %) but cannot help prefix_collision or compound_fact (0 %)… Mutation-time LLM (our hook) recovers those (compound_fact 78–85 %, prefix_collision 79 %)'."
+  },
+  {
+   "id": 29,
+   "point": "Graph systems nearly fail targeted deletion: Graphiti (Zep's engine) passes 7.0% of the adversarial cases it could be scored on, HippoRAG 9.5%, and Mem0 with LLM extraction 43.6%. The study is single-author, from the builder of one tested system (Lethe).",
+   "paper": "library/llm/memory/agent/Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen.md",
+   "verdict": "holds",
+   "evidence": "Limitations (p. 9): 'Graphiti scores 17/242 evaluable (7.0 %) with 143 cases N/A'; 'HippoRAG scores 31/326 evaluable (9.5 %)… strict-denominator 31/385 = 8.0 %'; Mem0 infer=True '168/385 = 43.6 %', against 68.3% with infer off (Appendix P). The sole author is Dongxu Yang, affiliation DeepLethe. These numbers are in Limitations and the appendices, not on p. 8."
+  },
+  {
+   "id": 30,
+   "point": "Most loss happens at write time: in HaluMem every system except MemOS recalls under 60% of the memory points it should have extracted. The benchmark's authors include the company behind MemOS.",
+   "paper": "library/llm/memory/benchmarks/HaluMem. Evaluating Hallucinations in Memory Systems of Agents.md",
+   "verdict": "holds",
+   "evidence": "§6.2.1 (p. 11): 'In the memory extraction task, regarding memory integrity, except for MemOS, all systems achieve recall (R) rates below 60%, indicating that many reference memory points are not extracted.' Affiliations include MemTensor (Shanghai) Technology, with corresponding author lizy@memtensor.cn."
+  }
+ ],
+ "answers": [
+  "nonotes-q4-r1",
+  "noreviews-q4-r3",
+  "asis+claude-sonnet-5-5-q4-r1",
+  "asis-q4-r3",
+  "nonotes-q4-r3",
+  "nonotes-q4-r2",
+  "noreviews-q4-r2",
+  "asis-q4-r1",
+  "noreviews-q4-r1",
+  "noreviews+claude-sonnet-5-5-q4-r1",
+  "asis-q4-r2"
+ ],
+ "cost": {
+  "usd": 1.0987576000000001,
+  "seconds": 176
+ }
+}

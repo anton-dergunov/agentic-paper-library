@@ -1,0 +1,139 @@
+{
+ "answers": {
+  "asis-q5-r2": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    8,
+    9,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+   ],
+   "errors": [
+    {
+     "quote": "Old targets: the models are GPT-3.5, Claude-v1.3 and 7B Llamas",
+     "paper_says": "Not all of them. RECOMP's QA reader is Flan-UL2 (20B) with a transfer test on LLaMA-13B (p. 7 Table 2 caption; p. 8), Gisting also uses FLAN-T5-XXL (p. 1), and LLMLingua-2 also tests Mistral-7B (p. 8). The dating argument itself holds."
+    }
+   ],
+   "papers_cited": 10,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Every number and page I checked matches the papers, including the less obvious ones: ablation 72.93/73.62/78.62 against 79.08 (LLMLingua p. 7 Table 3), oracle sentence 60.2 against 39.3 (RECOMP p. 8 Table 3), SeCom 69.33 to 59.87 (p. 7 Table 2), ACE 18,282 to 122 tokens and 91.8% cache reuse (p. 3, p. 10), Cartridges 30 minutes on 8xH100 (p. 12). It reports LongLLMLingua's +21.4 at face value, without the position-1 parity (75.0 against 75.7) or the fact that the ranker alone gets most of the gain, and it omits the one-shot baseline (77.10) behind the 20x headline. Its statements about which papers have notes could not be checked, since this copy has no notes directory."
+  },
+  "nonotes-q5-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    5,
+    8,
+    13,
+    14,
+    16,
+    17,
+    20,
+    21,
+    22,
+    24,
+    25,
+    26,
+    27,
+    28,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "Selective-Context and AutoCompressors are cited as baselines by nearly every paper above",
+     "paper_says": "Selective-Context is a baseline only in the three LLMLingua papers. RECOMP's baselines are BM25, DPR, Contriever, T5 and GPT-3.5 (p. 7 Table 2); Gisting's are positive and negative controls and TF-IDF (p. 4, §4.2); ICAE and RECOMP cite AutoCompressors only as related work (ICAE p. 8 §4), not as a baseline. The second half of the sentence, that neither is in the library or the skip list, is correct."
+    },
+    {
+     "quote": "the gist and ICAE results by ChatGPT or GPT-4 pairwise preference",
+     "paper_says": "Gisting also reports ROUGE-L and a human evaluation (p. 5, §4.3; human win rate 52.3% for LLaMA-7B, Table 2). Only ICAE's fine-tuned results rest on GPT-4 preference alone."
+    }
+   ],
+   "papers_cited": 14,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Broadest coverage, and the adjacent-paper claims check out: Recall Is Not Enough +0.125 and +0.075 F1 (p. 6), RLM 26% median against compaction (p. 1), LongMemEval fact compression (p. 1), DeepSeek-OCR 97% and 60% (p. 1), the Cartridges conversion issue, RECOMP 85% against 39% (p. 8). It repeats LongLLMLingua's '+21.4%' as the paper prints it, without the position or noting it is 21.4 points (54.1 to 75.5 with reordering), so I did not credit point 9. It gives few numbers for LLMLingua-2 and ICAE and says itself that numbers were not checked against the tables; the ones it gives are right."
+  },
+  "asis+claude-sonnet-5-5-q5-r1": {
+   "makes": [
+    1,
+    3,
+    8,
+    14,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    25,
+    28
+   ],
+   "errors": [
+    {
+     "quote": "the papers put the usable range at about 2–5x for most tasks and up to about 10x for extractive RAG compression. Beyond that, quality degrades fast.",
+     "paper_says": "No paper states this range, and the results contradict it. LLMLingua loses 1.52 EM on GSM8K at 20x and puts the sharp drop at 25–30x (p. 6; p. 9). RECOMP's abstractive compressor keeps about 5% of tokens (roughly 18x) for 2 EM lost on NQ, and its extractive one uses 37 of 660 tokens for 36.57 against 39.39 (p. 7, Table 2). In the other direction, BBH already loses 8.5 EM at 5x (LLMLingua p. 6)."
+    }
+   ],
+   "papers_cited": 9,
+   "review_only": "My note flags the evidence as vendor-run. The authors also wrote the baselines, and the out-of-domain baseline numbers are copied from earlier papers.",
+   "misleading": "Mildly. The '2–5x, up to 10x for extractive RAG' rule is presented as what the papers say, but it is the answer's own synthesis and conflicts with LLMLingua's and RECOMP's reported results. LLMLingua, LongLLMLingua, RECOMP and Gisting are described from abstracts only, so their claims ('20x with little loss', 'compression can improve accuracy', '6% with minimal loss') go untested.",
+   "comment": "The LLMLingua-2 and ICAE sections are accurate and specific: 86.92/67.52/87.75, 970 against 1,176–1,222 tokens, 39.1/44.0/48.0, Synthetic 21.3 against 37.8, 45.4% lose against 19.6% win. The copied baseline numbers it attributes to a note are confirmed by the dagger footnotes on LLMLingua-2 Tables 2 and 3 (p. 6). Points 1 and 21 are credited loosely, since it gives only the abstract-level claim. Gisting's '40% fewer FLOPs and 4.2% lower latency' is correct (p. 1), but it misses that the gain against KV caching is 0.11%. 'Only LLMLingua-2 and ICAE have notes' could not be checked, since this copy has no notes directory. `paperlib read` does exist."
+  },
+  "noreviews-q5-r1": {
+   "makes": [
+    1,
+    6,
+    8,
+    9,
+    10,
+    12,
+    13,
+    14,
+    16,
+    18,
+    20,
+    21,
+    22,
+    24,
+    25,
+    26,
+    27,
+    28,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "On NaturalQuestions with 20 documents at 4x, LLMLingua scores 25.5–30.0",
+     "paper_says": "LongLLMLingua Table 1 (p. 6) gives LLMLingua at 4x as 25.5, 27.5, 23.5, 26.5 and 30.0 for gold positions 1, 5, 10, 15 and 20, so the range is 23.5–30.0. The answer took the first and last columns. The conclusion, below the 56.1 zero-shot score, is unaffected."
+    }
+   ],
+   "papers_cited": 12,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "The most critical reading, and the only answer to state the three points that reframe the headlines: one demonstration already scores 77.10 at 422 tokens (LLMLingua Table 2), question-blind compression falls below zero-shot on NQ, and position 1 shows no gain (75.0 against 75.7). The other numbers I checked are right: Recall Is Not Enough 0.326/0.400/0.451 with Qwen2.5-3B (p. 6 Table 3), RECOMP 37.04 at 36 tokens against 39.39 at 660, RLM 0.1 against 58.0 and 70.5 against 91.3 (p. 6 Table 1), SeCom −9.46, LightMem 50–80% (p. 8), DeepSeek-OCR's caveat (p. 19). It gives no LLMLingua-2 quality numbers and leaves out the LLMLingua ablation, BBH and the 25–30x limit. Point 13 is credited for the caching half only. The T5 detail in RECOMP is on p. 5, just outside the cited p. 2–4, which I did not count as an error. The claim about missing notes and the denied write could not be checked."
+  }
+ },
+ "cost": {
+  "usd": 1.6636268,
+  "seconds": 205
+ }
+}

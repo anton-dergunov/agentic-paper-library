@@ -1,0 +1,241 @@
+{
+ "points": [
+  {
+   "id": 1,
+   "point": "LLM judges inflate the benefit of personalisation: on a 1–5 preference scale where 3 is neutral, humans average 3.18 while all five LLM judges average higher, from 3.41 to 4.02.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 15, Table 6: Human 3.176; Gemma-4-31B 3.409, Claude-S4.6 3.428, Qwen3.5-27B 3.487, GPT-5.4 3.523, Llama-3.3-70B 4.019. p. 8: 'humans assign lower ratings than all LLM judges'."
+  },
+  {
+   "id": 2,
+   "point": "Judge–human item-level agreement is weak: Spearman with the human average rating is 0.11–0.38 across the five judges (at most 0.38).",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 15, Table 6: Spearman 0.111 (Gemma-4-31B), 0.182 (Qwen3.5-27B), 0.312 (GPT-5.4), 0.362 (Claude-S4.6), 0.376 (Llama-3.3-70B)."
+  },
+  {
+   "id": 3,
+   "point": "Humans rated 54.6% of personalised responses as no better than their generic counterparts.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 8, §6.2: '54.6% of personalized responses are judged by humans as no better than their generic counterparts (rating ≤ 3.0)'."
+  },
+  {
+   "id": 4,
+   "point": "Mechanism: several open-weight judges reward explicit mentions of a user attribute ('Given your interest in machine learning…'). Humans show almost no gap (Δ = 0.03), GPT-5.4 a small negative one (Δ = −0.07), and Claude Sonnet 4.6 over-penalises mentions (Δ = −0.39). The paper says such responses can feel robotic, presumptuous or intrusive to users.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 8, §6.2 and Fig. 6: 'several open-weight judges assign higher scores to explicit mentions, while human annotators and GPT-5.4 show little sensitivity'; human Δ=0.03, Claude-S4.6 Δ=−0.39, GPT-5.4 Δ=−0.07; 'feel robotic, presumptuous, or intrusive to users'."
+  },
+  {
+   "id": 5,
+   "point": "Models that mention user attributes more often as generators also reward such mentions more as judges: correlation 0.90 across five models (p = 0.04).",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 8, §6.2 and Fig. 7: 'strongly correlated (Spearman r=0.90, p=0.04)'. It is a Spearman correlation between a model's own mention rate and its own reward for mentions, across the five models."
+  },
+  {
+   "id": 6,
+   "point": "Training does not fix it: reward models trained on the human ratings reach only about 0.3 Spearman with humans, comparable to the stronger LLM judges.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 9, §6.3: ModernBERT, Qwen2.5-1.5B and Llama-3.2-1B reward models 'reach only around 0.3 Spearman correlation with human ratings. This is comparable to the stronger LLM judges ... such as Claude-S4.6 and GPT-5.4'."
+  },
+  {
+   "id": 7,
+   "point": "The same gap appears one stage earlier, in deciding which user attributes are relevant to a prompt: humans mark about 20% of pairs relevant and LLMs 40–60%; LLM–human κ is 0.300, against 0.426 human–human and 0.597 LLM–LLM.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 6, §5.2: human pairwise Cohen's κ 0.426, LLM–LLM 0.597, LLM–human 0.300; 'each human annotator marks only around 20% of attributes as relevant, whereas LLMs mark 40–60%'. Repeated on p. 15, Appendix G."
+  },
+  {
+   "id": 8,
+   "point": "The human ceiling is low: the three annotators agree with each other at only Spearman 0.325 (weighted κ 0.310), so the best judges (0.36–0.38 against the human mean) are near the human–human level. The inflation and the mention bias are therefore the firmer findings (the answers' own reading).",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 8, §6.1 Human Annotation: inter-annotator agreement by 'Spearman correlation and weighted Cohen's κ, which gives 0.325 and 0.310'. The noise-ceiling reading is the answers' inference: the paper calls this 'reasonable annotator consistency' and still concludes that judges are unreliable substitutes."
+  },
+  {
+   "id": 9,
+   "point": "The evidence is thin and uses third-party raters: Stage 3 rests on 80 items and 367 ratings from three Prolific annotators reading someone else's profile, not the users being personalised for.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 15, Appendix G: 'A total of 80 items were annotated, producing 367 (item, attribute) ratings across three annotators'; 'Three human annotators participated in all annotation tasks ... recruited through Prolific'; they were shown 'a user's attribute profile, a prompt, and two responses'."
+  },
+  {
+   "id": 10,
+   "point": "The paper's text and table disagree: the text says open-weight judges correlate very poorly and proprietary ones better, but Table 6 gives the highest correlation (0.376) to the open-weight Llama-3.3-70B, which is also the most inflated judge (4.02). So correlation alone does not pick a safe judge.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 8: 'Open-weight judges show very low Spearman correlations with human ratings, while proprietary judges perform better, with the strongest reaching about 0.37.' p. 15, Table 6: Llama-3.3-70B has avg. rating 4.019 and Spearman 0.376, both the highest; Claude-S4.6 has 0.362 and GPT-5.4 0.312."
+  },
+  {
+   "id": 11,
+   "point": "Synthetic users are easier than real ones, so benchmarks built on synthetic personas understate the difficulty.",
+   "paper": "library/llm/personalization/methods/Re-Centering Humans in LLM Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 4, §4.2 and Fig. 2: attributes extracted from real conversations have 'substantially higher proportions of uncertain and rejected cases' and 'synthetic data may underestimate the difficulty of this stage'. The paper shows this for attribute extraction (Stage 1) only, not for response judging."
+  },
+  {
+   "id": 12,
+   "point": "LLM-simulated users (GPT-4o given each real participant's profile) recover the aggregate ranking of the systems: correlation with the human ranking is r = 0.98–0.99.",
+   "paper": "library/llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md",
+   "verdict": "holds",
+   "evidence": "p. 17, 'Aggregate hierarchies are recovered': Plackett–Luce worth parameters correlate at r=0.99 (Sim-Judgement) and r=0.98 (Sim-Dynamic). The study re-recruited 530 participants (p. 1); the simulation comparison uses 1,855 matched trials from 497 of them (p. 16), so both figures cited in the answers are in the paper."
+  },
+  {
+   "id": 13,
+   "point": "The same simulators fall far below human self-consistency on individual judgements: per-trial Kendall τ 0.22 and 0.11 against 0.57, and top-1 accuracy 40.1% and 32.3% against 68.8%.",
+   "paper": "library/llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md",
+   "verdict": "holds",
+   "evidence": "p. 16–17, §4.1 and Fig. 8: human self-consistency ceiling τ=0.57, top-1 68.8%; Sim-Judgement τ=0.22 [0.20, 0.25], top-1 40.1%; Sim-Dynamic τ=0.11 [0.09, 0.14], top-1 32.3%."
+  },
+  {
+   "id": 14,
+   "point": "Simulators have a much stronger position bias than humans: they rank the first-shown model best 44.9% of the time and the last 7.2% (33.8% and 15.0% in the other condition), while humans are near 25% for each position.",
+   "paper": "library/llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md",
+   "verdict": "holds",
+   "evidence": "p. 18, 'Simulators dramatically exacerbate UI position biases': humans A 24.1%, B 23.2%, C 24.1%, D 28.6%; Sim-Judgement A 33.8% vs D 15.0%; Sim-Dynamic A 44.9% vs D 7.2%. The two pairs quoted by different answers are the two conditions, so both are correct."
+  },
+  {
+   "id": 15,
+   "point": "One simulation condition still swapped the top two models despite the near-perfect aggregate correlation.",
+   "paper": "library/llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md",
+   "verdict": "holds",
+   "evidence": "p. 17: 'Sim-Dynamic condition recovered the human ordering (PPFT > DPFT > Base > Prompting), but Sim-Judgement swapped the top two models, reversing the slim advantage for PPFT in the human study.'"
+  },
+  {
+   "id": 16,
+   "point": "The PRISM-X result is for a naive simulator (GPT-4o conditioned on a text persona), which the authors say is not the ceiling of what simulation can achieve. Simulated users were also far more sycophantic than real ones.",
+   "paper": "library/llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md",
+   "verdict": "holds",
+   "evidence": "Discussion: 'a widely-used but relatively naive paradigm (persona-conditioning via natural language in GPT-4o) rather than the ceiling of what more advanced methods can achieve'. p. 20: 'Real users almost never displayed sycophancy (90% scored 1/10)', human M=1.18 vs simulated M=3.41. p. 19 heading: 'Humans are more diverse than their simulated counterparts'."
+  },
+  {
+   "id": 17,
+   "point": "Response length alone drives much of human preference: each additional 100 characters gives 1.57× the odds of being chosen, so length should be controlled for.",
+   "paper": "library/llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md",
+   "verdict": "holds",
+   "evidence": "p. 13, §3.4: 'each additional 100 characters was associated with 1.57× the odds of being chosen (p<.001)'. This is first-turn response length predicting the opening choice; for full-conversation length predicting ranked-best the odds ratio is 1.15."
+  },
+  {
+   "id": 18,
+   "point": "Scoring against rubric aspects taken from the asker's own question narrative agrees with human annotators in 73% of cases, against 58% for direct scoring. The validation is small: 100 examples, two annotators, inter-annotator κ 0.726.",
+   "paper": "library/llm/personalization/benchmarks/LaMP-QA. A Benchmark for Personalized Long-form Question Answering.md",
+   "verdict": "holds",
+   "evidence": "p. 7, 'Effect of Evaluation Method and Auto-Rater Size': 100 test examples, each rated by two annotators, Cohen's κ 0.726; 'in 73% of cases, the aspect-based evaluation method selects the same response as human annotators, while the direct scoring method aligns ... in only 58%'."
+  },
+  {
+   "id": 19,
+   "point": "Pairwise judging is order-dependent: the pairwise judge (Qwen 2.5, 32B) changed its preferred response in 78% of cases when the order of the two answers was reversed.",
+   "paper": "library/llm/personalization/benchmarks/LaMP-QA. A Benchmark for Personalized Long-form Question Answering.md",
+   "verdict": "holds",
+   "evidence": "p. 7: 'instruction-tuned Qwen 2.5 (32B parameters) changes its preferred response in 78% of cases when the order of the two responses is reversed.'"
+  },
+  {
+   "id": 20,
+   "point": "Small judges both agree less with humans and inflate scores: a 0.5B judge agrees 48% of the time with a mean score of 0.94, while a 32B judge agrees 73% with a mean score of 0.44.",
+   "paper": "library/llm/personalization/benchmarks/LaMP-QA. A Benchmark for Personalized Long-form Question Answering.md",
+   "verdict": "holds",
+   "evidence": "p. 7: 'with a 0.5B parameter model, alignment with human preferences is only 48%, and the average score assigned is relatively high at 0.94. In contrast, the 32B evaluator achieves a much higher alignment of 73% but assigns a significantly lower average score of 0.44.'"
+  },
+  {
+   "id": 21,
+   "point": "The most reliable evaluator of a personalised answer is the original user who asked the question; third-party annotators and judges are proxies.",
+   "paper": "library/llm/personalization/benchmarks/LaMP-QA. A Benchmark for Personalized Long-form Question Answering.md",
+   "verdict": "holds",
+   "evidence": "p. 10, Limitations, 'On the Automatic Evaluation of Personalization': 'the most reliable evaluator is the original user who posed the question. However, consistently obtaining feedback from the same user ... is impractical, costly, and in many cases impossible.' Verified for LaMP-QA only; some answers attribute the same statement to Re-Centering Humans, which was not checked."
+  },
+  {
+   "id": 22,
+   "point": "Personalisation is the judge's weakest dimension: judge–human κ is 0.52 on personalisation against 0.78 on task completion, while human annotators agree among themselves at 0.75 and 0.865. The validation is 100 dialogues with three annotators.",
+   "paper": "library/llm/personalization/benchmarks/PersonaLens. A Benchmark for Personalization Evaluation in Conversational AI Assistants.md",
+   "verdict": "holds",
+   "evidence": "p. 8, §4.7 and Table 5: Task Completion Cohen's κ 0.780 / Fleiss IAA 0.865; Personalization 0.520 / 0.750. 0.520 is the lowest judge–human κ of the six metrics; 100 sampled dialogues, three annotators."
+  },
+  {
+   "id": 23,
+   "point": "For binary checks against a stated preference (violated, acknowledged, hallucinated, helpful), the Claude 3 Sonnet judge agrees with humans at 86–98% per checker and 0.92–0.97 on final preference-following accuracy.",
+   "paper": "library/llm/personalization/benchmarks/Do LLMs Recognize Your Preferences. Evaluating Personalized Preference Following in LLMs.md",
+   "verdict": "holds",
+   "evidence": "p. 43, §A.17, Table 18: checker agreement ranges from 0.86 (Violate, implicit choice-based) to 0.98 (Hallucinate, explicit); Preference Following Accuracy 0.97 / 0.92 / 0.96; 100 sampled evaluations per preference form."
+  },
+  {
+   "id": 24,
+   "point": "For checklist-based matching of an inferred preference to the ground truth, the GPT-4o judge reaches Krippendorff α = 0.769 against the human majority vote, and a distilled 7B matcher 0.748.",
+   "paper": "library/llm/personalization/benchmarks/CUPID. Evaluating Personalized and Contextualized Alignment of LLMs from Interactions.md",
+   "verdict": "holds",
+   "evidence": "p. 3, §2.3 'Inference - Preference Match': 'GPT-4o achieved a Krippendorff's alpha of 0.769 (substantial agreement) with the majority vote of human annotators ... PrefMatcher-7B ... 0.748'. The figure is on p. 3, not p. 8 as some answers cite. The appendix reports α 0.467 between the human annotators themselves."
+  },
+  {
+   "id": 25,
+   "point": "The LLM judge aligns with human experts at 73–96% depending on the task, across four memory and preference tasks.",
+   "paper": "library/llm/personalization/benchmarks/AlpsBench. An LLM Personalization Benchmark for Real-Dialogue Memorization and Preference Alignment.md",
+   "verdict": "holds",
+   "evidence": "§3 (p. 4), 'LLM-as-a-Judge Alignment' and Fig. 5: 'alignment rates of 96% for Task 3, 85% for Task 2, 83% for Task 4, and 73% for Task 1'."
+  },
+  {
+   "id": 26,
+   "point": "For over-personalisation metrics (irrelevance, sycophancy), judge scores correlate with human scores at Spearman about 0.60–0.74 across judge models: 0.68 for the GPT-4o-mini judge actually used, 0.74 for the best.",
+   "paper": "library/llm/personalization/benchmarks/OP-Bench. Benchmarking Over-Personalization for Memory-Augmented Personalized Conversational Agents.md",
+   "verdict": "holds",
+   "evidence": "p. 14, §A.3.2, Table 5: Spearman ρ from 0.61/0.60 (DeepSeek-v3.2) to 0.74/0.74 (Claude-Opus-4.5-thinking) for irrelevance/sycophancy; GPT-4o-mini 0.68/0.68, chosen as the judge; 100 queries, 200 responses. Answer G's '0.62–0.71' understates the range."
+  },
+  {
+   "id": 27,
+   "point": "Given the user's true rubric, a judge picks the right response almost perfectly (97.5% directional agreement with humans on 2,830 pairs; oracle accuracy 97.8–99.1%), but the best model reaches only about 76% (75.94%) when it has to infer the needs itself. The pairs were built to follow or violate the rubric, so the first case is easy by construction.",
+   "paper": "library/llm/post-training/preference-learning/Personalized RewardBench. Evaluating Reward Models with Human Aligned Personalization.md",
+   "verdict": "holds",
+   "evidence": "p. 17, §B.4: 'directional agreement reaches 97.5% (2,758 / 2,830)', 99.7% excluding ties. p. 15, §B.1: oracle Gemini-3-Flash with ground-truth rubric aspects scores 97.78%, 99.09% and 98.60%, against a state-of-the-art peak of 75.94%. p. 6, §4.2: the best model 'fails to surpass the 76% accuracy threshold'. Abstract: pairs are built 'based on strict adherence to (or violation of) user-specific rubrics'."
+  },
+  {
+   "id": 28,
+   "point": "Small (8B-class) LLM judges pass generic answers off as personalised, scoring 0–19% accuracy on the correct-but-generic class, where a small entailment model does far better. The LLM judges still do better at identifying the personalised class.",
+   "paper": "library/llm/personalization/methods/Evaluating LLM Personalization via Semantic Constraint Verification.md",
+   "verdict": "holds",
+   "evidence": "p. 7, §4.3, Table 3: accuracy on the Generalized class is Qwen3-8B 18.69%, DeepSeek-R1 0.00%, Llama-3-8B 0.00%, Falcon-H1R 3.09%, against DeBERTa-Large 93.23%; overall mean 68.44% against 27–33% for the LLM judges. On the Personalized class DeBERTa-Large gets 43.50%, below Llama-3-8B (61.68%) and DeepSeek-R1 (46.25%). This is what the table shows; whether the text explicitly concedes it was not checked."
+  },
+  {
+   "id": 29,
+   "point": "The judge can pick a different winner from humans: GPT-4 as judge puts P-Soups first on average pairwise win rate, while human judges put P-MORL first.",
+   "paper": "library/llm/personalization/methods/Personalized Soups. Personalized Large Language Model Alignment via Post-hoc Parameter Merging.md",
+   "verdict": "holds",
+   "evidence": "p. 7, §4.3, Tables 3–4: under GPT-4, P-Soups averages 55.23%; under human evaluation P-MORL averages 58.70% against 55.29% for P-Soups. The text notes 'a discrepancy between the simulated and human evaluation; P-Soups has the highest average win rate in GPT-4'."
+  },
+  {
+   "id": 30,
+   "point": "When a judge is calibrated to abstain on low-confidence items, the abstained items are the ones humans also find subjective: human inter-annotator agreement is 0.815 on abstained samples against 0.902 on evaluated ones. The agreement guarantee therefore covers only the easier items.",
+   "paper": "library/llm/evaluation/methods/Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement.md",
+   "verdict": "holds",
+   "evidence": "p. 7, §3.3, Table 4: Human IAA 0.815 (abstained) vs 0.902 (evaluated), p < 1e-8; 'instances abstained by LLM judges tend to be more subjective even for humans'. Measured on ChatArena, not on personalisation data."
+  },
+  {
+   "id": 31,
+   "point": "An LLM judge rated the PUMA system's responses above those of real human counsellors (average 4.37 against 3.85).",
+   "paper": "library/llm/personalization/user-modelling/Know You Before You Speak. User-State Modeling for LLM Personalization in Multi-Turn Conversation.md",
+   "verdict": "holds",
+   "evidence": "p. 7, §5.2 'Counselor-side MI quality', Table 2: LLM-judge MITI average is 3.85 for 'Real (human)' and 4.37 for PUMA (4.27 with the second backbone). The paper describes PUMA as 'comparable to the human-reference responses' and has no human validation of the judge. This is a 31st point, kept because it checks out; drop it if the cap of 30 is strict."
+  }
+ ],
+ "answers": [
+  "asis+claude-sonnet-5-5-q3-r1",
+  "nonotes-q3@run1",
+  "noreviews-q3-r3",
+  "asis-q3-r2",
+  "noreviews+claude-sonnet-5-5-q3-r1",
+  "nonotes-q3-r3",
+  "asis-q3-r3",
+  "noreviews-q3-r2",
+  "asis-q3@run1",
+  "nonotes-q3-r1",
+  "noreviews-q3@run1",
+  "asis-q3-r1",
+  "nonotes-q3-r2",
+  "noreviews-q3-r1"
+ ],
+ "cost": {
+  "usd": 1.5737235999999997,
+  "seconds": 147
+ }
+}

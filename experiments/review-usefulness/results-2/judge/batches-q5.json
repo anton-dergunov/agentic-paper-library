@@ -1,0 +1,19 @@
+[
+ [
+  "asis-q5-r2",
+  "nonotes-q5-r1",
+  "asis+claude-sonnet-5-5-q5-r1",
+  "noreviews-q5-r1"
+ ],
+ [
+  "noreviews-q5-r2",
+  "nonotes-q5-r2",
+  "nonotes-q5-r3",
+  "noreviews+claude-sonnet-5-5-q5-r1"
+ ],
+ [
+  "asis-q5-r3",
+  "asis-q5-r1",
+  "noreviews-q5-r3"
+ ]
+]

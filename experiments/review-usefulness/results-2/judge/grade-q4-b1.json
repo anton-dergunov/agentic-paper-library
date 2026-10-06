@@ -1,0 +1,125 @@
+{
+ "answers": {
+  "noreviews+claude-sonnet-5-5-q4-r1": {
+   "makes": [
+    3,
+    4,
+    5,
+    7,
+    9,
+    10,
+    12,
+    14,
+    15
+   ],
+   "errors": [],
+   "papers_cited": 37,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "A catalogue built from the index summaries, which it states (\"I'm working from the index summaries, not from full reads of the papers\"). The one-line descriptions I checked match the papers: MIRIX's six managers, Memanto's thirteen categories, the six operations in Rethinking Memory, Memory-R1's 152 pairs, and the folder counts 70/18/10. Points 3, 4, 7, 10 and 14 are made only in part (no append-only log, function calls, edge invalidation, or write-time versus read-time contrast). It gives no comparative evidence and no page numbers, so it says what kinds exist but little on how they differ in practice. \"Tests 13 systems\" is loose: the paper compares thirteen system configurations."
+  },
+  "noreviews-q4-r3": {
+   "makes": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    12,
+    13,
+    15,
+    16,
+    17,
+    20,
+    22,
+    25,
+    26,
+    29
+   ],
+   "errors": [
+    {
+     "quote": "Tiered context (OS-style) | ... | The agent itself edits the in-prompt block through a function call | MemGPT, MemoryOS, LightMem",
+     "paper_says": "This holds for MemGPT only. MemoryOS moves content between fixed short-, mid- and long-term tiers by FIFO and a heat score, not by the agent's function calls (Memory OS of AI Agent, §3.2–3.3, p. 3–4). In Are We Ready (§3.4, p. 6) LightMem is described as an append-only insert of timestamped facts."
+    }
+   ],
+   "papers_cited": 27,
+   "review_only": "This rests on the library's notes for about 25 of the 70 memory papers; for the rest (marked * below) I used only the index summaries, not the papers.",
+   "misleading": "no",
+   "comment": "The widest coverage of the graded points, and every number I checked is in the paper: 0.389/0.642, 155/117/3.7 s, 72.90/66.88, 83.0/52.0, 7% or less, 7.0%/9.5%/43.6% (Control-Plane, p. 9). The LoCoMo label permutation is real: A-MEM's 27.02 / 45.85 / 12.14 / 44.65 sit under Multi Hop / Temporal / Open Domain / Single Hop in A-MEM (p. 6) and under Single Hop / Temporal / Multi-Hop / Open Domain in Mem0 (p. 9). The Are We Ready tie to MemOS also holds (shared authors Zhiyu Li and Feiyu Xiong). \"On tool-use execution, procedural memory is best\" holds for the in-episode setting (EvoMemBench Finding 4, p. 7) but not cross-episode, where retrieval-augmented memory ranks best on Tool Using (Finding 7, p. 8). Points 5 and 7 are made only in part. I could not confirm from the markdown that Fig. 7 of Are We Ready and Table 2 of Mem0 are on the pages it cites."
+  },
+  "asis-q4-r1": {
+   "makes": [
+    1,
+    3,
+    4,
+    6,
+    7,
+    10,
+    12,
+    14,
+    22,
+    23,
+    24
+   ],
+   "errors": [
+    {
+     "quote": "Nearly all agent memory systems are the text kind, because only text can be shown to a user, deleted on request and used with any model (Memory in the Age of AI Agents, p. 12)",
+     "paper_says": "The survey says token-level memory is \"the most common memory form\" and \"typically transparent, easy to edit, and straightforward to interpret\" (§3.1, p. 13), and that it is often plug-and-play (p. 30). It does not give these as the reason for its prevalence and does not say only text has them; p. 12 holds just the three-form definition."
+    },
+    {
+     "quote": "Experience (ExpeL, Agent Workflow Memory, ReasoningBank) | ... | A wrong lesson keeps being applied; nothing prunes.",
+     "paper_says": "ExpeL prunes: insights can be DOWNVOTEd, and \"if an insight's importance count reaches zero, it will be removed\" (ExpeL, p. 4)."
+    },
+    {
+     "quote": "Extract-and-consolidate (Mem0, A-MEM, LightMem) | An LLM extracts the fact, fetches the 10 most similar stored facts and chooses add, update, delete or nothing.",
+     "paper_says": "This is Mem0's procedure (s = 10, Mem0 §2.1, p. 3). A-MEM builds notes, links them and rewrites neighbours' descriptions (A-MEM §3.1–3.3, p. 4); it has no delete operation."
+    }
+   ],
+   "papers_cited": 26,
+   "review_only": "Everything else above that carries no page link rests on the review alone.",
+   "misleading": "Slightly. Under \"Graphs are not a general accuracy upgrade\" it rests on AgentMemBench's 0.001 graph Recall@5 with no caveat that this is an NER entity graph run with a 4-bit 7B model on 491 questions, and it omits the larger study's finding that graph systems lead on knowledge updates and single-hop recall.",
+   "comment": "The numbers with page links all check out: 7K/600K tokens (Mem0, p. 14), 72.90/66.88 and 17.12/1.44 s, Zep 71.2% against 60.2% at 1.6K tokens (p. 7, Table 2), AgentMemBench 0.573/0.001/0.005 (p. 10), Cartridges 38.6× (p. 1). The MemoryLLM correction is right: the paper says the model \"retains knowledge even after 20 updates\" (p. 7), and N/K = 7680/256 = 30. It uses none of the head-to-head studies behind points 16–21 and 25–30. It also says outright that the Zep-versus-Mem0 ranking claim is from the review and was not rechecked. Points 4 and 7 are made only in part."
+  },
+  "nonotes-q4-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7,
+    9,
+    10,
+    12,
+    16,
+    17,
+    18,
+    19,
+    21,
+    25,
+    28
+   ],
+   "errors": [
+    {
+     "quote": "Flat extract-and-retrieve | Short facts pulled out by an LLM, embedded in a vector store | ... | Mem0, SeCom, LightMem",
+     "paper_says": "SeCom does not extract facts. It partitions conversations into topical segments and concatenates the retrieved segments, \"bypassing summarization to avoid the information loss\" (On Memory Construction and Retrieval, p. 1)."
+    },
+    {
+     "quote": "AgentMemBench claims a plain key-value store beats graphs and summaries on every axis (p. 1)",
+     "paper_says": "The paper says \"EKV dominates on every quality axis\" (p. 1, p. 10). On footprint it is the worst: 5,126 tokens against about 300 for windowing and 3,478 for summaries (p. 11)."
+    }
+   ],
+   "papers_cited": 32,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "The best-sourced answer: every section and page link I checked points to the right heading, and the head-to-head findings match the papers. These include 12 systems and 11 datasets, 155/117/3.7 s, Mem0 21.4 at 35.9 s (Are We Ready, p. 10), 40% and 0/385 (Control-Plane, §5.5, p. 6), the write-time versus mutation-time result (§5.7, p. 8), and MemoryArena 40–60% (Memory for Autonomous LLM Agents, p. 4, Table 1). \"The 2023 systems were designed for 8k-token contexts\" is supported only for MemGPT (GPT-4 at 8,192 tokens, p. 4); Generative Agents and MemoryBank do not state it. Points 1, 6, 9, 21 and 25 are made without their numbers or full detail. It leaves out the vendor-paper results (points 22–24) and the write-time loss and revision results (points 26, 30)."
+  }
+ },
+ "cost": {
+  "usd": 1.6343785999999998,
+  "seconds": 253
+ }
+}

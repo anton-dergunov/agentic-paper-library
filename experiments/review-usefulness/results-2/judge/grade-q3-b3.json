@@ -1,0 +1,114 @@
+{
+ "answers": {
+  "asis+claude-sonnet-5-5-q3-r1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    12,
+    13,
+    19,
+    22,
+    28,
+    31
+   ],
+   "errors": [],
+   "papers_cited": 6,
+   "review_only": "I took these from the library's review and haven't re-read the papers",
+   "misleading": "no",
+   "comment": "No wrong numbers or pages found; the Re-Centering and PRISM-X figures and pages all check out. Two overstatements that stop short of errors: 'Judges reward visible personalising' is said of judges in general, while the paper (p. 8) limits it to several open-weight judges, with GPT-5.4 showing little sensitivity and Claude-S4.6 a negative gap. And the opening 'A judge can rank systems against each other' rests only on PRISM-X's simulated users, where Sim-Judgement swapped the top two models (p. 17). Four points (Semantic Constraint Verification, LaMP-QA 78%, PersonaLens, PUMA) are openly flagged as taken from the review, though the numbers match the papers. The line 'No paper here has users rate answers to their own questions over time' is defensible only because of 'over time': PRISM-X does have the users themselves rate."
+  },
+  "noreviews-q3-r3": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9,
+    12,
+    13,
+    14,
+    18,
+    19,
+    24,
+    26,
+    27,
+    30
+   ],
+   "errors": [
+    {
+     "quote": "CUPID ([p. 8](...CUPID...pdf?page=8)) | Match inferred preference to ground truth via checklists | α = 0.769 vs human majority",
+     "paper_says": "The α = 0.769 meta-evaluation of the GPT-4o matcher is in §2.3 Metrics, 'Inference - Preference Match (p. 3)'. Page 8 holds only the PrefMatcher-7B vs GPT-4o correlation and the generation-task results; 0.769 appears nowhere else in the paper."
+    }
+   ],
+   "papers_cited": 7,
+   "review_only": "I took the Personalized RewardBench figures from a skim-level digest",
+   "misleading": "no",
+   "comment": "The numbers are accurate throughout; the only error is the CUPID page. The RewardBench figures it flags as coming from a digest are nonetheless correct (Table 2 on p. 6, oracle bound in B.1 on p. 15, best model 75.94%). It marks the noise-ceiling argument as its own reading. Point 14 is given only for the Sim-Dynamic condition and without the human ~25% baseline. Point 30 is stated without the agreement numbers, but the Table 4, p. 7 citation is right."
+  },
+  "noreviews-q3-r1": {
+   "makes": [
+    1,
+    2,
+    4,
+    7,
+    8,
+    9,
+    12,
+    13,
+    18,
+    22,
+    24
+   ],
+   "errors": [],
+   "papers_cited": 7,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "No errors found. It is the only answer with the right CUPID page (p. 3). 'Two open-weight judges were below 0.2' matches Table 6 (Qwen3.5 0.182, Gemma-4 0.111). PersonaLens and CUPID do use synthetic users, and Prediction-Powered Inference and Trust or Escalate are both in the library. The opening claim that even on rubric checks the judge 'agrees with humans less than humans agree with each other' is shown only for PersonaLens (0.520 vs 0.750); CUPID and LaMP-QA do not give a comparable pair, so it is a generalisation from one paper. It omits the 54.6% figure, the r = 0.90 generator–judge link and the reward-model result."
+  },
+  "noreviews-q3@run1": {
+   "makes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    22,
+    23,
+    24,
+    25,
+    26
+   ],
+   "errors": [
+    {
+     "quote": "CUPID | Does the inferred preference match the ground truth, by checklist? | α = 0.769 (p. 8)",
+     "paper_says": "The α = 0.769 agreement with the human majority vote is reported in §2.3 Metrics, 'Inference - Preference Match (p. 3)', not on p. 8."
+    }
+   ],
+   "papers_cited": 7,
+   "review_only": "no",
+   "misleading": "no",
+   "comment": "Widest coverage, and accurate apart from the CUPID page. Checked and correct: PrefEval 0.92–0.97 (A.17, Table 18, p. 43), AlpsBench 73–96% (p. 4, Fig. 5), OP-Bench 0.68 / 0.74 (A.3.2, Table 5, p. 14), PersonaLens 0.52 vs 0.78 (p. 8, Table 5), synthetic easier than real (p. 4). The PrefEval row is labelled 'Did the response violate a stated preference?', but 0.92–0.97 is the final preference-following accuracy row; the violation checker itself is 0.86–0.95. I did not count this as an error because the range quoted is a real row of the same table. It claims to have added a Q&A entry to notes/; this copy of the library has no notes/ directory, so I could not confirm that write."
+  }
+ },
+ "cost": {
+  "usd": 0.761694,
+  "seconds": 92
+ }
+}
