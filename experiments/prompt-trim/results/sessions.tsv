@@ -1,59 +1,157 @@
-task	condition	check	result
-add	after	add-arxiv run	pass
-add	after	build-index then check	pass
-add	after	filed in	llm/memory/agent
-add	after	lookup run	pass
-add	after	no git commit	pass
-add	after	paper added	pass
-add	after	suggests a commit message	pass
-add	after	summary set with set-summary	pass
-add	after	topics.yaml read	pass
-add	before	add-arxiv run	pass
-add	before	build-index then check	pass
-add	before	filed in	llm/memory/agent
-add	before	lookup run	pass
-add	before	no git commit	pass
-add	before	paper added	pass
-add	before	suggests a commit message	pass
-add	before	summary set with set-summary	pass
-add	before	topics.yaml read	pass
-overview	after	Overview, Questions, Follow-ups	pass
-overview	after	abstract callout	pass
-overview	after	checkboxes all false	pass
-overview	after	frontmatter keys in order	pass
-overview	after	method subsections in order	pass
-overview	after	no build-index, check or git status	pass
-overview	after	no page references in the note	pass
-overview	after	note written to overview_dir	pass
-overview	after	notes/ file keeps Digest and Q&A	pass
-overview	after	report starts with the link	pass
-overview	after	set-type run	pass
-overview	before	Overview, Questions, Follow-ups	pass
-overview	before	abstract callout	pass
-overview	before	checkboxes all false	pass
-overview	before	frontmatter keys in order	pass
-overview	before	method subsections in order	pass
-overview	before	no build-index, check or git status	pass
-overview	before	no page references in the note	pass
-overview	before	note written to overview_dir	pass
-overview	before	notes/ file keeps Digest and Q&A	pass
-overview	before	report starts with the link	pass
-overview	before	set-type run	pass
-qa	after	cites a page (p. N)	pass
-qa	after	did not open a PDF	pass
-qa	after	gives 71.2% against 60.2% full context (gpt-4o)	pass
-qa	after	pdf.invalid link with page=	pass
-qa	after	read Zep's note	pass
-qa	before	cites a page (p. N)	pass
-qa	before	did not open a PDF	pass
-qa	before	gives 71.2% against 60.2% full context (gpt-4o)	pass
-qa	before	pdf.invalid link with page=	pass
-qa	before	read Zep's note	pass
+task	run	check	result
+add	after r1	add-arxiv run	pass
+add	after r1	build-index then check	pass
+add	after r1	filed in	llm/memory/agent
+add	after r1	lookup run	pass
+add	after r1	no git commit	pass
+add	after r1	paper added	pass
+add	after r1	suggests a commit message	pass
+add	after r1	summary set with set-summary	pass
+add	after r1	topics.yaml read	pass
+add	after r2	add-arxiv run	pass
+add	after r2	build-index then check	pass
+add	after r2	filed in	llm/memory/agent
+add	after r2	lookup run	pass
+add	after r2	no git commit	pass
+add	after r2	paper added	pass
+add	after r2	suggests a commit message	pass
+add	after r2	summary set with set-summary	pass
+add	after r2	topics.yaml read	pass
+add	before r1	add-arxiv run	pass
+add	before r1	build-index then check	pass
+add	before r1	filed in	llm/memory/agent
+add	before r1	lookup run	pass
+add	before r1	no git commit	pass
+add	before r1	paper added	pass
+add	before r1	suggests a commit message	pass
+add	before r1	summary set with set-summary	pass
+add	before r1	topics.yaml read	pass
+add	before r2	add-arxiv run	pass
+add	before r2	build-index then check	pass
+add	before r2	filed in	llm/memory/agent
+add	before r2	lookup run	pass
+add	before r2	no git commit	pass
+add	before r2	paper added	pass
+add	before r2	suggests a commit message	pass
+add	before r2	summary set with set-summary	pass
+add	before r2	topics.yaml read	pass
+overview	after r1	Overview, Questions, Follow-ups	pass
+overview	after r1	abstract callout	pass
+overview	after r1	checkboxes all false	pass
+overview	after r1	frontmatter keys in order	pass
+overview	after r1	method subsections in order	pass
+overview	after r1	no build-index, check or git status	pass
+overview	after r1	no page references in the note	pass
+overview	after r1	note written to overview_dir	pass
+overview	after r1	notes/ file keeps Digest and Q&A	pass
+overview	after r1	report starts with the link	pass
+overview	after r1	set-type run	pass
+overview	after r2	Overview, Questions, Follow-ups	pass
+overview	after r2	abstract callout	pass
+overview	after r2	checkboxes all false	pass
+overview	after r2	frontmatter keys in order	pass
+overview	after r2	method subsections in order	pass
+overview	after r2	no build-index, check or git status	pass
+overview	after r2	no page references in the note	pass
+overview	after r2	note written to overview_dir	pass
+overview	after r2	notes/ file keeps Digest and Q&A	pass
+overview	after r2	report starts with the link	pass
+overview	after r2	set-type run	pass
+overview	before r1	Overview, Questions, Follow-ups	pass
+overview	before r1	abstract callout	pass
+overview	before r1	checkboxes all false	pass
+overview	before r1	frontmatter keys in order	pass
+overview	before r1	method subsections in order	pass
+overview	before r1	no build-index, check or git status	pass
+overview	before r1	no page references in the note	pass
+overview	before r1	note written to overview_dir	pass
+overview	before r1	notes/ file keeps Digest and Q&A	pass
+overview	before r1	report starts with the link	pass
+overview	before r1	set-type run	pass
+overview	before r2	Overview, Questions, Follow-ups	pass
+overview	before r2	abstract callout	pass
+overview	before r2	checkboxes all false	pass
+overview	before r2	frontmatter keys in order	pass
+overview	before r2	method subsections in order	pass
+overview	before r2	no build-index, check or git status	pass
+overview	before r2	no page references in the note	pass
+overview	before r2	note written to overview_dir	pass
+overview	before r2	notes/ file keeps Digest and Q&A	pass
+overview	before r2	report starts with the link	pass
+overview	before r2	set-type run	pass
+qa	after r1	cites a page (p. N)	pass
+qa	after r1	did not open a PDF	pass
+qa	after r1	gives 71.2% against 60.2% full context (gpt-4o)	pass
+qa	after r1	pdf.invalid link with page=	pass
+qa	after r1	read Zep's note	pass
+qa	after r2	cites a page (p. N)	pass
+qa	after r2	did not open a PDF	pass
+qa	after r2	gives 71.2% against 60.2% full context (gpt-4o)	pass
+qa	after r2	pdf.invalid link with page=	pass
+qa	after r2	read Zep's note	pass
+qa	before r1	cites a page (p. N)	pass
+qa	before r1	did not open a PDF	pass
+qa	before r1	gives 71.2% against 60.2% full context (gpt-4o)	pass
+qa	before r1	pdf.invalid link with page=	pass
+qa	before r1	read Zep's note	pass
+qa	before r2	cites a page (p. N)	pass
+qa	before r2	did not open a PDF	pass
+qa	before r2	gives 71.2% against 60.2% full context (gpt-4o)	pass
+qa	before r2	pdf.invalid link with page=	pass
+qa	before r2	read Zep's note	pass
+reorganize	after r1	folder index or papers read	pass
+reorganize	after r1	nothing moved before approval	pass
+reorganize	after r1	numbered proposal	pass
+reorganize	after r1	topics.yaml read	pass
+reorganize	before r1	folder index or papers read	pass
+reorganize	before r1	nothing moved before approval	pass
+reorganize	before r1	numbered proposal	pass
+reorganize	before r1	topics.yaml read	pass
+reviewread	after r1	exactly one new note	FAIL
+reviewread	after r1	focus written	pass
+reviewread	after r1	inner read: input tokens, USD	-
+reviewread	after r1	paperlib read with --focus and --limit 1	pass
+reviewread	after r1	review-status run	pass
+reviewread	after r1	stopped before writing a review	pass
+reviewread	before r1	exactly one new note	FAIL
+reviewread	before r1	focus written	pass
+reviewread	before r1	inner read: input tokens, USD	-
+reviewread	before r1	paperlib read with --focus and --limit 1	pass
+reviewread	before r1	review-status run	pass
+reviewread	before r1	stopped before writing a review	pass
+reviewstatus	after r1	no reading or writing	pass
+reviewstatus	after r1	review-status run	pass
+reviewstatus	before r1	no reading or writing	pass
+reviewstatus	before r1	review-status run	pass
+synthesis	after r1	checked notes or papers	pass
+synthesis	after r1	did not read a review whole	pass
+synthesis	after r1	files changed	none
+synthesis	after r1	pdf.invalid links with page=	pass
+synthesis	after r1	searched a review (grep)	pass
+synthesis	before r1	checked notes or papers	pass
+synthesis	before r1	did not read a review whole	pass
+synthesis	before r1	files changed	none
+synthesis	before r1	pdf.invalid links with page=	pass
+synthesis	before r1	searched a review (grep)	pass
 
-task	condition	input processed	cache write	cache read	output	turns	seconds	usd	tool calls
-add	after	225392	47707	177675	1730	6	41	0.24	5
-add	before	354968	33100	321854	2270	8	43	0.22	7
-overview	after	449735	42228	407491	5474	10	56	0.53	9
-overview	before	401919	44762	357143	6300	10	63	0.56	9
-qa	after	215483	25914	189559	4269	8	38	0.33	7
-qa	before	223453	26759	196684	4001	8	36	0.33	7
+task	run	input processed	cache write	cache read	output	turns	seconds	usd	tool calls
+add	after r1	225392	47707	177675	1730	6	41	0.24	5
+add	after r2	340605	30542	310049	1828	8	60	0.20	7
+add	before r1	354968	33100	321854	2270	8	43	0.22	7
+add	before r2	317452	39141	278299	2283	7	64	0.24	6
+overview	after r1	449735	42228	407491	5474	10	56	0.53	9
+overview	after r2	368304	39902	328388	4938	10	48	0.48	9
+overview	before r1	401919	44762	357143	6300	10	63	0.56	9
+overview	before r2	440879	42217	398646	4791	9	46	0.51	8
+qa	after r1	215483	25914	189559	4269	8	38	0.33	7
+qa	after r2	252466	23311	229143	3692	8	34	0.31	7
+qa	before r1	223453	26759	196684	4001	8	36	0.33	7
+qa	before r2	218009	25152	192847	3668	8	34	0.31	7
+reorganize	after r1	230219	36931	193278	4400	5	43	0.42	4
+reorganize	before r1	414654	46519	368121	5534	7	54	0.56	6
+reviewread	after r1	216719	21031	195678	1146	5	14	0.23	4
+reviewread	before r1	230534	23699	206825	1097	5	13	0.25	4
+reviewstatus	after r1	170500	20277	150215	1797	4	18	0.23	3
+reviewstatus	before r1	283281	26075	257194	2161	6	30	0.30	5
+synthesis	after r1	434393	44804	389573	7878	10	72	0.59	9
+synthesis	before r1	574746	49180	525546	6849	11	63	0.64	10

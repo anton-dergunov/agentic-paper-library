@@ -1,0 +1,51 @@
+{
+ "points": [
+  "1 Architecture: 111B dense decoder-only Transformer with SwiGLU, GQA (document masking), sliding-window and full attention interleaved 3:1 (RoPE on window layers, NoPE on full layers), parallel attention/FFN block, tied input/output embeddings, no bias terms (p. 3)",
+  "2 Disclosure: weights of Command A and Command R7B released under CC-BY-NC on HuggingFace (p. 2); not disclosed: pretraining token count, compute, layer/width counts, vocabulary size, data-mixture proportions",
+  "3 Pretraining recipe: µP/µTransfer tuning; JAX/GSPMD on H100s with DP+FSDP+SP; FP8 matmuls with FP32 master weights, plus BF16 steps to recover a small downstream loss; cooldown anneals LR from 2.5e-4 to 1e-6 over 50,000 steps, with context 8k (30k steps) then 32k/128k/256k (10k/5k/5k steps) (p. 4–5)",
+  "4 Post-training pipeline: Instruct model, then six SFT experts (Code, Safety, RAG, Math, Multilingual, Long-Context) merged into an SFT soup, then six RL experts merged into an RL soup, then polishing (best-of-N SFT, then offline SRPO and online CoPG alternated ping-pong); SRPO is a min-max self-refinement objective, CoPG a contrastive policy gradient equal to RLOO on-policy (p. 5–7)",
+  "5 Merging: linear weight averaging with manually searched weights (SLERP and task vectors no better); shared instruct initialisation; leave-one-out merges to find collisions; 1.8% average drop against the best expert, most metrics within 2.5%, code least preserved (p. 15–17, 34)",
+  "6 Efficiency and long context: serves on two A100/H100s at up to 156 tok/s (1.75x GPT-4o, 2.4x DeepSeek V3); KV cache 75% (8k) and 32.9% (128k) of Llama 3.3 70B's; RULER ≤128k average 95.0 vs Claude 3.5 Sonnet 95.4, 84.6 at 256k vs Gemini 1.5 Pro 91.6 (p. 1, 34)",
+  "7 Academic results (Tables 1/3): MATH 80.0 vs DeepSeek V3 70.2 / GPT-4o 68.5; MMLU 85.5 vs DeepSeek V3 88.5; GPQA 50.8 vs DeepSeek V3 59.1; IFEval 90.9 vs Llama 3.3 70B 92.1",
+  "8 Agents/RAG: Taubench 51.7 vs GPT-4o 51.2 (Table 1; retail/airline P@1 60.0/45.3 in Table 6); BFCL 63.8 vs GPT-4o 72.1; ChatRAGBench 72.9 vs GPT-4o 66.6",
+  "9 Multilingual and safety: NTREX COMET-20 average 68.8 vs GPT-4o 71.0; mArenaHard average win rate 53.4 vs DeepSeek V3; absolute safety 70.4 vs Claude 3.5 Sonnet 80.0 / Qwen 2.5 72B 71.4; XSTest over-refusal 1.1",
+  "10 Human and enterprise evaluation: pairwise win rates (general/reasoning/code) 50.4/51.4/46.8 vs GPT-4o and 49.0/49.3/54.7 vs DeepSeek V3 on ~800 internal prompts; polishing raised the GPT-4o win rates from 43.2/41.4/30.0; enterprise generative pass rate 94.2 vs Claude 3.5 Sonnet v2 84.2"
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "\"Best-in-class\" therefore holds against the 70B-class models, not against DeepSeek V3 or GPT-4o on MMLU, GPQA, BFCL, MBPP+ or NTREX.",
+     "paper": "Tables 1 and 3 (p. 2, p. 18) show Llama 3.3 70B ahead of Command A on MMLU (86.0 vs 85.5) and IFEval (92.1 vs 90.9), so the claim does not hold against the 70B-class models either."
+    },
+    {
+     "quote": "Setup: about 800 internal prompts, judged by internal annotators.",
+     "paper": "§4.11 (p. 37) and Fig. 1 say only 'our pool of annotators' and 'specially trained human annotators' (on average 65 per run); the paper never says the annotators are internal."
+    }
+   ],
+   "missed": [],
+   "conversion": "Misses the misaligned FLORES row in Table 7 (fused \"76.3 72.6\" cell next to an empty cell), so the claim that Table 7 'can be read by order' fails for that row; the rest is right."
+  },
+  "B": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Mostly right; omits the out-of-order stage list in §3.1 (Instruct listed after the SFT experts, Polished before RL Soup)."
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "R7B scores below Llama 3.1 8B and Gemma 2 9B on MMLU (65.2 vs 71.1/73.5) and GPQA (26.3 vs 23.4/31.3 — below Gemma)",
+     "paper": "Table 3 (p. 18): Command R7B's GPQA of 26.3 is above Llama 3.1 8B's 23.4; it is below only Gemma 2 9B (31.3) and Gemini 1.5 Flash-8B (31.6)."
+    }
+   ],
+   "missed": [],
+   "conversion": "right"
+  }
+ },
+ "key": {
+  "A": "after",
+  "B": "before-repeat",
+  "C": "before"
+ },
+ "usd": 0.8172919999999999
+}

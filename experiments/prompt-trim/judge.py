@@ -23,6 +23,8 @@ sys.path.insert(0, str(HERE.parent.parent / "scripts"))
 from paperlib import LIBRARY_DIR, read_paper, read_view  # noqa: E402
 
 TOPIC = "llm/foundation-models"
+# What `claude -p` says when the account's usage window is used up.
+LIMIT = re.compile(r"(session|usage|weekly|daily|monthly) limit|resets? (at )?\d|quota|credit balance", re.I)
 PROMPT = """You are grading notes that three readers wrote on the same paper, for a literature review of model technical reports. The paper's main text comes first (as the readers saw it, without references), then the notes, labelled by letter.
 
 Step 1. From the paper alone, list the 10 points a note must contain to be useful for comparing this paper with others: its mechanism or recipe, what it discloses and withholds, and its main results with their baselines.
@@ -66,9 +68,19 @@ def main():
                      "You are a careful grader. You verify every claim against the source text.",
                      "--output-format", "json", "--no-session-persistence"],
                     input=prompt, capture_output=True, text=True, cwd=empty, env=env)
-            reply = json.loads(done.stdout)
-            text = reply["result"]
-            grade = json.loads(text[text.index("{"):text.rindex("}") + 1])
+            try:
+                reply = json.loads(done.stdout)
+                text = reply["result"]
+                if reply.get("is_error"):
+                    raise ValueError(text)
+                grade = json.loads(text[text.index("{"):text.rindex("}") + 1])
+            except (ValueError, KeyError) as error:
+                message = str(error)[:300] or done.stderr[:300]
+                if LIMIT.search(message + done.stdout[-2000:] + done.stderr[-2000:]):
+                    print(f"judge: usage limit at {stem}: {message}\nSwitch account and run the "
+                          "same command again; papers already judged are kept.", file=sys.stderr)
+                    sys.exit(3)
+                sys.exit(f"judge: failed at {stem}: {message}\nRun the same command again to retry.")
             grade["key"], grade["usd"] = key, reply.get("total_cost_usd")
             target.write_text(json.dumps(grade, indent=1, ensure_ascii=False))
         grade = json.loads(target.read_text())

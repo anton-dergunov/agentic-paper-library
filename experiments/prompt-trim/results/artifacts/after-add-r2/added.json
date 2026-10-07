@@ -1,0 +1,6 @@
+[
+ {
+  "path": "llm/memory/agent/MemOS. An Operating System for Memory-Augmented Generation (MAG) in Large Language Models.md",
+  "frontmatter": "\ntitle: 'MemOS: An Operating System for Memory-Augmented Generation (MAG) in Large Language Models'\nauthors: [Zhiyu Li, Shichao Song, Hanyu Wang, Simin Niu, Ding Chen, Jiawei Yang, Chenyang Xi, Huayi Lai, Jihao Zhao, Yezhaohui Wang, Junpeng Ren, Zehao Lin, Jiahao Huo, Tianyi Chen, Kai Chen, Kehang Li, Zhiqiang Yin, Qingchen Yu, Bo Tang, Hongkang Yang, Zhi-Qin John Xu, Feiyu Xiong]\npublished: 2025-05-28\narxiv: '2505.22101'\nurl: https://arxiv.org/abs/2505.22101\nsource: html\nsummary: 'MemOS (short version): treats parametric, activation and plaintext memory as managed resources behind one standardized unit, the MemCube, with a three-layer architecture for scheduling, lifecycle and governance; a design proposal without experiments.'\nadded: 2026-10-07\n"
+ }
+]

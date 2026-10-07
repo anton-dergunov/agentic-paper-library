@@ -1,0 +1,55 @@
+{
+ "points": [
+  "1 Scale and positioning: a sparse MoE LLM with 236B total and 21B activated parameters per token, 128K context, pretrained on 8.1T tokens (p. 1, p. 12).",
+  "2 MLA mechanism: keys and values are jointly low-rank compressed into one cached latent c^KV (d_c=512). W^UK and W^UV are absorbed into W^Q and W^O at inference. Queries are also compressed (d_c'=1536), but only to save training activation memory (p. 7, p. 12).",
+  "3 Decoupled RoPE and cache size: extra per-head RoPE queries plus one shared, cached RoPE key (d_h^R=64) carry position. The cache is (d_c+d_h^R)l ≈ 9/2·d_h·l elements, equal to GQA with 2.25 groups. The claim that MLA is 'stronger than MHA' rests on Appendix D ablations that are not in the main text (p. 8, Table 1).",
+  "4 DeepSeekMoE recipe: 2 shared + 160 routed experts with 6 active, all FFNs except layer 1. Device-limited routing uses M=3 of D=8 devices. There are three auxiliary balance losses (expert, device, communication; α=0.003/0.05/0.02) and device-level token dropping at capacity 1.0, with about 10% of sequences never dropped (pp. 9–12).",
+  "5 Pretraining data and long context: 8.1T tokens with Chinese about 12% more than English; same 100K BBPE tokenizer as DeepSeek 67B; contentious content filtered. YaRN is applied to the decoupled key to extend 4K→128K, plus 1000 steps at 32K. NIAH evidence is a figure only (pp. 11–13).",
+  "6 Efficiency vs DeepSeek 67B: 42.5% lower training cost (172.8K vs 300.6K H800 GPU hours per trillion tokens), 93.3% smaller KV cache, and 5.76× max generation throughput (>50K tok/s on 8×H800). The deployment also uses FP8 weights and ~6-bit KV quantization (p. 16).",
+  "7 Base results (Table 2) vs DeepSeek 67B, Qwen1.5 72B, Mixtral 8x22B and LLaMA3 70B, all re-run in the internal framework: MMLU 78.5 vs 71.3/77.2/77.6/78.9. Chinese is strong (C-Eval 81.7, behind Qwen's 83.7). V2 trails LLaMA3 70B on most English rows, which the paper attributes to fewer than a quarter of the English tokens (pp. 14–16).",
+  "8 Alignment recipe: SFT on 1.5M instances (1.2M helpfulness, 0.3M safety), 2 epochs, LR 5e-6. RL uses critic-free GRPO in two stages: a reasoning reward model for code and math, then a weighted helpful + safety + rule-based reward (pp. 16–17).",
+  "9 Chat results: Chat (RL) gets AlpacaEval 2.0 LC 38.9 and MT-Bench 8.97 vs LLaMA3 70B Instruct 34.4/8.95, and AlignBench 7.91 vs GPT-4-1106-Preview 8.01 and GPT-4-0613 7.53. IFEval trails LLaMA3 (63.8 vs 79.7). RL→SFT alignment tax on BBH: 81.3→79.7 (pp. 18–20).",
+  "10 Disclosure and caveats: checkpoints are released. Not given: the data source mix, RL hyperparameters (ε, β, c1–c3) and reward-data sizes. Every comparison is vendor-run, single-run, in the internal framework. DeepSeek 67B Chat scores are copied from the earlier report. SFT-size and online-vs-offline RL claims come without numbers."
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "base model on about 29 English, Chinese, code and math benchmarks",
+     "paper": "Table 2 (p. 14) has 28 benchmark rows: 14 English, 4 code, 3 math, 7 Chinese."
+    }
+   ],
+   "missed": [],
+   "conversion": "Partly right. Table 2's bold/underline is indeed lost. But it misses that all figures (Fig. 1–4, including Fig. 1(b) efficiency and Fig. 4 NIAH) are bare [figure] placeholders, and that the underlining marking Chinese benchmarks in §3.2.1 is lost."
+  },
+  "B": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Partly right. Table 2's bold/underline loss is correct. It misses the figures reduced to [figure] placeholders (incl. Fig. 1(b), Fig. 4) and the lost underlining of Chinese benchmarks in §3.2.1."
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "base model on about 27 English/Chinese/code/math benchmarks",
+     "paper": "Table 2 (p. 14) has 28 benchmark rows: 14 English, 4 code, 3 math, 7 Chinese."
+    },
+    {
+     "quote": "chat models on the same benchmarks plus MT-Bench, AlpacaEval 2.0 and AlignBench",
+     "paper": "Table 3 (p. 18–19) is a different set from Table 2. It drops Pile, DROP, HellaSwag, PIQA, WinoGrande, RACE, CMRC, C3, CHID and CCPM. It adds IFEval and LiveCodeBench, and uses CRUXEval-COT variants."
+    },
+    {
+     "quote": "The 93.3% derivation is only in Fig. 1(b).",
+     "paper": "The text only says Figure 1 shows the 93.3% KV-cache reduction (p. 4). No derivation is given anywhere visible, and the figure itself is a placeholder in this view."
+    }
+   ],
+   "missed": [],
+   "conversion": "Wrong to say plain 'ok'. Table 2's bold/underline best/second-best marking is lost, as is the underlining of Chinese benchmarks in §3.2.1. All figures are [figure] placeholders."
+  }
+ },
+ "key": {
+  "A": "before",
+  "B": "after",
+  "C": "before-repeat"
+ },
+ "usd": 0.5581
+}

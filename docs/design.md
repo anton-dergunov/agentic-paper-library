@@ -125,7 +125,7 @@ next piece of work.
   no change found in notes, answers, overviews or adds. Skills are not split further, since
   reading another file costs a turn. `paperlib read` and `add` keep the user's CLAUDE.md files
   out of their requests and send what an area shares as a cached system prompt: a read cost
-  19% less on three papers
+  24% less on six papers, and twenty sessions of seven tasks showed no change in behaviour
   ([experiments/prompt-trim](../experiments/prompt-trim/README.md)).
 - **A review is a map, not evidence (2026-10-05, measured again 2026-10-06).** Sessions
   find reviews and notes on their own. Told to start from the review, a session answered a
