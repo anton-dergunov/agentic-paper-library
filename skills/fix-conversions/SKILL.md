@@ -1,6 +1,6 @@
 ---
 name: fix-conversions
-description: Work through the library's known conversion problems — tables missing, flattened or with values in the wrong cells, missing sections, garbled equations — by fixing the converter for recurring ones, reconverting, or correcting a paper by hand from the PDF, and read again the papers whose notes were affected. Works through catalog/conversion-issues.yaml, filled from what the reader reported in the notes. Use for "/fix-conversions search-and-ranking", "fix the conversion issues", "fix this paper's table", "the conversion of X is broken", and between reading an area into notes and writing its review.
+description: Work through the known conversion problems in catalog/conversion-issues.yaml (tables missing, flattened or with values in the wrong cells, missing sections, garbled equations) by fixing the converter, reconverting or correcting a paper from the PDF, then read again the papers whose notes were affected. Use for "/fix-conversions <scope>", "fix the conversion issues", "fix this paper's table", "the conversion of X is broken", and between reading an area into notes and writing its review.
 model: opus
 ---
 
@@ -9,8 +9,8 @@ model: opus
 When `paperlib read` writes a note, the reader reports on its `conversion:` line what is
 broken in the paper's markdown. `paperlib conversion-issues` copies those reports into
 `catalog/conversion-issues.yaml`, the one list of known conversion problems. This skill
-works through that list. Read `AGENTS.md` (which imports `.claude/library-guide.md`) first
-if you have not.
+works through that list. `paperlib symptoms` lists papers that show known conversion
+problems the notes may not report.
 
 **Scope.** `<scope>` (a folder), `<paper.md>`, or nothing for the whole catalog. In the
 pipeline of an area it sits between reading and writing:
@@ -56,9 +56,11 @@ paperlib read <scope>          notes; each reports its paper's conversion proble
    - A flaw in one paper only: go to step 4.
 4. **Fix one paper**, cheapest first, and look at the place again after each try:
    - **Reconvert.** `paperlib reconvert <paper.md>` for `source: html` (the converter may
-     have improved since). For `source: pdf-text`, `paperlib reconvert --pdf-text
+     have improved since): it refetches arXiv's HTML at the PDF's version (cached, so no
+     network) and rewrites the body, keeping the frontmatter and the PDF; it skips papers
+     marked `<!-- hand-edited -->`. For `source: pdf-text`, `paperlib reconvert --pdf-text
      --inline-math <paper.md>`, the thorough PDF conversion; most PDF papers had the quick
-     one.
+     one. For many papers (or `--all`), `--jobs N --state <file>` runs them at once, resumably.
    - **By hand, from the PDF**, only for key content that is broken. Rewrite the
      broken part (the table, the equation, the paragraph) from the PDF page, with the
      paper's numbers exactly as printed; never fill in what the PDF does not show. Merged

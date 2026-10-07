@@ -2,93 +2,57 @@
 
 # Paper library: conventions
 
-This folder is a research-paper library kept with agentic-paper-library. It holds agent-readable markdown copies of papers, organised by topic, with the original PDFs kept outside git for reading. Papers are added, read with an agent, compared across the library and organised here. Every command below is `paperlib <command>`. Run it anywhere in this folder, and run `paperlib --help` to list the commands.
+A research-paper library kept with agentic-paper-library: agent-readable markdown copies of papers by topic, with the PDFs outside git. Commands are `paperlib <command>`, run anywhere in this folder; `paperlib --help` lists them.
 
 ## Layout
 
 | What | Where |
 |---|---|
 | Paper markdown (committed) | `library/<topic path>/<Title>.md` |
-| Figures extracted from it (committed) | `library/<topic path>/images/<Title>-figNN.<ext>` |
+| Its figures (committed) | `library/<topic path>/images/<Title>-figNN.<ext>` |
 | Original PDF (not committed) | `pdfs/<topic path>/<Title>.pdf` |
 | Indexes (generated) | `library/README.md` and a `README.md` in every folder |
 | Topic tree (declared) | `catalog/topics.yaml`: every folder with its scope |
 | Papers deliberately not added | `catalog/skipped.yaml`: title, reason, date |
 | Broken conversions to fix | `catalog/conversion-issues.yaml`: paper stem, problem, date |
-| Papers waiting to be added | `INBOX.txt`: raw links or titles, drained by `/add-paper inbox` |
+| Papers waiting to be added | `INBOX.txt`, drained by `/add-paper inbox` |
 | Agent memory per paper (committed) | `notes/<Title>.md`: digest, related papers, Q&A |
 | Literature review per area (committed) | `reviews/<topic path>.md`: narrative, findings, paper map, Q&A |
-| The reader's own note per paper | `(not configured)/<Title>.md`, written by the `overview` skill |
+| the reader's own note per paper | `(not configured)/<Title>.md`, written by the `overview` skill |
 | Configuration | `paper-library.yaml` |
 
-The two trees mirror each other: a paper's markdown and its PDF have the same topic path and the same filename stem.
+A paper's markdown and PDF have the same topic path and filename stem.
 
 ## Rules
 
-- **Add papers only with paperlib.** Use the command that matches the source:
-  - `paperlib add-arxiv <arxiv-url-or-id> <topic>` for anything on arXiv;
-  - `paperlib add-web <url> <topic>` for papers published as web pages (Distill, transformer-circuits.pub);
-  - `paperlib add-pdf <file.pdf> <topic> [--title "..."] [--source "..."]` otherwise.
-
-  `paperlib add <arxiv-url-or-id> ...` chooses the topic and writes the summary itself, with one model request per paper; it never creates a folder. The `add-paper` skill wraps all of these, and is the way to add a paper that needs a new folder. It also adds the papers queued in `INBOX.txt` and removes each one from the file once it is added. To add tens of papers at once, the `expand-library` skill finds the gaps in an area and adds the approved list with `paperlib add-batch`. Every add writes both files, the frontmatter, and the page numbers on headings.
-- **Move papers only with `paperlib move <paper.md> <topic>`.** It moves the markdown, its figures and the PDF together; a hand `mv` splits the two trees. Filenames follow `paperlib filename "<title>"`, where a colon in a title becomes ". ". After that rule changes, `paperlib rename` renames every paper to match.
-- **Never put a PDF in git.** `*.pdf` is ignored, and `paperlib check` fails on one.
-- **Read the markdown, not the PDF.** PDFs make poor agent input. The markdown comes from arXiv's HTML rendering and keeps equations as LaTeX and tables as tables. Papers converted any other way say so:
-  - **`source: pdf-text`.** The paper has no HTML rendering and was converted from the PDF; the note at the top of each says how.
-    - "By layout analysis" means the headings, tables and figures were rebuilt around the PDF's own text, and each equation was read from its image by a model. The numbers are the PDF's, but check the PDF before quoting an equation, or a table whose columns look off, and say that you did.
-    - "From the PDF text layer" is the older conversion, which has no tables or headings. Treat its equations, tables and numbers as unreliable, and reconvert the paper with `paperlib reconvert --pdf-text <paper.md>`.
-  - **`source: web`.** The paper was converted from a web article. Interactive figures are missing, and the PDF is the page as printed by Chrome.
-- **Prefer the local copy to the web.** Search the web for work that is not in the library, not for what is.
-- **Indexes are generated.** Never edit a `README.md` under `library/`. After adding, moving or removing a paper, or after changing `catalog/`, run `paperlib build-index`, then `paperlib check`, which must pass.
-- **Don't re-propose skipped papers.** `catalog/skipped.yaml` lists the papers the reader decided not to add, with the reason, and `paperlib lookup` flags them as `skipped earlier`. Record every new skip there. If the reader changes their mind, remove the entry first.
-- **Prefer a better tool to a workaround.** When a library, model or tool would do a conversion, or any other job here, better than what paperlib uses, say so and propose it. Don't hand-tune heuristics or work around a weak tool. Compare candidates on real papers before adopting one.
-- **Conversion quality comes before speed.** Papers arrive one or two a day, so a slow, precise conversion (minutes per paper) beats a fast, lossy one. Be pragmatic only when converting hundreds of papers at once, and say what was traded away.
-- **Flag broken conversions.** Whoever notices a garbled paper adds an entry to `catalog/conversion-issues.yaml`. Garbled means broken equations, flattened tables, missing sections or figures, a truncated body, or implausible `pdf-text` numbers. Say so when you quote from such a paper. `paperlib read` reports each paper's conversion problems in its note, and `paperlib conversion-issues <scope>` copies them into the catalog, marking those whose key content is broken. The `fix-conversions` skill works through the catalog: it reads those again once they are fixed, sends recurring flaws to the converter, and marks what cannot be fixed `wont-fix`.
-- **Conversions can be regenerated.** `paperlib reconvert <paper.md>` (or `--all`) refetches arXiv's HTML at the PDF's version and rewrites the body with the current converter. It keeps the frontmatter and the PDF.
-  - A paper whose markdown was corrected by hand must contain `<!-- hand-edited -->` near the edit; reconvert skips those.
-  - arXiv downloads are cached, so reconverting needs no network.
-  - `--jobs N --state <file>` runs many papers at once, resumably.
-  - `paperlib symptoms` lists papers that still show known conversion problems.
+- **Add papers only with paperlib**: the `add-paper` skill (any source, a new folder, or the inbox), `paperlib add <arxiv-url-or-id> ...` (chooses the folder and summary itself, never creates one), or the `expand-library` skill for tens of papers.
+- **Move papers only with `paperlib move <paper.md> <topic>`**, which moves the markdown, figures and PDF together; a hand `mv` splits the trees. Filenames follow `paperlib filename "<title>"` (a colon becomes ". "); `paperlib rename` re-applies the rule.
+- **Never put a PDF in git.** `paperlib check` fails on one.
+- **Read the markdown, not the PDF.** It comes from arXiv's HTML, with equations as LaTeX and tables as tables. Papers converted otherwise say so in `source`, and in a note at the top:
+  - `pdf-text` "by layout analysis": headings, tables and figures rebuilt around the PDF's text, each equation read from its image by a model. Check the PDF before quoting an equation or a table whose columns look off, and say that you did.
+  - `pdf-text` "from the PDF text layer" (older): no tables or headings. Treat its equations, tables and numbers as unreliable; reconvert with `paperlib reconvert --pdf-text <paper.md>`.
+  - `web`: converted from a web article; interactive figures are missing, and the PDF is the page printed by Chrome.
+- **Prefer the local copy to the web.** Search the web only for work not in the library.
+- **Indexes are generated.** Never edit a `README.md` under `library/`. After adding, moving or removing a paper, or changing `catalog/`, run `paperlib build-index`, then `paperlib check`, which must pass.
+- **Don't re-propose skipped papers.** `paperlib lookup` flags those in `catalog/skipped.yaml` as `skipped earlier`. Record every new skip there, with the reason; if the reader changes their mind, remove the entry first.
+- **Prefer a better tool to a workaround, and conversion quality to speed.** When a library or model would do a job better than paperlib does, propose it rather than hand-tuning heuristics, and compare candidates on real papers first. A slow, precise conversion beats a fast, lossy one, except for hundreds of papers at once (then say what was traded away).
+- **Flag broken conversions** (broken equations, flattened tables, missing sections or figures, a truncated body, implausible `pdf-text` numbers) in `catalog/conversion-issues.yaml`, and say so when you quote from such a paper. The `fix-conversions` skill works through the catalog.
+- **Don't hand-edit a paper's markdown without `<!-- hand-edited -->` near the edit**: `paperlib reconvert <paper.md>` regenerates bodies from arXiv's HTML with the current converter, and skips only those.
 - **Start from the review, then check the paper.** For a question about an area, a comparison across papers, or "what exists on X", first read the review whose scope covers it: `reviews/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.
   - The review is a map, not evidence. Use it to find the papers and the shape of the answer. Before you state a number, or what a result means, read that paper's note or the paper at the cited page: an answer written from the review alone gets the numbers right and their meaning wrong. Say so when a point rests only on the review.
   - Search a review for the part you need (`grep -n` its headings and the terms) rather than reading it whole; the paper map and the link definitions at the end are for lookup.
-  - When a session settles a cross-paper point, append it to the review's `## Q&A`.
-  - After papers are added to a reviewed area, offer to update the review.
-  - The `literature-review` skill writes and updates reviews, and `paperlib review-status` shows which are stale.
-- **Check what is already known about a paper.** Before answering about a paper, read `notes/<Title>.md` if it exists, and the reader's own note at `(not configured)/<Title>.md` if there is one. When a session settles something worth keeping, such as a clarified mechanism, a derivation or a comparison, append it to the Q&A in `notes/<Title>.md` (format below), so the next session reuses it instead of re-deriving it.
+  - When a session settles a cross-paper point, append it to the review's `## Q&A`. After papers are added to a reviewed area, offer to update the review (the `literature-review` skill).
+- **Check what is already known about a paper.** Before answering about it, read `notes/<Title>.md` if it exists, and the reader's own note at `(not configured)/<Title>.md` if there is one. When a session settles something worth keeping (a clarified mechanism, a derivation, a comparison), append it to the note's Q&A (format below).
 
 ## Paper files
 
-Each paper starts with YAML frontmatter:
+YAML frontmatter: `title`, `authors`, `published`, `arxiv`, `url`, `source` (`html` | `pdf-text` | `web`), `type` (optional: `method` | `survey` | `benchmark` | `study` | `system` | `position` | `theory`), `summary` (one neutral sentence on what the paper does or finds; the indexes show it), `added`.
 
-```yaml
----
-title: 'Zep: A Temporal Knowledge Graph Architecture for Agent Memory'
-authors: [Preston Rasmussen, Pavlo Paliychuk, ...]
-published: 2025-01-20
-arxiv: '2501.13956'
-url: https://arxiv.org/abs/2501.13956
-source: html            # html | pdf-text | web
-type: method            # optional, set by /overview: method | survey | benchmark | study | system | position | theory
-summary: One neutral line on what the paper does.
-added: 2026-09-29
----
-```
-
-`summary` is what the indexes show: one sentence saying what the paper does or finds, not why it was saved.
-
-In the body:
-
-- Math is `$...$` and `$$...$$` (LaTeX, rendered by KaTeX in VS Code).
-- Tables with merged cells are HTML `<table>`s.
-- Figures are files in `images/`.
-- Headings carry the PDF page they start on, as in `### 4.3 LongMemEval (LME) (p. 6)`. Cite pages that way ("p. 7, Table 2"), so the reader can find the place in the PDF.
+In the body, math is `$...$` and `$$...$$` (KaTeX), tables with merged cells are HTML `<table>`s, figures are files in `images/`, and headings carry the PDF page they start on: `### 4.3 LongMemEval (LME) (p. 6)`. Cite pages that way ("p. 7, Table 2").
 
 ## Notes: agent memory per paper
 
-One file per paper, `notes/<stem>.md`, where `<stem>` is the paper's file name without `.md`. The folder is flat, so moving a paper between topics doesn't touch it. `paperlib check` fails on a note whose paper is not in the library.
-
-These files are for the agent, not for the reader. They hold what was learned about a paper, so later sessions and comparisons across papers don't re-read and re-derive it. `paperlib read` and the `overview` skill create a paper's file, and any session may append to its Q&A.
+`notes/<stem>.md`, where `<stem>` is the paper's file name without `.md`; the folder is flat, so moves don't touch it. Notes are for agents, so later sessions don't re-read and re-derive. `paperlib read <scope or paper.md>` writes them (one model request per paper, resumable), the `overview` skill too, and any session may append to the Q&A. Merge into an existing note; never drop its Q&A.
 
 ```markdown
 # <Title>
@@ -102,8 +66,7 @@ conversion: ok | <what is broken in the markdown, and where (p. N)> | key-conten
 ## Digest
 
 At most 20 lines: the claim, the mechanism, key definitions, and the main numbers with
-their baselines, each with its page (p. N). Enough to compare this paper with others
-without re-reading it.
+their baselines, each with its page (p. N).
 
 ## Related in library
 
@@ -116,42 +79,24 @@ without re-reading it.
 <The answer in a few short paragraphs or bullets, with the page of each claim (p. N).>
 ```
 
-Write each Q&A entry as readable markdown over several lines, never as one long line: a `###` heading with the date and the question, then the answer as short paragraphs or a bullet list, a table where the content is a comparison, and a fenced block for an example or a worked calculation. Mark content the session made up, such as a toy example, as ours ("ours, not from the paper"), so a later session doesn't take it for the paper's. The entry is read by the reader as often as by agents, and the extra lines cost few tokens.
-
-`paperlib read <scope or paper.md>` writes these files: one model request per paper, the whole main text, resumable. `paperlib review-status <scope>` lists the papers that have no note yet. `family`, `evidence` and `conversion` are what a literature review groups and weighs papers by; a note written before they existed lacks them.
-
-`conversion` starts with `key-content-broken:` when a part the paper's findings rest on is missing or wrong in the markdown (a results table missing, values in the wrong cells, the main equation unreadable). Before leaning on such a paper, check the place in the PDF.
-
-`read` says how much of the paper the digest rests on: `full` (the main text was read) or `skim` (abstract, introduction, conclusion and headline results only, as the first literature reviews did for most papers). A file without the line was written from a full read. Before leaning on a `skim` digest for a detail, open the paper; `paperlib read --skims <scope>` reads the skimmed papers in full.
-
-Merge into an existing file; never drop its Q&A.
+- **Q&A entries** are multi-line markdown, never one long line: short paragraphs or bullets, a table for a comparison, a fenced block for an example or a calculation. Mark what the session made up (a toy example) as "ours, not from the paper".
+- **`conversion`** starts with `key-content-broken:` when a part the findings rest on is missing or wrong (a results table missing, values in the wrong cells, the main equation unreadable): check the PDF before leaning on that paper.
+- **`read: skim`** marks a digest written from the abstract, introduction, conclusion and headline results only (the first reviews); open the paper before leaning on it for a detail. `paperlib read --skims <scope>` reads them in full. No `read` line means a full read.
 
 ## Topics
 
-Topics are folder paths under `library/`, lowercase and hyphenated (`llm/memory/agent`). `catalog/topics.yaml` declares the whole tree, one line per folder with its scope.
-
-- `paperlib build-index` creates every declared folder in both trees, even while it is empty.
-- `paperlib check` fails on a paper in an undeclared folder.
-- `library/README.md` shows the tree with counts.
-- A folder's README ends with "Considered, not added": the papers from `skipped.yaml` filed there, with the reason.
-
-How to file:
-
-- **Read the scopes before filing.** File a paper where the reader would look for it: in the folder whose scope fits, general before specific. A method that predates LLMs, or applies to all of ML, goes in its general area, not in an LLM folder.
-- **A clear, natural structure comes first.** About 20 papers per folder is a heuristic, not a limit. Split a bigger folder only when a natural division exists.
-- **A new folder is a catalog change.** When nothing fits, propose the folder and its scope rather than forcing the paper into a near miss. Once the reader agrees, add it to `catalog/topics.yaml`; the add and move commands refuse undeclared folders.
-- **Reorganising is expected** as the library grows: use the `reorganize` skill.
+Topics are folder paths under `library/`, lowercase and hyphenated (`llm/memory/agent`), each declared with its scope in `catalog/topics.yaml`; `paperlib check` fails on a paper in an undeclared folder. A new folder is the reader's decision: propose it with a scope, don't create it.
 
 ## Linking to a place in a paper
 
-When you point the reader to a specific place in a paper, make the citation a link. Clicking it opens the PDF at that spot in [vscode-pdf-viewer](https://github.com/anton-dergunov/vscode-pdf-viewer), next to the chat:
+When you point the reader to a place in a paper, make the citation a link; it opens the PDF at that spot in [vscode-pdf-viewer](https://github.com/anton-dergunov/vscode-pdf-viewer):
 
 ```
 [Zep, p. 7, Table 2](http://pdf.invalid/llm/memory/agent/Zep.%20A%20Temporal%20Knowledge%20Graph%20Architecture%20for%20Agent%20Memory.pdf?dest=table.2&page=7)
 ```
 
-- **Path:** the paper's markdown path under `library/`, with `.md` replaced by `.pdf`. Percent-encode it: spaces as `%20`, and `#`, `?` or `%` if a title has them (`&` and `+` stay as they are).
-- **`page`:** always include it. Take it from the `(p. N)` on the heading, or use the page the passage is on.
-- **`dest`:** for papers with `source: html` (built from LaTeX), add the section's name: `section.4`, `subsection.4.3`, `subsubsection.2.2.3`, and in appendices `appendix.A`, `subsection.A.1`. `table.2` and `figure.3` exist in many papers, but not all. A name that is not in the PDF falls back to `page`, so a guess costs nothing.
-- **`search`:** optional. A short phrase exactly as printed on that page, for when the spot is a sentence rather than a section or table.
-- Keep the link text in the usual "p. 7, Table 2" style. Several links in one answer are fine; the reader opens the ones they want. Never open a PDF yourself.
+- **Path:** the paper's markdown path under `library/`, `.md` replaced by `.pdf`, percent-encoded: spaces as `%20`, and `#`, `?` or `%` in a title (`&` and `+` stay).
+- **`page`:** always; from the heading's `(p. N)` or the page the passage is on.
+- **`dest`:** for `source: html` papers, the section's name: `section.4`, `subsection.4.3`, `subsubsection.2.2.3`, `appendix.A`, `subsection.A.1`; `table.2` and `figure.3` exist in many papers. A missing name falls back to `page`, so a guess costs nothing.
+- **`search`:** optional, a short phrase exactly as printed on that page, for a sentence rather than a section or table.
+- Keep the link text in the "p. 7, Table 2" style; several links in one answer are fine. Never open a PDF yourself.

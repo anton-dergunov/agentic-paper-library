@@ -6,8 +6,7 @@ model: opus
 
 # /reorganize — restructure topic folders
 
-Read `AGENTS.md` (which imports `.claude/library-guide.md`) first if you have not: it has
-the topic rules and the intended top level. Paths below are the defaults;
+`AGENTS.md` may describe the intended top level. Paths below are the defaults;
 `.claude/library-guide.md` has this library's.
 
 **Propose first, move after approval.** Never move a paper before the reader picks the
@@ -28,7 +27,9 @@ changes.
 
    Structure comes first; the ~20-per-folder figure is only a hint. Only split where a
    natural division exists that the reader would recognise, and leave a large folder alone
-   when it does not. Show the resulting tree for the scope.
+   when it does not. File general before specific: a method that predates LLMs, or applies
+   to all of ML, belongs in its general area, not in an LLM folder. Show the resulting tree
+   for the scope.
 4. **Wait** for the reader to pick changes by number.
 5. **Apply** the changes to the tree first, then the moves:
    - Add each new folder to `catalog/topics.yaml` with a one-line scope, next to its

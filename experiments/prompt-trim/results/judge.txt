@@ -1,0 +1,19 @@
+related, Improving Language Understandi: after 0, before 0, in both 0
+related, Improving Language Understandi: after 0, before-repeat 0, in both 0
+related, Gemma 3 Technical Report: after 3, before 3, in both 3
+related, Gemma 3 Technical Report: after 3, before-repeat 3, in both 3
+related, OLMo. Accelerating the Science: after 5, before 6, in both 5
+related, OLMo. Accelerating the Science: after 5, before-repeat 5, in both 4
+
+condition	paper	errors	points missed of 10	related listed	conversion line
+after	Gemma 3 Technical Report	1	0	3	Not fully right. 'ok' misses several artifacts: leaked LaTeX macros, a duplicated title, inlined footnotes, an empty 'Macknight et al. ()' citation, doubled bullet markers, and flattened two-level headers in Tables 2–3. All figures are placeholders.
+after	Improving Language Understandi	0	0	0	Right on Eq. 5 and Table 1. Misses that the author line 'Ilya Sutskever OpenAI…' is displaced into the introduction body, along with footnote 1. Also misses that every table caption is printed twice.
+after	OLMo. Accelerating the Science	0	0	5	Not right to say 'otherwise ok'. The 4086 value and the WD column are correctly flagged, but it misses the footnote fused into a Table 4 cell (p. 7), the '\[\]' markers on the OLMo rows of Tables 3–4, footnote numbers fused into body text (e.g. 'License.11 1', 'Llama 288 8'), and the garbled affiliations.
+before	Gemma 3 Technical Report	1	1	3	Not fully right. 'ok' misses several artifacts: leaked LaTeX (\authfootnotetext, \authfootnotemark1), a duplicated title, footnotes merged into running text ('‘‘memorization rate’’11 1 ”We do not…', '22 2'), an empty citation 'Macknight et al. ()', doubled bullets ('- •'), and flattened two-level headers in Tables 2–3. All figures are [figure] placeholders.
+before	Improving Language Understandi	0	0	0	Right on Eq. 5 and Table 1. The Eq. 2 '∀i ∈ [1, n]' reading matches the markdown, though it may be the source's own typo rather than a conversion fault. Misses the displaced 'Ilya Sutskever' author line and footnote 1, and the duplicated table captions.
+before	OLMo. Accelerating the Science	0	0	6	Mostly right: 4086, the WD column, the '\[\]' markers and the fused Table 4 footnote are all correct. It misses footnote numbers fused into body text (e.g. 'License.11 1', 'throughput.22 2', 'Llama 288 8') and the garbled author/affiliation block.
+before-repeat	Gemma 3 Technical Report	0	0	3	Not fully right. 'ok' misses several artifacts: leaked LaTeX macros, a duplicated title, footnotes inlined into the text, an empty 'Macknight et al. ()' citation, doubled bullet markers, and flattened two-level headers in Tables 2–3. All figures are placeholders, though the note does flag the figure-only ablations.
+before-repeat	Improving Language Understandi	1	0	0	Right on Eq. 5 and Table 1. Misses the displaced 'Ilya Sutskever' author line and footnote 1 in the introduction, and the duplicated table captions.
+before-repeat	OLMo. Accelerating the Science	0	0	5	Mostly right: the 4086 value, the missing WD column and the fused Table 4 footnote are correctly flagged, and the warmup conflict is correctly put down to the paper. It misses the '\[\]' markers on the OLMo rows of Tables 3–4, footnote numbers fused into body text (e.g. 'License.11 1', 'throughput.22 2', 'Llama 288 8'), and the garbled author/affiliation block.
+
+judge: $1.27

@@ -1,15 +1,13 @@
 ---
 name: expand-library
-description: Find the papers missing from an area of the library, have the reader review the list, then add the approved ones in bulk with summaries. Use for "what am I missing in X", "expand the library on recommender-systems", "literature pass on X", "fill the gaps in llm/evaluation", "find the seminal papers on X", or to add a long list of papers at once.
+description: Find the papers missing from an area, have the reader review the list, then add the approved ones in bulk with summaries. Use for "what am I missing in X", "expand the library on X", "fill the gaps in X", "literature pass on X", "find the seminal papers on X", or to add a long list of papers at once.
 model: sonnet
 ---
 
 # /expand-library — fill the gaps in an area
 
-Read `AGENTS.md` (which imports `.claude/library-guide.md`) first if you have not: it has
-the layout, the rules and the topic tree. Paths below are the defaults;
-`.claude/library-guide.md` has this library's.
-For one or two papers use `add-paper`; this is for tens to hundreds.
+For one or two papers use `add-paper`; this is for tens to hundreds. Paths below are the
+defaults; `.claude/library-guide.md` has this library's.
 
 **Propose first, add after approval.** Nothing is added before the reader has reviewed the
 list.

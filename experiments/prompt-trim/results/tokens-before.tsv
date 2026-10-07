@@ -1,0 +1,24 @@
+kind	name	chars	tokens	model
+flags	as before (no tools, own system prompt)	0	1442	opus
+flags	+ CLAUDE_CODE_DISABLE_CLAUDE_MDS	0	812	opus
+flags	+ both env vars (shipped)	0	614	opus
+flags	+ both env vars + --setting-sources ''	0	432	opus
+file	guide	14436	5261	opus
+file	library-AGENTS	5093	1888	opus
+file	memory-index	688	262	opus
+file	global-CLAUDE	1626	509	opus
+file	engine-AGENTS	4464	1693	opus
+file	skill-list	2846	932	opus
+file	add-paper	5393	1998	opus
+file	expand-library	3652	1316	opus
+file	expand-library/reading-list-guide	3485	1291	opus
+file	fix-conversions	6160	2167	opus
+file	literature-review	12022	4009	opus
+file	literature-review/format	18101	6212	opus
+file	overview	4438	1580	opus
+file	overview/format	14168	5114	opus
+file	reorganize	2771	968	opus
+file	reading-prompt	3221	1002	opus
+file	filing-prompt	951	323	opus
+session	empty	0	32494	opus
+session	library	0	40788	opus

@@ -117,6 +117,16 @@ next piece of work.
   the reader: on six papers its notes had 1 error against 6 for Sonnet, 7 and 9 for two
   Gemini models and 35 for Haiku
   ([experiments/reading-models](../experiments/reading-models/README.md)).
+- **Instructions cost tokens on every turn, so each rule lives where it is used (2026-10-07).**
+  The guide, a library's `AGENTS.md` and the skill list load into every session and subagent
+  and are re-read each turn; a skill's files load when it runs. Rules only one workflow needs
+  moved from the guide into that skill, duplicates went, and history moved to the docs: the
+  library's share of a session's start fell from 8.3K to 5.5K tokens, with no rule lost and
+  no change found in notes, answers, overviews or adds. Skills are not split further, since
+  reading another file costs a turn. `paperlib read` and `add` keep the user's CLAUDE.md files
+  out of their requests and send what an area shares as a cached system prompt: a read cost
+  19% less on three papers
+  ([experiments/prompt-trim](../experiments/prompt-trim/README.md)).
 - **A review is a map, not evidence (2026-10-05, measured again 2026-10-06).** Sessions
   find reviews and notes on their own. Told to start from the review, a session answered a
   synthesis question from it alone: a third of the tokens and more misreadings. The guide

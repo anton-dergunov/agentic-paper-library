@@ -69,9 +69,11 @@ def main(argv):
         sys.exit("error: arXiv export API gave no usable response")
 
     topics = load_topics()
-    template = (ENGINE_ROOT / "guide" / "filing-prompt.md").read_text(encoding="utf-8")
+    # The rules and the topic tree are the system prompt, the same for every paper of a run,
+    # so the requests after the first read them from the prompt cache.
+    rules, the_paper = (ENGINE_ROOT / "guide" / "filing-prompt.md").read_text(encoding="utf-8").split("THE PAPER")
     tree = "\n".join(f"{folder}: {scope}" for folder, scope in topics.items())
-    style = style_sample()
+    system = SYSTEM + "\n\n" + rules.format(topics=tree, style=style_sample()).strip()
     in_library = library_arxiv_ids()
     skipped_by_id, skipped_by_title = skipped_index()
     added, left = 0, 0
@@ -93,8 +95,8 @@ def main(argv):
             left += 1
             continue
         try:
-            reply, _ = ask_model(model, SYSTEM, template.format(
-                topics=tree, style=style, title=entry["title"], abstract=entry["abstract"]))
+            reply, _ = ask_model(model, system, "THE PAPER" + the_paper.format(
+                title=entry["title"], abstract=entry["abstract"]))
             folder, reason, summary = filing_choice(reply, topics)
         except RuntimeError as error:
             print(f"  not added: {error}")

@@ -326,12 +326,17 @@ def ask_model(model, system, prompt):
     """One request to a Claude model through `claude -p`, with no tools.
 
     Returns (reply text, usage dict); raises RuntimeError on failure.
+
+    The environment keeps the user's CLAUDE.md files and background requests out of the
+    request: they are about 800 of its 1,400 fixed tokens (experiments/prompt-trim).
     """
+    env = {**os.environ, "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
+           "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
     with tempfile.TemporaryDirectory() as empty:
         done = subprocess.run(
             ["claude", "-p", "--model", model, "--tools", "", "--system-prompt", system,
              "--output-format", "json", "--no-session-persistence"],
-            input=prompt, capture_output=True, text=True, cwd=empty)
+            input=prompt, capture_output=True, text=True, cwd=empty, env=env)
     try:
         reply = json.loads(done.stdout)
     except ValueError:

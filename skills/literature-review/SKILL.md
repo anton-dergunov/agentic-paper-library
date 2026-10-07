@@ -1,6 +1,6 @@
 ---
 name: literature-review
-description: Write or update the literature review of an area of the library — a narrative of the kinds of approaches, what the papers find, how they relate and where the evidence is weak, kept in reviews/<scope>.md for the reader to read and for agents to start from. Use for "literature review of llm/memory", "/literature-review search-and-ranking", "update the review of X", "I've added papers to X, update the review", "a year has passed, what's new in X", "which reviews are stale", "what's the state of research in X", and for reading an area into notes ahead of its review ("read llm/agents", "read 30 papers of X"). Not for single papers (that is overview).
+description: Write or update the literature review of an area of the library (the kinds of approaches, what the papers find, how they relate, where the evidence is weak) in reviews/<scope>.md, for the reader to read and agents to start from; also reads an area's papers into notes ahead of its review. Use for "literature review of llm/memory", "/literature-review X", "update the review of X", "I've added papers to X, update the review", "what's new in X", "what's the state of research in X", "which reviews are stale", "read llm/agents", "read 30 papers of X". Not for single papers (that is overview).
 model: opus
 ---
 
@@ -9,8 +9,8 @@ model: opus
 A review is the synthesis of one area of the library: the reader reads it to learn the
 state of research, and agents read it before opening papers, so the same papers aren't
 re-read and the same points re-derived. `format.md` in this folder defines the file; read
-it before writing. Read `AGENTS.md` (which imports `.claude/library-guide.md`) first if you
-have not. Paths below are the defaults; `.claude/library-guide.md` has this library's.
+it before writing. Paths below are the defaults; `.claude/library-guide.md` has this
+library's.
 
 **Scopes.** A review covers a folder in `catalog/topics.yaml` and everything under it:
 usually one per top-level area, except an area too large for one review, which has one per
@@ -33,14 +33,12 @@ paperlib read <scope>          notes, one request per paper; runs from a termina
 /literature-review <scope>     the review; reads what is missing, offers the fix first
 ```
 
-**What it costs.** Reading is most of the work. `paperlib read` gives each paper to the
-reading model in one request, about 35K tokens for a paper of ordinary length, so 100
-papers come to a few million tokens and can use up a usage window. Reading is resumable
-and its results are the notes, so it can be spread over several sessions (`read <scope>
-30`), and the review written when `paperlib review-status <scope>` shows nothing left.
-The measurements are in the engine's `experiments/review-token-cost` and
-`experiments/reading-models`. Do not read papers with subagents: an agent keeps every
-paper it has read in its context and pays for all of them again on each request.
+**What it costs.** Reading is most of the work: `paperlib read` sends each paper in one
+request, about 35K tokens, so 100 papers can use up a usage window. It is resumable and
+its results are the notes, so it can be spread over sessions (`read <scope> 30`), and the
+review written when `paperlib review-status <scope>` shows nothing left. Do not read
+papers with subagents: an agent keeps every paper it has read in its context and pays for
+all of them again on each request.
 
 ## read
 

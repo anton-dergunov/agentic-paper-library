@@ -1,0 +1,42 @@
+{
+ "points": [
+  "1 Recipe: two stages. First, generative left-to-right LM pre-training (Eq. 1, context window k). Second, discriminative fine-tuning with one added linear+softmax layer W_y on the final block's last-token activation (Eq. 3–4). The LM loss is kept as an auxiliary objective weighted by λ = 0.5 (Eq. 5), claimed to improve generalisation and speed convergence. The only new parameters are W_y and the delimiter embeddings (p. 3–4).",
+  "2 Traversal-style input transformations turn structured inputs into one token sequence with start, end and $ delimiter tokens. Entailment: premise $ hypothesis. Similarity: both orderings, representations added element-wise. QA/commonsense: [z; q; $; a_k] per answer, softmax over answers (p. 4).",
+  "3 Architecture: 12-layer decoder-only Transformer with masked self-attention, 768-dim states, 12 heads, 3072-dim FFN, GELU, learned position embeddings, BPE with 40,000 merges, tied output embedding (p. 3–4).",
+  "4 Pre-training data: BooksCorpus, over 7,000 unpublished books, chosen for long contiguous text over the sentence-shuffled 1B Word Benchmark used by ELMo. Token-level perplexity 18.4, no baseline given (p. 4).",
+  "5 Optimisation. Pre-training: Adam, max lr 2.5e-4, 2000-update linear warmup, cosine annealing, 100 epochs, 64 × 512-token minibatches, dropout 0.1, modified L2 w = 0.01. Fine-tuning: lr 6.25e-5, batch 32, about 3 epochs, warmup over 0.2%, classifier dropout 0.1 (p. 4).",
+  "6 Withheld: parameter count, compute and training time, corpus size in tokens, seeds/variance/significance tests, dev vs test split for most results.",
+  "7 Headline: SOTA on 9 of 12 datasets. NLI (Table 2): MNLI-m 82.1 vs 80.6 (SAN 3x), SNLI 89.9 vs 89.3 (5x ensembles), SciTail 88.3 vs 83.3 (CAFE), QNLI 88.1 vs 82.3 (GenSen), loses RTE 56.0 vs 61.7 (Multi-task BiLSTM+Attn). QA (Table 3): Story Cloze 86.5 vs 77.6, RACE 59.0 vs 53.3 (BiAttention MRU 9x).",
+  "8 Table 4 (GLUE tasks): CoLA 45.4 vs 35.0, STS-B 82.0 vs 81.0 (ECNU), QQP 70.3 vs 66.1. Losses: SST-2 91.3 vs 93.2 (Sparse byte mLSTM) and MRPC 82.3 vs 86.0 (TF-KLD). GLUE 72.8 vs 68.9, which does not match the introduction's '5.5%' claim.",
+  "9 Ablations (Table 5, unweighted average over 8 GLUE tasks), full model 74.7. Without pre-training: 59.9 ('14.8%' drop, worse on all tasks). Single-layer 2048-unit LSTM: 69.1 ('5.6' drop, wins only MRPC). Without aux LM: 75.0, higher average; the aux LM helps only NLI/QQP, i.e. larger datasets. Table 5 MNLI 81.8 vs Table 2 MNLI-m 82.1 is unexplained.",
+  "10 Analysis (Fig. 2, figure only). Each transferred layer helps, up to 9% on MultiNLI. Zero-shot LM heuristics (CoLA, SST-2, RACE, DPRD) rise steadily over pre-training, and the LSTM shows higher variance (p. 7)."
+ ],
+ "notes": {
+  "A": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Right on Eq. 5 and Table 1. Misses that the author line 'Ilya Sutskever OpenAI…' is displaced into the introduction body, along with footnote 1. Also misses that every table caption is printed twice."
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "The model is a multi-layer Transformer decoder with masked self-attention, learned position embeddings and an output softmax tied to the token embeddings, Eq. 2 (p. 3).",
+     "paper": "Minor page issue. §3.1/Eq. 2 (p. 3) gives only a 'multi-layer Transformer decoder' with position matrix W_p and tied W_e^T. 'Masked self-attention heads' and 'learned position embeddings instead of the sinusoidal version' are stated in §4.1 Model specifications (p. 4)."
+    }
+   ],
+   "missed": [],
+   "conversion": "Right on Eq. 5 and Table 1. Misses the displaced 'Ilya Sutskever' author line and footnote 1 in the introduction, and the duplicated table captions."
+  },
+  "C": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Right on Eq. 5 and Table 1. The Eq. 2 '∀i ∈ [1, n]' reading matches the markdown, though it may be the source's own typo rather than a conversion fault. Misses the displaced 'Ilya Sutskever' author line and footnote 1, and the duplicated table captions."
+  }
+ },
+ "key": {
+  "A": "after",
+  "B": "before-repeat",
+  "C": "before"
+ },
+ "usd": 0.37114400000000003
+}

@@ -24,6 +24,13 @@ the 16K.
   - order the request so that what is shared by a folder's papers comes first and is cached.
 - Done when a read costs measurably less and the related lists are as good.
 
+Done in part on 2026-10-07 ([`experiments/prompt-trim`](../../experiments/prompt-trim/README.md)):
+what `claude -p` adds is measured and cut from 1,442 to 614 tokens, and the prompt, the focus
+and the list (now including the paper itself) are the system prompt, read from the cache by
+every request of a scope after the first (a 12.6K-token prompt: $0.101 written, $0.008 read).
+Still open: whether a shorter list (the paper's folder and its siblings, or stems without
+summaries) keeps the related sections as good; with the cache it matters less.
+
 ## 2. Is a cheaper reading worth it for the thinly covered areas?
 
 The first reviews skimmed most papers because each agent read 10–15 papers in one context

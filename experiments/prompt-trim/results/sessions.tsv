@@ -1,0 +1,59 @@
+task	condition	check	result
+add	after	add-arxiv run	pass
+add	after	build-index then check	pass
+add	after	filed in	llm/memory/agent
+add	after	lookup run	pass
+add	after	no git commit	pass
+add	after	paper added	pass
+add	after	suggests a commit message	pass
+add	after	summary set with set-summary	pass
+add	after	topics.yaml read	pass
+add	before	add-arxiv run	pass
+add	before	build-index then check	pass
+add	before	filed in	llm/memory/agent
+add	before	lookup run	pass
+add	before	no git commit	pass
+add	before	paper added	pass
+add	before	suggests a commit message	pass
+add	before	summary set with set-summary	pass
+add	before	topics.yaml read	pass
+overview	after	Overview, Questions, Follow-ups	pass
+overview	after	abstract callout	pass
+overview	after	checkboxes all false	pass
+overview	after	frontmatter keys in order	pass
+overview	after	method subsections in order	pass
+overview	after	no build-index, check or git status	pass
+overview	after	no page references in the note	pass
+overview	after	note written to overview_dir	pass
+overview	after	notes/ file keeps Digest and Q&A	pass
+overview	after	report starts with the link	pass
+overview	after	set-type run	pass
+overview	before	Overview, Questions, Follow-ups	pass
+overview	before	abstract callout	pass
+overview	before	checkboxes all false	pass
+overview	before	frontmatter keys in order	pass
+overview	before	method subsections in order	pass
+overview	before	no build-index, check or git status	pass
+overview	before	no page references in the note	pass
+overview	before	note written to overview_dir	pass
+overview	before	notes/ file keeps Digest and Q&A	pass
+overview	before	report starts with the link	pass
+overview	before	set-type run	pass
+qa	after	cites a page (p. N)	pass
+qa	after	did not open a PDF	pass
+qa	after	gives 71.2% against 60.2% full context (gpt-4o)	pass
+qa	after	pdf.invalid link with page=	pass
+qa	after	read Zep's note	pass
+qa	before	cites a page (p. N)	pass
+qa	before	did not open a PDF	pass
+qa	before	gives 71.2% against 60.2% full context (gpt-4o)	pass
+qa	before	pdf.invalid link with page=	pass
+qa	before	read Zep's note	pass
+
+task	condition	input processed	cache write	cache read	output	turns	seconds	usd	tool calls
+add	after	225392	47707	177675	1730	6	41	0.24	5
+add	before	354968	33100	321854	2270	8	43	0.22	7
+overview	after	449735	42228	407491	5474	10	56	0.53	9
+overview	before	401919	44762	357143	6300	10	63	0.56	9
+qa	after	215483	25914	189559	4269	8	38	0.33	7
+qa	before	223453	26759	196684	4001	8	36	0.33	7

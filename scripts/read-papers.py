@@ -5,11 +5,13 @@
                              [--focus FILE] [--skims] [--redo] [--appendix]
 
 For every paper named, or under a scope (a folder of the library), that has no digest in
-notes/<stem>.md yet, sends the paper's reading view (paperlib read-view) with the prompt
-in guide/reading-prompt.md to a model through `claude -p`, with no tools, and writes the
-reply as the note. Each paper is its own request, so nothing read earlier is paid for
-again, and a run that is stopped loses only the papers in progress: run it again and it
-continues. An existing note's Q&A is kept.
+notes/<stem>.md yet, sends the paper's reading view (paperlib read-view) to a model through
+`claude -p`, with no tools, and writes the reply as the note. The prompt in
+guide/reading-prompt.md, with the focus and the scope's papers, is the system prompt: the
+same for every paper of a scope, so the requests after the first read it from the prompt
+cache. Each paper is its own request, so nothing read earlier is paid for again, and a run
+that is stopped loses only the papers in progress: run it again and it continues. An
+existing note's Q&A is kept.
 
     --limit N     read at most N papers in this run (to spend a known budget)
     --jobs N      requests at a time (default 4)
@@ -61,19 +63,19 @@ def note_state(stem):
 
 
 def related_list(paper, scope_dir):
-    """The other papers of the area, one line each, for the note's "Related in library"."""
-    lines = []
-    for other in paper_files(scope_dir):
-        if other == paper:
-            continue
-        summary = " ".join(str(read_paper(other)[0].get("summary") or "").split())
-        lines.append(f"- {other.stem}: {summary}")
-    if len(lines) > RELATED_MAX:
+    """The papers of the area, one line each, for the note's "Related in library".
+
+    The paper itself is listed too, so that the list, and with it the system prompt, is the
+    same for every paper of the area and is read from the prompt cache.
+    """
+    def lines(folder):
+        return [f"- {o.stem}: " + " ".join(str(read_paper(o)[0].get("summary") or "").split())
+                for o in paper_files(folder)]
+    found = lines(scope_dir)
+    if len(found) > RELATED_MAX:
         # A large area: keep the paper's own folder, which holds its nearest neighbours.
-        own = [f"- {o.stem}: " + " ".join(str(read_paper(o)[0].get('summary') or '').split())
-               for o in paper_files(paper.parent) if o != paper]
-        lines = own[:RELATED_MAX]
-    return "\n".join(lines) or "(none)"
+        found = lines(paper.parent)[:RELATED_MAX]
+    return "\n".join(found)
 
 
 class UsageLimit(RuntimeError):
@@ -89,13 +91,13 @@ RETRY_PAUSES = [30, 60, 120]  # seconds before each retry of a transient refusal
 stop = threading.Event()  # set at a usage limit: requests not yet sent are not sent
 
 
-def ask(model, prompt):
+def ask(model, system, prompt):
     """ask_model, with transient refusals retried and a usage limit raised as UsageLimit."""
     for pause in RETRY_PAUSES + [None]:
         if stop.is_set():
             raise UsageLimit("stopped: the usage limit was reached")
         try:
-            return ask_model(model, SYSTEM, prompt)
+            return ask_model(model, system, prompt)
         except RuntimeError as error:
             if WINDOW_LIMIT.search(str(error)):
                 stop.set()
@@ -109,12 +111,11 @@ def read_one(paper, scope_dir, model, focus, template, appendix):
     if stop.is_set():
         raise UsageLimit("not started: the usage limit was reached")
     meta, body = read_paper(paper)
-    prompt = (template.replace("{{focus}}", focus)
-              .replace("{{related}}", related_list(paper, scope_dir))
-              + read_view(meta, body, appendix=appendix))
+    system = (SYSTEM + "\n\n" + template.replace("{{focus}}", focus)
+              .replace("{{related}}", related_list(paper, scope_dir)))
     start = time.time()
     try:
-        note, usage = ask(model, prompt)
+        note, usage = ask(model, system, "The paper:\n\n" + read_view(meta, body, appendix=appendix))
     except RuntimeError:
         # A request in flight when the limit was reached fails with an empty or odd message.
         if stop.is_set():

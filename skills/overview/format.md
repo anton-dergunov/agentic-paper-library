@@ -21,19 +21,12 @@ Code.
 
 ## What makes a good overview
 
-Verdicts on earlier drafts, from the library where this format was developed:
-- ChatGPT's were clear and well structured, but repetitive and shallow.
-- Claude's had the depth and nuance, but were dense and harder to read.
-- Claude's 2026-09-30 note for "Learning to Discover at Test Time" failed. It was about 4×
-  too long, full of hyperparameters, provider names, costs, numbers and page references,
-  and too technical to read before the paper.
-- The second try was the right length, but the top half was still weak. The Setting listed
-  technical preconditions instead of the kind of problem. Why it works read as a wall of
-  text, and its bold lead-ins were claims ("the model learns from its rare successes")
-  instead of naming the design choice. The web-chat v2 note did these better with no
-  rules, so the examples below come from it.
-
-Aim for a clear structure and real insight, in few words:
+Earlier drafts failed by being clear but repetitive and shallow, or deep but dense. One was
+4× too long, full of hyperparameters, provider names, costs, numbers and page references;
+its second try listed technical preconditions as the Setting, wrote Why it works as a wall
+of text, and used claims ("the model learns from its rare successes") as bold lead-ins
+instead of naming the design choice. The examples below come from a note that got these
+right. Aim for a clear structure and real insight, in few words:
 
 - **Punchy.** One idea per bullet and one line per bullet where possible. If a bullet runs
   past two lines, cut it. Bold lead-ins name *the thing* (the design choice, the step, the
@@ -63,19 +56,17 @@ Aim for a clear structure and real insight, in few words:
 
 ### Math
 
-Assume the reader likes maths but remembers intuition, not formulas. Use at most one small
-formula, and
-only when it makes the idea click. Write it in reduced notation, then say in one sentence
-what it means. No numeric worked examples. Usually words are enough: "the loss
+Assume the reader likes maths but remembers intuition, not formulas. At most one small
+formula, only when it makes the idea click, in reduced notation and followed by one
+sentence on what it means. No numeric worked examples. Usually words are enough: "the loss
 exponentially up-weights the best attempts, so the model learns mostly from its rare
 successes".
 
 ### Diagrams
 
-Use a mermaid `flowchart LR` when the method is a loop or a pipeline: at most 5 nodes, one
-loop and one exit to the result, with two-line labels (`<br/>`) so it renders wide. Describe
-steps, not applications. Don't try to verify the rendering; the reader will say if it
-needs redrawing. Reference:
+A mermaid `flowchart LR` when the method is a loop or a pipeline: at most 5 nodes, one loop
+and one exit to the result, two-line labels (`<br/>`) so it renders wide. Describe steps,
+not applications. Don't verify the rendering; the reader will say if it needs redrawing:
 
 ```mermaid
 flowchart LR
@@ -113,39 +104,35 @@ reproduce: false
 ---
 ```
 
-- `title`: the exact paper title, copied from the library frontmatter. Don't add the method
-  name in brackets; that goes in `aliases`.
-- `aliases`: the method's or paper's short name, if it has one. Otherwise leave the field
-  out.
-- `authors`: all of them if there are 6 or fewer, otherwise the first 5 followed by
-  `et al.`.
-- `affiliations`: only if the paper states them. Short names, deduplicated.
+- `title`: the exact title from the library frontmatter, without the method name (that
+  goes in `aliases`).
+- `aliases`: the method's or paper's short name; leave the field out if it has none.
+- `authors`: all if 6 or fewer, otherwise the first 5 and `et al.`.
+- `affiliations`: only if the paper states them; short names, deduplicated.
 - `year`: from `published`.
 - `type`: the same value as in the library frontmatter (see the table below).
 - `topic`: the paper's library folder path.
-- `links`: a plain list of URLs: the arXiv page and the code or project URLs printed in
-  the paper.
+- `links`: plain URLs: the arXiv page, and the code or project URLs printed in the paper.
 - `concepts`: 3–6 links to the ideas the paper is *about*, not tools it merely uses.
-- `papers`: links to the 2–5 closest papers. For a paper in the library, link its stem.
-  Otherwise use its short common name, or the name of an existing note for it in the
-  notes folder.
-- `tags`: lowercase and hyphenated: the specific tools, models, datasets and domains the
-  paper touches, so an agent can search for them. The frontmatter is the place for these
-  details, not the body. Never `paper`, never something every note would carry, never
-  vague umbrellas (`ai-for-science`), and nothing already in `concepts`.
+- `papers`: links to the 2–5 closest papers: a library paper by its stem, otherwise its
+  short common name or the name of its existing note in the notes folder.
+- `tags`: lowercase, hyphenated: the specific tools, models, datasets and domains the paper
+  touches, so an agent can search for them (these details go here, not in the body). Never
+  `paper`, anything every note would carry, vague umbrellas (`ai-for-science`), or anything
+  in `concepts`.
 - The checkboxes all start `false`; the reader sets them.
 
 ## Body
 
-No H1, because Obsidian (like most notes apps) shows the file name. It starts with the callout:
+No H1 (notes apps show the file name). It starts with the callout:
 
 ```markdown
 > [!abstract]
 > <one punchy sentence, at most about 20 words: the idea and what it is for>
 ```
 
-Write the callout fresh. Don't copy the library `summary`, which is written for agents.
-No method name (it's in the title and aliases), no model names, no jargon. Example: "An LLM
+Write the callout fresh, not from the library `summary` (written for agents). No method
+name (it's in the title and aliases), no model names, no jargon. Example: "An LLM
 keeps learning while it solves one hard problem, training on its own best attempts instead
 of staying frozen."
 
@@ -165,7 +152,7 @@ Then come three `##` sections. The reader adds their own `##` sections later.
 
 ### Sections by type
 
-Every type follows the same length and plainness rules. Each subsection is a few sentences
+Every type follows the same length and plainness rules; each subsection is a few sentences
 or a short list.
 
 These names mean the same in every type:

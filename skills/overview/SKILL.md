@@ -1,27 +1,24 @@
 ---
 name: overview
-description: Write a short first overview note for a paper that is already in the library, into the reader's own notes folder (overview_dir, e.g. an Obsidian vault) — a 3–5 minute pre-read that gives the intuition behind the paper before they read it. Classifies the paper type and keeps a per-paper memory file in notes/. Use for "overview <paper>", "/overview", "start working on <paper>", "make me a note for <paper>". Not for adding papers (that is add-paper).
+description: Write a short pre-read overview note for a paper already in the library into the reader's own notes folder (overview_dir, e.g. an Obsidian vault), giving the intuition in 3–5 minutes; also sets the paper type and writes its notes/ memory file. Use for "overview <paper>", "/overview", "start working on <paper>", "make me a note for <paper>". Not for adding papers (that is add-paper).
 model: opus
 ---
 
 # /overview — a quick pre-read note for a paper
 
-The reader runs this when they are about to read a paper. The note gives them the
-intuition in 3–5 minutes: what problem, what idea, why it works, what it was tried on, and
-how it relates to other work. Then they decide whether to read the paper, and grow the
-note themselves.
+The reader runs this before reading a paper. The note gives them the intuition in 3–5
+minutes (what problem, what idea, why it works, what it was tried on, how it relates to
+other work); then they decide whether to read the paper, and grow the note themselves.
 `format.md` in this folder defines the note; read it before writing.
 
-**Be fast and lightweight.** The reader runs this on many papers. Aim for a couple of
-minutes and a handful of tool calls. Do only the steps below, nothing around them.
+**Be fast and lightweight.** The reader runs this on many papers: a couple of minutes and
+a handful of tool calls. Do only the steps below, nothing around them.
 
-**Where notes go.** New paper notes are written to `<overview_dir>/<stem>.md`, where
-`overview_dir` is set in `paper-library.yaml` at the library root (the layout table in
-`.claude/library-guide.md` shows it as "The reader's own note per paper") and `<stem>` is
-the paper's file name in `library/`. This is the only notes-folder path the skill uses. If
-`overview_dir` is not configured, ask the reader where overview notes should live and
-suggest setting `overview_dir` in `paper-library.yaml`; don't write the note until it is
-settled. Other paths below are the defaults; `.claude/library-guide.md` has this
+**Where notes go:** `<overview_dir>/<stem>.md`, where `overview_dir` is set in
+`paper-library.yaml` (the guide's layout table shows it) and `<stem>` is the paper's file
+name in `library/`; no other notes-folder path. If `overview_dir` is not configured, ask
+the reader where notes should live and suggest setting it; don't write the note until it
+is settled. Other paths below are the defaults; `.claude/library-guide.md` has this
 library's.
 
 ## Steps

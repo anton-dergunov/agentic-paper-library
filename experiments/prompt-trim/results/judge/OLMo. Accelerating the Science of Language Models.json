@@ -1,0 +1,37 @@
+{
+ "points": [
+  "1 Openness and release. OLMo is a 'truly open' LM. The release covers 1B weights and four 7B variants (§5 names 7B, 7B-twin-2T and 1B), the full Dolma pretraining data with curation and WIMBD analysis tools, and training, inference, evaluation and adaptation code. It also includes W&B training logs, 500+ intermediate checkpoints at 1000-step intervals, tools to reconstruct the exact data order, and the SFT/DPO model weights, all under Apache 2.0 (p. 1, p. 8).",
+  "2 Architecture. Decoder-only transformer with no bias terms, non-parametric layer norm (chosen over parametric LN and RMSNorm as safest and fastest), and SwiGLU with hidden size ~8/3·d rounded to a multiple of 128 (11,008 for 7B). It uses RoPE and a modified GPT-NeoX-20B BPE tokenizer with PII-mask tokens (vocabulary 50,280, embedding padded to 50,304) (p. 2).",
+  "3 Configurations and optimizer (Table 1, §3.2). 1B: 16 layers, D 2048, 16 heads, 2T tokens, peak LR 4.0E-4, tied weights. 7B: 32 layers, 32 heads, 2.46T tokens, peak LR 3.0E-4, untied. Both use AdamW (0.9/0.95, eps 1E-5) and a ~4M-token batch. Warmup is 5000 steps in the text but 2000 for 1B in Table 1. LR decays linearly to 1/10 of peak, gradients are clipped at l2-norm 1.0, and the evaluated 7B checkpoint gets a final 1000 steps with LR decayed to 0 (pp. 1, 5).",
+  "4 Data. Dolma has 2,668B tokens and 4,367M docs, of which Common Crawl is 2,180B tokens (Table 2, p. 3). Training uses a 2T-token sample: EOS-joined documents in 2048-token chunks, shuffled identically for every run. Training past 2T starts a second epoch with a new shuffle, which the authors call negligible (p. 5).",
+  "5 Training infrastructure. ZeRO via PyTorch FSDP and bf16 mixed precision, with full-precision sharded weights, optimizer state and gradient reduction (p. 4). Runs used LUMI (up to 256 nodes of 4x AMD MI250X) and MosaicML (27 nodes of 8x A100-40GB); the authors claim 'nearly identical' results on both by 2T tokens, with no numbers given (p. 5).",
+  "6 Withheld from the main text: compute, GPU-hours or energy; in-loop ablation results; diverged or failed runs (admitted in Limitations, p. 9); separate results for the 7B variants; weight decay values; seeds or variance. The data is English-only.",
+  "7 7B zero-shot, 8 core tasks, rank classification with per-task normalization (Table 3, p. 5). Averages: OLMo-7B 69.3 vs Llama 2 7B 70.5, Falcon-7B 70.3, MPT-7B 69.8, LLaMA 7B 69.6, RPJ-INCITE-7B 66.6, Pythia 6.9B 63.0. OLMo is fifth of seven despite the text calling it 'competitive'.",
+  "8 1B zero-shot (Table 3, p. 5). OLMo-1B 60.4 vs TinyLlama 1.1B 59.4 and Pythia 1B 54.5. StableLM 1.6B scores 66.5 and is set aside as larger and trained on unknown data.",
+  "9 Paloma bits per byte on 11 of 18 sources, with OLMo's pretraining data decontaminated against Paloma (OLMo is called the largest LM with such decontamination, p. 4). Results appear only in Figure 2: OLMo is competitive overall and best on C4 (88.8% Common Crawl), weaker on WikiText-103, M2D2 and RedPajama. MPT-7B stands out, possibly because of its 27% non-Common Crawl data vs OLMo's 11.2% (p. 6).",
+  "10 Adaptation. Tülu SFT then DPO (p. 3). Base → SFT → SFT+DPO: MMLU 28.3 → 47.3 → 46.2; AlpacaEval – → 57.0 → 69.3; ToxiGen 81.4 → 14.4 → 1.7; TruthfulQA 31.6 → 41.2 → 52.0. OLMo trails Tülu 2+DPO (50.7 MMLU, 85.1 AlpacaEval) and Llama-2-Chat (46.8 MMLU, 87.3 AlpacaEval); the gap is attributed to Llama 2 MMLU contamination and a Llama-oriented mix (Table 4, p. 7)."
+ ],
+ "notes": {
+  "A": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Mostly right: the 4086 value, the missing WD column and the fused Table 4 footnote are correctly flagged, and the warmup conflict is correctly put down to the paper. It misses the '\\[\\]' markers on the OLMo rows of Tables 3–4, footnote numbers fused into body text (e.g. 'License.11 1', 'throughput.22 2', 'Llama 288 8'), and the garbled author/affiliation block."
+  },
+  "B": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Not right to say 'otherwise ok'. The 4086 value and the WD column are correctly flagged, but it misses the footnote fused into a Table 4 cell (p. 7), the '\\[\\]' markers on the OLMo rows of Tables 3–4, footnote numbers fused into body text (e.g. 'License.11 1', 'Llama 288 8'), and the garbled affiliations."
+  },
+  "C": {
+   "errors": [],
+   "missed": [],
+   "conversion": "Mostly right: 4086, the WD column, the '\\[\\]' markers and the fused Table 4 footnote are all correct. It misses footnote numbers fused into body text (e.g. 'License.11 1', 'throughput.22 2', 'Llama 288 8') and the garbled author/affiliation block."
+  }
+ },
+ "key": {
+  "A": "before-repeat",
+  "B": "after",
+  "C": "before"
+ },
+ "usd": 0.43709200000000004
+}
