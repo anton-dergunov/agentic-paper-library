@@ -1,4 +1,8 @@
-# Agentic paper library
+<p align="center">
+  <img src="docs/images/logo.jpg" alt="A friendly three-eyed monster reading a long scroll of a research paper between two stacks of papers" width="420">
+</p>
+
+<h1 align="center">Agentic paper library</h1>
 
 A way to read and organise research papers with a coding agent at the centre. Papers from arXiv, PDFs and web articles are converted to Markdown with equations as LaTeX, tables as tables, local figures and page-numbered headings. The agent can then read across the whole library and cite a claim by section and page. Claude Code skills add a paper and file it in your topic tree, write a short overview before you read it, keep notes on each paper, find the gaps in an area, and write a literature review of it.
 
