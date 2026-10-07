@@ -68,6 +68,12 @@ python3 follow_up.py            # work folder ~/.cache/papers/prompt-trim, libra
 - a session that succeeded is not run again;
 - before every session its copy is reset to the pristine twin, so a repeat or a retried run never sees an earlier run's work.
 
+The work folder was deleted after the run on 7 Oct 2026. To run again, recreate its two inputs:
+- `engine-before/`: `git archive a67d5b4 | tar -x -C <work>/engine-before`, plus the engine's untracked `AGENTS.md` as it was;
+- `papers-before/AGENTS.md`: the library's `AGENTS.md` from its git history, before the trim.
+
+`follow_up.py` builds the rest.
+
 **At a usage limit** a step stops with exit code 3 and says so. Switch account (`/login`) or wait for the reset, and run the same command again.
 
 Sessions run each condition's own engine through the shim and their own cache. In the core run, the session's `paperlib` was the current engine in both conditions; that only matters for `/literature-review read`, whose inner request is itself the reading prompt.
