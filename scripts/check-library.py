@@ -114,6 +114,8 @@ def check_reviews(stems):
             problems.append(f"{name}: needs a paper and a problem")
         elif entry["paper"] not in stems:
             problems.append(f"{name}: no paper named `{entry['paper']}` in the library")
+        elif "wont-fix" in entry and not str(entry["wont-fix"] or "").strip():
+            problems.append(f"{name}: wont-fix needs a reason")
     return problems
 
 

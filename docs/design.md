@@ -139,16 +139,19 @@ next piece of work.
   that and never creates a folder; the skill stays for new folders, titles, PDFs and the
   inbox. Each skill now names its model in its frontmatter: Sonnet for `add-paper` and
   `expand-library`, Opus for the rest. Only the reader and the filing model are measured.
-- **Conversion problems are graded, collected and fixed between reading and writing
-  (2026-10-06).** Reading `search-and-ranking` for its review, the reader reported a
-  conversion problem in 46 of 91 papers, 28 of them among the area's PDF-converted papers,
-  but most were garbled equations whose meaning the prose kept, and the notes said what not
-  to trust. The reader now grades each problem `minor` or `damaged`;
-  `paperlib conversion-issues` puts the damaged ones in the catalog with no agent; the
-  `fix-conversions` skill repairs them and reads them again; and a note records the text it
-  was read from (`paper-hash`), so a fixed paper's note shows up as stale. A review is
-  written once its scope's damaged papers are fixed, or the reader says to go ahead.
-  Recurring flaws go to the converter, not to each paper.
+- **Conversion problems are collected from the notes and fixed between reading and writing
+  (2026-10-07).** Reading `search-and-ranking` for its review, the reader reported a
+  conversion problem in 46 of 91 papers, 28 of them among the area's PDF-converted papers;
+  most were garbled equations whose meaning the prose kept. The reader now marks a problem
+  `key-content-broken` when a part the paper's findings rest on is missing or wrong (a
+  results table, the main equation, a section). `paperlib conversion-issues` copies every reported problem into the catalog,
+  which is the one list of them; the `fix-conversions` skill reads again only the papers
+  whose key content was broken, sends recurring flaws to the converter so new papers
+  benefit, and marks the rest `wont-fix`. Notes are not re-read when a paper merely
+  changes: since the converter settled on 3 Oct, a change to an already-read paper has
+  touched a median 0.08% of it
+  ([experiments/conversion-churn](../experiments/conversion-churn/README.md)), so tracking
+  which notes are out of date (built and removed the same day) was not worth its weight.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

@@ -14,10 +14,9 @@ A paper is covered when the review's "## Paper map" section links it. A broken
 link whose filename still exists elsewhere in the library (the paper moved, so
 its stem is unchanged) is rewritten by --fix-links; a renamed paper is reported
 for a manual fix. A paper has been read when notes/<stem>.md has a "## Digest";
-its "read:" line says whether in full or as a skim. For one scope it also lists the notes
-that are stale (their paper changed since they were written) and counts the papers whose
-conversion is damaged: listed in catalog/conversion-issues.yaml, graded `damaged` by the
-reader and not listed yet, or in notes not graded yet.
+its "read:" line says whether in full or as a skim. For one scope it also counts the
+conversion problems: open and wont-fix entries in catalog/conversion-issues.yaml, and
+problems the notes report that the catalog does not list yet.
 """
 
 import os
@@ -28,7 +27,7 @@ from urllib.parse import quote, urlsplit
 
 from paperlib import (
     LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_LINK_BASE, REVIEWS_DIR, load_conversion_issues,
-    load_reviews, load_topics, note_conversion, note_is_stale, note_path, paper_files, read_paper,
+    load_reviews, load_topics, note_conversion, note_path, paper_files, read_paper,
     review_coverage, review_links,
 )
 
@@ -101,25 +100,18 @@ def scope_report(scope):
 
 
 def conversion_report(papers):
-    """Notes whose paper changed since they were written, and papers whose conversion the
-    reader found damaged or the catalog lists: what a fix pass has to deal with."""
-    stale = [p for p in papers if note_is_stale(p)]
-    if stale:
-        print(f"{len(stale)} notes are stale, their paper changed since (paperlib read --stale <scope>)")
-        for p in stale:
-            print(f"  stale: {p.relative_to(LIBRARY_DIR)}")
-    grades = {}
-    for p in papers:
-        if note_path(p).exists():
-            grade, _ = note_conversion(note_path(p).read_text(encoding="utf-8"))
-            grades.setdefault(grade, []).append(p)
-    listed = {e.get("paper") for e in load_conversion_issues() if isinstance(e, dict)}
-    flagged = [p for p in papers if p.stem in listed]
-    unlisted = [p for p in grades.get("damaged", []) if p.stem not in listed]
-    if flagged or unlisted or grades.get("unclassified"):
-        print(f"conversion: {len(flagged)} listed in the catalog of conversion issues, "
-              f"{len(unlisted)} more graded damaged, {len(grades.get('unclassified', []))} notes "
-              "not graded (paperlib conversion-issues <scope>, then /fix-conversions <scope>)")
+    """The conversion problems of the scope: what a fix pass has to deal with."""
+    stems = {p.stem for p in papers}
+    entries = [e for e in load_conversion_issues() if isinstance(e, dict) and e.get("paper") in stems]
+    listed = {e["paper"] for e in entries}
+    unlisted = sum(1 for p in papers if p.stem not in listed and note_path(p).exists()
+                   and note_conversion(note_path(p).read_text(encoding="utf-8"))[0] in ("problem", "key-content-broken"))
+    open_entries = [e for e in entries if not e.get("wont-fix")]
+    broken = sum(1 for e in open_entries if e.get("key-content-broken"))
+    if open_entries or unlisted:
+        print(f"conversion: {len(open_entries)} open problems in the catalog ({broken} with key content broken), "
+              f"{len(entries) - len(open_entries)} wont-fix, {unlisted} reported in notes and not in the "
+              "catalog yet (paperlib conversion-issues <scope>, then /fix-conversions <scope>)")
 
 
 def links(scope):

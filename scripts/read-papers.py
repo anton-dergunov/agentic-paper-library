@@ -2,8 +2,7 @@
 """Read papers and write their notes, one model request per paper.
 
     ./scripts/read-papers.py <scope or paper.md> ... [--limit N] [--jobs N] [--model ID]
-                             [--focus FILE] [--stale] [--skims] [--redo] [--appendix]
-    ./scripts/read-papers.py <scope or paper.md> ... --stamp
+                             [--focus FILE] [--skims] [--redo] [--appendix]
 
 For every paper named, or under a scope (a folder of the library), that has no digest in
 notes/<stem>.md yet, sends the paper's reading view (paperlib read-view) with the prompt
@@ -12,24 +11,19 @@ reply as the note. Each paper is its own request, so nothing read earlier is pai
 again, and a run that is stopped loses only the papers in progress: run it again and it
 continues. An existing note's Q&A is kept.
 
-A note records the text it was written from (`paper-hash:`, a fingerprint of the paper's
-body). When the paper is reconverted or fixed by hand, the note is stale.
-
     --limit N     read at most N papers in this run (to spend a known budget)
     --jobs N      requests at a time (default 4)
     --model ID    the reading model (default: `reader_model` in paper-library.yaml, else
                   opus; experiments/reading-models compares the candidates)
     --focus FILE  a few lines on what the area's review will ask, put before the paper
-    --stale       also read again the papers changed since their note was written
     --skims       also read again the papers whose note says `read: skim`
     --redo        read again every paper named, whatever its note says
     --appendix    give the reader the appendices too (for papers whose note says the
                   main results are in them); use with --redo on those papers
-    --stamp       read nothing: record each paper's current text in its note, for notes
-                  written before notes recorded it (they are never reported stale)
 
 Prints a line per paper with its tokens and any conversion problem the reader reported
-(`minor: …` or `damaged: …`), and appends the same to <cache>/read-papers.jsonl.
+(`key-content-broken: …` when
+a part the paper's findings rest on is missing or wrong), and appends the same to <cache>/read-papers.jsonl.
 
 A request refused for a moment (rate limit, service busy) is retried after a pause. When
 the account's usage window is used up, no further requests are sent, the message with its
@@ -46,8 +40,8 @@ from concurrent.futures import CancelledError, ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from paperlib import (
-    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTE_HASH, NOTES_DIR, ask_model, note_conversion,
-    note_is_stale, note_path, paper_files, paper_hash, read_paper, read_view, stamp_note,
+    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, note_conversion, note_path,
+    paper_files, read_paper, read_view,
 )
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
@@ -134,28 +128,13 @@ def read_one(paper, scope_dir, model, focus, template, appendix):
     if "## Related in library" not in note:
         note += "\n\n## Related in library\n"
     _, qa = note_state(paper.stem)
-    note = stamp_note(note.rstrip(), paper_hash(paper)) + "\n\n## Q&A\n" + (f"\n{qa}\n" if qa else "")
+    note = note.rstrip() + "\n\n## Q&A\n" + (f"\n{qa}\n" if qa else "")
     NOTES_DIR.mkdir(parents=True, exist_ok=True)
     note_path(paper).write_text(note, encoding="utf-8")
-    grade, problem = note_conversion(note)
+    state, problem = note_conversion(note)
     usage.update(paper=paper.stem, model=model, seconds=round(time.time() - start),
-                 conversion=f"{grade}: {problem}" if problem else (grade or "?"))
+                 conversion={"ok": "ok", "key-content-broken": f"key-content-broken: {problem}"}.get(state, problem or "?"))
     return usage
-
-
-def stamp(papers):
-    """Record the current text of each paper in its note, without reading it again."""
-    stamped = 0
-    for paper, _ in papers:
-        note = note_path(paper)
-        if not note.exists() or "## Digest" not in note.read_text(encoding="utf-8"):
-            continue
-        text = note.read_text(encoding="utf-8")
-        if NOTE_HASH.search(text):
-            continue
-        note.write_text(stamp_note(text, paper_hash(paper)), encoding="utf-8")
-        stamped += 1
-    print(f"read: {stamped} notes stamped with their paper's current text")
 
 
 def main(argv):
@@ -168,7 +147,7 @@ def main(argv):
             if not args:
                 sys.exit(__doc__)
             options[arg] = args.pop(0)
-        elif arg in ("--skims", "--redo", "--appendix", "--stale", "--stamp"):
+        elif arg in ("--skims", "--redo", "--appendix"):
             flags.add(arg)
         elif arg.startswith("-"):
             sys.exit(__doc__)
@@ -181,9 +160,7 @@ def main(argv):
     if options["--focus"]:
         focus = ("What the area's review will ask, so that the note captures it:\n\n"
                  + Path(options["--focus"]).read_text(encoding="utf-8").strip() + "\n\n")
-    grades = (ENGINE_ROOT / "guide" / "conversion-grades.md").read_text(encoding="utf-8").strip()
-    template = (ENGINE_ROOT / "guide" / "reading-prompt.md").read_text(encoding="utf-8").replace(
-        "{{grades}}", "\n".join("  " + line for line in grades.split("\n")))
+    template = (ENGINE_ROOT / "guide" / "reading-prompt.md").read_text(encoding="utf-8")
 
     papers = []  # (paper, the folder whose papers are offered as related)
     for target in targets:
@@ -195,24 +172,16 @@ def main(argv):
             papers += [(p.resolve(), scope_dir) for p in paper_files(scope_dir)]
         else:
             sys.exit(f"read: `{target}` is neither a paper nor a folder of the library")
-    if "--stamp" in flags:
-        stamp(papers)
-        return
-    todo, done_before, stale = [], 0, 0
+    todo, done_before = [], 0
     for paper, scope_dir in papers:
         depth, _ = note_state(paper.stem)
-        is_stale = "--stale" in flags and depth is not None and note_is_stale(paper)
-        stale += is_stale
-        if ("--redo" in flags or depth is None or is_stale
-                or (depth == "skim" and "--skims" in flags)):
+        if "--redo" in flags or depth is None or (depth == "skim" and "--skims" in flags):
             todo.append((paper, scope_dir))
         else:
             done_before += 1
     if options["--limit"]:
         todo = todo[:int(options["--limit"])]
-    print(f"read: {len(papers)} papers, {done_before} already have a current digest"
-          + (f", {stale} notes stale" if "--stale" in flags else "")
-          + f", reading {len(todo)} with {model}")
+    print(f"read: {len(papers)} papers, {done_before} already have a digest, reading {len(todo)} with {model}")
 
     log = CACHE_DIR / "read-papers.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)

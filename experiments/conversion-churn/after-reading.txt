@@ -1,0 +1,16 @@
+Papers ever read (a note was added): 432
+Papers whose body changed after their note was added: 143 (33%)
+Times changed after reading: mean 1.24, max 3; 1x: 113, 2x: 26, 3x: 4
+Changes before 2026-10-03: 41 to 35 papers; lines median 30, max 902; characters median 606, mean 5904, max 84023; share of the body median 0.78%, 90th percentile 7.77%, max 152.9%; over 1%: 19
+Changes from 2026-10-03: 136 to 132 papers; lines median 8, max 274; characters median 91, mean 1230, max 128517; share of the body median 0.08%, 90th percentile 0.37%, max 37.9%; over 1%: 7
+Largest changes after reading (share of the body):
+   152.9%    84023 chars   902 lines  2026-10-01  MemGPT. Towards LLMs as Operating Systems
+    37.9%   128517 chars    92 lines  2026-10-05  Terminal-Bench. Benchmarking Agents on Hard, Realistic Tasks
+    36.1%    37158 chars   442 lines  2026-10-01  On Memory Construction and Retrieval for Personalized Conver
+    24.0%    24810 chars   313 lines  2026-10-01  HaluMem. Evaluating Hallucinations in Memory Systems of Agen
+     8.4%     7395 chars    36 lines  2026-10-01  Memory-R1. Enhancing Large Language Model Agents to Manage a
+     7.8%     5765 chars   171 lines  2026-10-01  Mem0. Building Production-Ready AI Agents with Scalable Long
+     7.1%     7216 chars   224 lines  2026-10-01  LightMem. Lightweight and Efficient Memory-Augmented Generat
+     6.4%    10728 chars   234 lines  2026-10-01  Cartridges. Lightweight and general-purpose long context rep
+     6.0%     7215 chars   225 lines  2026-10-01  LongMemEval. Benchmarking Chat Assistants on Long-Term Inter
+     5.5%     5444 chars    90 lines  2026-10-01  Are We Ready For An Agent-Native Memory System

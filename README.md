@@ -30,7 +30,7 @@ It began on 29 September 2026 with 240 papers from a project on LLM memory. With
 | `/overview` | A 3–5 minute pre-read for a paper you're about to read: the intuition, the mechanism, what is new against your library. Written to your notes folder (an Obsidian vault works well). |
 | `/expand-library` | Finds the papers missing from an area, has you strike what you don't want, and adds the rest in bulk. |
 | `/literature-review` | Writes or updates the review of an area: the kinds of approaches, what the papers find, how they relate, where the evidence is weak. |
-| `/fix-conversions` | Repairs the papers whose conversion the reader found damaged (a missing or flattened table, a missing section), by reconverting them or fixing them by hand from the PDF, and reads them again. Run it between reading an area and writing its review. |
+| `/fix-conversions` | Works through the conversion problems the notes report: fixes recurring ones in the converter, reconverts or fixes papers by hand from the PDF, reads again the papers whose key content was broken, and marks what can't be fixed. Run it between reading an area and writing its review. |
 | `/reorganize` | Proposes moves, splits and merges of topic folders as the library grows, and carries out the ones you approve. |
 
 ### Which model

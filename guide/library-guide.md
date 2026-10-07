@@ -43,7 +43,7 @@ The two trees mirror each other: a paper's markdown and its PDF have the same to
 - **Don't re-propose skipped papers.** `{{catalog}}/skipped.yaml` lists the papers {{reader}} decided not to add, with the reason, and `paperlib lookup` flags them as `skipped earlier`. Record every new skip there. If {{reader}} changes their mind, remove the entry first.
 - **Prefer a better tool to a workaround.** When a library, model or tool would do a conversion, or any other job here, better than what paperlib uses, say so and propose it. Don't hand-tune heuristics or work around a weak tool. Compare candidates on real papers before adopting one.
 - **Conversion quality comes before speed.** Papers arrive one or two a day, so a slow, precise conversion (minutes per paper) beats a fast, lossy one. Be pragmatic only when converting hundreds of papers at once, and say what was traded away.
-- **Flag broken conversions.** Whoever notices a garbled paper adds an entry to `{{catalog}}/conversion-issues.yaml`. Garbled means broken equations, flattened tables, missing sections or figures, a truncated body, or implausible `pdf-text` numbers. Say so when you quote from such a paper. `paperlib read` grades each paper's conversion in its note (`minor` or `damaged`), and `paperlib conversion-issues <scope>` adds the damaged ones to the catalog. The `fix-conversions` skill reconverts them or fixes them by hand, reads them again, and removes the entries.
+- **Flag broken conversions.** Whoever notices a garbled paper adds an entry to `{{catalog}}/conversion-issues.yaml`. Garbled means broken equations, flattened tables, missing sections or figures, a truncated body, or implausible `pdf-text` numbers. Say so when you quote from such a paper. `paperlib read` reports each paper's conversion problems in its note, and `paperlib conversion-issues <scope>` copies them into the catalog, marking those whose key content is broken. The `fix-conversions` skill works through the catalog: it reads those again once they are fixed, sends recurring flaws to the converter, and marks what cannot be fixed `wont-fix`.
 - **Conversions can be regenerated.** `paperlib reconvert <paper.md>` (or `--all`) refetches arXiv's HTML at the PDF's version and rewrites the body with the current converter. It keeps the frontmatter and the PDF.
   - A paper whose markdown was corrected by hand must contain `<!-- hand-edited -->` near the edit; reconvert skips those.
   - arXiv downloads are cached, so reconverting needs no network.
@@ -97,8 +97,7 @@ type: method
 read: full
 family: <the kind of approach it belongs to, in a few words>
 evidence: <what it was tested on, against what>; strength: <replicated / one benchmark / vendor-run / …>
-conversion: ok | minor: <what is broken, and where (p. N)> | damaged: <what, where>
-paper-hash: <fingerprint of the paper's text the note was written from>
+conversion: ok | <what is broken in the markdown, and where (p. N)> | key-content-broken: <what, where>
 
 ## Digest
 
@@ -119,9 +118,9 @@ without re-reading it.
 
 Write each Q&A entry as readable markdown over several lines, never as one long line: a `###` heading with the date and the question, then the answer as short paragraphs or a bullet list, a table where the content is a comparison, and a fenced block for an example or a worked calculation. Mark content the session made up, such as a toy example, as ours ("ours, not from the paper"), so a later session doesn't take it for the paper's. The entry is read by the reader as often as by agents, and the extra lines cost few tokens.
 
-`paperlib read <scope or paper.md>` writes these files: one model request per paper, the whole main text, resumable. `paperlib review-status <scope>` lists the papers that have no note yet, and the notes that are stale: their paper was reconverted or fixed after the note was written (`paper-hash` no longer matches), so `paperlib read --stale <scope>` reads them again. `family`, `evidence` and `conversion` are what a literature review groups and weighs papers by; a note written before they existed lacks them.
+`paperlib read <scope or paper.md>` writes these files: one model request per paper, the whole main text, resumable. `paperlib review-status <scope>` lists the papers that have no note yet. `family`, `evidence` and `conversion` are what a literature review groups and weighs papers by; a note written before they existed lacks them.
 
-`conversion` is `minor` when the meaning is still recoverable (a garbled equation explained in the prose) and `damaged` when something a note or a review needs is missing or unreliable (a results table, a section). Before leaning on a damaged paper, check the place in the PDF.
+`conversion` starts with `key-content-broken:` when a part the paper's findings rest on is missing or wrong in the markdown (a results table missing, values in the wrong cells, the main equation unreadable). Before leaning on such a paper, check the place in the PDF.
 
 `read` says how much of the paper the digest rests on: `full` (the main text was read) or `skim` (abstract, introduction, conclusion and headline results only, as the first literature reviews did for most papers). A file without the line was written from a full read. Before leaning on a `skim` digest for a detail, open the paper; `paperlib read --skims <scope>` reads the skimmed papers in full.
 

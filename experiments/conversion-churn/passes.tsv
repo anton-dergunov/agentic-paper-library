@@ -1,0 +1,18 @@
+date	sha	subject	papers_changed	of_them_read	share_median	share_p90	share_max
+2026-09-30	3288cb2b	Fix math, figures, tables and filenames in paper markdown	231	0	0.07995	0.19805	0.44918
+2026-09-30	52b848cb	Store figures locally as WebP instead of linking to arXiv	207	0	0.00319	0.01199	0.05753
+2026-09-30	8a25d07a	Add page numbers to 591 more headings across 100 papers	100	0	0.00026	0.00073	0.00153
+2026-09-30	967ed4c8	Add 793 papers from the inventory, with summaries	30	0	0.09373	0.27050	0.78574
+2026-09-30	22e0d4f3	Read two-column PDFs in column order	169	0	1.33393	1.76249	2.09967
+2026-10-01	4a62e43c	Add 309 papers from the primary-area reading lists	168	0	0.03184	0.11537	1.05668
+2026-10-01	b860b684	Add 791 papers from the remaining reading lists and restore 	827	1	0.00662	0.02430	0.62979
+2026-10-01	18cfcb53	Recover boxed text, scaled tables and forest trees in the co	24	9	0.02604	0.31961	1.52864
+2026-10-01	c9c5977c	Reconvert llm/personalization with the fixed converter	67	0	0.01544	0.21184	0.50328
+2026-10-01	7f5bc9b3	Reconvert library, first partial pass	1132	19	0.00806	0.09337	2.01253
+2026-10-01	33b8cc3e	Merge branch 'main' into reconvert-library	6	0	0.55281	1.36647	1.36647
+2026-10-02	6b3a47aa	Merge branch 'main' into reconvert-library	2	0	0.01132	0.01797	0.01797
+2026-10-02	1b6f6dbe	Reconvert library, nightly pass	1047	12	0.00905	1.32272	2.40914
+2026-10-02	f8056ad3	Fix table bugs found validating the reconversion; record inc	9	0	0.00755	0.92137	0.92137
+2026-10-04	42c0824a	Reconvert 94 papers whose equations KaTeX could not draw	95	0	0.00023	0.00254	0.35025
+2026-10-05	2253fc4e	Add the literature review of llm/post-training	1387	123	0.00076	0.00339	0.37918
+2026-10-06	8315d233	Reconvert 58 papers for tree references and style warnings; 	49	13	0.00213	0.00699	0.01003

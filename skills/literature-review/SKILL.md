@@ -28,8 +28,9 @@ passed) and `status`. With no mode, pick `write` or `update` by whether
 
 ```
 paperlib read <scope>          notes, one request per paper; runs from a terminal too
-/fix-conversions <scope>       repair the papers the reader graded `damaged`, read them again
-/literature-review <scope>     the review; reads what is missing or stale, offers the fix first
+/fix-conversions <scope>       fix the conversion problems the notes report; read again the
+                               papers whose key content was broken
+/literature-review <scope>     the review; reads what is missing, offers the fix first
 ```
 
 **What it costs.** Reading is most of the work. `paperlib read` gives each paper to the
@@ -63,20 +64,21 @@ paper it has read in its context and pays for all of them again on each request.
 4. **Papers whose results are in the appendix.** A note whose `evidence` line or digest
    says the main numbers are in an appendix was read without them. Read those again:
    `paperlib read --redo --appendix <paper.md> ...`.
-5. **Report**: how many notes were written, how many papers are left, and how the reader
-   graded the conversions (`paperlib review-status <scope>` counts them). If any are
-   damaged, suggest `/fix-conversions <scope>` before the review. In `read` mode, stop here.
+5. **Report**: how many notes were written, how many papers are left, and the conversion
+   problems the notes report (`paperlib review-status <scope>` counts them). If any have
+   key content broken, suggest `/fix-conversions <scope>` before the review. In `read`
+   mode, stop here.
 
 ## write
 
 1. **Read** every paper of the scope, as above, until `paperlib review-status <scope>`
-   lists none as not read. Add `--stale` to the read command when it lists stale notes
-   (their paper was reconverted or fixed since).
-2. **Conversion problems.** Run `paperlib conversion-issues <scope>`: it grades older
-   notes and adds the damaged papers to `catalog/conversion-issues.yaml`. If entries in
-   the scope remain, say how many and which matter most, and offer `/fix-conversions
-   <scope>` before writing. Write only once they are fixed or the reader says to go ahead;
-   then, wherever the review leans on one of those papers, say that its copy is damaged.
+   lists none as not read.
+2. **Conversion problems.** Run `paperlib conversion-issues <scope>`: it copies the
+   problems the notes report into `catalog/conversion-issues.yaml` and lists the open ones.
+   If any in the scope have key content broken (or have not been looked at yet: older
+   notes never mark it), say how many and which matter most, and offer `/fix-conversions <scope>`
+   before writing. Write once they are fixed or the reader says to go ahead; then,
+   wherever the review leans on a paper whose key content is broken, say so.
 3. **Context.**
    - Read the notes of every paper in scope (`notes/<stem>.md`): these are what the
      review is written from.
@@ -142,9 +144,9 @@ Steps:
 2. **Format.** Compare the review with `format.md`. A review written under an older format
    gets what it lacks in this update: missing sections ("Where the papers disagree", "In
    practice"), evidence labels, source links in the comparison tables.
-3. **Read** the uncovered papers: `paperlib read <scope> --stale` reads the ones without a
-   note and those whose note is stale (steps 3–4 of `read`). Then deal with conversion
-   problems as in step 2 of `write`, and read the new notes.
+3. **Read** the uncovered papers: `paperlib read <scope>` reads the ones without a note
+   (steps 3–4 of `read`). Then deal with conversion problems as in step 2 of `write`, and
+   read the new notes.
 4. **Revise** the review:
    - Place each paper in the map and in its family under "Kinds of …". When a paper that
      was skimmed has since been read in full (its note says `read: full`), drop its
