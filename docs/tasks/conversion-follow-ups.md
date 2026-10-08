@@ -53,22 +53,21 @@ Left open by the fixes of 2026-10-04:
 - **An algorithm set as a table gets a table's caption.** DAPO's Algorithm 1 is followed by an empty "Table 1:", the number of the paper's real Table 1.
 - **Undefined author macros.** Their names are dropped now ("\\multiauthors\\affiliations" in "The Leaderboard Illusion"), but what they held is still set as loose text in the author block.
 
-The ten bugs found by the fix pass of 2026-10-08 are fixed in the converter ([`experiments/table-emphasis`](../../experiments/table-emphasis/README.md)), measured on 91 papers. **The library has not been reconverted**: the fixes reach a paper when it is converted again. `paperlib symptoms` shows how far that is (`double-mark` on 1,687 papers, `macro-name` on 132, before the run). From a clean library, about two hours:
+**To do: reconvert the library.** The converter fixes of 2026-10-08 ([`experiments/table-emphasis`](../../experiments/table-emphasis/README.md)) were measured on 91 papers and reach a paper only when it is converted again. In the library, from a clean tree, about two hours; the second line checks the result (`double-mark` was on 1,687 papers and `macro-name` on 132 before):
 
 ```sh
 caffeinate -i sh -c 'paperlib reconvert --all --jobs 3 --state ~/.cache/papers/reconvert-emphasis.jsonl; paperlib reconvert --all --jobs 3 --state ~/.cache/papers/reconvert-emphasis.jsonl'
-paperlib symptoms && paperlib symptoms --compare HEAD && paperlib symptoms --katex
+paperlib symptoms; paperlib symptoms --compare HEAD; paperlib symptoms --katex
 ```
 
-What that pass found and is still open:
+Left open by those fixes:
 
 - **Shading in several colours, and heat maps.** Shading is kept as `<mark>` only where the caption refers to it and the table has one shading colour. "Continual Learning via Sparse Memory Finetuning" (Table 1, a heat map of 83 shades) and "Overview of the TREC 2019 deep learning track" (Table 5, grey rows the caption does not mention) are as before. 607 of the 1,390 shaded tables in the cache use more than one colour; a mark that names its colour would cover them, and was not measured.
 - **The `±` of a value and its deviation is not in arXiv's HTML** ("Large language models can accurately predict searcher preferences", Table 1). The two are set apart now ("0.34 0.01"); the sign would have to come from the LaTeX source or the PDF.
 - **22 of 91 citations LaTeXML could not resolve are still "( ?)"** in "Transformer models: an introduction and catalog": the words before them are not found once in the source. Three in a second paper likewise. **Unresolved references** printing as a label (UltraFeedback: "Appendix app_anno") were not looked at.
-- **A table with sub-tables whose PDF caption is not found** keeps arXiv's number, which for ColBERTv2 is the PDF's (Table 5). `caption-numbers.py` still does not find a caption that follows a sub-table's "(b)", so where arXiv's number is wrong it stays wrong.
+- **A caption that follows a sub-table's "(b)" is not found in the PDF** by `caption-numbers.py`, so such a table keeps arXiv's number, right or wrong (right for ColBERTv2's Table 5).
 - **Stacked header cells in Gemma 3 (Table 2)** were not checked; the fix for Gemini 2.5 covers a raised second line only.
-- **A footnote mark printed twice** remains where an author has two `\thanks` with the same mark; `double-mark` flags these too.
-- **"Comment lines inside a code listing become headings"** (Understanding R1-Zero-Like Training) is not a conversion bug: the lines are inside a code fence, and `page-map.py` skips fences. `grep '^#'` on a paper shows them.
+- **`double-mark` also flags an author with two `\thanks` under the same mark**, which is not a fault (10 in the 91 papers).
 
 ## The PDF converter
 
