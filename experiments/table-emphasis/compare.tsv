@@ -1,0 +1,93 @@
+kind	paper	chars before	chars after	bold before	bold after	italic before	italic after	underline before	underline after	double marks before	double marks after	macro names before	macro names after	captions before	captions after	paged headings before	paged headings after	words lost
+named	In-context Autoencoder for Context Compression in a Large Language Model	71346	71451	0	28	66	71	0	0	10	1	0	0	19	19	26	26	3
+named	2 OLMo 2 Furious	242813	243406	10	344	91	150	0	4	37	0	117	3	52	52	104	104	114
+named	DeepSeek-V3.2. Pushing the Frontier of Open Large Language Models	85211	85546	2	61	7	7	0	9	5	0	2	1	16	16	44	44	1
+named	Gemini 2.5. Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next	299343	299712	7	125	41	77	0	0	4	0	1	0	29	29	85	85	59
+named	Gemma 3 Technical Report	94247	95365	0	196	81	82	0	0	3	0	1	0	30	30	28	28	2
+named	Phi-4 Technical Report	120336	120954	0	125	97	119	0	7	10	0	1	1	16	16	53	53	1
+named	Qwen3 Technical Report	177185	186610	0	825	62	100	0	526	1	0	0	0	39	39	35	35	0
+named	The Llama 3 Herd of Models	422728	423785	6	538	288	318	0	0	24	1	18	0	63	63	103	103	20
+named	Transformer models. an introduction and catalog	119691	123643	0	709	7	42	0	0	37	0	0	0	8	8	97	97	0
+named	Continual Learning via Sparse Memory Finetuning	49594	49670	0	17	34	34	0	0	3	1	0	0	9	9	16	16	2
+named	Nemotron-4 340B Technical Report	106029	106456	0	71	51	93	0	14	20	0	0	0	17	17	82	82	0
+named	OpenThoughts. Data Recipes for Reasoning Models	281196	292748	0	636	45	996	0	0	4	0	4	4	86	86	81	81	1
+named	UltraFeedback. Boosting Language Models with Scaled AI Feedback	95214	95957	0	105	61	75	0	17	6	0	0	0	17	17	43	43	1
+named	Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	241712	245236	6	693	127	159	0	0	26	0	1	0	16	16	92	80	26
+named	QLoRA. Efficient Finetuning of Quantized LLMs	104852	105015	0	50	73	76	0	0	3	0	0	0	19	19	67	67	1
+named	The Entropy Mechanism of Reinforcement Learning for Reasoning Language Models	101311	101468	3	49	48	86	0	0	7	0	1	0	16	16	39	39	11
+named	Understanding R1-Zero-Like Training. A Critical Perspective	78195	77610	3	113	35	50	0	0	6	1	2	2	21	21	21	21	2
+named	A Large Scale Search Dataset for Unbiased Learning to Rank	66660	67006	0	71	0	36	0	0	8	1	0	0	13	13	43	43	3
+named	Doubly-Robust Estimation for Correcting Position-Bias in Click Feedback for Unbiased Learning to	194359	197377	0	59	114	426	0	0	2	0	0	0	0	0	76	76	0
+named	ANN-Benchmarks. A Benchmarking Tool for Approximate Nearest Neighbor Algorithms	69127	69183	0	17	32	36	0	0	4	1	0	0	15	15	21	21	2
+named	Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval	76354	76835	0	58	55	66	0	0	4	0	0	0	16	16	19	19	2
+named	BEIR. A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models	117081	118480	0	164	87	140	0	49	3	0	0	0	13	13	31	31	1
+named	BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval	222540	223990	7	187	104	187	0	13	22	0	2	2	52	52	49	49	4
+named	ColBERTv2. Effective and Efficient Retrieval via Lightweight Late Interaction	110374	111203	0	118	76	125	0	4	15	0	0	0	15	15	36	36	6
+named	Dense Text Retrieval based on Pretrained Language Models. A Survey	318447	318607	0	32	769	804	0	0	29	0	0	0	0	0	75	75	1
+named	PLAID. An Efficient Engine for Late Interaction Retrieval	70351	70397	0	4	67	82	0	0	2	0	0	0	0	0	28	28	0
+named	Unsupervised Dense Information Retrieval with Contrastive Learning	95668	96332	0	187	77	94	0	0	2	0	0	0	17	17	42	42	0
+named	Large language models can accurately predict searcher preferences	87350	87504	0	11	50	57	0	0	2	0	0	0	0	0	33	33	0
+named	Overview of the TREC 2019 deep learning track	84500	84552	0	9	57	65	0	0	3	0	0	0	16	16	18	18	0
+named	Decoding billions of integers per second through vectorization	134641	137377	0	63	114	173	0	0	1	0	5	0	19	19	27	27	7
+named	Which Tricks Are Important for Learning to Rank	75549	75952	0	61	47	53	0	0	5	0	0	0	31	31	28	28	1
+random	A Probabilistic Perspective on Model Collapse	189375	189721	0	57	27	86	0	0	1	0	0	0	11	11	44	44	0
+random	Dataset Cartography. Mapping and Diagnosing Datasets with Training Dynamics	88349	88464	43	78	58	107	0	0	24	0	0	0	18	18	28	28	1
+random	How to represent part-whole hierarchies in a neural network	116075	116261	0	8	0	91	0	0	37	0	0	0	5	5	35	35	0
+random	U-Net. Convolutional Networks for Biomedical Image Segmentation	23992	24052	0	13	2	2	0	0	4	0	0	0	6	6	9	9	0
+random	Knowledge Distillation. A Survey	202377	203141	0	7	35	400	0	0	1	0	0	0	21	21	30	30	0
+random	Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference	75103	75214	0	9	15	54	0	0	12	0	0	0	20	20	32	32	0
+random	Batch Normalization Explained	96947	97047	0	8	39	73	0	0	3	0	0	0	11	11	38	38	0
+random	Fixup Initialization. Residual Learning Without Normalization	68784	68875	0	15	59	67	0	0	9	0	0	0	10	10	42	42	3
+random	A disciplined approach to neural network hyper-parameters. Part 1 -- learning rate, batch size	92960	92964	0	1	34	34	0	0	1	0	0	0	18	18	24	24	0
+random	Descending through a Crowded Valley - Benchmarking Deep Learning Optimizers	157850	158255	0	95	505	529	0	0	4	0	0	0	27	27	33	32	1
+random	SOAP, Muon, and Beyond. Pushing LLM Pretraining Scales	113283	113853	0	92	0	5	0	0	8	0	0	0	20	20	42	42	0
+random	A Probabilistic Interpretation of Transformers	45522	45586	0	0	21	52	0	0	1	0	0	0	0	0	32	32	0
+random	Revisiting the Calibration of Modern Neural Networks	93547	93595	0	10	73	77	0	0	2	0	0	0	21	21	25	25	0
+random	Underspecification Presents Challenges for Credibility in Modern Machine Learning	235652	235573	0	61	175	178	0	0	13	0	0	0	30	30	57	57	5
+random	Multiple Randomization Designs. Estimation and Inference with Interference	397778	398072	0	0	6	153	0	0	1	0	0	0	14	14	147	147	0
+random	Flow-GRPO. Training Flow Matching Models via Online RL	89113	89571	0	41	1	83	0	0	1	0	1	0	26	26	47	47	2
+random	Talk like a Graph. Encoding Graphs for Large Language Models	107475	108458	0	141	85	101	0	50	0	0	0	0	15	15	24	24	0
+random	Open Problems in Mechanistic Interpretability	351219	351739	0	113	306	346	0	0	8	1	0	0	6	6	52	52	2
+random	Sparse Autoencoders Find Highly Interpretable Features in Language Models	65946	65951	0	0	28	35	0	1	9	0	0	0	20	20	34	34	2
+random	A Survey on Employing Large Language Models for Text-to-SQL Tasks	158601	158802	0	26	120	167	0	0	0	0	0	0	0	0	45	45	0
+random	ReAct. Synergizing Reasoning and Acting in Language Models	121936	122076	0	58	26	36	0	0	9	0	0	0	15	15	51	51	1
+random	Teaching Language Models to Reason with Tools	123290	124016	42	161	110	117	0	17	2	1	2	2	15	15	54	54	0
+random	Instruction-Following Evaluation for Large Language Models	145347	145377	0	9	215	217	0	0	2	0	0	0	6	6	12	12	2
+random	A Survey of Context Engineering for Large Language Models	598598	599061	0	107	706	717	0	0	0	0	0	0	15	15	130	130	0
+random	LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression	109917	110696	3	90	78	125	0	0	20	0	0	0	18	18	40	40	1
+random	Recall Is Not Enough. A Reader-Context Diagnostic for Budget-Constrained Retrieval-Augmented	83859	84581	0	64	65	66	0	0	3	0	0	0	12	12	39	39	0
+random	GPQA. A Graduate-Level Google-Proof Q&A Benchmark	115500	115816	0	59	44	68	0	0	3	0	0	0	12	12	47	47	0
+random	Measuring Massive Multitask Language Understanding	82941	83205	0	56	22	22	0	4	0	0	0	0	71	71	27	27	0
+random	A Survey on LLM-based Conversational User Simulation	274454	274789	0	46	29	51	0	0	1	0	0	0	15	15	117	117	0
+random	Rethinking Benchmark and Contamination for Language Models with Rephrased Samples	71349	71697	29	93	13	14	0	0	2	0	0	0	12	12	28	28	1
+random	The Coin Flip Judge. Reliability and Bias in LLM-as-a-Judge Evaluation	66441	66649	0	44	15	28	0	0	0	0	0	0	18	18	40	40	0
+random	LongCat-Flash Technical Report	155546	155841	0	54	87	97	0	0	3	0	0	0	19	19	65	65	0
+random	MEMORYLLM. Towards Self-Updatable Large Language Models	66141	66485	0	83	35	45	0	0	2	0	0	0	11	11	45	45	1
+random	HorizonBench. Long-Horizon Personalization with Evolving Preferences	91847	92139	2	69	36	56	0	0	0	0	0	0	13	13	38	38	0
+random	PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users	328318	333969	29	823	470	568	0	2	8	2	0	0	101	101	79	79	4
+random	LMSYS-Chat-1M. A Large-Scale Real-World LLM Conversation Dataset	88299	88561	0	70	39	39	0	0	8	0	0	0	14	14	29	29	2
+random	Scaling Instruction-Finetuned Language Models	223893	224784	0	112	82	129	0	29	13	0	0	0	44	44	53	53	9
+random	Offline RL for Natural Language Generation with Implicit Language Q Learning	146498	146813	0	142	57	58	0	0	5	0	0	0	27	27	66	66	0
+random	P-GenRM. Personalized Generative Reward Model with Test-time User-based Scaling	121029	121631	9	97	56	76	0	5	4	0	0	0	30	30	35	35	3
+random	RewardBench 2. Advancing Reward Model Evaluation	123678	122952	0	108	1	24	0	0	3	0	0	0	17	17	40	40	0
+random	How do language models learn facts. Dynamics, curricula and hallucinations	149536	149606	0	19	52	59	0	0	1	0	2	0	30	30	50	50	2
+random	OLMoTrace. Tracing Language Model Outputs Back to Trillions of Training Tokens	50011	50422	0	71	10	45	0	3	4	0	0	0	9	9	49	49	0
+random	Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters	104749	104996	5	68	44	43	0	0	1	0	1	0	29	29	30	30	1
+random	RouterBench. A Benchmark for Multi-LLM Routing System	68120	68388	0	53	33	47	0	0	8	0	0	0	10	10	30	30	0
+random	Improving User Privacy in Personalized Generation. Client-Side Retrieval-Augmented Modification of	109336	109505	0	31	2	9	0	0	12	0	0	0	0	0	13	13	0
+random	Clio. Privacy-Preserving Insights into Real-World AI Use	169424	169961	0	93	51	149	0	0	22	0	0	0	22	22	75	75	2
+random	Mixed-Type Tabular Data Synthesis with Score-based Diffusion in Latent Space	135768	135998	0	97	43	57	0	0	22	0	1	1	23	23	58	58	3
+random	Don't Stop Pretraining. Adapt Language Models to Domains and Tasks	99758	101528	0	58	64	298	0	0	14	0	0	0	24	24	42	42	0
+random	Gmail Smart Compose. Real-Time Assisted Writing	60547	60667	0	13	51	61	0	0	1	0	0	0	0	0	27	27	0
+random	TWIN. TWo-stage Interest Network for Lifelong User Behavior Modeling in CTR Prediction at Kuaishou	69782	69997	0	26	36	81	0	2	1	0	0	0	0	0	29	29	0
+random	OneRec Technical Report	112486	112329	37	80	209	220	0	3	1	0	1	0	33	33	55	55	5
+random	The Phenomenon of Policy Churn	97574	97811	0	38	37	80	0	0	9	0	0	0	29	29	44	44	0
+random	Dream to Control. Learning Behaviors by Latent Imagination	68818	68969	0	39	71	71	0	0	2	0	0	0	12	12	41	41	1
+random	EmbeddingGemma. Powerful and Lightweight Text Representations	85125	85957	0	128	10	20	0	15	3	0	1	0	13	13	30	30	1
+random	Unsupervised Feature Learning via Non-Parametric Instance-level Discrimination	54604	54818	0	19	28	83	0	0	0	0	0	0	11	11	22	22	0
+random	GR00T N1. An Open Foundation Model for Generalist Humanoid Robots	132483	133101	0	107	92	120	0	0	0	0	1	0	21	21	61	61	1
+random	PaLM-E. An Embodied Multimodal Language Model	86012	86544	0	65	83	119	0	0	0	0	0	0	18	18	24	24	0
+random	Unified Embedding Based Personalized Retrieval in Etsy Search	46020	46196	0	9	33	71	0	0	0	0	0	0	0	0	22	22	0
+random	Rank1. Test-Time Compute for Reranking in Information Retrieval	68168	68522	1	64	56	59	0	0	12	0	0	0	14	14	43	43	0
+random	VaultGemma. A Differentially Private Gemma Model	27120	27154	0	6	23	23	0	0	1	0	1	0	4	4	29	29	1
+total		12118274	12188228	244	9930	7666	11787	0	774	649	10	166	16	1766	1766	4171	4158	328

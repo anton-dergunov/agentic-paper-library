@@ -27,6 +27,8 @@ lacks the content:
   split-title   the title as two lines over a row of "="
   year-citation citations showing only a year ("[2018]")
   input-path    a line that is only a file's path, where \\input was not expanded
+  double-mark   a footnote spliced into its sentence, its mark printed twice
+  macro-name    the name of a macro LaTeXML did not know, left in the text ("\\sans")
 
 --katex instead lists papers of every source with equations KaTeX (VS Code's
 preview) cannot draw, with the number of them and the first error. It needs
@@ -55,6 +57,9 @@ spec = importlib.util.spec_from_file_location("html_to_markdown", SCRIPTS / "htm
 converter = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(converter)
 
+# A control sequence in running text; \\captionof has a symptom of its own.
+MACRO_NAME = re.compile(r"(?<![\\$\w])\\(?!captionof\b)[a-zA-Z]{3,}(?![a-zA-Z{])")
+MATH_OR_CODE = re.compile(r"^```.*?^```|\$\$.*?\$\$|\$[^$\n]+\$|`[^`\n]+`", re.S | re.M)
 NUMBER = re.compile(r"(?<![\w.])\d+\.\d+(?![\w.])")
 CHECKS = {
     "flat-table": lambda t: any(
@@ -78,6 +83,8 @@ CHECKS = {
     "split-title": lambda t: re.search(r"\A\s*\S[^\n]*\\\n[^\n]+\n=+\s*$", t, re.M),
     "year-citation": lambda t: len(re.findall(r"\[\d{4}[a-z]?\]\(#bib", t)) >= 5,
     "input-path": lambda t: re.search(r"^(?:sections?|tex|content|chapters?|src)/[\w./-]+$", t, re.M),
+    "double-mark": lambda t: re.search(r"<sup>([^<]{1,3})</sup><sup>\1</sup>", t),
+    "macro-name": lambda t: len(MACRO_NAME.findall(MATH_OR_CODE.sub(" ", t))) >= 3,
 }
 
 

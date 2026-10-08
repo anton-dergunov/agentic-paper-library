@@ -372,7 +372,93 @@ def checks():
                     '<td class="ltx_eqn_cell ltx_eqn_eqno"><span class="ltx_tag">(1)</span></td></tr></tbody></table>')
     yield "an equation across the columns is a display equation", md.strip().startswith("$$") and r"\tag{1}" in md
 
+    def font(text, classes="ltx_font_bold"):
+        return f'<span class="ltx_text {classes}">{text}</span>'
+
+    note = ('<span class="ltx_note ltx_role_footnote"><sup class="ltx_note_mark">1</sup><span class="ltx_note_outer">'
+            '<span class="ltx_note_content"><sup class="ltx_note_mark">1</sup> <span class="ltx_tag ltx_tag_note">1</span> '
+            "Most samples are short.</span></span></span>")
+    md, _ = convert(f'<h2>{font("2 Method")}</h2><p class="ltx_p">{font("Setup. ")}A {font("new", "ltx_font_italic")} '
+                    f'dataset{note} of {font(font("pairs"))}.</p><p>After.</p>')
+    yield "bold and italics are kept in running text", "**Setup.** A *new* dataset" in md and "**pairs**." in md
+    yield "a bold heading is a plain heading", "## 2 Method\n" in md
+    yield "a footnote follows its paragraph, its mark printed once", (
+        "dataset<sup>1</sup> of" in md and "\n\n<sup>1</sup> Most samples are short.\n\nAfter." in md
+        and md.count("<sup>1</sup>") == 2)
+
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
+                    f'<td class="ltx_td ltx_border_tt">{font("Model")}</td><td class="ltx_td ltx_border_tt">NDCG</td></tr>'
+                    f'<tr class="ltx_tr"><td class="ltx_td ltx_border_t">YetiRank{note}</td>'
+                    f'<td class="ltx_td ltx_border_t">{font("50.75")}</td></tr><tr class="ltx_tr"><td class="ltx_td">LambdaMART</td>'
+                    f'<td class="ltx_td">{font("50.11", "ltx_framed ltx_framed_underline")}</td></tr></table>'
+                    f'<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">{font("Table")} {font("2")}: </span>Results.'
+                    "</figcaption></figure>")
+    yield "bold and underline mark a table's results", "**50.75**" in md and "<u>50.11</u>" in md
+    yield "column titles and the caption's label are not bold", "| Model" in md and "\nTable 2: Results." in md
+    yield "a footnote in a cell follows the table", (
+        "YetiRank<sup>1</sup>" in md and md.index("Table 2: Results.") < md.index("<sup>1</sup> Most samples"))
+
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td ltx_border_tt">Run</td>'
+                    '<td class="ltx_td ltx_border_tt"><span class="ltx_text ltx_font_italic" style="position:relative; bottom:-3.5pt;">'
+                    '<span class="ltx_text">Pro</span><span class="ltx_text" style="position:relative; bottom:12.0pt;">Gemini 2.5'
+                    '</span></span></td></tr><tr class="ltx_tr"><td class="ltx_td ltx_border_t">Kappa</td>'
+                    f'<td class="ltx_td ltx_border_t">{math("0.34")}<span class="ltx_text" style="font-size:90%;">0.01</span></td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">LiveBench</td><td class="ltx_td">70.9'
+                    '<span class="ltx_text" style="--ltx-fg-color:#00E000;">+2.3</span></td></tr></table>')
+    yield "a value and the deviation after it are set apart", "$0.34$ 0.01" in md and "70.9 +2.3" in md
+    yield "a raised line of a column title is read first", "Gemini 2.5 Pro" in md
+
+    md, _ = convert('<div class="ltx_para"><span class="ltx_ERROR undefined">\\DeclareCaptionType</span>'
+                    '<p class="ltx_p">listing[Listing][List of Listings]</p></div>'
+                    '<p class="ltx_p">Data: <span class="ltx_ERROR undefined">\\sans</span>(pretrain), ranked '
+                    '<em class="ltx_emph">edited</em> ¿ <em class="ltx_emph">chosen</em>; ¿Qué tal?</p>')
+    yield "an unknown macro's name is dropped", "sans" not in md and "(pretrain)" in md and "Listing" not in md
+    yield "a lone ¿ is the > it was typed as", "*edited* \\> *chosen*" in md and "¿Qué" in md
+
+    def shaded_table(caption):
+        gray = 'style="--ltx-bg-color:#E6E6E6;"'
+        return ('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
+                '<td class="ltx_td ltx_border_tt">Method</td><td class="ltx_td ltx_border_tt">AUROC</td></tr>'
+                '<tr class="ltx_tr"><td class="ltx_td ltx_border_t">Probe</td><td class="ltx_td ltx_border_t">0.940</td></tr>'
+                f'<tr class="ltx_tr"><td class="ltx_td" {gray}>Prompt</td><td class="ltx_td" {gray}>0.929</td></tr>'
+                '<tr class="ltx_tr"><td class="ltx_td">SAE</td><td class="ltx_td">0.695</td></tr></table>'
+                f'<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 1: </span>{caption}</figcaption></figure>')
+    md, _ = convert(shaded_table("Mean AUROC. Gray indicates non-representation methods."))
+    yield "shading the caption refers to is marked", "<mark>Prompt</mark>" in md and md.count("<mark>") == 1
+    md, _ = convert(shaded_table("Mean AUROC compared across methods."))
+    yield "other shading is dropped", "<mark>" not in md and "Prompt" in md
+
+    def panel(rows, label):
+        body = "".join('<tr class="ltx_tr">' + "".join(f'<td class="ltx_td">{c}</td>' for c in row) + "</tr>" for row in rows)
+        return (f'<figure class="ltx_table ltx_figure_panel"><table class="ltx_tabular">{body}</table>'
+                f'<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">({label}) </span>Panel.</figcaption></figure>')
+    md, _ = convert('<figure class="ltx_table"><div class="ltx_flex_figure">'
+                    + panel([["", "coding", "bits"], ["BP128", "1700", "17"], ["PFOR", "380", "16"], ["BP32", "790", "15"]], "a")
+                    + panel([["coding", "bits"], ["1800", "7.0"], ["440", "6.8"], ["840", "5.8"]], "b")
+                    + '</div><figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 4: </span>Speed.'
+                    "</figcaption></figure>")
+    yield "a panel without row labels gets its neighbour's", bool(
+        __import__("re").search(r"\| PFOR +\| 440 +\| 6\.8", md)) and md.count("BP32") == 2
+
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td ltx_border_tt">Task</td>'
+                    '<td class="ltx_td ltx_border_tt">Domain</td><td class="ltx_td ltx_border_tt">Size</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td ltx_border_t" rowspan="2">Retrieval</td><td class="ltx_td ltx_border_t">Web</td>'
+                    '<td class="ltx_td ltx_border_t">502</td></tr><tr class="ltx_tr"><td class="ltx_td">News</td><td class="ltx_td">57</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td"></td><td class="ltx_td">Wiki</td><td class="ltx_td">176</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td" rowspan="2">QA</td><td class="ltx_td">Web</td><td class="ltx_td">78</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">Books</td><td class="ltx_td">9</td></tr></table>')
+    yield "a row label spanning a group takes the group's last row", (
+        '<td rowspan="3">Retrieval</td>' in md and "<td></td>" not in md and "<td>Wiki</td>" in md)
+
     h2m = load("html-to-markdown")
+    cited = h2m.unknown_citations(
+        "<p>introduced by Google researchers in 2017 ( ?). The encoder-decoder models ( ?) came first.</p>",
+        r"introduced by Google researchers in 2017 \protect~\shortcite{vaswani2017attention}. Nothing else.",
+        "@article{vaswani2017attention, author={Vaswani, Ashish and Shazeer, Noam and Parmar, Niki}, "
+        "title={Attention is all you need}, year={2017}}")
+    yield "a citation with no key left is found in the LaTeX source", (
+        "(Vaswani et al. 2017)" in cited and "models ( ?)" in cited)
+
     tex = r"and 17 widely used \emph{agentic} benchmarks (Table \ref{tab:all}). As shown in Figure~\ref{fig:flow}, we then"
     yield "an empty reference is found in the LaTeX source", (
         h2m.label_in_source("17 widely used <em>agentic</em> benchmarks (Table ", tex) == "tab:all"
@@ -405,6 +491,40 @@ def checks():
     yield "captions and their links are renumbered from the PDF", (
         "Figure 2: Agreement" in out and "Table 7: Category-wise" in out
         and 'Table [7](#S4.T8 "Table 7 ‣ 4 Results")' in out and "[Figure\xa07]" in out)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
+        doc = pymupdf.open()
+        page = doc.new_page()
+        page.insert_text((72, 100), "Table 7: Zero-shot evaluation results on the dev sets of LoTTE.")
+        doc.save(pdf_file)
+        text = ("Table 5: Zero-shot evaluation results. Sub-table (a) reports BEIR.\n\n"
+                "Table 7: Zero-shot evaluation results on the dev sets of LoTTE.\n")
+        md_file.write_text(text, encoding="utf-8")
+        subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
+        out = md_file.read_text(encoding="utf-8")
+    yield "a caption does not take the number another caption keeps", out == text
+
+    with tempfile.TemporaryDirectory() as tmp:
+        pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
+        doc = pymupdf.open()
+        for number, text in enumerate(("1 Introduction", "2 Method", "A Proofs"), 1):
+            page = doc.new_page()
+            page.insert_text((72, 100), text)
+            if number == 3:
+                page.insert_text((72, 300), "1. Basic properties")
+        doc.set_toc([[1, "1 Introduction", 1], [1, "2 Method", 2], [1, "A Proofs", 3]])
+        doc.save(pdf_file)
+        md_file.write_text("## 1 Introduction\n\n## 2 Method\n\n## Appendix A Proofs\n\n#### 1. Basic properties\n",
+                           encoding="utf-8")
+        subprocess.run([sys.executable, SCRIPTS / "page-map.py", pdf_file, md_file], check=True, capture_output=True)
+        out = md_file.read_text(encoding="utf-8")
+    yield "a numbered step in an appendix is not section 1", (
+        "## 2 Method (p. 2)" in out and "#### 1. Basic properties (p. 3)" in out)
+
+    paperlib = load("paperlib")
+    view = paperlib.read_view({"title": "T", "source": "html"}, "N = 10<sup>4</sup>, x<sub>i</sub>, a<sup>†‡</sup>\n")
+    yield "the read view keeps superscripts apart", "10^4" in view and "x_i" in view and "a^{†‡}" in view
 
     pdf = load("pdf-to-markdown")
     yield "PDF heading levels from numbering", [

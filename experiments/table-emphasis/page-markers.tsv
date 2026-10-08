@@ -1,0 +1,91 @@
+paper	before	after
+Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity	## Appendix C Factor Analysis (p. 17)	## Appendix C Factor Analysis (p. 18)
+Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity	## Appendix F Open-Source Development and AI Tooling Primers (p. 34)	## Appendix F Open-Source Development and AI Tooling Primers (p. 35)
+Descending through a Crowded Valley - Benchmarking Deep Learning Optimizers	##### 1. Assessing the progress in deep learning optimization. (p. 1)	##### 1. Assessing the progress in deep learning optimization. (p. 2)
+Descending through a Crowded Valley - Benchmarking Deep Learning Optimizers	##### 2. Insights from more than $\mathbf{50}$,$\mathbf{000}$ optimization runs. (p. 3)	##### 2. Insights from more than $\mathbf{50}$,$\mathbf{000}$ optimization runs.
+Descending through a Crowded Valley - Benchmarking Deep Learning Optimizers	##### 3. An open-source baseline for future optimizer benchmarks and meta-learning approaches. (p. 5)	##### 3. An open-source baseline for future optimizer benchmarks and meta-learning approaches. (p. 2)
+Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability	##### 1. With cross-entropy loss, the sharpness often drops at the end of training (p. 1)	##### 1. With cross-entropy loss, the sharpness often drops at the end of training (p. 17)
+Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability	##### 2. For shallow or wide networks, or on simple datasets, sharpness doesn’t rise *that* much (p. 2)	##### 2. For shallow or wide networks, or on simple datasets, sharpness doesn’t rise *that* much (p. 17)
+Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability	##### 3. Sharpness sometimes drops at the beginning of training (p. 3)	##### 3. Sharpness sometimes drops at the beginning of training (p. 17)
+Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability	##### 4. With batch normalization, need to look at sharpness *between* iterates (p. 8)	##### 4. With batch normalization, need to look at sharpness *between* iterates (p. 17)
+Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability	##### 5. With non-differentiable components, instability sometimes begins when the sharpness is a bit *less than* $2/\eta$ (p. 10)	##### 5. With non-differentiable components, instability sometimes begins when the sharpness is a bit *less than* $2/\eta$
+Laplace Redux -- Effortless Bayesian Deep Learning	### Four Components of Scalable Laplace Approximations for Deep Neural Networks	### Four Components of Scalable Laplace Approximations for Deep Neural Networks (p. 3)
+Laplace Redux -- Effortless Bayesian Deep Learning	#### 1  Inference over all Weights or Subsets of Weights (p. 1)	#### 1  Inference over all Weights or Subsets of Weights (p. 3)
+Laplace Redux -- Effortless Bayesian Deep Learning	#### 2  Hessian Approximations and Their Factorizations (p. 2)	#### 2  Hessian Approximations and Their Factorizations (p. 4)
+Laplace Redux -- Effortless Bayesian Deep Learning	#### 3  Hyperparameter Tuning (p. 5)	#### 3  Hyperparameter Tuning (p. 4)
+Laplace Redux -- Effortless Bayesian Deep Learning	#### 4  Approximate Predictive Distribution (p. 6)	#### 4  Approximate Predictive Distribution (p. 5)
+Laplace Redux -- Effortless Bayesian Deep Learning	### 1  Inference over Subsets of Weights (p. 1)	### 1  Inference over Subsets of Weights (p. 16)
+Laplace Redux -- Effortless Bayesian Deep Learning	### 2  Hessian Factorization (p. 2)	### 2  Hessian Factorization (p. 17)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### Diagonal	##### Diagonal (p. 17)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### KFAC	##### KFAC (p. 18)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### Low-rank block-diagonal	##### Low-rank block-diagonal (p. 18)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### Low-rank	##### Low-rank (p. 19)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### Functional	##### Functional (p. 19)
+Laplace Redux -- Effortless Bayesian Deep Learning	### 3  Hyperparameter Tuning (p. 5)	### 3  Hyperparameter Tuning (p. 19)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### *Post-Hoc*	##### *Post-Hoc* (p. 19)
+Laplace Redux -- Effortless Bayesian Deep Learning	##### *Online*	##### *Online* (p. 19)
+Laplace Redux -- Effortless Bayesian Deep Learning	### 4  Approximate Predictive Distribution (p. 6)	### 4  Approximate Predictive Distribution (p. 20)
+Simple and Effective Masked Diffusion Language Models	## Acknowledgments and Disclosure of Funding	## Acknowledgments and Disclosure of Funding (p. 11)
+Simple and Effective Masked Diffusion Language Models	## References	## References (p. 11)
+Simple and Effective Masked Diffusion Language Models	##### Case 1.	##### Case 1. (p. 18)
+Simple and Effective Masked Diffusion Language Models	##### Case 2.	##### Case 2. (p. 18)
+Simple and Effective Masked Diffusion Language Models	##### Case 1.	##### Case 1. (p. 18)
+Simple and Effective Masked Diffusion Language Models	##### Case 2.	##### Case 2. (p. 18)
+Simple and Effective Masked Diffusion Language Models	##### Case 1:	##### Case 1: (p. 20)
+Simple and Effective Masked Diffusion Language Models	##### Case 2:	##### Case 2: (p. 20)
+Simple and Effective Masked Diffusion Language Models	##### 1. Case $({\mathbf{y}}^{\prime}={\mathbf{x}},{\mathbf{y}}={\mathbf{x}})$: (p. 1)	##### 1. Case $({\mathbf{y}}^{\prime}={\mathbf{x}},{\mathbf{y}}={\mathbf{x}})$:
+Simple and Effective Masked Diffusion Language Models	##### 2. Case $({\mathbf{y}}^{\prime}={\mathbf{m}},{\mathbf{y}}\in\mathcal{V}-\{{\mathbf{m}}\})$: (p. 2)	##### 2. Case $({\mathbf{y}}^{\prime}={\mathbf{m}},{\mathbf{y}}\in\mathcal{V}-\{{\mathbf{m}}\})$:
+Simple and Effective Masked Diffusion Language Models	##### 3. Case $({\mathbf{y}}^{\prime}={\mathbf{m}},{\mathbf{y}}={\mathbf{m}})$: (p. 3)	##### 3. Case $({\mathbf{y}}^{\prime}={\mathbf{m}},{\mathbf{y}}={\mathbf{m}})$:
+Simple and Effective Masked Diffusion Language Models	##### 4. Case $({\mathbf{y}}^{\prime}={\mathbf{x}},{\mathbf{y}}\in\mathcal{V}-\{{\mathbf{x}}\})$: (p. 6)	##### 4. Case $({\mathbf{y}}^{\prime}={\mathbf{x}},{\mathbf{y}}\in\mathcal{V}-\{{\mathbf{x}}\})$:
+Simple and Effective Masked Diffusion Language Models	##### 5. Case $({\mathbf{y}}^{\prime}\in\mathcal{V}-\{{\mathbf{m}},{\mathbf{x}}\},{\mathbf{y}}\in\{{\mathbf{m}},{\mathbf{x}}\})$: (p. 6)	##### 5. Case $({\mathbf{y}}^{\prime}\in\mathcal{V}-\{{\mathbf{m}},{\mathbf{x}}\},{\mathbf{y}}\in\{{\mathbf{m}},{\mathbf{x}}\})$:
+Grad-CAM. Visual Explanations from Deep Networks via Gradient-based Localization	### 1. Grad-CAM for different layers (p. 1)	### 1. Grad-CAM for different layers (p. 14)
+Grad-CAM. Visual Explanations from Deep Networks via Gradient-based Localization	### 2. Design choices (p. 3)	### 2. Design choices (p. 14)
+Grad-CAM. Visual Explanations from Deep Networks via Gradient-based Localization	### 1. Image Classification (p. 1)	### 1. Image Classification (p. 14)
+Grad-CAM. Visual Explanations from Deep Networks via Gradient-based Localization	### 2. Image Captioning (p. 3)	### 2. Image Captioning (p. 15)
+Grad-CAM. Visual Explanations from Deep Networks via Gradient-based Localization	### 3. Visual Question Answering (VQA) (p. 4)	### 3. Visual Question Answering (VQA) (p. 15)
+Sanity Checks for Saliency Maps	##### Linear Model.	##### Linear Model. (p. 9)
+Sanity Checks for Saliency Maps	##### 1 Layer Sum-Pool Conv Model. (p. 1)	##### 1 Layer Sum-Pool Conv Model. (p. 9)
+Progress measures for grokking via mechanistic interpretability	##### 5 Digit Addition (p. 8)	##### 5 Digit Addition (p. 30)
+Progress measures for grokking via mechanistic interpretability	##### Repeated subsequence	##### Repeated subsequence (p. 31)
+Progress measures for grokking via mechanistic interpretability	##### Skip trigram	##### Skip trigram (p. 31)
+Natural Emergent Misalignment from Reward Hacking in Production RL	## A Historical Analysis of Programming Test Circumvention Techniques (p. 49)	## A Historical Analysis of Programming Test Circumvention Techniques (p. 66)
+Terminal-Bench. Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces	#### 1. Outcome Validity. (p. 2)	#### 1. Outcome Validity. (p. 27)
+Terminal-Bench. Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces	#### 2. Task Validity. (p. 2)	#### 2. Task Validity. (p. 28)
+Terminal-Bench. Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces	#### 3. Benchmark Reporting. (p. 6)	#### 3. Benchmark Reporting. (p. 28)
+Terminal-Bench. Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces	#### Overall.	#### Overall. (p. 28)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	### Model Proof	### Model Proof (p. 30)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 1. Circumcenter $P$ of $\triangle ACD$ (p. 4)	#### 1. Circumcenter $P$ of $\triangle ACD$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 2. Second intersections $E,F$ and midpoint $S$ of $EF$ (p. 4)	#### 2. Second intersections $E,F$ and midpoint $S$ of $EF$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 3. Unit vectors along and perpendicular to $AP$ (p. 6)	#### 3. Unit vectors along and perpendicular to $AP$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 4. Orthocenter $H$ of $\triangle PMN$ (p. 9)	#### 4. Orthocenter $H$ of $\triangle PMN$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 5. Computation of $\beta=(S-B)\cdot\mathbf{n}$ and $\gamma=(S-H)\cdot\mathbf{n}$ (p. 16)	#### 5. Computation of $\beta=(S-B)\cdot\mathbf{n}$ and $\gamma=(S-H)\cdot\mathbf{n}$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 6. Expression for $|S-B|^{2}$ (p. 17)	#### 6. Expression for $|S-B|^{2}$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 7. Circumcenter $O$ of $\triangle BEF$ and the tangency condition (p. 19)	#### 7. Circumcenter $O$ of $\triangle BEF$ and the tangency condition
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 1. Basic properties (p. 4)	#### 1. Basic properties (p. 43)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 2. Behaviour on primes (p. 4)	#### 2. Behaviour on primes (p. 43)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 3. When $S$ is infinite (p. 6)	#### 3. When $S$ is infinite
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 4. Odd primes in $S$ force $S$ to be infinite (p. 9)	#### 4. Odd primes in $S$ force $S$ to be infinite
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 5. Case $S=\varnothing$ (p. 16)	#### 5. Case $S=\varnothing$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 6. Case $S=\{2\}$ (p. 17)	#### 6. Case $S=\{2\}$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	##### 6.1 Odd arguments (p. 17)	##### 6.1 Odd arguments (p. 44)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	##### 6.2 Even arguments (p. 18)	##### 6.2 Even arguments (p. 44)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 7. Sharpness (p. 19)	#### 7. Sharpness (p. 45)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	### Model Proof	### Model Proof (p. 47)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 1. Preliminaries (p. 4)	#### 1. Preliminaries (p. 47)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 2. Two key lemmas (p. 4)	#### 2. Two key lemmas (p. 47)
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 3. All terms must be multiples of $6$ (p. 6)	#### 3. All terms must be multiples of $6$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 4. Reduction to the form $6M$ (p. 9)	#### 4. Reduction to the form $6M$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 5. Characterising admissible $M_{1}=a_{1}/6$ (p. 16)	#### 5. Characterising admissible $M_{1}=a_{1}/6$
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	#### 6. Final answer (p. 17)	#### 6. Final answer (p. 51)
+Universal and Transferable Adversarial Attacks on Aligned Language Models	#### 1 behavior/string, 1 model. (p. 2)	#### 1 behavior/string, 1 model. (p. 10)
+Evaluating Sakana's AI Scientist. Bold Claims, Mixed Results, and a Promising Future	#### 1. Goal and Research Direction (p. 2)	#### 1. Goal and Research Direction (p. 4)
+Evaluating Sakana's AI Scientist. Bold Claims, Mixed Results, and a Promising Future	#### 2. Experimental Pipeline (p. 4)	#### 2. Experimental Pipeline (p. 5)
+Evaluating Sakana's AI Scientist. Bold Claims, Mixed Results, and a Promising Future	#### 3. Seed Ideas (p. 10)	#### 3. Seed Ideas (p. 5)
+Evaluating Sakana's AI Scientist. Bold Claims, Mixed Results, and a Promising Future	#### 4. LaT<span class="smallcaps">e</span>XTemplates (p. 14)	#### 4. LaT<span class="smallcaps">e</span>XTemplates
+MTEB. Massive Text Embedding Benchmark	#### 1. Long document datasets (p. 1)	#### 1. Long document datasets (p. 17)
+MTEB. Massive Text Embedding Benchmark	#### 2. Task imbalance (p. 2)	#### 2. Task imbalance (p. 17)
+MTEB. Massive Text Embedding Benchmark	#### 3. Multinguality (p. 2)	#### 3. Multinguality (p. 17)
+MTEB. Massive Text Embedding Benchmark	#### 4. Additional modalities (p. 5)	#### 4. Additional modalities (p. 17)
+GME. Improving Universal Multimodal Retrieval by Multimodal LLMs	#### 1. Single Image Limit (p. 1)	#### 1. Single Image Limit (p. 19)
+GME. Improving Universal Multimodal Retrieval by Multimodal LLMs	#### 2. Single Language Limit (p. 2)	#### 2. Single Language Limit (p. 19)
+ViDoRe V3. A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World	#### 1. A Human Annotation Methodology for Realistic Queries (p. 1)	#### 1. A Human Annotation Methodology for Realistic Queries (p. 2)

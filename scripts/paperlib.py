@@ -175,6 +175,10 @@ def read_view(meta, body, appendix=False):
             body, after = body + (after[following.start():] if following else ""), ""
     body = re.sub(r"!\[[^\]]*\]\([^)]*\)", "[figure]", body)
     body = re.sub(r"\]\((#|https?://)[^)]*\)", "]", body)
+    # A superscript without its tag reads as a digit of the number: "10<sup>4</sup>" as 104.
+    for tag, mark in (("sup", "^"), ("sub", "_")):
+        body = re.sub(rf"<{tag}>((?:(?!</?{tag}>)[^\n])+)</{tag}>",
+                      lambda m: mark + (m.group(1) if len(m.group(1)) == 1 else f"{{{m.group(1)}}}"), body)
     body = re.sub(r"</?(span|sup|sub|a|div)\b[^>]*>", "", body)
     body = re.sub(r' (class|style|id)="[^"]*"', "", body)
     body = re.sub(r"\n{3,}", "\n\n", body).strip()

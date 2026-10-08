@@ -36,6 +36,15 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
 10. Cross-references LaTeXML could not resolve keep their label as text.
 11. The warnings a conference style file typesets when a paper changed its
     page layout are dropped (see drop_style_warnings).
+12. Bold, italics and underlining are kept, and each footnote follows the
+    paragraph or table it annotates (both in arxiv-html.lua). Cell shading
+    is kept as <mark> where the caption refers to it (see mark_shading).
+13. The names of macros LaTeXML did not know are dropped, a value and the
+    deviation printed small after it are set apart, and a column title's
+    raised line is read first (see drop_undefined_macros, tidy_cells).
+14. A table panel gets the row labels it shares with the panel beside it,
+    and a row label spanning a group of rows takes the group's last row
+    (see share_panel_labels, extend_rowspans).
 """
 
 import base64
@@ -44,6 +53,7 @@ import gzip
 import html
 import html.entities
 import io
+import os
 import re
 import subprocess
 import sys
@@ -539,15 +549,20 @@ MISSING_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*">LABEL:
 # The same, with not even the label left: "(Table )".
 EMPTY_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*"[^>]*>\s*</span>')
 TEX_REF = r"\\(?:ref|cref|Cref|autoref|vref)\*?\{([^}]+)\}"
+TEX_CITE = r"\\[a-zA-Z]*cite[a-zA-Z]*\*?(?:\[[^\]]*\])*\{([^}]+)\}"
+# A citation command LaTeXML did not know leaves no key at all: "( ?)".
+UNKNOWN_CITATION = re.compile(r"\(\s\?\)|\[\s?\?\]")
 # What may stand between two words of a sentence in its LaTeX source.
-TEX_GAP = r"(?:[^a-zA-Z0-9\\]|\\[a-zA-Z]+\*?|\\.)*"
+TEX_GAP = r"(?:[^a-zA-Z0-9\\]|\\(?:begin|end|label)\{[^}]*\}|\\[a-zA-Z]+\*?|\\.)*"
 
 
-def label_in_source(before, tex):
-    """The label of the \\ref that follows the words `before` in the LaTeX source."""
+def label_in_source(before, tex, command=TEX_REF, least=3):
+    """The label of the \\ref (or the keys of the \\cite, given TEX_CITE) that
+    follows the words `before` in the LaTeX source: the last five of them,
+    then fewer, down to `least`."""
     said = plain_words(re.sub(r"<math\b.*?</math>", " ", before, flags=re.S))[-5:]
-    while len(said) >= 3:
-        found = {m.group(1) for m in re.finditer(TEX_GAP.join(map(re.escape, said)) + TEX_GAP + TEX_REF, tex, re.I)}
+    while len(said) >= least:
+        found = {m.group(1) for m in re.finditer(TEX_GAP.join(map(re.escape, said)) + TEX_GAP + command, tex, re.I)}
         if len(found) == 1:
             return found.pop()
         if found:
@@ -591,10 +606,15 @@ def unresolved_citations(article, page):
     """
     keys = list(dict.fromkeys(k.strip() for k in MISSING_CITATION.findall(article)))
     labels_missing = MISSING_LABEL.search(article) or EMPTY_LABEL.search(article)
-    if not keys and not labels_missing:
+    unknown = UNKNOWN_CITATION.search(article)
+    if not keys and not labels_missing and not unknown:
         return article
     version = paper_version(page)
     files = source_files(version) if version else {}
+
+    if unknown:
+        article = unknown_citations(article, latex_source(version) or "" if version else "",
+                                    "\n".join(text for name, text in files.items() if name.endswith(".bib")))
 
     if keys:
         bib = "\n".join(text for name, text in files.items() if name.endswith(".bib"))
@@ -641,6 +661,31 @@ def unresolved_citations(article, page):
         article = EMPTY_LABEL.sub(from_source, article)
         article = MISSING_LABEL.sub(lambda m: number(m.group(1)), article)
     return article
+
+
+def unknown_citations(article, tex, bib):
+    """Name the papers behind each "( ?)": the keys of the \\cite that follows the
+    same words in the LaTeX source, labelled from the paper's .bib. One whose
+    words are not found once in the source, or whose keys the .bib lacks, stays."""
+    if not tex or not bib:
+        return article
+    cited = {}
+    for m in UNKNOWN_CITATION.finditer(article):
+        # From the end of a tag, so that no attribute is taken for words. Two
+        # words are enough for a catalogue's "BART ... Reference: ( ?)".
+        before = re.sub(r"\A[^<]*>", "", article[max(0, m.start() - 1500):m.start()])
+        found = label_in_source(before, tex, TEX_CITE, least=2)
+        if found:
+            cited[m.start()] = [k.strip() for k in found.split(",")]
+    labels, _ = citations_from_bibtex(list(dict.fromkeys(k for keys in cited.values() for k in keys)), bib)
+
+    def name(m):
+        keys = cited.get(m.start())
+        if not keys or any(k not in labels for k in keys):
+            return m.group(0)
+        return m.group(0)[0] + "; ".join(labels[k] for k in keys) + m.group(0)[-1]
+
+    return UNKNOWN_CITATION.sub(name, article)
 
 
 def plain_words(text):
@@ -913,6 +958,269 @@ def drop_invisible(article):
     return re.sub(r'<span\b[^>]*\bclass="ltx_p"[^>]*>\s*-?\d+(?:\.\d+)?pt\s*</span>', "", article)
 
 
+CELL = re.compile(r"<(t[dh])\b[^>]*>.*?</\1\s*>", re.S)
+# A span with a size or colour of its own, set straight after a number.
+ANNOTATION = re.compile(r'(\d|</math>)(<span\b[^>]*\bstyle="[^"]*(?:font-size:\s*\d+%|--ltx-fg-color)[^"]*"[^>]*>)(?=[-+−±↑↓(]?\d)')
+RAISED = re.compile(r'(<span\b[^>]*>[^<]*</span>)\s*'
+                    r'(<span\b[^>]*\bstyle="[^"]*position:relative;\s*bottom:(\d+(?:\.\d+)?)pt[^"]*"[^>]*>[^<]*</span>)')
+# \captionof stays: caption-numbers.py gives the caption after it its number.
+UNDEFINED_MACRO = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR undefined"[^>]*>\\(?!captionof\b)[a-zA-Z@]+\*?</span>')
+CAPTION_TYPE = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR undefined"[^>]*>\\DeclareCaptionType</span>\s*'
+                          r'<p\b[^>]*>[^<]*\[[^<]*</p>')
+
+
+def tidy_cells(article):
+    """Set apart what LaTeX placed with a size, a colour or a raise.
+
+    A deviation or a gain printed small or in colour after a table's value
+    arrives with no space between them ("0.340.01", "70.9+2.3"); it gets one.
+    A column title set on two lines arrives lower line first, the upper one
+    raised above it ("Pro" then "Gemini 2.5"); the raised line goes first.
+    """
+    article = CELL.sub(lambda cell: ANNOTATION.sub(r"\1 \2", cell.group(0)), article)
+    return RAISED.sub(lambda m: f"{m.group(2)} {m.group(1)}" if float(m.group(3)) >= 8 else m.group(0), article)
+
+
+def drop_undefined_macros(article):
+    """Remove the names of macros LaTeXML did not know ("\\sans", "\\rotate").
+
+    It prints the name where the macro stood and then sets the arguments as
+    text, so only the name goes. \\DeclareCaptionType in the body goes with
+    the paragraph of its arguments ("listing[Listing][List of Listings]").
+    Run after the steps that read such a macro (forest_trees, unresolved_refs).
+    """
+    return UNDEFINED_MACRO.sub("", CAPTION_TYPE.sub("", article))
+
+
+def fix_text_encoding(article):
+    """A ">" or "<" typed in text comes out as "¿" or "¡" (the text font's
+    encoding). Standing alone they are the comparison; before a letter they
+    are Spanish and stay."""
+    article = re.sub(r"(?<=[\s>])¿(?=[\s<])", "&gt;", article)
+    return re.sub(r"(?<=[\s>])¡(?=[\s<])", "&lt;", article)
+
+
+BACKGROUND = re.compile(r"--ltx-bg-color:\s*#[0-9A-Fa-f]{6}")
+SHADED_SPAN = re.compile(r"<span\b[^>]*--ltx-bg-color[^>]*>(.*?)</span>", re.S)
+TABLE_FLOAT = re.compile(r'<figure\b[^>]*\bclass="[^"]*\bltx_table\b[^"]*"[^>]*>')
+TABLE_ROW = re.compile(r"<tr\b[^>]*>(.*?)</tr\s*>", re.S)
+TABLE_CELL = re.compile(r"<(t[dh])\b([^>]*)>(.*?)</\1\s*>", re.S)
+NAMES_SHADING = re.compile(r"colou?r|shad|highlight|gr[ae]y|background|\b(?:green|red|blue|yellow|orange|purple|pink|cyan)\b")
+# Which shading is marked: "caption" (where the caption refers to it; the rule
+# in use), "all" (wherever it picks out some rows or cells) or "none". The
+# other two are for measuring the rule (experiments/table-emphasis).
+SHADING = os.environ.get("PAPERLIB_SHADING", "caption")
+
+
+def cell_text(fragment):
+    return re.sub(r"<[^>]+>", "", fragment).strip()
+
+
+def shaded_cells(float_html):
+    """A table float's rows as lists of (start, end, shaded) for each cell's
+    content. A cell is shaded when it has a background colour, or nearly all
+    its text sits in a span that has one."""
+    rows = []
+    for row in TABLE_ROW.finditer(float_html):
+        cells = []
+        for cell in TABLE_CELL.finditer(row.group(1)):
+            text = cell_text(cell.group(3))
+            inner = "".join(cell_text(span) for span in SHADED_SPAN.findall(cell.group(3)))
+            shaded = bool(BACKGROUND.search(cell.group(2))) or (bool(text) and len(inner) >= 0.8 * len(text))
+            cells.append((row.start(1) + cell.start(3), row.start(1) + cell.end(3), shaded))
+        if cells:
+            rows.append(cells)
+    return rows
+
+
+def shading_pattern(rows):
+    """What a table's shading picks out, from rows of booleans: "whole table",
+    "header row", "alternate rows", "some rows", "whole columns", "some cells"
+    or "many cells" (over a third). A row is shaded when all its cells are, or
+    all but its label."""
+    total, shaded = sum(map(len, rows)), sum(map(sum, rows))
+    if shaded == total:
+        return "whole table"
+    full = [all(r) or (len(r) > 1 and all(r[1:])) for r in rows]
+    if full == [any(r) for r in rows]:
+        at = [i for i, f in enumerate(full) if f]
+        if at == [0]:
+            return "header row"
+        if len(at) >= 3 and all(b - a == 2 for a, b in zip(at, at[1:])):
+            return "alternate rows"
+        return "some rows"
+    width = max(map(len, rows))
+    columns = [[r[c] for r in rows if len(r) == width] for c in range(width)]
+    if sum(sum(c) for c in columns if sum(c) >= 0.8 * len(c)) >= 0.9 * shaded:
+        return "whole columns"
+    return "some cells" if shaded <= total / 3 else "many cells"
+
+
+def mark_shading(article, rule=None):
+    """Keep the cell shading that says something, as <mark>.
+
+    Markdown has no cell colour, and most shading says nothing a reader of
+    the whole paper lacks: a header, every other row, the paper's own method.
+    It is kept only where the caption refers to it ("gray rows are ..."),
+    since the caption would otherwise point at nothing: a shaded cell's
+    content is marked, a row shaded from end to end on its first cell only,
+    a shaded column on its top cell. A table shaded in several colours is
+    left alone, as one mark cannot say which colour a cell had.
+    """
+    rule = rule or SHADING
+    if rule == "none":
+        return article
+    out, pos = [], 0
+    for m in TABLE_FLOAT.finditer(article):
+        end = balanced_end(article, m.start(), "figure")
+        if m.start() < pos or end is None:
+            continue
+        body = article[m.start():end]
+        rows = shaded_cells(body) if "--ltx-bg-color" in body else []
+        if not any(shaded for row in rows for _, _, shaded in row):
+            continue
+        flags = [[shaded for _, _, shaded in row] for row in rows]
+        pattern = shading_pattern(flags)
+        caption = cell_text(" ".join(re.findall(r"<figcaption\b.*?</figcaption>", body, re.S))).lower()
+        named = bool(NAMES_SHADING.search(caption))
+        if rule == "caption":
+            colours = {c.lower() for c in BACKGROUND.findall(body)}
+            wanted = (named and len(colours) == 1
+                      and pattern in ("some rows", "some cells", "many cells", "whole columns"))
+        else:
+            wanted = pattern in ("some rows", "some cells", "many cells")
+        if not wanted:
+            continue
+        marks = []
+        if pattern == "whole columns":
+            width = max(map(len, rows))
+            for c in range(width):
+                column = [row[c] for row in rows if len(row) == width]
+                if sum(shaded for _, _, shaded in column) >= 0.8 * len(column):
+                    marks.append(column[0][:2])
+        else:
+            for row, row_flags in zip(rows, flags):
+                if len(row) > 1 and all(row_flags[1:]):
+                    marks.append(row[0][:2])
+                else:
+                    marks += [(a, b) for a, b, shaded in row if shaded]
+        for a, b in sorted(marks, reverse=True):
+            if cell_text(body[a:b]):
+                body = f"{body[:a]}<mark>{body[a:b]}</mark>{body[b:]}"
+        out.append(article[pos:m.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+FIRST_CELL = re.compile(r"\s*<(t[dh])\b([^>]*)>(.*?)</\1\s*>", re.S)
+
+
+def extend_rowspans(article):
+    """Let a row label that spans a group of rows take the group's last row too.
+
+    A \\multirow counted one row short leaves the group's last row starting
+    with an empty cell, which reads as a row belonging to no group. The
+    spanning cell is extended over it and the empty cell dropped.
+    """
+    out, pos = [], 0
+    for table in re.finditer(r"<table\b", article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        if 'rowspan="' not in body or body.count("<table") > 1:
+            continue
+        rows = [[m.start(1), m.end(1)] for m in TABLE_ROW.finditer(body)]
+        edits = []  # (start, end, replacement), in the table
+        i = 0
+        while i < len(rows):
+            first = FIRST_CELL.match(body, rows[i][0], rows[i][1])
+            span = first and re.search(r'\browspan="(\d+)"', first.group(2))
+            if not span or not cell_text(first.group(3)):
+                i += 1
+                continue
+            n = int(span.group(1))
+            while i + n < len(rows):
+                after = FIRST_CELL.match(body, rows[i + n][0], rows[i + n][1])
+                if not after or "span=" in after.group(2) or cell_text(after.group(3)) or "<img" in after.group(3):
+                    break
+                # A row with one cell filled is a heading for what follows, not the group's last row.
+                if sum(bool(cell_text(c.group(3))) for c in TABLE_CELL.finditer(body, *rows[i + n])) < 2:
+                    break
+                edits.append((after.start(), after.end(), ""))
+                n += 1
+            if n != int(span.group(1)):
+                at = first.start(2) + span.start(1)
+                edits.append((at, at + len(span.group(1)), str(n)))
+            i += n
+        if not edits:
+            continue
+        for a, b, text in sorted(edits, reverse=True):
+            body = body[:a] + text + body[b:]
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+PANEL = re.compile(r'<figure\b[^>]*\bclass="[^"]*\bltx_figure_panel\b[^"]*"[^>]*>')
+
+
+def panel_rows(table):
+    """A panel table's rows as lists of whole cells, or None when a cell spans rows or columns."""
+    if re.search(r'\b(?:row|col)span="', table):
+        return None
+    return [(row.start(1), [cell.group(0) for cell in TABLE_CELL.finditer(row.group(1))])
+            for row in TABLE_ROW.finditer(table)]
+
+
+def numeric_share(cells):
+    """The share of a column's filled cells that hold a number."""
+    texts = [t for t in (cell_text(re.sub(r"<math\b.*?</math>", "0", c, flags=re.S)) for c in cells) if t]
+    return sum(bool(re.fullmatch(r"[-+−±<>≈~]?\$?\d[\d.,]*\s*[%KMBkx×]?", t)) for t in texts) / max(len(texts), 1)
+
+
+def share_panel_labels(article):
+    """Give a table panel the row labels it shares with the panel beside it.
+
+    A float of several tables side by side often names the rows in the left
+    panel only: the right one has the same rows in the same order and one
+    column fewer, and read on its own its numbers belong to nothing. Each
+    such panel gets the first column of the last panel that had one, when
+    that column is names and the panel's own first column is numbers.
+    """
+    out, pos = [], 0
+    labelled = None  # (end of its float, rows) of the last panel with a label column
+    for m in PANEL.finditer(article):
+        end = balanced_end(article, m.start(), "figure")
+        table = re.search(r"<table\b", article[m.start():end or m.start()])
+        if m.start() < pos or end is None or not table:
+            continue
+        begin = m.start() + table.start()
+        table_end = balanced_end(article, begin, "table")
+        rows = panel_rows(article[begin:table_end]) if table_end else None
+        if not rows or len(rows) < 3 or len({len(cells) for _, cells in rows}) != 1:
+            labelled = None
+            continue
+        width = len(rows[0][1])
+        # Panels of one float follow each other with only layout between them.
+        beside = labelled and not re.search(r"<(?:p|h\d|section)\b", article[labelled[0]:m.start()])
+        if (beside and len(labelled[1]) == len(rows) and len(labelled[1][0][1]) == width + 1
+                and numeric_share(cells[0] for _, cells in labelled[1]) < 0.2
+                and numeric_share(cells[0] for _, cells in rows) > 0.6):
+            body = article[begin:table_end]
+            for (at, _), (_, cells) in reversed(list(zip(rows, labelled[1]))):
+                body = body[:at] + cells[0] + body[at:]
+            out.append(article[pos:begin])
+            out.append(body)
+            pos = table_end
+            labelled = (end, labelled[1])
+        else:
+            labelled = (end, rows)
+    return "".join(out) + article[pos:]
+
+
 STYLE_WARNING = re.compile(
     r"(?:\w+ has been altered\.|The page layout violates the \w+ style\."
     r"|Please do not change the page layout, or include packages like[^.]*\."
@@ -1071,6 +1379,12 @@ def main(html_path, body_path, images_dir, basename):
     article = forest_trees(article, page)
     article = unresolved_refs(article)
     article = unresolved_citations(article, page)
+    article = drop_undefined_macros(article)
+    article = fix_text_encoding(article)
+    article = tidy_cells(article)
+    article = extend_rowspans(article)
+    article = share_panel_labels(article)
+    article = mark_shading(article)
     article = bare_year_citations(article)
     article = extract_svgs(article, save)
     article = lift_blocks(article)
@@ -1086,6 +1400,10 @@ def main(html_path, body_path, images_dir, basename):
     # LaTeXML sometimes repeats a heading with nothing under the first copy
     # (an "Abstract" set both by the class and by the author).
     body = re.sub(r"^(#{1,6} .+)\n\n(?=\1\n)", "", body, flags=re.M)
+
+    # In a table written as HTML, bold marks the result a row or column is
+    # about, many times over: the short tag says the same in fewer tokens.
+    body = re.sub(r"<(/?)strong>", r"<\1b>", body)
 
     # Raster figures arXiv inlines as base64 data URIs.
     body = re.sub(

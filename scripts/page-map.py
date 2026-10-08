@@ -162,6 +162,20 @@ def main(pdf_path, md_path):
         for line in lines
     )
 
+    # The level a numbered section sits at ("## 3 Method": 2), a subsection one
+    # deeper: the commonest among the numbered headings.
+    levels = {}
+    in_fence = False
+    for line in lines:
+        if line.startswith("```"):
+            in_fence = not in_fence
+        m = None if in_fence else HEADING.match(line)
+        numbered = m and heading_number(PAGE_SUFFIX.sub("", m.group(2)), m.group(1) == "##", roman)
+        if numbered:
+            level = len(m.group(1)) - numbered[0].count(".")
+            levels[level] = levels.get(level, 0) + 1
+    section_level = max(levels, key=levels.get) if levels else 2
+
     # First pass: every heading, and the exact page of those a destination or a
     # bookmark names. The outline is matched even when a destination already
     # gave the page, so that its cursor stays level with the headings.
@@ -179,13 +193,16 @@ def main(pdf_path, md_path):
             continue
         text = PAGE_SUFFIX.sub("", m.group(2))
         numbered = heading_number(text, m.group(1) == "##", roman)
+        # "#### 1. Basic properties" inside Appendix E is a step of a proof,
+        # not section 1, whose destination and bookmark it would take.
+        sectioned = numbered and len(m.group(1)) - numbered[0].count(".") == section_level
         dest_page = None
-        if numbered:
+        if sectioned:
             for name in dest_candidates(numbered[0]):
                 if name in dests:
                     dest_page = dests[name]
                     break
-        outline_page = outline.page_of(numbered[0], exact_so_far) if numbered else None
+        outline_page = outline.page_of(numbered[0], exact_so_far) if sectioned else None
         # A bookmark can point at the wrong page: hyperref gives appendix "A.7"
         # the destination of section 7 when the counters collide. Believe it
         # only when the heading is printed on that page.

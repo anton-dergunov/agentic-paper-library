@@ -49,6 +49,8 @@ local EQUIVALENT = {
   mathsection = "\\S", mathparagraph = "\\P",
   -- KaTeX has these, MathJax (GitHub, Obsidian) does not.
   argmax = "\\operatorname*{arg\\,max}", argmin = "\\operatorname*{arg\\,min}",
+  -- The physics package's \qty only sizes the brackets after it.
+  qty = "",
 }
 
 -- Commands whose braced argument is text, not math.
@@ -399,6 +401,8 @@ local function normalise_math(t)
   t = t:gsub("\\(%a+){split}", "\\%1{aligned}")
   -- A bare \mod ("$\mod$" between two words) has no argument for KaTeX.
   t = t:gsub("\\mod%s*$", "\\operatorname{mod}")
+  -- The physics package's \order{n} is O(n).
+  t = t:gsub("\\order%s*(%b{})", function(arg) return "\\mathcal{O}(" .. arg:sub(2, -2) .. ")" end)
   t = unwrap_mleft(t)
   t = unwrap_mathchoice(t)
   return rewrite_commands(strip_layout(join_digit_groups(t)))
@@ -473,13 +477,73 @@ end
 -- A title broken over two lines ("Terminal-Bench:<br>Benchmarking ...") would be
 -- written as a setext heading with a hard break in it.
 function Header(el)
-  el.content = el.content:walk({ LineBreak = function() return pandoc.Space() end })
+  el.content = el.content:walk({
+    LineBreak = function() return pandoc.Space() end,
+    -- A heading set in bold is still only a heading.
+    Strong = function(s) return s.content end,
+    Underline = function(s) return s.content end,
+  })
   return el
 end
 
-function Span(el)
-  return el.content
+-- \textbf, \textit and \underline arrive as spans. In a table they are what
+-- the paper claims (the best result, the significant one), in running text
+-- the run-in headings and the terms being defined.
+local FONTS = {
+  { "ltx_font_bold", "Strong" }, { "ltx_font_italic", "Emph" },
+  { "ltx_underline", "Underline" }, { "ltx_framed_underline", "Underline" },
+}
+
+-- A space, or the no-break spaces LaTeXML pads a cell's text with.
+local function is_space(el)
+  return el.t == "Space" or el.t == "SoftBreak" or (el.t == "Str" and not el.text:gsub("\u{a0}", ""):match("%S"))
 end
+
+function Span(el)
+  local content = el.content
+  -- A caption's "Table 7:" is matched as plain text (caption-numbers.py),
+  -- also when the style sets its two words in bold one by one.
+  if el.classes:includes("ltx_tag") then
+    local function plain(inner) return inner.content end
+    return pandoc.Inlines(content):walk({ Strong = plain, Emph = plain, Underline = plain })
+  end
+  if not pandoc.utils.stringify(content):match("%S") then return content end
+  -- Shading the converter kept (mark_shading in html-to-markdown.py).
+  if el.classes:includes("mark") then
+    return pandoc.List({ pandoc.RawInline("html", "<mark>") }) .. content
+      .. pandoc.List({ pandoc.RawInline("html", "</mark>") })
+  end
+  for _, font in ipairs(FONTS) do
+    if el.classes:includes(font[1]) then
+      local kind = font[2]
+      -- Bold inside bold is still bold, and the spaces at either end stay outside the marks.
+      content = pandoc.Inlines(content):walk({ [kind] = function(inner) return inner.content end })
+      local before, after = pandoc.List(), pandoc.List()
+      while #content > 0 and is_space(content[1]) do before:insert(content:remove(1)) end
+      while #content > 0 and is_space(content[#content]) do after:insert(1, content:remove()) end
+      -- The padding also comes joined to the first and the last word.
+      local first, last = content[1], content[#content]
+      if first and first.t == "Str" then first.text = first.text:gsub("^[\u{a0}%s]+", "") end
+      if last and last.t == "Str" then last.text = last.text:gsub("[\u{a0}%s]+$", "") end
+      content = before .. pandoc.List({ pandoc[kind](content) }) .. after
+    end
+  end
+  return content
+end
+
+-- A float's label set in bold ("**Table 7:** Results") is the label all the same.
+local function plain_label(el)
+  local first = el.content[1]
+  if first and first.t == "Strong"
+      and pandoc.utils.stringify(first):match("^%a+%.?%s[%w.]+[:.]?%s*$") then
+    el.content:remove(1)
+    for k, inline in ipairs(first.content) do el.content:insert(k, inline) end
+    return el
+  end
+end
+
+Para = plain_label
+Plain = plain_label
 
 -- With raw HTML on, any link or image carrying an id or class is written as an
 -- HTML tag; without the attributes it stays a markdown link.
@@ -657,11 +721,17 @@ local function escape_math_pipes(el)
   }).content[1]
 end
 
-local function clean_row(row)
+local function clean_row(row, head)
   row.attr = pandoc.Attr()
   for _, cell in ipairs(row.cells) do
     cell.attr = pandoc.Attr()
     cell.contents = flatten_cell_tables(cell.contents)
+    if head then
+      -- Bold column titles say nothing the header row does not.
+      cell.contents = pandoc.walk_block(pandoc.Div(cell.contents), {
+        Strong = function(s) return s.content end,
+      }).content
+    end
   end
 end
 
@@ -724,7 +794,7 @@ function Table(tbl)
   for i, spec in ipairs(tbl.colspecs) do
     tbl.colspecs[i] = { spec[1], pandoc.ColWidthDefault }
   end
-  for _, row in ipairs(tbl.head.rows) do clean_row(row) end
+  for _, row in ipairs(tbl.head.rows) do clean_row(row, true) end
   for _, body in ipairs(tbl.bodies) do
     body.attr = pandoc.Attr()
     for _, row in ipairs(body.head) do clean_row(row) end
@@ -733,3 +803,72 @@ function Table(tbl)
   for _, row in ipairs(tbl.foot.rows) do clean_row(row) end
   return escape_math_pipes(tbl)
 end
+
+-- A footnote arrives inside the sentence it annotates: its mark, the mark
+-- again, its number and its text, all inline ("a dataset11 1 Despite some
+-- ..."). The mark stays where it is, once, and the text follows the block
+-- (paragraph, list, table or figure) it belongs to, behind the same mark.
+local function is_note_label(el)
+  return el.t == "Span" and (el.classes:includes("ltx_tag_note") or el.classes:includes("ltx_note_type"))
+end
+
+local function note_parts(span)
+  local mark, text = nil, pandoc.List()
+  for _, el in ipairs(span.content) do
+    if el.t == "Superscript" and not mark then
+      mark = el
+    elseif el.t == "Span" and el.classes:includes("ltx_note_outer") then
+      local inner = el.content
+      if #inner == 1 and inner[1].t == "Span" and inner[1].classes:includes("ltx_note_content") then
+        inner = inner[1].content
+      end
+      local marked = false
+      for _, part in ipairs(inner) do
+        if part.t == "Superscript" and not marked then
+          marked = true
+          mark = mark or part
+        elseif not is_note_label(part) then
+          text:insert(part)
+        end
+      end
+    end
+  end
+  while #text > 0 and (text[1].t == "Space" or text[1].t == "SoftBreak") do text:remove(1) end
+  return mark, text
+end
+
+local function lift_notes(blocks)
+  local out = pandoc.List()
+  for _, block in ipairs(blocks) do
+    if block.t == "Div" then
+      block.content = lift_notes(block.content)
+      out:insert(block)
+    else
+      local notes = pandoc.List()
+      out:insert(pandoc.walk_block(block, {
+        Span = function(span)
+          if not span.classes:includes("ltx_note") then return nil end
+          local mark, text = note_parts(span)
+          if pandoc.utils.stringify(text):match("%S") then
+            local note = pandoc.List()
+            if mark then note:extend({ mark, pandoc.Space() }) end
+            note:extend(text)
+            notes:insert(pandoc.Para(note))
+          end
+          return mark and { mark } or {}
+        end,
+      }))
+      out:extend(notes)
+    end
+  end
+  return out
+end
+
+return {
+  { Pandoc = function(doc)
+      doc.blocks = lift_notes(doc.blocks)
+      return doc
+    end },
+  { Div = Div, Math = Math, Inlines = Inlines, Header = Header, Span = Span, Para = Para, Plain = Plain,
+    Link = Link, Image = Image, Figure = Figure, Table = Table },
+}

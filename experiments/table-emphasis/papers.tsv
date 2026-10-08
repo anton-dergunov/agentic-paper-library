@@ -1,0 +1,91 @@
+named	llm/context/In-context Autoencoder for Context Compression in a Large Language Model.md
+named	llm/foundation-models/2 OLMo 2 Furious.md
+named	llm/foundation-models/DeepSeek-V3.2. Pushing the Frontier of Open Large Language Models.md
+named	llm/foundation-models/Gemini 2.5. Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next.md
+named	llm/foundation-models/Gemma 3 Technical Report.md
+named	llm/foundation-models/Phi-4 Technical Report.md
+named	llm/foundation-models/Qwen3 Technical Report.md
+named	llm/foundation-models/The Llama 3 Herd of Models.md
+named	llm/foundation-models/Transformer models. an introduction and catalog.md
+named	llm/memory/parametric/Continual Learning via Sparse Memory Finetuning.md
+named	llm/post-training/data/Nemotron-4 340B Technical Report.md
+named	llm/post-training/data/OpenThoughts. Data Recipes for Reasoning Models.md
+named	llm/post-training/data/UltraFeedback. Boosting Language Models with Scaled AI Feedback.md
+named	llm/post-training/fine-tuning/Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation.md
+named	llm/post-training/fine-tuning/QLoRA. Efficient Finetuning of Quantized LLMs.md
+named	llm/post-training/rl-for-reasoning/The Entropy Mechanism of Reinforcement Learning for Reasoning Language Models.md
+named	llm/post-training/rl-for-reasoning/Understanding R1-Zero-Like Training. A Critical Perspective.md
+named	search-and-ranking/click-models-and-unbiased-ltr/A Large Scale Search Dataset for Unbiased Learning to Rank.md
+named	search-and-ranking/click-models-and-unbiased-ltr/Doubly-Robust Estimation for Correcting Position-Bias in Click Feedback for Unbiased Learning to.md
+named	search-and-ranking/dense-retrieval/ANN-Benchmarks. A Benchmarking Tool for Approximate Nearest Neighbor Algorithms.md
+named	search-and-ranking/dense-retrieval/Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval.md
+named	search-and-ranking/dense-retrieval/BEIR. A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models.md
+named	search-and-ranking/dense-retrieval/BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.md
+named	search-and-ranking/dense-retrieval/ColBERTv2. Effective and Efficient Retrieval via Lightweight Late Interaction.md
+named	search-and-ranking/dense-retrieval/Dense Text Retrieval based on Pretrained Language Models. A Survey.md
+named	search-and-ranking/dense-retrieval/PLAID. An Efficient Engine for Late Interaction Retrieval.md
+named	search-and-ranking/dense-retrieval/Unsupervised Dense Information Retrieval with Contrastive Learning.md
+named	search-and-ranking/evaluation/Large language models can accurately predict searcher preferences.md
+named	search-and-ranking/evaluation/Overview of the TREC 2019 deep learning track.md
+named	search-and-ranking/indexing-and-classical-ir/Decoding billions of integers per second through vectorization.md
+named	search-and-ranking/learning-to-rank/Which Tricks Are Important for Learning to Rank.md
+random	data-centric-ml/augmentation-and-synthetic-data/A Probabilistic Perspective on Model Collapse.md
+random	data-centric-ml/labels-and-annotation/Dataset Cartography. Mapping and Diagnosing Datasets with Training Dynamics.md
+random	deep-learning/architectures/How to represent part-whole hierarchies in a neural network.md
+random	deep-learning/architectures/U-Net. Convolutional Networks for Biomedical Image Segmentation.md
+random	deep-learning/efficiency-and-compression/Knowledge Distillation. A Survey.md
+random	deep-learning/efficiency-and-compression/Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference.md
+random	deep-learning/normalization-and-regularization/Batch Normalization Explained.md
+random	deep-learning/normalization-and-regularization/Fixup Initialization. Residual Learning Without Normalization.md
+random	deep-learning/optimizers-and-schedules/A disciplined approach to neural network hyper-parameters. Part 1 -- learning rate, batch size.md
+random	deep-learning/optimizers-and-schedules/Descending through a Crowded Valley - Benchmarking Deep Learning Optimizers.md
+random	deep-learning/optimizers-and-schedules/SOAP, Muon, and Beyond. Pushing LLM Pretraining Scales.md
+random	deep-learning/theory/A Probabilistic Interpretation of Transformers.md
+random	deep-learning/uncertainty-and-robustness/Revisiting the Calibration of Modern Neural Networks.md
+random	deep-learning/uncertainty-and-robustness/Underspecification Presents Challenges for Credibility in Modern Machine Learning.md
+random	experimentation-and-metrics/ab-testing/Multiple Randomization Designs. Estimation and Inference with Interference.md
+random	generative-models/diffusion/Flow-GRPO. Training Flow Matching Models via Online RL.md
+random	graphs/graph-neural-networks/Talk like a Graph. Encoding Graphs for Large Language Models.md
+random	interpretability/mechanistic/Open Problems in Mechanistic Interpretability.md
+random	interpretability/mechanistic/Sparse Autoencoders Find Highly Interpretable Features in Language Models.md
+random	llm/agents/A Survey on Employing Large Language Models for Text-to-SQL Tasks.md
+random	llm/agents/ReAct. Synergizing Reasoning and Acting in Language Models.md
+random	llm/agents/Teaching Language Models to Reason with Tools.md
+random	llm/behaviour/Instruction-Following Evaluation for Large Language Models.md
+random	llm/context/A Survey of Context Engineering for Large Language Models.md
+random	llm/context/LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression.md
+random	llm/context/Recall Is Not Enough. A Reader-Context Diagnostic for Budget-Constrained Retrieval-Augmented.md
+random	llm/evaluation/benchmarks/GPQA. A Graduate-Level Google-Proof Q&A Benchmark.md
+random	llm/evaluation/benchmarks/Measuring Massive Multitask Language Understanding.md
+random	llm/evaluation/methods/A Survey on LLM-based Conversational User Simulation.md
+random	llm/evaluation/methods/Rethinking Benchmark and Contamination for Language Models with Rephrased Samples.md
+random	llm/evaluation/methods/The Coin Flip Judge. Reliability and Bias in LLM-as-a-Judge Evaluation.md
+random	llm/foundation-models/LongCat-Flash Technical Report.md
+random	llm/memory/parametric/MEMORYLLM. Towards Self-Updatable Large Language Models.md
+random	llm/personalization/benchmarks/HorizonBench. Long-Horizon Personalization with Evolving Preferences.md
+random	llm/personalization/benchmarks/PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users.md
+random	llm/post-training/data/LMSYS-Chat-1M. A Large-Scale Real-World LLM Conversation Dataset.md
+random	llm/post-training/fine-tuning/Scaling Instruction-Finetuned Language Models.md
+random	llm/post-training/preference-learning/Offline RL for Natural Language Generation with Implicit Language Q Learning.md
+random	llm/post-training/preference-learning/P-GenRM. Personalized Generative Reward Model with Test-time User-based Scaling.md
+random	llm/post-training/preference-learning/RewardBench 2. Advancing Reward Model Evaluation.md
+random	llm/pretraining/How do language models learn facts. Dynamics, curricula and hallucinations.md
+random	llm/pretraining/OLMoTrace. Tracing Language Model Outputs Back to Trillions of Training Tokens.md
+random	llm/reasoning/Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters.md
+random	llm/routing/RouterBench. A Benchmark for Multi-LLM Routing System.md
+random	llm/safety-and-privacy/Improving User Privacy in Personalized Generation. Client-Side Retrieval-Augmented Modification of.md
+random	llm/text-analytics/Clio. Privacy-Preserving Insights into Real-World AI Use.md
+random	ml-foundations/tabular/Mixed-Type Tabular Data Synthesis with Score-based Diffusion in Latent Space.md
+random	nlp/pretrained-language-models/Don't Stop Pretraining. Adapt Language Models to Domains and Tasks.md
+random	nlp/tasks-and-methods/Gmail Smart Compose. Real-Time Assisted Writing.md
+random	recommender-systems/industrial-systems/TWIN. TWo-stage Interest Network for Lifelong User Behavior Modeling in CTR Prediction at Kuaishou.md
+random	recommender-systems/llm-and-generative/OneRec Technical Report.md
+random	reinforcement-learning/deep-rl/The Phenomenon of Policy Churn.md
+random	reinforcement-learning/world-models/Dream to Control. Learning Behaviors by Latent Imagination.md
+random	representation-learning/embeddings/EmbeddingGemma. Powerful and Lightweight Text Representations.md
+random	representation-learning/self-supervised/Unsupervised Feature Learning via Non-Parametric Instance-level Discrimination.md
+random	robotics-and-embodied/GR00T N1. An Open Foundation Model for Generalist Humanoid Robots.md
+random	robotics-and-embodied/PaLM-E. An Embodied Multimodal Language Model.md
+random	search-and-ranking/dense-retrieval/Unified Embedding Based Personalized Retrieval in Etsy Search.md
+random	search-and-ranking/neural-ranking/Rank1. Test-Time Compute for Reranking in Information Retrieval.md
+random	trustworthy-ml/privacy-and-federated/VaultGemma. A Differentially Private Gemma Model.md

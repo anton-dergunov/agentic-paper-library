@@ -90,6 +90,7 @@ def main(pdf_path, md_path):
     lines = Path(md_path).read_text(encoding="utf-8").split("\n")
     renamed, labelled = {}, 0  # old label -> new label
     seen = {}
+    found = []  # (line index, label, caption text, the PDF's label for it)
     in_fence = False
     for i, line in enumerate(lines):
         if line.startswith("```"):
@@ -100,10 +101,7 @@ def main(pdf_path, md_path):
         if m:
             old = f"{'Figure' if m.group(1) == 'Fig.' else m.group(1)} {m.group(2)}"
             seen[old] = seen.get(old, 0) + 1
-            new = pdf_label(m.group(3), old, captions)
-            if new and new != old:
-                lines[i] = f"{new}: {m.group(3)}"
-                renamed[old] = new if seen[old] == 1 else None
+            found.append((i, old, m.group(3), pdf_label(m.group(3), old, captions)))
             continue
         m = CAPTIONOF.match(line)
         if m and any(prev.strip() == "\\captionof" for prev in lines[max(0, i - 2):i]):
@@ -114,6 +112,26 @@ def main(pdf_path, md_path):
                     if lines[j].strip() == "\\captionof":
                         lines[j] = ""
                 labelled += 1
+
+    # A PDF caption is one caption's. When the PDF's own caption was not found
+    # (it follows a sub-table's "(b)"), a caption opening with the same few
+    # words as a later one would take that one's number: the longest opening
+    # run wins, and a label another caption keeps is not given out again.
+    def opening_run(text, label):
+        return max(common_prefix(words(text), theirs) for pdf, theirs in captions if pdf == label)
+
+    runs = {}
+    for _, _, text, new in found:
+        if new:
+            runs.setdefault(new, []).append(opening_run(text, new))
+    kept = {old for _, old, _, new in found if new in (None, old)}
+    for i, old, text, new in found:
+        if not new or new == old or new in kept:
+            continue
+        if opening_run(text, new) < max(runs[new]) or runs[new].count(max(runs[new])) > 1:
+            continue
+        lines[i] = f"{new}: {text}"
+        renamed[old] = new
 
     # A label two captions carried cannot say which of them a link meant.
     renamed = {old: new for old, new in renamed.items() if new and seen[old] == 1}

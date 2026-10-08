@@ -1,6 +1,6 @@
 # Conversion
 
-The markdown is the agent's copy of a paper, so its quality decides how well the agent reads. This document records how each kind of paper is converted, and why. The measurements behind each decision are in [`experiments/`](../experiments/README.md); this page keeps only the decision.
+The markdown is the agent's copy of a paper, so its quality decides how well the agent reads. The reader reads the PDF, so a conversion is judged only by whether it helps an agent read the paper, answer questions about it and write about it: something that makes the markdown nicer for a person but costs tokens, without helping those tasks, is left out. This document records how each kind of paper is converted, and why. The measurements behind each decision are in [`experiments/`](../experiments/README.md); this page keeps only the decision.
 
 | Source | `source:` | Converter | Command |
 |---|---|---|---|
@@ -37,13 +37,25 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **The author block** shows a list of affiliations shared by all authors once, not after every name.
 - **A title broken over two lines** is one heading.
 - **Warnings a style file typesets** when a paper changed its page layout ("marginparsep has been altered. … The page layout violates the ICML style.") arrive as the paper's first paragraphs, above the title. They are dropped.
+- **Bold, italics and underlining** are kept: in a table they are the paper's claim (the best result, the significant one), in running text the run-in headings and the terms being defined. Headings, column titles and a caption's "Table 7:" stay plain. In a table written as HTML, bold is `<b>`.
+- **Footnotes** arrive spliced into the sentence, the mark printed twice. The mark stays, once, and the note's text follows the paragraph or table it annotates.
+- **Cell shading** is kept as `<mark>` only where the caption refers to it ("gray rows are …") and the table has one shading colour; a shaded row is marked on its first cell. Other shading is dropped: on fifteen tables it changed no answer a reader of the whole paper would not already have.
+- **A value and what is printed small or in colour after it** (a deviation, a gain) are set apart: "70.9 +2.3".
+- **A column title set on two lines** arrives lower line first; the raised line is read first.
+- **Names of macros LaTeXML did not know** (`\sans`, `\rotate`) are dropped; their arguments stay.
+- **Citations with no key left** ("( ?)") are found in the LaTeX source by the words before them and labelled from the paper's `.bib`.
+- **A ">" typed in text** arrives as "¿"; standing alone it is ">" again.
+- **A table panel without row labels** gets those of the panel beside it, when that panel has the same rows and one column more.
+- **A row label spanning a group of rows** takes the group's last row when the paper's `\multirow` was one row short.
 - **Numbers and symbols LaTeXML left half-expanded:** digit groups joined by "true" (`2true294`), a `\mathchoice` of boxed symbols, `\penalty` before a control space, an accent over nothing (`pass\^{}k`), a tilde set on a digit ("5̃5%").
 
-→ [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md), [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md)
+→ [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md), [`experiments/table-emphasis`](../experiments/table-emphasis/README.md)
 
 ## Table and figure numbers
 
 arXiv's HTML numbers floats itself, and sometimes differently from the PDF: a plot set beside a table in one float is captioned as a table, a caption written with `\captionof` gets no number, and every later number is then off by one or two. `scripts/caption-numbers.py` matches each caption in the markdown to the PDF caption that starts with the same words, and renames it, with the links that point to it, when the PDF calls it something else. A caption that matches no PDF caption, or two equally well, is left alone. It runs after `page-map.py` on every arXiv-HTML conversion. → [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md)
+
+A PDF caption gives its number to one caption only, the one sharing the longest run of opening words, and never to a second: when the PDF's own caption is not found, a caption that opens like a later one would otherwise take that one's number. → [`experiments/table-emphasis`](../experiments/table-emphasis/README.md)
 
 What it cannot repair is a reference whose target LaTeXML got wrong: four tables in one float share one anchor, so every reference to them names the last. Those are corrected by hand.
 
@@ -66,7 +78,7 @@ In papers converted from a PDF, display equations are read from the page image b
 
 ## Page numbers
 
-Every heading ends with the PDF page it starts on, `(p. N)`, so the agent can cite the page of the PDF the reader has open. `scripts/page-map.py` finds the page from three sources, in order: the PDF's named destinations (LaTeX writes one per section), its outline, and a search of the page text for the heading. A bookmark is believed only when its page prints the heading, since hyperref can point appendix "A.7" at section 7. A run-in paragraph heading ("Setup. We evaluate …") is found at the start of a line. → [`experiments/page-number-mapping`](../experiments/page-number-mapping/README.md)
+Every heading ends with the PDF page it starts on, `(p. N)`, so the agent can cite the page of the PDF the reader has open. `scripts/page-map.py` finds the page from three sources, in order: the PDF's named destinations (LaTeX writes one per section), its outline, and a search of the page text for the heading. A bookmark is believed only when its page prints the heading, since hyperref can point appendix "A.7" at section 7. A numbered heading takes a destination or a bookmark only at the level the paper's sections sit at: "#### 1. Basic properties" inside an appendix is a step of a proof, not section 1 (90 markers corrected in 16 of 1,911 papers → [`experiments/table-emphasis`](../experiments/table-emphasis/README.md)). A run-in paragraph heading ("Setup. We evaluate …") is found at the start of a line. → [`experiments/page-number-mapping`](../experiments/page-number-mapping/README.md)
 
 ## PDF-only papers
 
