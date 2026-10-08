@@ -53,6 +53,19 @@ Left open by the fixes of 2026-10-04 ([`experiments/review-flagged-fixes`](../..
 - **An algorithm set as a table gets a table's caption.** DAPO's Algorithm 1 is followed by an empty "Table 1:", the number of the paper's real Table 1.
 - **Undefined author macros** leave their names in the author block ("\\multiauthors\\affiliations" in "The Leaderboard Illusion").
 
+Found by the fix pass of 2026-10-08 over the whole catalog (the papers named are still open there):
+
+- **Bold, underline, italics and cell colour are lost in tables.** LaTeXML writes them as `ltx_font_bold`, `ltx_framed_underline`, `ltx_font_italic` spans and a background colour on the cell, and pandoc drops them, so the marking of the best or the significant result is gone: only five papers in the library have a bold table cell. "Which Tricks Are Important for Learning to Rank" (Tables 2 and 4: bold is the significance claim) and "Continual Learning via Sparse Memory Finetuning" (Table 1: shading is the result) have key content broken by it; others are BEIR, BRIGHT, ANCE, Contriever (Table 2), "Doubly-Robust Estimation for Correcting Position-Bias", "A Large Scale Search Dataset for Unbiased Learning to Rank" (Tables 4, 5), "Overview of the TREC 2019 deep learning track" (Table 5, grey rows), ANN-Benchmarks (Table 2, italics). This is the most common problem the readers report; fixing it means reconverting every arXiv-HTML paper.
+- **Superscripts and `±` are flattened in table cells and headers.** "N = 104" for $10^4$ (Doubly-Robust, Tables 1, 2), "c=213" for $2^{13}$ (PLAID, Tables 3–6), "0.340.01" for 0.34 ± 0.01 ("Large language models can accurately predict searcher preferences", Table 1), "70.9+2.3" (Qwen3, Table 22), standard errors glued to values (OpenThoughts, Tables 3–8).
+- **Footnotes are spliced into the text or a table cell**, the mark printed two or three times: "dataset11 1" (In-context Autoencoder, pp. 4–8), QLoRA (p. 5), Nemotron-4 340B (Table 5), Phi-4 (Table 1), "Transformer models: an introduction and catalog".
+- **The caption pass numbers a table with sub-tables wrongly.** ColBERTv2's zero-shot table is "Table 5" in the PDF, with sub-tables (a) and (b), and "Table 7" in the markdown, colliding with the appendix's Table 7; the text cites it as Table 5(a).
+- **A multi-panel table loses the label column of its later panels** ("Decoding billions of integers per second through vectorization", Tables 4–6), and **a row is shifted by an empty leading cell** ("Dense Text Retrieval based on Pretrained Language Models", Tables I and IV). **Stacked header cells are joined in the wrong order** (Gemini 2.5, Tables 1 and 3–6: "ProGemini 2.5"; Gemma 3, Table 2).
+- **Citations LaTeXML could not resolve print as "( ?)"** ("Transformer models: an introduction and catalog", 91 places); the PDF has them. **Unresolved references** print as a label or nothing (UltraFeedback: "Appendix ,", "Appendix app_anno").
+- **">" comes out as "¿"** (The Llama 3 Herd of Models, pp. 16, 19): the text font's encoding, where the PDF prints ">".
+- **Macros left as text:** "\sans" (2 OLMo 2 Furious, Tables 2, 10, 11 and the title block), "\rotate" (Llama 3, Table 2), the physics package's `\order` and `\qty` as "\operatorname{order}" (DeepSeek-V3.2, Eq. 2–4), "DeclareCaptionType" (The Entropy Mechanism of RL for Reasoning Language Models).
+- **Comment lines inside a code listing become headings** (Understanding R1-Zero-Like Training).
+- **Page markers restart inside an appendix** (Nemotron-Cascade 2, Appendix E reads p. 4, 6, 9 after Appendix D at pp. 27–30).
+
 ## The PDF converter
 
 - **OpenCV is held at 4.12.** Later releases segfault in their Arm resize inside RapidOCR, about one conversion in three of "Canaries in the Coal Mine" ([`experiments/ocr-engines`](../../experiments/ocr-engines/README.md)). Lift the pin, and the numpy override that goes with it, when a release converts that paper ten times without a crash.
