@@ -49,10 +49,19 @@ paperlib read <scope>          notes; each reports its paper's conversion proble
    - **Worth fixing**: everything else.
 3. **Group the fixable ones by cause.** Several papers showing the same flaw (lost `±`,
    superscripts flattened in table cells, bold marking lost) point to one converter bug.
-   - A converter bug is fixed in the engine, in a session there (its `AGENTS.md` applies:
-     a regression test for the fix, the change measured on real papers). Record each bug
-     once in the engine's `docs/tasks/conversion-follow-ups.md`, with these papers as
-     examples, and leave their entries open until the fix is in and they are reconverted.
+   - A converter bug is fixed in the engine's code, in this run: that is the main work of
+     this skill, since one fix repairs every paper with the flaw, now and later. Read the
+     engine's `AGENTS.md` first and follow it (a regression test for the fix, the change
+     measured on real papers). Take the bugs that break key content first, then those
+     that touch the most papers. After each fix, reconvert the papers that show the flaw
+     (all of them when it is widespread: `paperlib reconvert --all --jobs N --state
+     <file>`), look at the example papers again, and compare `paperlib symptoms --counts`
+     and `paperlib symptoms --compare HEAD` with before, so the fix breaks nothing else.
+   - Only a bug that cannot be finished in the run (it needs a design decision, a new
+     tool to be chosen, or hours of conversion) is recorded instead: once, in the
+     engine's `docs/tasks/conversion-follow-ups.md`, with these papers as examples and
+     the reason it was left. Its entries stay open. Remove a recorded bug from that file
+     when it is fixed.
    - A flaw in one paper only: go to step 4.
 4. **Fix one paper**, cheapest first, and look at the place again after each try:
    - **Reconvert.** `paperlib reconvert <paper.md>` for `source: html` (the converter may
@@ -77,7 +86,9 @@ paperlib read <scope>          notes; each reports its paper's conversion proble
 7. **Check.** `paperlib check` must pass.
 8. **Report.**
    - A table: paper, the problem, its kind, what was done (reconverted, fixed by hand, read
-     again, wont-fix and why, left for a converter fix).
-   - The converter bugs recorded in the engine.
+     again, fixed in the converter, wont-fix and why, left for a converter fix).
+   - The converter bugs fixed (with the papers reconverted and what was measured), and
+     those recorded in the engine instead, each with why it was left.
    - The entries still open in the scope.
-   - A commit message: the fixed papers, the notes, the catalog. Never commit.
+   - Two commit messages, one per repository: the library (fixed papers, notes, catalog)
+     and the engine (converter, tests, docs). Never commit.
