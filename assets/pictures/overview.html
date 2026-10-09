@@ -2,7 +2,7 @@
 <!--
   Source of assets/pictures/overview.png. The note is an overview of the DPO paper (arXiv 2305.18290,
   CC BY 4.0) in the form skills/overview/format.md defines for a paper of type "method": the abstract
-  callout, then Setting, Motivation and Method, written for this picture from the paper in
+  callout, Setting, Motivation, Method and Why it works, and the closing Questions and Follow-ups, written for this picture from the paper in
   examples/library. The note is not in the repository. Render with assets/pictures/render.sh overview.
 -->
 <html lang="en">
@@ -17,10 +17,13 @@
   .paper { font-size: 12px; }
   .r { flex: 1 1 0; display: flex; flex-direction: column; }
   .main { gap: 26px; }
-  .pt { display: flex; gap: 9px; margin-top: 13px; font-size: 12px; line-height: 1.4; }
+  .pt { display: flex; gap: 9px; margin-top: 11px; font-size: 12px; line-height: 1.38; }
   .pt b { font-weight: 650; }
   .ccin { margin-bottom: 4px; }
-  .paper { flex: 1 1 auto; }
+  .r .paper { flex: 1 1 auto; }
+  .paper.end { margin-top: 10px; font-size: 11px; line-height: 1.38; padding: 4px 13px 10px; }
+  .paper.end ul { margin-left: 15px; }
+  .paper.end li + li { margin-top: 2px; }
   .fname { font: 10px var(--mono); color: var(--muted); margin-bottom: 7px; white-space: nowrap; }
   .paper h4:first-of-type { margin-top: 10px; }
 </style>
@@ -38,7 +41,20 @@
       <div class="ccin"><span>/overview <em>Direct Preference Optimization</em></span><i>↑</i></div>
       <div class="pt"><span class="n">1</span><span><b>Read the note first.</b> Then decide whether the paper is worth an hour.</span></div>
       <div class="pt"><span class="n">2</span><span><b>It lands in your own notes folder.</b> An Obsidian vault works; the note links to your other notes.</span></div>
-      <div class="pt"><span class="n">3</span><span><b>It ends with questions and follow-ups:</b> what to ask of the paper, and what to read next.</span></div>
+      <div class="pt"><span class="n">3</span><span><b>It hands the lead back to you.</b> The note ends with questions to ask of the paper and what to do next:</span></div>
+      <div class="paper end">
+        <h5>Questions</h5>
+        <ul>
+          <li>Why can a reward be written as a ratio of two models’ probabilities?</li>
+          <li>What does the frozen copy stop the tuned model from doing?</li>
+          <li>Where would this break: noisy preferences, or prompts unlike the training ones?</li>
+        </ul>
+        <h5>Follow-ups</h5>
+        <ul>
+          <li><b>Read</b> Proximal Policy Optimization: the reinforcement-learning step this removes.</li>
+          <li><b>Try</b> tuning a small model on a few preference pairs and watching the loss.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="r">
@@ -58,7 +74,7 @@
         </ol>
         <h5>Why it works</h5>
         <div><b>Implicit reward:</b> the model’s own probabilities play the part of the reward, so there is no second model to train and keep in step.</div>
-        <div class="more">… then Applications and results · Evidence · Novelty · Concepts · Questions · Follow-ups</div>
+        <div class="more">… then Applications and results · Evidence · Novelty · Concepts</div>
       </div>
     </div>
   </div>

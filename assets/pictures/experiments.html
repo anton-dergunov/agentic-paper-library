@@ -16,6 +16,7 @@
   .t > div { padding: 0 14px; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.38; min-width: 0; }
   .t > .th { border-top: 0; background: var(--panel); font: 700 10px Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); height: 26px; }
   .t .q { font-weight: 700; font-size: 13px; }
+  .t .q .exp { font-weight: 400; margin-top: 3px; }
   .t .m b { color: var(--accent); font-weight: 700; }
   .t .d { background: var(--ok-bg); border-left: 1px solid var(--ok-line); font-weight: 600; color: #116329; }
   .t .th.d { color: var(--ok); font-weight: 700; }
@@ -31,32 +32,32 @@
   <div class="t">
     <div class="th">Question</div><div class="th">Measured</div><div class="th d">Decision</div>
 
-    <div class="q">Convert from arXiv’s HTML or from the PDF?</div>
+    <div class="q">Convert from arXiv’s HTML or from the PDF?<span class="exp">experiments/pdf-vs-arxiv-html</span></div>
     <div class="m"><span>The HTML kept <b>35 of 35</b> equations as exact LaTeX. A layout-aware PDF tool kept <b>1</b> and dropped the rest without a trace.</span></div>
     <div class="d">HTML first; the PDF only when there is no HTML</div>
 
-    <div class="q">Which converter for papers that are only a PDF?</div>
+    <div class="q">Which converter for papers that are only a PDF?<span class="exp">experiments/pdf-converter-bakeoff</span></div>
     <div class="m"><span>Four compared on six papers. The best pairing put <b>100%</b> of table numbers in tables and read <b>71%</b> of equations closely.</span></div>
     <div class="d">A layout model, plus a model that reads each equation</div>
 
-    <div class="q">Keep bold and underline?</div>
+    <div class="q">Keep bold and underline?<span class="exp">experiments/table-emphasis</span></div>
     <div class="m"><span>They mark a table’s best result. Keeping them restored <b>9,930</b> marks in 91 papers and made the papers <b>0.6%</b> longer.</span></div>
     <div class="d">Kept: cheap, and the agent needs it</div>
 
-    <div class="q">Keep the shading of table cells?</div>
+    <div class="q">Keep the shading of table cells?<span class="exp">experiments/table-emphasis</span></div>
     <div class="m"><span>Questions answered correctly: <b>11 of 15</b> without it, <b>15 of 15</b> with it. Three of the four gains are stated in the paper’s text anyway.</span></div>
     <div class="d">Kept only where the caption refers to it</div>
 
-    <div class="q">Which model reads a paper into its note?</div>
+    <div class="q">Which model reads a paper into its note?<span class="exp">experiments/reading-models</span></div>
     <div class="m"><span>Errors in six notes, for five models: <b>1</b>, 6, 7, 9 and <b>35</b>.</span></div>
     <div class="d">The most accurate one, in one request a paper</div>
 
-    <div class="q">Answer from the review, or from the papers?</div>
+    <div class="q">Answer from the review, or from the papers?<span class="exp">experiments/review-usefulness</span></div>
     <div class="m"><span>From the review alone: a third of the tokens, but <b>8</b> wrong statements against <b>3</b>.</span></div>
     <div class="d">The review guides the search; the answer is checked in the paper</div>
   </div>
 
-  <div class="foot"><b>22 experiments</b> are in the repository, each with its method, scripts and results. Used by the author on a library of about 2,200 papers.</div>
+  <div class="foot"><b>22 experiments</b> are in the repository under <span class="exp" style="font-size: 11px">experiments/</span>, each with its method, scripts and results. Used by the author on a library of about 2,200 papers.</div>
 </div>
 </body>
 </html>

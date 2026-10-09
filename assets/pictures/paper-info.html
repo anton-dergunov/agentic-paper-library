@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/paper-info.png. The table is the output of `paperlib info 2405.14734`
+  run in examples/library on 10 Oct 2026 (SimPO, not in the library; its nearest paper there is DPO),
+  with the Authors, Comment, h-index, Type and Releases rows left out and Proposes, Evidence and
+  Nearest cut to their first sentences. The line at the foot is experiments/paper-vetting: Sonnet
+  would add 22 of the 30 papers the reader skipped and 28 of the 42 kept.
+  Render with assets/pictures/render.sh paper-info.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>A quick look at a paper</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .l { width: 268px; flex: none; }
+  .r { flex: 1 1 0; display: flex; flex-direction: column; }
+  .main { gap: 26px; }
+  .ccin { margin-bottom: 14px; }
+  .pt { display: flex; gap: 9px; margin-top: 14px; font-size: 12px; line-height: 1.4; }
+  .pt b { font-weight: 650; }
+  .paper { flex: 1 1 auto; padding: 6px 16px; display: flex; }
+  .info { width: 100%; border-collapse: collapse; font-size: 12px; line-height: 1.4; }
+  .info td { padding: 5px 0; vertical-align: top; border-top: 1px solid #eaeef2; }
+  .info tr:first-child td { border-top: 0; }
+  .info td:first-child { width: 84px; font-weight: 650; color: var(--muted); }
+  .info .t { font-weight: 700; font-size: 13px; }
+  .info .st { color: var(--bad); font-weight: 600; }
+  .info a { color: var(--accent); font-weight: 600; }
+  .info i { font-style: normal; color: var(--muted); }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head big">
+    <h1>A quick look at a paper</h1>
+    <span class="sub">For a paper you came across: where it was published, how much it is cited, what it proposes, and the nearest papers you already have.</span>
+  </div>
+
+  <div class="main">
+    <div class="l">
+      <div class="h2">In Claude Code</div>
+      <div class="ccin"><span>/paper-info <em>2405.14734</em></span><i>↑</i></div>
+      <div class="h2">or in a terminal</div>
+      <div class="sh">paperlib info 2405.14734</div>
+      <div class="pt"><span class="n">1</span><span><b>Before adding.</b> It reads the abstract and public records, not the paper.</span></div>
+      <div class="pt"><span class="n">2</span><span><b>Against your library.</b> It says whether you have the paper, where it would go, and what is nearest to it.</span></div>
+      <div class="pt"><span class="n">3</span><span><b>No verdict.</b> It reports; whether to add the paper stays your decision.</span></div>
+    </div>
+
+    <div class="r">
+      <div class="paper">
+        <table class="info">
+          <tr><td>Paper</td><td class="t">SimPO: Simple Preference Optimization with a Reference-Free Reward</td></tr>
+          <tr><td>Status</td><td class="st">not in library</td></tr>
+          <tr><td>arXiv</td><td>2405.14734, 2024-05-23 <i>(2.4 years old)</i></td></tr>
+          <tr><td>Venue</td><td>Neural Information Processing Systems</td></tr>
+          <tr><td>Citations</td><td>1207, 502.9 a year, 243 influential</td></tr>
+          <tr><td>Uptake</td><td>very high</td></tr>
+          <tr><td>Named by</td><td>0 library papers, 0 notes or reviews</td></tr>
+          <tr><td>Folder</td><td>llm/post-training/preference-learning <i>(1 papers)</i></td></tr>
+          <tr><td>Proposes</td><td>SimPO is an offline preference-optimization method that uses the length-averaged log probability of a response as its implicit reward, so no reference model is needed. <i>…</i></td></tr>
+          <tr><td>Evidence</td><td>Compared with DPO and its recent variants on Mistral, Llama 3 and Gemma 2 models (base and instruction-tuned), evaluated on AlpacaEval 2, MT-Bench and Arena-Hard. <i>…</i></td></tr>
+          <tr><td>Nearest</td><td><a>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</a> [alternative]: SimPO replaces DPO’s reference-model log-ratio reward with a length-normalized average log probability and adds a target margin, so it needs no reference model. <i>…</i></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><b>Measured on 72 papers:</b> a model’s advice to add or skip did not match what the reader had decided, so the command gives none. <span class="exp">experiments/paper-vetting</span></div>
+</div>
+</body>
+</html>

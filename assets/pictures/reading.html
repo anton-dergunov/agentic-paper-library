@@ -14,7 +14,7 @@
 <title>Read a paper with Claude Code beside it</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  .vsc { height: 330px; flex: none; }
+  .vsc { height: 324px; flex: none; }
   .head { margin-bottom: 9px; }
   .tree { width: 184px; }
   .cc { width: 314px; }
@@ -22,14 +22,15 @@
   .pg9 { position: relative; }
   .pg9 img { display: block; width: 100%; }
   .mark { position: absolute; left: 60.2%; top: 34.5%; width: 39.3%; height: 41%; border: 2px solid var(--accent); background: rgba(9, 105, 218, .10); border-radius: 3px; }
-  .under { flex: none; display: flex; gap: 12px; margin-top: 17px; }
+  .under { flex: none; display: flex; gap: 12px; margin-top: 14px; }
   .under .md { flex: 1 1 0; min-width: 0; }
   .under .sk { flex: none; width: 356px; }
   .under .label { margin-bottom: 4px; }
   .under .box { padding: 8px 12px; }
   .foot { margin-top: 7px; }
   .code { font-size: 11px; line-height: 1.5; }
-  .sk .grid { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 0; font-size: 11.5px; line-height: 1.4; align-items: baseline; }
+  .sk .slash { line-height: 1.25; }
+  .sk .grid { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 0; font-size: 11.2px; line-height: 1.24; align-items: baseline; }
 </style>
 </head>
 <body class="wide">
@@ -98,6 +99,7 @@ To further compare the performance of PPO and DPO under …</div>
     <div class="box sk">
       <div class="label">Skills, typed in Claude Code</div>
       <div class="grid">
+        <span class="slash">/paper-info</span><span>a quick look at a new paper</span>
         <span class="slash">/add-paper</span><span>add a paper and file it under a topic</span>
         <span class="slash">/overview</span><span>a short overview before you read</span>
         <span class="slash">/literature-review</span><span>review the papers of a topic</span>
@@ -107,7 +109,7 @@ To further compare the performance of PPO and DPO under …</div>
     </div>
   </div>
 
-  <div class="foot">Design choices were measured in <b>22 experiments</b>, kept in the repository.</div>
+  <div class="foot">Design choices were measured in <b>22 experiments</b>, kept in the repository with their scripts and results. <span class="exp">experiments/</span></div>
 </div>
 </body>
 </html>
