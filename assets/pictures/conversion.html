@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/conversion.png. The three columns are DPO's equation 7 and Table 1 as
+  experiments/pdf-vs-arxiv-html/outputs holds them (dpo_pdftext.md, dpo_p4llm.md) and as
+  examples/library holds the paper now; runs of spaces in the raw PDF text are shortened and long lines cut with an ellipsis to fit, and
+  the lines in red or green italics are the picture's remarks. The numbers along the bottom are from
+  experiments/pdf-vs-arxiv-html, katex-equation-check (and docs/conversion.md for the current count),
+  reference-titles-and-table-math and library-reconversion. Render with
+  assets/pictures/render.sh conversion.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>The author's TeX, not the PDF's glyphs</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .main > div { flex: 1 1 0; }
+  .main > .k1 { flex: 1.3 1 0; }
+  .main > .k2 { flex: .95 1 0; }
+  .main > .k3 { flex: 1.3 1 0; }
+  .k1 .eq .tiny { font-size: 6.3px; line-height: 1.5; }
+  .k3 .tb { font-size: 8.6px; }
+  .doc { font-size: 9.3px; line-height: 1.5; white-space: pre; }
+  .doc + .doc { margin-top: 7px; }
+  .doc.eq { height: 162px; flex: none; }
+  .doc.tb { flex: 1 1 auto; }
+  .lbl { font: 700 9px/1 Inter, -apple-system, sans-serif; letter-spacing: .06em; color: var(--muted); margin-bottom: 3px; white-space: normal; }
+  .wrap { white-space: pre-wrap; }
+  .t1 { font-size: 8.2px; }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head">
+    <h1>The author's TeX, not the PDF's glyphs</h1>
+    <span class="sub">one equation and one table of the DPO paper, as three conversions hand them to a model</span>
+  </div>
+
+  <div class="main">
+    <div class="colflex k1">
+      <div class="col-title"><span class="pill before">PDF</span>the text layer<span class="muted">PyMuPDF</span></div>
+      <div class="doc eq"><div class="lbl">EQUATION 7</div><span class="tiny">                                          πθ(yw | x)          πθ(yl | x)
+LDPO(πθ; πref) = −E(x,yw,yl)∼D log σ β log           −β log            . (7)
+                                         πref(yw | x)        πref(yl | x)</span>
+
+<span class="remark">a fraction spread over three lines, for the reader to
+reassemble from horizontal positions</span></div>
+      <div class="doc tb t1"><div class="lbl">TABLE 1</div>6.3  Generalization to a new input distribution
+                         <span class="bad">Win rate vs. ground truth</span>
+To further … PPO and DPO un-  <span class="bad">Alg.  Temp 0  Temp 0.25</span>
+der distribution shifts, we … PPO and DPO poli-
+cies from our Reddit TL;DR …  <span class="bad">DPO    0.36     0.31</span>
+                              <span class="bad">PPO    0.26     0.23</span>
+a different distribution, news articles in the …
+<span class="remark">the table is woven into the paragraph beside it</span></div>
+    </div>
+
+    <div class="colflex k2">
+      <div class="col-title"><span class="pill before">PDF</span>layout-aware<span class="muted">pymupdf4llm</span></div>
+      <div class="doc eq wrap"><div class="lbl">EQUATION 7</div>…we can formulate a maximum likelihood
+objective for a parametrized policy _πθ_
+<span class="bad">                                         </span>
+This way, we fit an implicit reward using…
+<span class="remark">the objective is gone: no placeholder, no warning</span></div>
+      <div class="doc tb"><div class="lbl">TABLE 1</div>||<span class="bad">**Win rate vs. **|**ground truth**</span>|
+|---|---|---|
+|**Alg.**|Temp0|Temp0_._25|
+|DPO|0.36|0.31|
+|PPO|0.26|0.23|
+
+<span class="remark">a simple table survives; the header that spans two
+columns is split over them</span></div>
+    </div>
+
+    <div class="colflex k3">
+      <div class="col-title"><span class="pill after">shipped</span>arXiv's HTML<span class="muted">LaTeXML, pandoc</span></div>
+      <div class="doc eq"><div class="lbl">EQUATION 7</div><span class="math">$$\mathcal{L}_{\text{DPO}}(\pi_{\theta};
+\pi_{\text{ref}})=-\mathbb{E}_{(x,y_{w},y_{l})
+\sim\mathcal{D}}\left[\log\sigma\left(\beta\log
+\frac{\pi_{\theta}(y_{w}\mid x)}
+{\pi_{\text{ref}}(y_{w}\mid x)}-\beta\log
+\frac{\pi_{\theta}(y_{l}\mid x)}
+{\pi_{\text{ref}}(y_{l}\mid x)}
+\right)\right]. \tag{7}$$</span></div>
+      <div class="doc tb"><div class="lbl">TABLE 1</div><span class="h">### 6.3 Generalization to a new input …</span> <span class="pg">(p. 9)</span>
+<span class="dim">&lt;th colspan="2"&gt;</span>Win rate vs. ground truth<span class="dim">&lt;/th&gt;</span>
+<span class="dim">&lt;th&gt;&lt;b&gt;</span>Alg.<span class="dim">&lt;/b&gt;&lt;/th&gt; &lt;td&gt;</span>Temp 0<span class="dim">&lt;/td&gt; &lt;td&gt;</span>Temp 0.25<span class="dim">&lt;/td&gt;</span>
+<span class="dim">&lt;th&gt;</span>DPO<span class="dim">&lt;/th&gt; &lt;td&gt;</span>0.36<span class="dim">&lt;/td&gt; &lt;td&gt;</span>0.31<span class="dim">&lt;/td&gt;</span>
+<span class="dim">&lt;th&gt;</span>PPO<span class="dim">&lt;/th&gt; &lt;td&gt;</span>0.26<span class="dim">&lt;/td&gt; &lt;td&gt;</span>0.23<span class="dim">&lt;/td&gt;</span>
+Table 1: GPT-4 win rates vs. ground truth …
+<span class="remark ok">the author's LaTeX; the merged header kept; the PDF page
+on the heading</span></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>35 of 35</b><span>display equations of two maths papers kept as exact LaTeX; pymupdf4llm kept the number of 1</span><i>experiments/pdf-vs-arxiv-html</i></div>
+    <div class="stat"><b>830 → 6</b><span>of 35,000 formulas failing to parse after three rounds of fixes; now 66 of 488,925 in 2,204 papers</span><i>experiments/katex-equation-check</i></div>
+    <div class="stat"><b>13.1% shorter</b><span>40 random papers, once the hover titles of cross-references went and table formulas became TeX</span><i>experiments/reference-titles-and-table-math</i></div>
+    <div class="stat"><b>1,370 → 362</b><span>papers showing a known conversion symptom after the whole library was reconverted</span><i>experiments/library-reconversion</i></div>
+  </div>
+</div>
+</body>
+</html>

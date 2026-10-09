@@ -1,0 +1,102 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/overview.png. The paper is DPO (arXiv 2305.18290, CC BY 4.0) as
+  examples/library holds it: its frontmatter, headings, equation 7 and Table 1 (p. 9) are copied from
+  the converted markdown, and the answer in the chat states that table. The numbers along the bottom
+  are from README.md, docs/conversion.md, experiments/page-number-mapping and the count of
+  directories in experiments/. Render with assets/pictures/render.sh overview.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>Agentic paper library</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .top { display: flex; gap: 12px; flex: 1 1 auto; min-height: 0; }
+  .top > * { min-width: 0; }
+  .c1 .chips { flex-wrap: nowrap; }
+  .c1 .chip { font-size: 9.5px; }
+  .c1 { width: 262px; flex: none; }
+  .c2 { flex: 1 1 0; }
+  .c3 { width: 244px; flex: none; }
+  .body { flex-direction: column; gap: 10px; }
+  .tree { font-size: 9.5px; line-height: 1.5; margin-top: 7px; flex: 1 1 auto; }
+  .c2 .doc { font-size: 9.5px; line-height: 1.45; flex: 1 1 auto; }
+  .chat { flex: 1 1 auto; }
+  .doc .math { white-space: pre; }
+  .cards { grid-template-columns: repeat(5, 1fr); flex: none; }
+  .around { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--muted); margin-bottom: -5px; }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head">
+    <h1>One paper's way through the library</h1>
+    <span class="sub">converted so that a coding agent can read it, filed where the agent can find it, and cited back to the page of the PDF you have open</span>
+  </div>
+
+  <div class="main body">
+    <div class="top">
+      <div class="c1 colflex">
+        <div class="col-title"><span class="num">1</span>Look, then add</div>
+        <div class="chips"><span class="chip skill">/paper-info</span><span class="or">or</span><span class="chip">paperlib info 2305.18290</span></div>
+        <div class="chips" style="margin-top: 4px"><span class="chip skill">/add-paper</span><span class="or">or</span><span class="chip">paperlib add 2305.18290</span></div>
+        <div class="doc tree"><span class="dim">~/papers/</span>
+├─ library/llm/…/preference-learning/
+│  ├─ <span class="hl">Direct Preference Optimiz….md</span>
+│  └─ README.md  <span class="dim">← index, generated</span>
+├─ pdf/llm/…/preference-learning/
+│  └─ Direct Preference Optimiz….pdf
+└─ catalog/topics.yaml  <span class="dim">← folder scopes</span></div>
+        <div class="caption">A model picks the folder from the declared topic tree and writes the index line. The markdown is the agent's copy; the PDF is yours, synced and outside git, <b>at the same path</b>.</div>
+      </div>
+
+      <div class="c2 colflex">
+        <div class="col-title"><span class="num">2</span>The agent's copy<span class="muted">from arXiv's HTML rendering</span></div>
+        <div class="doc"><span class="h">## 4 Direct Preference Optimization</span> <span class="pg">(p. 4)</span>
+<span class="math">$$\mathcal{L}_{\text{DPO}}(\pi_{\theta};\pi_{\text{ref}})=
+-\mathbb{E}_{(x,y_{w},y_{l})\sim\mathcal{D}}\left[
+\log\sigma\left(\beta\log\frac{\pi_{\theta}(y_{w}\mid x)}
+{\pi_{\text{ref}}(y_{w}\mid x)}-\beta\log\frac{…}{…}
+\right)\right]. \tag{7}$$</span>
+
+<span class="h">### 6.3 Generalization to a new input distribution</span> <span class="pg">(p. 9)</span>
+<span class="dim">&lt;th colspan="2"&gt;</span>Win rate vs. ground truth<span class="dim">&lt;/th&gt;</span>
+<span class="dim">&lt;th&gt;</span>DPO<span class="dim">&lt;/th&gt; &lt;td&gt;</span>0.36<span class="dim">&lt;/td&gt; &lt;td&gt;</span>0.31<span class="dim">&lt;/td&gt;</span>
+<span class="dim">&lt;th&gt;</span>PPO<span class="dim">&lt;/th&gt; &lt;td&gt;</span>0.26<span class="dim">&lt;/td&gt; &lt;td&gt;</span>0.23<span class="dim">&lt;/td&gt;</span>
+Table 1: GPT-4 win rates vs. ground truth summaries for
+out-of-distribution CNN/DailyMail input articles.</div>
+        <div class="caption">Equations stay <b>the author's TeX</b>, tables with merged cells stay tables, and <b>every heading carries its PDF page</b>.</div>
+      </div>
+
+      <div class="c3 colflex">
+        <div class="col-title"><span class="num">3</span>Read with the agent</div>
+        <div class="chat">
+          <div class="msg you">Does DPO still beat PPO on text unlike what it was trained on?</div>
+          <div class="msg agent"><span class="who">CLAUDE CODE, IN THE LIBRARY</span>Yes. Both policies were trained on Reddit TL;DR and then tested on CNN/DailyMail news articles: GPT-4 preferred DPO's summary to the reference one at a rate of 0.36, against 0.26 for PPO, at temperature 0 <span class="cite">p. 9, Table 1</span>.</div>
+          <div class="msg you">Which of my papers build on it?</div>
+        </div>
+        <div class="caption">The citation is a link that opens the PDF at that table. The agent reads <b>the whole library</b> and your notes.</div>
+      </div>
+    </div>
+
+    <div class="around">AROUND THE READING</div>
+    <div class="cards">
+      <div class="card"><div class="chips"><span class="chip skill">/overview</span></div><div class="what">a 3–5 minute pre-read: the intuition and what is new against your library</div></div>
+      <div class="card"><div class="chips"><span class="chip skill">/literature-review</span></div><div class="what">a note per paper (<span class="mono">paperlib read</span>), then the review of an area</div></div>
+      <div class="card"><div class="chips"><span class="chip skill">/fix-conversions</span></div><div class="what">what the notes report as broken, fixed in the converter</div></div>
+      <div class="card"><div class="chips"><span class="chip skill">/expand-library</span></div><div class="what">the papers an area lacks, as a list you strike from, then added in bulk</div></div>
+      <div class="card"><div class="chips"><span class="chip skill">/reorganize</span></div><div class="what">moves, splits and merges of folders, once you approve</div></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>2,200 papers</b><span>in the library it was built on, across machine learning: one git repository an agent reads</span><i>README.md</i></div>
+    <div class="stat"><b>66 of 488,925</b><span>equations in that library fail to parse as KaTeX; the rest render as the author wrote them</span><i>docs/conversion.md</i></div>
+    <div class="stat"><b>99.1%</b><span>of numbered headings carry the PDF page they start on, over 2,202 papers</span><i>experiments/page-number-mapping</i></div>
+    <div class="stat"><b>22 experiments</b><span>behind the converters, the prompts and the choice of model, results committed</span><i>experiments/README.md</i></div>
+  </div>
+</div>
+</body>
+</html>

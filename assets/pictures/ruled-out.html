@@ -1,0 +1,101 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/ruled-out.png. Four designs that were built or tried and then dropped or
+  narrowed, each with the measurement that decided it: experiments/paper-vetting,
+  experiments/review-usefulness, experiments/katex-equation-check (the MathML comparison of 4 Oct)
+  and experiments/table-emphasis. The numbers along the bottom are from pdf-vs-arxiv-html,
+  review-usefulness, conversion-churn and reading-models. Render with
+  assets/pictures/render.sh ruled-out.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>What the measurements ruled out</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .grid { flex: 1 1 auto; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; min-height: 0; }
+  .q { border: 1px solid var(--line); border-radius: 9px; padding: 8px 11px 9px; display: flex; flex-direction: column; min-height: 0; }
+  .q h2 { font-size: 12.5px; font-weight: 700; }
+  .q .idea { color: var(--muted); font-size: 10.5px; line-height: 1.35; margin-top: 1px; white-space: nowrap; overflow: hidden; }
+  .q .mid { display: flex; gap: 12px; margin-top: 7px; align-items: flex-start; flex: 1 1 auto; }
+  .q .num2 { flex: none; width: 178px; }
+  .q .num2 .bar { grid-template-columns: 82px 1fr; font-size: 10px; }
+  .q .num2 .bar + .bar { margin-top: 4px; }
+  .q .num2 .fill { height: 12px; }
+  .q .found { font-size: 10px; line-height: 1.38; }
+  .q .then { margin-top: 5px; flex: none; border-top: 1px dashed var(--line); padding-top: 5px; font-size: 10.5px; line-height: 1.35; }
+  .q .then b { color: var(--ok); font-weight: 700; letter-spacing: .04em; font-size: 9.5px; margin-right: 4px; }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head">
+    <h1>What the measurements ruled out</h1>
+    <span class="sub">four designs that were built or tried, measured on real papers, and then dropped or narrowed; each write-up keeps its results and its limits</span>
+  </div>
+
+  <div class="grid">
+    <div class="q">
+      <h2>A verdict on each new paper: add, skip or read first</h2>
+      <div class="idea">from its abstract, citations, mentions in the library and stated interests</div>
+      <div class="mid">
+        <div class="num2">
+          <div class="bar"><span class="lab">papers I skipped<i>“add” for 22 of 30</i></span><div class="track"><div class="fill worst" style="width: 51%"></div><span class="v">73%</span></div></div>
+          <div class="bar"><span class="lab">papers I kept<i>“add” for 28 of 42</i></span><div class="track"><div class="fill" style="width: 47%"></div><span class="v">67%</span></div></div>
+        </div>
+        <div class="found">The verdict did not separate them. It followed uptake: papers it would add are named by a median 5.5 library papers, the rest by 0.5. The labels are weak, so they cannot show a verdict wrong either.</div>
+      </div>
+      <div class="then"><b>NOW</b><span class="mono">paperlib info</span> reports venue, citations, mentions and nearest papers. It does not recommend: why a paper is wanted is in no file.</div>
+    </div>
+
+    <div class="q">
+      <h2>Answer from the literature review first</h2>
+      <div class="idea">a review already says what the papers find, so a session could start there</div>
+      <div class="mid">
+        <div class="num2">
+          <div class="bar"><span class="lab">from the review<i>a third of the tokens</i></span><div class="track"><div class="fill worst" style="width: 48%"></div><span class="v">8 wrong</span></div></div>
+          <div class="bar"><span class="lab">from the papers</span><div class="track"><div class="fill" style="width: 18%"></div><span class="v">3 wrong</span></div></div>
+        </div>
+        <div class="found">Told to start from the review, a session answered a synthesis question from it alone. A stronger rule, notes and papers first, cost half again as much for no clear gain.</div>
+      </div>
+      <div class="then"><b>NOW</b>“A review is a map, not evidence”: sessions search it, then check the paper, and err no more than sessions without reviews.</div>
+    </div>
+
+    <div class="q">
+      <h2>Take equations from MathML instead of the author's TeX</h2>
+      <div class="idea">arXiv's HTML carries each equation both ways, and MathML parses more often</div>
+      <div class="mid">
+        <div class="num2">
+          <div class="bar"><span class="lab">parse failures<i>13 failing papers</i></span><div class="track"><span class="v">39 → 8</span></div></div>
+          <div class="bar"><span class="lab">characters of maths<i>63 papers</i></span><div class="track"><span class="v">+26%</span></div></div>
+          <div class="bar"><span class="lab">\operatorname<i>names and macros</i></span><div class="track"><span class="v">1,046 → 93</span></div></div>
+        </div>
+        <div class="found">It parses because what cannot be drawn is gone: one equation became “w = .”, pictures became blanks. The rest is machine-written TeX, without the author's macros and alignment.</div>
+      </div>
+      <div class="then"><b>NOW</b>The author's TeX stays the source; a formula that cannot be drawn stays visible.</div>
+    </div>
+
+    <div class="q">
+      <h2>Keep every table's cell shading</h2>
+      <div class="idea">shading can carry a claim: the paper's own method, a different condition</div>
+      <div class="mid">
+        <div class="num2">
+          <div class="bar"><span class="lab">shading dropped</span><div class="track"><div class="fill" style="width: 37%"></div><span class="v">11 of 15</span></div></div>
+          <div class="bar"><span class="lab">shading marked</span><div class="track"><div class="fill best" style="width: 50%"></div><span class="v">15 of 15</span></div></div>
+        </div>
+        <div class="found">Shading-dependent questions, answered by Opus from the table and the text citing it. Three of the four gains asked which method is the paper's own, which the whole paper says anyway.</div>
+      </div>
+      <div class="then"><b>NOW</b>Shading is kept only where the caption refers to it: 813 marks in 62 papers.</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>1 of 35</b><span>equation numbers survived pymupdf4llm, with no placeholder for the rest: not adopted</span><i>experiments/pdf-vs-arxiv-html</i></div>
+    <div class="stat"><b>35 errors</b><span>in Haiku's six notes against 1 in Opus's: the cheapest reader was not adopted</span><i>experiments/reading-models</i></div>
+    <div class="stat"><b>Built, then removed</b><span>tracking of out-of-date notes, the same day: a change touches a median 0.08% of a paper</span><i>experiments/conversion-churn</i></div>
+    <div class="stat"><b>Not compared</b><span>MinerU: installed, its run failed. Stated in the write-up as the converter to try next</span><i>experiments/pdf-converter-bakeoff</i></div>
+  </div>
+</div>
+</body>
+</html>
