@@ -33,7 +33,7 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **Icon-font glyphs** (Font Awesome) are written as the icon's name, `[lock]`, so a column of icons still says what each cell holds.
 - **Several captions in one float** each stay with their own table.
 - **Citations showing only a year**, where LaTeXML did not know the bibliography style, get the first author from the reference list.
-- **References with nothing in them** ("(Table )") are looked up in the paper's LaTeX source by the words before them. The float's number is used when its caption is in the HTML, its label's name otherwise. A reference to a section LaTeXML left as a label ("Section gen_inst") gets the number of the section the label follows in the source.
+- **References with nothing in them** ("(Table )") are looked up in the paper's LaTeX source by the words before them. The float's number is used when its caption is in the HTML, its label's name otherwise: the caption is the one before the label in its float, and captions that open alike ("… results in `\flickr`") are paired with the HTML's in order. Of a source holding two documents (an appendix compiled apart), the longest is the paper. A reference to a section LaTeXML left as a label ("Section gen_inst") gets the number of the section the label follows in the source.
 - **The author block** shows a list of affiliations shared by all authors once, not after every name.
 - **A title broken over two lines** is one heading.
 - **Warnings a style file typesets** when a paper changed its page layout ("marginparsep has been altered. … The page layout violates the ICML style.") arrive as the paper's first paragraphs, above the title. They are dropped.
@@ -45,7 +45,7 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **Cell shading** is kept as `<mark>` only where the caption refers to it ("gray rows are …") and the table has one shading colour; a shaded row is marked on its first cell. Other shading is dropped: on fifteen tables it changed no answer a reader of the whole paper would not already have.
 - **A value and what is printed small or in colour after it** (a deviation, a gain) are set apart: "70.9 +2.3".
 - **A column title set on two lines** arrives lower line first; the raised line is read first.
-- **Names of macros LaTeXML did not know** (`\sans`, `\rotate`) are dropped; their arguments stay. After an undefined `\cellcolor` the colour's name is set as text, and goes too.
+- **Names of macros LaTeXML did not know** (`\sans`, `\rotate`) are dropped; their arguments stay. After an undefined `\cellcolor` or `\rowcolor` the colour's name is set as text and runs into the cell's ("gray!10ANLI", "c3-avg-bkg72.6"); the name alone goes: a mix ends by its syntax, and another name is learnt where a tag follows it.
 - **TeX set as text** is read: a `\par` printed in every heading and caption of a paper, a bibliography style's `\citeauthoryearBengio et al.2003`, a glossary's `\cite[citep]{…}`, a `\diaghead` header cell.
 - **A number whose TeX is `\par`** (siunitx, in one paper's main table) has its digits only in the MathML; they are taken from there.
 - **Citations with no key left** ("( ?)") are found in the LaTeX source by the words before them and labelled from the paper's `.bib`.
@@ -77,7 +77,7 @@ Maths is written as `$…$` and `$$…$$` for KaTeX, VS Code's renderer, not as 
 - a `$`, a `_`, or a maths-only command such as `\times` inside a text argument is rewritten for its mode;
 - environments KaTeX lacks or restricts (`split` outside a display, `multlined`, `@{}` columns) become ones it draws.
 
-`scripts/katex-commands.txt` is the list of commands KaTeX supports, with those it refuses in a text argument marked; `scripts/katex/katex-commands.js` generates it. In a library of 2,202 papers, 56 of 444,263 equations do not parse: pictures and tables set inside an equation, and equations a model read from a PDF. `paperlib symptoms --katex` lists them.
+`scripts/katex-commands.txt` is the list of commands KaTeX supports, with those it refuses in a text argument marked; `scripts/katex/katex-commands.js` generates it. In a library of 2,204 papers, 66 of 488,925 equations do not parse: tables and images set inside an equation (28), equations a model read from a PDF (17), and single cases. `paperlib symptoms --katex` lists them.
 
 The equations are converted from the author's TeX, which LaTeXML keeps beside its MathML. Converting from the MathML parses slightly more often but gives machine-written TeX without the author's macros, fonts and alignment, so it is not used. → [`experiments/katex-equation-check`](../experiments/katex-equation-check/README.md)
 

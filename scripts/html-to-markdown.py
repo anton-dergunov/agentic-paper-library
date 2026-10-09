@@ -527,10 +527,6 @@ def latex_source(version):
     """The paper's LaTeX, \\input files spliced in and comments removed, or None."""
     files = {name: re.sub(r"(?<!\\)%.*", "", text)
              for name, text in source_files(version).items() if name.endswith(".tex")}
-    main = next((n for n, t in files.items() if r"\documentclass" in t), None)
-    if not main:
-        return None
-
     def splice(name, depth=0):
         text = files.get(name) or files.get(name + ".tex") or ""
         if depth > 10:
@@ -541,7 +537,8 @@ def latex_source(version):
             text,
         )
 
-    return splice(main)
+    # A source can hold a second document (an appendix or a reply compiled apart): the paper is the longest.
+    return max((splice(n) for n, t in files.items() if r"\documentclass" in t), key=len, default=None)
 
 
 MISSING_CITATION = re.compile(r'<span class="ltx_ref ltx_missing_citation[^"]*">([^<]+)</span>')
@@ -550,6 +547,8 @@ MISSING_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*">LABEL:
 EMPTY_LABEL = re.compile(r'<span class="ltx_ref ltx_missing_label[^"]*"[^>]*>\s*</span>')
 TEX_REF = r"\\(?:ref|cref|Cref|autoref|vref)\*?\{([^}]+)\}"
 TEX_CITE = r"\\[a-zA-Z]*cite[a-zA-Z]*\*?(?:\[[^\]]*\])*\{([^}]+)\}"
+TEX_FLOAT = re.compile(r"\\begin\{(table|figure|algorithm)\*?\}")
+TEX_CAPTION = re.compile(r"\\caption\*?\s*(?:\[[^\]]*\])?\s*\{")
 # A citation command LaTeXML did not know leaves no key at all: "( ?)".
 UNKNOWN_CITATION = re.compile(r"\(\s\?\)|\[\s?\?\]")
 # What may stand between two words of a sentence in its LaTeX source.
@@ -644,19 +643,34 @@ def unresolved_citations(article, page):
 
         sections = section_numbers(article, tex)
 
+        def opening(caption):
+            """The first words of a caption in the source, none from what follows a short one."""
+            end = tex_group_end(tex, caption.end() - 1) or len(tex)
+            return plain_words(tex[caption.end():min(end, caption.end() + 200)])[:5]
+
         def number(label):
             if label in sections:
                 return sections[label][0]
             at = tex.find(f"\\label{{{label}}}")
             # The caption of the float the label sits in: the nearest one before
-            # the label within the float, else the first after it.
-            begin = max(tex.rfind("\\begin{table", 0, at), tex.rfind("\\begin{figure", 0, at)) if at >= 0 else -1
-            caption = re.search(r"\\caption\*?\s*(?:\[[^\]]*\])?\s*\{", tex[begin:]) if begin >= 0 else None
+            # the label within the float, else the first after it. A label outside
+            # a float (an equation's, an appendix's) has no caption.
+            opened = max(TEX_FLOAT.finditer(tex, 0, at), key=lambda m: m.start(), default=None) if at >= 0 else None
+            closed = re.compile(r"\\end\{%s\*?\}" % opened.group(1)).search(tex, opened.end()) if opened else None
+            end = closed.start() if closed else len(tex)
+            caption = None
+            if opened and at < end:
+                caption = (max(TEX_CAPTION.finditer(tex, opened.end(), at), key=lambda m: m.start(), default=None)
+                           or TEX_CAPTION.search(tex, at, end))
             if caption:
-                start = plain_words(tex[begin + caption.end():begin + caption.end() + 200])[:5]
-                for tag, body in captions:
-                    if start and body[:len(start)] == start:
-                        return tag.split()[-1]  # "Table 3" -> "3", after the "Table" already in the text
+                start = opening(caption)
+                same = [tag for tag, body in captions if start and body[:len(start)] == start]
+                if len(same) > 1:
+                    # Captions that open alike ("… results in \\flickr") are told apart by their order in the source.
+                    alike = [m.start() for m in TEX_CAPTION.finditer(tex) if opening(m) == start]
+                    same = [same[alike.index(caption.start())]] if len(alike) == len(same) else []
+                if same:
+                    return same[0].split()[-1]  # "Table 3" -> "3", after the "Table" already in the text
             return label.split(":", 1)[-1]
 
         def from_source(m):
@@ -1064,6 +1078,8 @@ UNDEFINED_MACRO = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR[^"]*\bundefined"[^
 # A colour macro of a package LaTeXML lacks, and the colour's name set after it as text.
 UNDEFINED_COLOUR = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR[^"]*\bundefined"[^>]*>\\(?:cell|row|column)color</span>'
                               r'(\s*(?:<span\b[^>]*>)?)([^<\s]*)')
+# xcolor's mix of a colour with white or another colour ("gray!10", "blue!20!white"), which ends where a letter follows a percentage.
+COLOUR_MIX = re.compile(r"[A-Za-z][\w-]*(?:!\d+(?:\.\d+)?(?:![A-Za-z][\w-]*(?=!))?)+(?=[^\d.!])")
 # Text of an element, with the tag that opens it; code and a formula's TeX are not prose.
 TEXT_NODE = re.compile(r"(<(?!code\b|pre\b|annotation\b|/?math\b)[^>]*>)([^<]+)")
 RAW_CITE = re.compile(r"\\cite\[cite[pt]\]\{\(?\\@@bibref\{[^}]*\}\{([^}]*)\}\{\\@@citephrase\{[^}]*\}\}\{\}\)?\}")
@@ -1092,13 +1108,17 @@ def drop_undefined_macros(article):
     the paragraph of its arguments ("listing[Listing][List of Listings]").
     Run after the steps that read such a macro (forest_trees, unresolved_refs).
     """
-    # The name runs into the cell's text ("c5-item-bkgVCG Bench") unless a tag
-    # follows it, so the names are learnt where one does.
-    names = sorted({m.group(2) for m in UNDEFINED_COLOUR.finditer(article)
-                    if m.group(2) and article.startswith("<", m.end())}, key=len, reverse=True)
+    # The name runs into the cell's text ("c5-item-bkgVCG Bench", "gray!10ANLI").
+    # A mix ends by its syntax; another name is learnt where a tag follows it,
+    # unless that is a known name with a one-word cell after it.
+    found = [(m.group(2), article.startswith("<", m.end())) for m in UNDEFINED_COLOUR.finditer(article)]
+    names = {mix.group(0) for text, _ in found if (mix := COLOUR_MIX.match(text))}
+    whole = {text for text, tagged in found if text and tagged}
+    names |= {text for text in whole if not any(text != n and text.startswith(n) for n in names | whole)}
+    names = sorted(names, key=len, reverse=True)
 
     def colour(m):
-        name = next((n for n in names if m.group(2).startswith(n)), m.group(2) if article.startswith("<", m.end()) else "")
+        name = next((n for n in names if m.group(2).startswith(n)), "")
         return m.group(1) + m.group(2)[len(name):]
 
     article = UNDEFINED_COLOUR.sub(colour, article)

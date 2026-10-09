@@ -2,34 +2,6 @@
 
 The one list of what is open in the converters and in the conversion of the author's library (`~/papers`). The examples are papers of that library. A problem that does not change what an agent reads from a paper, and is hard to fix, is not here: the last section says which were dropped.
 
-## 0. Finish the fixes of 2026-10-09 (start here)
-
-The converter was changed on 2026-10-09 ([`experiments/reference-titles-and-table-math`](../../experiments/reference-titles-and-table-math/README.md)): link titles dropped, mathematics in HTML tables written as TeX, pictures in formulas replaced by what they show, TeX set as text removed. `paperlib test` passes. The library is being reconverted with it:
-
-```sh
-cd ~/papers
-caffeinate -i sh -c 'paperlib reconvert --all --jobs 3 --state ~/.cache/papers/reconvert-2026-10-09.jsonl; paperlib reconvert --all --jobs 3 --state ~/.cache/papers/reconvert-2026-10-09.jsonl'
-```
-
-It began at 12:21 and resumes from the state file if it is run again. It is done when the state file has a line for each of the 2,204 papers and no `reconvert.py` process is left. **Do not edit `scripts/` while it runs:** it converts with the working tree.
-
-State of the two repositories when it began:
-- Engine: the converter changes, ten new fixtures, both experiment write-ups, `docs/conversion.md` and this file, uncommitted or committed as "Drop link titles…" (see `git log`).
-- Library: clean at `1d812178` apart from the run's output, two corrected table numbers (the Spider 2.0 note and `reviews/llm/evaluation.md`) and two deleted task files.
-
-When the run has ended, in `~/papers`:
-
-1. **Outcome.** Count the statuses in the state file; expect about 1,889 ok, 16 partial (figures arXiv does not serve), 299 skipped, none failed. Look at anything else.
-2. **Validate.** `paperlib symptoms --counts` (before the run, with today's checks: 417 papers; `macro-name` 56, `tex-box` 9, `empty-ref` 9, `double-mark` 3, `empty-header` 335). `paperlib symptoms --compare HEAD`: no paper should shrink by 5% except those that lost picture commands (xLSTM, "Scaling Laws for Generative Mixed-Modal Language Models", "Attention Heads of Large Language Models", Self-RAG, "The Platonic Representation Hypothesis") and long tables of rendered formulas; check each one listed. `paperlib symptoms --katex`: 80 formulas in 28 papers before; fewer now.
-3. **Measure.** `python3 experiments/reference-titles-and-table-math/compare.py ~/papers > experiments/reference-titles-and-table-math/compare.tsv` (in the engine); read the lost words it prints. They should be picture commands ("pgfpicture", "hbox", "stroke"), macro names and "par".
-4. **Look at ten papers** of the diff outside `llm/evaluation`: title, authors, citations, one HTML table with formulas, one equation. Among them "Attention is not Explanation" (Table 2 against the PDF), xLSTM (equations 1–3), DeepWalk (still "shown in Figure ."? then see why the source lookup fails).
-5. **The seven papers edited by hand** are skipped by the run and keep their link titles. Remove them with `LINK_TITLE` of `scripts/caption-numbers.py` alone, not by running the script, which would renumber captions.
-6. **"Continual Learning via Sparse Memory Finetuning", Table 1** (a heat map, key content broken in the catalog): `python3 experiments/reference-titles-and-table-math/heatmap.py ~/.cache/papers/arxiv/html/<id>v<n>/index.html.gz <paper.md> --write` marks the tokens shaded at a quarter or more of the darkest shade, from the HTML's colours. Then add `<!-- hand-edited: Table 1's shaded tokens marked from arXiv's HTML -->` and a sentence under the caption saying what `<mark>` means, and remove the catalog entry.
-7. **Catalog.** In `catalog/conversion-issues.yaml` remove the entries the run fixed: check at least "Attention is not Explanation", Self-RAG, xLSTM, DAPO, and any entry about "par", macro names or garbled formulas in tables. `paperlib read --redo` "Attention is not Explanation" if it has a note: its Table 2 had no numbers.
-8. **Indexes.** `paperlib build-index`, `paperlib check`.
-9. **Write up.** Fill "Still to add" in the experiment's README and its row in `experiments/README.md`, and the count of formulas KaTeX cannot draw in `docs/conversion.md` ("Equations") and in the sections below. Delete this section.
-10. **Two commit messages**, one per repository.
-
 ## 1. Content arXiv's HTML lacks, taken from the PDF
 
 The largest gain for an agent: these papers are missing pages of text.
@@ -74,7 +46,9 @@ Before the overnight runs below, so that they get these fixes.
 
 - **`Memory in the Age of AI Agents`** is edited by hand, so it keeps "§ what-memory" for Section 3. A reconversion with `--force` now resolves such references from the LaTeX source; its cropped Figure 1 has to be put back after.
 - **References that share an anchor.** See "Table and figure numbers" in [`conversion.md`](../conversion.md).
-- **An `\includegraphics` or a `tabular` inside a formula** stays as its TeX, which an agent reads and KaTeX does not draw (about 30 formulas in 6 papers). A `NiceArray` arrives empty (5 formulas, one paper).
+- **An `\includegraphics` or a `tabular` inside a formula** stays as its TeX, which an agent reads and KaTeX does not draw (23 formulas in 4 papers). A `NiceArray` arrives empty (5 formulas, one paper).
+- **A reference to an equation, a theorem or an appendix that LaTeXML lost** shows its label's name ("eq.(exactSol)", "Appendix minibatch"); only sections and floats get their number from the LaTeX source. Nine papers showed an unrelated float's number there until 2026-10-09, "Real numbers, data science and chaos" in thirteen places. An equation's number could be taken from its place among the numbered equations of the source.
+- **A colour mix that ends in a colour's name** (`red!30!blue`) before a cell's text cannot be told from the text; no paper of the library has one.
 - **Image file names repeat the paper's title**, so image links are 1.6% of the text of the arXiv-HTML papers. Shorter names would change the layout the VS Code extension and `move-paper.sh` rely on.
 
 ## Dropped

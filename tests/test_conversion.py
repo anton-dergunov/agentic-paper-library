@@ -460,6 +460,34 @@ def checks():
         "(Vaswani et al. 2017)" in cited and "models ( ?)" in cited)
 
     tex = r"and 17 widely used \emph{agentic} benchmarks (Table \ref{tab:all}). As shown in Figure~\ref{fig:flow}, we then"
+    files, h2m.source_files = h2m.source_files, lambda version: {
+        "appendix.tex": "\\documentclass{article}\\begin{document}More.\\end{document}",
+        "paper.tex": "\\documentclass{article}\\begin{document}\\input{intro} % \\ref{no}\n\\end{document}",
+        "intro.tex": "The walk is shown in Figure \\ref{fig:toy}."}
+    spliced = h2m.latex_source("1403.6652v2")
+    h2m.source_files = files
+    yield "the paper is the longest document of its source, its \\input files spliced in", (
+        "Figure \\ref{fig:toy}" in spliced and "{no}" not in spliced and "More" not in spliced)
+    table = "\\begin{{table}}\\caption{{Multi-label classification results in \\{0}}}\\label{{tbl:{0}}}\\end{{table}}"
+    caption = '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table {}: </span>Multi-label classification results in {}</figcaption>'
+    samples = ("\\begin{figure}\\begin{subfigure}\\caption{Normal model, no trigger}\\end{subfigure}"
+               "\\caption[]{Samples from our models}\\label{fig:samples}\\end{figure}")
+    files, h2m.source_files = h2m.source_files, lambda version: {
+        "paper.tex": "\\documentclass{article}" + table.format("blog") + table.format("flickr") + table.format("youtube") + samples
+                     + "\\begin{equation}x\\label{eq:objective}\\end{equation}"}
+    resolved = h2m.unresolved_citations(
+        caption.format(2, "BlogCatalog") + caption.format(3, "Flickr") + caption.format(4, "YouTube")
+        + '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(a) </span>Normal model, no trigger</figcaption>'
+        + '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">Figure 9: </span>Samples from our models</figcaption>'
+        + '<p>See Table <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:tbl:youtube</span> and '
+        'Table <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:tbl:blog</span> and '
+        'Figure <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:fig:samples</span>. '
+        'Eq. <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:eq:objective</span></p>',
+        '<base href="/html/1403.6652v2/">')
+    h2m.source_files = files
+    yield "captions that open alike are numbered by their order in the source", "See Table 4 and Table 2 and" in resolved
+    yield "a label takes the caption before it, not a sub-figure's", "and Figure 9." in resolved
+    yield "a label outside a float does not take the float's number", "Eq. objective</p>" in resolved
     yield "an empty reference is found in the LaTeX source", (
         h2m.label_in_source("17 widely used <em>agentic</em> benchmarks (Table ", tex) == "tab:all"
         and h2m.label_in_source("held out. As shown in Figure ", tex) == "fig:flow"
@@ -580,6 +608,10 @@ def checks():
     yield "TeX set as text is read: a citation, a colour's name, a split header", (
         "[Bengio et al. 2003](#bib.bibx2)" in md and "(olsson_2022)" in md and "cell Score" in md
         and "Method / Dataset" in md and "\\" not in md.replace("\\[", "").replace("\\]", ""))
+
+    rowcolor = '<span class="ltx_ERROR undefined">\\rowcolor</span><span class="ltx_text">gray!10{}</span>'
+    md, _ = convert(f'<p>Rows {rowcolor.format("ANLI")} and {rowcolor.format("AIME 2025")} and {rowcolor.format("")}end.</p>')
+    yield "a colour mix before a one-word cell goes alone", "Rows ANLI and AIME 2025 and end." in md
 
     unplaced = ('<span class="ltx_note ltx_role_footnotetext"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer">'
                 '<span class="ltx_note_content"><sup class="ltx_note_mark">†</sup>{}</span></span></span>')

@@ -38,7 +38,7 @@ from paperlib import (
 
 # Markdown images, and <img> tags (used inside the HTML tables of complex tables).
 # Alt text may hold an escaped bracket ("Low (8, 12\]").
-IMAGE_LINK = re.compile(r"!\[(?:\\.|[^\]\\])*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
+IMAGE_LINK = re.compile(r"(?<!\\)!\[(?:\\.|[^\]\\])*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
 # Fenced code can show image markup as text (a paper's HTML examples).
 FENCE = re.compile(r"^(`{3,}|~{3,})")
 
