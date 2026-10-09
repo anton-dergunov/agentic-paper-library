@@ -34,6 +34,10 @@ Three ways to place a heading, in order:
 
 Headings neither method places are left alone and reported. Existing `(p. N)`
 suffixes are replaced, so the script is safe to re-run.
+
+The first line it prints also names the PDF pages whose text the markdown
+lacks, when there are three or more: arXiv's HTML can stop partway or leave
+out appendix pages, and nothing else says so (see missing_pages).
 """
 
 import re
@@ -138,6 +142,52 @@ def dest_candidates(number):
     if depth == 0 and parts[0].isalpha():
         names.append(f"appendix.{number}")
     return names
+
+
+LIGATURES = str.maketrans({"\ufb01": "fi", "\ufb02": "fl", "\ufb00": "ff", "\ufb03": "ffi", "\ufb04": "ffl"})
+MIN_MISSING = 3  # fewer are pages of figures, tables or a contents list
+
+
+def text_words(text):
+    """The words of three letters or more, lowercased, a word broken at a line's end joined."""
+    return re.findall(r"[a-z]{3,}", re.sub(r"-\n", "", text.translate(LIGATURES)).lower())
+
+
+def missing_pages(doc, markdown):
+    """(pages of the PDF whose text the markdown lacks, pages with text): 1-based.
+
+    A page with 120 or more words is missing when under a quarter of its
+    three-word sequences occur in the markdown. A page of references (twelve
+    years and a venue) is not counted: arXiv's HTML often sets the list
+    differently.
+    """
+    words = text_words(markdown)
+    known = set(zip(words, words[1:], words[2:]))
+    missing, texty = [], 0
+    for number, page in enumerate(doc, 1):
+        text = page.get_text()
+        words = text_words(text)
+        if len(words) < 120:
+            continue
+        texty += 1
+        grams = list(zip(words, words[1:], words[2:]))
+        if sum(g in known for g in grams) >= 0.25 * len(grams):
+            continue
+        if len(re.findall(r"\b(?:19|20)\d\d[a-z]?\b", text)) >= 12 and re.search(r"arXiv|Proceedings|Conference|Journal|In [A-Z]", text):
+            continue
+        missing.append(number)
+    return missing, texty
+
+
+def page_ranges(pages):
+    """ "24–26, 30" for [24, 25, 26, 30]."""
+    runs = []
+    for page in pages:
+        if runs and page == runs[-1][1] + 1:
+            runs[-1][1] = page
+        else:
+            runs.append([page, page])
+    return ", ".join(str(a) if a == b else f"{a}–{b}" for a, b in runs)
 
 
 def main(pdf_path, md_path):
@@ -272,7 +322,10 @@ def main(pdf_path, md_path):
         placed += 1
 
     Path(md_path).write_text("\n".join(lines), encoding="utf-8")
-    print(f"page-map: {placed} headings placed, {unplaced} numbered headings unplaced")
+    lacking, texty = missing_pages(doc, "\n".join(lines))
+    lacking = (f"; {len(lacking)} of {texty} text pages are not in the markdown (pp. {page_ranges(lacking)})"
+               if len(lacking) >= MIN_MISSING else "")
+    print(f"page-map: {placed} headings placed, {unplaced} numbered headings unplaced{lacking}")
     if from_outline:
         print(f"  {from_outline} placed from the PDF outline")
     if contents:

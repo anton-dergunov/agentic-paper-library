@@ -4,14 +4,13 @@ What is open in the converters and in the conversion of the author's library (`~
 
 ## 1. For every new paper
 
-- **A check for pages arXiv's HTML lacks.** arXiv's rendering can stop partway or leave out appendix pages, and nothing says so when the paper is added. Put the page comparison in `paperlib symptoms` as `missing-pages`: a PDF page with 120 or more words, of which under a quarter of the three-word sequences occur in the markdown, is missing; reference pages are not counted.
 - **A reading of an equation that does not parse.** In a PDF-only paper the model's reading can have unbalanced braces or delimiters (17 formulas in 11 papers, `paperlib symptoms --katex`). Check each reading with KaTeX when it is made, and read again one that fails.
 - **Tables that are images.** Their numbers come from OCR and differ a little from run to run, while the note at the top of the paper says the numbers are the PDF's own (TabPFN's Extended Data tables, pp. 18–23). Say so in the note when a table had no text layer under it.
 - **OpenCV is held at 4.12** ([`experiments/ocr-engines`](../../experiments/ocr-engines/README.md)). Lift the pin, and the numpy override that goes with it, when a release converts "Canaries in the Coal Mine" ten times without a crash.
 
 ## 2. Content arXiv's HTML lacks, taken from the PDF
 
-- **Papers whose arXiv HTML is incomplete**: 27 are in the library's `catalog/conversion-issues.yaml`, those missing eight pages or a quarter of the paper (the GPT-4 Technical Report has no System Card, "Studying Large Language Model Generalization with Influence Functions" ends at §2.1); eighty papers miss three pages or more.
+- **Papers whose arXiv HTML is incomplete**: 27 are in the library's `catalog/conversion-issues.yaml`, those missing eight pages or a quarter of the paper (the GPT-4 Technical Report has no System Card, "Studying Large Language Model Generalization with Influence Functions" ends at §2.1); `paperlib symptoms --pages` lists 73 papers that miss three pages or more, and the line a paper's conversion prints names the pages.
   - `paperlib reconvert` cannot convert a `source: html` paper from its PDF. Add `--from-pdf`, and compare it on five papers with adding only the missing pages to the HTML conversion.
   - Read the converted papers again; estimate the cost of that first.
 - **Figures arXiv does not serve** (16 papers, `figure-link` in `paperlib symptoms`) still link to arXiv. Cut them from the PDFs by the same route.

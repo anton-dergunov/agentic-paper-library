@@ -5,6 +5,7 @@
     ./scripts/conversion-symptoms.py --counts [<folder> ...]  # papers per symptom
     ./scripts/conversion-symptoms.py --katex [<folder> ...]
     ./scripts/conversion-symptoms.py --compare <git-ref> [<folder> ...]
+    ./scripts/conversion-symptoms.py --pages [<folder> ...]
 
 Looks at papers converted from arXiv HTML (all of them, or those under the
 folders given). The symptoms are the ones html-to-markdown.py now fixes, so
@@ -34,6 +35,11 @@ lacks the content:
 preview) cannot draw, with the number of them and the first error. It needs
 Node; KaTeX is installed into scripts/katex/ on first use.
 
+--pages instead lists papers with three or more PDF pages whose text the
+markdown lacks: arXiv's HTML stopped partway or left appendix pages out. It
+reads every paper's PDF (page-map.py's missing_pages; the same count is in the
+line page-map prints when a paper is added or reconverted).
+
 --compare <git-ref> instead lists papers whose text shrank by more than 5%
 since <git-ref> (body against body, words outside markup, so frontmatter,
 dropped alt text and tags do not count), the check that a reconversion lost
@@ -47,15 +53,23 @@ import re
 import shutil
 import subprocess
 import sys
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from urllib.parse import unquote
 
-from paperlib import LIBRARY_DIR, paper_files, read_paper, split_frontmatter
+from paperlib import LIBRARY_DIR, paper_files, pdf_path_for, read_paper, split_frontmatter
 
 SCRIPTS = Path(__file__).resolve().parent
-spec = importlib.util.spec_from_file_location("html_to_markdown", SCRIPTS / "html-to-markdown.py")
-converter = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(converter)
+
+
+def load(name):
+    spec = importlib.util.spec_from_file_location(name.replace("-", "_"), SCRIPTS / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+converter = load("html-to-markdown")
 
 # A control sequence in running text; \\captionof has a symptom of its own.
 # A prompt's printed line break or tab before a capitalised word ("\nAnswer:") is not one.
@@ -179,7 +193,33 @@ def katex(folders):
     print(f"{failures} equations in {papers} papers do not parse in KaTeX", file=sys.stderr)
 
 
+def lacking_pages(md):
+    """A line for a paper whose markdown lacks pages of its PDF, or None."""
+    import pymupdf
+    page_map = load("page-map")
+    pymupdf.TOOLS.mupdf_display_errors(False)
+    pdf = pdf_path_for(md)
+    if not pdf.exists():
+        return None
+    with pymupdf.open(pdf) as doc:
+        missing, texty = page_map.missing_pages(doc, md.read_text(encoding="utf-8"))
+    if len(missing) < page_map.MIN_MISSING:
+        return None
+    return f"{len(missing)}\t{texty}\tpp. {page_map.page_ranges(missing)}\t{md.relative_to(LIBRARY_DIR)}"
+
+
+def pages(folders):
+    """Papers whose markdown lacks pages of the PDF: count, pages with text, which, path."""
+    papers = [md for md, _ in html_papers(folders)]
+    with ProcessPoolExecutor() as pool:  # reading two thousand PDFs takes minutes on one core
+        lines = [line for line in pool.map(lacking_pages, papers, chunksize=20) if line]
+    print("\n".join(lines))
+    print(f"{len(lines)} papers lack 3 or more pages of their PDF", file=sys.stderr)
+
+
 def main(argv):
+    if "--pages" in argv:
+        return pages([a for a in argv if not a.startswith("--")])
     if "--katex" in argv:
         return katex([a for a in argv if not a.startswith("--")])
     if "--compare" in argv:

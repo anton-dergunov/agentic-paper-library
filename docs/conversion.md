@@ -128,6 +128,7 @@ A whole-library run is validated with:
 - `paperlib symptoms`, which detects known conversion problems;
 - `paperlib symptoms --compare <git-ref>`, which flags papers whose body shrank by more than 5% since that commit;
 - `paperlib symptoms --katex`, which lists papers with equations KaTeX cannot parse (it needs Node);
+- `paperlib symptoms --pages`, which lists papers whose markdown lacks three or more pages of the PDF;
 - `tests/test_conversion.py`.
 
 The converters are pinned in `pyproject.toml`, so that a fresh install converts a paper exactly as before. Upgrading docling or PyMuPDF changes papers already in a library, so it is a measured step. → [`experiments/library-reconversion`](../experiments/library-reconversion/README.md)

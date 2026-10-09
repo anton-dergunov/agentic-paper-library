@@ -44,7 +44,7 @@ Paths below are the defaults; `.claude/library-guide.md` has this library's.
 5. **Rebuild and check.** `paperlib build-index`, then `paperlib check`, which must pass.
 6. **Report**, briefly:
    - where it was filed, and whether the markdown came from `html` or `pdf-text`;
-   - the page-map line (headings placed / unplaced);
+   - the page-map line (headings placed / unplaced, and any pages it says the markdown lacks);
    - two or three sentences on what the paper is and how it relates to papers already in
      the library, with links;
    - if the folder's `README.md` links a literature review, one line: "Not yet in

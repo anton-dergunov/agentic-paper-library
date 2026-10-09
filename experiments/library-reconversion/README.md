@@ -202,8 +202,10 @@ The converter tests went from 41 checks to 44.
 
 ### arXiv's HTML is incomplete for some papers
 
-No symptom catches this. A paper whose HTML rendering stops partway converts cleanly, and its
-markdown ends where the rendering ends. It was found in three steps.
+No symptom caught this. A paper whose HTML rendering stops partway converts cleanly, and its
+markdown ends where the rendering ends. It was found in three steps. Since 9 Oct 2026 the page
+comparison of step 2, reference pages aside, is `paperlib symptoms --pages` (73 papers lack three
+pages or more), and the line a conversion prints names the pages.
 
 1. **Words per paper.** [`truncated.py`](truncated.py) divides the markdown's word count by the
    PDF's ([`truncated.txt`](truncated.txt)). The median ratio is 0.97. The worst is "Studying

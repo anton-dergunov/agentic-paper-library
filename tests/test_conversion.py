@@ -649,6 +649,17 @@ def checks():
         ["| Model | Hit |\n|---|---|\n| A | 0.4 |", "| B | 0.6 |\n|---|---|\n| C | 0.7 |"]
     ) == ["| Model | Hit |\n|---|---|\n| A | 0.4 |\n| B | 0.6 |\n| C | 0.7 |"]
 
+    import pymupdf
+    page_map = load("page-map")
+    said = [" ".join(f"{topic}{chr(97 + i % 26)}{chr(97 + i // 26)}" for i in range(130))
+            for topic in ("intro", "method", "proof", "ablation", "prompts")]
+    doc = pymupdf.open()
+    for text in said + ["Smith 2019. In Proceedings of the Conference. " * 14 + said[0]]:
+        doc.new_page().insert_textbox(pymupdf.Rect(40, 40, 560, 800), text, fontsize=6)
+    lacking, texty = page_map.missing_pages(doc, said[0] + "\n\n" + said[1])
+    yield "pages of the PDF the markdown lacks are found, a page of references aside", (
+        (lacking, texty) == ([3, 4, 5], 6) and page_map.page_ranges([3, 4, 5, 9]) == "3–5, 9")
+
     symptoms = load("conversion-symptoms")
     yield "a < in an equation is not a tag", symptoms.prose_words(
         "If $a<b$ then one two three and $c>d$ holds.\n\n$$x<y \\tag{1}$$\n\n<span>four</span> <!-- note -->") == 12
