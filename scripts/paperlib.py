@@ -100,9 +100,6 @@ CATALOG_DIR = _path(CONFIG.get("catalog", "catalog"), _BASE)
 TOPICS_FILE = CATALOG_DIR / "topics.yaml"
 SKIPPED_FILE = CATALOG_DIR / "skipped.yaml"
 CONVERSION_ISSUES_FILE = CATALOG_DIR / "conversion-issues.yaml"
-# What the reader works on and wants to learn, for `paperlib vet`: a short
-# markdown file, which may live outside the library (docs/configuration.md).
-INTERESTS_FILE = _path(CONFIG.get("interests") or CATALOG_DIR / "interests.md", _BASE)
 TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 # Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
 NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)

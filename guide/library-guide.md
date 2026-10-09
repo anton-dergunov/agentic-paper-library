@@ -26,6 +26,7 @@ A paper's markdown and PDF have the same topic path and filename stem.
 ## Rules
 
 - **Add papers only with paperlib**: the `add-paper` skill (any source, a new folder, or the inbox), `paperlib add <arxiv-url-or-id> ...` (chooses the folder and summary itself, never creates one), or the `expand-library` skill for tens of papers.
+- **A paper named in passing**: `paperlib info <arxiv-url-or-id or title words>` says whether the library has it and where its markdown, note and review are; for one it lacks, its citations, what it proposes and the nearest library papers. It reports and never recommends.
 - **Move papers only with `paperlib move <paper.md> <topic>`**, which moves the markdown, figures and PDF together; a hand `mv` splits the trees. Filenames follow `paperlib filename "<title>"` (a colon becomes ". "); `paperlib rename` re-applies the rule.
 - **Never put a PDF in git.** `paperlib check` fails on one.
 - **Read the markdown, not the PDF.** It comes from arXiv's HTML, with equations as LaTeX and tables as tables. Papers converted otherwise say so in `source`, and in a note at the top:

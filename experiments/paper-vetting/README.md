@@ -1,10 +1,12 @@
 # Experiment · does a first opinion on a paper agree with what the reader decided?
 
-**Question.** `paperlib vet` gives a verdict on a paper before it is added: `add`, `skip` or `read first`, from the abstract, citation data, the library's own mentions of the title, the folder's papers and the reader's interests. Does that verdict agree with the decisions already in a library, what does it cost, and which model should write it?
+**Question.** `paperlib vet`, the first design of the quick look at a paper, gave a verdict on a paper before it is added: `add`, `skip` or `read first`, from the abstract, citation data, the library's own mentions of the title, the folder's papers and the reader's interests. Does that verdict agree with the decisions already in a library, what does it cost, and which model should write it?
 
 **Status.** Measured 9 Oct 2026 on 72 papers of the author's library. **The verdict does not separate the papers the reader skipped from those kept**: Sonnet 5.5 said `add` for 22 of 30 skipped papers and for 28 of 42 kept ones; Haiku 4.5 for 13 of 30 and 21 of 42. It follows uptake instead: the papers Sonnet would add are named by a median 5.5 library papers, those it would skip by 0.5. The labels are weak (below), so this does not show the verdicts are wrong, only that these labels cannot validate them. A Sonnet verdict costs 11.3K tokens in, 700 out, $0.029; Haiku's cost more ($0.050, 7.3K output tokens) and were slower. Not measured: one request against two.
 
-**Serves.** `paperlib vet`; no decision in [`docs/design.md`](../../docs/design.md) yet.
+**Decision.** The recommendation was dropped. The reader's reason for wanting a paper is not written anywhere a script can read, so the command that shipped, `paperlib info`, reports the same signals and a description and recommends nothing.
+
+**Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), `paperlib info`.
 
 ## Method
 
@@ -13,7 +15,7 @@
   - `kept-reviewed` (27): the two papers that were once in `skipped.yaml` and are now in the library (the file's git history has three commits, so earlier unskips are lost), and 25 papers the reader wrote an overview note of.
   - `kept-unreviewed` (15, drawn from the rest): proposed by an agent and taken on trust.
 - **Hiding the answer.** A paper in the library is left out of its folder's list and of the search for its own title. Notes and reviews are not searched, since they name a paper because it is in the library. The skip list is not shown.
-- **Input and models.** As `paperlib vet` runs: the filing request, then the verdict request ([`guide/vetting-prompt.md`](../../guide/vetting-prompt.md)) with the reader's interests file as it was on the day (four lists, 30 lines, drafted the same day and not yet corrected by the reader). Sonnet 5.5 and Haiku 4.5 through `claude -p`, no tools, default thinking, four requests at a time.
+- **Input and models.** The command as it was that day, kept here as [`vet.py`](vet.py): the filing request, then the verdict request ([`prompt.md`](prompt.md)) with the reader's interests file as it was on the day (four lists, 30 lines, drafted the same day and not yet corrected by the reader). Sonnet 5.5 and Haiku 4.5 through `claude -p`, no tools, default thinking, four requests at a time.
 - **Scoring.** `add` agrees with a kept paper, `skip` with a skipped one; `read first` agrees with neither. [`score.py`](score.py).
 - **Results.** [`results/`](results/): the sample with its labels, and each model's verdicts with signals, folder and usage.
 
@@ -56,8 +58,7 @@ The two models gave the same recommendation for 49 of 72 papers and the same fol
 - Sonnet leans to `add` for any well-cited paper the library's papers name. For a reader whose long-tail folders hold only the seminal papers, that is too generous.
 - Haiku is not cheaper here, and disagrees with Sonnet on a third of the papers.
 
-## Not done, and what would follow
+## Not done
 
 - **One request against two** was in the plan and was not run.
-- **Give the verdict the reader's bar**: the folder's own entries from `catalog/skipped.yaml` with their reasons, as precedents, and how deep the folder is meant to go. Measurable on this sample, with each paper's own entry hidden.
-- **Better labels**: the reader marks a few dozen verdicts on papers as they arrive, right or wrong.
+- Giving the verdict the folder's own skipped papers as precedents, and how deep the folder is meant to go, might have raised agreement. It was not tried: the decision above does not rest on the score.

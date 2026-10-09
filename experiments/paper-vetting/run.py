@@ -5,7 +5,7 @@
     PAPER_LIBRARY=<library> uv run python experiments/paper-vetting/run.py vet <model> [--jobs N]
 
 `sample` writes results/sample.jsonl: papers in three classes of label (see the README),
-drawn with a fixed seed. `vet` runs scripts/vet-paper.py's `vet` on each and appends to
+drawn with a fixed seed. `vet` runs vet.py's `vet` on each and appends to
 results/<model>.jsonl; a rerun skips the papers already there. A paper in the library is
 hidden from its own verdict: its file is left out of the folder's list and of the search for
 its title, and notes and reviews are not searched at all, since they name a paper because it
@@ -69,7 +69,7 @@ def sample():
 
 
 def vet_all(model, jobs):
-    spec = importlib.util.spec_from_file_location("vet_paper", SCRIPTS / "vet-paper.py")
+    spec = importlib.util.spec_from_file_location("vet_paper", HERE / "vet.py")
     vp = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(vp)
     vp.NOTES_DIR = vp.REVIEWS_DIR = Path("/nonexistent")

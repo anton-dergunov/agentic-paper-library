@@ -9,7 +9,9 @@ to the engine that alters them shows up here. No network is used, and the
 example's PDFs are not needed.
 """
 
+import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -58,6 +60,25 @@ def filing_problems(root):
     return result.stderr.strip().splitlines()[-1:] if result.returncode else []
 
 
+def info_problems(root):
+    """`info` answers for a library paper from the library alone, by arXiv id and by title words."""
+    problems = []
+    paper = next(p for p in sorted(root.joinpath("library").rglob("*.md")) if p.name != "README.md"
+                 and "\narxiv:" in p.read_text()[:1500])
+    arxiv_id = re.search(r"^arxiv: '?([\d.]+)", paper.read_text(), re.M).group(1)
+    title = re.search(r"^title: (.+)$", paper.read_text(), re.M).group(1).strip("'\"")
+    for query in (arxiv_id, " ".join(re.findall(r"[A-Za-z]{4,}", title)[:3])):
+        result = run("paper-info.py", root, query, "--json")
+        try:
+            info = json.loads(result.stdout.splitlines()[0])
+        except (ValueError, IndexError):
+            problems.append(f"`{query}`: no JSON ({result.stderr.strip()[:100]})")
+            continue
+        if info.get("status") != "in library" or not root.joinpath(info.get("paper", "?")).is_file():
+            problems.append(f"`{query}`: not found in the library")
+    return problems
+
+
 def main():
     failures = 0
     with tempfile.TemporaryDirectory() as tmp:
@@ -77,6 +98,9 @@ def main():
         problems = filing_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} filing: " + ("; ".join(problems) or "only a declared folder is accepted"))
+        problems = info_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} paper-info.py: " + ("; ".join(problems) or "library papers found by id and by title"))
         for index in sorted(root.joinpath("library").rglob("README.md")):
             rel = index.relative_to(root)
             committed = EXAMPLE / rel

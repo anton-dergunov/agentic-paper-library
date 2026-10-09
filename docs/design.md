@@ -162,6 +162,21 @@ next piece of work.
   touched a median 0.08% of it
   ([experiments/conversion-churn](../experiments/conversion-churn/README.md)), so tracking
   which notes are out of date (built and removed the same day) was not worth its weight.
+- **A quick look at a paper reports and does not recommend (2026-10-09).** Papers now arrive
+  one at a time, and most need a look before they are worth adding. The first design gave
+  a verdict (`add`, `skip` or `read first`) from the abstract, citation data, the folder's
+  papers and a file of the reader's interests. On 72 papers of known fate it did not
+  separate the papers I had skipped from those I kept: Sonnet would add 22 of 30 skipped
+  and 28 of 42 kept
+  ([experiments/paper-vetting](../experiments/paper-vetting/README.md)). The cause is not
+  the model: why I want a paper (a colleague passed it on, a project touches it) is not in
+  any file, so a recommendation can only be invented. `paperlib info` therefore reports
+  along fixed axes and leaves the decision to me, or to a tool that knows my plans:
+  whether the library has the paper and where its files are, its venue and citations with
+  a fixed grade of the citation rate, which library papers name it, what it proposes, its
+  type, and the nearest papers of its folder. `--json` is the same for another program;
+  `--facts` skips the two model requests. A library paper is answered with no network. The
+  `paper-info` skill only runs it.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

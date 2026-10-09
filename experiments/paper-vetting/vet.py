@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""A first opinion on a paper before it is added: what it is, how it was received, how the
+"""The `paperlib vet` command as measured here on 9 Oct 2026, kept as apparatus: the engine
+replaced it with `paperlib info`, which reports and does not recommend.
+
+A first opinion on a paper before it is added: what it is, how it was received, how the
 library covers its area, how it fits the reader's interests.
 
-    ./scripts/vet-paper.py <arxiv-id-or-url> [...] [--why "..."] [--again] [--model ID]
+    vet.py <arxiv-id-or-url> [...] [--why "..."] [--again] [--model ID]
 
 It stops as early as it can. A paper in the library, skipped earlier (catalog/skipped.yaml)
 or vetted before is reported from what is already known, with no model request. Otherwise
@@ -22,13 +25,15 @@ from the abstract, so it cannot tell whether the paper's evidence holds.
 
 import datetime
 import json
+import os
 import re
 import subprocess
 import sys
+from pathlib import Path
 from urllib.parse import quote
 
 from paperlib import (
-    CACHE_DIR, CONFIG, ENGINE_ROOT, INTERESTS_FILE, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR,
+    CACHE_DIR, CATALOG_DIR, CONFIG, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR,
     REVIEWS_DIR, ask_model, fetch, filing_choice, filing_prompts, library_arxiv_ids, load_topics,
     norm_title, note_path, paper_files, parse_arxiv_entries, read_paper, skipped_index,
 )
@@ -38,6 +43,8 @@ S2_BATCH = ("https://api.semanticscholar.org/graph/v1/paper/batch?fields=venue,y
             "influentialCitationCount,publicationTypes,authors.name,authors.hIndex")
 ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(v\d+)?")
 VERDICT = re.compile(r"\*\*Recommendation:\s*(add|skip|read first)\b", re.I)
+# The reader's interests, as the measured design had them: `interests:` in paper-library.yaml.
+INTERESTS_FILE = Path(os.path.expanduser(str(CONFIG.get("interests") or CATALOG_DIR / "interests.md")))
 NO_INTERESTS = "(not written down: judge fit against the library's topic tree alone, and say so)"
 
 
@@ -122,12 +129,12 @@ def interests():
 
 
 def vetting_prompts():
-    """(system prompt, paper template): guide/vetting-prompt.md, with the reader's interests.
+    """(system prompt, paper template): prompt.md, with the reader's interests.
 
     The rules and the interests are the system prompt, the same for every paper, so a run
     of several reads them from the prompt cache.
     """
-    rules, the_paper = (ENGINE_ROOT / "guide" / "vetting-prompt.md").read_text(encoding="utf-8").split("THE PAPER")
+    rules, the_paper = (Path(__file__).resolve().parent / "prompt.md").read_text(encoding="utf-8").split("THE PAPER")
     system = rules.replace("{reader}", str(CONFIG.get("reader") or "the reader")).replace("{interests}", interests())
     return system.strip(), "THE PAPER" + the_paper
 
