@@ -490,7 +490,21 @@ def checks():
         out = md_file.read_text(encoding="utf-8")
     yield "captions and their links are renumbered from the PDF", (
         "Figure 2: Agreement" in out and "Table 7: Category-wise" in out
-        and 'Table [7](#S4.T8 "Table 7 ‣ 4 Results")' in out and "[Figure\xa07]" in out)
+        and "Table [7](#S4.T8)" in out and "[Figure\xa07](#S4.T7)" in out)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
+        doc = pymupdf.open()
+        page = doc.new_page()
+        page.insert_text((72, 100), "(b) LoTTE results.\nTable 5: Zero-shot evaluation results on both sets.")
+        page.insert_text((72, 300), "Table 1: Main results of the progressive techniques.")
+        doc.save(pdf_file)
+        md_file.write_text("Algorithm 1 Sampling\n\nTable 1:\n\nTable 1: Main results of the progressive techniques.\n\n"
+                           "Table 6: Zero-shot evaluation results on both sets.\n\nFigure 3:\n", encoding="utf-8")
+        subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
+        out = md_file.read_text(encoding="utf-8")
+    yield "a bare label a captioned table carries too is dropped", out.count("Table 1:") == 1 and "Figure 3:" in out
+    yield "a caption under a sub-table's label is found in the PDF", "Table 5: Zero-shot" in out
 
     with tempfile.TemporaryDirectory() as tmp:
         pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
@@ -521,6 +535,57 @@ def checks():
         out = md_file.read_text(encoding="utf-8")
     yield "a numbered step in an appendix is not section 1", (
         "## 2 Method (p. 2)" in out and "#### 1. Basic properties (p. 3)" in out)
+
+    md, _ = convert('<p>See Table <a href="#S4.T8" title="Table&nbsp;8 ‣ 4.2 Results ‣ 4 Experiments ‣ A Paper">8</a> in Section '
+                    '<a href="#S4" title="4 Experiments ‣ A Paper">4</a> (<a href="https://x.org" title="Home">site</a>).</p>')
+    yield "a link's title keeps only the float it names", (
+        '[8](#S4.T8 "Table 8")' in md and "[4](#S4)" in md and "Experiments" not in md and '"Home"' in md)
+
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td ltx_border_tt" rowspan="2">Model</td>'
+                    f'<td class="ltx_td ltx_border_tt">Size {math(r"\times 10^{3}")}</td></tr>'
+                    f'<tr class="ltx_tr"><td class="ltx_td">{math("a&lt;b")}</td></tr>'
+                    f'<tr class="ltx_tr"><td class="ltx_td ltx_border_t">A</td><td class="ltx_td ltx_border_t">{math("18.65")}</td></tr>'
+                    f'</table><p>Costs {math("x")}2 here.</p>')
+    yield "mathematics in an HTML table is its TeX", (
+        r"Size $\times 10^{3}$" in md and "<td>18.65</td>" in md and r"$a\lt b$" in md and "math inline" not in md)
+    yield "a formula before a digit still closes", "$x$<!-- -->2" in md
+
+    picture_tex = (r"\{\mathchoice" + r"{\hbox to46.43pt{\vbox to13.69pt{\pgfpicture\makeatletter\hbox{{stroke=#000000}}\endpgfpicture}}}" * 4
+                   + r",\hbox to9pt{\vbox to5pt{\pgfpicture\endpgfpicture}}\}")
+    drawn = ('<mtext><svg height="18" width="64"><g><path d="M 0 0 h 6"></path><foreignObject width="57" height="12">'
+             '<span class="ltx_foreignobject_container">{}</span></foreignObject></g></svg></mtext>')
+    md, _ = convert(f'<p>Tokens <math alttext="{picture_tex}" display="inline"><semantics><mrow>'
+                    + drawn.format("Critique") + drawn.format(r'<math alttext="\displaystyle\mathstrut c_{t}" display="inline"><mi>c</mi></math>')
+                    + f'</mrow><annotation encoding="application/x-tex">{picture_tex}</annotation></semantics></math> are added.</p>')
+    yield "a picture in a formula is what it shows, not its drawing commands", (
+        r"$\{\text{Critique},{c_{t}}\}$" in md and "pgfpicture" not in md and "images/" not in md)
+
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td" rowspan="2">Stage</td><td class="ltx_td">Early</td></tr>'
+                    r'<tr class="ltx_tr"><td class="ltx_td"><math alttext="0.26\scalebox{0.7}{$\pm$}\text{\scriptsize 0.0020}" display="inline">'
+                    '<semantics><mrow><mn>0.26</mn><mtext><div class="ltx_inline-block"><span class="ltx_p">±</span></div></mtext>'
+                    '<mtext>0.0020</mtext></mrow></semantics></math></td></tr></table>')
+    yield "a value and its scaled deviation stay one formula", r"0.26{\pm}\text{\scriptsize 0.0020}" in md
+
+    md, _ = convert('<h2 class="ltx_title"><span class="ltx_tag ltx_tag_section">4 \\par</span>Experiments</h2>'
+                    '<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td" rowspan="2">SST</td><td class="ltx_td">'
+                    '<math alttext="\\par" display="inline"><semantics><mn>0.395\u2009443\u2009126\u2009241\u2009129\u20096</mn>'
+                    '<annotation encoding="application/x-tex">\\par</annotation></semantics></math></td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">0.59</td></tr></table>'
+                    '<p>Embeddings [<a href="#bib.bibx2" class="ltx_ref">\\citeauthoryearBengio et al.2003</a>], circuits '
+                    '\\cite[citep]{(\\@@bibref{AuthorsPhrase1Year}{olsson_2022}{\\@@citephrase{, }}{})}, and a cell '
+                    '<span class="ltx_ERROR ltx_centering undefined">\\cellcolor</span>c3-item-bkg<span class="ltx_text">Score</span> '
+                    'beside <span class="ltx_picture">\\diaghead(-3,1){pad}{{\\shortstack[l]{Method}}}{{\\shortstack[r]{Dataset}}}</span>.</p>')
+    yield "a \\par set as text is dropped, and a number behind one is kept", (
+        "## 4 Experiments" in md and "<td>0.3954</td>" in md and "par" not in md)
+    yield "TeX set as text is read: a citation, a colour's name, a split header", (
+        "[Bengio et al. 2003](#bib.bibx2)" in md and "(olsson_2022)" in md and "cell Score" in md
+        and "Method / Dataset" in md and "\\" not in md.replace("\\[", "").replace("\\]", ""))
+
+    unplaced = ('<span class="ltx_note ltx_role_footnotetext"><sup class="ltx_note_mark">†</sup><span class="ltx_note_outer">'
+                '<span class="ltx_note_content"><sup class="ltx_note_mark">†</sup>{}</span></span></span>')
+    md, _ = convert(f'<p>Abstract text.</p><p>{unplaced.format("Under review.")}{unplaced.format("Code at x.")}</p>')
+    yield "a paragraph of note marks alone is dropped", (
+        "<sup>†</sup><sup>†</sup>" not in md and "<sup>†</sup> Under review." in md and "<sup>†</sup> Code at x." in md)
 
     paperlib = load("paperlib")
     view = paperlib.read_view({"title": "T", "source": "html"}, "N = 10<sup>4</sup>, x<sub>i</sub>, a<sup>†‡</sup>\n")

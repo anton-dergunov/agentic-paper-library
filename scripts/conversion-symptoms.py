@@ -58,7 +58,8 @@ converter = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(converter)
 
 # A control sequence in running text; \\captionof has a symptom of its own.
-MACRO_NAME = re.compile(r"(?<![\\$\w])\\(?!captionof\b)[a-zA-Z]{3,}(?![a-zA-Z{])")
+# A prompt's printed line break or tab before a capitalised word ("\nAnswer:") is not one.
+MACRO_NAME = re.compile(r"(?<![\\$\w])\\(?!captionof\b|[nt][A-Z])[a-zA-Z]{3,}(?![a-zA-Z{])")
 MATH_OR_CODE = re.compile(r"^```.*?^```|\$\$.*?\$\$|\$[^$\n]+\$|`[^`\n]+`", re.S | re.M)
 NUMBER = re.compile(r"(?<![\w.])\d+\.\d+(?![\w.])")
 CHECKS = {
@@ -67,7 +68,7 @@ CHECKS = {
         for line in t.split("\n")),
     "forest": lambda t: "{forest}" in t,
     # A length glued to the next symbol; \kern and \hspace lengths are fine.
-    "pt-residue": lambda t: re.search(r"(?<!\\kern )(?<!\\kern)(?:^|[ ,;={(])\d+\.?\d*pt[A-Za-z]", t, re.M),
+    "pt-residue": lambda t: re.search(r"(?<!\\kern )(?<!\\kern)(?:^|[ ,;={(])\d+\.?\d*pt(?!s\b)[A-Za-z]", t, re.M),
     "macro": lambda t: re.search(r"operatorname\{math(?:section|paragraph)\}|montrait|\\Cref[a-z]", t),
     "figure-link": lambda t: re.search(
         r"\]\((?:https://arxiv\.org/html/)?\d{4}\.\d{4,5}v\d+/|src=\"\d{4}\.\d{4,5}v\d+/", t),
@@ -81,9 +82,11 @@ CHECKS = {
     "empty-ref": lambda t: len(re.findall(
         r"\((?:Table|Figure|Fig\.|Section|Appendix) \)|\b(?:in|see|See) (?:Table|Figure|Section|Appendix) [.,)]", t)) >= 2,
     "split-title": lambda t: re.search(r"\A\s*\S[^\n]*\\\n[^\n]+\n=+\s*$", t, re.M),
-    "year-citation": lambda t: len(re.findall(r"\[\d{4}[a-z]?\]\(#bib", t)) >= 5,
+    # "Kang & Schafer (2007)" with the year alone linked is the paper's own style; the author comes first there.
+    "year-citation": lambda t: len(re.findall(r"[^)\s\xa0.,][\s\xa0]*(?:\\\[|\()\[\d{4}[a-z]?\]\(#bib", t)) >= 5,
     "input-path": lambda t: re.search(r"^(?:sections?|tex|content|chapters?|src)/[\w./-]+$", t, re.M),
-    "double-mark": lambda t: re.search(r"<sup>([^<]{1,3})</sup><sup>\1</sup>", t),
+    # A numbered mark: two unnumbered notes at one place share their sign ("††") by right.
+    "double-mark": lambda t: re.search(r"<sup>(\d{1,3})</sup><sup>\1</sup>", t),
     "macro-name": lambda t: len(MACRO_NAME.findall(MATH_OR_CODE.sub(" ", t))) >= 3,
 }
 

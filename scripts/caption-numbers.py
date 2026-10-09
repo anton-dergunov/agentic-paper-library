@@ -14,7 +14,8 @@ matched to the PDF caption that starts with the same words. When the PDF
 calls it something else ("Figure 2"), the caption is rewritten, and so are
 the links that point to it. A "\\captionof" caption gets its label the same
 way. A caption that matches no PDF caption, or two equally well, is left
-alone. Safe to re-run.
+alone. The titles of the paper's links, which name the float each one means
+until this point, are then removed. Safe to re-run.
 """
 
 import re
@@ -25,11 +26,16 @@ import pymupdf
 
 LABEL = r"(Table|Figure|Fig\.) ((?:[A-Z]\.?)?\d+(?:\.\d+)?)"
 PDF_CAPTION = re.compile(rf"^{LABEL}\s*[:.|]\s*(.+)", re.S)
+SUBCAPTION = re.compile(r"\(?[a-z]\)")
 MD_CAPTION = re.compile(rf"^{LABEL}: (.+)$")
+# The label alone: LaTeXML numbers a float that has no caption (an algorithm set as a table).
+BARE_LABEL = re.compile(rf"^{LABEL}:\s*$")
 # LaTeXML's rendering of an undefined \captionof{table}{...}.
 CAPTIONOF = re.compile(r"^(table|figure)(?=\S)(.+)$")
 # A link inside the paper: [7](#S4.T8 "Table 8 ‣ 4.2 ..."), [Figure 1](#S2.F1 "In 2 Results ‣ ...").
 LINK = re.compile(r'(?:\b(Tables?|Figures?|Figs?\.|Tab\.)(\s+))?\[([^\]]*)\]\((#[^ )]+)(?: "([^"]*)")?\)')
+# The title of a link inside the paper, in markdown and in an HTML table.
+LINK_TITLE = re.compile(r'(\]\(#[^ )]+) "[^"]*"(?=\))|(<a href="#[^"]*") title="[^"]*"')
 FLOAT = r"(?:Table|Figure)\s(?:[A-Z]\.?)?\d+(?:\.\d+)?"  # \s: LaTeXML joins them with a no-break space
 MIN_WORDS = 4
 
@@ -50,6 +56,10 @@ def pdf_captions(pdf_path):
         for block in page.get_text("blocks"):
             text = re.sub(r"-\n(?=[a-z])", "", block[4]).strip()
             m = PDF_CAPTION.match(text)
+            if not m and SUBCAPTION.match(text):
+                # "(b) LoTTE results." above the caption, in one block with it.
+                at = re.search(rf"^(?={LABEL}\s*[:.|])", text, re.M)
+                m = PDF_CAPTION.match(text[at.start():]) if at else None
             if m:
                 kind = "Figure" if m.group(1) == "Fig." else m.group(1)
                 found.append((f"{kind} {m.group(2)}", words(m.group(3))))
@@ -91,6 +101,7 @@ def main(pdf_path, md_path):
     renamed, labelled = {}, 0  # old label -> new label
     seen = {}
     found = []  # (line index, label, caption text, the PDF's label for it)
+    bare = []  # (line index, label)
     in_fence = False
     for i, line in enumerate(lines):
         if line.startswith("```"):
@@ -103,6 +114,10 @@ def main(pdf_path, md_path):
             seen[old] = seen.get(old, 0) + 1
             found.append((i, old, m.group(3), pdf_label(m.group(3), old, captions)))
             continue
+        m = BARE_LABEL.match(line)
+        if m:
+            bare.append((i, f"{'Figure' if m.group(1) == 'Fig.' else m.group(1)} {m.group(2)}"))
+            continue
         m = CAPTIONOF.match(line)
         if m and any(prev.strip() == "\\captionof" for prev in lines[max(0, i - 2):i]):
             new = pdf_label(m.group(2), None, captions)
@@ -112,6 +127,11 @@ def main(pdf_path, md_path):
                     if lines[j].strip() == "\\captionof":
                         lines[j] = ""
                 labelled += 1
+
+    # A label with no caption, which a captioned float carries too, is not the PDF's.
+    dropped = [i for i, label in bare if label in seen]
+    for i in dropped:
+        lines[i] = ""
 
     # A PDF caption is one caption's. When the PDF's own caption was not found
     # (it follows a sub-table's "(b)"), a caption opening with the same few
@@ -158,12 +178,15 @@ def main(pdf_path, md_path):
         return f'{word or ""}{space or ""}[{text}]({target}{quoted})'
 
     body = "\n".join(lines)
-    if labelled:
+    if labelled or dropped:
         body = re.sub(r"\n{3,}", "\n\n", body)
     if renamed:
         body = LINK.sub(relink, body)
-    if renamed or labelled:
-        Path(md_path).write_text(body, encoding="utf-8")
+    # A title named its link's float for the step above; an agent reads the
+    # float's number in the text, so the title goes.
+    untitled = LINK_TITLE.sub(lambda m: m.group(1) or m.group(2), body)
+    if renamed or labelled or dropped or untitled != body:
+        Path(md_path).write_text(untitled, encoding="utf-8")
     print(f"caption-numbers: {len(renamed)} captions renumbered from the PDF, {labelled} given a number")
     for old, new in renamed.items():
         print(f"  {old} -> {new}")

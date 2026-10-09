@@ -2,7 +2,7 @@
 
 **Question.** The fix pass of 8 Oct 2026 over the whole catalog left ten converter bugs in [`docs/tasks/conversion-follow-ups.md`](../../docs/tasks/conversion-follow-ups.md), the commonest being that the bold, underline, italics and cell colour marking a table's best or significant result were gone. Where does each come from, what does fixing it change in real papers, and for cell colour, which markdown cannot express: does keeping it help an agent answer questions about the table?
 
-**Status.** Run 8 Oct 2026 on 91 arXiv-HTML papers of the author's library (the 31 the task file names and 60 at random) and, for the counts, on all 1,917 cached renderings. **Bold went from 244 marks to 9,930 in the 91 papers, underline from 0 to 774, footnote marks printed twice from 649 to 10, macro names left as text from 166 to 16; no word of any paper was lost; the papers grew 0.58%.** Shading: a model answered 11 of 15 shading-dependent questions without it and 15 of 15 with it marked, but three of the four gains were "which method is the paper's own", which a reader of the whole paper knows. Shading is kept only where the caption refers to it and the table uses one colour: 813 marks in 110 tables of 62 papers. The reading test cost $1.08. The full reconversion has not been run.
+**Status.** Run 8 Oct 2026 on 91 arXiv-HTML papers of the author's library (the 31 the task file names and 60 at random) and, for the counts, on all 1,917 cached renderings. **Bold went from 244 marks to 9,930 in the 91 papers, underline from 0 to 774, footnote marks printed twice from 649 to 10, macro names left as text from 166 to 16; no word of any paper was lost; the papers grew 0.58%.** Shading: a model answered 11 of 15 shading-dependent questions without it and 15 of 15 with it marked, but three of the four gains were "which method is the paper's own", which a reader of the whole paper knows. Shading is kept only where the caption refers to it and the table uses one colour: 813 marks in 110 tables of 62 papers. The reading test cost $1.08. The library was reconverted on 8–9 Oct (below).
 
 **Serves.** [`docs/conversion.md`](../../docs/conversion.md#arxiv-html), and the rule "the markdown is for the agent" at the top of that page.
 
@@ -95,6 +95,20 @@ Reading test, 15 tables, each question over the plain and the marked excerpt:
 - **No harm was observed**, including where it was looked for: marks on a decorative label column, on a header's logo, on the paper's own row under a caption about gray *text*, and one `<mark>` standing for two colours ("best in blue, second-best in green"), where the model answered from the numbers.
 - **What each rule would write** in the 1,917 renderings: marking all shading that picks out rows or cells, 14,384 marks in 1,027 tables of 286 papers; only where the caption refers to it, 2,720 marks in 190 tables of 112 papers; that and one colour only, 813 marks in 110 tables of 62 papers.
 
+### The library, reconverted
+
+`paperlib reconvert --all --jobs 3`, twice, from 22:12 on 8 Oct to 00:43 on 9 Oct: 1,889 papers converted, 16 with figures arXiv does not serve, 299 skipped (PDF-only, not from arXiv HTML, or edited by hand), none failed.
+
+| Papers showing | Before | After |
+|---|---|---|
+| A footnote mark printed twice (`double-mark`) | 1,687 | 120 |
+| A macro's name left as text (`macro-name`) | 132 | 68 |
+| Any symptom, with the checks as corrected on 9 Oct | 1,639 | 417 |
+
+- **No paper's text shrank by 5%**, and KaTeX fails on the same 80 formulas in 28 papers as before.
+- **117 of the 120 doubled marks left are not the fault.** Two or three notes with no number of their own stand at one place and share their sign ("††"). The check now looks for a doubled number, which leaves 3 papers (1,560 before the run), and a prompt's printed "\\nAnswer:" is no longer taken for a macro (56 papers; 120 before).
+- **The papers with macro names were not all text the paper prints.** A `\cellcolor` with its colour's name 835 times in one paper, a `\par` in every heading of another, and undefined macros carrying a second class were still there; they were fixed the next day. → [`experiments/reference-titles-and-table-math`](../reference-titles-and-table-math/README.md)
+
 ## What the numbers do not say
 
 The reading test is fifteen tables, one question each, one model, one run, graded by the author of the questions. It shows that a mark can carry a caption's meaning and that marks did not mislead in these fifteen; it does not measure how often an agent reading a whole paper is asked something that turns on shading. The "caption refers to it" check is a word list ("gray", "shaded", "highlight", colour names) and also fires on captions about coloured text. Shading in several colours, 44% of shaded tables, is not kept at all, and neither is a heat map ("Continual Learning via Sparse Memory Finetuning", Table 1, 83 shades). The sample's named papers were chosen for their bugs, so its before-and-after counts overstate a typical paper; the random 60 are in the same table. The fixes were checked in each named paper at the table or passage the task file cites, not across each paper.
@@ -105,4 +119,4 @@ The reading test is fifteen tables, one question each, one model, one run, grade
 - A footnote follows the paragraph or table it annotates, its mark printed once.
 - Shading is kept as `<mark>` only where the caption refers to it and the table has one shading colour. Marking more costs five to eighteen times the marks for answers a reader of the whole paper already has.
 - `paperlib symptoms` gained `double-mark` and `macro-name`; before the reconversion they flag 1,687 and 132 of the library's papers.
-- Still open, in the task file: shading in several colours and heat maps, 22 unresolved citations of one paper, the `±` arXiv's HTML does not have, and the reconversion of the whole library.
+- Left as they are: shading in several colours and heat maps, 22 unresolved citations of one paper, and the `±` arXiv's HTML does not have between a value and its deviation ("0.34 0.01"), which reads as the pair it is.

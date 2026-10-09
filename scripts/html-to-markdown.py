@@ -600,8 +600,9 @@ def unresolved_citations(article, page):
     renders with every citation as its BibTeX key and no reference list.
     Both are rebuilt from the .bib in the paper's source. A reference to a
     table or figure LaTeXML lost ("Table LABEL:tab:x") gets its number from
-    the float whose caption follows that \\label in the source, or else
-    shows the label's name. Where not even the label is left ("Table "), it
+    the float whose caption follows that \\label in the source, one to a
+    section the number of the section the label follows (see
+    section_numbers), or else it shows the label's name. Where not even the label is left ("Table "), it
     is the one the same sentence refers to in the source.
     """
     keys = list(dict.fromkeys(k.strip() for k in MISSING_CITATION.findall(article)))
@@ -641,7 +642,11 @@ def unresolved_citations(article, page):
                     for tag, body in re.findall(
                         r'<figcaption\b[^>]*>\s*<span class="ltx_tag[^"]*">(.*?)</span>(.*?)</figcaption>', article, re.S)]
 
+        sections = section_numbers(article, tex)
+
         def number(label):
+            if label in sections:
+                return sections[label][0]
             at = tex.find(f"\\label{{{label}}}")
             # The caption of the float the label sits in: the nearest one before
             # the label within the float, else the first after it.
@@ -958,13 +963,111 @@ def drop_invisible(article):
     return re.sub(r'<span\b[^>]*\bclass="ltx_p"[^>]*>\s*-?\d+(?:\.\d+)?pt\s*</span>', "", article)
 
 
+# A TikZ picture inside a formula, as LaTeXML leaves it in the formula's TeX.
+PICTURE = re.compile(r"\\hbox to\s*[\d.]+pt\s*\{\\vbox to\s*[\d.]+pt\s*\{\\pgfpicture")
+TEX_SPECIAL = re.compile(r"[\\{}#$%&_^~]")
+
+
+def tex_group_end(tex, begin):
+    """Index just past the brace group that opens at `begin`, or None."""
+    depth, i = 0, begin
+    while i < len(tex):
+        if tex[i] == "\\":
+            i += 1
+        elif tex[i] == "{":
+            depth += 1
+        elif tex[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return None
+
+
+def picture_label(svg):
+    """The TeX for what a picture in a formula shows: the formulas and words set in it."""
+    parts = []
+    for block in foreign_objects(svg):
+        for piece in re.split(r'(<math\b[^>]*>.*?</math>)', block, flags=re.S):
+            alt = re.match(r'<math\b[^>]*\balttext="([^"]*)"', piece)
+            text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", piece)).split())
+            if alt:
+                # The strut and the style only made the picture's box.
+                parts.append("{" + re.sub(r"\A(?:\\(?:display|text|script|scriptscript)style|\\mathstrut|\s)+", "",
+                                          html.unescape(alt.group(1))) + "}")
+            elif text and not piece.startswith("<math"):
+                parts.append("\\text{" + TEX_SPECIAL.sub(lambda c: "\\" + c.group(0) if c.group(0) in "#$%&_" else " ", text) + "}")
+    return " ".join(parts) or "\\text{[picture]}"
+
+
+def clean_math(article):
+    """Rebuild the formulas that hold a picture or a block of HTML.
+
+    A TikZ picture set in a formula (a boxed token name, a highlighted
+    symbol) leaves its drawing commands in the formula's TeX, thousands of
+    characters each, and the picture itself as an <svg> in the MathML. The
+    commands are replaced by what the picture shows. A formula holding a
+    <div> (a \\scalebox) is cut short by pandoc, the rest set as loose text.
+    Both are written again as their TeX alone.
+    """
+    out, pos = [], 0
+    for m in re.finditer(r"<math\b[^>]*>", article):
+        if m.start() < pos:
+            continue
+        end = balanced_end(article, m.start(), "math")
+        if end is None:
+            continue
+        element = article[m.start():end]
+        if "<svg" not in element and "<div" not in element:
+            continue
+        alt = re.search(r'\balttext="([^"]*)"', m.group(0))
+        if not alt:
+            continue
+        tex = html.unescape(alt.group(1))
+        svgs, at = [], 0
+        while (begin := element.find("<svg", at)) >= 0:
+            at = balanced_end(element, begin, "svg") or len(element)
+            svgs.append(element[begin:at])
+        for labels in ([picture_label(svg) for svg in svgs], []):
+            parts, done, used = [], 0, 0
+            for pic in PICTURE.finditer(tex):
+                if pic.start() < done:
+                    continue
+                begin, stop = pic.start(), tex_group_end(tex, tex.index("{", pic.start()))
+                if tex.endswith("\\mathchoice{", 0, begin):  # the same picture at four sizes
+                    begin -= len("\\mathchoice{")
+                    stop = begin + len("\\mathchoice")
+                    for _ in range(4):
+                        stop = tex_group_end(tex, stop) if stop is not None and tex.startswith("{", stop) else None
+                if stop is None:
+                    continue
+                parts += [tex[done:begin], labels[used] if used < len(labels) else "\\text{[picture]}"]
+                done, used = stop, used + 1
+            if used == len(labels) or not labels:
+                break
+        tex = "".join(parts) + tex[done:]
+        display = re.search(r'\bdisplay="(\w+)"', m.group(0))
+        out += [article[pos:m.start()],
+                f'<math display="{display.group(1) if display else "inline"}"><semantics><mrow></mrow>'
+                f'<annotation encoding="application/x-tex">{html.escape(tex, quote=False)}</annotation></semantics></math>']
+        pos = end
+    return "".join(out) + article[pos:]
+
+
 CELL = re.compile(r"<(t[dh])\b[^>]*>.*?</\1\s*>", re.S)
 # A span with a size or colour of its own, set straight after a number.
 ANNOTATION = re.compile(r'(\d|</math>)(<span\b[^>]*\bstyle="[^"]*(?:font-size:\s*\d+%|--ltx-fg-color)[^"]*"[^>]*>)(?=[-+−±↑↓(]?\d)')
 RAISED = re.compile(r'(<span\b[^>]*>[^<]*</span>)\s*'
                     r'(<span\b[^>]*\bstyle="[^"]*position:relative;\s*bottom:(\d+(?:\.\d+)?)pt[^"]*"[^>]*>[^<]*</span>)')
 # \captionof stays: caption-numbers.py gives the caption after it its number.
-UNDEFINED_MACRO = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR undefined"[^>]*>\\(?!captionof\b)[a-zA-Z@]+\*?</span>')
+UNDEFINED_MACRO = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR[^"]*\bundefined"[^>]*>\\(?!captionof\b)[a-zA-Z@_:]+\*?</span>')
+# A colour macro of a package LaTeXML lacks, and the colour's name set after it as text.
+UNDEFINED_COLOUR = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR[^"]*\bundefined"[^>]*>\\(?:cell|row|column)color</span>'
+                              r'(\s*(?:<span\b[^>]*>)?)([^<\s]*)')
+# Text of an element, with the tag that opens it; code and a formula's TeX are not prose.
+TEXT_NODE = re.compile(r"(<(?!code\b|pre\b|annotation\b|/?math\b)[^>]*>)([^<]+)")
+RAW_CITE = re.compile(r"\\cite\[cite[pt]\]\{\(?\\@@bibref\{[^}]*\}\{([^}]*)\}\{\\@@citephrase\{[^}]*\}\}\{\}\)?\}")
+DIAGHEAD = re.compile(r"\\diaghead\([^)]*\)\{[^}]*\}" + r"\{\{?(?:\\shortstack\[\w\])?\{?([^{}]*)\}?\}?\}" * 2)
 CAPTION_TYPE = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR undefined"[^>]*>\\DeclareCaptionType</span>\s*'
                           r'<p\b[^>]*>[^<]*\[[^<]*</p>')
 
@@ -989,7 +1092,45 @@ def drop_undefined_macros(article):
     the paragraph of its arguments ("listing[Listing][List of Listings]").
     Run after the steps that read such a macro (forest_trees, unresolved_refs).
     """
+    # The name runs into the cell's text ("c5-item-bkgVCG Bench") unless a tag
+    # follows it, so the names are learnt where one does.
+    names = sorted({m.group(2) for m in UNDEFINED_COLOUR.finditer(article)
+                    if m.group(2) and article.startswith("<", m.end())}, key=len, reverse=True)
+
+    def colour(m):
+        name = next((n for n in names if m.group(2).startswith(n)), m.group(2) if article.startswith("<", m.end()) else "")
+        return m.group(1) + m.group(2)[len(name):]
+
+    article = UNDEFINED_COLOUR.sub(colour, article)
     return UNDEFINED_MACRO.sub("", CAPTION_TYPE.sub("", article))
+
+
+def drop_tex_residue(article):
+    """Remove TeX that LaTeXML set as text.
+
+    A \\par in a macro's argument is printed in each heading, caption and
+    author it reached ("4 \\parExperiments"). A number set by siunitx can
+    arrive with "\\par" as its TeX and the digits only in the MathML; the
+    digits are taken. A bibliography style's "\\citeauthoryearBengio et
+    al.2003" is the author and year, a glossary's "\\cite[citep]{...}"
+    its keys, and a "\\diaghead" the two titles of a split header cell.
+    """
+    article = re.sub(
+        r'(<math\b[^>]*>\s*<semantics>)((?:(?!</math>).)*?)(<annotation encoding="application/x-tex">)\\par(</annotation>)',
+        lambda m: m.group(1) + m.group(2) + m.group(3)
+        + re.sub(r"[\u2009\u2006\u202f]", r"\\,", html.unescape(re.sub(r"<[^>]+>", "", m.group(2))).strip()) + m.group(4),
+        article, flags=re.S)
+
+    def prose(m):
+        text = re.sub(r"\s*\\par\b(?![a-zA-Z])\s*", " ", m.group(2)) if "\\par" in m.group(2) else m.group(2)
+        if "\\cite" in text:
+            text = re.sub(r"\\citeauthoryear(.*?)\s*(\d{4}[a-z]?)\Z", r"\1 \2", text)
+            text = RAW_CITE.sub(r"(\1)", text)
+        if "\\diaghead" in text:
+            text = DIAGHEAD.sub(r"\1 / \2", text)
+        return m.group(1) + text
+
+    return TEXT_NODE.sub(prose, article)
 
 
 def fix_text_encoding(article):
@@ -1339,6 +1480,35 @@ def objects_to_images(article):
     )
 
 
+HTML_BLOCK = re.compile(r"^<(table|dl)\b.*?^</\1>", re.S | re.M)
+MARKED_MATH = re.compile("\ue000(.*?)\ue001|\ue002(.*?)\ue003", re.S)
+PLAIN_NUMBER = re.compile(r"[-+−]?\d[\d.,]*%?")
+
+
+def write_math(body):
+    """Write each formula the filter marked (mark_math in arxiv-html.lua).
+
+    In markdown it is $...$ or $$...$$. In a table written as HTML it is the
+    same, where pandoc would render it into tags and lose what it cannot
+    draw ("0.26 ± 0.002" came out as "0.26" and loose TeX); a plain number
+    there is written bare, and a "<" that would open a tag is written "\\lt".
+    """
+    def tex(m, in_html=False):
+        inline, display = m.group(1), m.group(2)
+        if inline is None:
+            return f"$${display}$$"
+        if in_html:
+            if PLAIN_NUMBER.fullmatch(inline.strip()):
+                return inline.strip()
+            inline = re.sub(r"<(?=[a-zA-Z/!])", r"\\lt ", inline)
+        return f"${inline}$"
+
+    body = HTML_BLOCK.sub(lambda block: MARKED_MATH.sub(lambda m: tex(m, True), block.group(0)), body)
+    # A digit straight after the closing "$" would stop it closing the formula.
+    body = MARKED_MATH.sub(lambda m: tex(m) + "\ue004", body)
+    return re.sub("\ue004(?=\\d)", "<!-- -->", body).replace("\ue004", "")
+
+
 def main(html_path, body_path, images_dir, basename):
     images_dir = Path(images_dir)
     counter, invalid = 0, 0
@@ -1369,6 +1539,7 @@ def main(html_path, body_path, images_dir, basename):
     # ("x1.png", "extracted/..."); the figure download needs the full path.
     base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
     article = extract_article(page)
+    article = clean_math(article)
     article = drop_invisible(article)
     article = drop_style_warnings(article)
     article = name_icons(article)
@@ -1380,6 +1551,7 @@ def main(html_path, body_path, images_dir, basename):
     article = unresolved_refs(article)
     article = unresolved_citations(article, page)
     article = drop_undefined_macros(article)
+    article = drop_tex_residue(article)
     article = fix_text_encoding(article)
     article = tidy_cells(article)
     article = extend_rowspans(article)
@@ -1397,6 +1569,7 @@ def main(html_path, body_path, images_dir, basename):
         ],
         input=article, capture_output=True, text=True, check=True,
     ).stdout
+    body = write_math(body)
     # LaTeXML sometimes repeats a heading with nothing under the first copy
     # (an "Abstract" set both by the class and by the author).
     body = re.sub(r"^(#{1,6} .+)\n\n(?=\1\n)", "", body, flags=re.M)

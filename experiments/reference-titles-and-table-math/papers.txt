@@ -1,0 +1,40 @@
+Deep contextualized word representations
+Visualizing and Understanding Recurrent Networks
+AgentMemBench. A Systematic Benchmark for Evaluating Long-Term Memory Management Strategies in
+Fuzzy Substring Matching. On-device Fuzzy Friend Search at Snapchat
+Know When To Stop. A Study of Semantic Drift in Text Generation
+LLMs + Persona-Plug = Personalized LLMs
+Constitutional AI. Harmlessness from AI Feedback
+Well-Read Students Learn Better. On the Importance of Pre-training Compact Models
+Agent Workflow Memory
+Fine-Tuning Pretrained Language Models. Weight Initializations, Data Orders, and Early Stopping
+MultiEURLEX -- A multi-lingual and multi-label legal document classification dataset for zero-shot
+Consistency Models
+M3-Embedding. Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through
+Semantic IDs for Joint Generative Search and Recommendation
+Bias and Fairness in Large Language Models. A Survey
+A Survey of Agentic Reasoning for Large Language Models. Towards Recursively Self-Improving and
+Mask R-CNN
+DoLa. Decoding by Contrasting Layers Improves Factuality in Large Language Models
+EmbeddingGemma. Powerful and Lightweight Text Representations
+Inherent Trade-Offs in the Fair Determination of Risk Scores
+Don't Stop Pretraining. Adapt Language Models to Domains and Tasks
+Scaling up Test-Time Compute with Latent Reasoning. A Recurrent Depth Approach
+Training Large Language Models to Reason in a Continuous Latent Space
+FineTuneBench. How well do commercial fine-tuning APIs infuse knowledge into LLMs
+Gated Linear Attention Transformers with Hardware-Efficient Training
+When combinations of humans and AI are useful. A systematic review and meta-analysis
+JudgeBench. A Benchmark for Evaluating LLM-based Judges
+When the Judge Changes, So Does the Measurement. Auditing LLM-as-Judge Reliability
+Language Models are Injective and Hence Invertible
+Know What You Don't Know. Unanswerable Questions for SQuAD
+Offline Reinforcement Learning. Tutorial, Review, and Perspectives on Open Problems
+Understanding plasticity in neural networks
+On the Difficulty of Evaluating Baselines. A Study on Recommender Systems
+Muse. Text-To-Image Generation via Masked Generative Transformers
+Not what you've signed up for. Compromising Real-World LLM-Integrated Applications with Indirect
+Generalizing Verifiable Instruction Following
+M+. Extending MemoryLLM with Scalable Long-Term Memory
+How Well Do Models Follow Their Constitutions
+Atlas. Few-shot Learning with Retrieval Augmented Language Models
+Are We Ready For An Agent-Native Memory System

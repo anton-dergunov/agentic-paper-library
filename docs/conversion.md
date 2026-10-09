@@ -33,29 +33,36 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **Icon-font glyphs** (Font Awesome) are written as the icon's name, `[lock]`, so a column of icons still says what each cell holds.
 - **Several captions in one float** each stay with their own table.
 - **Citations showing only a year**, where LaTeXML did not know the bibliography style, get the first author from the reference list.
-- **References with nothing in them** ("(Table )") are looked up in the paper's LaTeX source by the words before them. The float's number is used when its caption is in the HTML, its label's name otherwise.
+- **References with nothing in them** ("(Table )") are looked up in the paper's LaTeX source by the words before them. The float's number is used when its caption is in the HTML, its label's name otherwise. A reference to a section LaTeXML left as a label ("Section gen_inst") gets the number of the section the label follows in the source.
 - **The author block** shows a list of affiliations shared by all authors once, not after every name.
 - **A title broken over two lines** is one heading.
 - **Warnings a style file typesets** when a paper changed its page layout ("marginparsep has been altered. … The page layout violates the ICML style.") arrive as the paper's first paragraphs, above the title. They are dropped.
 - **Bold, italics and underlining** are kept: in a table they are the paper's claim (the best result, the significant one), in running text the run-in headings and the terms being defined. Headings, column titles and a caption's "Table 7:" stay plain. In a table written as HTML, bold is `<b>`.
-- **Footnotes** arrive spliced into the sentence, the mark printed twice. The mark stays, once, and the note's text follows the paragraph or table it annotates.
+- **Footnotes** arrive spliced into the sentence, the mark printed twice. The mark stays, once, and the note's text follows the paragraph or table it annotates. Notes with no place in the text (`\footnotetext` under the abstract) leave no paragraph of marks.
+- **The hover title of a cross-reference** is dropped. LaTeXML gives each one the path to its target ("Table 8 ‣ 4.2 Results ‣ 4 Experiments ‣ the paper's title"), which was a twelfth of all the text of a library and says nothing the reference does not. `[8](#S4.T8)` is what is left.
+- **Mathematics in a table written as HTML** is its TeX, `$\times 10^{3}$`, as everywhere else; a plain number is written bare. pandoc renders a formula there itself, into `<span class="math inline">` and tags, and what it could not draw came out as loose TeX with the "±" between a value and its deviation gone.
+- **A picture or a box inside a formula.** A TikZ picture set in a formula (a boxed token name, a highlighted symbol) leaves its drawing commands as the formula's TeX, up to 30,000 characters each; they are replaced by what the picture shows. A formula holding a `\scalebox` is written from its TeX whole.
 - **Cell shading** is kept as `<mark>` only where the caption refers to it ("gray rows are …") and the table has one shading colour; a shaded row is marked on its first cell. Other shading is dropped: on fifteen tables it changed no answer a reader of the whole paper would not already have.
 - **A value and what is printed small or in colour after it** (a deviation, a gain) are set apart: "70.9 +2.3".
 - **A column title set on two lines** arrives lower line first; the raised line is read first.
-- **Names of macros LaTeXML did not know** (`\sans`, `\rotate`) are dropped; their arguments stay.
+- **Names of macros LaTeXML did not know** (`\sans`, `\rotate`) are dropped; their arguments stay. After an undefined `\cellcolor` the colour's name is set as text, and goes too.
+- **TeX set as text** is read: a `\par` printed in every heading and caption of a paper, a bibliography style's `\citeauthoryearBengio et al.2003`, a glossary's `\cite[citep]{…}`, a `\diaghead` header cell.
+- **A number whose TeX is `\par`** (siunitx, in one paper's main table) has its digits only in the MathML; they are taken from there.
 - **Citations with no key left** ("( ?)") are found in the LaTeX source by the words before them and labelled from the paper's `.bib`.
 - **A ">" typed in text** arrives as "¿"; standing alone it is ">" again.
 - **A table panel without row labels** gets those of the panel beside it, when that panel has the same rows and one column more.
 - **A row label spanning a group of rows** takes the group's last row when the paper's `\multirow` was one row short.
 - **Numbers and symbols LaTeXML left half-expanded:** digit groups joined by "true" (`2true294`), a `\mathchoice` of boxed symbols, `\penalty` before a control space, an accent over nothing (`pass\^{}k`), a tilde set on a digit ("5̃5%").
 
-→ [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md), [`experiments/table-emphasis`](../experiments/table-emphasis/README.md)
+→ [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md), [`experiments/table-emphasis`](../experiments/table-emphasis/README.md), [`experiments/reference-titles-and-table-math`](../experiments/reference-titles-and-table-math/README.md)
 
 ## Table and figure numbers
 
 arXiv's HTML numbers floats itself, and sometimes differently from the PDF: a plot set beside a table in one float is captioned as a table, a caption written with `\captionof` gets no number, and every later number is then off by one or two. `scripts/caption-numbers.py` matches each caption in the markdown to the PDF caption that starts with the same words, and renames it, with the links that point to it, when the PDF calls it something else. A caption that matches no PDF caption, or two equally well, is left alone. It runs after `page-map.py` on every arXiv-HTML conversion. → [`experiments/review-flagged-fixes`](../experiments/review-flagged-fixes/README.md)
 
 A PDF caption gives its number to one caption only, the one sharing the longest run of opening words, and never to a second: when the PDF's own caption is not found, a caption that opens like a later one would otherwise take that one's number. → [`experiments/table-emphasis`](../experiments/table-emphasis/README.md)
+
+A caption printed under a sub-table's "(b) …" line is found in the PDF all the same. A label with no caption ("Table 1:" under an algorithm set as a table, which LaTeXML numbers and the PDF does not) is dropped when a captioned float carries the same label. The pass knows which float a link means from the link's title, and removes the titles when it is done. → [`experiments/reference-titles-and-table-math`](../experiments/reference-titles-and-table-math/README.md)
 
 What it cannot repair is a reference whose target LaTeXML got wrong: four tables in one float share one anchor, so every reference to them names the last. Those are corrected by hand.
 

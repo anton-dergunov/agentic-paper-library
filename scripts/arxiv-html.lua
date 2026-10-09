@@ -403,6 +403,10 @@ local function normalise_math(t)
   t = t:gsub("\\mod%s*$", "\\operatorname{mod}")
   -- The physics package's \order{n} is O(n).
   t = t:gsub("\\order%s*(%b{})", function(arg) return "\\mathcal{O}(" .. arg:sub(2, -2) .. ")" end)
+  -- A \par that came along inside a macro's argument.
+  t = t:gsub("\\par%f[%A]", "")
+  -- \scalebox{0.7}{$\pm$}: the size goes, what was scaled stays.
+  t = t:gsub("\\scalebox%s*%b{}", ""):gsub("\\resizebox%s*%b{}%s*%b{}", "")
   t = unwrap_mleft(t)
   t = unwrap_mathchoice(t)
   return rewrite_commands(strip_layout(join_digit_groups(t)))
@@ -547,8 +551,17 @@ Plain = plain_label
 
 -- With raw HTML on, any link or image carrying an id or class is written as an
 -- HTML tag; without the attributes it stays a markdown link.
+--
+-- LaTeXML gives every cross-reference a hover title, the path to its target
+-- ("Table 8 ‣ 4.2 Results ‣ 4 Experiments ‣ <the paper's title>"): a twelfth
+-- of a paper's text, repeated at each reference. Only the float it names is
+-- kept, for caption-numbers.py, which removes it once the captions are numbered.
 function Link(el)
   el.attr = pandoc.Attr()
+  if el.target:sub(1, 1) == "#" then
+    local title = el.title:gsub("\u{a0}", " ")
+    el.title = title:match("^Table [%w.]+") or title:match("^Figure [%w.]+") or ""
+  end
   return el
 end
 
@@ -845,7 +858,7 @@ local function lift_notes(blocks)
       out:insert(block)
     else
       local notes = pandoc.List()
-      out:insert(pandoc.walk_block(block, {
+      block = pandoc.walk_block(block, {
         Span = function(span)
           if not span.classes:includes("ltx_note") then return nil end
           local mark, text = note_parts(span)
@@ -857,11 +870,32 @@ local function lift_notes(blocks)
           end
           return mark and { mark } or {}
         end,
-      }))
+      })
+      -- Notes with no place in the text (\\footnotetext under the abstract)
+      -- leave a paragraph of marks alone ("†††"); the notes say it all.
+      local only_marks = #notes > 0 and (block.t == "Para" or block.t == "Plain")
+      for _, el in ipairs(only_marks and block.content or {}) do
+        if el.t ~= "Superscript" and not is_space(el) then only_marks = false end
+      end
+      if not only_marks then out:insert(block) end
       out:extend(notes)
     end
   end
   return out
+end
+
+-- Where pandoc writes a block as HTML (a table with merged cells), it renders
+-- the mathematics itself: a number in a <span>, anything it cannot draw as
+-- loose TeX with the "\pm" gone. Every formula leaves as its TeX between two
+-- marks instead, and html-to-markdown.py writes it for where it landed (see
+-- write_math there).
+local MATH_MARKS = {
+  InlineMath = { "\u{E000}", "\u{E001}" }, DisplayMath = { "\u{E002}", "\u{E003}" },
+}
+
+local function mark_math(m)
+  local marks = MATH_MARKS[m.mathtype]
+  return pandoc.RawInline("html", marks[1] .. m.text .. marks[2])
 end
 
 return {
@@ -871,4 +905,5 @@ return {
     end },
   { Div = Div, Math = Math, Inlines = Inlines, Header = Header, Span = Span, Para = Para, Plain = Plain,
     Link = Link, Image = Image, Figure = Figure, Table = Table },
+  { Math = mark_math },
 }
