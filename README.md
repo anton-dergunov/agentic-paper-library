@@ -88,7 +88,7 @@ paperlib build-index && paperlib check
 
 ## Next
 
-- Conversion follow-ups: incomplete arXiv renderings, pictures inside equations, tables that are images ([list](docs/tasks/conversion-follow-ups.md)).
+- Conversion follow-ups: incomplete arXiv renderings, equations a model misread in a PDF, tables that are images ([list](docs/tasks/conversion-follow-ups.md)).
 - Running a library from Claude Code on the web, which needs the engine installed by a setup step.
 - `read` and `wrap` skills for reading a paper with the agent and keeping what you took from it.
 
