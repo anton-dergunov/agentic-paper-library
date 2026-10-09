@@ -1,0 +1,90 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/add-paper.png. The paper, its two files, the topics with their scopes
+  and the index line are those of examples/library (DPO, arXiv 2305.18290, CC BY 4.0;
+  catalog/topics.yaml; the folder's README.md). The line at the foot is experiments/skill-models:
+  53 of 60 folders graded best with Sonnet, about 4 seconds a request.
+  Render with assets/pictures/render.sh add-paper.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>Add a paper</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .l { width: 318px; flex: none; }
+  .r { flex: 1 1 0; display: flex; flex-direction: column; }
+  .l { display: flex; flex-direction: column; }
+  .l .topics { margin-top: auto; }
+  .r .got { flex: 1 1 auto; align-items: flex-start; }
+  .r .got .n { margin-top: 1px; }
+  .r .got { padding-top: 14px; }
+  .main { gap: 26px; }
+  .ccin { margin-bottom: 14px; }
+  .l .small { margin-top: 2px; }
+  .sh { margin-bottom: 7px; }
+  .topics { margin-top: 16px; }
+  .topic { font-size: 11.5px; line-height: 1.4; padding: 7px 10px; border: 1px solid var(--line); border-radius: 7px; background: #fff; color: var(--muted); }
+  .topic + .topic { margin-top: 6px; }
+  .topic b { display: block; font: 600 10.5px var(--mono); color: var(--ink); }
+  .topic.pick { border-color: var(--ok-line); background: var(--ok-bg); color: var(--ink); }
+  .topic.pick b { font-size: 10px; }
+  .topic.pick::before { content: "chosen"; float: right; font: 700 9.5px Inter, sans-serif; color: var(--ok); letter-spacing: .05em; text-transform: uppercase; margin-top: 16px; }
+  .got { display: flex; gap: 11px; border: 1px solid var(--line); border-radius: 9px; background: #fff; padding: 11px 14px 12px; box-shadow: 0 3px 10px rgba(31, 35, 40, .07); }
+  .got + .got { margin-top: 12px; }
+  .got .t { font-weight: 700; font-size: 14.5px; }
+  .got .p { font: 11px/1.55 var(--mono); color: var(--muted); margin-top: 2px; white-space: nowrap; }
+  .got .p b { color: var(--ink); font-weight: 600; }
+  .got .d { font-size: 12.5px; line-height: 1.4; margin-top: 3px; }
+  .got > div { min-width: 0; }
+  .row { margin-top: 5px; border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; font-size: 12.5px; line-height: 1.4; background: var(--panel); }
+  .row a { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head big">
+    <h1>Add a paper</h1>
+    <span class="sub">Give an arXiv id, a URL, a title or a PDF. The paper is downloaded, converted to Markdown and filed under the topic it belongs to.</span>
+  </div>
+
+  <div class="main">
+    <div class="l">
+      <div class="h2">In Claude Code</div>
+      <div class="ccin"><span>/add-paper <em>2305.18290</em></span><i>↑</i></div>
+      <div class="h2">or in a terminal</div>
+      <div class="sh">paperlib add 2305.18290</div>
+      <div class="small">Several at once: list them in <b>INBOX.txt</b>, then <b>/add-paper inbox</b>.</div>
+      <div class="topics">
+        <div class="h2">Your topics<span>each a folder with a scope</span></div>
+        <div class="topic"><b>llm/memory</b>Memory for LLMs and agents.</div>
+        <div class="topic"><b>llm/post-training</b>Adapting pretrained models after pretraining.</div>
+        <div class="topic pick"><b>llm/post-training/preference-learning</b>RLHF, reward models, DPO and other preference-optimization methods.</div>
+        <div class="topic"><b>deep-learning/optimizers-and-schedules</b>Optimizers, learning-rate and batch-size schedules, …</div>
+      </div>
+    </div>
+
+    <div class="r">
+      <div class="h2">What is added</div>
+      <div class="got"><span class="n">1</span><div>
+        <div class="t">The PDF, for you to read</div>
+        <div class="p">pdfs/llm/post-training/preference-learning/<br><b>Direct Preference Optimization. Your Language Model is….pdf</b></div>
+      </div></div>
+      <div class="got"><span class="n">2</span><div>
+        <div class="t">The paper as Markdown, for Claude Code to read</div>
+        <div class="p">library/llm/post-training/preference-learning/<br><b>Direct Preference Optimization. Your Language Model is….md</b></div>
+        <div class="d">Equations as LaTeX, tables, figures, and the PDF page on every heading.</div>
+      </div></div>
+      <div class="got"><span class="n">3</span><div>
+        <div class="t">A line in the topic’s index</div>
+        <div class="row"><a>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</a> · 2023 · DPO: fine-tunes on preferences directly by reparameterising the reward, with no separate reward model or RL.</div>
+        <div class="d">The indexes are how Claude Code finds papers across the whole library.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="foot"><b>Measured on 60 papers:</b> a blind judge graded the chosen folder the best one for 53. Choosing it takes one request of about 4 seconds.</div>
+</div>
+</body>
+</html>

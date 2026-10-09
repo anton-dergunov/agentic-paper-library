@@ -1,0 +1,92 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/literature-review.png. The note is the opening of Opus's note on the
+  Gemma 3 Technical Report, committed in experiments/reading-models/results/claude-opus-5-5/, with
+  two of its digest lines shortened. The review's sections are those skills/literature-review/format.md
+  defines. The line at the foot is experiments/reading-models: errors in six notes were 1 for the
+  model used and 35 for the cheapest. Render with assets/pictures/render.sh literature-review.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>Literature review of a topic</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .top { flex: none; display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+  .top .ccin { width: 300px; }
+  .main { gap: 0; align-items: stretch; }
+  .st { display: flex; flex-direction: column; min-width: 0; }
+  .s1 { width: 196px; flex: none; } .s2 { flex: 1 1 0; } .s3 { width: 290px; flex: none; }
+  .ar { width: 34px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 22px; }
+  .hd { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .why { font-size: 11.5px; line-height: 1.4; color: var(--muted); margin-bottom: 9px; min-height: 48px; }
+  .stack { position: relative; flex: 1 1 auto; }
+  .sheet { position: absolute; left: 0; right: 18px; height: 96px; border: 1px solid var(--line); border-radius: 7px; background: #fff; box-shadow: 0 2px 6px rgba(31, 35, 40, .08); padding: 8px 10px; font-size: 11px; line-height: 1.3; font-weight: 600; }
+  .sheet span { display: block; font: 400 9.5px var(--mono); color: var(--muted); margin-top: 3px; }
+  .count { position: absolute; top: 140px; left: 0; right: 0; font-size: 11.5px; line-height: 1.4; color: var(--muted); }
+  .paper { flex: 1 1 auto; }
+  .note { font: 10.8px/1.55 var(--mono); }
+  .note .k { color: var(--md-key); }
+  .note .pg { color: var(--ok); font-weight: 700; }
+  .note p { margin-top: 8px; }
+  .s3 .paper { font-size: 12px; }
+  .s3 .sec { margin-top: 11px; }
+  .s3 .sec:first-child { margin-top: 0; }
+  .s3 .sec b { display: block; font-size: 13.5px; }
+  .s3 .sec span { color: var(--muted); font-size: 12px; line-height: 1.35; display: block; }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head big">
+    <h1>Literature review of a topic</h1>
+    <span class="sub">Claude Code reads every paper in a topic and writes one review: the kinds of approaches, what the papers find, and where the evidence is weak.</span>
+  </div>
+
+  <div class="top">
+    <div class="ccin"><span>/literature-review <em>llm/memory</em></span><i>↑</i></div>
+    <span class="small">Run it again after adding papers and the review is updated, not rewritten.</span>
+  </div>
+
+  <div class="main">
+    <div class="st s1">
+      <div class="hd"><span class="n">1</span>The topic’s papers</div>
+      <div class="why">Every paper in the folder and its subfolders, as Markdown.</div>
+      <div class="stack">
+        <div class="sheet" style="top: 0; left: 18px; right: 0"></div>
+        <div class="sheet" style="top: 14px; left: 9px; right: 9px"></div>
+        <div class="sheet" style="top: 28px">Larimar: Large Language Models with Episodic Memory Control<span>llm/memory/parametric</span></div>
+        <div class="count">… and every other paper<br>under llm/memory</div>
+      </div>
+    </div>
+    <div class="ar">→</div>
+    <div class="st s2">
+      <div class="hd"><span class="n">2</span>A note for each paper</div>
+      <div class="why">Each paper is read once, in full, into a short note that keeps the page of every number. A topic of a hundred papers then fits in one review session.</div>
+      <div class="paper note"><b>Gemma 3 Technical Report</b>
+        <p><span class="k">type:</span> system<br><span class="k">evidence:</span> Chatbot Arena Elo for 27B against other listed models; ten benchmarks, all run by the authors …</p>
+        <p>- Long context: 128K tokens (1B: 32K); the local span is 1024 tokens <span class="pg">(p. 1)</span>.</p>
+        <p>- Chatbot Arena: Gemma-3-27B-IT has Elo 1338, against 1220 for Gemma-2-27B-it; marked preliminary <span class="pg">(p. 3–4, Table 5)</span>.</p>
+        <p>- “27B comparable to Gemini-1.5-Pro” is mixed: 67.5 against 75.8 on MMLU-Pro, 89.0 against 86.5 on MATH <span class="pg">(p. 4, Table 6)</span>.</p>
+      </div>
+    </div>
+    <div class="ar">→</div>
+    <div class="st s3">
+      <div class="hd"><span class="n">3</span>One review</div>
+      <div class="why">Written from the notes, and checked against the papers where a finding rests on a number.</div>
+      <div class="paper">
+        <div class="sec"><b>Kinds of methods</b><span>the families, and the few choices that separate them</span></div>
+        <div class="sec"><b>The map</b><span>every paper, placed in its family</span></div>
+        <div class="sec"><b>How the field got here</b><span>what replaced what, and why</span></div>
+        <div class="sec"><b>Findings</b><span>each a claim with page citations, and how strong its evidence is</span></div>
+        <div class="sec"><b>Where the papers disagree</b></div>
+        <div class="sec"><b>In practice</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><b>Measured on six papers:</b> of five models compared as readers, the one used made 1 error in its notes; the cheapest made 35.</div>
+</div>
+</body>
+</html>

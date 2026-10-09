@@ -1,0 +1,78 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/grow.png. Two skills as skills/expand-library/SKILL.md and
+  skills/reorganize/SKILL.md describe them: propose first, act on the reader's choice. The proposed
+  papers are real papers around the example library's DPO paper; the list, the split and its paper
+  counts are an illustration, not the output of a run. Render with assets/pictures/render.sh grow.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>Find missing papers, reorganise topics</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .main { gap: 22px; }
+  .half { flex: 1 1 0; display: flex; flex-direction: column; min-width: 0; }
+  .half .h2 { font-size: 15px; margin-bottom: 2px; }
+  .half .small { margin-bottom: 9px; min-height: 32px; }
+  .ccin { font-size: 11.5px; margin-bottom: 10px; }
+  .paper { flex: 1 1 auto; font-size: 12.5px; padding: 13px 16px; }
+  .lab { font: 700 9.5px Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .it { display: flex; gap: 8px; padding: 4px 0; line-height: 1.35; }
+  .it i { flex: none; width: 13px; font-style: normal; font-weight: 700; color: var(--muted); }
+  .it span span { color: var(--muted); display: block; }
+  .it.x { text-decoration: line-through; color: #9aa3ad; }
+  .you { margin-top: 11px; border: 1px solid #cdc6b0; background: #fdf6e3; border-radius: 7px; padding: 5px 10px; font: 600 11.5px var(--mono); color: #586e75; }
+  .done { margin-top: 11px; color: var(--ok); font-weight: 600; line-height: 1.4; }
+  .trees { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .tree { flex: 1 1 0; font: 12px/1.65 var(--mono); border: 1px solid var(--line); border-radius: 7px; padding: 8px 12px; background: var(--panel); white-space: nowrap; }
+  .tree b { color: var(--ok); }
+  .tree span { color: var(--muted); }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head big">
+    <h1>Find missing papers, reorganise topics</h1>
+    <span class="sub">Two skills keep a growing library in order. Both propose first and change nothing until you choose.</span>
+  </div>
+
+  <div class="main">
+    <div class="half">
+      <div class="h2">Find the papers a topic lacks</div>
+      <div class="small">A reading list for the topic, with a reason for each paper. Strike what you don’t want; the rest are added.</div>
+      <div class="ccin"><span>/expand-library <em>llm/post-training/preference-learning</em></span><i>↑</i></div>
+      <div class="paper">
+        <div class="lab">Proposed</div>
+        <div class="it"><i>1</i><span>Deep Reinforcement Learning from Human Preferences<span>where learning a reward from comparisons began</span></span></div>
+        <div class="it"><i>2</i><span>Proximal Policy Optimization Algorithms<span>the RL step that DPO removes</span></span></div>
+        <div class="it x"><i>3</i><span>Learning to Summarize from Human Feedback</span></div>
+        <div class="it"><i>4</i><span>Training Language Models to Follow Instructions with Human Feedback<span>RLHF at scale</span></span></div>
+        <div class="it"><i>5</i><span>SimPO: Simple Preference Optimization with a Reference-Free Reward<span>a successor without the reference model</span></span></div>
+        <div class="you">strike 3</div>
+        <div class="done">4 papers added. The struck one is remembered, so it is not proposed again.</div>
+      </div>
+    </div>
+
+    <div class="half">
+      <div class="h2">Reorganise topics</div>
+      <div class="small">Papers live in folders by topic. As a folder grows, the skill proposes splits, merges and moves, each with a reason.</div>
+      <div class="ccin"><span>/reorganize <em>llm/memory</em></span><i>↑</i></div>
+      <div class="paper">
+        <div class="lab">Proposed</div>
+        <div class="it"><i>1</i><span>Split <b>llm/memory</b> into three subfolders<span>the papers fall into three groups that answer different questions</span></span></div>
+        <div class="it"><i>2</i><span>Move one paper to <b>llm/agents</b><span>it is about planning, and memory is a detail in it</span></span></div>
+        <div class="you">apply 1</div>
+        <div class="trees">
+          <div class="tree">llm/memory <span>58</span></div>
+          <span style="color: var(--muted); font-size: 18px">→</span>
+          <div class="tree">llm/memory<br>&nbsp;<b>parametric</b> <span>21</span><br>&nbsp;<b>retrieval</b> <span>24</span><br>&nbsp;<b>agents</b> <span>13</span></div>
+        </div>
+        <div class="done">Each paper moves with its PDF, Markdown and figures, and the indexes are rebuilt.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

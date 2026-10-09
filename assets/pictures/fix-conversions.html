@@ -1,0 +1,82 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/fix-conversions.png. The three steps are skills/fix-conversions/SKILL.md
+  and docs/design.md's decision of 2026-10-07. The conversion line is the opening of the one in
+  Opus's note on the Gemma 3 Technical Report (experiments/reading-models/results/claude-opus-5-5/).
+  The example and the line at the foot are experiments/review-flagged-fixes: a padding digit printed
+  in table cells of 29 papers, and papers showing a known symptom 761 to 379.
+  Render with assets/pictures/render.sh fix-conversions.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>Conversion errors are reported and fixed</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .main { flex-direction: column; gap: 16px; }
+  .steps { display: flex; align-items: stretch; flex: none; }
+  .step { flex: 1 1 0; min-width: 0; border: 1px solid var(--line); border-radius: 9px; background: #fff; padding: 12px 14px 13px; box-shadow: 0 3px 10px rgba(31, 35, 40, .07); }
+  .step .hd { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14.5px; margin-bottom: 6px; }
+  .step p { font-size: 12.5px; line-height: 1.42; }
+  .step .code, .step .ccin { margin-top: 9px; }
+  .step .code { font-size: 10.3px; line-height: 1.5; white-space: normal; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; }
+  .step .code .k { color: var(--md-key); }
+  .ar { width: 30px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 22px; }
+  .case { flex: 1 1 auto; border: 1px solid var(--line); border-radius: 9px; background: var(--panel); padding: 12px 16px; display: flex; gap: 22px; align-items: center; }
+  .case .txt { width: 268px; flex: none; }
+  .case .txt b { font-size: 14px; display: block; margin-bottom: 4px; }
+  .case .txt span { font-size: 12.5px; line-height: 1.42; color: var(--muted); }
+  .cells { flex: 1 1 0; display: flex; align-items: center; gap: 10px; }
+  .cell { flex: 1 1 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px 11px; text-align: center; }
+  .cell .label { margin-bottom: 6px; }
+  .cell .v { font: 700 30px/1.1 var(--mono); }
+  .cell .v s { text-decoration: none; color: #c3c9d0; }
+  .cell.bad { border-color: #ffc1ba; } .cell.bad .v { color: var(--bad); }
+  .cell.ok { border-color: var(--ok-line); } .cell.ok .v { color: var(--ok); }
+  .cell small { display: block; font-size: 10.5px; line-height: 1.3; color: var(--muted); margin-top: 5px; }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head big">
+    <h1>Conversion errors are reported and fixed</h1>
+    <span class="sub">No converter gets every paper right. Claude Code records what looks broken while it reads, and one skill works through the list.</span>
+  </div>
+
+  <div class="main">
+    <div class="steps">
+      <div class="step">
+        <div class="hd"><span class="n">1</span>Reported while reading</div>
+        <p>Each note says what the conversion broke, and on which page.</p>
+        <div class="code"><span class="k">conversion:</span> all figures (Fig. 1–9) are [figure] placeholders, so no figure values can be read (p. 1–8) …</div>
+      </div>
+      <div class="ar">→</div>
+      <div class="step">
+        <div class="hd"><span class="n">2</span>Fixed where it starts</div>
+        <p>A problem seen in several papers is fixed in the converter, with a test. A single one is fixed from the PDF.</p>
+        <div class="ccin"><span>/fix-conversions</span><i>↑</i></div>
+      </div>
+      <div class="ar">→</div>
+      <div class="step">
+        <div class="hd"><span class="n">3</span>Converted again</div>
+        <p>Every paper with the same problem is corrected at once. A note is rewritten only when the paper’s key content was affected.</p>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="txt"><b>An example: a digit nobody could see</b><span>Authors pad a table column with an invisible digit. The PDF hides it; the HTML source still carries it, and it was printed. One fix in the converter removed it from 29 papers.</span></div>
+      <div class="cells">
+        <div class="cell"><div class="label">In the PDF</div><div class="v">3.4</div><small>what the authors show</small></div>
+        <span class="ar" style="width: 14px">→</span>
+        <div class="cell bad"><div class="label">Markdown, before</div><div class="v">53.4</div><small>a wrong value in a well-formed table</small></div>
+        <span class="ar" style="width: 14px">→</span>
+        <div class="cell ok"><div class="label">Markdown, now</div><div class="v">3.4</div><small>the hidden digit is dropped</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot"><b>Measured:</b> after the 22 problems reported during one literature review were fixed, papers showing a known symptom fell from 761 to 379.</div>
+</div>
+</body>
+</html>

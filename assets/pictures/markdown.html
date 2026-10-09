@@ -1,0 +1,81 @@
+<!doctype html>
+<!--
+  Source of assets/pictures/markdown.png. Equation 7 and Table 1 of the DPO paper (arXiv 2305.18290,
+  CC BY 4.0) three ways: crops of the PDF (img/dpo-eq7.png, img/dpo-table1.png); the PDF's text
+  layer as experiments/pdf-vs-arxiv-html/outputs/dpo_pdftext.md holds it, with runs of spaces
+  shortened and long lines cut with an ellipsis; and the paper's Markdown in examples/library, the
+  equation broken over lines and each table row joined on one line to fit. The number at the foot is
+  docs/conversion.md's count for the author's library: 66 of 488,925 formulas fail to parse.
+  Render with assets/pictures/render.sh markdown.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="picture-size" content="960x600">
+<title>Each paper is converted to Markdown for the agent</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .g { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 112px 1fr 1fr; grid-template-rows: auto 138px auto auto; align-content: start; gap: 9px 12px; }
+  .g .ch { font-weight: 650; font-size: 12.5px; align-self: end; }
+  .rl { font-weight: 650; font-size: 12.5px; line-height: 1.25; padding-top: 8px; }
+  .rl span { display: block; font-weight: 400; font-size: 10.5px; line-height: 1.3; color: var(--muted); margin-top: 3px; }
+  .rl.no { color: var(--bad); } .rl.yes { color: var(--ok); }
+  .cell { border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px; background: #fff; min-width: 0; overflow: hidden; }
+  .cell.pdf { display: flex; align-items: center; justify-content: center; }
+  .cell.pdf img { max-width: 100%; max-height: 100%; }
+  .cell.no { border-color: #ffc1ba; background: #fff8f7; }
+  .cell.yes { border-color: var(--ok-line); background: #f6fdf8; }
+  .code { font-size: 9.9px; line-height: 1.5; }
+  .no .code { font-size: 9.4px; }
+  .yes .code.t { font-size: 8.9px; line-height: 1.6; }
+  .say { margin-top: 5px; font-size: 11px; line-height: 1.3; }
+  .no .say { color: var(--bad); } .yes .say { color: var(--ok); }
+</style>
+</head>
+<body class="wide">
+<div class="frame">
+  <div class="head big">
+    <h1>Each paper is converted to Markdown for the agent</h1>
+    <span class="sub">A PDF is laid out for people. Its text alone loses equations and tables, so Claude Code reads a Markdown copy that keeps them.</span>
+  </div>
+
+  <div class="g">
+    <div></div><div class="ch">An equation</div><div class="ch">A table</div>
+
+    <div class="rl">PDF page<span>what you read</span></div>
+    <div class="cell pdf"><img src="img/dpo-eq7.png" alt=""></div>
+    <div class="cell pdf"><img src="img/dpo-table1.png" alt=""></div>
+
+    <div class="rl no">Text taken from the PDF<span>what an agent gets from the file itself</span></div>
+    <div class="cell no"><div class="code">                πθ(yw | x)          πθ(yl | x)
+LDPO(πθ; πref) = −E(x,yw,yl)∼D log σ β log    −β log    . (7)
+                πref(yw | x)        πref(yl | x)</div>
+      <div class="say">Fractions and brackets are gone.</div></div>
+    <div class="cell no"><div class="code">                         Win rate vs. ground truth
+To further … PPO and DPO un-  Alg.  Temp 0  Temp 0.25
+der distribution shifts, we … PPO and DPO poli-
+cies from our Reddit TL;DR …  DPO    0.36     0.31
+                              PPO    0.26     0.23</div>
+      <div class="say">The table is mixed into the paragraph beside it.</div></div>
+
+    <div class="rl yes">Markdown in the library<span>what Claude Code reads</span></div>
+    <div class="cell yes"><div class="code"><span class="math">$$\mathcal{L}_{\text{DPO}}(\pi_{\theta};\pi_{\text{ref}})=
+-\mathbb{E}_{(x,y_{w},y_{l})\sim\mathcal{D}}\left[
+\log\sigma\left(\beta\log\frac{\pi_{\theta}(y_{w}\mid x)}
+{\pi_{\text{ref}}(y_{w}\mid x)}
+-\beta\log\frac{\pi_{\theta}(y_{l}\mid x)}
+{\pi_{\text{ref}}(y_{l}\mid x)}\right)\right]. \tag{7}$$</span></div>
+      <div class="say">The equation as LaTeX, with its number.</div></div>
+    <div class="cell yes"><div class="code t"><span class="h">### 6.3 Generalization to a new input distribution</span> <span class="pg">(p. 9)</span>
+<span class="dim">&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th colspan="2"&gt;</span>Win rate vs. ground truth<span class="dim">&lt;/th&gt;&lt;/tr&gt;</span>
+<span class="dim">&lt;tr&gt;&lt;th&gt;</span>Alg.<span class="dim">&lt;/th&gt;&lt;td&gt;</span>Temp 0<span class="dim">&lt;/td&gt;&lt;td&gt;</span>Temp 0.25<span class="dim">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="dim">&lt;tr&gt;&lt;th&gt;</span>DPO<span class="dim">&lt;/th&gt;&lt;td&gt;</span>0.36<span class="dim">&lt;/td&gt;&lt;td&gt;</span>0.31<span class="dim">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="dim">&lt;tr&gt;&lt;th&gt;</span>PPO<span class="dim">&lt;/th&gt;&lt;td&gt;</span>0.26<span class="dim">&lt;/td&gt;&lt;td&gt;</span>0.23<span class="dim">&lt;/td&gt;&lt;/tr&gt;</span>
+Table 1: GPT-4 win rates vs. ground truth summaries …</div>
+      <div class="say">A table. The heading has the PDF page, so an answer can link to it.</div></div>
+  </div>
+
+  <div class="foot" style="margin-top:auto">Made from arXiv’s HTML where a paper has one, otherwise from the PDF with a layout model and an equation model. <b>Measured: 99.99% of 489,000 equations in 2,200 papers parse as LaTeX.</b></div>
+</div>
+</body>
+</html>
