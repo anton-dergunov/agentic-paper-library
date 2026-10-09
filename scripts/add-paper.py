@@ -24,23 +24,13 @@ import sys
 from urllib.parse import quote
 
 from paperlib import (
-    CONFIG, ENGINE_ROOT, LIBRARY_DIR, SCRIPTS_DIR, ask_model, fetch, filing_choice,
-    library_arxiv_ids, load_topics, norm_title, paper_files, parse_arxiv_entries, read_paper,
-    skipped_index, write_paper,
+    CONFIG, LIBRARY_DIR, SCRIPTS_DIR, ask_model, fetch, filing_choice, filing_prompts,
+    library_arxiv_ids, load_topics, norm_title, parse_arxiv_entries, read_paper, skipped_index,
+    write_paper,
 )
 
 API = "https://export.arxiv.org/api/query"
 ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(v\d+)?")
-SYSTEM = "You are a careful research librarian."
-STYLE_SAMPLES = 3
-
-
-def style_sample():
-    """A few summaries already in the library, spread over it, for the model to match."""
-    summaries = [s for s in (" ".join(str(read_paper(p)[0].get("summary") or "").split())
-                             for p in paper_files()) if s]
-    step = max(1, len(summaries) // STYLE_SAMPLES)
-    return "\n".join("- " + s for s in summaries[::step][:STYLE_SAMPLES]) or "(none yet)"
 
 
 def main(argv):
@@ -69,11 +59,7 @@ def main(argv):
         sys.exit("error: arXiv export API gave no usable response")
 
     topics = load_topics()
-    # The rules and the topic tree are the system prompt, the same for every paper of a run,
-    # so the requests after the first read them from the prompt cache.
-    rules, the_paper = (ENGINE_ROOT / "guide" / "filing-prompt.md").read_text(encoding="utf-8").split("THE PAPER")
-    tree = "\n".join(f"{folder}: {scope}" for folder, scope in topics.items())
-    system = SYSTEM + "\n\n" + rules.format(topics=tree, style=style_sample()).strip()
+    system, the_paper = filing_prompts(topics)
     in_library = library_arxiv_ids()
     skipped_by_id, skipped_by_title = skipped_index()
     added, left = 0, 0
@@ -95,7 +81,7 @@ def main(argv):
             left += 1
             continue
         try:
-            reply, _ = ask_model(model, system, "THE PAPER" + the_paper.format(
+            reply, _ = ask_model(model, system, the_paper.format(
                 title=entry["title"], abstract=entry["abstract"]))
             folder, reason, summary = filing_choice(reply, topics)
         except RuntimeError as error:

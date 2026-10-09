@@ -100,6 +100,9 @@ CATALOG_DIR = _path(CONFIG.get("catalog", "catalog"), _BASE)
 TOPICS_FILE = CATALOG_DIR / "topics.yaml"
 SKIPPED_FILE = CATALOG_DIR / "skipped.yaml"
 CONVERSION_ISSUES_FILE = CATALOG_DIR / "conversion-issues.yaml"
+# What the reader works on and wants to learn, for `paperlib vet`: a short
+# markdown file, which may live outside the library (docs/configuration.md).
+INTERESTS_FILE = _path(CONFIG.get("interests") or CATALOG_DIR / "interests.md", _BASE)
 TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 # Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
 NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)
@@ -125,7 +128,7 @@ SOURCES = {"html", "pdf-text", "web"}
 TYPES = {"method", "survey", "benchmark", "study", "system", "position", "theory"}
 
 _FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
-ATOM = {"a": "http://www.w3.org/2005/Atom"}
+ATOM = {"a": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
 
 
 def paper_files(root=None):
@@ -236,6 +239,8 @@ def parse_arxiv_entries(xml_text):
             "published": datetime.date.fromisoformat(published) if published else None,
             "version": int(version.group(1)) if version else None,
             "abstract": " ".join(entry.findtext("a:summary", "", ATOM).split()),
+            "categories": [c.get("term") for c in entry.findall("a:category", ATOM)],
+            "comment": " ".join(entry.findtext("arxiv:comment", "", ATOM).split()),
         }
     return out
 
@@ -352,6 +357,23 @@ def ask_model(model, system, prompt):
         "input": sum(usage.get(k, 0) or 0 for k in
                      ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")),
         "output": usage.get("output_tokens", 0), "usd": reply.get("total_cost_usd")}
+
+
+def filing_prompts(topics):
+    """(system prompt, paper template) for a filing request: guide/filing-prompt.md.
+
+    The rules and the topic tree are the system prompt, the same for every paper of a run,
+    so the requests after the first read them from the prompt cache. The template takes
+    `title` and `abstract`.
+    """
+    rules, the_paper = (ENGINE_ROOT / "guide" / "filing-prompt.md").read_text(encoding="utf-8").split("THE PAPER")
+    tree = "\n".join(f"{folder}: {scope}" for folder, scope in topics.items())
+    # A few summaries already in the library, spread over it, for the model to match.
+    summaries = [s for s in (" ".join(str(read_paper(p)[0].get("summary") or "").split())
+                             for p in paper_files()) if s]
+    style = "\n".join("- " + s for s in summaries[::max(1, len(summaries) // 3)][:3]) or "(none yet)"
+    system = "You are a careful research librarian.\n\n" + rules.format(topics=tree, style=style).strip()
+    return system, "THE PAPER" + the_paper
 
 
 def filing_choice(reply, topics):

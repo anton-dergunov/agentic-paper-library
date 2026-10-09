@@ -10,11 +10,24 @@ A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it
 | `overview_dir` | none | A folder for your own note per paper, which the `overview` skill writes, e.g. a folder in an Obsidian vault. Without it, the skill asks where notes should go. |
 | `library`, `catalog`, `notes`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
 | `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder and summary ([measured](../experiments/skill-models/README.md)). |
+| `vetting_model` | `sonnet` | The model `paperlib vet` asks for a first opinion on a paper ([measured](../experiments/paper-vetting/README.md)). |
+| `interests` | `catalog/interests.md` | A short markdown file on what you work on and want to learn, which `paperlib vet` reads to say how a paper fits ([below](#interests)). It may live outside the library. |
 | `reader_model` | `opus` | The model `paperlib read` gives each paper to for its note ([measured](../experiments/reading-models/README.md)). |
 | `cache` | `~/.cache/papers` | arXiv downloads (HTML, figures, LaTeX sources) and marker's environment, shared by every library. |
 | `chrome` | found on PATH, then the macOS app | Headless Chrome, for web articles. |
 
 Relative paths are taken from the library root, and `~` is expanded. The environment variables `LIBRARY_DIR`, `PDF_ROOT` and `PAPERS_CACHE` override the config, for example on a machine where the PDFs are mounted somewhere else. `PAPERS_MARKER_PYTHON` points at another marker environment.
+
+## Interests
+
+`paperlib vet` judges a paper's fit against this file, and against the topic tree alone when there is none. It is free markdown, read by a model; four headings cover what the verdict needs, in under 40 lines:
+
+- **Focus**: the areas you work in.
+- **Growing**: what you want to learn.
+- **In use**: areas outside the focus that your projects need, so a paper there is not written off as off-topic.
+- **Not interested**: what to leave out.
+
+It is read only by `vet`, not loaded into every session; the paragraph on your focus in `AGENTS.md` stays.
 
 ## What else lives in a library
 
