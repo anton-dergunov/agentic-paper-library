@@ -43,6 +43,7 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **Mathematics in a table written as HTML** is its TeX, `$\times 10^{3}$`, as everywhere else; a plain number is written bare. pandoc renders a formula there itself, into `<span class="math inline">` and tags, and what it could not draw came out as loose TeX with the "±" between a value and its deviation gone.
 - **A picture or a box inside a formula.** A TikZ picture set in a formula (a boxed token name, a highlighted symbol) leaves its drawing commands as the formula's TeX, up to 30,000 characters each; they are replaced by what the picture shows. A formula holding a `\scalebox` is written from its TeX whole.
 - **Cell shading** is kept as `<mark>` only where the caption refers to it ("gray rows are …") and the table has one shading colour; a shaded row is marked on its first cell. Other shading is dropped: on fifteen tables it changed no answer a reader of the whole paper would not already have.
+- **Text in a colour the caption refers to** ("excluded topics are in gray") is marked the same way, in a table that has no shading and one text colour.
 - **A value and what is printed small or in colour after it** (a deviation, a gain) are set apart: "70.9 +2.3".
 - **A column title set on two lines** arrives lower line first; the raised line is read first.
 - **Names of macros LaTeXML did not know** (`\sans`, `\rotate`) are dropped; their arguments stay. After an undefined `\cellcolor` or `\rowcolor` the colour's name is set as text and runs into the cell's ("gray!10ANLI", "c3-avg-bkg72.6"); the name alone goes: a mix ends by its syntax, and another name is learnt where a tag follows it.
@@ -52,9 +53,13 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **A ">" typed in text** arrives as "¿"; standing alone it is ">" again.
 - **A table panel without row labels** gets those of the panel beside it, when that panel has the same rows and one column more.
 - **A row label spanning a group of rows** takes the group's last row when the paper's `\multirow` was one row short.
+- **A row group's label typed on the group's last row** (a `\multirow{-2}`, which reaches up) moves to the group's first row and spans the group; left where LaTeXML puts it, it names one row and the rows above it have no name.
+- **A header of two rows** stays together when LaTeXML marks only its first as `<th>`: the rows a header cell spans are header rows. Leading `<th>` rows of a `<tbody>` are the table's head and come first.
+- **A row of results marked as a header** (a label, then only decimal numbers and dashes) opens the body instead.
+- **A float that swallowed the rest of the paper** (a table LaTeXML could not close takes in the following sections, references and appendices) ends where the first of those sections begins, so its caption stays under it.
 - **Numbers and symbols LaTeXML left half-expanded:** digit groups joined by "true" (`2true294`), a `\mathchoice` of boxed symbols, `\penalty` before a control space, an accent over nothing (`pass\^{}k`), a tilde set on a digit ("5̃5%").
 
-→ [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md), [`experiments/table-emphasis`](../experiments/table-emphasis/README.md), [`experiments/reference-titles-and-table-math`](../experiments/reference-titles-and-table-math/README.md)
+→ [`experiments/tree-references-and-style-warnings`](../experiments/tree-references-and-style-warnings/README.md), [`experiments/table-emphasis`](../experiments/table-emphasis/README.md), [`experiments/reference-titles-and-table-math`](../experiments/reference-titles-and-table-math/README.md), [`experiments/split-characters-and-text-colour`](../experiments/split-characters-and-text-colour/README.md)
 
 ## Table and figure numbers
 

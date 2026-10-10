@@ -386,6 +386,12 @@ def checks():
         "dataset<sup>1</sup> of" in md and "\n\n<sup>1</sup> Most samples are short.\n\nAfter." in md
         and md.count("<sup>1</sup>") == 2)
 
+    md, _ = convert(f'<p class="ltx_p">0.272<sup class="ltx_sup">{font("†", "ltx_font_italic")}</sup> and '
+                    f'{font(" ±0.3 ")} hold.</p><table class="ltx_equation ltx_eqn_table"><tbody>'
+                    + eqn_row(math(r"\displaystyle\geq q(U)"), "by Eq.\u00a06", number=1) + "</tbody></table>")
+    yield "a dagger or a ± set in italics or bold stays whole", "<sup>*†*</sup>" in md and "**±0.3**" in md
+    yield "a no-break space in an equation's text is a space", r"\text{by Eq. 6}" in md and "\ufffd" not in md
+
     md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
                     f'<td class="ltx_td ltx_border_tt">{font("Model")}</td><td class="ltx_td ltx_border_tt">NDCG</td></tr>'
                     f'<tr class="ltx_tr"><td class="ltx_td ltx_border_t">YetiRank{note}</td>'
@@ -415,6 +421,43 @@ def checks():
     yield "an unknown macro's name is dropped", "sans" not in md and "(pretrain)" in md and "Listing" not in md
     yield "a lone ¿ is the > it was typed as", "*edited* \\> *chosen*" in md and "¿Qué" in md
 
+    md, _ = convert('<section class="ltx_section"><h2 class="ltx_title ltx_title_section">7 Results</h2>'
+                    '<p class="ltx_p">Before.</p><figure class="ltx_table"><figcaption class="ltx_caption">'
+                    '<span class="ltx_tag ltx_tag_table">Table 7: </span>Query times.</figcaption><div class="ltx_block">'
+                    '<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">varint</td><td class="ltx_td">1.4</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">bitmap</td><td class="ltx_td">2.0</td></tr></table>'
+                    '<section class="ltx_section"><h2 class="ltx_title ltx_title_section">8 Discussion</h2>'
+                    '<p class="ltx_p">Last words.</p></section></div></figure></section>')
+    yield "a float that swallowed the next section ends before it", (
+        "| bitmap | 2.0 |" in md and md.index("Table 7: Query times.") < md.index("## 8 Discussion") < md.index("Last words."))
+
+    def th(text, attrs=""):
+        return f'<th class="ltx_td ltx_th ltx_th_column" {attrs}>{text}</th>'
+
+    def cells(*texts):
+        return "".join(f'<td class="ltx_td">{t}</td>' for t in texts)
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><tbody class="ltx_tbody">'
+                    f'<tr class="ltx_tr">{th("Method", 'rowspan="2"')}{th("Sentence", 'colspan="2"')}{th("Passage")}</tr>'
+                    f'<tr class="ltx_tr">{cells("NoFac", "Fact", "Pear.")}</tr>'
+                    f'<tr class="ltx_tr">{th("SelfCk-BERT")}{th("81.96")}{th("44.23")}{th("58.18")}</tr>'
+                    f'<tr class="ltx_tr">{cells("SelfCk-QA", "84.26", "48.14", "61.07")}</tr></tbody></table>'
+                    '<figcaption class="ltx_caption">Table 3: Detection.</figcaption></figure>')
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a header's second row stays under the cell that spans it", (
+        '<th rowspan="2">Method</th>' in head and head.index("Sentence") < head.index("NoFac"))
+    yield "a row of results marked as a header is a body row", "SelfCk-BERT" not in head and "<td>81.96</td>" in md
+
+    def ruled(*texts):
+        return "".join(f'<td class="ltx_td ltx_border_t">{t}</td>' for t in texts)
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular">'
+                    f'<tr class="ltx_tr">{ruled("Benchmark", "Dataset", "Size")}</tr>'
+                    f'<tr class="ltx_tr">{ruled("", "Task-specific", "30,000")}</tr>'
+                    f'<tr class="ltx_tr">{cells("HaluEval", "General", "5,000")}</tr>'
+                    f'<tr class="ltx_tr">{ruled("Med-HALT", "-", "4,916")}</tr></table>'
+                    '<figcaption class="ltx_caption">Table 4: Benchmarks.</figcaption></figure>')
+    yield "a group's label typed on its last row spans the group from its first", (
+        '<td rowspan="2">HaluEval</td>' in md and md.index("HaluEval") < md.index("Task-specific") < md.index("General"))
+
     def shaded_table(caption):
         gray = 'style="--ltx-bg-color:#E6E6E6;"'
         return ('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
@@ -427,6 +470,24 @@ def checks():
     yield "shading the caption refers to is marked", "<mark>Prompt</mark>" in md and md.count("<mark>") == 1
     md, _ = convert(shaded_table("Mean AUROC compared across methods."))
     yield "other shading is dropped", "<mark>" not in md and "Prompt" in md
+
+    def coloured_table(caption):
+        def gray(text):
+            return f'<span class="ltx_text" style="--ltx-fg-color:#808080;">{text}</span>'
+        return ('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
+                '<td class="ltx_td ltx_border_tt">Topic</td><td class="ltx_td ltx_border_tt">Relevant</td>'
+                '<td class="ltx_td ltx_border_tt">Judged</td></tr>'
+                '<tr class="ltx_tr"><td class="ltx_td ltx_border_t">19335</td><td class="ltx_td ltx_border_t">53</td>'
+                '<td class="ltx_td ltx_border_t">194</td></tr>'
+                f'<tr class="ltx_tr"><td class="ltx_td">{gray("47923")}</td><td class="ltx_td">{gray("2")}</td>'
+                f'<td class="ltx_td">{gray("148")}</td></tr>'
+                '<tr class="ltx_tr"><td class="ltx_td">87181</td><td class="ltx_td">116</td><td class="ltx_td">158</td></tr></table>'
+                f'<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 5: </span>{caption}</figcaption></figure>')
+    md, _ = convert(coloured_table('Judging statistics. Excluded topics are '
+                                   '<span class="ltx_text" style="--ltx-fg-color:#808080;">in gray</span>.'))
+    yield "text in a colour the caption refers to is marked", "<mark>47923</mark>" in md and md.count("<mark>") == 1
+    md, _ = convert(coloured_table("Judging statistics for the two tasks."))
+    yield "other coloured text is left plain", "<mark>" not in md and "47923" in md
 
     def panel(rows, label):
         body = "".join('<tr class="ltx_tr">' + "".join(f'<td class="ltx_td">{c}</td>' for c in row) + "</tr>" for row in rows)

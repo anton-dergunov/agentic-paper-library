@@ -1,0 +1,44 @@
+paper	float	marks	cells	caption
+1608.06993v5	S4.T2	5	173	Table 2: Error rates (%) on CIFAR and SVHN datasets. kk denotes network’s growth rate. Results that surpass all competing methods are bold and the overall best 
+1801.03924v2	A1.T5	36	259	Table 5: Results. We show 2AFC scores (higher is better) across a spectrum of methods and test sets. The bolded &amp; underlined values are the highest performi
+1911.05722v3	S4.T4	11	81	Table 4: Comparison with previous methods on object detection fine-tuned on PASCAL VOC trainval2007. Evaluation is on test2007. The ImageNet supervised counterp
+2003.07820v2	S5.T5	54	379	Table 5: Judging statistics for the Document Ranking and Passage Ranking tasks. Given are the number of documents judged (any variant of) relevant, the total nu
+2010.13902v3	S5.T6	12	38	Table 6: Adversarial performance under three adversarial attacks for GNN with different depth (following the protocol in [60]). Red numbers indicate the best pe
+2109.13916v5	A1.T2	24	60	Table 2: Problems and the hazards they help handle. Checkmarks indicate whether a problem directly reduces vulnerability or exposure to a given hazard, and bold
+2110.12088v2	S5.T3	11	86	Table 3: Performance gap between human noise and class-dependent noise: test accuracy (trained on synthetic noise) - test accuracy (trained on human noise). Neg
+2111.06377v3	S4.T2	2	35	Table 2: Wall-clock time of our MAE training (800 epochs), benchmarked in 128 TPU-v3 cores with TensorFlow. The speedup is relative to the entry whose encoder h
+2211.10438v7	S3.T1	1	30	Table 1: Among different activation quantization schemes, only per-channel quantization (Bondarenko et al., 2021) preserves the accuracy, but it is not compatib
+2303.06865v2	S6.T4	2	21	Table 4: Ablation study of proposed techniques. The numbers are generation throughput on 1 GPU with prompt length 512. The gray tuple denotes a policy (GPU batc
+2303.06865v2	A1.T12	4	22	Table 12: Generation throughput (token/s) on 1 GPU (RTX 3090) with 125 GB CPU memory and 1TB SSD, run with input sequence length 512 and output sequence length 
+2303.06865v2	A1.T14	4	22	Table 14: Generation throughput (token/s) on 1 GPU with input sequence length 256 and output sequence length 32. FlexGen is our system without compression; Flex
+2303.06865v2	A1.T15	4	22	Table 15: Generation throughput (token/s) on 1 T4 GPU with input sequence length 512 and output sequence length 32. FlexGen is our system without compression; F
+2303.06865v2	A1.T16	5	22	Table 16: Generation throughput (token/s) on 1 T4 GPU with input sequence length 1024 and output sequence length 32. FlexGen is our system without compression; 
+2303.06865v2	A1.T17	4	22	Table 17: Generation throughput (token/s) on 1 T4 GPU with input sequence length 128 and output sequence length 128. FlexGen is our system without compression; 
+2303.06865v2	A1.T18	4	22	Table 18: Generation throughput (token/s) on 1 T4 GPU with input sequence length 512 and output sequence length 8. FlexGen is our system without compression; Fl
+2303.06865v2	A1.T23	6	21	Table 23: Ablation study of proposed techniques. The numbers are generation throughput on 1 T4 GPU with prompt length 512 and generating length 32. The gray tup
+2304.12210v2	S3.T3	2	48	Table 3: Hyperparameter selection using the common supervised linear probe strategy (ImageNet oracle), RankMe and α\alpha-ReQ. OOD indicates the average perform
+2306.00978v6	S3.T1	8	52	Table 1: Keeping a small fraction of weights (0.1%-1%) in FP16 significantly improves the performance of the quantized models over round-to-nearest (RTN). It is
+2310.11511v1	S5.T2	7	232	Table 2: Overall experiment results on six tasks. Bold numbers indicate the best performance among non-proprietary models, and gray-colored bold text indicates 
+2311.01449v2	A10.T14	2	29	Table 14: Prompt template for generating broad, high-level topics that can either serve as a flat list of standalone topics or as the first tier of a hierarchic
+2311.01449v2	A10.T15	2	34	Table 15: Prompt template for generating second-level subtopics in a topic hierarchy. In practice, users need to modify the components highlighted in red (gener
+2311.01449v2	A10.T16	1	27	Table 16: Prompt template for refining/merging similar topics in a topic hierarchy. In practice, users need to modify the components highlighted in red (example
+2311.01449v2	A10.T17	2	24	Table 17: Prompt template for assigning topics to a given document in the corpus. In practice, users need to modify the components highlighted in red as well as
+2401.11817v2	S3.T1	8	43	Table 1: Illustration of diagonalization for the proof of Theorem 1. Each row represents a particular LLM state. Each column represents a string sis_{i} with wh
+2401.11817v2	S3.T2	14	43	Table 2: Illustration of proof for Theorem 2. Each row represents a particular LLM. Each column represents a string sis_{i} where the LLM is tested on. A value 
+2401.15884v3	S5.T1	4	129	Table 1: Overall evaluation results on the test sets of four datasets. Results are separated based on the generation LLMs. Bold numbers indicate the best perfor
+2403.02545v4	S6.T2	6	124	Table 2: Evaluation results on six public datasets. The model with best AUC and best LogLoss on each dataset are highlighted.
+2406.06560v2	S4.T1	2	46	Table 1: Evaluation of possibly biased principles on three datasets. Results on AlpacaEval (648648 preferences), Chatbot Arena (5,1155{,}115), and PRISM (7,4907
+2406.06560v2	A6.T2	26	147	Table 2: Evaluation of possibly biased principles on three datasets. Results on AlpacaEval (648648 preferences), Chatbot Arena (5,1155{,}115), and PRISM (7,4907
+2406.16860v2	A5.T21	3	138	Table 21: Number of leaked test set images. Using image hashing, we assess the overlap of test images across three training datasets: Cambrian10M Data Engine 16
+2407.12883v4	A2.T17	1	12	Table 17: Prompt used to check TheoremQA-Theorem documents. Blue text denote instance-specific inputs. For each question, we provide the problem statement, the 
+2408.15240v3	S4.T1	1	25	Table 1: Performance of different methods on math tasks from the MMLU (Hendrycks et al., 2020) dataset. The evaluation uses an easy-to-hard generalization setti
+2409.19606v3	A11.T13	4	38	Table 13: OLMo’s default configuration was evaluated using multiple metrics. Perplexity (PPL) and loss were used for the V2 and V3 Validation Sets, while zero-s
+2502.13595v4	S3.T2	3	474	Table 2: The results for three multilingual benchmarks are ranked using Borda count. We provide averages across all tasks, per task category, and weighted by ta
+2504.20571v3	S3.T3	2	286	Table 3: 1(Few)-Shot RLVR performance (%) for different categories in MATH500. Here for MATH500, we consider Algebra (Alg.), Count &amp; Probability (C.P.), Geo
+2505.24864v1	S3.T3	3	108	Table 1: Performance (pass@1) comparison for benchmarks across Math domain. The best results are highlighted in bold. The results of DeepSeek-R1-Distill-Qwen-7B
+2506.16791v4	A6.T1	6	426	Table F.1: Performance Per Dataset. We show the average predictive performance per dataset with the standard deviation over folds. We show the performance for t
+2509.02046v2	S3.T3	3	40	Table 3: Illustrative coordinate-descent steps for AdamW on the 130M 1× Chinchilla regime. Changed hyperparameter values are highlighted in red; We omitted some
+2510.18866v4	A1.T5	2	27	Table 5: Mapping between functions, their roles, and the concrete models used in this paper. Black-font entries denote models shared by both LightMem and baseli
+2511.16719v2	S6.T3a	2	32	Table 3: Accuracy on counting benchmarks. Gray indicates usage of training sets.
+2511.16719v2	S6.T7	8	94	Table 7: SAM 3 Agent results. Gray indicates fine-tuned results on ReasonSeg (train), * indicates reproduced results, underline indicates the main metric. †: LI
+2601.05505v2	A6.T14	3	80	Table 14: Qualitative comparison on GSM8K. We display the complete reasoning chain for both models. The blue markers indicate the exact moment the FlashMem mech

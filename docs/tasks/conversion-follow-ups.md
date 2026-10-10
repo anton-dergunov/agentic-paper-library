@@ -20,7 +20,7 @@ What is open in the converters and in the conversion of the author's library (`~
 
 Run these after the equation check of section 1, so that they get it.
 
-- **The thorough conversion of 30 catalogued papers** (28 of `search-and-ranking`, Command A and "Reinforcement Learning for LLM Post-Training. A Survey"), listed in the library's `docs/tasks/pdf-reconversion-papers.txt`. About 13 minutes a paper, and more than two jobs do not help; expect 6–8 hours.
+- **The thorough conversion of 34 catalogued papers** (31 of `search-and-ranking`, Command A, "Reinforcement Learning for LLM Post-Training. A Survey" and "Detecting hallucinations in large language models using semantic entropy"), listed in the library's `docs/tasks/pdf-reconversion-papers.txt`. About 13 minutes a paper, and more than two jobs do not help; expect 7–9 hours. Papers edited by hand are skipped: "A Latent Semantic Model with Convolutional-Pooling Structure for Information Retrieval" (its row labels and captions on p. 7 were restored from the page) needs `--force`, and the edit made again after.
   ```sh
   cd ~/papers
   tr '\n' '\0' < docs/tasks/pdf-reconversion-papers.txt | xargs -0 caffeinate -i \
@@ -36,11 +36,12 @@ Run these after the equation check of section 1, so that they get it.
   caffeinate -i paperlib reconvert --all --pdf-text --inline-math --state ~/.cache/papers/reconvert-pdf-inline.jsonl
   ```
 - **International AI Safety Report 2026.** The equation model failed on it, so text blocks whose symbols the text layer lost were left as they are. Reconvert it alone: `paperlib reconvert --pdf-text <paper.md>`.
-- **Old PDFs with a broken text layer** ("Long Short-Term Memory", "The power of two random choices") lose ligatures and, for LSTM, headings and equations. Replace the PDF with a cleaner copy.
+- **Old PDFs with a broken text layer** ("Long Short-Term Memory", "The power of two random choices", "The Anatomy of a Large-Scale Hypertextual Web Search Engine") lose ligatures and, for LSTM, headings and equations; the Google paper is a scan whose OCR garbled headings and numbers (its two tables were rewritten by hand). Replace the PDF with a cleaner copy.
 
 ## 4. Small
 
 - **A reference to an equation, a theorem or an appendix that LaTeXML lost** shows its label's name ("eq.(exactSol)", "Appendix minibatch"); only sections and floats get their number from the LaTeX source. Nine papers have them, "Real numbers, data science and chaos" in thirteen places. An equation's number could be taken from its place among the numbered equations of the source.
 - **`Memory in the Age of AI Agents`** is edited by hand, so it keeps "§ what-memory" for Section 3. A reconversion with `--force` resolves such references from the LaTeX source; its cropped Figure 1 has to be put back after.
 - **A `tabular` or an `\includegraphics` inside a formula** stays as its TeX, which an agent reads and KaTeX does not draw (23 formulas in 4 papers). A `NiceArray` arrives empty (5 formulas, one paper).
+- **A taxonomy tree's leaves that hold only citations arrive empty, and a table of paragraph columns is set as run-on text** ("A Survey on Hallucination in Large Language Models", Figure 1 on p. 2 and Tables 1 and 5 on pp. 5 and 26).
 - **References that share an anchor.** See "Table and figure numbers" in [`conversion.md`](../conversion.md).

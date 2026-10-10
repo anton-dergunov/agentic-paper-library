@@ -333,6 +333,37 @@ def balanced_end(article, begin, tag):
     return None
 
 
+def close_runaway_floats(article):
+    """End a float where the sections it has swallowed begin.
+
+    A table LaTeXML could not close (a longtable at the end of a section)
+    takes the rest of the paper into its <figure>: the following sections,
+    the references, the appendices. pandoc prints a float's caption after its
+    content, here after the paper's last line. The float is closed before the
+    first of those sections, with the containers it opened; their closing
+    tags, which end the float, go.
+    """
+    out, pos = [], 0
+    for m in re.finditer(r"<figure\b[^>]*>", article):
+        if m.start() < pos:
+            continue
+        end = balanced_end(article, m.start(), "figure")
+        section = article.find("<section", m.end(), end) if end else -1
+        if section < 0:
+            continue
+        head, tail = article[m.start():section], article[section:end]
+        closing = re.search(r"((?:</div\s*>\s*)*)</figure\s*>$", tail)
+        opened = len(re.findall(r"<div\b", head)) - len(re.findall(r"</div\s*>", head))
+        swallowed = tail[:closing.start()]
+        if ("<figcaption" not in head or opened != closing.group(1).count("</div")
+                or len(re.findall(r"<section\b", swallowed)) != len(re.findall(r"</section\s*>", swallowed))
+                or len(re.findall(r"<figure\b", head)) != len(re.findall(r"</figure\s*>", head)) + 1):
+            continue
+        out += [article[pos:m.start()], head, "</div>" * opened, "</figure>", swallowed]
+        pos = end
+    return "".join(out) + article[pos:]
+
+
 def listing_source(block):
     """The source text of one LaTeXML code listing.
 
@@ -1163,6 +1194,9 @@ def fix_text_encoding(article):
 
 BACKGROUND = re.compile(r"--ltx-bg-color:\s*#[0-9A-Fa-f]{6}")
 SHADED_SPAN = re.compile(r"<span\b[^>]*--ltx-bg-color[^>]*>(.*?)</span>", re.S)
+# Text set in a colour; black is no colour.
+TEXT_COLOUR = re.compile(r"--ltx-fg-color:\s*#(?!000000)[0-9A-Fa-f]{6}")
+COLOURED_SPAN = re.compile(r"<span\b[^>]*--ltx-fg-color:\s*#(?!000000)[^>]*>(.*?)</span>", re.S)
 TABLE_FLOAT = re.compile(r'<figure\b[^>]*\bclass="[^"]*\bltx_table\b[^"]*"[^>]*>')
 TABLE_ROW = re.compile(r"<tr\b[^>]*>(.*?)</tr\s*>", re.S)
 TABLE_CELL = re.compile(r"<(t[dh])\b([^>]*)>(.*?)</\1\s*>", re.S)
@@ -1177,21 +1211,27 @@ def cell_text(fragment):
     return re.sub(r"<[^>]+>", "", fragment).strip()
 
 
-def shaded_cells(float_html):
+def shaded_cells(float_html, colour=BACKGROUND, span=SHADED_SPAN):
     """A table float's rows as lists of (start, end, shaded) for each cell's
     content. A cell is shaded when it has a background colour, or nearly all
-    its text sits in a span that has one."""
+    its text sits in a span that has one. With TEXT_COLOUR and COLOURED_SPAN,
+    the same for the colour of the text."""
     rows = []
     for row in TABLE_ROW.finditer(float_html):
         cells = []
         for cell in TABLE_CELL.finditer(row.group(1)):
             text = cell_text(cell.group(3))
-            inner = "".join(cell_text(span) for span in SHADED_SPAN.findall(cell.group(3)))
-            shaded = bool(BACKGROUND.search(cell.group(2))) or (bool(text) and len(inner) >= 0.8 * len(text))
+            inner = "".join(cell_text(part) for part in span.findall(cell.group(3)))
+            shaded = bool(colour.search(cell.group(2))) or (bool(text) and len(inner) >= 0.8 * len(text))
             cells.append((row.start(1) + cell.start(3), row.start(1) + cell.end(3), shaded))
         if cells:
             rows.append(cells)
     return rows
+
+
+def table_only(float_html):
+    """A table float without its captions, where a word may be coloured too."""
+    return re.sub(r"<figcaption\b.*?</figcaption>", "", float_html, flags=re.S)
 
 
 def shading_pattern(rows):
@@ -1227,6 +1267,10 @@ def mark_shading(article, rule=None):
     content is marked, a row shaded from end to end on its first cell only,
     a shaded column on its top cell. A table shaded in several colours is
     left alone, as one mark cannot say which colour a cell had.
+
+    A table without shading whose caption refers to the colour of its text
+    ("excluded topics are in gray") is treated the same: its cells set
+    wholly in the one colour are the shaded ones.
     """
     rule = rule or SHADING
     if rule == "none":
@@ -1237,7 +1281,11 @@ def mark_shading(article, rule=None):
         if m.start() < pos or end is None:
             continue
         body = article[m.start():end]
+        colour = BACKGROUND
         rows = shaded_cells(body) if "--ltx-bg-color" in body else []
+        if not rows and "--ltx-fg-color" in body:
+            colour = TEXT_COLOUR
+            rows = shaded_cells(body, TEXT_COLOUR, COLOURED_SPAN)
         if not any(shaded for row in rows for _, _, shaded in row):
             continue
         flags = [[shaded for _, _, shaded in row] for row in rows]
@@ -1245,7 +1293,8 @@ def mark_shading(article, rule=None):
         caption = cell_text(" ".join(re.findall(r"<figcaption\b.*?</figcaption>", body, re.S))).lower()
         named = bool(NAMES_SHADING.search(caption))
         if rule == "caption":
-            colours = {c.lower() for c in BACKGROUND.findall(body)}
+            # A caption names the colour of text in that colour ("in gray").
+            colours = {c.lower() for c in colour.findall(body if colour is BACKGROUND else table_only(body))}
             wanted = (named and len(colours) == 1
                       and pattern in ("some rows", "some cells", "many cells", "whole columns"))
         else:
@@ -1319,6 +1368,97 @@ def extend_rowspans(article):
             continue
         for a, b, text in sorted(edits, reverse=True):
             body = body[:a] + text + body[b:]
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+def raise_group_labels(article):
+    """Put a row group's label on the group's first row, spanning the group.
+
+    A \\multirow{-2} is typed on the last row of its group and reaches up
+    (the way to span rows that have a \\rowcolor). LaTeXML leaves the label
+    on that last row, so it reads as the name of one row and the rows above
+    it as nameless. Where a group between two rules has its only label on its
+    last row, the label moves to the first and spans the group. A header
+    written that way ("Metric" under an empty cell) is left alone in a table
+    without spans, which stays a pipe table.
+    """
+    out, pos = [], 0
+    for table in re.finditer(r"<table\b", article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        if "ltx_border_t" not in body or body.count("<table") > 1:
+            continue
+        firsts = [FIRST_CELL.match(body, m.start(1), m.end(1)) for m in TABLE_ROW.finditer(body)]
+        ruled = [bool(f and re.search(r"\bltx_border_tt?\b", f.group(2))) for f in firsts]
+        starts = [i for i, r in enumerate(ruled) if r] + [len(firsts)]
+        edits = []
+        for a, b in zip(starts, starts[1:]):
+            group = firsts[a:b]
+            if len(group) < 2 or not all(group) or any("span=" in f.group(2) for f in group):
+                continue
+            # A header's label is raised only in a table that is written as HTML anyway.
+            if a == 0 and not re.search(r'\b(?:row|col)span="', body):
+                continue
+            if any(cell_text(f.group(3)) or "<img" in f.group(3) for f in group[:-1]) or not cell_text(group[-1].group(3)):
+                continue
+            top, label = group[0], group[-1]
+            edits.append((label.start(), label.end(), ""))
+            edits += [(f.start(), f.end(), "") for f in group[1:-1]]
+            edits.append((top.start(3), top.end(3), label.group(3)))
+            edits.append((top.start(2), top.start(2), f' rowspan="{len(group)}"'))
+        if not edits:
+            continue
+        for a, b, text in sorted(edits, reverse=True):
+            body = body[:a] + text + body[b:]
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+def span_header_rows(article):
+    """Make the rows a header cell spans header rows too.
+
+    LaTeXML marks the first row of a two-row header as <th> ("Method" over
+    both rows, "Sent-lvl" over three columns) and leaves the second as <td>.
+    pandoc ends the head where the <th> rows end and cuts the span there, so
+    "Method" would sit over the first sub-column. The spanned rows' cells
+    become <th>.
+    """
+    out, pos = [], 0
+    for table in re.finditer(r"<table\b", article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        if 'rowspan="' not in body or "<thead" in body or body.count("<table") > 1:
+            continue
+        rows = list(TABLE_ROW.finditer(body))
+        head, i = 0, 0  # rows the header reaches; the row looked at
+        while i < min(len(rows), 3):
+            cells = list(TABLE_CELL.finditer(rows[i].group(1)))
+            if i >= head and not (cells and all(c.group(1) == "th" for c in cells)):
+                break
+            spans = [int(n) for c in cells for n in re.findall(r'\browspan="(\d+)"', c.group(2))]
+            head = max([head, i + 1] + [i + n for n in spans])
+            i += 1
+        if head > min(len(rows) - 1, 3):
+            continue
+        edits = []
+        for row in rows[:head]:
+            for cell in TABLE_CELL.finditer(row.group(1)):
+                if cell.group(1) == "td":
+                    edits += [(row.start(1) + cell.start(1), "th"),
+                              (row.start(1) + cell.start() + cell.group(0).rindex("</") + 2, "th")]
+        if not edits:
+            continue
+        for at, tag in sorted(edits, reverse=True):
+            body = body[:at] + tag + body[at + 2:]
         out.append(article[pos:table.start()])
         out.append(body)
         pos = end
@@ -1561,6 +1701,7 @@ def main(html_path, body_path, images_dir, basename):
     article = extract_article(page)
     article = clean_math(article)
     article = drop_invisible(article)
+    article = close_runaway_floats(article)
     article = drop_style_warnings(article)
     article = name_icons(article)
     article = split_captions(article)
@@ -1575,6 +1716,8 @@ def main(html_path, body_path, images_dir, basename):
     article = fix_text_encoding(article)
     article = tidy_cells(article)
     article = extend_rowspans(article)
+    article = raise_group_labels(article)
+    article = span_header_rows(article)
     article = share_panel_labels(article)
     article = mark_shading(article)
     article = bare_year_citations(article)

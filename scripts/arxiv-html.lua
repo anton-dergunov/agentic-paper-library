@@ -503,6 +503,24 @@ local function is_space(el)
   return el.t == "Space" or el.t == "SoftBreak" or (el.t == "Str" and not el.text:gsub("\u{a0}", ""):match("%S"))
 end
 
+-- A word without the padding at one end ("^" or "$"). The no-break space is
+-- matched as its two bytes together and the spaces are listed: a character
+-- class takes each byte alone, and %s takes the byte 0xA0 in some locales,
+-- either of which cuts "†" or "±" in half.
+local function trim_padding(text, at)
+  local n
+  repeat
+    if at == "^" then
+      text, n = text:gsub("^\u{a0}", "")
+      if n == 0 then text, n = text:gsub("^[ \t\r\n]+", "") end
+    else
+      text, n = text:gsub("\u{a0}$", "")
+      if n == 0 then text, n = text:gsub("[ \t\r\n]+$", "") end
+    end
+  until n == 0
+  return text
+end
+
 function Span(el)
   local content = el.content
   -- A caption's "Table 7:" is matched as plain text (caption-numbers.py),
@@ -527,8 +545,8 @@ function Span(el)
       while #content > 0 and is_space(content[#content]) do after:insert(1, content:remove()) end
       -- The padding also comes joined to the first and the last word.
       local first, last = content[1], content[#content]
-      if first and first.t == "Str" then first.text = first.text:gsub("^[\u{a0}%s]+", "") end
-      if last and last.t == "Str" then last.text = last.text:gsub("[\u{a0}%s]+$", "") end
+      if first and first.t == "Str" then first.text = trim_padding(first.text, "^") end
+      if last and last.t == "Str" then last.text = trim_padding(last.text, "$") end
       content = before .. pandoc.List({ pandoc[kind](content) }) .. after
     end
   end
@@ -666,7 +684,8 @@ local function equation_rows(tbl)
             has_math = true
             table.insert(tex, p.math)
           else
-            local s = p.text:gsub("%s+", " ")
+            -- Not %s, which takes the second byte of a no-break space alone.
+            local s = p.text:gsub("\u{a0}", " "):gsub("[ \t\r\n]+", " ")
             if s:match("%S") then
               table.insert(plain, s)
               table.insert(tex, "\\text{" .. tex_text(s) .. "}")
@@ -761,32 +780,83 @@ end
 -- in a bottom rule, or followed by a row with a top rule (\midrule), become
 -- the head. The head grows to take in the rows a header cell spans
 -- ("Length" over "Memory" / "Ability"), as long as it stays within three.
+-- A row of results LaTeXML took for a header: a label, then nothing but
+-- decimal numbers and dashes.
+local function is_data_row(row)
+  local cells = row.cells
+  if #cells < 3 or not pandoc.utils.stringify(cells[1].contents):match("%a") then return false end
+  local numbers = 0
+  for i = 2, #cells do
+    local text = pandoc.utils.stringify(cells[i].contents):gsub("[%s\u{a0}*†‡%%]", "")
+    if text:match("^[+-]?%d*%.%d+$") then
+      numbers = numbers + 1
+    elseif not (text == "" or text == "-" or text == "–" or text == "—") then
+      return false
+    end
+  end
+  return numbers >= 2
+end
+
+-- The head without the rows of results at its end; they open the body.
+local function demote_data_rows(tbl)
+  local rows = tbl.head.rows
+  if #tbl.bodies == 0 then return end
+  while #rows > 1 and is_data_row(rows[#rows]) do
+    tbl.bodies[1].body:insert(1, rows:remove())
+  end
+  tbl.head.rows = rows
+end
+
 local function promote_header(tbl)
-  if #tbl.head.rows > 0 or #tbl.bodies == 0 then return end
+  if #tbl.bodies == 0 then return end
+  local limit = 3
+  if #tbl.head.rows > 0 then
+    demote_data_rows(tbl)
+    return
+  end
+  -- Leading rows of <th> cells in a <tbody> are the head: pandoc keeps them
+  -- as the body's own head, which is written after any row promoted here.
+  -- The rows under them, down to the rule, are promoted as below.
+  local head = pandoc.List()
+  if #tbl.bodies[1].head > 0 then
+    head = tbl.bodies[1].head
+    tbl.bodies[1].head = pandoc.List()
+    limit = limit - #head
+  end
   local rows = tbl.bodies[1].body
   local k
-  for r = 1, math.min(3, #rows - 1) do
+  for r = 1, math.min(limit, #rows - 1) do
     if has_class(rows[r], "ltx_border_b") or has_class(rows[r], "ltx_border_bb")
         or has_class(rows[r + 1], "ltx_border_t") then
       k = r
       break
     end
   end
-  if not k then return end
-  local r = 1
-  while r <= k do
-    for _, cell in ipairs(rows[r].cells) do
-      k = math.max(k, r + cell.row_span - 1)
+  if k then
+    local r = 1
+    while r <= k do
+      for _, cell in ipairs(rows[r].cells) do
+        k = math.max(k, r + cell.row_span - 1)
+      end
+      r = r + 1
     end
-    r = r + 1
+    if k > limit or k >= #rows then k = nil end
   end
-  if k > 3 or k >= #rows then return end
-  local head, rest = pandoc.List(), pandoc.List()
+  -- Under rows already marked as the head, only a row that is itself
+  -- ruled off from the body joins them, and not a row of results.
+  if k and #head > 0 then
+    for r = 1, k do
+      if is_data_row(rows[r]) then k = nil break end
+    end
+  end
+  local rest = pandoc.List()
   for r, row in ipairs(rows) do
-    if r <= k then head:insert(row) else rest:insert(row) end
+    if k and r <= k then head:insert(row) else rest:insert(row) end
   end
+  if #head == 0 then return end
   tbl.head.rows = head
   tbl.bodies[1].body = rest
+  demote_data_rows(tbl)
 end
 
 function Table(tbl)
