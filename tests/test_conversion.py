@@ -447,6 +447,26 @@ def checks():
         '<th rowspan="2">Method</th>' in head and head.index("Sentence") < head.index("NoFac"))
     yield "a row of results marked as a header is a body row", "SelfCk-BERT" not in head and "<td>81.96</td>" in md
 
+    def ruled_th(*texts):
+        return "".join(f'<th class="ltx_td ltx_th ltx_th_column ltx_border_t">{t}</th>' for t in texts)
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><tbody class="ltx_tbody">'
+                    f'<tr class="ltx_tr">{th("Model", 'rowspan="2"')}{th("Empty", 'colspan="2"')}</tr>'
+                    f'<tr class="ltx_tr">{cells("ASR", "ISR")}</tr>'
+                    f'<tr class="ltx_tr">{ruled_th("GPT-4o-mini", "62%", "100%")}</tr>'
+                    f'<tr class="ltx_tr">{cells("Llama-3.1", "52.94%", "100%")}</tr></tbody></table>'
+                    '<figcaption class="ltx_caption">Table 1: Attack success.</figcaption></figure>')
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a ruled-off row of percentages marked as a header is a body row", (
+        "ASR" in head and "GPT-4o-mini" not in head and "62%" in md)
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><tbody class="ltx_tbody">'
+                    f'<tr class="ltx_tr">{th("Method")}{th("Recall", 'colspan="2"')}</tr>'
+                    f'<tr class="ltx_tr">{ruled_th("k", "10", "100")}</tr>'
+                    f'<tr class="ltx_tr">{cells("BM25", "0.41", "0.68")}</tr>'
+                    f'<tr class="ltx_tr">{cells("DPR", "0.52", "0.75")}</tr></tbody></table>'
+                    '<figcaption class="ltx_caption">Table 2: Recall.</figcaption></figure>')
+    head = md[:md.index("</thead>")] if "</thead>" in md else md[:md.index("BM25")]
+    yield "ruled-off column titles that are whole numbers stay in the header", "100" in head and "0.41" not in head
+
     def ruled(*texts):
         return "".join(f'<td class="ltx_td ltx_border_t">{t}</td>' for t in texts)
     md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular">'

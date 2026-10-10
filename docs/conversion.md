@@ -55,7 +55,7 @@ LaTeXML sometimes loses content that the converter recovers. Its docstring has t
 - **A row label spanning a group of rows** takes the group's last row when the paper's `\multirow` was one row short.
 - **A row group's label typed on the group's last row** (a `\multirow{-2}`, which reaches up) moves to the group's first row and spans the group; left where LaTeXML puts it, it names one row and the rows above it have no name.
 - **A header of two rows** stays together when LaTeXML marks only its first as `<th>`: the rows a header cell spans are header rows. Leading `<th>` rows of a `<tbody>` are the table's head and come first.
-- **A row of results marked as a header** (a label, then only decimal numbers and dashes) opens the body instead.
+- **A row of results marked as a header** (a label, then only decimal numbers and dashes) opens the body instead. A row with whole numbers or percentages does so only when a rule sets it off from the header and it mixes them with decimal numbers or the row under it holds the same kind of values: whole numbers alone are as often column titles ("Epochs | 200 | 400 | 800"). A row that a header cell spans stays in the head.
 - **A float that swallowed the rest of the paper** (a table LaTeXML could not close takes in the following sections, references and appendices) ends where the first of those sections begins, so its caption stays under it.
 - **Numbers and symbols LaTeXML left half-expanded:** digit groups joined by "true" (`2true294`), a `\mathchoice` of boxed symbols, `\penalty` before a control space, an accent over nothing (`pass\^{}k`), a tilde set on a digit ("5̃5%").
 

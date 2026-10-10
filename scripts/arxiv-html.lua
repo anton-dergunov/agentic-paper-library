@@ -774,39 +774,90 @@ local function has_class(row, class)
   return false
 end
 
+-- A row's cells after its label, as "decimal", "whole", "percent" (a whole
+-- number of per cent), "" (empty or a dash) or "text".
+local function value_kinds(row)
+  local kinds = {}
+  for i = 2, #row.cells do
+    local text = pandoc.utils.stringify(row.cells[i].contents):gsub("[%s\u{a0}*†‡]", "")
+    local number = text:gsub("%%$", "")
+    if number:match("^[+-]?%d*%.%d+$") then
+      kinds[#kinds + 1] = "decimal"
+    elseif number:match("^[+-]?%d[%d,]*$") then
+      kinds[#kinds + 1] = number == text and "whole" or "percent"
+    elseif text == "" or text == "-" or text == "–" or text == "—" then
+      kinds[#kinds + 1] = ""
+    else
+      kinds[#kinds + 1] = "text"
+    end
+  end
+  return kinds
+end
+
+local function count(kinds, kind)
+  local n = 0
+  for _, k in ipairs(kinds) do
+    if k == kind then n = n + 1 end
+  end
+  return n
+end
+
+-- A row of results LaTeXML took for a header: a label, then nothing but
+-- numbers and dashes, at least two of them decimal. A row with fewer decimal
+-- numbers is one only when a rule sets it off from the rows above and:
+-- it mixes whole and decimal numbers ("Gemini Embedding | 1 | 68.3"), or the
+-- row under it has the same kind of values (percentages under percentages,
+-- whole numbers under whole numbers). Column titles are whole numbers too
+-- ("Epochs | 200 | 400 | 800"), but over rows of another kind.
+local function is_data_row(row, below)
+  local cells = row.cells
+  if #cells < 3 or not pandoc.utils.stringify(cells[1].contents):match("%a") then return false end
+  local kinds = value_kinds(row)
+  if count(kinds, "text") > 0 then return false end
+  local decimal, whole, percent = count(kinds, "decimal"), count(kinds, "whole"), count(kinds, "percent")
+  if decimal >= 2 and whole + percent == 0 then return true end
+  if decimal + whole + percent < 2 then return false end
+  for _, cell in ipairs(cells) do
+    if not cell.classes:includes("ltx_border_t") then return false end
+  end
+  if decimal >= 1 and whole + percent >= 1 then return true end
+  if not below or #below.cells ~= #cells then return false end
+  local under = value_kinds(below)
+  if count(under, "text") > 0 then return false end
+  if percent > 0 and whole == 0 then
+    return count(under, "percent") > 0 and count(under, "whole") == 0
+  end
+  return percent == 0 and count(under, "whole") >= 2 and count(under, "decimal") + count(under, "percent") == 0
+end
+
+-- Whether a cell of the head's earlier rows spans down into its last row.
+local function last_row_spanned(rows)
+  for r = 1, #rows - 1 do
+    for _, cell in ipairs(rows[r].cells) do
+      if r + cell.row_span - 1 >= #rows then return true end
+    end
+  end
+  return false
+end
+
+-- The head without the rows of results at its end; they open the body. A row
+-- that a cell above spans stays, since moving it would cut the span.
+local function demote_data_rows(tbl)
+  local rows = tbl.head.rows
+  if #tbl.bodies == 0 then return end
+  local body = tbl.bodies[1].body
+  while #rows > 1 and is_data_row(rows[#rows], body[1]) and not last_row_spanned(rows) do
+    body:insert(1, rows:remove())
+  end
+  tbl.head.rows = rows
+end
+
 -- LaTeXML marks a header row (<thead>, <th>) only sometimes; without one,
 -- pandoc writes an empty header and the real header becomes the first data
 -- row. The rule under the header is the cue: up to three leading rows ending
 -- in a bottom rule, or followed by a row with a top rule (\midrule), become
 -- the head. The head grows to take in the rows a header cell spans
 -- ("Length" over "Memory" / "Ability"), as long as it stays within three.
--- A row of results LaTeXML took for a header: a label, then nothing but
--- decimal numbers and dashes.
-local function is_data_row(row)
-  local cells = row.cells
-  if #cells < 3 or not pandoc.utils.stringify(cells[1].contents):match("%a") then return false end
-  local numbers = 0
-  for i = 2, #cells do
-    local text = pandoc.utils.stringify(cells[i].contents):gsub("[%s\u{a0}*†‡%%]", "")
-    if text:match("^[+-]?%d*%.%d+$") then
-      numbers = numbers + 1
-    elseif not (text == "" or text == "-" or text == "–" or text == "—") then
-      return false
-    end
-  end
-  return numbers >= 2
-end
-
--- The head without the rows of results at its end; they open the body.
-local function demote_data_rows(tbl)
-  local rows = tbl.head.rows
-  if #tbl.bodies == 0 then return end
-  while #rows > 1 and is_data_row(rows[#rows]) do
-    tbl.bodies[1].body:insert(1, rows:remove())
-  end
-  tbl.head.rows = rows
-end
-
 local function promote_header(tbl)
   if #tbl.bodies == 0 then return end
   local limit = 3
@@ -846,7 +897,7 @@ local function promote_header(tbl)
   -- ruled off from the body joins them, and not a row of results.
   if k and #head > 0 then
     for r = 1, k do
-      if is_data_row(rows[r]) then k = nil break end
+      if is_data_row(rows[r], rows[r + 1]) then k = nil break end
     end
   end
   local rest = pandoc.List()

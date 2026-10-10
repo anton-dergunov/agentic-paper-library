@@ -1,0 +1,15 @@
+paper	row	what it is	first rule (ruled off, any numbers)	shipped rule
+Memory Poisoning Attack and Defense on Memory Based LLM-Agents	GPT-4o-mini | 62% | 100% | 6.67% | 26.67% (two tables)	results	body	body
+Gemini Embedding. Generalizable Embeddings from Gemini	Gemini Embedding | 1 | 68.3 | 59.6 … (two tables)	results	body	body
+MegaScale-Infer. Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism	L20 | 1.00 | 48 | 864 | 119.5	results	body	body
+Locating and Editing Factual Associations in GPT	Records | 21919 | 645 | 1	results	body	body
+Goal-Driven Explainable Clustering via Language Descriptions	a row of whole-number scores	results	body	body
+Can AI-Generated Text be Reliably Detected	QA performance | 97% | 97% | 96% …	results, under a cell spanning two rows	body, the span cut and the row one column off	head (as before)
+VLM2Vec. Training Vision-Language Models for Massive Multimodal Embedding Tasks	# of datasets | 10 | 10 | 12 | 4	a count per column	body	head (as before)
+VLM2Vec-V2. Advancing Multimodal Embedding for Videos, Images, and Visual Documents	# of Datasets | 10 | 10 | 12 | 4 …	a count per column	body	head (as before)
+GPipe. Efficient Training of Giant Neural Networks using Pipeline Parallelism	K = | 2 | 4 | 8 | 2 | 4 | 8	column titles	body (wrong)	head
+Asynchronous Methods for Deep Reinforcement Learning	Method | 1 | 2 | 4 | 8 | 16	column titles	body (wrong)	head
+Provable Guarantees for Self-Supervised Deep Learning with Spectral Contrastive Loss	Epochs | 200 | 400 | 800 …	column titles	body (wrong)	head
+Qwen-Image-Layered. Towards Inherent Editability via Layer Decomposition	# Max Allowed Layer Merge | 0 | 1 | 2 …	column titles	body (wrong)	head
+Moshi. a speech-text foundation model for real-time dialogue	Bitwidth vs Block size | 256 | 32 (two tables)	column titles	body (wrong)	head
+An Empirical Study of Mamba-based Language Models	Mamba-2-Hybrid | 8.66 | 56 | 4096 | … | None | 4096	results, with a word among them	head	head (left)
