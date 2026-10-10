@@ -175,22 +175,23 @@ def table(info):
     add = lambda name, value: rows.append((name, str(value))) if value not in (None, "", []) else None
     if info["status"] == "in library":
         add("Status", "in library")
-        add("arXiv", f"{info['arxiv']}, {info['published']}" if info["arxiv"] else info["published"])
+        add("arXiv", f"{info['arxiv']}, submitted {info['published']}" if info["arxiv"] else info["published"])
         for name in ("paper", "note", "overview", "review", "type", "summary"):
             add(name.capitalize(), info[name])
     elif info["status"] == "skipped":
         add("Status", f"skipped earlier ({info['skipped']['date']}): {info['skipped']['reason']}")
-        add("arXiv", f"{info['arxiv']}, {info['published']}")
+        add("arXiv", f"{info['arxiv']}, submitted {info['published']}")
     else:
         age = f"{info['age_years']} years" if info["age_years"] >= 1 else f"{round(info['age_years'] * 12)} months"
         add("Status", "not in library" + (f"; looked at {info['looked']}" if info.get("looked") else ""))
-        add("arXiv", f"{info['arxiv']}, {info['published']} ({age} old)")
+        add("arXiv", f"{info['arxiv']}, submitted {info['published']} ({age} old)")
         add("Authors", ", ".join(info["authors"][:6]) + (" and others" if len(info["authors"]) > 6 else ""))
         add("Venue", info["venue"] or ("arXiv only" if info["citations"] is not None else None))
         add("Comment", info["comment"])
         if info["citations"] is not None:
             rate = f", {info['citations_per_year']:g} a year" if info["citations_per_year"] is not None else ""
-            add("Citations", f"{info['citations']}{rate}, {info['influential_citations']} influential")
+            add("Citations", f"{info['citations']} in total{rate}, "
+                f"{info['influential_citations']} where the citing paper builds on this one")
         add("Uptake", info["uptake"])
         add("h-index", ", ".join(map(str, info["authors_h_index"][:6])))
         named = info["named_in_library"]
@@ -198,7 +199,7 @@ def table(info):
         add("Named by", f"{named['papers']} library papers, {named['notes_and_reviews']} notes or reviews"
             + (f": {names}" if names else ""))
         if "proposes" in info:
-            add("Folder", f"{info['folder']} ({info['folder_papers']} papers)" if info["folder"] else "no declared folder fits")
+            add("Folder", f"{info['folder']} ({info['folder_papers']} paper{'' if info['folder_papers'] == 1 else 's'})" if info["folder"] else "no declared folder fits")
             add("Type", ", ".join(filter(None, [info["type"], info["character"]])))
             add("Proposes", info["proposes"])
             add("Evidence", info["evidence"])
