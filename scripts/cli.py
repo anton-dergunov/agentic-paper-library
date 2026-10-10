@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """paperlib: one command for every script in the engine.
 
-    paperlib <command> [arguments]
+    paperlib [-C <library>] <command> [arguments]
 
 Run it anywhere inside a library (a folder with paper-library.yaml at its
-root), or set PAPER_LIBRARY. The converters, `init`, `test` and
+root), or name the library with -C or PAPER_LIBRARY. The converters, `init`, `test` and
 `setup-equations` work outside one too. `paperlib <command> --help` shows a
 command's own usage where the script has one.
 """
@@ -22,7 +22,7 @@ sys.path.insert(0, str(SCRIPTS))
 # command: (script, needs a library, what it does)
 COMMANDS = {
     "add": ("add-paper.py", True, "add arXiv papers, a model choosing the folder and summary: <arxiv-url-or-id> ... [--dry-run]"),
-    "info": ("paper-info.py", True, "what is known about a paper, in the library or not: <arxiv-url-or-id or title words> ... [--json] [--facts]"),
+    "info": ("paper-info.py", True, "what is known about a paper, in the library or not: <arxiv-url-or-id or title words> ... [--json] [--facts] [--abstract]"),
     "add-arxiv": ("add-arxiv-paper.sh", True, "add a paper from arXiv: <arxiv-url-or-id> <topic>"),
     "add-pdf": ("add-pdf-paper.sh", True, "add a local PDF: <file.pdf> <topic> [--title ...] [--source ...]"),
     "add-web": ("add-web-article.py", True, "add a paper published as a web page: <url> <topic>"),
@@ -58,11 +58,13 @@ PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename"}
 def usage():
     width = max(map(len, COMMANDS)) + 2
     lines = [__doc__.strip(), "", "Commands:"]
-    lines += [f"  {name:<{width}}{about}" for name, (_, _, about) in COMMANDS.items()]
-    lines += [f"  {'init':<{width}}set up a library here: config, folders, skills, PDF link",
-              f"  {'test':<{width}}run the engine's tests",
-              f"  {'setup-equations':<{width}}install marker (its equation model) in its own environment",
-              f"  {'install-vscode':<{width}}build and install the Paper Library extension for VS Code"]
+    others = {"init": "set up a library here: config, folders, skills, PDF link",
+              "test": "run the engine's tests",
+              "setup-equations": "install marker (its equation model) in its own environment",
+              "install-vscode": "build and install the Paper Library extension for VS Code"}
+    from paperlib import styled
+    lines += [f"  {styled(name, 1)}{' ' * (width - len(name))}{about}"
+              for name, about in [(name, about) for name, (_, _, about) in COMMANDS.items()] + list(others.items())]
     return "\n".join(lines)
 
 
@@ -80,6 +82,14 @@ def script_env(root=None):
 
 
 def main(argv):
+    if argv[:1] == ["-C"]:
+        if len(argv) < 2 or not (Path(argv[1]).expanduser() / "paper-library.yaml").is_file():
+            print(f"paperlib -C: no paper library at `{' '.join(argv[1:2])}` (no paper-library.yaml there)",
+                  file=sys.stderr)
+            return 2
+        # Before paperlib is imported: it finds the library when it loads.
+        os.environ["PAPER_LIBRARY"] = str(Path(argv[1]).expanduser().resolve())
+        argv = argv[2:]
     if not argv or argv[0] in {"-h", "--help", "help"}:
         print(usage())
         return 0

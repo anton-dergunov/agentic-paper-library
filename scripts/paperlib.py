@@ -553,14 +553,54 @@ def skipped_index():
     return by_id, by_title
 
 
+def paper_index():
+    """Map paper file -> frontmatter, for every paper in the library, without reading them all.
+
+    Reading and parsing 2,000 papers takes seconds, and a lookup needs only their
+    frontmatter. It is kept in one file in the cache with each paper's size and modification
+    time, and only a new or changed paper is read again, and then only its head. The values
+    are as JSON holds them: a date is a string. Delete the file to rebuild it.
+    """
+    saved_at = CACHE_DIR / "index" / f"{LIBRARY_ROOT.name}.json"
+    try:
+        saved = json.loads(saved_at.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        saved = {}
+    saved = saved if saved.get("library") == str(LIBRARY_DIR) else {}
+    known, papers, changed = saved.get("papers") or {}, {}, False
+    for path in paper_files():
+        stat = path.stat()
+        stamp = [stat.st_mtime_ns, stat.st_size]
+        entry = known.get(str(path))
+        if not entry or entry[0] != stamp:
+            with open(path, encoding="utf-8") as file:
+                head = file.read(8192)
+                meta = split_frontmatter(head if _FRONTMATTER.match(head) else head + file.read())[0]
+            entry, changed = [stamp, json.loads(json.dumps(meta, default=str))], True
+        papers[str(path)] = entry
+    if changed or len(papers) != len(known):
+        saved_at.parent.mkdir(parents=True, exist_ok=True)
+        partial = saved_at.with_suffix(f".{os.getpid()}.tmp")
+        partial.write_text(json.dumps({"library": str(LIBRARY_DIR), "papers": papers}, ensure_ascii=False),
+                           encoding="utf-8")
+        os.replace(partial, saved_at)
+    return {Path(path): entry[1] for path, entry in papers.items()}
+
+
 def library_arxiv_ids():
     """Map arXiv id -> paper file, for every paper in the library that has one."""
-    out = {}
-    for md in paper_files():
-        arxiv_id = read_paper(md)[0].get("arxiv")
-        if arxiv_id:
-            out[str(arxiv_id)] = md
-    return out
+    return {str(meta["arxiv"]): path for path, meta in paper_index().items() if meta.get("arxiv")}
+
+
+def styled(text, *codes):
+    """`text` with ANSI codes (1 bold, 2 dim, 32 green, ...) when a person reads it on a terminal.
+
+    Unchanged when the output is piped, redirected or read by a script or an agent, or when
+    NO_COLOR is set, so no caller has to strip anything.
+    """
+    if not codes or not sys.stdout.isatty() or os.environ.get("NO_COLOR"):
+        return text
+    return f"\033[{';'.join(map(str, codes))}m{text}\033[0m"
 
 
 # Raster figures are stored as WebP no larger than this on the long side: that

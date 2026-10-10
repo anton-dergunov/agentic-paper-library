@@ -23,7 +23,8 @@ EXAMPLE = ENGINE / "examples" / "library"
 
 
 def run(script, root, *args):
-    env = dict(os.environ, PAPER_LIBRARY=str(root), PDF_ROOT=str(root / "no-pdfs"))
+    env = dict(os.environ, PAPER_LIBRARY=str(root), PDF_ROOT=str(root / "no-pdfs"),
+               PAPERS_CACHE=str(root.parent / "cache"))
     env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env["PATH"]
     return subprocess.run([sys.executable, str(ENGINE / "scripts" / script), *args], env=env,
                           capture_output=True, text=True)
@@ -61,7 +62,9 @@ def filing_problems(root):
 
 
 def info_problems(root):
-    """`info` answers for a library paper from the library alone, by arXiv id and by title words."""
+    """`info` answers for a library paper from the library alone, by arXiv id and by title words.
+
+    Run after the indexes are built: it renames a paper in the copy."""
     problems = []
     paper = next(p for p in sorted(root.joinpath("library").rglob("*.md")) if p.name != "README.md"
                  and "\narxiv:" in p.read_text()[:1500])
@@ -76,6 +79,20 @@ def info_problems(root):
             continue
         if info.get("status") != "in library" or not root.joinpath(info.get("paper", "?")).is_file():
             problems.append(f"`{query}`: not found in the library")
+    # The saved index of frontmatter follows a paper that changes.
+    paper.write_text(re.sub(r"^title: .+$", "title: Renamed Zebra Paper", paper.read_text(), 1, re.M))
+    result = run("paper-info.py", root, "zebra renamed")
+    if "in library" not in result.stdout:
+        problems.append("a changed title is not found: the saved index is stale")
+    if "\033" in result.stdout:
+        problems.append("piped output carries terminal escape codes")
+    # -C names the library from anywhere.
+    env = {k: v for k, v in os.environ.items() if k != "PAPER_LIBRARY"}
+    env.update(PDF_ROOT=str(root / "no-pdfs"), PAPERS_CACHE=str(root.parent / "cache"))
+    result = subprocess.run([sys.executable, str(ENGINE / "scripts" / "cli.py"), "-C", str(root), "info", arxiv_id],
+                            env=env, cwd=tempfile.gettempdir(), capture_output=True, text=True)
+    if "in library" not in result.stdout:
+        problems.append(f"-C: {(result.stderr or result.stdout).strip()[:100]}")
     return problems
 
 
@@ -100,7 +117,7 @@ def main():
         print(f"{'FAIL' if problems else 'ok  '} filing: " + ("; ".join(problems) or "only a declared folder is accepted"))
         problems = info_problems(root)
         failures += bool(problems)
-        print(f"{'FAIL' if problems else 'ok  '} paper-info.py: " + ("; ".join(problems) or "library papers found by id and by title"))
+        print(f"{'FAIL' if problems else 'ok  '} paper-info.py: " + ("; ".join(problems) or "library papers found by id, by title and with -C"))
         for index in sorted(root.joinpath("library").rglob("README.md")):
             rel = index.relative_to(root)
             committed = EXAMPLE / rel

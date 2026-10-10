@@ -177,6 +177,17 @@ next piece of work.
   type, and the nearest papers of its folder. `--json` is the same for another program;
   `--facts` skips the two model requests. A library paper is answered with no network. The
   `paper-info` skill only runs it.
+- **Lookups read a saved index of frontmatter (2026-10-10).** Every `paperlib info` took
+  seconds, saved answer or not: finding a paper by arXiv id read and parsed all 2,200
+  papers, and finding it by title did so twice. The frontmatter is now kept in one file in
+  the cache with each paper's size and modification time, and only a changed paper is read
+  again. In my library: a paper in the library 2.7 s → 0.4 s, a saved answer 3.6 s → 0.4 s,
+  title words 5.7 s → 0.4 s, of which 0.3 s is starting Python through uv. Title words also
+  find a paper outside the library that was looked at before. On a terminal the row names
+  are bold and the status coloured; piped, redirected or run by a script the output is
+  plain, so nothing has to strip it. `paperlib -C <library>` names the library as
+  `git -C` does. Other tools read `info --json` (a capture inbox adds it to items about
+  papers), so its keys are an interface: add keys, do not rename them.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

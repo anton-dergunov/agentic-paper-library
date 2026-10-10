@@ -1,6 +1,6 @@
 # Configuration
 
-A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it from the working directory, searching that folder and its parents, or from `$PAPER_LIBRARY`. `paperlib init` writes the file with comments; every key is optional.
+A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it from the working directory, searching that folder and its parents, or from `$PAPER_LIBRARY`; `paperlib -C <library> <command>` names it for one call, from anywhere. `paperlib init` writes the file with comments; every key is optional.
 
 | Key | Default | What it sets |
 |---|---|---|

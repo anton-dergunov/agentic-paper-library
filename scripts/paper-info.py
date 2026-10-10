@@ -2,11 +2,12 @@
 """What is known about a paper, whether or not the library has it. It reports along fixed
 axes and never recommends: whether to read or add a paper is the reader's call.
 
-    ./scripts/paper-info.py <arxiv-id-or-url | title words> [...] [--json] [--facts] [--again]
+    ./scripts/paper-info.py <arxiv-id-or-url | title words> [...] [--json] [--facts] [--again] [--abstract]
 
 A paper in the library is answered from the library alone, with no network: where its
-markdown, note, overview and review are, and its summary. Title words find library papers
-only. A paper skipped earlier (catalog/skipped.yaml) is answered with the reason.
+markdown, note, overview and review are, and its summary. Title words find library papers,
+and after them the papers outside it that were looked at before. A paper skipped earlier
+(catalog/skipped.yaml) is answered with the reason.
 
 For any other arXiv paper it collects, without a model: arXiv's metadata; Semantic Scholar's
 venue and citation counts, with a grade of the citation rate (UPTAKE below); and which of
@@ -16,11 +17,13 @@ and one that says what the paper proposes, its type and character, and how it re
 nearest papers of that folder (guide/info-prompt.md).
 
     --json     one JSON object per paper, on one line each, for another program
+    --abstract the abstract as a row too, for a paper not in the library (--json always has it)
     --facts    no model requests: everything above them, in about two seconds
     --again    ignore the saved answer for a paper not in the library
     --model ID the model (default: `info_model` in paper-library.yaml, else sonnet)
 
-Answers for papers not in the library are kept in the cache, per library.
+Answers for papers not in the library are kept in the cache, per library. On a terminal the
+row names are bold and the status coloured; piped or redirected, the output is plain text.
 """
 
 import datetime
@@ -33,9 +36,9 @@ from urllib.parse import quote
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
-    TYPES, ask_model, fetch, filing_choice, filing_prompts, library_arxiv_ids, load_reviews,
-    load_topics, norm_title, note_path, paper_files, parse_arxiv_entries, read_paper, review_for,
-    skipped_index,
+    TYPES, ask_model, fetch, filing_choice, filing_prompts, load_reviews, load_topics, norm_title,
+    note_path, paper_files, paper_index, parse_arxiv_entries, read_paper, review_for, skipped_index,
+    styled,
 )
 
 API = "https://export.arxiv.org/api/query"
@@ -169,12 +172,12 @@ def describe(info, topics, model, prompts):
     return info
 
 
-def table(info):
+def table(info, abstract=False):
     """The answer as aligned lines for a person; a markdown renderer shows them as they are."""
-    rows = [("Paper", info["title"])]
+    rows = [("Paper", styled(info["title"], 1))]
     add = lambda name, value: rows.append((name, str(value))) if value not in (None, "", []) else None
     if info["status"] == "in library":
-        add("Status", "in library")
+        add("Status", styled("in library", 32))
         add("arXiv", f"{info['arxiv']}, submitted {info['published']}" if info["arxiv"] else info["published"])
         for name in ("paper", "note", "overview", "review", "type", "summary"):
             add(name.capitalize(), info[name])
@@ -183,7 +186,7 @@ def table(info):
         add("arXiv", f"{info['arxiv']}, submitted {info['published']}")
     else:
         age = f"{info['age_years']} years" if info["age_years"] >= 1 else f"{round(info['age_years'] * 12)} months"
-        add("Status", "not in library" + (f"; looked at {info['looked']}" if info.get("looked") else ""))
+        add("Status", styled("not in library", 33) + (f"; looked at {info['looked']}" if info.get("looked") else ""))
         add("arXiv", f"{info['arxiv']}, submitted {info['published']} ({age} old)")
         add("Authors", ", ".join(info["authors"][:6]) + (" and others" if len(info["authors"]) > 6 else ""))
         add("Venue", info["venue"] or ("arXiv only" if info["citations"] is not None else None))
@@ -205,20 +208,33 @@ def table(info):
             add("Evidence", info["evidence"])
             add("Releases", info["releases"])
             for item in info["nearest"]:
-                add("Nearest", f"{item['title']} [{item['relation']}]: {item['how']}")
+                add("Nearest", f"{styled(item['title'], 1)} [{styled(item['relation'], 36)}]: {item['how']}")
+        if abstract:
+            add("Abstract", info.get("abstract"))
     width = max(len(name) for name, _ in rows)
-    return "\n".join(f"{name:<{width}}  {value}" for name, value in rows)
+    return "\n".join(f"{styled(name, 1)}{' ' * (width - len(name))}  {value}" for name, value in rows)
 
 
-def find_by_title(words, files):
-    """Library papers whose title holds all the words given."""
+def find_by_title(words, titles):
+    """The keys of `titles` (key -> title) whose title holds all the words given."""
     wanted = norm_title(words).split()
-    return [p for p in files if all(w in norm_title(read_paper(p)[0].get("title")).split() for w in wanted)]
+    return [key for key, title in titles.items() if wanted and all(w in norm_title(title).split() for w in wanted)]
+
+
+def looked_at(folder):
+    """Map arXiv id -> title, for the papers outside the library whose answer is saved in `folder`."""
+    titles = {}
+    for path in sorted(folder.glob("*.json")):
+        try:
+            titles[path.stem] = json.loads(path.read_text(encoding="utf-8")).get("title")
+        except (OSError, ValueError):
+            continue
+    return titles
 
 
 def main(argv):
     sys.stdout.reconfigure(line_buffering=True)
-    flags = {name: name in argv for name in ("--json", "--facts", "--again")}
+    flags = {name: name in argv for name in ("--json", "--facts", "--again", "--abstract")}
     args = [a for a in argv if a not in flags]
     model = CONFIG.get("info_model") or "sonnet"
     if "--model" in args:
@@ -228,19 +244,24 @@ def main(argv):
     if not args:
         sys.exit(__doc__)
     show = (lambda info: print(json.dumps(info, ensure_ascii=False))) if flags["--json"] else \
-        (lambda info: print(table(info) + "\n"))
+        (lambda info: print(table(info, flags["--abstract"]) + "\n"))
 
-    library = library_arxiv_ids()
+    index = paper_index()
+    library = {str(meta["arxiv"]): path for path, meta in index.items() if meta.get("arxiv")}
     skipped_by_id, _ = skipped_index()
-    files, todo, failed = None, [], False
+    saved = lambda arxiv_id: CACHE_DIR / "info" / LIBRARY_ROOT.name / f"{arxiv_id}.json"
+    todo, failed = [], False
     for arg in args:
         found = ARXIV_ID.search(arg)
         if not found:
-            files = files or paper_files()
-            matches = find_by_title(arg, files)
+            matches = find_by_title(arg, {path: meta.get("title") for path, meta in index.items()})
             for path in matches[:5]:
                 show(in_library(path))
-            if not matches:
+            # No library paper: a paper looked at before, by the title its saved answer has.
+            earlier = [] if matches else [i for i in find_by_title(arg, looked_at(saved("x").parent))
+                                          if i not in library]
+            todo += earlier[:5]
+            if not matches and not earlier:
                 show({"status": "not found", "title": arg, "note": "no library paper has these title words; "
                       "give an arXiv id or URL for a paper outside the library"}) if flags["--json"] else \
                     print(f"{arg}: no library paper has these title words; give an arXiv id or URL "
@@ -251,7 +272,6 @@ def main(argv):
         else:
             todo.append(found.group(1))
     todo = list(dict.fromkeys(todo))
-    saved = lambda arxiv_id: CACHE_DIR / "info" / LIBRARY_ROOT.name / f"{arxiv_id}.json"
     fresh = []
     for arxiv_id in todo:
         if saved(arxiv_id).exists() and not flags["--again"]:
