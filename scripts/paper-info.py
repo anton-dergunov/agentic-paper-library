@@ -36,7 +36,7 @@ from urllib.parse import quote
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
-    TYPES, ask_model, fetch, filing_choice, filing_prompts, load_reviews, load_topics, norm_title,
+    TYPES, ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics, norm_title,
     note_path, paper_files, paper_index, parse_arxiv_entries, read_paper, review_for, skipped_index,
     styled,
 )
@@ -213,12 +213,6 @@ def table(info, abstract=False):
             add("Abstract", info.get("abstract"))
     width = max(len(name) for name, _ in rows)
     return "\n".join(f"{styled(name, 1)}{' ' * (width - len(name))}  {value}" for name, value in rows)
-
-
-def find_by_title(words, titles):
-    """The keys of `titles` (key -> title) whose title holds all the words given."""
-    wanted = norm_title(words).split()
-    return [key for key, title in titles.items() if wanted and all(w in norm_title(title).split() for w in wanted)]
 
 
 def looked_at(folder):

@@ -19,23 +19,14 @@ import re
 import sys
 from pathlib import Path
 
-import yaml
-
 from paperlib import (
-    SKIPPED_FILE, fetch, library_arxiv_ids, load_topics, norm_title, paper_files,
+    append_skipped, fetch, library_arxiv_ids, load_topics, norm_title, paper_files,
     parse_arxiv_entries, read_paper, skipped_index,
 )
 
 ARXIV_ID = re.compile(r"\b(\d{4}\.\d{4,5})\b")
 URL = re.compile(r"https?://\S+")
 COLUMNS = ["number", "arxiv", "url", "title", "year", "folder", "source", "status"]
-
-
-class NoAliases(yaml.SafeDumper):
-    """Write the shared date in full each time: appended anchors would clash."""
-
-    def ignore_aliases(self, data):
-        return True
 
 
 def parse_numbers(spec):
@@ -171,10 +162,7 @@ def main(argv):
         lines = ["\t".join(r[c] for c in COLUMNS).rstrip("\t") for r in rows]
         tsv.write_text("\n".join(lines) + "\n", encoding="utf-8")
     if skips:
-        entries = [{k: v for k, v in s.items() if v is not None} for s in skips]
-        with SKIPPED_FILE.open("a", encoding="utf-8") as f:
-            f.write(yaml.dump(entries, Dumper=NoAliases, sort_keys=False, allow_unicode=True,
-                              width=100))
+        append_skipped([{k: v for k, v in s.items() if v is not None} for s in skips])
     print("saved")
 
 

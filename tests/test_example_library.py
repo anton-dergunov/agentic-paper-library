@@ -96,6 +96,63 @@ def info_problems(root):
     return problems
 
 
+def remove_problems(root):
+    """`remove` deletes a paper's files only when told to, and can record the skip.
+
+    Run last: it takes a paper out of the copy."""
+    problems = []
+    paper = next(p for p in sorted(root.joinpath("library").rglob("*.md")) if p.name != "README.md"
+                 and "\narxiv:" in p.read_text()[:1500])
+    text = paper.read_text()
+    arxiv_id = re.search(r"^arxiv: '?([\d.]+)", text, re.M).group(1)
+    topic = paper.parent.relative_to(root / "library")
+    figure = paper.parent / "images" / f"{paper.stem}-fig99.png"
+    other = paper.parent / "images" / f"{paper.stem}-figures of another paper-fig01.png"
+    pdf = root / "no-pdfs" / topic / f"{paper.stem}.pdf"
+    note = root / "notes" / f"{paper.stem}.md"
+    issues = root / "catalog" / "conversion-issues.yaml"
+    for f in (figure, pdf, note):
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("x")
+    issues.write_text(f"# Known problems.\n- paper: {paper.stem}\n  problem: a table\n  found: 2026-01-01\n")
+    skipped = root / "catalog" / "skipped.yaml"
+
+    result = run("remove-paper.py", root, arxiv_id, "--reason", "not for this library")
+    if not all(f.exists() for f in (paper, figure, pdf, note)) or "nothing removed" not in result.stdout:
+        problems.append("deleted without --yes")
+    if "skipped.yaml" not in result.stdout or yaml_list(skipped):
+        problems.append("the skip is not announced, or recorded before the paper is removed")
+    result = run("remove-paper.py", root, arxiv_id, "--reason", "not for this library", "--yes")
+    left = [f.name for f in (paper, figure, pdf, note) if f.exists()]
+    if left:
+        problems.append(f"left behind: {left}")
+    # A paper whose title begins with this one's keeps its figures.
+    paper.write_text(text)
+    other.parent.mkdir(exist_ok=True)
+    other.write_text("x")
+    run("remove-paper.py", root, str(paper), "--yes")
+    if paper.exists() or not other.exists():
+        problems.append("by path: the paper is still there, or another paper's figure went with it")
+    other.unlink()
+    if yaml_list(issues) or not issues.read_text().startswith("# Known problems."):
+        problems.append("conversion-issues.yaml: the entry is still there, or the comment is gone")
+    entry = (yaml_list(skipped) or [{}])[-1]
+    if (entry.get("arxiv"), entry.get("reason"), entry.get("topic")) != (arxiv_id, "not for this library", str(topic)):
+        problems.append(f"skipped.yaml: {entry}")
+    if not skipped.read_text().startswith("#"):
+        problems.append("skipped.yaml: the header comment is gone")
+    if result.returncode:
+        problems.append(f"the check fails afterwards: {result.stdout.strip().splitlines()[-3:]}")
+    if run("remove-paper.py", root, arxiv_id, "--yes").returncode == 0:
+        problems.append("a paper that is not in the library: no error")
+    return problems
+
+
+def yaml_list(path):
+    import yaml
+    return yaml.safe_load(path.read_text()) or []
+
+
 def main():
     failures = 0
     with tempfile.TemporaryDirectory() as tmp:
@@ -124,6 +181,9 @@ def main():
             same = committed.exists() and committed.read_text() == index.read_text()
             failures += not same
             print(f"{'ok  ' if same else 'FAIL'} {rel} matches the committed index")
+        problems = remove_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} remove-paper.py: " + ("; ".join(problems) or "asks first, deletes the paper's files, records the skip"))
     sys.exit(1 if failures else 0)
 
 

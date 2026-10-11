@@ -34,6 +34,7 @@ COMMANDS = {
     "build-index": ("build-index.py", True, "regenerate every README index and the agent guide"),
     "check": ("check-library.py", True, "check the library is consistent; non-zero on any problem"),
     "move": ("move-paper.sh", True, "move a paper's markdown, figures and PDF: <paper.md> <topic>"),
+    "remove": ("remove-paper.py", True, "take a paper out: its markdown, figures, PDF and note: <paper.md, arxiv id or title words> ... [--reason \"...\"] [--yes]"),
     "rename": ("rename-papers.py", True, "rename papers whose filename no longer matches the title"),
     "reconvert": ("reconvert.py", True, "regenerate paper bodies with the current converter"),
     "symptoms": ("conversion-symptoms.py", True, "list papers showing known conversion problems"),

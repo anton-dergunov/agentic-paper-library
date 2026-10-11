@@ -74,7 +74,7 @@ corrupted.
 1. **Add.** Paste an arXiv link into a session; `add-paper` fetches it, files it under a topic,
    and writes the summary.
 2. **Decide.** Read the overview, then drop, skim or read. For most papers the overview is the
-   whole reading.
+   whole reading. `paperlib remove` drops one.
 3. **Read with the agent.** It says what is new compared with papers I already have, which
    sections matter, and which prerequisites to explain first. Then I ask as I read: "explain
    eq. 4 without the notation", "how is this different from MemGPT". Answers cite pages
@@ -188,6 +188,18 @@ next piece of work.
   plain, so nothing has to strip it. `paperlib -C <library>` names the library as
   `git -C` does. Other tools read `info --json` (a capture inbox adds it to items about
   papers), so its keys are an interface: add keys, do not rename them.
+- **A paper is tried by adding it, and dropped with `paperlib remove` (2026-10-11).** After
+  `paperlib info`, the next step for a paper of some interest is to read a little of it with
+  the agent, before deciding to keep it. A staging area was considered: convert into the
+  cache, chat, add later. It would give a paper a second state, and the notes, the page map,
+  the figures, `info`'s neighbours and the VS Code extension all assume a paper is at
+  `library/<topic>/<Title>.md`. It would also cover only the paper tried today, not a
+  duplicate, a wrong match or a paper added a year ago. An add is already close to a trial,
+  since nothing is committed until I commit. So `remove` deletes the markdown, figures, PDF
+  and the agent's note, and with `--reason` records the paper in `catalog/skipped.yaml`; it
+  leaves my overview note, and reports the reviews and notes that still name the paper. It
+  lists all this and asks before it deletes, since a PDF may hold highlights and is not in
+  git.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

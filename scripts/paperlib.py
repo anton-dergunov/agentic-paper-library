@@ -400,6 +400,34 @@ def norm_title(title):
     return " ".join(re.sub(r"[^a-z0-9]+", " ", str(title or "").lower()).split())
 
 
+def find_by_title(words, titles):
+    """The keys of `titles` (key -> title) whose title holds all the words given."""
+    wanted = norm_title(words).split()
+    return [key for key, title in titles.items() if wanted and all(w in norm_title(title).split() for w in wanted)]
+
+
+class _NoAliases(yaml.SafeDumper):
+    """Write a shared value (the date) in full each time: appended anchors would clash."""
+
+    def ignore_aliases(self, data):
+        return True
+
+
+def append_skipped(entries):
+    """Add entries (dicts with title, reason, date, ...) to the end of the skipped list.
+
+    Appended as text, so the file's header comments stay as they are; the `[]` of a
+    list that is still empty gives way to the entries.
+    """
+    text = SKIPPED_FILE.read_text(encoding="utf-8") if SKIPPED_FILE.exists() else ""
+    text = re.sub(r"^\[\][ \t]*\n?\Z", "", text, flags=re.M)
+    if text and not text.endswith("\n"):
+        text += "\n"
+    text += yaml.dump(entries, Dumper=_NoAliases, sort_keys=False, allow_unicode=True, width=100)
+    SKIPPED_FILE.parent.mkdir(parents=True, exist_ok=True)
+    SKIPPED_FILE.write_text(text, encoding="utf-8")
+
+
 def load_conversion_issues():
     """The list of flagged conversion problems (dicts with paper, problem, found)."""
     if not CONVERSION_ISSUES_FILE.exists():
@@ -418,6 +446,24 @@ def append_conversion_issues(entries):
     text += yaml.safe_dump(entries, allow_unicode=True, sort_keys=False, width=100)
     CONVERSION_ISSUES_FILE.parent.mkdir(parents=True, exist_ok=True)
     CONVERSION_ISSUES_FILE.write_text(text, encoding="utf-8")
+
+
+def remove_conversion_issues(stem):
+    """Drop the entries about the paper named `stem` from the catalog file; how many went.
+
+    Done on the text, an entry being a top-level list item, so the comments stay.
+    """
+    if not CONVERSION_ISSUES_FILE.exists():
+        return 0
+    blocks = re.split(r"^(?=- )", CONVERSION_ISSUES_FILE.read_text(encoding="utf-8"), flags=re.M)
+    kept = [blocks[0]]
+    for block in blocks[1:]:
+        entry = (yaml.safe_load(block) or [None])[0]
+        if not (isinstance(entry, dict) and entry.get("paper") == stem):
+            kept.append(block)
+    if len(kept) < len(blocks):
+        CONVERSION_ISSUES_FILE.write_text("".join(kept), encoding="utf-8")
+    return len(blocks) - len(kept)
 
 
 def note_path(paper):

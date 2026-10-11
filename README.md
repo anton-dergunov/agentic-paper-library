@@ -91,6 +91,7 @@ paperlib add 2305.18290                              # a model picks the folder 
 paperlib add-arxiv 2305.18290 llm/post-training      # or name the folder yourself
 paperlib add-pdf ~/Downloads/paper.pdf ml/classics --title "..."
 paperlib add-web https://distill.pub/2017/momentum/ deep-learning/optimization
+paperlib remove 2305.18290 --reason "not for me"     # take it out again: markdown, figures, PDF and note
 paperlib build-index && paperlib check
 ```
 
