@@ -22,7 +22,7 @@
 #
 # Markdown is converted from arXiv's own HTML rendering (arxiv.org/html/<id>),
 # which comes through far cleaner than PDF text extraction — see
-# docs/library.md. The PDF and the HTML are fetched
+# docs/conversion.md. The PDF and the HTML are fetched
 # at the same arXiv version. scripts/html-to-markdown.py does the conversion:
 # math as $...$, complex tables as HTML, figures saved to images/ as repaired
 # standalone SVGs. Existing files are left alone unless --force is given, and a
@@ -33,9 +33,11 @@
 # pick the wrong root .tex and render the conference template instead of the
 # paper. The stub case is detected automatically; the wrong-template case is not
 # detectable from the outside, so pass --from-pdf when you spot one. Either way
-# the fallback extracts the PDF's text layer, which is markedly worse — tables
-# and figures do not survive — so the frontmatter says `source: pdf-text` and
-# the markdown carries a warning at the top.
+# the fallback converts the PDF by layout analysis (scripts/pdf-to-markdown.py):
+# headings, tables and figures are rebuilt around the PDF's text, and each
+# equation is read from its image by a model. That is less exact than the HTML,
+# so the frontmatter says `source: pdf-text` and the markdown carries a note at
+# the top saying what to check in the PDF.
 
 set -euo pipefail
 
