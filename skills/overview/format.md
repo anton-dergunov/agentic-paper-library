@@ -64,9 +64,33 @@ successes".
 
 ### Diagrams
 
-A mermaid `flowchart LR` when the method is a loop or a pipeline: at most 5 nodes, one loop
-and one exit to the result, two-line labels (`<br/>`) so it renders wide. Describe steps,
-not applications. Don't verify the rendering; the reader will say if it needs redrawing:
+Draw the picture that makes *this* paper's idea click, and choose its form from what the
+idea is. A row of connected boxes is one form among several; don't default to it. Ask what
+the reader has to see:
+
+| What the idea is | Form |
+|---|---|
+| A loop or a pipeline of steps | mermaid `flowchart LR` |
+| Stages run by different parts, or once versus per item | `flowchart` with `subgraph`s |
+| Parties exchanging messages over time (agent and tools, teacher and student) | `sequenceDiagram` |
+| What happens to the data: before and after, what is observed and what is missing | a small grid as a markdown table, with symbols in the cells |
+| A system moving between modes | `stateDiagram-v2` |
+| A relationship between two quantities, or a curve whose shape is the point | `xychart-beta`, shape only, no exact values |
+| Methods placed on two axes | `quadrantChart` |
+| A hierarchy or taxonomy | `mindmap`, or a nested list |
+| A tensor, an architecture block, a geometric picture | a short ASCII sketch in a fenced block |
+
+- **The mechanism, not the outline.** If the diagram only repeats the numbered steps as
+  boxes, replace it with one that shows what the steps do to an example.
+- **Two when they show different things** (the problem as a grid, the method as a flow);
+  otherwise one. More involved diagrams are welcome when the idea needs them: up to about
+  10 nodes, grouped, with labelled edges.
+- **Readable:** two-line labels (`<br/>`) so a flowchart renders wide, a concrete example
+  in the labels where it fits, and one sentence under the diagram on what to notice.
+- Describe steps, not applications. Don't verify the rendering; the reader will say if it
+  needs redrawing.
+
+A loop as a flowchart:
 
 ```mermaid
 flowchart LR
@@ -76,6 +100,13 @@ flowchart LR
     U --> S
     E --> B[Best-so-far solution]
 ```
+
+Data as a grid (which answers were recorded, which exist but were never seen):
+
+| | page A | page B | page C |
+|---|---|---|---|
+| query 1 | ✓ clicked | · never shown | |
+| query 2 | ✓ clicked | · never shown | ✓ clicked |
 
 ## Frontmatter
 

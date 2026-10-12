@@ -12,7 +12,7 @@ This repository is the engine. Your library is a separate folder, usually its ow
 
 ## Why it exists
 
-I wanted an agent next to the PDF I am reading, not a chat box inside a PDF app. It should read the paper I'm on and every other paper I keep, use my notes, and run my own workflows. Every "AI PDF reader" I tried (PaperNook, Open Paper, pdfpal, NotebookLM, Zotero with llm-for-zotero) keeps the chat inside its app and its own storage. Claude Code already does the rest, so I built the missing piece:
+I wanted an agent next to the PDF I am reading, not a chat box inside a PDF app. It should read the paper I'm on and every other paper I keep, use my notes, and run my own workflows. Every "AI PDF reader" I tried (PaperNook, Open Paper, pdfpal, NotebookLM) keeps the chat inside its app and its own storage. Claude Code already does the rest, so I built the missing piece:
 
 - a library the agent can read well;
 - conventions it follows;
@@ -84,16 +84,13 @@ paperlib setup-equations                             # optional: marker's equati
 paperlib install-vscode                              # optional: the VS Code extension that opens papers by title
 ```
 
-Declare a topic or two in `catalog/topics.yaml`, then add papers, from the shell or by asking Claude Code (`/add-paper 2305.18290`):
+Declare a topic or two in `catalog/topics.yaml`, then add a paper, from the shell or by asking Claude Code (`/add-paper 2305.18290`):
 
 ```bash
 paperlib add 2305.18290                              # a model picks the folder and writes the summary
-paperlib add-arxiv 2305.18290 llm/post-training      # or name the folder yourself
-paperlib add-pdf ~/Downloads/paper.pdf ml/classics --title "..."
-paperlib add-web https://distill.pub/2017/momentum/ deep-learning/optimization
-paperlib remove 2305.18290 --reason "not for me"     # take it out again: markdown, figures, PDF and note
-paperlib build-index && paperlib check
 ```
+
+The [user guide](docs/user-guide.md) takes it from there, task by task: the layout of a library, VS Code, looking at a paper before adding it, adding and removing papers, reading with the agent, literature reviews, and checking the library's health.
 
 `paperlib init` links the skills into the library's `.claude/skills/`, so Claude Code opened there has them. To use the skills from other folders, install them as a plugin instead: `/plugin marketplace add anton-dergunov/agentic-paper-library`. They still need `paperlib` on your PATH.
 
@@ -107,6 +104,7 @@ Every change to a converter, a prompt or a skill is measured on real papers befo
 
 ## Documentation
 
+- [User guide](docs/user-guide.md): installing, creating a library, and every task from adding a paper to writing a literature review.
 - [Conversion](docs/conversion.md): how each kind of paper is converted, and why.
 - [Design](docs/design.md): the reading workflow, where things live, and the tools considered.
 - [Working in VS Code](docs/vscode.md): one window on the library, PDFs beside the markdown, papers opened by title, page links from the chat.

@@ -4,7 +4,7 @@ How papers are stored, read and discussed, and why this is built rather than tak
 existing tool. Written 2026-09-29 for my own library and updated as decisions were made; on
 2026-10-03 the engine (scripts, skills, conventions) was split from the library into this
 repository, so the same workflow can run more than one library. Out of scope here: paper
-discovery.
+discovery. How to use a library is in the [user guide](user-guide.md).
 
 ## The finding that shapes everything
 
@@ -85,15 +85,11 @@ corrupted.
 5. **Across papers.** Sessions with no single paper: "what do my papers say about temporal
    knowledge graphs for memory".
 
-Steps 2–4 depend on the note format and the `overview`, `read` and `wrap` skills, which are the
-next piece of work.
+The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the `read` and
+`wrap` skills that would give them a fixed form are not written yet.
 
 ## Decisions log
 
-- **Claude Code is the hub; retire Zotero.** The llm-for-zotero plugin was tried. Its reader is
-  good, but it is desktop only, citation clicks did not open at the right page, highlights are
-  stored in Zotero's database rather than the PDF, its Claude Code mode is experimental, and
-  building my topic structure in Zotero collections would take too much work.
 - **PaperNook: not the hub.** Beyond the sandboxed chat, it owns its storage: one level of topic
   slugs, and papers only appear once imported through its own pipeline.
 - **VS Code on the iPad: ruled out.** Tested in the browser and over a `code tunnel`: PDF
@@ -205,11 +201,6 @@ next piece of work.
   what this project does), Paperless-ngx (a document archive, not a reader).
 
 ## Next
-
-Done: the `overview` skill; the PDF viewer extension; the library expansion, which grew my
-library from 240 LLM papers to 2,200 across the whole field (the `expand-library` skill); the
-`literature-review` skill; the split of the engine from the library; and the Paper Library
-VS Code extension, which opens a paper by title ([tasks/vscode-extension.md](tasks/vscode-extension.md)).
 
 1. The `read` and `wrap` skills.
 2. Running a library from a cloud session (Claude Code on the web), which needs the engine

@@ -1,6 +1,6 @@
 # Working in VS Code
 
-The desk setup: one VS Code window on the library, with the Claude Code panel beside the PDF you are reading.
+The desk setup: one VS Code window on the library, with the Claude Code panel beside the PDF you are reading. The [user guide](user-guide.md#4-set-up-vs-code) has the short version.
 
 ## One window, both trees
 
@@ -16,7 +16,7 @@ Open the library folder itself, for example `code ~/papers`, rather than a multi
 
 Install the Paper Library extension once per machine, with `paperlib install-vscode` (it needs Node.js and VS Code's `code` command). Its commands are in the palette under **Paper Library**, in a window on a library only.
 
-- **By title: ⌥⌘P** (Paper Library: Open Paper). Each paper is listed once, with its topic, year and summary, and the ones you opened recently come first. Type words from the title or the topic. Enter opens the PDF in the viewer. The buttons on a paper open its markdown, its notes when it has some, or reveal it in the explorer.
+- **By title: ⌥⌘P** (Ctrl+Alt+P on Windows and Linux; Paper Library: Open Paper). Each paper is listed once, with its topic, year and summary, and the ones you opened recently come first. Type words from the title or the topic. Enter opens the PDF in the viewer. The buttons on a paper open its markdown, its notes when it has some, or reveal it in the explorer.
 - **From a paper to its other files.** Paper Library: Reveal in Library, from the PDF, the markdown or the notes, also on the explorer's context menu. The first choice is the counterpart, so the command followed by Enter switches between the PDF and the markdown. The topic's index is in the list too.
 - **From the indexes.** Open `library/README.md` in the markdown preview (⇧⌘V) and follow the tree. Each paper row links the markdown (the title) and the PDF (**PDF**). A click on **PDF** opens it in the viewer.
 - **By content.** Ask the agent ("what do my papers say about X"), or run Paper Library: Search Library Text, which opens the search view limited to the papers' markdown (indexes aside), filled with the selected text.
