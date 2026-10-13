@@ -162,14 +162,13 @@ The body has these sections, in this order:
 
     ```markdown
     - [Zep][zep]: temporal knowledge-graph memory; beats full context on LongMemEval, vendor-run. → Findings: compact vs full history
-    - [MemoryOS][memoryos] (skimmed): three-tier store with heat-based promotion. → Kinds
+    - [MemoryOS][memoryos]: three-tier store with heat-based promotion. → Kinds
     ```
 
-    The link text is the paper's short name. A paper that was skimmed, not read in full,
-    is marked "(skimmed)" after the link, so the reader can see when a claim rests on a
-    skim. After that come its role and main result in one line, in plain words, written
-    from the reading digest rather than copied from the index summary: these lines read
-    much better than technical one-line summaries. Then `→` and the sections that discuss
+    The link text is the paper's short name. After it come the paper's role and main
+    result in one line, in plain words, written from the reading digest rather than
+    copied from the index summary: these lines read much better than technical one-line
+    summaries. Then `→` and the sections that discuss
     it (or `→ map only` if none does). Every paper in the scope must be here:
     `paperlib review-status` counts this section.
 
@@ -212,10 +211,10 @@ review gives advice.
 
   ```markdown
   > [!warning] Written by an agent from these papers
-  > These recommendations were derived by an LLM agent from the <N> papers in this review
-  > (<M> read in full, the rest skimmed), as the library stood on <date>. They are a
-  > synthesis, not a tested procedure, and nobody has verified them in practice. Recheck
-  > them when the review is updated: new papers may overturn them.
+  > These recommendations were derived by an LLM agent from the <N> papers in this review,
+  > as the library stood on <date>. They are a synthesis, not a tested procedure, and
+  > nobody has verified them in practice. Recheck them when the review is updated: new
+  > papers may overturn them.
   ```
 
 - **Shapes that worked:** what is different in practice; a recommended design as numbered

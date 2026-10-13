@@ -59,7 +59,6 @@ In the body, math is `$...$` and `$$...$$` (KaTeX), tables with merged cells are
 # <Title>
 
 type: method
-read: full
 family: <the kind of approach it belongs to, in a few words>
 evidence: <what it was tested on, against what>; strength: <replicated / one benchmark / vendor-run / …>
 conversion: ok | <what is broken in the markdown, and where (p. N)> | key-content-broken: <what, where>
@@ -82,7 +81,6 @@ their baselines, each with its page (p. N).
 
 - **Q&A entries** are multi-line markdown, never one long line: short paragraphs or bullets, a table for a comparison, a fenced block for an example or a calculation. Mark what the session made up (a toy example) as "ours, not from the paper".
 - **`conversion`** starts with `key-content-broken:` when a part the findings rest on is missing or wrong (a results table missing, values in the wrong cells, the main equation unreadable): check the PDF before leaning on that paper.
-- **`read: skim`** marks a digest written from the abstract, introduction, conclusion and headline results only (the first reviews); open the paper before leaning on it for a detail. `paperlib read --skims <scope>` reads them in full. No `read` line means a full read.
 
 ## Topics
 

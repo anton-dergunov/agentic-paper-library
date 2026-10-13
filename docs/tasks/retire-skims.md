@@ -1,15 +1,22 @@
-# Task: retire `read: skim`
+# Task: retire the last "(skimmed)" marks
 
-The first literature reviews read most papers as skims (abstract, introduction, conclusion and headline results), because their reading agents paid again for every paper already in their context. Since `paperlib read` reads every paper in full, one request each, no new skim is written. The concept stays only for the old notes, and it costs words in every session: the guide explains `read: skim`, `read-papers.py` has `--skims`, `review-status` counts skims, and the literature-review skill and its format have the "(skimmed)" mark.
+The first literature reviews read most papers as skims (abstract, introduction, conclusion and headline results), because their reading agents paid again for every paper already in their context. Since `paperlib read` reads every paper in full, one request each, no new skim is written, and on 13 Oct 2026 the concept was removed from the engine: the guide, the reading prompt and the note format have no `read:` line, `paperlib read` has no `--skims`, `review-status` counts no skims, and the literature-review skill and its format have no "(skimmed)" mark.
 
-On 7 Oct 2026 the author's library held 152 skim notes (llm/evaluation 70, llm/post-training 61, llm/foundation-models 21), and its five reviews 230 "(skimmed)" marks.
+## Done
 
-## Steps
+- The 152 skim notes of the author's library (llm/evaluation 70, llm/post-training 61, llm/foundation-models 21) were read in full, and no note says `read: skim`.
+- Those three reviews were updated on 13 Oct 2026. Every sentence that cites a formerly skimmed paper was checked against the full note, and against the paper where the note did not hold the number. Most claims held. Fifteen were narrowed or qualified, two of them also in an "In practice" section; each review's `## Updates` lists its own.
 
-1. Read the skimmed papers in full, an area at a time: `paperlib read --skims <scope>`. At about $0.36 a paper with Opus (the reading prompt's instructions and related list now come from the prompt cache after the first paper), the 152 papers come to about $55, roughly one and a half 5-hour windows.
-2. `/literature-review update <scope>` for the three reviews: it drops the "(skimmed)" marks of papers now read in full, and the finding that leaned on a skim gets checked against the full note.
-3. Check that no note says `read: skim` and no review has "(skimmed)".
-4. Remove the concept from the engine: the `read: skim` paragraph of `guide/library-guide.md` (and `read:` from the note format, if `full` is then the only value), `--skims` and the depth in `read-papers.py`, the skim count in `review-status.py`, and the "(skimmed)" rules in `skills/literature-review/SKILL.md` and `format.md` (the paper-map example and the In practice provenance note).
-5. Run `paperlib test` and `paperlib build-index` in `examples/library`.
+## Left
 
-Done when the library has no skim and the engine no longer mentions one.
+The llm/memory and llm/personalization reviews still carry 76 "(skimmed)" marks (41 and 35). Their papers have no note at all: the marks were inferred on 4 Oct 2026 from the missing notes, because the reading batches of those two reviews were not kept. The 152 above did not count them.
+
+1. `paperlib read llm/memory llm/personalization` writes the missing notes (`paperlib review-status <scope>` lists them: 42 and 35 papers). At about $0.36 a paper with Opus that is about $28.
+2. For each of the two reviews, check what it says about each marked paper against the new note, correct what does not hold, and remove the marks. The skill no longer knows the mark, so say this when asking for `/literature-review update <scope>`. The same update adds what these reviews lack under the current format.
+3. `grep -c '(skimmed):' reviews/llm/*.md` gives 0 for every review. The two reviews' `## Updates` lines of 4 Oct 2026 keep the word, as history.
+
+Done when no review marks a paper as skimmed; then delete this file.
+
+## How the check was done
+
+For a review of 60–70 formerly skimmed papers, reading every note in full next to the review is about 100K tokens. Cheaper and as thorough: a script that prints, for each such paper, the review's sentences that cite it, each followed by the note's lines for the pages that sentence cites, and flags the numbers that the note does not hold. The flagged numbers are then looked up in the paper's markdown. What this found was mostly of three kinds: a margin quoted from the best case only, a comparison whose two sides also differed in something else, and a claim taken from a paper's prose that its own table does not support.

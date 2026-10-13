@@ -51,7 +51,6 @@ all of them again on each request.
 3. **Read.** Run `paperlib read <scope> --focus reviews/.work/<scope>/focus.md`, with
    `--limit N` when a number of papers was asked for. Run it in the background and wait
    for it; it prints a line per paper.
-   - Every paper is read in full: there is no skimming.
    - Exit code 3 means the account's usage limit was reached; the script prints the
      message with its reset time. The notes written so far are kept. Don't assume the
      limit still holds: the reader may switch accounts or pay with API credits. Say how
@@ -93,8 +92,7 @@ all of them again on each request.
    - Open a paper again to check any claim the review leans on, and always before
      stating what a result means beyond what its note says: a note gives numbers
      faithfully, and their interpretation is where reviews go wrong.
-   - Start the paper map from `paperlib review-status --links <scope>`. Mark a paper
-     "(skimmed)" only if its note says `read: skim` (notes from before `paperlib read`).
+   - Start the paper map from `paperlib review-status --links <scope>`.
    - Collect the disagreements between papers as you write the findings, for "Where the
      papers disagree".
    - Look up the exact page of each cited number in the note; never guess one.
@@ -146,9 +144,7 @@ Steps:
    (steps 3–4 of `read`). Then deal with conversion problems as in step 2 of `write`, and
    read the new notes.
 4. **Revise** the review:
-   - Place each paper in the map and in its family under "Kinds of …". When a paper that
-     was skimmed has since been read in full (its note says `read: full`), drop its
-     "(skimmed)" mark. A new family gets
+   - Place each paper in the map and in its family under "Kinds of …". A new family gets
      its own subsection and a row in the side-by-side table.
    - History: add a period for the new papers; don't rewrite the old ones.
    - Findings: when new evidence changes a finding, rewrite it and say in place what

@@ -8,7 +8,6 @@ Write the note in exactly this format, and nothing else:
 # <Title>
 
 type: method | survey | benchmark | study | system | position | theory
-read: full
 family: <the kind of approach it belongs to, in a few words>
 evidence: <what it was tested on, against what>; strength: <replicated / one benchmark / vendor-run / no ablations / …>
 conversion: ok | <what is broken in the markdown, and where (p. N)> | key-content-broken: <what is broken, and where (p. N)>

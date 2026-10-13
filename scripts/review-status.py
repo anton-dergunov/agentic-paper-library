@@ -13,14 +13,12 @@
 A paper is covered when the review's "## Paper map" section links it. A broken
 link whose filename still exists elsewhere in the library (the paper moved, so
 its stem is unchanged) is rewritten by --fix-links; a renamed paper is reported
-for a manual fix. A paper has been read when notes/<stem>.md has a "## Digest";
-its "read:" line says whether in full or as a skim. For one scope it also counts the
-conversion problems: open and wont-fix entries in catalog/conversion-issues.yaml, and
+for a manual fix. A paper has been read when notes/<stem>.md has a "## Digest".
+For one scope it also counts the conversion problems: open and wont-fix entries in catalog/conversion-issues.yaml, and
 problems the notes report that the catalog does not list yet.
 """
 
 import os
-import re
 import sys
 from pathlib import Path
 from urllib.parse import quote, urlsplit
@@ -45,16 +43,10 @@ def pdf_link(paper):
         paper.relative_to(LIBRARY_DIR).with_suffix(".pdf").as_posix(), safe="/&+")
 
 
-def read_depth(stem):
-    """"full" or "skim" for a paper with a digest in its note, None for a paper not read."""
+def has_digest(stem):
+    """Whether the paper has been read: its note holds a digest."""
     note = NOTES_DIR / f"{stem}.md"
-    if not note.exists():
-        return None
-    text = note.read_text(encoding="utf-8")
-    if "## Digest" not in text:
-        return None
-    depth = re.search(r"^read:\s*(\w+)", text, re.M)
-    return depth.group(1) if depth else "full"
+    return note.exists() and "## Digest" in note.read_text(encoding="utf-8")
 
 
 def report(scope, review):
@@ -81,19 +73,17 @@ def scope_report(scope):
         in_scope, listed = review_coverage(reviews[scope])
         # Papers the review covers whose reading was not kept: an update or a question
         # would have to read them again.
-        no_note = sorted(p for p in in_scope & listed if not read_depth(p.stem))
+        no_note = sorted(p for p in in_scope & listed if not has_digest(p.stem))
         if no_note:
             print(f"{scope}: {len(no_note)} covered papers have no note")
             for p in no_note:
                 print(f"  no note: {p.relative_to(LIBRARY_DIR)}")
         papers = sorted(in_scope - listed)
-    depths = {p: read_depth(p.stem) for p in papers}
-    remaining = [p for p in papers if not depths[p]]
+    remaining = [p for p in papers if not has_digest(p.stem)]
     if scope not in reviews or remaining:
         to_read = "uncovered papers" if scope in reviews else "papers"
-        skims = sum(1 for d in depths.values() if d == "skim")
-        print(f"{scope}: {len(papers)} {to_read}; notes: {len(papers) - len(remaining) - skims} read in full, "
-              f"{skims} skimmed, {len(remaining)} not read")
+        print(f"{scope}: {len(papers)} {to_read}; notes: {len(papers) - len(remaining)} read, "
+              f"{len(remaining)} not read")
         for p in remaining:
             print(f"  not read: {p.relative_to(LIBRARY_DIR)}")
     conversion_report(paper_files(LIBRARY_DIR / scope))

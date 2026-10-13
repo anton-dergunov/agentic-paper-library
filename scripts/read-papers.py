@@ -2,7 +2,7 @@
 """Read papers and write their notes, one model request per paper.
 
     ./scripts/read-papers.py <scope or paper.md> ... [--limit N] [--jobs N] [--model ID]
-                             [--focus FILE] [--skims] [--redo] [--appendix]
+                             [--focus FILE] [--redo] [--appendix]
 
 For every paper named, or under a scope (a folder of the library), that has no digest in
 notes/<stem>.md yet, sends the paper's reading view (paperlib read-view) to a model through
@@ -18,7 +18,6 @@ existing note's Q&A is kept.
     --model ID    the reading model (default: `reader_model` in paper-library.yaml, else
                   opus; experiments/reading-models compares the candidates)
     --focus FILE  a few lines on what the area's review will ask, put before the paper
-    --skims       also read again the papers whose note says `read: skim`
     --redo        read again every paper named, whatever its note says
     --appendix    give the reader the appendices too (for papers whose note says the
                   main results are in them); use with --redo on those papers
@@ -51,15 +50,13 @@ RELATED_MAX = 150
 
 
 def note_state(stem):
-    """(depth, Q&A text) of a paper's note: depth is "full", "skim" or None for no digest."""
+    """(has a digest, Q&A text) of a paper's note."""
     note = NOTES_DIR / f"{stem}.md"
     if not note.exists():
-        return None, ""
+        return False, ""
     text = note.read_text(encoding="utf-8")
     qa = re.search(r"^## Q&A[ \t]*\n(.*)\Z", text, re.M | re.S)
-    depth = re.search(r"^read:\s*(\w+)", text, re.M)
-    has_digest = "## Digest" in text
-    return (depth.group(1) if depth else "full") if has_digest else None, (qa.group(1).strip() if qa else "")
+    return "## Digest" in text, (qa.group(1).strip() if qa else "")
 
 
 def related_list(paper, scope_dir):
@@ -148,7 +145,7 @@ def main(argv):
             if not args:
                 sys.exit(__doc__)
             options[arg] = args.pop(0)
-        elif arg in ("--skims", "--redo", "--appendix"):
+        elif arg in ("--redo", "--appendix"):
             flags.add(arg)
         elif arg.startswith("-"):
             sys.exit(__doc__)
@@ -175,8 +172,8 @@ def main(argv):
             sys.exit(f"read: `{target}` is neither a paper nor a folder of the library")
     todo, done_before = [], 0
     for paper, scope_dir in papers:
-        depth, _ = note_state(paper.stem)
-        if "--redo" in flags or depth is None or (depth == "skim" and "--skims" in flags):
+        has_digest, _ = note_state(paper.stem)
+        if "--redo" in flags or not has_digest:
             todo.append((paper, scope_dir))
         else:
             done_before += 1
