@@ -1,0 +1,20 @@
+24 papers
+   2  LaTeXML: failed or lost pages
+   8  LaTeXML: timed out at 5 minutes
+   5  LaTeXML: whole paper
+   2  LaTeXML: whole paper once the limit of 100 errors is lifted
+   2  no usable source: no source
+   5  no usable source: the source is not the paper
+   3  pandoc: failed or timed out
+   4  pandoc: lost pages
+  10  pandoc: whole paper
+
+form	papers	chars against library (median)	pages lacking	formulas KaTeX cannot parse (median)	labels left (median)
+library	17	1.00	4 of 439	0	0
+latexml	7	0.98	26 of 142	1	0
+latexml2	2	1.04	0 of 47	3.5	0.0
+pandoc	14	1.01	23 of 365	25.5	58.0
+tex	17	1.19	6 of 439		151
+
+LaTeXML runs that ended by themselves: 9, median 20 s, longest 117 s
+pandoc runs that converted: 14, median 0.3 s, longest 2.7 s

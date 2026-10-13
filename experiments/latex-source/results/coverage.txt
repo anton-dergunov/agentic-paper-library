@@ -1,0 +1,6 @@
+ 1915   86.7%  arXiv, from the HTML (has a source)
+  231   10.5%  not on arXiv, from the PDF
+   24    1.1%  arXiv, from the PDF, with a source
+   22    1.0%  arXiv, from the PDF, submitted as a PDF
+   16    0.7%  web article
+ 2208          papers

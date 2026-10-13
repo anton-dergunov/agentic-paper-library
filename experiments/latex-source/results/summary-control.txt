@@ -1,0 +1,16 @@
+13 papers
+   6  LaTeXML: timed out at 5 minutes
+   7  LaTeXML: whole paper
+   6  pandoc: failed or timed out
+   1  pandoc: lost pages
+   6  pandoc: whole paper
+
+form	papers	chars against library (median)	pages lacking	formulas KaTeX cannot parse (median)	labels left (median)
+library	13	1.00	52 of 300	0	0
+latexml	7	0.99	15 of 166	0	0
+latexml2	1	9.54	0 of 37	1	0
+pandoc	7	0.80	15 of 144	0	35
+tex	13	1.11	25 of 300		133
+
+LaTeXML runs that ended by themselves: 7, median 14 s, longest 64 s
+pandoc runs that converted: 7, median 0.2 s, longest 0.4 s

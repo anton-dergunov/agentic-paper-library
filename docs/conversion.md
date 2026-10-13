@@ -14,6 +14,8 @@ Each converter writes figures to `images/` (raster images as WebP, plots as SVG)
 
 **arXiv's HTML rendering is the source whenever it exists.** It is built from the paper's LaTeX, so equations arrive as the author's TeX and tables keep their structure. PDF text extraction either flattens equations into glyphs (raw PyMuPDF) or drops them without a trace (pymupdf4llm left DPO's objective as an empty gap), and both lose two-level table headers. For papers of prose and simple tables, every conversion is fine. → [`experiments/pdf-vs-arxiv-html`](../experiments/pdf-vs-arxiv-html/README.md)
 
+**The LaTeX source itself is read only for repairs.** A model answers questions from the stripped source as well as from the markdown, for a quarter more tokens and without figures, page numbers or the PDF's table numbers; pandoc's conversion of it loses tables and citations. Running LaTeXML here, for the arXiv papers that have a source and no HTML (17 of 2,208), converted 7 of them with the release Homebrew ships and timed out on 8, so those papers still go through the PDF. → [`experiments/latex-source`](../experiments/latex-source/README.md)
+
 ## arXiv HTML
 
 `scripts/html-to-markdown.py` runs pandoc with `scripts/arxiv-html.lua`. Maths becomes `$...$`, tables with merged cells become HTML, and figures are saved locally. Plots arXiv embeds as SVG objects are kept as vectors, except that one over 300 KB is rasterised to WebP: on 10,000 figures that rule was projected to cut 2.24 GB on disk to 0.91 GB, and 435 MB in git to 326 MB. → [`experiments/svg-figures`](../experiments/svg-figures/README.md)

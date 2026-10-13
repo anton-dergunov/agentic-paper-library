@@ -1,0 +1,24 @@
+questions	form	n	right	partly	wrong	score
+all	library	48	48	0	0	1.00
+all	pandoc	42	27	6	9	0.71
+all	tex	48	47	1	0	0.99
+equation	library	16	16	0	0	1.00
+equation	pandoc	14	14	0	0	1.00
+equation	tex	16	16	0	0	1.00
+reference	library	16	16	0	0	1.00
+reference	pandoc	14	7	6	1	0.71
+reference	tex	16	15	1	0	0.97
+set from library	library	24	24	0	0	1.00
+set from library	pandoc	21	13	3	5	0.69
+set from library	tex	24	24	0	0	1.00
+set from tex	library	24	24	0	0	1.00
+set from tex	pandoc	21	14	3	4	0.74
+set from tex	tex	24	23	1	0	0.98
+table	library	16	16	0	0	1.00
+table	pandoc	14	6	0	8	0.43
+table	tex	16	16	0	0	1.00
+
+form	papers	input tokens	characters	usd
+library	8	312457	694908	1.28
+pandoc	7	175118	463415	0.72
+tex	8	397403	843407	1.62

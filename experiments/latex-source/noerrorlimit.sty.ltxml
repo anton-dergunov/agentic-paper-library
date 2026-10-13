@@ -1,0 +1,11 @@
+# LaTeXML stops a conversion at its 100th error, as TeX does. An undefined
+# macro used throughout a paper reaches that on the first pages; with the
+# limit lifted the rest of the paper is still converted.
+package LaTeXML::Package::Pool;
+use strict;
+use warnings;
+use LaTeXML::Package;
+
+AssignValue(MAX_ERRORS => 100000, 'global');
+
+1;
