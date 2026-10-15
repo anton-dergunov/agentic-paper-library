@@ -382,9 +382,11 @@ def read_blocks(pdf_path, boxes):
     if not boxes or not MARKER_PYTHON.exists():
         return None
     try:
+        # A box takes two to eight seconds; a long paper read with its inline
+        # mathematics has thousands, so the limit grows with them.
         run = subprocess.run(
             [str(MARKER_PYTHON), str(Path(__file__).with_name("pdf-equations.py")), str(pdf_path)],
-            input=json.dumps(boxes), capture_output=True, text=True, timeout=1800,
+            input=json.dumps(boxes), capture_output=True, text=True, timeout=max(1800, 20 * len(boxes)),
         )
     except subprocess.TimeoutExpired:
         print("warning: equation model failed: timed out", file=sys.stderr)

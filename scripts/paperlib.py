@@ -173,7 +173,12 @@ def read_view(meta, body, appendix=False):
         if appendix:
             following = re.search(r"^#{1,3} ", after, re.M)
             body, after = body + (after[following.start():] if following else ""), ""
-    body = re.sub(r"!\[[^\]]*\]\([^)]*\)", "[figure]", body)
+    # An icon keeps its name ("[check-mark]"); a picture without one is "[figure]".
+    body = re.sub(r"!\[([^\]]*)\]\([^)]*\)", lambda m: f"[{m.group(1).strip() or 'figure'}]", body)
+    def img(m):
+        alt = re.search(r'\balt="([^"]*)"', m.group(0))
+        return f"[{(alt.group(1) if alt else '').strip() or 'figure'}]"
+    body = re.sub(r"<img\b[^>]*>", img, body)
     body = re.sub(r"\]\((#|https?://)[^)]*\)", "]", body)
     # A superscript without its tag reads as a digit of the number: "10<sup>4</sup>" as 104.
     for tag, mark in (("sup", "^"), ("sub", "_")):

@@ -703,6 +703,11 @@ def checks():
     paperlib = load("paperlib")
     view = paperlib.read_view({"title": "T", "source": "html"}, "N = 10<sup>4</sup>, x<sub>i</sub>, a<sup>†‡</sup>\n")
     yield "the read view keeps superscripts apart", "10^4" in view and "x_i" in view and "a^{†‡}" in view
+    view = paperlib.read_view({"title": "T", "source": "html"}, (
+        "![](images/T-fig01.png)\n\n| A | ![check-mark](images/x2.png) |\n\n"
+        '<td><img src="images/T-fig08.svg" /></td><td><img src="images/x3.png" alt="snowflake" /></td>\n'))
+    yield "the read view names icons and drops image paths", (
+        view.count("[figure]") == 2 and "[check-mark]" in view and "[snowflake]" in view and "images/" not in view)
 
     pdf = load("pdf-to-markdown")
     yield "PDF heading levels from numbering", [
