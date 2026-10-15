@@ -26,11 +26,11 @@ Both runs are done (`reconvert-pdf-2026-10-08.jsonl`, `reconvert-pdf-inline.json
    library/search-and-ranking/search-systems/Improving Cloud Storage Search with User Activity.md
    EOF
    head -5 /tmp/rerun.txt | tr '\n' '\0' | xargs -0 git restore --staged --worktree --
-   git commit -m "…"    # the rest of the reconversion
+   git commit -m "Rest of the PDF reconversion"
    tr '\n' '\0' < /tmp/rerun.txt | xargs -0 caffeinate -i nice -n 19 \
      paperlib reconvert --pdf-text --inline-math --jobs 1 --state ~/.cache/papers/reconvert-pdf-rerun.jsonl
    ```
-   A state line that still says "equation model failed" or "fell back to the text layer": `git restore` that paper and report it here.
+   If a paper fails with `TimeoutExpired`, run the same command again after pulling the engine: the 1-hour limit on one conversion, which stopped the two longest papers on 2026-10-15, is now 8 hours. A state line that still says "equation model failed" or "fell back to the text layer": `git restore` that paper and report it here.
 2. **"A Latent Semantic Model with Convolutional-Pooling Structure for Information Retrieval"** was skipped as hand-edited, and its equations are blank (takes: reconvert, by hand): `paperlib reconvert --pdf-text --inline-math --force <paper.md>`, then restore the row labels and captions on p. 7 from the page and mark the edit. The five other hand-edited PDF papers stay as they are.
 3. **Re-read the thoroughly converted papers** (takes: re-read, 32 papers, about $12). Their notes describe the old conversion's tables and equations. "Command A" was read again already; "A Latent Semantic Model…" follows step 2.
    ```sh

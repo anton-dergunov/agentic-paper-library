@@ -86,7 +86,8 @@ def reconvert_pdf_text(md, meta, inline_math=False):
         run = subprocess.run(
             [sys.executable, SCRIPTS / "pdf-to-markdown.py", *([] if inline_math else ["--fast"]),
              pdf_path_for(md), out, new_images, md.stem],
-            capture_output=True, text=True, timeout=3600,  # a PDF that hangs must not stop a long run
+            capture_output=True, text=True,
+            timeout=8 * 3600,  # a PDF that hangs must not stop a long run; a 300-page report takes hours
         )
         if run.returncode:
             raise RuntimeError(f"pdf-to-markdown: {run.stderr.strip().splitlines()[-1:]}")
