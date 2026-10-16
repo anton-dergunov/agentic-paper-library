@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """The conversion problems known in the library: list them, add one, close them.
 
-    paperlib issues [<scope or paper.md> ...] [--kind K] [--key-content] [--new] [--all] [--counts]
+    paperlib issues [<scope or paper.md> ...] [--kind K] [--key-content] [--new] [--all | --wont-fix] [--counts]
     paperlib issues add <paper.md or stem> <kind | new:<slug>> "<what>" --where "p. N, Table M" [--key-content]
     paperlib issues close <kind> (--state <reconvert.jsonl> | <paper.md or stem> ...)
 
 Each paper with a known problem has issues/<stem>.yaml: a list of records, one problem
 each, whose `kind` is the id of a ticket in the engine's tickets/ (one ticket per cause),
 or `new` with `suggested: <slug>` until the triage-conversions skill gives it one.
-`paperlib read` writes the reader's records; `add` records one a session found.
+`paperlib read` writes the reader's records; `add` records one a session found, unless the
+paper already has one of that kind at that place (a wont-fix one included).
 
 The listing prints the open records in the scope (the whole library when none is named),
-one line each, those with key content broken first; `--all` adds the wont-fix ones,
-`--kind` and `--new` narrow it, and `--counts` prints papers and records per ticket instead.
+one line each, those with key content broken first; `--all` adds the wont-fix ones (a record
+marked `wont-fix: <reason>`, or one filed under a ticket whose status is wont-fix),
+`--wont-fix` shows only those, with their reasons, `--kind` and `--new` narrow it, and
+`--counts` prints papers and records per ticket instead.
 
 `close` deletes the records of one kind once the converter fix has reached the papers:
 those that `paperlib reconvert --state <file>` reconverted `ok`, or the papers named. It
@@ -64,7 +67,7 @@ def option(argv, name):
 def list_issues(argv):
     kind = option(argv, "--kind")
     flags = {a for a in argv if a.startswith("--")}
-    unknown = flags - {"--key-content", "--new", "--all", "--counts"}
+    unknown = flags - {"--key-content", "--new", "--all", "--wont-fix", "--counts"}
     if unknown:
         sys.exit(__doc__)
     stems = scope_stems([a for a in argv if not a.startswith("--")])
@@ -72,7 +75,8 @@ def list_issues(argv):
     rows = []
     for stem, records in found.items():
         for r in records:
-            if ("--all" in flags or is_open(r)) and (not kind or r.get("kind") == kind) \
+            wanted = (not is_open(r)) if "--wont-fix" in flags else ("--all" in flags or is_open(r))
+            if wanted and (not kind or r.get("kind") == kind) \
                     and ("--key-content" not in flags or r.get("key-content")) \
                     and ("--new" not in flags or r.get("kind") == "new"):
                 rows.append((stem, r))
@@ -93,7 +97,7 @@ def list_issues(argv):
     rows.sort(key=lambda sr: (not sr[1].get("key-content"), str(stems[sr[0]])))
     for stem, r in rows:
         print(f"{stems[stem]}: {describe(r)}")
-    shown = "" if "--all" in flags else ", wont-fix not shown"
+    shown = "" if flags & {"--all", "--wont-fix"} else ", wont-fix not shown"
     print(f"issues: {len(rows)} records in {len({s for s, _ in rows})} papers{shown}")
 
 
@@ -113,6 +117,11 @@ def add_issue(argv):
         record.update(kind="new", suggested=kind[4:])
     elif kind != "new" and kind not in load_tickets():
         sys.exit(f"issues: no ticket `{kind}`; use new:<slug> for a cause without one")
+    norm = lambda r: (r.get("kind"), " ".join(str(r.get("where", "")).lower().split()))
+    same = [r for r in load_issues(stem) if norm(r) == norm(record)]
+    if same:
+        print(f"issues: already recorded in {stem}: {describe(same[0])}")
+        return
     save_issues(stem, load_issues(stem) + [record])
     print(f"issues: added to {stem}: {describe(record)}")
 

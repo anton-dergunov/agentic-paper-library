@@ -30,7 +30,11 @@ paper text beyond a quick look at a cited place.
      catch-all ticket rather than a ticket of their own.
    - **Cannot be fixed, or not worth it** (the PDF itself lacks it, arXiv's HTML leaves it
      out, a small isolated flaw both an agent and a person read past): file it, and add
-     `wont-fix: <reason>` to the record.
+     `wont-fix: <reason>` to the record, a reason that fits that one problem. A whole cause
+     left as it is: the ticket's `status: wont-fix` with a one-line `reason`; its records then
+     count as wont-fix too. Either way it is listed under "Won't fix" in the tickets index,
+     and neither a new reading nor `paperlib issues add` records it again. A problem an open
+     ticket will fix is not wont-fix.
 3. **Catch-all tickets** (their Fix says "not known yet"): when one holds enough records
    to see sub-causes, split it: a ticket per sub-cause, its records moved over.
 4. **Status.** A ticket with no open records left and nothing in the engine to do is

@@ -163,8 +163,15 @@ def issues_problems(root):
     if result.returncode or [r.get("kind") for r in records] != ["pdf-table-bold", "new"] \
             or records[1].get("suggested") != "odd-glyph" or not records[0].get("key-content"):
         problems.append(f"add did not record both problems: {records} {result.stderr.strip()[-200:]}")
+    again = run("issues.py", root, "add", rel, "pdf-table-bold", "bold lost again", "--where", "p.  2, table 1")
+    if "already recorded" not in again.stdout or len(yaml_list(root / "issues" / f"{paper.stem}.yaml")) != 2:
+        problems.append("add recorded a problem the paper already has")
     if run("issues.py", root, "add", rel, "no-such-ticket", "x", "--where", "p. 1").returncode == 0:
         problems.append("add accepted a kind that is no ticket")
+    path = root / "issues" / f"{paper.stem}.yaml"
+    path.write_text(path.read_text() + "- kind: new\n  where: p. 9\n  what: left alone\n  wont-fix: small\n")
+    if "1 records in 1 papers" not in run("issues.py", root, "--wont-fix").stdout:
+        problems.append("--wont-fix does not list only the wont-fix records")
     listing = run("issues.py", root).stdout
     if "KEY CONTENT" not in listing or "2 records in 1 papers" not in listing:
         problems.append("the listing lacks the records")
@@ -172,7 +179,7 @@ def issues_problems(root):
         problems.append("check fails on valid records")
     closed = run("issues.py", root, "close", "pdf-table-bold", rel)
     left = yaml_list(root / "issues" / f"{paper.stem}.yaml")
-    if [r.get("kind") for r in left] != ["new"] or "read --redo" not in closed.stdout:
+    if [r.get("kind") for r in left] != ["new", "new"] or "read --redo" not in closed.stdout:
         problems.append("close did not remove the kind's records or name the note to read again")
     (root / "issues" / f"{paper.stem}.yaml").unlink()
 

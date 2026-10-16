@@ -305,6 +305,8 @@ paperlib issues close <ticket> --state ~/.cache/papers/reconvert-<ticket>.jsonl 
 
 Only notes whose key content was broken are read again. A paper is edited by hand only when the problem is isolated or no program could fix it.
 
+What is decided not to fix stays recorded, with its reason, so that nobody looks at it again: a whole cause is a ticket whose status is `wont-fix`, and one problem in one paper is a record marked `wont-fix: <reason>`. The tickets' index lists both under "Won't fix", `paperlib issues --wont-fix` lists the records, and a later reading of the paper does not record them again.
+
 ## 11. Commands and skills
 
 In a terminal (`paperlib --help` has the full list):

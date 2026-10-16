@@ -197,7 +197,13 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   went stale whenever a paper was fixed; `paperlib info` shows a paper's open problems. The
   catalog's 380 paragraphs were split by Sonnet into 779 records ($1.91), after 194
   problems that were the papers' own errors were dropped; the reader is now told those go
-  in the digest. Tickets are markdown files for now; they could become GitHub issues.
+  in the digest, and the 195 such remarks the migration found were appended to their 132
+  notes' digests as one bullet each, unchecked against the PDF, rather than re-reading the
+  papers (about $57). What is decided not to fix stays recorded in the same two places, so
+  it is not looked at again: a ticket with `status: wont-fix` and a `reason` for a whole
+  cause, a record with `wont-fix: <reason>` for one problem; the tickets' index lists both
+  under "Won't fix", rather than in a separate document that would have to agree with
+  them. Tickets are markdown files for now; they could become GitHub issues.
 - **A quick look at a paper reports and does not recommend (2026-10-09).** Papers now arrive
   one at a time, and most need a look before they are worth adding. The first design gave
   a verdict (`add`, `skip` or `read first`) from the abstract, citation data, the folder's

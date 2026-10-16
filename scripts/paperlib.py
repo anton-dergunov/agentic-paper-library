@@ -498,8 +498,24 @@ def all_issues(stems=None):
     return found
 
 
+_WONT_FIX_TICKETS = None
+
+
+def wont_fix_reason(record):
+    """Why a problem is left as it is: its own `wont-fix`, or that of its ticket when the
+    whole cause is wont-fix; "" for an open problem."""
+    global _WONT_FIX_TICKETS
+    if record.get("wont-fix"):
+        return str(record["wont-fix"])
+    if _WONT_FIX_TICKETS is None:
+        _WONT_FIX_TICKETS = {tid: str(t.get("reason") or "the ticket is wont-fix")
+                             for tid, t in load_tickets().items() if t.get("status") == "wont-fix"}
+    reason = _WONT_FIX_TICKETS.get(record.get("kind"))
+    return f"ticket: {reason}" if reason else ""
+
+
 def is_open(record):
-    return not record.get("wont-fix")
+    return not wont_fix_reason(record)
 
 
 def describe_issue(record):
@@ -507,14 +523,15 @@ def describe_issue(record):
     kind = record.get("kind", "?")
     if kind == "new" and record.get("suggested"):
         kind = f"new:{record['suggested']}"
+    reason = wont_fix_reason(record)
     flags = (" · KEY CONTENT" if record.get("key-content") else "") + \
-            (f" · wont-fix: {record['wont-fix']}" if record.get("wont-fix") else "")
+            (f" · wont-fix: {reason}" if reason else "")
     return f"{record.get('where', '?')} · {kind}{flags} · {' '.join(str(record.get('what', '')).split())}"
 
 
 def load_tickets():
     """{id: ticket} from the engine's tickets/*.md: the frontmatter (id, title, converter,
-    takes, status) plus `body` and `path`."""
+    takes, status, cost, and `reason` for a wont-fix one) plus `body` and `path`."""
     tickets = {}
     for path in sorted(TICKETS_DIR.glob("*.md")) if TICKETS_DIR.is_dir() else []:
         if path.name == "README.md":
