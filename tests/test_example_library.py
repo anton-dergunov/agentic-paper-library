@@ -22,9 +22,9 @@ ENGINE = Path(__file__).resolve().parent.parent
 EXAMPLE = ENGINE / "examples" / "library"
 
 
-def run(script, root, *args):
+def run(script, root, *args, **extra_env):
     env = dict(os.environ, PAPER_LIBRARY=str(root), PDF_ROOT=str(root / "no-pdfs"),
-               PAPERS_CACHE=str(root.parent / "cache"))
+               PAPERS_CACHE=str(root.parent / "cache"), **extra_env)
     env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env["PATH"]
     return subprocess.run([sys.executable, str(ENGINE / "scripts" / script), *args], env=env,
                           capture_output=True, text=True)
@@ -206,6 +206,33 @@ def issues_problems(root):
     return problems
 
 
+def tickets_problems(root):
+    """tickets move puts a ticket in the folder of its state, and back; a closed status at the
+    top of tickets/ is reported."""
+    problems = []
+    copy = root.parent / "tickets"
+    shutil.copytree(ENGINE / "tickets", copy)
+    env = {"TICKETS_DIR": str(copy)}
+    tid = sorted(p.stem for p in copy.glob("*.md") if p.name != "README.md")[0]
+    if run("tickets.py", root, "move", tid, "wont-fix", **env).returncode == 0:
+        problems.append("a ticket became wont-fix without a reason")
+    run("tickets.py", root, "move", tid, "wont-fix", "--reason", "not worth it", **env)
+    moved = copy / "wont-fix" / f"{tid}.md"
+    text = moved.read_text() if moved.exists() else ""
+    if (copy / f"{tid}.md").exists() or "reason: not worth it" not in text or "closed:" not in text \
+            or "status:" in text.split("---")[1] or f"(wont-fix/{tid}.md)" not in (copy / "README.md").read_text():
+        problems.append("move to wont-fix/ did not move the file, set its reason and date, or link it")
+    run("tickets.py", root, "move", tid, "open", **env)
+    back = copy / f"{tid}.md"
+    if not back.exists() or "status: open" not in back.read_text() or "closed:" in back.read_text():
+        problems.append("move back to open did not restore the ticket")
+    other = sorted(p for p in copy.glob("*.md") if p.name != "README.md")[1]
+    other.write_text(other.read_text().replace("status: open", "status: done", 1))
+    if "belongs in done/" not in run("tickets.py", root, **env).stdout:
+        problems.append("a done ticket at the top of tickets/ is not reported")
+    return problems
+
+
 def yaml_list(path):
     import yaml
     return yaml.safe_load(path.read_text()) or []
@@ -242,6 +269,9 @@ def main():
         problems = issues_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} issues.py: " + ("; ".join(problems) or "add, list, close; the reader's records parsed and merged"))
+        problems = tickets_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} tickets.py: " + ("; ".join(problems) or "move to wont-fix/ and back, closed status checked"))
         problems = remove_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} remove-paper.py: " + ("; ".join(problems) or "asks first, deletes the paper's files, records the skip"))

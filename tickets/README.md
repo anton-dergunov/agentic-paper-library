@@ -1,7 +1,8 @@
 # Conversion tickets
 
 One file per cause of conversion problems: what is broken, how to fix it, what it gives and
-what it takes. The papers each one touches are recorded in a library's `issues/`, one record
+what it takes. The active tickets are in this folder; `done/` holds those fixed and
+reconverted, `wont-fix/` those left as they are (`paperlib tickets move` moves one). The papers each one touches are recorded in a library's `issues/`, one record
 per problem, whose `kind` is the ticket's id (`paperlib issues --kind <id>` lists them).
 
 - **Takes**: `engine` a change to the converters, with a fixture; `reconvert` the papers
@@ -11,7 +12,7 @@ per problem, whose `kind` is the ticket's id (`paperlib issues --kind <id>` list
 - **Status**: `open`; `fixed` in the engine, waiting for the reconversion (then
   `paperlib issues close <id> --state <file>`); `done`; `wont-fix`, with its `reason`.
 - **Won't fix**, below, is the list of what was decided not to fix: a whole cause (a ticket
-  whose status is `wont-fix`) or one problem in one paper (a record with
+  in `wont-fix/`) or one problem in one paper (a record with
   `wont-fix: <reason>`). `paperlib issues --wont-fix` lists the same, and a new reading
   of a paper does not record such a problem again.
 
@@ -97,3 +98,7 @@ Problems in single papers left as they are (34):
 | Privacy-Aware Personalized Entity Representations for Improved User | p. 6, Table 4; p. 7, Table 5 | pdf-table-structure | small: the tables read by row order |
 | Information Retrieval System Evaluation. Effort, Sensitivity, and Reliability | p. 4 | pdf-text-layer-errors | small: a few ranges lost their dash |
 | Search Snippet Evaluation at Yandex. Lessons Learned and Future Directions | pp. 6–8, Table 1 | pdf-text-layer-errors | the PDF's text layer itself splits each line into clipped fragments (p. 7); the findings are in Tables 2–6, which read cleanly |
+
+## Done
+
+No ticket is done yet.

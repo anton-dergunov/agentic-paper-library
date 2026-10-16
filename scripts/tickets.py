@@ -3,11 +3,20 @@
 
     paperlib tickets            # print the summary
     paperlib tickets --write    # also regenerate tickets/README.md from it
+    paperlib tickets move <id> <open | fixed | done | wont-fix> [--reason "<why>"]
 
-A ticket is one cause of conversion problems: tickets/<id>.md, its frontmatter giving
+A ticket is one cause of conversion problems, a markdown file whose frontmatter gives
 `id`, `title`, `converter` (pdf, html, web or any), `takes` (engine, reconvert, reread,
-by-hand), `status` (open, fixed: waiting for the papers to be reconverted, done,
-wont-fix, with a one-line `reason`) and a short `cost`. The records in the library's issues/ name their ticket in
+by-hand) and a short `cost`. Where it sits is its state:
+
+    tickets/<id>.md            active: `status: open`, or `fixed` (in the engine, waiting
+                               for the papers to be reconverted)
+    tickets/done/<id>.md       fixed and reconverted
+    tickets/wont-fix/<id>.md   left as it is, with a one-line `reason`
+
+`move` changes the state: it moves the file, sets its status line and, for a closed
+ticket, `closed: <date>` (and `reason`, required for wont-fix), then rewrites the README.
+The records in the library's issues/ name their ticket in
 `kind`, so the counts come from there, live; the README keeps a dated snapshot of them,
 which the triage-conversions skill refreshes, and a "Won't fix" section: the wont-fix
 tickets with their reasons, and every record marked wont-fix in a paper, with its reason, so
@@ -18,17 +27,24 @@ import datetime
 import sys
 from collections import Counter
 
+import re
+
+import yaml
+
 from paperlib import (
-    LIBRARY_ROOT, TICKET_STATUSES, TICKET_TAKES, TICKETS_DIR, all_issues, is_open, load_tickets,
-    wont_fix_reason,
+    LIBRARY_ROOT, TICKET_FOLDERS, TICKET_STATUSES, TICKET_TAKES, TICKETS_DIR, all_issues, is_open,
+    load_tickets, split_frontmatter, wont_fix_reason,
 )
+
+FIELD_ORDER = ["id", "title", "converter", "takes", "status", "reason", "closed", "cost"]
 
 ORDER = {"open": 0, "fixed": 1, "wont-fix": 2, "done": 3}
 
 HEADER = """# Conversion tickets
 
 One file per cause of conversion problems: what is broken, how to fix it, what it gives and
-what it takes. The papers each one touches are recorded in a library's `issues/`, one record
+what it takes. The active tickets are in this folder; `done/` holds those fixed and
+reconverted, `wont-fix/` those left as they are (`paperlib tickets move` moves one). The papers each one touches are recorded in a library's `issues/`, one record
 per problem, whose `kind` is the ticket's id (`paperlib issues --kind <id>` lists them).
 
 - **Takes**: `engine` a change to the converters, with a fixture; `reconvert` the papers
@@ -38,7 +54,7 @@ per problem, whose `kind` is the ticket's id (`paperlib issues --kind <id>` list
 - **Status**: `open`; `fixed` in the engine, waiting for the reconversion (then
   `paperlib issues close <id> --state <file>`); `done`; `wont-fix`, with its `reason`.
 - **Won't fix**, below, is the list of what was decided not to fix: a whole cause (a ticket
-  whose status is `wont-fix`) or one problem in one paper (a record with
+  in `wont-fix/`) or one problem in one paper (a record with
   `wont-fix: <reason>`). `paperlib issues --wont-fix` lists the same, and a new reading
   of a paper does not record such a problem again.
 
@@ -68,9 +84,19 @@ def summary():
     return rows, orphans
 
 
+def link(t):
+    return t["path"].relative_to(TICKETS_DIR).as_posix()
+
+
 def problems(tickets):
     out = []
     for tid, t in tickets.items():
+        name = link(t)
+        if t["path"].parent == TICKETS_DIR and t["status"] in TICKET_FOLDERS:
+            out.append(f"{name}: status `{t['status']}` belongs in {t['status']}/ "
+                       f"(paperlib tickets move {tid} {t['status']})")
+        if t["path"].parent != TICKETS_DIR and t.get("declared") not in (None, t["status"]):
+            out.append(f"{name}: status `{t['declared']}` disagrees with its folder")
         if t["path"].stem != tid:
             out.append(f"{t['path'].name}: id `{tid}` differs from the file name")
         if not t.get("title"):
@@ -89,12 +115,12 @@ def wont_fix_section(tickets):
     """The README's Won't fix: the wont-fix tickets, then the papers' wont-fix records."""
     issues = all_issues()
     lines = ["## Won't fix", ""]
-    whole = [(tid, t) for tid, t in tickets.items() if t.get("status") == "wont-fix"]
+    whole = [(tid, t) for tid, t in tickets.items() if t["status"] == "wont-fix"]
     lines.append("Causes left as they are:" if whole else "No cause is left as it is.")
     lines.append("")
     for tid, t in whole:
         n = sum(1 for recs in issues.values() for r in recs if r.get("kind") == tid)
-        lines.append(f"- [{t.get('title', tid)}]({tid}.md): {t.get('reason', '')} ({n} records)")
+        lines.append(f"- [{t.get('title', tid)}]({link(t)}): {t.get('reason', '')} ({n} records)")
     if whole:
         lines.append("")
     rows = [(stem, r) for stem, recs in issues.items() for r in recs if r.get("wont-fix")]
@@ -106,16 +132,82 @@ def wont_fix_section(tickets):
     return "\n".join(lines)
 
 
-def table(rows):
+def table(rows, tickets):
     lines = ["| Ticket | Takes | Status | Papers | Key content | Cost |", "|---|---|---|---|---|---|"]
-    for r in (r for r in rows if r["status"] != "wont-fix"):
+    for r in (r for r in rows if r["status"] not in TICKET_FOLDERS):
         takes = " ".join(f"`{t}`" for t in r["takes"])
-        lines.append(f"| [{r['title']}]({r['id']}.md) | {takes} | {r['status']} | {r['papers'] or ''} "
+        lines.append(f"| [{r['title']}]({link(tickets[r['id']])}) | {takes} | {r['status']} | {r['papers'] or ''} "
                      f"| {r['key'] or ''} | {r['cost']} |")
     return "\n".join(lines)
 
 
+def done_section(tickets):
+    done = sorted(((t.get("closed") or "", tid, t) for tid, t in tickets.items() if t["status"] == "done"),
+                  reverse=True)
+    lines = ["## Done", ""]
+    if not done:
+        return "\n".join(lines + ["No ticket is done yet."])
+    lines.append(f"Fixed and reconverted ({len(done)}), latest first:")
+    lines.append("")
+    lines += [f"- {closed or '?'}: [{t.get('title', tid)}]({link(t)})" for closed, tid, t in done]
+    return "\n".join(lines)
+
+
+def write_readme(rows):
+    tickets = load_tickets()
+    today = datetime.date.today().isoformat()
+    text = (HEADER + f"\n## Tickets\n\nPapers and key-content counts from the library "
+            f"`{LIBRARY_ROOT.name}` on {today}.\n\n" + table(rows, tickets) + "\n\n"
+            + wont_fix_section(tickets) + "\n\n" + done_section(tickets) + "\n")
+    (TICKETS_DIR / "README.md").write_text(text, encoding="utf-8")
+    print(f"tickets: wrote {TICKETS_DIR.name}/README.md")
+
+
+def move(argv):
+    reason = None
+    if "--reason" in argv:
+        i = argv.index("--reason")
+        reason = argv[i + 1] if i + 1 < len(argv) else sys.exit("tickets: --reason needs a value")
+        del argv[i:i + 2]
+    if len(argv) != 2 or argv[1] not in TICKET_STATUSES:
+        sys.exit(__doc__)
+    tid, status = argv
+    tickets = load_tickets()
+    if tid not in tickets:
+        sys.exit(f"tickets: no ticket `{tid}`")
+    path = tickets[tid]["path"]
+    meta, body = split_frontmatter(path.read_text(encoding="utf-8"))
+    meta = dict(meta)
+    meta.pop("status", None)
+    if status in TICKET_FOLDERS:
+        dest = TICKETS_DIR / status / path.name
+        meta["closed"] = datetime.date.today().isoformat()
+        if status == "wont-fix":
+            meta["reason"] = reason or meta.get("reason") or sys.exit("tickets: a wont-fix ticket needs --reason")
+        else:
+            meta.pop("reason", None)
+    else:
+        dest = TICKETS_DIR / path.name
+        meta["status"] = status
+        meta.pop("closed", None)
+        meta.pop("reason", None)
+    ordered = {k: meta[k] for k in FIELD_ORDER if k in meta}
+    ordered.update({k: v for k, v in meta.items() if k not in ordered})
+    # The labels line under the heading ends with the status: "`engine` `reconvert` · pdf · open".
+    body = re.sub(r"^((?:`[a-z-]+` )+· [a-z-]+ · )[a-z-]+[ \t]*$", lambda m: m.group(1) + status,
+                  body, count=1, flags=re.M)
+    dest.parent.mkdir(exist_ok=True)
+    dest.write_text("---\n" + yaml.safe_dump(ordered, sort_keys=False, allow_unicode=True, width=100, default_flow_style=None)
+                    + "---\n" + body, encoding="utf-8")
+    if dest != path:
+        path.unlink()
+    print(f"tickets: {tid} is {status}: {dest.relative_to(TICKETS_DIR)}")
+    write_readme(summary()[0])
+
+
 def main(argv):
+    if argv[:1] == ["move"]:
+        return move(list(argv[1:]))
     if any(a not in ("--write",) for a in argv):
         sys.exit(__doc__)
     rows, orphans = summary()
@@ -128,12 +220,7 @@ def main(argv):
     for kind, n in sorted(orphans.items(), key=lambda kv: -kv[1]):
         print(f"{str(kind):34} {'untriaged' if kind == 'new' else 'NO TICKET':9} {n:6}")
     if "--write" in argv:
-        today = datetime.date.today().isoformat()
-        text = (HEADER + f"\n## Tickets\n\nPapers and key-content counts from the library "
-                f"`{LIBRARY_ROOT.name}` on {today}.\n\n" + table(rows) + "\n\n"
-                + wont_fix_section(load_tickets()) + "\n")
-        (TICKETS_DIR / "README.md").write_text(text, encoding="utf-8")
-        print(f"tickets: wrote {TICKETS_DIR.name}/README.md")
+        write_readme(rows)
 
 
 if __name__ == "__main__":

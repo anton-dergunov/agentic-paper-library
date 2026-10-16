@@ -200,10 +200,13 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   in the digest, and the 195 such remarks the migration found were appended to their 132
   notes' digests as one bullet each, unchecked against the PDF, rather than re-reading the
   papers (about $57). What is decided not to fix stays recorded in the same two places, so
-  it is not looked at again: a ticket with `status: wont-fix` and a `reason` for a whole
+  it is not looked at again: a ticket in `tickets/wont-fix/` with a `reason` for a whole
   cause, a record with `wont-fix: <reason>` for one problem; the tickets' index lists both
   under "Won't fix", rather than in a separate document that would have to agree with
-  them. Tickets are markdown files for now; they could become GitHub issues.
+  them. The folder is a ticket's state: the active ones (open, or fixed and waiting for the
+  overnight reconversion) at the top of `tickets/`, so that it shows what is left to do,
+  and the closed ones in `done/` and `wont-fix/`, kept as the record of how the work
+  converges; `paperlib tickets move` changes it. Tickets are markdown files for now; they could become GitHub issues.
 - **A quick look at a paper reports and does not recommend (2026-10-09).** Papers now arrive
   one at a time, and most need a look before they are worth adding. The first design gave
   a verdict (`add`, `skip` or `read first`) from the abstract, citation data, the folder's

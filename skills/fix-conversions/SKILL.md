@@ -29,8 +29,8 @@ and only notes whose key content was broken are read again.
      `paperlib symptoms --counts` and `paperlib symptoms --compare HEAD` on them with
      before, so the fix breaks nothing else. `paperlib test` must pass.
    - Close the test papers' records: `paperlib issues close <id> <paper.md> ...`.
-   - Set the ticket's `status: fixed` (`done` if no other paper has its records), and
-     update its Fix with what was done. A ticket that turns out to need a design decision
+   - `paperlib tickets move <id> fixed` (`done` if no other paper has its records), and
+     update the ticket's Fix with what was done. A ticket that turns out to need a design decision
      or a new tool: write down what was found in the ticket and leave it `open`.
 3. **By-hand tickets** (`takes: by-hand`) are done only when the reader asks, and the edit
    is marked `<!-- hand-edited: <what> -->`.

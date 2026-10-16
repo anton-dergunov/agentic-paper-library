@@ -13,7 +13,7 @@ evidence: <what it was tested on, against what>; strength: <replicated / one ben
 
 ## Digest
 
-At most 20 bullet lines: the claim, the mechanism in plain words, the key definitions, what the paper leaves out or does not disclose, and the main numbers with their baselines. Say where the text claims more than its tables show.
+At most 20 bullet lines: the claim, the mechanism in plain words, the key definitions, what the paper leaves out or does not disclose, and the main numbers with their baselines. Say where the text claims more than its tables show. If the paper prints things that disagree with each other (two values for one number, a count that does not add up), end with one bullet: `- The paper's own inconsistencies: <what> (p. N); <what> (p. N).`
 
 ## Related in library
 

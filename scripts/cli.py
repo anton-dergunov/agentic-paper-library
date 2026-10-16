@@ -39,7 +39,7 @@ COMMANDS = {
     "reconvert": ("reconvert.py", True, "regenerate paper bodies with the current converter"),
     "symptoms": ("conversion-symptoms.py", True, "list papers showing known conversion problems"),
     "issues": ("issues.py", True, "known conversion problems: list [<scope or paper.md> ...] [--kind K] [--counts], add <paper> <kind> \"<what>\" --where ..., close <kind> --state <file>"),
-    "tickets": ("tickets.py", True, "the engine's conversion tickets with the papers each touches [--write]"),
+    "tickets": ("tickets.py", True, "the engine's conversion tickets with the papers each touches [--write]; move <id> <open|fixed|done|wont-fix> [--reason ...]"),
     "localize-figures": ("localize-figures.py", True, "download figures that still link to arXiv"),
     "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.md> ... [--limit N]"),
     "read-view": ("read-view.py", True, "a paper's main text for reading, without references or link targets: <paper.md>"),

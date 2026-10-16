@@ -107,7 +107,11 @@ NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)
 # of a ticket in the engine's tickets/ (one ticket per cause), or `new` until triage
 # gives it one.
 ISSUES_DIR = _path(CONFIG.get("issues", "issues"), _BASE)
-TICKETS_DIR = ENGINE_ROOT / "tickets"
+# The tickets: the active ones (open, or fixed and waiting for a reconversion) at the top
+# of tickets/, the closed ones in tickets/done/ and tickets/wont-fix/, whose folder is their
+# status. TICKETS_DIR overrides it (the tests use a copy).
+TICKETS_DIR = Path(os.environ.get("TICKETS_DIR") or ENGINE_ROOT / "tickets")
+TICKET_FOLDERS = ("done", "wont-fix")
 # Literature reviews, one per scope (a declared folder): reviews/<scope>.md, or
 # reviews/<scope>/index.md plus section files once a review is split. Partial
 # reading results live in reviews/.work/ (ignored) until the review is written.
@@ -530,15 +534,23 @@ def describe_issue(record):
 
 
 def load_tickets():
-    """{id: ticket} from the engine's tickets/*.md: the frontmatter (id, title, converter,
-    takes, status, cost, and `reason` for a wont-fix one) plus `body` and `path`."""
+    """{id: ticket} from the engine's tickets/: the frontmatter (id, title, converter, takes,
+    status, cost, `reason` for a wont-fix one, `closed` for a closed one) plus `body` and
+    `path`. A ticket in done/ or wont-fix/ has that status; `declared` keeps the status its
+    frontmatter gives, if any, for the check."""
     tickets = {}
-    for path in sorted(TICKETS_DIR.glob("*.md")) if TICKETS_DIR.is_dir() else []:
-        if path.name == "README.md":
-            continue
+    if not TICKETS_DIR.is_dir():
+        return tickets
+    paths = [p for p in sorted(TICKETS_DIR.glob("*.md")) if p.name != "README.md"]
+    for folder in TICKET_FOLDERS:
+        paths += sorted((TICKETS_DIR / folder).glob("*.md"))
+    for path in paths:
         meta, body = read_paper(path)
         meta = dict(meta or {})
         meta.setdefault("id", path.stem)
+        meta["declared"] = meta.get("status")
+        folder = path.parent.name if path.parent != TICKETS_DIR else None
+        meta["status"] = folder or meta.get("status") or "open"
         tickets[meta["id"]] = {**meta, "body": body, "path": path}
     return tickets
 

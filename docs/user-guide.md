@@ -295,7 +295,7 @@ The summary and the PDF are kept. A paper you corrected by hand is skipped when 
 Problems are fixed where they start, in the converter, so that one fix repairs every paper with the flaw and every paper added later. The library records them; the engine holds what to do about them.
 
 - **Recorded.** While reading, the reader writes each problem it finds to `issues/<Title>.yaml`: where it is, what is broken, and whether the paper's findings rest on it (key content). The agent records one you notice in a session with `paperlib issues add <paper.md> <kind> "<what>" --where "p. 4, Table 2"`. `paperlib info` shows a paper's open problems.
-- **Filed under tickets.** A ticket is one cause, a file in the engine's `tickets/`, labelled with what it takes: an engine fix, a reconversion, notes read again, or a hand edit. `paperlib tickets` lists them with the papers each touches. `/triage-conversions` files new problems under tickets and proposes which to fix together.
+- **Filed under tickets.** A ticket is one cause, a file in the engine's `tickets/`, labelled with what it takes: an engine fix, a reconversion, notes read again, or a hand edit. The active tickets sit at the top of the folder; those fixed and reconverted move to `tickets/done/`, those left as they are to `tickets/wont-fix/` (`paperlib tickets move <id> <status>`). `paperlib tickets` lists them with the papers each touches. `/triage-conversions` files new problems under tickets and proposes which to fix together.
 - **Fixed.** `/fix-conversions <ticket> ...` fixes tickets in the converter, checks the fix on a few papers, and gives the commands for the rest, to run overnight:
 
 ```bash
@@ -305,7 +305,7 @@ paperlib issues close <ticket> --state ~/.cache/papers/reconvert-<ticket>.jsonl 
 
 Only notes whose key content was broken are read again. A paper is edited by hand only when the problem is isolated or no program could fix it.
 
-What is decided not to fix stays recorded, with its reason, so that nobody looks at it again: a whole cause is a ticket whose status is `wont-fix`, and one problem in one paper is a record marked `wont-fix: <reason>`. The tickets' index lists both under "Won't fix", `paperlib issues --wont-fix` lists the records, and a later reading of the paper does not record them again.
+What is decided not to fix stays recorded, with its reason, so that nobody looks at it again: a whole cause is a ticket in `tickets/wont-fix/`, with its reason, and one problem in one paper is a record marked `wont-fix: <reason>`. The tickets' index lists both under "Won't fix", `paperlib issues --wont-fix` lists the records, and a later reading of the paper does not record them again.
 
 ## 11. Commands and skills
 
