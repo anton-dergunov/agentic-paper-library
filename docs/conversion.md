@@ -20,6 +20,8 @@ Each converter writes figures to `images/` (raster images as WebP, plots as SVG)
 
 `scripts/html-to-markdown.py` runs pandoc with `scripts/arxiv-html.lua`. Maths becomes `$...$`, tables with merged cells become HTML, and figures are saved locally. Plots arXiv embeds as SVG objects are kept as vectors, except that one over 300 KB is rasterised to WebP: on 10,000 figures that rule was projected to cut 2.24 GB on disk to 0.91 GB, and 435 MB in git to 326 MB. → [`experiments/svg-figures`](../experiments/svg-figures/README.md)
 
+Some figures arXiv's HTML links are missing from its server or damaged there (204 in 14 of 2,274 papers, in October 2026). Such a figure is taken from the paper's LaTeX source under the same path, which held 195 of them; a PNG whose text chunk has a bad checksum loses that chunk. A download cut short is retried rather than cached. One found nowhere intact keeps its arXiv link and the paper reconverts `partial`: a cut-off image is not decoded as far as it goes, since the missing part would read as part of the figure. → ticket `html-figure-download`
+
 LaTeXML sometimes loses content that the converter recovers. Its docstring has the details, and `tests/test_conversion.py` checks each case on a small fixture:
 
 - **Boxed text** (definitions, findings, takeaways, prompt templates). LaTeXML draws it as an SVG frame with the text inside; it becomes a quote the agent can read. Only drawings with real shapes stay images, and small text badges in tables become their text.

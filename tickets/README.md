@@ -51,6 +51,7 @@ Papers and key-content counts from the library `papers` on 2026-10-16.
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 6 |  | engine: medium for one paper, or by hand |
 | [A hand-edited paper keeps an older converter's flaws](hand-edited-stale.md) | `by-hand` `reconvert` | open | 1 |  | by hand: reconvert with --force, then put the hand edit back |
+| [Figures of arXiv-HTML papers that cannot be downloaded stay links to arXiv](html-figure-download.md) | `engine` `reconvert` | open | 1 |  | engine: small (download checks, a fallback to the paper's LaTeX source); reconvert the papers |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
@@ -67,7 +68,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
-Problems in single papers left as they are (42):
+Problems in single papers left as they are (43):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -84,6 +85,7 @@ Problems in single papers left as they are (42):
 | Neural Ranking Models with Weak Supervision | p. 3, Eqs. 2-3 | html-equation-garbled | small: readable |
 | Reinforcement Learning. An Overview | pp. 52-57 | html-equation-garbled | small: two numbers of ellipsis rows |
 | Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset | p. 3, footnote 7 | html-equation-garbled | small and isolated: one footnote's token-id list |
+| Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift | p. 6 | html-figure-download | no intact copy exists on arXiv; the PDF has the figure |
 | Deep Reinforcement Learning, a textbook | table of contents | html-lost-labels | small: only the table of contents |
 | Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement | p. 5, Algorithm 1 | html-pseudocode | small and isolated; arXiv's HTML has the two lines joined |
 | Large language models can accurately predict searcher preferences | pp. 4–5, Table 1 | html-symbols-lost | arXiv's HTML has no ± in Table 1; a cell reads as the value, then its interval |

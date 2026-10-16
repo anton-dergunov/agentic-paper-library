@@ -54,6 +54,10 @@ from paperlib import (
     LIBRARY_DIR, all_issues, fetch, is_open, paper_files, pdf_path_for, read_paper, write_paper,
 )
 
+# A PDF that breaks the syntax of its own drawings ("unknown keyword") still reads
+# fine; MuPDF's complaints would only bury the progress bar.
+pymupdf.TOOLS.mupdf_display_errors(False)
+
 SCRIPTS = Path(__file__).resolve().parent
 # The marker, also when it carries a note: "<!-- hand-edited: the title moved to the top -->".
 HAND_EDITED = re.compile(r"<!--\s*hand-edited\b")

@@ -777,6 +777,43 @@ def checks():
     yield "the read view names icons and drops image paths", (
         view.count("[figure]") == 2 and "[check-mark]" in view and "[snowflake]" in view and "images/" not in view)
 
+    import io
+    import random
+    import zlib
+    from PIL import Image
+    noise = Image.frombytes("L", (64, 64), random.Random(0).randbytes(64 * 64))
+    png = io.BytesIO()
+    noise.save(png, "PNG")
+    png = png.getvalue()
+    text = b"tEXtmxGraphModel\0<diagram/>"  # draw.io rewrites its diagram, not the checksum
+    bad_crc = png[:33] + len(text[4:]).to_bytes(4, "big") + text + (zlib.crc32(text) ^ 1).to_bytes(4, "big") + png[33:]
+    with tempfile.TemporaryDirectory() as tmp:
+        cache = Path(tmp)
+        (cache / "cut.png").write_bytes(b"")
+        served = {"cut.png": png[:len(png) // 2], "crc.png": bad_crc, "short.png": png[:len(png) // 2]}  # arXiv's HTML server
+        source = {"missing.png": png, "cut.png": png}  # the paper's LaTeX source
+        refetched = []
+
+        def fetch(url, attempts=4, fresh=False):
+            name = url.rpartition("/")[2]
+            if fresh:
+                refetched.append(name)
+                return png if name == "cut.png" else served.get(name)
+            return served.get(name)
+
+        figures = load("paperlib")
+        figures.fetch = fetch
+        figures.cache_path = lambda url: cache / url.rpartition("/")[2]
+        figures.source_images = lambda version: source if version == "2401.00001v1" else {}
+        names = iter(range(1, 10))
+        body = "".join(f"![](2401.00001v1/{n}.png)\n" for n in ("missing", "cut", "crc", "gone", "short"))
+        body, failed = figures.localize_figures(body, lambda data, ext: f"images/f{next(names)}.{ext}", pause=0)
+    yield "a figure arXiv lacks comes from the source; a cut-off cached one is downloaded again", (
+        body.startswith("![](images/f1.webp)\n![](images/f2.webp)\n") and refetched == ["cut.png"])
+    yield "a PNG loses a text chunk with a bad checksum; a figure found nowhere, or only cut off, keeps its arXiv link", (
+        "![](images/f3.webp)" in body and "](https://arxiv.org/html/2401.00001v1/gone.png)" in body
+        and "](https://arxiv.org/html/2401.00001v1/short.png)" in body and failed == 2)
+
     pdf = load("pdf-to-markdown")
     yield "PDF heading levels from numbering", [
         pdf.heading_level(t, False, 2) for t in ("3 Method", "3.1 Setup", "A.2 Proofs", "Abstract", "User Consent")

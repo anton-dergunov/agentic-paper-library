@@ -21,6 +21,7 @@ and fails outside a library.
 """
 
 import datetime
+import functools
 import gzip
 import io
 import json
@@ -28,9 +29,11 @@ import os
 import re
 import subprocess
 import sys
+import tarfile
 import tempfile
 import threading
 import time
+import zlib
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -267,17 +270,17 @@ def cache_path(url):
     return CACHE_DIR / "arxiv" / m.group(1) / (rel + ".gz")
 
 
-def fetch(url, attempts=4):
+def fetch(url, attempts=4, fresh=False):
     """GET a URL and return its body as bytes, or None on 404 or repeated failure.
 
     Downloads go through curl, like the add scripts: arXiv's HTML server
     answers Python's own HTTP client with 406 for anything not already in its
     cache. Throttled requests (errors or an empty body) are retried with
     backoff. arXiv HTML pages, their figures and LaTeX sources are served from
-    CACHE_DIR when already there, and stored there when downloaded.
+    CACHE_DIR when already there (unless `fresh`), and stored there when downloaded.
     """
     cached = cache_path(url)
-    if cached and cached.exists():
+    if cached and cached.exists() and not fresh:
         return gzip.decompress(cached.read_bytes())
     data = download(url, attempts)
     if cached and data:
@@ -292,13 +295,16 @@ def download(url, attempts):
     for attempt in range(attempts):
         with tempfile.NamedTemporaryFile() as out:
             result = subprocess.run(
-                ["curl", "-sL", "--max-time", "60", "-o", out.name, "-w", "%{http_code}", url],
+                ["curl", "-sL", "--max-time", "600", "--speed-limit", "1024", "--speed-time", "60",
+                 "-o", out.name, "-w", "%{http_code}", url],
                 capture_output=True, text=True,
             )
             status = result.stdout.strip()
             if status == "404":
                 return None
-            if status == "200":
+            # A transfer cut short (a time limit, a dropped connection) still
+            # reports the 200 it began with; only curl's exit status tells.
+            if status == "200" and result.returncode == 0:
                 data = Path(out.name).read_bytes()
                 if data:
                     return data
@@ -828,40 +834,107 @@ def svg_to_webp(data):
     return to_webp(png)
 
 
+def png_without_bad_chunks(data):
+    """A PNG without the ancillary chunks (text, metadata) whose checksum is wrong, or None
+    if it has none. draw.io rewrites the diagram it keeps in a text chunk but not the
+    checksum, and Pillow then refuses the whole image."""
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        return None
+    out, i, dropped = [data[:8]], 8, False
+    while i + 12 <= len(data):
+        n = int.from_bytes(data[i:i + 4], "big")
+        chunk = data[i:i + 12 + n]
+        kind, body, crc = chunk[4:8], chunk[8:8 + n], chunk[8 + n:]
+        if kind[:1].islower() and len(crc) == 4 and int.from_bytes(crc, "big") != zlib.crc32(kind + body):
+            dropped = True
+        else:
+            out.append(chunk)
+        i += 12 + n
+    return b"".join(out) if dropped else None
+
+
+@functools.lru_cache(maxsize=1)
+def source_images(version):
+    """The image files of a paper's arXiv source (its e-print): {path: bytes}."""
+    data = fetch(f"https://arxiv.org/e-print/{version}")
+    files = {}
+    try:
+        with tarfile.open(fileobj=io.BytesIO(data or b""), mode="r:*") as tar:
+            for member in tar.getmembers():
+                if member.isfile() and member.name.lower().endswith(
+                        (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tif", ".tiff", ".webp", ".svg")):
+                    files[member.name.removeprefix("./")] = tar.extractfile(member).read()
+    except tarfile.TarError:
+        pass
+    return files
+
+
 def localize_figures(body, save, pause=0.2):
     """Download every arXiv-hosted figure in a markdown body.
 
     A raster image goes through to_webp and then `save(data, "webp")`; an SVG
     is passed on unchanged as `save(data, "svg")`, unless it is larger than
     SVG_MAX_BYTES, when it is rasterized to WebP. `save` writes the file and
-    returns the link to put in its place. A figure that cannot be downloaded or
-    decoded keeps an absolute arXiv link. Returns (new body, number failed).
+    returns the link to put in its place.
+
+    arXiv's rendering links some files its server lacks or serves cut off, so a
+    figure that will not decode is taken from the cache's copy downloaded again
+    (it may predate the checks on downloads), then from the paper's LaTeX source
+    under the same path, then with a PNG's bad text chunks dropped. One that fails
+    all of them keeps an absolute arXiv link: a cut-off file is not decoded as far
+    as it goes, since the missing part would read as part of the figure.
+    Returns (new body, number failed).
     """
     saved, failed = {}, set()
 
+    def store(data):
+        if is_svg(data) and len(data) > SVG_MAX_BYTES:
+            try:
+                return save(svg_to_webp(data), "webp")
+            except Exception:
+                return save(data, "svg")
+        if is_svg(data):
+            return save(data, "svg")
+        return save(to_webp(data), "webp")
+
+    def copies(path):
+        url = f"https://arxiv.org/html/{path}"
+        cached = cache_path(url)
+        was_cached = bool(cached and cached.exists())
+        data = fetch(url)
+        time.sleep(pause)
+        yield data
+        if was_cached:
+            data = fetch(url, fresh=True)
+            time.sleep(pause)
+            yield data
+        version, _, name = path.partition("/")
+        yield source_images(version).get(name)
+
+    def localize(path):
+        tried = []
+        for data in copies(path):
+            if not data:
+                continue
+            tried.append(data)
+            try:
+                return store(data)
+            except Exception:
+                pass
+        for data in filter(None, map(png_without_bad_chunks, tried)):
+            try:
+                return store(data)
+            except Exception:
+                pass
+        return None
+
     def replace(m):
         path = m.group(2)
-        url = f"https://arxiv.org/html/{path}"
-        if path not in saved and path not in failed:
-            data = fetch(url)
-            time.sleep(pause)
-            try:
-                if not data:
-                    saved[path] = None
-                elif is_svg(data) and len(data) > SVG_MAX_BYTES:
-                    try:
-                        saved[path] = save(svg_to_webp(data), "webp")
-                    except Exception:
-                        saved[path] = save(data, "svg")
-                elif is_svg(data):
-                    saved[path] = save(data, "svg")
-                else:
-                    saved[path] = save(to_webp(data), "webp")
-            except Exception:
-                saved[path] = None
+        if path not in saved:
+            saved[path] = localize(path)
             if saved[path] is None:
                 failed.add(path)
-        return m.group(1) + (saved.get(path) or url)
+        return m.group(1) + (saved[path] or f"https://arxiv.org/html/{path}")
 
     return ARXIV_FIGURE.sub(replace, body), len(failed)
 
