@@ -10,7 +10,6 @@ Write the note in exactly this format, and nothing else:
 type: method | survey | benchmark | study | system | position | theory
 family: <the kind of approach it belongs to, in a few words>
 evidence: <what it was tested on, against what>; strength: <replicated / one benchmark / vendor-run / no ablations / …>
-conversion: ok | <what is broken in the markdown, and where (p. N)> | key-content-broken: <what is broken, and where (p. N)>
 
 ## Digest
 
@@ -19,6 +18,10 @@ At most 20 bullet lines: the claim, the mechanism in plain words, the key defini
 ## Related in library
 
 - <stem>: how it relates, in one line
+
+## Conversion
+
+- <kind> | <where: p. N, Table M> | <what is broken, in one line>[ | key-content]
 ```
 
 Rules:
@@ -26,10 +29,15 @@ Rules:
 - Quote numbers exactly as the paper prints them. Never round, convert or compute a number, and never give one that is not in the text.
 - Every number names its baseline, or what it is compared with.
 - State only what the paper says. Do not add facts you know from elsewhere (a cited paper's authors, a predecessor's settings), and do not present an inference as the paper's statement.
-- `conversion`: report garbled or missing equations, tables flattened into text or with rows out of order, a truncated body, and numbers that look wrong. The missing references, appendices and figure images are not conversion problems, and neither are cosmetic flaws that leave the content readable (footnote markers fused into the text, a scrambled author block, stray cross-reference text): write `ok` when those are all there is.
-  Start the description with `key-content-broken:` when a part the paper's findings rest on is missing or wrong in the markdown: a results table that is absent, flattened past reading, or has values in the wrong rows or columns; marking lost that carries a claim (bold for the significant results, shading that separates conditions); the main method's equation unreadable; a missing section or a truncated body. Leave it out when the meaning can still be recovered (an equation garbled but explained in the prose, a table readable by order, reading order scrambled on one page) or the broken part is incidental to the findings.
+- `## Conversion` lists what the conversion broke in the markdown, one problem a line: garbled or missing equations, tables flattened into text or with rows out of order, a truncated body, numbers that look wrong. Write `- none` when nothing is. The missing references, appendices and figure images are not conversion problems, and neither are cosmetic flaws that leave the content readable (footnote markers fused into the text, a scrambled author block, stray cross-reference text). Nor are the paper's own errors: two numbers the paper prints differently go in the digest, unless their digits look garbled.
+  `kind` is the id of the cause from the list below, or `new:<a-short-slug>` when none fits.
+  End the line with `| key-content` when a part the paper's findings rest on is missing or wrong in the markdown: a results table that is absent, flattened past reading, or has values in the wrong rows or columns; marking lost that carries a claim (bold for the significant results, shading that separates conditions); the main method's equation unreadable; a missing section or a truncated body. Leave it off when the meaning can still be recovered (an equation garbled but explained in the prose, a table readable by order, reading order scrambled on one page) or the broken part is incidental to the findings.
   Do not quote a number from a broken table without saying it is unreliable.
 - "Related in library" lists only other papers from the list below (it includes this one), by exact name, that this paper builds on, compares with or contradicts; leave it empty if none.
+
+Known causes of conversion problems (`kind`):
+
+{{kinds}}
 
 Papers in the same area of the library:
 

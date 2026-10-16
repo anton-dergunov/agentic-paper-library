@@ -160,7 +160,7 @@ def tree(folder, topics, reviews, depth=0):
 
 def write_guide():
     """Render the engine's agent guide into the library, with its paths filled in."""
-    from paperlib import CONFIG, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR, CATALOG_DIR, INBOX_FILE
+    from paperlib import CONFIG, ISSUES_DIR, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR, CATALOG_DIR, INBOX_FILE
 
     def show(path):
         path = Path(path)
@@ -171,7 +171,7 @@ def write_guide():
 
     values = {
         "library": show(LIBRARY_DIR), "pdf_root": show(PDF_ROOT), "catalog": show(CATALOG_DIR),
-        "notes": show(NOTES_DIR), "reviews": show(REVIEWS_DIR), "inbox": show(INBOX_FILE),
+        "notes": show(NOTES_DIR), "issues": show(ISSUES_DIR), "reviews": show(REVIEWS_DIR), "inbox": show(INBOX_FILE),
         "overview_dir": show(OVERVIEW_DIR) if OVERVIEW_DIR else "(not configured)",
         "engine": show(ENGINE_ROOT), "reader": CONFIG.get("reader") or "the reader",
     }

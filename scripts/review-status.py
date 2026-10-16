@@ -14,8 +14,8 @@ A paper is covered when the review's "## Paper map" section links it. A broken
 link whose filename still exists elsewhere in the library (the paper moved, so
 its stem is unchanged) is rewritten by --fix-links; a renamed paper is reported
 for a manual fix. A paper has been read when notes/<stem>.md has a "## Digest".
-For one scope it also counts the conversion problems: open and wont-fix entries in catalog/conversion-issues.yaml, and
-problems the notes report that the catalog does not list yet.
+For one scope it also counts the open conversion problems in issues/, those that break
+key content and those not yet filed under a ticket.
 """
 
 import os
@@ -24,9 +24,8 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 
 from paperlib import (
-    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_LINK_BASE, REVIEWS_DIR, load_conversion_issues,
-    load_reviews, load_topics, note_conversion, note_path, paper_files, read_paper,
-    review_coverage, review_links,
+    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_LINK_BASE, REVIEWS_DIR, all_issues, is_open,
+    load_reviews, load_topics, note_path, paper_files, read_paper, review_coverage, review_links,
 )
 
 
@@ -92,16 +91,12 @@ def scope_report(scope):
 def conversion_report(papers):
     """The conversion problems of the scope: what a fix pass has to deal with."""
     stems = {p.stem for p in papers}
-    entries = [e for e in load_conversion_issues() if isinstance(e, dict) and e.get("paper") in stems]
-    listed = {e["paper"] for e in entries}
-    unlisted = sum(1 for p in papers if p.stem not in listed and note_path(p).exists()
-                   and note_conversion(note_path(p).read_text(encoding="utf-8"))[0] in ("problem", "key-content-broken"))
-    open_entries = [e for e in entries if not e.get("wont-fix")]
-    broken = sum(1 for e in open_entries if e.get("key-content-broken"))
-    if open_entries or unlisted:
-        print(f"conversion: {len(open_entries)} open problems in the catalog ({broken} with key content broken), "
-              f"{len(entries) - len(open_entries)} wont-fix, {unlisted} reported in notes and not in the "
-              "catalog yet (paperlib conversion-issues <scope>, then /fix-conversions <scope>)")
+    records = [r for recs in all_issues(stems).values() for r in recs if is_open(r)]
+    broken = sum(1 for r in records if r.get("key-content"))
+    new = sum(1 for r in records if r.get("kind") == "new")
+    if records:
+        print(f"conversion: {len(records)} open problems ({broken} break key content, {new} not filed "
+              "under a ticket yet): paperlib issues <scope>; /triage-conversions files them")
 
 
 def links(scope):

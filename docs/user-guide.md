@@ -89,8 +89,7 @@ Then do three things by hand:
 ├── INBOX.txt                 links and titles waiting to be added
 ├── catalog/
 │   ├── topics.yaml           every topic folder with its scope
-│   ├── skipped.yaml          papers you decided not to add, with the reason
-│   └── conversion-issues.yaml  known conversion problems
+│   └── skipped.yaml          papers you decided not to add, with the reason
 ├── library/
 │   ├── README.md             index of everything (generated)
 │   └── llm/post-training/
@@ -100,6 +99,7 @@ Then do three things by hand:
 ├── pdf/ → your PDF folder
 │   └── llm/post-training/<Title>.pdf   the paper, for you
 ├── notes/<Title>.md          the agent's note on a paper
+├── issues/<Title>.yaml       what the conversion broke in a paper, one record per problem
 ├── reviews/<topic>.md        literature review of an area
 └── .claude/                  the agent guide (generated) and the skills (links)
 ```
@@ -111,7 +111,8 @@ Then do three things by hand:
 | `library/**/README.md`, `.claude/library-guide.md` | `paperlib build-index`; never edit them | Yes |
 | PDFs | `paperlib`, when a paper is added | No |
 | `notes/`, `reviews/` | The agent | Yes |
-| `catalog/skipped.yaml`, `catalog/conversion-issues.yaml` | `paperlib` and the agent | Yes |
+| `issues/` | `paperlib read`, and the agent | Yes |
+| `catalog/skipped.yaml` | `paperlib` and the agent | Yes |
 
 Three things are worth knowing:
 
@@ -208,7 +209,7 @@ paperlib move "library/llm/memory/Zep. A Temporal Knowledge Graph.md" llm/memory
 paperlib rename                                       # after correcting a title
 ```
 
-**Remove** lists what it will delete (the Markdown, the figures, the PDF, the agent's note) and asks before it does. It keeps your own overview note, and it names the reviews and notes that still mention the paper. With `--reason` the paper is recorded in `catalog/skipped.yaml`, so it is not proposed again; leave the reason out for a duplicate or a mistake. The PDF is not in git, so highlights in it are gone for good.
+**Remove** lists what it will delete (the Markdown, the figures, the PDF, the agent's note, its conversion problems) and asks before it does. It keeps your own overview note, and it names the reviews and notes that still mention the paper. With `--reason` the paper is recorded in `catalog/skipped.yaml`, so it is not proposed again; leave the reason out for a duplicate or a mistake. The PDF is not in git, so highlights in it are gone for good.
 
 Adding a paper is also how you try one: add it, read a little with the agent, and remove it if it is not worth keeping.
 
@@ -228,7 +229,7 @@ Adding a paper is also how you try one: add it, read a little with the agent, an
 
 A review covers one topic folder and everything under it, and is written to `reviews/<topic>.md`. Below, `<topic>` is a folder such as `llm/memory`.
 
-It takes three steps. Each can be run on its own day.
+It takes two steps. Each can be run on its own day.
 
 ### Step 1. Read the papers into notes (terminal)
 
@@ -245,27 +246,9 @@ paperlib review-status <topic>            # done when no paper is "not read"
 - **Results in an appendix.** When a note says the paper's main numbers are in an appendix, read that paper again with the appendix: `paperlib read --redo --appendix <paper.md>`.
 - **A focus file** is optional: 5 to 10 lines on the themes the review will have and what it will ask of each paper, passed with `--focus <file>`. `/literature-review read <topic> 30` in a session drafts one from the folder's summaries and then runs the same command.
 
-Each line the command prints ends with any conversion problem the reader found in that paper. Those are the input to step 2.
+Each line the command prints ends with how many conversion problems the reader found in that paper; they are recorded in `issues/` (section 10).
 
-### Step 2. Fix the conversion problems (session)
-
-```
-/fix-conversions <topic>
-```
-
-To see the list first, in a terminal: `paperlib conversion-issues <topic>`.
-
-The skill compares each reported problem with the PDF and sorts it:
-
-| Kind | What happens |
-|---|---|
-| Key content broken: a results table, the main equation or a section is missing or wrong | The paper is fixed, then read again, since its note may be wrong too. |
-| Worth fixing: the meaning survives | Fixed in the converter if several papers show it, and those papers are converted again. The note stands. |
-| Won't fix: the PDF itself lacks it, or it is small | Marked, so it is not looked at again. |
-
-When a fix is in the converter, the skill gives two commit messages, one for the library and one for the engine.
-
-### Step 3. Write the review (a new session)
+### Step 2. Write the review (a new session)
 
 ```
 /literature-review <topic>
@@ -277,7 +260,7 @@ It writes the review from the notes: the kinds of approaches, a map of the paper
 
 | To | Run |
 |---|---|
-| Do all three steps in one go | `/literature-review <topic>`. It reads what is missing and offers the fix before writing. Good for a small folder. |
+| Do both steps in one go | `/literature-review <topic>`. It reads what is missing, then writes. Good for a small folder. |
 | Update a review after adding papers | `paperlib read <topic>`, then `/literature-review update <topic>`. |
 | See which reviews are behind | `paperlib review-status`, or `/literature-review status`. |
 
@@ -286,16 +269,16 @@ It writes the review from the notes: the kinds of approaches, a map of the paper
 ```bash
 paperlib check                       # is everything consistent?
 paperlib review-status               # which reviews miss papers or have broken links?
-paperlib conversion-issues --dry-run # which conversion problems are known and open?
+paperlib issues --counts             # which conversion problems are known, by cause?
 paperlib symptoms --counts           # how many papers show a known conversion flaw?
 ```
 
 | Command | What it tells you |
 |---|---|
-| `paperlib check` | Every paper has its fields, its PDF and its figures; every paper is in a declared folder; no PDF is in git; notes, reviews and the catalog name papers that exist; links in reviews resolve. It prints the problems and exits non-zero on any. Run it after every change. |
+| `paperlib check` | Every paper has its fields, its PDF and its figures; every paper is in a declared folder; no PDF is in git; notes, issues, reviews and the catalog name papers that exist; links in reviews resolve. It prints the problems and exits non-zero on any. Run it after every change. |
 | `paperlib build-index` | Rebuilds the indexes and the agent guide. Run it before `check` after adding, moving or removing by hand, or after editing `catalog/`. |
 | `paperlib review-status` | For each review, the papers of its area it does not cover and its broken links. `paperlib review-status <topic>` adds which papers have no note and counts the conversion problems. `--fix-links` repairs links to papers that moved. |
-| `paperlib conversion-issues --dry-run` | The problems the notes report that the catalog lacks, and the open entries, those with key content broken first. Without `--dry-run` it records them. |
+| `paperlib issues` | The conversion problems recorded in `issues/`, one line each, those with key content broken first. Give a topic or a paper to narrow it; `--counts` totals them per ticket. |
 | `paperlib symptoms` | Papers whose Markdown shows a flaw the converter now fixes, one line each. `--counts` gives totals per flaw, `--katex` lists equations that cannot be drawn, `--pages` lists papers missing three or more PDF pages. |
 
 To repair a paper:
@@ -305,7 +288,22 @@ paperlib reconvert <paper.md>                            # convert it again with
 paperlib reconvert --pdf-text --inline-math <paper.md>   # the same for a paper converted from its PDF
 ```
 
-The summary and the PDF are kept. A paper you corrected by hand is skipped when the correction is marked `<!-- hand-edited -->`. For anything beyond one paper, use `/fix-conversions`.
+The summary and the PDF are kept. A paper you corrected by hand is skipped when the correction is marked `<!-- hand-edited -->`.
+
+### Conversion problems
+
+Problems are fixed where they start, in the converter, so that one fix repairs every paper with the flaw and every paper added later. The library records them; the engine holds what to do about them.
+
+- **Recorded.** While reading, the reader writes each problem it finds to `issues/<Title>.yaml`: where it is, what is broken, and whether the paper's findings rest on it (key content). The agent records one you notice in a session with `paperlib issues add <paper.md> <kind> "<what>" --where "p. 4, Table 2"`. `paperlib info` shows a paper's open problems.
+- **Filed under tickets.** A ticket is one cause, a file in the engine's `tickets/`, labelled with what it takes: an engine fix, a reconversion, notes read again, or a hand edit. `paperlib tickets` lists them with the papers each touches. `/triage-conversions` files new problems under tickets and proposes which to fix together.
+- **Fixed.** `/fix-conversions <ticket> ...` fixes tickets in the converter, checks the fix on a few papers, and gives the commands for the rest, to run overnight:
+
+```bash
+caffeinate -i nice -n 19 paperlib reconvert --issue <ticket> --jobs 1 --state ~/.cache/papers/reconvert-<ticket>.jsonl
+paperlib issues close <ticket> --state ~/.cache/papers/reconvert-<ticket>.jsonl   # then read again the notes it names
+```
+
+Only notes whose key content was broken are read again. A paper is edited by hand only when the problem is isolated or no program could fix it.
 
 ## 11. Commands and skills
 
@@ -321,7 +319,7 @@ In a terminal (`paperlib --help` has the full list):
 | `read` | Reads papers into notes | [9](#9-write-a-literature-review) |
 | `review-status` | Review coverage and unread papers | [9](#9-write-a-literature-review), [10](#10-check-the-librarys-health) |
 | `build-index`, `check` | Rebuild the indexes, check consistency | [10](#10-check-the-librarys-health) |
-| `conversion-issues`, `symptoms`, `reconvert` | Find and repair conversion problems | [10](#10-check-the-librarys-health) |
+| `issues`, `tickets`, `symptoms`, `reconvert` | Find and repair conversion problems | [10](#10-check-the-librarys-health) |
 
 In a Claude Code session:
 
@@ -332,7 +330,8 @@ In a Claude Code session:
 | `/expand-library` | Finds and adds the papers missing from an area | [6](#6-add-papers) |
 | `/reorganize` | Proposes splits, merges and moves of folders | [7](#7-remove-move-and-reorganise) |
 | `/overview` | A short note to read before a paper | [8](#8-read-a-paper-with-the-agent) |
-| `/fix-conversions` | Works through the conversion problems | [9](#9-write-a-literature-review) |
+| `/triage-conversions` | Files conversion problems under tickets, proposes what to fix | [10](#10-check-the-librarys-health) |
+| `/fix-conversions` | Fixes tickets in the converter | [10](#10-check-the-librarys-health) |
 | `/literature-review` | Writes or updates the review of an area | [9](#9-write-a-literature-review) |
 
 The skills are available in a session opened on the library. To use them from other folders, install them as a plugin: `/plugin marketplace add anton-dergunov/agentic-paper-library`.

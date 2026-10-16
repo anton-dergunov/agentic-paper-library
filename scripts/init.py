@@ -51,6 +51,7 @@ pdf_link: pdf
 # library: library
 # catalog: catalog
 # notes: notes
+# issues: issues           # conversion problems, one file per paper
 # reviews: reviews
 # inbox: INBOX.txt
 # cache: ~/.cache/papers      # arXiv downloads, shared by every library

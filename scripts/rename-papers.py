@@ -17,7 +17,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from paperlib import (
-    LIBRARY_DIR, NOTES_DIR, OVERVIEW_DIR, paper_files, pdf_path_for, read_paper, title_to_filename,
+    LIBRARY_DIR, NOTES_DIR, OVERVIEW_DIR, issues_path, paper_files, pdf_path_for, read_paper, title_to_filename,
 )
 
 
@@ -45,6 +45,9 @@ def rename(md, stem, dry_run):
     note = NOTES_DIR / f"{old}.md"
     if note.exists():
         note.rename(NOTES_DIR / f"{stem}.md")
+    issues = issues_path(old)
+    if issues.exists():
+        issues.rename(issues_path(stem))
     return f"{old}  ->  {stem}"
 
 

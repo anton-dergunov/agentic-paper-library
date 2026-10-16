@@ -22,9 +22,14 @@ existing note's Q&A is kept.
     --appendix    give the reader the appendices too (for papers whose note says the
                   main results are in them); use with --redo on those papers
 
-Prints a line per paper with its tokens and any conversion problem the reader reported
-(`key-content-broken: …` when
-a part the paper's findings rest on is missing or wrong), and appends the same to <cache>/read-papers.jsonl.
+The reader ends the note with the conversion problems it found, one a line, each under
+the id of a ticket in the engine's tickets/ (or `new:<slug>`). They are taken out of the
+note and written to issues/<stem>.yaml: they replace the records an earlier reading left
+there, while the records a session or `paperlib symptoms` added, and those marked
+wont-fix, stay (a problem already marked wont-fix is not added again).
+
+Prints a line per paper with its tokens and the problems it recorded (how many break key
+content), and appends the same to <cache>/read-papers.jsonl.
 
 A request refused for a moment (rate limit, service busy) is retried after a pause. When
 the account's usage window is used up, no further requests are sent, the message with its
@@ -32,6 +37,7 @@ reset time is printed, and the exit code is 3: the notes written are kept, and t
 command continues, after the reset or on another account.
 """
 
+import datetime
 import json
 import re
 import sys
@@ -41,8 +47,8 @@ from concurrent.futures import CancelledError, ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from paperlib import (
-    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, note_conversion, note_path,
-    paper_files, read_paper, read_view,
+    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, is_open, load_issues,
+    load_tickets, note_path, paper_files, read_paper, read_view, save_issues,
 )
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
@@ -75,6 +81,46 @@ def related_list(paper, scope_dir):
     return "\n".join(found)
 
 
+# The note's last section, where the reader lists the conversion problems: one per line,
+# `- <kind> | <where> | <what>[ | key-content]`, or `- none`.
+CONVERSION_SECTION = re.compile(r"^## Conversion[ \t]*\n(.*?)(?=^## |\Z)", re.M | re.S)
+
+
+def kinds_list(tickets):
+    """The known causes for the reading prompt: one line per ticket not yet done."""
+    return "\n".join(f"- {tid}: {t.get('title', '')}" for tid, t in tickets.items()
+                     if t.get("status") != "done") or "- (none yet)"
+
+
+def take_conversion(note, tickets):
+    """(the note without its Conversion section, the records the section lists)."""
+    m = CONVERSION_SECTION.search(note)
+    if not m:
+        return note, []
+    today = datetime.date.today().isoformat()
+    records = []
+    for line in m.group(1).splitlines():
+        parts = [p.strip() for p in line.strip().lstrip("-*").split("|")]
+        if len(parts) < 3 or not parts[0] or parts[0].lower() == "none":
+            continue
+        kind, where, what = parts[0].strip("`"), parts[1], parts[2]
+        record = {"kind": kind, "where": where, "what": what,
+                  "key-content": any(p.lower().replace(" ", "-") == "key-content" for p in parts[3:]),
+                  "by": "reader", "found": today}
+        if kind.startswith("new:") or kind not in tickets:
+            record.update(kind="new", suggested=kind.removeprefix("new:"))
+        records.append(record)
+    return (note[:m.start()] + note[m.end():]).rstrip() + "\n", records
+
+
+def merge_reader_records(old, new):
+    """A paper's records after a reading: the reader's replace those of the previous reading;
+    the rest stay, and a problem already marked wont-fix is not added again."""
+    kept = [r for r in old if r.get("by") != "reader" or not is_open(r)]
+    known = {(r.get("kind"), " ".join(str(r.get("where", "")).lower().split())) for r in old if not is_open(r)}
+    return kept + [r for r in new if (r["kind"], " ".join(r["where"].lower().split())) not in known]
+
+
 class UsageLimit(RuntimeError):
     """The account's usage window is used up: nothing more can be read until it resets."""
 
@@ -104,7 +150,7 @@ def ask(model, system, prompt):
             time.sleep(pause)
 
 
-def read_one(paper, scope_dir, model, focus, template, appendix):
+def read_one(paper, scope_dir, model, focus, template, appendix, tickets):
     if stop.is_set():
         raise UsageLimit("not started: the usage limit was reached")
     meta, body = read_paper(paper)
@@ -123,15 +169,16 @@ def read_one(paper, scope_dir, model, focus, template, appendix):
         note = note.split("\n", 1)[1].rsplit("```", 1)[0].strip()
     if "## Digest" not in note or not note.startswith("# "):
         raise RuntimeError("the reply is not a note: " + note[:120].replace("\n", " "))
+    note, records = take_conversion(note, tickets)
     if "## Related in library" not in note:
         note += "\n\n## Related in library\n"
     _, qa = note_state(paper.stem)
     note = note.rstrip() + "\n\n## Q&A\n" + (f"\n{qa}\n" if qa else "")
     NOTES_DIR.mkdir(parents=True, exist_ok=True)
     note_path(paper).write_text(note, encoding="utf-8")
-    state, problem = note_conversion(note)
+    save_issues(paper, merge_reader_records(load_issues(paper), records))
     usage.update(paper=paper.stem, model=model, seconds=round(time.time() - start),
-                 conversion={"ok": "ok", "key-content-broken": f"key-content-broken: {problem}"}.get(state, problem or "?"))
+                 issues=len(records), key_content=sum(r["key-content"] for r in records))
     return usage
 
 
@@ -158,7 +205,9 @@ def main(argv):
     if options["--focus"]:
         focus = ("What the area's review will ask, so that the note captures it:\n\n"
                  + Path(options["--focus"]).read_text(encoding="utf-8").strip() + "\n\n")
-    template = (ENGINE_ROOT / "guide" / "reading-prompt.md").read_text(encoding="utf-8")
+    tickets = load_tickets()
+    template = ((ENGINE_ROOT / "guide" / "reading-prompt.md").read_text(encoding="utf-8")
+                .replace("{{kinds}}", kinds_list(tickets)))
 
     papers = []  # (paper, the folder whose papers are offered as related)
     for target in targets:
@@ -188,7 +237,7 @@ def main(argv):
     limit_message = None
     with ThreadPoolExecutor(max_workers=int(options["--jobs"])) as pool:
         waiting = {pool.submit(read_one, paper, scope_dir, model, focus, template,
-                               "--appendix" in flags): paper
+                               "--appendix" in flags, tickets): paper
                    for paper, scope_dir in todo}
         for future in as_completed(waiting):
             paper = waiting[future]
@@ -214,7 +263,8 @@ def main(argv):
             totals["output"] += usage["output"]
             with log.open("a", encoding="utf-8") as out:
                 out.write(json.dumps(usage, ensure_ascii=False) + "\n")
-            problem = "" if usage["conversion"] == "ok" else f" | conversion: {usage['conversion']}"
+            problem = (f" | conversion: {usage['issues']} problems" + (f", {usage['key_content']} key content"
+                       if usage["key_content"] else "")) if usage["issues"] else ""
             print(f"  read {paper.stem} ({usage['input']} in, {usage['output']} out, "
                   f"{usage['seconds']} s){problem}", flush=True)
     print(f"read: {read} notes written, {failed} failed, {stopped} not read because of the limit; "

@@ -94,15 +94,20 @@ PDF_LINK_DIR = _path(CONFIG["pdf_link"], _BASE) if CONFIG.get("pdf_link") else N
 # later reconversion needs no network. Delete a file, or the folder, to fetch
 # it again; failed downloads are never kept.
 CACHE_DIR = Path(os.environ.get("PAPERS_CACHE") or _path(CONFIG.get("cache", "~/.cache/papers"), _BASE))
-# Hand-maintained data the scripts read: the declared topic tree, the papers
-# deliberately not added, and the papers whose conversion needs fixing.
+# Hand-maintained data the scripts read: the declared topic tree and the papers
+# deliberately not added.
 CATALOG_DIR = _path(CONFIG.get("catalog", "catalog"), _BASE)
 TOPICS_FILE = CATALOG_DIR / "topics.yaml"
 SKIPPED_FILE = CATALOG_DIR / "skipped.yaml"
-CONVERSION_ISSUES_FILE = CATALOG_DIR / "conversion-issues.yaml"
 TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 # Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
 NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)
+# Conversion problems: issues/<stem>.yaml for a paper that has any, keyed by the stem
+# like the notes. Each holds a list of records, one problem each, whose `kind` is the id
+# of a ticket in the engine's tickets/ (one ticket per cause), or `new` until triage
+# gives it one.
+ISSUES_DIR = _path(CONFIG.get("issues", "issues"), _BASE)
+TICKETS_DIR = ENGINE_ROOT / "tickets"
 # Literature reviews, one per scope (a declared folder): reviews/<scope>.md, or
 # reviews/<scope>/index.md plus section files once a review is split. Partial
 # reading results live in reviews/.work/ (ignored) until the review is written.
@@ -433,67 +438,92 @@ def append_skipped(entries):
     SKIPPED_FILE.write_text(text, encoding="utf-8")
 
 
-def load_conversion_issues():
-    """The list of flagged conversion problems (dicts with paper, problem, found)."""
-    if not CONVERSION_ISSUES_FILE.exists():
-        return []
-    return yaml.safe_load(CONVERSION_ISSUES_FILE.read_text(encoding="utf-8")) or []
-
-
-def append_conversion_issues(entries):
-    """Add entries (dicts with paper, problem, found) to the end of the catalog file.
-
-    Appended as text, so the file's header comments stay as they are.
-    """
-    text = CONVERSION_ISSUES_FILE.read_text(encoding="utf-8") if CONVERSION_ISSUES_FILE.exists() else ""
-    if text and not text.endswith("\n"):
-        text += "\n"
-    text += yaml.safe_dump(entries, allow_unicode=True, sort_keys=False, width=100)
-    CONVERSION_ISSUES_FILE.parent.mkdir(parents=True, exist_ok=True)
-    CONVERSION_ISSUES_FILE.write_text(text, encoding="utf-8")
-
-
-def remove_conversion_issues(stem):
-    """Drop the entries about the paper named `stem` from the catalog file; how many went.
-
-    Done on the text, an entry being a top-level list item, so the comments stay.
-    """
-    if not CONVERSION_ISSUES_FILE.exists():
-        return 0
-    blocks = re.split(r"^(?=- )", CONVERSION_ISSUES_FILE.read_text(encoding="utf-8"), flags=re.M)
-    kept = [blocks[0]]
-    for block in blocks[1:]:
-        entry = (yaml.safe_load(block) or [None])[0]
-        if not (isinstance(entry, dict) and entry.get("paper") == stem):
-            kept.append(block)
-    if len(kept) < len(blocks):
-        CONVERSION_ISSUES_FILE.write_text("".join(kept), encoding="utf-8")
-    return len(blocks) - len(kept)
-
-
 def note_path(paper):
     return NOTES_DIR / f"{Path(paper).stem}.md"
 
 
-# A note's `conversion:` line is `ok`, a description of what is broken in the paper's
-# markdown, or `key-content-broken: <description>` when a part the paper's findings rest on
-# is missing or wrong (so the note may be too).
-_CONVERSION = re.compile(r"^conversion:[ \t]*(.*)$", re.M)
+# A conversion problem's record, in issues/<stem>.yaml. `kind` is a ticket id, or `new`
+# with `suggested` naming the cause; `key-content` is set when a part the paper's findings
+# rest on is missing or wrong (a results table, the main equation, a section), so a note
+# written from the paper may be wrong too; `by` says who found it; `wont-fix` gives the
+# reason a problem is left as it is.
+ISSUE_FIELDS = ["kind", "suggested", "where", "what", "key-content", "by", "found", "wont-fix"]
+ISSUE_SOURCES = {"reader", "session", "symptoms"}
+TICKET_STATUSES = {"open", "fixed", "done", "wont-fix"}
+TICKET_TAKES = {"engine", "reconvert", "reread", "by-hand"}
 
 
-def note_conversion(text):
-    """(state, description) from a note's text: state is "ok", "problem", "key-content-broken",
-    or None when the note has no conversion line."""
-    m = _CONVERSION.search(text)
-    if not m:
-        return None, ""
-    value = m.group(1).strip()
-    if re.fullmatch(r"ok\.?", value, re.I):
-        return "ok", ""
-    key = re.match(r"key-content-broken[ \t]*:[ \t]*(.*)$", value, re.I)
-    if key:
-        return "key-content-broken", key.group(1).strip()
-    return "problem", value
+def paper_stem(paper):
+    """The stem a paper is keyed by in notes/ and issues/: a path's stem, or a stem as given
+    (titles hold dots, so a bare stem is never split at one)."""
+    text = str(paper)
+    return Path(text).stem if text.endswith(".md") else Path(text).name
+
+
+def issues_path(paper):
+    return ISSUES_DIR / f"{paper_stem(paper)}.yaml"
+
+
+def load_issues(paper):
+    """The conversion-problem records of a paper (a path or a stem); [] when it has none."""
+    path = issues_path(paper)
+    if not path.exists():
+        return []
+    return [r for r in yaml.safe_load(path.read_text(encoding="utf-8")) or [] if isinstance(r, dict)]
+
+
+def save_issues(paper, records):
+    """Write a paper's records, fields in their usual order; delete the file when none is left."""
+    path = issues_path(paper)
+    if not records:
+        path.unlink(missing_ok=True)
+        return
+    ordered = [{**{k: r[k] for k in ISSUE_FIELDS if r.get(k) not in (None, "", False)},
+                **{k: v for k, v in r.items() if k not in ISSUE_FIELDS}} for r in records]
+    ISSUES_DIR.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.safe_dump(ordered, allow_unicode=True, sort_keys=False, width=100), encoding="utf-8")
+
+
+def all_issues(stems=None):
+    """{stem: records} for every paper with an issues file, or only for the stems given."""
+    if not ISSUES_DIR.is_dir():
+        return {}
+    wanted = set(stems) if stems is not None else None
+    found = {}
+    for path in sorted(ISSUES_DIR.glob("*.yaml")):
+        if wanted is None or path.stem in wanted:
+            records = load_issues(path.stem)
+            if records:
+                found[path.stem] = records
+    return found
+
+
+def is_open(record):
+    return not record.get("wont-fix")
+
+
+def describe_issue(record):
+    """A record on one line: where · kind · what, with its flags."""
+    kind = record.get("kind", "?")
+    if kind == "new" and record.get("suggested"):
+        kind = f"new:{record['suggested']}"
+    flags = (" · KEY CONTENT" if record.get("key-content") else "") + \
+            (f" · wont-fix: {record['wont-fix']}" if record.get("wont-fix") else "")
+    return f"{record.get('where', '?')} · {kind}{flags} · {' '.join(str(record.get('what', '')).split())}"
+
+
+def load_tickets():
+    """{id: ticket} from the engine's tickets/*.md: the frontmatter (id, title, converter,
+    takes, status) plus `body` and `path`."""
+    tickets = {}
+    for path in sorted(TICKETS_DIR.glob("*.md")) if TICKETS_DIR.is_dir() else []:
+        if path.name == "README.md":
+            continue
+        meta, body = read_paper(path)
+        meta = dict(meta or {})
+        meta.setdefault("id", path.stem)
+        tickets[meta["id"]] = {**meta, "body": body, "path": path}
+    return tickets
 
 
 # A markdown link's target, and the paper-map section of a review. Reviews use

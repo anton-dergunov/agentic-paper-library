@@ -19,8 +19,9 @@ Checks:
   declared topic if it names one, and is not a paper that is in the library;
 - every review in reviews/ names a declared scope, and every local link in it
   (to a paper, a page in a paper's PDF, another review) resolves;
-- every entry in catalog/conversion-issues.yaml names a paper in the library
-  by its stem and says what the problem is.
+- every file in issues/ is named after a paper in the library, and each of
+  its records says what the problem is, names a ticket of the engine's
+  tickets/ (or `new`), and gives a reason if it is wont-fix.
 """
 
 import os
@@ -31,9 +32,9 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from paperlib import (
-    LIBRARY_DIR, NOTES_DIR, PDF_ROOT, LIBRARY_ROOT, REQUIRED, SOURCES, TOPIC_PATH, TYPES,
-    load_conversion_issues, load_reviews, load_skipped, load_topics, norm_title, paper_files,
-    pdf_path_for, read_paper, review_links,
+    ISSUE_SOURCES, ISSUES_DIR, LIBRARY_DIR, NOTES_DIR, PDF_ROOT, LIBRARY_ROOT, REQUIRED, SOURCES,
+    TOPIC_PATH, TYPES, load_issues, load_reviews, load_skipped, load_tickets, load_topics, norm_title,
+    paper_files, pdf_path_for, read_paper, review_links,
 )
 
 # Markdown images, and <img> tags (used inside the HTML tables of complex tables).
@@ -108,14 +109,21 @@ def check_reviews(stems):
                 if not ok:
                     problems.append(f"{f.relative_to(LIBRARY_ROOT)}: broken link {target} "
                                     "(scripts/review-status.py --fix-links)")
-    for i, entry in enumerate(load_conversion_issues()):
-        name = f"catalog/conversion-issues.yaml entry {i + 1}"
-        if not isinstance(entry, dict) or not entry.get("paper") or not entry.get("problem"):
-            problems.append(f"{name}: needs a paper and a problem")
-        elif entry["paper"] not in stems:
-            problems.append(f"{name}: no paper named `{entry['paper']}` in the library")
-        elif "wont-fix" in entry and not str(entry["wont-fix"] or "").strip():
-            problems.append(f"{name}: wont-fix needs a reason")
+    tickets = load_tickets()
+    for path in sorted(ISSUES_DIR.glob("*.yaml")) if ISSUES_DIR.is_dir() else []:
+        name = path.relative_to(LIBRARY_ROOT)
+        if path.stem not in stems:
+            problems.append(f"{name}: no paper named `{path.stem}` in the library")
+        for i, record in enumerate(load_issues(path.stem), 1):
+            where = f"{name} record {i}"
+            if not str(record.get("what") or "").strip():
+                problems.append(f"{where}: says no `what`")
+            if record.get("kind") != "new" and record.get("kind") not in tickets:
+                problems.append(f"{where}: kind `{record.get('kind')}` is not a ticket (or `new`)")
+            if record.get("by") and record["by"] not in ISSUE_SOURCES:
+                problems.append(f"{where}: by `{record['by']}` is not one of {sorted(ISSUE_SOURCES)}")
+            if "wont-fix" in record and not str(record["wont-fix"] or "").strip():
+                problems.append(f"{where}: wont-fix needs a reason")
     return problems
 
 

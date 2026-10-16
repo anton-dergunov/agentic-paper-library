@@ -27,11 +27,14 @@ passed) and `status`. With no mode, pick `write` or `update` by whether
 **The pipeline.** A review is the last of three steps, and each step can run on its own:
 
 ```
-paperlib read <scope>          notes, one request per paper; runs from a terminal too
-/fix-conversions <scope>       fix the conversion problems the notes report; read again the
-                               papers whose key content was broken
-/literature-review <scope>     the review; reads what is missing, offers the fix first
+paperlib read <scope>          notes, one request per paper; runs from a terminal too; the
+                               conversion problems found go to issues/
+/literature-review <scope>     the review; reads what is missing, and checks the PDF where
+                               it leans on a part whose key content is broken
 ```
+
+Conversion problems are fixed in the engine, apart from this pipeline
+(`/triage-conversions`, `/fix-conversions <tickets>`).
 
 **What it costs.** Reading is most of the work: `paperlib read` sends each paper in one
 request, about 35K tokens, so 100 papers can use up a usage window. It is resumable and
@@ -62,20 +65,18 @@ all of them again on each request.
    says the main numbers are in an appendix was read without them. Read those again:
    `paperlib read --redo --appendix <paper.md> ...`.
 5. **Report**: how many notes were written, how many papers are left, and the conversion
-   problems the notes report (`paperlib review-status <scope>` counts them). If any have
-   key content broken, suggest `/fix-conversions <scope>` before the review. In `read`
-   mode, stop here.
+   problems recorded (`paperlib review-status <scope>` counts them), naming those with key
+   content broken (`paperlib issues <scope> --key-content`). In `read` mode, stop here.
 
 ## write
 
 1. **Read** every paper of the scope, as above, until `paperlib review-status <scope>`
    lists none as not read.
-2. **Conversion problems.** Run `paperlib conversion-issues <scope>`: it copies the
-   problems the notes report into `catalog/conversion-issues.yaml` and lists the open ones.
-   If any in the scope have key content broken (or have not been looked at yet: older
-   notes never mark it), say how many and which matter most, and offer `/fix-conversions <scope>`
-   before writing. Write once they are fixed or the reader says to go ahead; then,
-   wherever the review leans on a paper whose key content is broken, say so.
+2. **Conversion problems.** `paperlib issues <scope> --key-content` lists the places whose
+   key content is broken. Wherever the review leans on one, read the PDF at that page
+   (`Read` with `pages`, that page only) before stating its numbers, and say in the review
+   that it was checked there. When several of them share a ticket, mention it in the report
+   as worth a `/fix-conversions <id>`; do not fix papers by hand.
 3. **Context.**
    - Read the notes of every paper in scope (`notes/<stem>.md`): these are what the
      review is written from.
@@ -112,8 +113,9 @@ all of them again on each request.
      scope as written there.
 6. **Report.**
    - A link to the review and three or four lines on what the area looks like.
-   - The number of conversion problems flagged, with the worst ones.
-   - A commit message: the review, the new notes, the conversion issues. Never commit.
+   - The conversion problems with key content broken that the review leans on, and the
+     tickets they belong to.
+   - A commit message: the review, the new notes, `issues/`. Never commit.
    - One line advising to discuss or correct the review in a new session: this one's
      context holds every note, and each later turn pays for it again.
 
@@ -141,7 +143,7 @@ Steps:
    gets what it lacks in this update: missing sections ("Where the papers disagree", "In
    practice"), evidence labels, source links in the comparison tables.
 3. **Read** the uncovered papers: `paperlib read <scope>` reads the ones without a note
-   (steps 3–4 of `read`). Then deal with conversion problems as in step 2 of `write`, and
+   (steps 3–4 of `read`). Then check conversion problems as in step 2 of `write`, and
    read the new notes.
 4. **Revise** the review:
    - Place each paper in the map and in its family under "Kinds of …". A new family gets
@@ -167,7 +169,7 @@ Steps:
    - **What changed since <previous updated date>**, a few lines for the reader: new kinds of
      approaches, findings overturned or strengthened, and the two or three new papers to
      read first.
-   - Any conversion problems flagged.
+   - The conversion problems with key content broken that the review leans on.
    - A commit message. Never commit.
 
 ## status

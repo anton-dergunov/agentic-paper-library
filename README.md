@@ -42,7 +42,8 @@ Open the library in VS Code with the PDF on one side and Claude Code on the othe
 | `/overview` | A 3–5 minute pre-read for a paper you're about to read: the intuition, the mechanism, what is new against your library. Written to your notes folder (an Obsidian vault works well). |
 | `/expand-library` | Finds the papers missing from an area, has you strike what you don't want, and adds the rest in bulk. |
 | `/literature-review` | Writes or updates the review of an area: the kinds of approaches, what the papers find, how they relate, where the evidence is weak. |
-| `/fix-conversions` | Works through the conversion problems the notes report: fixes recurring ones in the converter, reconverts or fixes papers by hand from the PDF, reads again the papers whose key content was broken, and marks what can't be fixed. Run it between reading an area and writing its review. |
+| `/triage-conversions` | Files the conversion problems found while reading under tickets, one per cause, counts the papers each touches, and proposes which tickets to fix together. |
+| `/fix-conversions` | Fixes tickets in the converter, each with a test, and gives the overnight command that converts the affected papers again; only notes whose key content was broken are read again. |
 | `/reorganize` | Proposes moves, splits and merges of topic folders as the library grows, and carries out the ones you approve. |
 | `/paper-info` | A quick look at a paper before you add it: where it was published, how often it is cited, which papers in the library mention it and which are nearest. It reports and does not recommend. |
 
@@ -56,7 +57,7 @@ Open the library in VS Code with the PDF on one side and Claude Code on the othe
 
 ![Find missing papers, reorganise topics. /expand-library on a topic proposes a numbered reading list with a reason for each paper; you strike what you don't want and the rest are added, and a struck paper is not proposed again. /reorganize on a topic proposes splits, merges and moves with reasons; here one folder is split into three subfolders, and each paper moves with its PDF, Markdown and figures. Both propose first and change nothing until you choose.](assets/pictures/grow.png)
 
-![Conversion errors are reported and fixed, in three steps. Reported while reading: each note says what the conversion broke and on which page. Fixed where it starts: /fix-conversions fixes a problem seen in several papers in the converter, with a test, and a single one from the PDF. Converted again: every paper with the same problem is corrected at once. A note records the conversion in one of three ways: ok; a flaw with its page; or key-content-broken, when the paper's findings rest on the broken part, and only those papers are read again after the fix. An example: authors pad a number with an invisible digit so that a column lines up, so a table cell that reads 3.4 in the PDF was 53.4 in the Markdown and is 3.4 now; one fix removed the digit from 29 papers. Measured: after the 22 problems reported during one literature review were fixed, papers showing a known symptom fell from 761 to 379.](assets/pictures/fix-conversions.png)
+![Conversion errors are recorded, filed and fixed at their cause, in four steps. Recorded: while reading, or when a session notices one, each problem becomes one record in the library's issues/ folder, with its page and whether the paper's findings rest on it (key content). Filed: /triage-conversions puts each record under a ticket, one per cause, labelled with what it takes: an engine fix, a reconversion, re-reading notes, or a hand edit. Fixed in the converter: /fix-conversions fixes tickets with a test, so new papers get the fix at once. Converted again overnight: paperlib reconvert --issue converts every paper the ticket touches, the records are closed, and only notes whose key content was broken are read again. The record shown names its ticket (pdf-table-bold), the place (p. 6, Table 1), what is broken and that key content rests on it; the ticket, Bold in PDF tables is dropped, takes an engine fix, a reconversion and re-reading, and touches 12 papers. An example: authors pad a number with an invisible digit so that a column lines up, so a table cell that reads 3.4 in the PDF was 53.4 in the Markdown and is 3.4 now; one fix removed the digit from 29 papers. Measured: after the 22 problems reported during one literature review were fixed, papers showing a known symptom fell from 761 to 379.](assets/pictures/fix-conversions.png)
 
 ### Which model
 
@@ -67,7 +68,7 @@ Each skill sets its model for the turn it runs in, so a session on another model
 | `/add-paper`, `paperlib add` | Sonnet | Measured: in one request Sonnet files and summarises a paper about as well as Opus ([experiment](experiments/skill-models/README.md)). |
 | `/expand-library` | Sonnet | Not measured. The session mostly runs scripts, and the reading lists and summaries were written by Sonnet subagents when the skill was built. |
 | `/literature-review` | Opus | Reading is measured: Opus's notes had 1 error in six papers, Sonnet's 6 ([experiment](experiments/reading-models/README.md)). Writing the review is not measured. |
-| `/overview`, `/reorganize`, `/fix-conversions` | Opus | Not measured. They are short or run rarely, and you read or approve the result. |
+| `/overview`, `/reorganize`, `/triage-conversions`, `/fix-conversions` | Opus | Not measured. They are short or run rarely, and you read or approve the result. |
 | Questions about papers | Opus | Measured: Sonnet matches Opus on a detail of one paper, and makes about half the points on a synthesis of an area, at a third of the tokens ([experiment](experiments/review-usefulness/README.md)). |
 
 ## Quick start
@@ -115,7 +116,7 @@ Every change to a converter, a prompt or a skill is measured on real papers befo
 
 ## Next
 
-- Conversion follow-ups: incomplete arXiv renderings, equations a model misread in a PDF, tables that are images ([list](docs/tasks/conversion-follow-ups.md)).
+- Conversion tickets: incomplete arXiv renderings, equations a model misread in a PDF, PDF tables and pseudocode ([tickets](tickets/README.md)).
 - Running a library from Claude Code on the web, which needs the engine installed by a setup step.
 - `read` and `wrap` skills for reading a paper with the agent and keeping what you took from it.
 

@@ -4,7 +4,7 @@
     ./scripts/remove-paper.py <paper.md | arxiv-id-or-url | title words> ... [--reason "..."] [--yes]
 
 It first lists what it will delete: the markdown, its images/<Title>-fig* files, the PDF,
-notes/<Title>.md and the paper's entries in catalog/conversion-issues.yaml. It also lists
+notes/<Title>.md and its conversion problems, issues/<Title>.yaml. It also lists
 what it leaves for a person to decide: the reader's own overview note, the reviews that
 link the paper and the other notes that name it. On a terminal it then asks; anywhere else
 it deletes only with --yes.
@@ -26,8 +26,8 @@ from pathlib import Path
 
 from paperlib import (
     LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, SCRIPTS_DIR, append_skipped,
-    find_by_title, library_arxiv_ids, load_conversion_issues, load_reviews, note_path, paper_index,
-    pdf_path_for, read_paper, remove_conversion_issues, review_links,
+    find_by_title, issues_path, library_arxiv_ids, load_issues, load_reviews, note_path, paper_index,
+    pdf_path_for, read_paper, review_links,
 )
 
 ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(v\d+)?")
@@ -78,7 +78,7 @@ def plan(md, reviews):
                           if re.fullmatch(r"-fig\d+\.\w+", f.name[len(stem):])),
         "pdf": pdf if pdf.is_file() else None,
         "note": note if note.is_file() else None,
-        "issues": sum(1 for e in load_conversion_issues() if isinstance(e, dict) and e.get("paper") == stem),
+        "issues": issues_path(stem) if load_issues(stem) else None,
         "overview": overview if overview and overview.is_file() else None,
         "reviews": {scope: reviews[scope]["main"] for scope in linking},
         "naming": naming,
@@ -96,7 +96,7 @@ def show(p, reason):
     if p["note"]:
         print(f"  delete  the note: {relative(p['note'])}")
     if p["issues"]:
-        print(f"  delete  its entries in catalog/conversion-issues.yaml: {p['issues']}")
+        print(f"  delete  its conversion problems: {relative(p['issues'])}")
     if reason:
         print(f"  record  in catalog/skipped.yaml: {reason}")
     if p["overview"]:
@@ -117,13 +117,12 @@ def skip_entry(p, reason):
 
 
 def remove(p):
-    for path in [p["md"], *p["figures"], p["pdf"], p["note"]]:
+    for path in [p["md"], *p["figures"], p["pdf"], p["note"], p["issues"]]:
         if path:
             path.unlink()
     images = p["md"].parent / "images"
     if images.is_dir() and not any(images.iterdir()):
         images.rmdir()
-    remove_conversion_issues(p["md"].stem)
 
 
 def main(argv):

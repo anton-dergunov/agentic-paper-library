@@ -1,29 +1,30 @@
 <!doctype html>
 <!--
-  Source of assets/pictures/fix-conversions.png. The three steps are skills/fix-conversions/SKILL.md
-  and docs/design.md's decision of 2026-10-07. The conversion line is the opening of the one in
-  Opus's note on the Gemma 3 Technical Report (experiments/reading-models/results/claude-opus-5-5/).
-  The example and the line at the foot are experiments/review-flagged-fixes: a padding digit printed
-  in table cells of 29 papers (3.4 read as 53.4; the rest of the small table is an illustration). The three conversion
-  lines in "What a note records" follow the form guide/reading-prompt.md asks for and are examples, and papers showing a known symptom 761 to 379.
+  Source of assets/pictures/fix-conversions.png. The four steps are skills/triage-conversions/SKILL.md,
+  skills/fix-conversions/SKILL.md and docs/design.md's decision of 2026-10-16. The record is a real
+  one from the author's library (issues/, "Understanding the difficulty of training deep feedforward
+  neural networks"), and the ticket is tickets/pdf-table-bold.md with its counts of 2026-10-16. The example and the line at the foot are
+  experiments/review-flagged-fixes: a padding digit printed in table cells of 29 papers (3.4 read as
+  53.4; the rest of the small table is an illustration), and papers showing a known symptom 761 to 379.
   Render with assets/pictures/render.sh fix-conversions.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="picture-size" content="960x600">
-<title>Conversion errors are reported and fixed</title>
+<title>Conversion errors are recorded and fixed at their cause</title>
 <link rel="stylesheet" href="style.css">
 <style>
   .main { flex-direction: column; gap: 16px; }
   .steps { display: flex; align-items: stretch; flex: none; }
-  .step { flex: 1 1 0; min-width: 0; border: 1px solid var(--line); border-radius: 9px; background: #fff; padding: 11px 14px 12px; box-shadow: 0 3px 10px rgba(31, 35, 40, .07); }
-  .step .hd { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14.5px; margin-bottom: 6px; }
-  .step p { font-size: 12.5px; line-height: 1.42; }
+  .step { flex: 1 1 0; min-width: 0; border: 1px solid var(--line); border-radius: 9px; background: #fff; padding: 10px 12px 11px; box-shadow: 0 3px 10px rgba(31, 35, 40, .07); }
+  .step .hd { display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: 13.5px; margin-bottom: 5px; }
+  .step p { font-size: 11.8px; line-height: 1.4; }
   .step .code, .step .ccin { margin-top: 9px; }
   .step .code { font-size: 10.3px; line-height: 1.5; white-space: normal; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; }
   .step .code .k { color: var(--md-key); }
-  .ar { width: 30px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 22px; }
+  .step .ccin { font-size: 11px; padding-left: 9px; padding-right: 7px; }
+  .ar { width: 22px; flex: none; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 22px; }
   .low { flex: 1 1 auto; display: flex; gap: 12px; min-height: 0; }
   .case { border: 1px solid var(--line); border-radius: 9px; background: var(--panel); padding: 13px 16px; display: flex; flex-direction: column; min-width: 0; }
   .case.rec { width: 352px; flex: none; }
@@ -50,35 +51,40 @@
 <body class="wide">
 <div class="frame">
   <div class="head big">
-    <h1>Conversion errors are reported and fixed</h1>
-    <span class="sub">No converter gets every paper right. Claude Code records what looks broken while it reads, and one skill works through the list.</span>
+    <h1>Conversion errors are recorded and fixed at their cause</h1>
+    <span class="sub">No converter gets every paper right. Each problem is recorded once, filed under its cause, and fixed in the converter.</span>
   </div>
 
   <div class="main">
     <div class="steps">
       <div class="step">
-        <div class="hd"><span class="n">1</span>Reported while reading</div>
-        <p>Each note says what the conversion broke, and on which page.</p>
+        <div class="hd"><span class="n">1</span>Recorded</div>
+        <p>While reading a paper, or when a session notices one, each problem becomes a record: where, what, and whether the findings rest on it.</p>
       </div>
       <div class="ar">→</div>
       <div class="step">
-        <div class="hd"><span class="n">2</span>Fixed where it starts</div>
-        <p>A problem seen in several papers is fixed in the converter, with a test. A single one is fixed from the PDF.</p>
+        <div class="hd"><span class="n">2</span>Filed under a cause</div>
+        <p>Each record goes under a ticket, one per cause, which says what it takes and how many papers it touches.</p>
+        <div class="ccin"><span>/triage-conversions</span><i>↑</i></div>
+      </div>
+      <div class="ar">→</div>
+      <div class="step">
+        <div class="hd"><span class="n">3</span>Fixed in the converter</div>
+        <p>A ticket is fixed once, with a test, so every paper added later gets it.</p>
         <div class="ccin"><span>/fix-conversions</span><i>↑</i></div>
       </div>
       <div class="ar">→</div>
       <div class="step">
-        <div class="hd"><span class="n">3</span>Converted again</div>
-        <p>Every paper with the same problem is corrected at once. A note is rewritten only when the paper’s key content was affected.</p>
+        <div class="hd"><span class="n">4</span>Converted again</div>
+        <p>Overnight, every paper the ticket touches is converted again. Only notes whose key content was broken are read again.</p>
       </div>
     </div>
 
     <div class="low">
       <div class="case rec">
-        <b class="ct">What a note records about the conversion</b>
-        <div class="kind"><div class="code"><span class="k">conversion:</span> ok</div><span>Nothing wrong that matters to the content.</span></div>
-        <div class="kind"><div class="code"><span class="k">conversion:</span> equation 4 is garbled (p. 5)</div><span>A flaw and its page. The note still stands.</span></div>
-        <div class="kind key"><div class="code"><span class="k">conversion:</span> <b>key-content-broken:</b> the scores in Table 2 have a digit too many (p. 7)</div><span>The paper’s findings rest on the broken part. Only these papers are read again after the fix.</span></div>
+        <b class="ct">A record, and the ticket it is filed under</b>
+        <div class="kind key"><div class="code"><span class="k">kind:</span> pdf-table-bold<br><span class="k">where:</span> p. 6, Table 1<br><span class="k">what:</span> bold marking significance is lost<br><span class="k">key-content:</span> <b>true</b></div><span>In the library’s issues/. The findings rest on it, so the note is read again after the fix.</span></div>
+        <div class="kind"><div class="code"><b>Bold in PDF tables is dropped</b><br><span class="k">engine · reconvert · reread</span><br>12 papers, 1 with key content</div><span>In the engine’s tickets/, with the fix and its cost.</span></div>
       </div>
       <div class="case ex">
         <b class="ct">An example: a digit nobody could see</b>

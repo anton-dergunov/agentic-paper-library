@@ -7,6 +7,7 @@
     ./scripts/reconvert.py --all --pdf-text  # re-extract the PDF-text papers
     ./scripts/reconvert.py --pdf-text --inline-math <paper.md>   # the thorough PDF conversion
     ./scripts/reconvert.py --all --jobs 3 --state run.jsonl   # a long run, resumable
+    ./scripts/reconvert.py --issue <kind> --jobs 1 --state run.jsonl   # the papers a ticket touches
 
 For when the conversion improves: the frontmatter (summary included) and the
 PDF are kept; the body and the paper's images/ files are regenerated. The HTML
@@ -28,6 +29,11 @@ papers already converted (or skipped for good) and retries the rest: those
 whose HTML could not be fetched, whose figures did not all download, or whose
 conversion failed. A progress bar shows the run; failures are printed as they
 happen.
+
+--issue <kind> takes the papers with an open record of that kind in issues/ (a ticket
+fixed in the engine), PDF papers included with the thorough conversion (--pdf-text
+--inline-math); --list prints them and converts nothing. After the run,
+`paperlib issues close <kind> --state <file>` closes their records.
 """
 
 import datetime
@@ -44,7 +50,9 @@ from pathlib import Path
 import pymupdf
 from tqdm import tqdm
 
-from paperlib import LIBRARY_DIR, fetch, paper_files, pdf_path_for, read_paper, write_paper
+from paperlib import (
+    LIBRARY_DIR, all_issues, fetch, is_open, paper_files, pdf_path_for, read_paper, write_paper,
+)
 
 SCRIPTS = Path(__file__).resolve().parent
 # The marker, also when it carries a note: "<!-- hand-edited: the title moved to the top -->".
@@ -197,9 +205,15 @@ def main(argv):
     jobs = int(option(argv, "--jobs", "1"))
     state = option(argv, "--state")
     state = Path(state).expanduser().resolve() if state else None
+    issue = option(argv, "--issue")
     force, pdf_text, inline_math = "--force" in argv, "--pdf-text" in argv, "--inline-math" in argv
     args = [a for a in argv if not a.startswith("--")]
-    if "--all" in argv:
+    if issue:
+        stems = {s for s, records in all_issues().items()
+                 if any(r.get("kind") == issue and is_open(r) for r in records)}
+        papers = [p for p in paper_files() if p.stem in stems]
+        pdf_text = inline_math = True
+    elif "--all" in argv:
         papers = paper_files()
     else:
         papers = []
@@ -209,7 +223,12 @@ def main(argv):
     if pdf_text and "--all" in argv:  # only the PDF-text papers
         papers = [p for p in papers if read_paper(p)[0].get("source") == "pdf-text"]
     if not papers:
-        sys.exit(__doc__)
+        sys.exit(f"no open records of kind `{issue}` in issues/" if issue else __doc__)
+    if "--list" in argv:
+        for md in papers:
+            print(md.relative_to(LIBRARY_DIR.resolve()) if md.is_relative_to(LIBRARY_DIR.resolve()) else md)
+        print(f"{len(papers)} papers, {sum(read_paper(md)[0].get('source') == 'pdf-text' for md in papers)} of them from PDF")
+        return
 
     def key(md):
         return str(md.relative_to(LIBRARY_DIR)) if md.is_relative_to(LIBRARY_DIR) else str(md)

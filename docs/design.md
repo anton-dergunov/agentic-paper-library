@@ -6,6 +6,28 @@ existing tool. Written 2026-09-29 for my own library and updated as decisions we
 repository, so the same workflow can run more than one library. Out of scope here: paper
 discovery. How to use a library is in the [user guide](user-guide.md).
 
+## The main requirement: few tokens
+
+Besides doing its job (turning papers into something an agent can read, and helping me read
+them), the library has one requirement above the others: **an agent should answer questions
+about papers with as few tokens as possible**, quickly and without re-deriving or re-converting
+what was done before. The engine exists to save tokens. Work that spends more than it saves
+is the wrong work.
+
+- **The converter is the product; the library's markdown is its output.** A conversion
+  problem is fixed in the engine, so that every paper gets the fix, new ones at once. A hand
+  edit is for a problem that is isolated or that no program could fix.
+- **Don't perfect papers ahead of time.** I will discuss perhaps three papers a day, and most
+  papers in the library never. A flaw in a paper nobody is asking about costs nothing; a
+  session that reads PDFs and edits papers to remove it costs a lot. A single paper is
+  fixed by hand only when a session needs it and the flaw stands in the way of the answer.
+- **Reconversions are cheap, sessions are not.** Reconverting many papers overnight is
+  fine. What wastes tokens is a session redoing work: re-triaging the same problems,
+  re-reading the same PDFs, editing by hand what the converter should do.
+- **Conversion work should converge.** Each problem is recorded once, under the ticket for
+  its cause, so the open tickets can be counted and should shrink over time. When they do
+  not, the process is wrong, not the papers.
+
 ## The finding that shapes everything
 
 What I want next to a PDF is not a chat box. It is an agent that can:
@@ -146,7 +168,7 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   inbox. Each skill now names its model in its frontmatter: Sonnet for `add-paper` and
   `expand-library`, Opus for the rest. Only the reader and the filing model are measured.
 - **Conversion problems are collected from the notes and fixed between reading and writing
-  (2026-10-07).** Reading `search-and-ranking` for its review, the reader reported a
+  (2026-10-07; replaced on 2026-10-16, below).** Reading `search-and-ranking` for its review, the reader reported a
   conversion problem in 46 of 91 papers, 28 of them among the area's PDF-converted papers;
   most were garbled equations whose meaning the prose kept. The reader now marks a problem
   `key-content-broken` when a part the paper's findings rest on is missing or wrong (a
@@ -158,6 +180,24 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   touched a median 0.08% of it
   ([experiments/conversion-churn](../experiments/conversion-churn/README.md)), so tracking
   which notes are out of date (built and removed the same day) was not worth its weight.
+- **Conversion problems are records under tickets, fixed in the engine (2026-10-16).** The
+  2026-10-07 process kept each paper's problems as a paragraph, three times over: on the
+  note's `conversion:` line, in the library's `catalog/conversion-issues.yaml` (380
+  paragraphs) and, for the causes, in a follow-ups list in the engine that had grown to 17
+  items. Grouping paragraphs by cause took a model reading prose each time, the count never
+  went down, and fix sessions ended up refreshing entries and editing papers by hand. Now a
+  problem is one record in the library's `issues/<stem>.yaml` (a file per paper, so
+  parallel sessions don't collide), whose `kind` is the id of an engine ticket,
+  `tickets/<id>.md`, one per cause, labelled with what it takes (`engine`, `reconvert`,
+  `reread`, `by-hand`). The reader writes records as it reads, a session adds one with
+  `paperlib issues add`, `/triage-conversions` files new ones under tickets, and
+  `/fix-conversions <ids>` fixes tickets in the converter and gives the overnight
+  `paperlib reconvert --issue <id>` command; `paperlib issues close` then closes the
+  records and names the notes to read again. Notes lost their `conversion:` line, which
+  went stale whenever a paper was fixed; `paperlib info` shows a paper's open problems. The
+  catalog's 380 paragraphs were split by Sonnet into 779 records ($1.91), after 194
+  problems that were the papers' own errors were dropped; the reader is now told those go
+  in the digest. Tickets are markdown files for now; they could become GitHub issues.
 - **A quick look at a paper reports and does not recommend (2026-10-09).** Papers now arrive
   one at a time, and most need a look before they are worth adding. The first design gave
   a verdict (`add`, `skip` or `read first`) from the abstract, citation data, the folder's

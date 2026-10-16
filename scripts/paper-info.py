@@ -5,7 +5,8 @@ axes and never recommends: whether to read or add a paper is the reader's call.
     ./scripts/paper-info.py <arxiv-id-or-url | title words> [...] [--json] [--facts] [--again] [--abstract]
 
 A paper in the library is answered from the library alone, with no network: where its
-markdown, note, overview and review are, and its summary. Title words find library papers,
+markdown, note, overview and review are, its summary and its open conversion problems
+(issues/). Title words find library papers,
 and after them the papers outside it that were looked at before. A paper skipped earlier
 (catalog/skipped.yaml) is answered with the reason.
 
@@ -36,7 +37,8 @@ from urllib.parse import quote
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
-    TYPES, ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics, norm_title,
+    TYPES, ask_model, describe_issue, fetch, filing_choice, filing_prompts, find_by_title, is_open,
+    load_issues, load_reviews, load_topics, norm_title,
     note_path, paper_files, paper_index, parse_arxiv_entries, read_paper, review_for, skipped_index,
     styled,
 )
@@ -100,7 +102,8 @@ def in_library(path):
         "overview": str(overview) if overview and overview.exists() else None,
         "review": relative(load_reviews()[scope]["main"]) if scope else None,
         "type": meta.get("type"), "source": meta.get("source"),
-        "summary": " ".join(str(meta.get("summary") or "").split())}
+        "summary": " ".join(str(meta.get("summary") or "").split()),
+        "issues": [describe_issue(r) for r in load_issues(path) if is_open(r)]}
 
 
 def facts(arxiv_id, entry, record):
@@ -181,6 +184,8 @@ def table(info, abstract=False):
         add("arXiv", f"{info['arxiv']}, submitted {info['published']}" if info["arxiv"] else info["published"])
         for name in ("paper", "note", "overview", "review", "type", "summary"):
             add(name.capitalize(), info[name])
+        for i, issue in enumerate(info.get("issues") or []):
+            add("Conversion" if i == 0 else "", issue)
     elif info["status"] == "skipped":
         add("Status", f"skipped earlier ({info['skipped']['date']}): {info['skipped']['reason']}")
         add("arXiv", f"{info['arxiv']}, submitted {info['published']}")

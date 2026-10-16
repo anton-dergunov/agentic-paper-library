@@ -140,7 +140,7 @@ A whole-library run is validated with:
 
 The converters are pinned in `pyproject.toml`, so that a fresh install converts a paper exactly as before. Upgrading docling or PyMuPDF changes papers already in a library, so it is a measured step. → [`experiments/library-reconversion`](../experiments/library-reconversion/README.md)
 
-Open problems are in [`tasks/conversion-follow-ups.md`](tasks/conversion-follow-ups.md).
+Open problems are tickets, one per cause, in [`tickets/`](../tickets/README.md); a library's `issues/` records which papers each one touches.
 
 ## Metadata
 

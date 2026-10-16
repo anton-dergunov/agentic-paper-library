@@ -110,11 +110,12 @@ def remove_problems(root):
     other = paper.parent / "images" / f"{paper.stem}-figures of another paper-fig01.png"
     pdf = root / "no-pdfs" / topic / f"{paper.stem}.pdf"
     note = root / "notes" / f"{paper.stem}.md"
-    issues = root / "catalog" / "conversion-issues.yaml"
+    issues = root / "issues" / f"{paper.stem}.yaml"
     for f in (figure, pdf, note):
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text("x")
-    issues.write_text(f"# Known problems.\n- paper: {paper.stem}\n  problem: a table\n  found: 2026-01-01\n")
+    issues.parent.mkdir(exist_ok=True)
+    issues.write_text("- kind: new\n  where: p. 1\n  what: a table\n")
     skipped = root / "catalog" / "skipped.yaml"
 
     result = run("remove-paper.py", root, arxiv_id, "--reason", "not for this library")
@@ -134,8 +135,8 @@ def remove_problems(root):
     if paper.exists() or not other.exists():
         problems.append("by path: the paper is still there, or another paper's figure went with it")
     other.unlink()
-    if yaml_list(issues) or not issues.read_text().startswith("# Known problems."):
-        problems.append("conversion-issues.yaml: the entry is still there, or the comment is gone")
+    if issues.exists():
+        problems.append("issues/: the paper's problems are still there")
     entry = (yaml_list(skipped) or [{}])[-1]
     if (entry.get("arxiv"), entry.get("reason"), entry.get("topic")) != (arxiv_id, "not for this library", str(topic)):
         problems.append(f"skipped.yaml: {entry}")
@@ -145,6 +146,56 @@ def remove_problems(root):
         problems.append(f"the check fails afterwards: {result.stdout.strip().splitlines()[-3:]}")
     if run("remove-paper.py", root, arxiv_id, "--yes").returncode == 0:
         problems.append("a paper that is not in the library: no error")
+    return problems
+
+
+def issues_problems(root):
+    """issues add records a problem, the listing shows it, close removes it and names the
+    notes to read again; the reader's Conversion section becomes records."""
+    problems = []
+    paper = sorted(root.joinpath("library").rglob("*.md"))
+    paper = next(p for p in paper if p.name != "README.md")
+    rel = str(paper.relative_to(root))
+    result = run("issues.py", root, "add", rel, "pdf-table-bold", "bold lost", "--where", "p. 2, Table 1",
+                 "--key-content")
+    run("issues.py", root, "add", rel, "new:odd-glyph", "a stray glyph", "--where", "p. 3")
+    records = yaml_list(root / "issues" / f"{paper.stem}.yaml") if (root / "issues" / f"{paper.stem}.yaml").exists() else []
+    if result.returncode or [r.get("kind") for r in records] != ["pdf-table-bold", "new"] \
+            or records[1].get("suggested") != "odd-glyph" or not records[0].get("key-content"):
+        problems.append(f"add did not record both problems: {records} {result.stderr.strip()[-200:]}")
+    if run("issues.py", root, "add", rel, "no-such-ticket", "x", "--where", "p. 1").returncode == 0:
+        problems.append("add accepted a kind that is no ticket")
+    listing = run("issues.py", root).stdout
+    if "KEY CONTENT" not in listing or "2 records in 1 papers" not in listing:
+        problems.append("the listing lacks the records")
+    if run("check-library.py", root).returncode:
+        problems.append("check fails on valid records")
+    closed = run("issues.py", root, "close", "pdf-table-bold", rel)
+    left = yaml_list(root / "issues" / f"{paper.stem}.yaml")
+    if [r.get("kind") for r in left] != ["new"] or "read --redo" not in closed.stdout:
+        problems.append("close did not remove the kind's records or name the note to read again")
+    (root / "issues" / f"{paper.stem}.yaml").unlink()
+
+    sys.path.insert(0, str(ENGINE / "scripts"))
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("read_papers", ENGINE / "scripts" / "read-papers.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    note = ("# T\n\n## Digest\n\n- a claim\n\n## Related in library\n\n## Conversion\n\n"
+            "- pdf-table-bold | p. 4, Table 2 | bold lost | key-content\n- new:odd | p. 5 | a glyph\n- none\n")
+    body, records = module.take_conversion(note, {"pdf-table-bold": {}})
+    if "## Conversion" in body or "## Related in library" not in body:
+        problems.append("the Conversion section was not taken out of the note")
+    if [(r["kind"], r.get("suggested"), r["key-content"]) for r in records] != \
+            [("pdf-table-bold", None, True), ("new", "odd", False)]:
+        problems.append(f"the reader's records were parsed wrongly: {records}")
+    old = [{"kind": "a", "where": "p. 1", "what": "x", "by": "reader"},
+           {"kind": "b", "where": "p. 2", "what": "y", "by": "session"},
+           {"kind": "c", "where": "p. 3", "what": "z", "by": "reader", "wont-fix": "small"}]
+    new = [{"kind": "c", "where": "p.  3", "what": "z again"}, {"kind": "d", "where": "p. 4", "what": "w"}]
+    merged = [r["kind"] for r in module.merge_reader_records(old, new)]
+    if merged != ["b", "c", "d"]:
+        problems.append(f"a new reading did not replace only the reader's open records: {merged}")
     return problems
 
 
@@ -181,6 +232,9 @@ def main():
             same = committed.exists() and committed.read_text() == index.read_text()
             failures += not same
             print(f"{'ok  ' if same else 'FAIL'} {rel} matches the committed index")
+        problems = issues_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} issues.py: " + ("; ".join(problems) or "add, list, close; the reader's records parsed and merged"))
         problems = remove_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} remove-paper.py: " + ("; ".join(problems) or "asks first, deletes the paper's files, records the skip"))
