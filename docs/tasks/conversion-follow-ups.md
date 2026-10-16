@@ -9,39 +9,7 @@ What is open in the converters and in the conversion of the author's library (`~
 
 A new paper needs nothing from the reader: `paperlib add-arxiv` and `add-pdf` run every converter step there is. The engine items below improve what new papers get once they are done.
 
-## A. Finish the PDF reconversion of 2026-10-14
-
-Both runs are done (`reconvert-pdf-2026-10-08.jsonl`, `reconvert-pdf-inline.jsonl`); no paper shrank. What is left, in order, in `~/papers`:
-
-1. **Five papers lost their equations.** The equation model had one 30-minute limit per paper, which the inline mathematics of a long paper outran, so their equations are raw text: "Anytime-Valid Linear Models…", "Reinforcement Learning for LLM Post-Training. A Survey", "A Tutorial on Markov Chain Monte-Carlo…", "International AI Safety Report 2026", "The Algorithmic Foundations of Differential Privacy". The limit now grows with the paper. Two more crashed in the OCR: "Unbiased Learning to Rank. On Recent Advances…" and "Improving Cloud Storage Search with User Activity". Put the five back, commit the rest of the run, and convert the seven again overnight (takes: reconvert, several hours):
-   ```sh
-   cd ~/papers
-   cat > /tmp/rerun.txt <<'EOF'
-   library/experimentation-and-metrics/ab-testing/Anytime-Valid Linear Models and Regression Adjusted Causal Inference in Randomized Experiments.md
-   library/llm/post-training/rl-for-reasoning/Reinforcement Learning for LLM Post-Training. A Survey.md
-   library/ml-foundations/probabilistic-and-statistics/A Tutorial on Markov Chain Monte-Carlo and Bayesian Modeling.md
-   library/trustworthy-ml/ai-safety/International AI Safety Report 2026.md
-   library/trustworthy-ml/privacy-and-federated/The Algorithmic Foundations of Differential Privacy.md
-   library/search-and-ranking/click-models-and-unbiased-ltr/Unbiased Learning to Rank. On Recent Advances and Practical Applications.md
-   library/search-and-ranking/search-systems/Improving Cloud Storage Search with User Activity.md
-   EOF
-   head -5 /tmp/rerun.txt | tr '\n' '\0' | xargs -0 git restore --staged --worktree --
-   git commit -m "Rest of the PDF reconversion"
-   tr '\n' '\0' < /tmp/rerun.txt | xargs -0 caffeinate -i nice -n 19 \
-     paperlib reconvert --pdf-text --inline-math --jobs 1 --state ~/.cache/papers/reconvert-pdf-rerun.jsonl
-   ```
-   If a paper fails with `TimeoutExpired`, run the same command again after pulling the engine: the 1-hour limit on one conversion, which stopped the two longest papers on 2026-10-15, is now 8 hours. A state line that still says "equation model failed" or "fell back to the text layer": `git restore` that paper and report it here.
-2. **"A Latent Semantic Model with Convolutional-Pooling Structure for Information Retrieval"** was skipped as hand-edited, and its equations are blank (takes: reconvert, by hand): `paperlib reconvert --pdf-text --inline-math --force <paper.md>`, then restore the row labels and captions on p. 7 from the page and mark the edit. The five other hand-edited PDF papers stay as they are.
-3. **Re-read the thoroughly converted papers** (takes: re-read, 32 papers, about $12). Their notes describe the old conversion's tables and equations. "Command A" was read again already; "A Latent Semantic Model…" follows step 2.
-   ```sh
-   grep -v -e 'Command A' -e 'A Latent Semantic Model' docs/tasks/pdf-reconversion-papers.txt \
-     | tr '\n' '\0' | xargs -0 paperlib read --redo --jobs 2
-   ```
-   The 39 other PDF papers whose notes predate the run gained only inline mathematics, which seldom changes a digest. They are listed in `docs/tasks/reread-after-inline-math.txt`: re-read an area's share of them before its next review (about $8 for all), then delete the list.
-4. `paperlib conversion-issues`, then `/fix-conversions search-and-ranking` and the two `llm` papers of the list: replace each catalog entry with what the new note reports, or remove it. Check the PDF before marking key content broken.
-5. `paperlib check`, delete `pdf-reconversion-papers.txt`, commit.
-
-## B. Engine fixes, most useful first
+## A. Engine fixes, most useful first
 
 The counts come from the notes of 986 papers read by 2026-10-15 and from searching the library's markdown.
 
@@ -101,11 +69,24 @@ The counts come from the notes of 986 papers read by 2026-10-15 and from searchi
     - *Broken:* "A Survey on Hallucination in Large Language Models", Figure 1 on p. 2 and Tables 1 and 5 on pp. 5 and 26.
     - *Takes:* engine change for one paper; or by hand.
 
-## C. Waiting
+15. **Bold in PDF tables is dropped.**
+    - *Broken:* docling keeps a table's text but not its weight, so the bold that marks the best or the significant result is gone in PDF papers: 12 of the 103 read PDF papers report it. Where the bold carries a claim it is key content: "Large-scale validation and analysis of interleaved search evaluation" Table II (significant at 95%) and "Command A" Tables 7, 12 and 14 (the winning cluster, the best ± 1%) were restored by hand on 2026-10-16. Elsewhere it repeats what the numbers or the prose say: "Predicting Search Satisfaction Metrics with Interleaved Comparisons" Tables 2 and 4, LambdaLoss Tables 3–4, "Are Neural Rankers still Outperformed by Gradient Boosted Decision Trees" Table 2.
+    - *Fix:* the text layer still has it: each cell's words carry a font name (`-Bold`, `CMBX`, `SFBX`, `-Medi`). Mark a table cell bold when all its characters in the cell's box are set in a bold font; the hand fixes above read it that way with PyMuPDF.
+    - *Takes:* engine change, measured on these papers; reconvert the PDF papers with bold in tables (PDF speed, overnight); re-read those where the bold carries a claim.
+16. **Pseudocode in PDF papers runs together.**
+    - *Broken:* an algorithm box becomes one paragraph, with its loops and conditions lost and lines sometimes duplicated or out of order: 10 of the 103 read PDF papers, among them Ad Click Prediction, DiskANN, HNSW, "Efficient set intersection for inverted indexing", CatBoost, "From RankNet to LambdaRank to LambdaMART", "Winning The Transfer Learning Track of Yahoo!'s Learning To Rank Challenge…", "Detecting hallucinations in large language models using semantic entropy", "Reinforcement Learning for LLM Post-Training. A Survey". The prose or the equations next to it usually give the steps.
+    - *Fix:* write a box docling labels as code or as an algorithm as a fenced block, one PDF line per line, with the indentation from the words' x positions, and keep its mathematics inline.
+    - *Takes:* engine change, a fixture; reconvert these papers. No re-read.
+17. **Rows of a PDF table without rules collapse into one row.**
+    - *Broken:* the values of several rows land in one cell, readable only by order: 18 of the 103 read PDF papers, among them "Learning to Rank using Gradient Descent" Table 6, "Accuracy at the Top" Table 1, "Reciprocal rank fusion…" Table 1, "Expected Reciprocal Rank for Graded Relevance" Table 2 and the email papers' Tables 1–2. CatBoost Table 4, where the values ended in the wrong rows, was rewritten by hand on 2026-10-16.
+    - *Fix:* split a cell holding several values when the text layer puts them on separate lines aligned with the row labels, or try the table model MinerU uses on these papers.
+    - *Takes:* engine change and a comparison on these papers; reconvert them. A re-read only where a results table was involved.
+
+## B. Waiting
 
 - **OpenCV is held at 4.12** ([`experiments/ocr-engines`](../../experiments/ocr-engines/README.md)); it crashed one paper of the 2026-10-14 run all the same. Lift the pin, and the numpy override that goes with it, when a release converts "Canaries in the Coal Mine" ten times without a crash.
 
-## D. By hand
+## C. By hand
 
-- **Old PDFs with a broken text layer** ("Long Short-Term Memory", "The power of two random choices", "The Anatomy of a Large-Scale Hypertextual Web Search Engine") lose ligatures and, for LSTM, headings and equations; the Google paper is a scan whose OCR garbled headings and numbers (its two tables were rewritten by hand). Replace each PDF with a cleaner copy, then reconvert.
+- **Old PDFs with a broken text layer** ("Long Short-Term Memory", "The power of two random choices", "The Anatomy of a Large-Scale Hypertextual Web Search Engine", "The Use of MMR, Diversity-Based Reranking…", whose OCR reads λ as "~", "X" or "k" and collapses Table 3) lose ligatures and, for LSTM, headings and equations; the Google paper is a scan whose OCR garbled headings and numbers (its two tables were rewritten by hand). Replace each PDF with a cleaner copy, then reconvert.
 - **"Memory in the Age of AI Agents"** is edited by hand, so it keeps "§ what-memory" for Section 3. A reconversion with `--force` resolves such references from the LaTeX source; its cropped Figure 1 has to be put back after.
