@@ -19,4 +19,4 @@ cost: "engine: small, fixtures; reconvert 20 papers"
 
 **Cost.** Engine: small, fixtures; reconvert 20 papers.
 
-**Examples.** See `paperlib symptoms` for the papers.
+**Examples.** See `paperlib symptoms` for the papers. TableShift's tables (Tables 1, 3, 13–15): `true` between digit groups, from a number-formatting macro (`-34.485true838`), in 182 numbers.

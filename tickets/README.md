@@ -30,27 +30,32 @@ Papers and key-content counts from the library `papers` on 2026-10-16.
 | [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 24 | 5 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 41 | 3 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
 | [Colour marking with more than one colour is dropped](html-table-colours.md) | `engine` `reconvert` `reread` | open | 28 | 3 | engine: small, measured as in experiments/table-emphasis; reconvert the papers; re-read three |
+| [PDF tables taken for pictures](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 2 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 77 | 1 | unknown until its sub-causes are found |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 15 | 1 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [Bold in PDF tables is dropped](pdf-table-bold.md) | `engine` `reconvert` `reread` | open | 12 | 1 | engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the bold carries a claim |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 47 |  | unknown until its sub-causes are found |
-| [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 34 |  | unknown until its sub-causes are found |
-| [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 33 |  | unknown until its sub-causes are found |
+| [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 34 |  | unknown until its sub-causes are found |
 | [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 32 |  | unknown until its sub-causes are found |
 | [Wrong characters from a PDF's text layer](pdf-text-layer-errors.md) | `engine` `reconvert` | open | 30 |  | unknown until its sub-causes are found |
+| [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 28 |  | unknown until its sub-causes are found |
 | [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | open | 19 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
 | [PDF equations that are only their number](pdf-equation-number-only.md) | `engine` `reconvert` `reread` | open | 19 |  | engine: medium, measured on the papers; reconvert them overnight (about 3 hours); re-read those whose claims rest on the equations |
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 19 |  | engine: medium, a fixture; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
+| [LaTeXML's macros left in formulas](html-latexml-macros.md) | `engine` `reconvert` | open | 18 |  | engine: small, fixtures; reconvert 20 papers |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
-| [LaTeXML's macros left in formulas](html-latexml-macros.md) | `engine` `reconvert` | open | 17 |  | engine: small, fixtures; reconvert 20 papers |
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 12 |  | engine: medium; reconvert the papers overnight |
+| [Symbols set as small images in arXiv-HTML papers are lost](html-image-symbols.md) | `engine` `reconvert` | open | 8 |  | engine: small to medium (one vision-model call per distinct icon, cached); reconvert the papers with such icons |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 6 |  | engine: medium for one paper, or by hand |
+| [Underline, strikethrough and un-bold in arXiv's HTML are not read](html-text-marks.md) | `engine` `reconvert` | open | 3 |  | engine: small; reconvert the papers that use them |
 | [A hand-edited paper keeps an older converter's flaws](hand-edited-stale.md) | `by-hand` `reconvert` | open | 1 |  | by hand: reconvert with --force, then put the hand edit back |
+| [Links within an arXiv-HTML paper point to arxiv.org](html-self-links.md) | `engine` `reconvert` | open | 1 |  | engine: small; reconvert four papers |
+| [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open |  |  | engine: small; reaches the PDF papers with their next reconversion |
@@ -58,28 +63,39 @@ Papers and key-content counts from the library `papers` on 2026-10-16.
 
 ## Won't fix
 
-No cause is left as it is.
+Causes left as they are:
 
-Problems in single papers left as they are (34):
+- [Results printed only in a plot](wont-fix/figure-values-in-plots.md): the numbers are not in the paper as text, only in the plot (2 records)
+- [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
+- [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
+
+Problems in single papers left as they are (42):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
+| A Survey of Context Engineering for Large Language Models | p. 14, Table 2; p. 25, Table 5 | figure-numbering | small: the tables are only misplaced |
+| AdaGReS Adaptive Greedy Context Selection via Redundancy-Aware Scoring for Token-Budgeted RAG | pp. 10–12, Table 1 | figure-numbering | small: the table is only misplaced |
 | Cartridges. Lightweight and general-purpose long context representations via self-study | p. 20 | figure-numbering | small: the figure is only misplaced |
+| In-context Autoencoder for Context Compression in a Large Language Model | pp. 4–6, Table 4 | figure-numbering | small: the table is only misplaced |
+| Parameter-Efficient Transfer Learning for NLP | p. 1 | front-matter | small and isolated: only the H1 title is wrong, the frontmatter title is right |
 | Unbiased LambdaMART. An Unbiased Pairwise Learning-to-Rank Algorithm | throughout | hand-edited-stale | cosmetic |
+| MM-LLMs. Recent Advances in MultiModal Large Language Models | p. 4, Fig. 3 | html-empty-tree-leaves | small: readable as a nested list |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 1 | html-equation-garbled | small: readable from the prose |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 4 Theorem 3.2; p. 6 Theorem 4.2 | html-equation-garbled | small: the split equations are all readable |
 | Cartridges. Lightweight and general-purpose long context representations via self-study | p. 6, §3.2 | html-equation-garbled | small: readable, its two halves labelled inline |
 | Neural Ranking Models with Weak Supervision | p. 3, Eqs. 2-3 | html-equation-garbled | small: readable |
+| Reinforcement Learning. An Overview | pp. 52-57 | html-equation-garbled | small: two numbers of ellipsis rows |
 | Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset | p. 3, footnote 7 | html-equation-garbled | small and isolated: one footnote's token-id list |
+| Deep Reinforcement Learning, a textbook | table of contents | html-lost-labels | small: only the table of contents |
 | Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement | p. 5, Algorithm 1 | html-pseudocode | small and isolated; arXiv's HTML has the two lines joined |
 | Large language models can accurately predict searcher preferences | pp. 4–5, Table 1 | html-symbols-lost | arXiv's HTML has no ± in Table 1; a cell reads as the value, then its interval |
 | Large language models can accurately predict searcher preferences | prose | html-symbols-lost | small: arXiv's HTML collapses the dashes; readable |
 | Neural Ranking Models with Weak Supervision | p. 5, Table 2; pp. 5-9, Tables 3, 5 | html-symbols-lost | arXiv's HTML carries the wrong glyphs for the significance marks, and the captions say what they mean; the odd P@20 value is in the HTML too |
+| Rubrics as Rewards. Reinforcement Learning Beyond Verifiable Domains | p. 1 | html-symbols-lost | small: only footnote links |
 | BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval | p. 3, Table 1 | html-table-structure | small: the merged cells read by order |
 | Chain-of-Verification Reduces Hallucination in Large Language Models | p. 6, Table 1 | html-table-structure | small: Table 1's header spans sit one column off in arXiv's HTML, and the table reads by order |
+| Flamingo. a Visual Language Model for Few-Shot Learning | pp. 1-3, Figure 1 | html-table-structure | small: an illustration of prompts; nothing rests on it |
 | Neural Ranking Models with Weak Supervision | pp. 5-9, Table 4 | html-table-structure | the odd P@20 value is in arXiv's HTML too |
-| Parameter-Efficient Transfer Learning for NLP | p. 1 | new | small and isolated: only the H1 title is wrong, the frontmatter title is right |
-| Rubrics as Rewards. Reinforcement Learning Beyond Verifiable Domains | p. 1 | new | small: only footnote links |
 | Anatomy of a Privacy-Safe Large-Scale Information Extraction System Over Email | pp. 1-2 | pdf-reading-order | small: the bullets are out of order but readable |
 | Privacy-Aware Personalized Entity Representations for Improved User | p. 3, Figure 2 | pdf-reading-order | small: readable |
 | Privacy-Aware Personalized Entity Representations for Improved User | p. 1 | pdf-reading-order | small: readable |
@@ -98,6 +114,7 @@ Problems in single papers left as they are (34):
 | Privacy-Aware Personalized Entity Representations for Improved User | p. 6, Table 4; p. 7, Table 5 | pdf-table-structure | small: the tables read by row order |
 | Information Retrieval System Evaluation. Effort, Sensitivity, and Reliability | p. 4 | pdf-text-layer-errors | small: a few ranges lost their dash |
 | Search Snippet Evaluation at Yandex. Lessons Learned and Future Directions | pp. 6–8, Table 1 | pdf-text-layer-errors | the PDF's text layer itself splits each line into clipped fragments (p. 7); the findings are in Tables 2–6, which read cleanly |
+| Why Momentum Really Works | p. 7, p. 9, p. 13 | web-conversion | small: readable in order |
 
 ## Done
 
