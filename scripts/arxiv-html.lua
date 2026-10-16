@@ -496,7 +496,33 @@ end
 local FONTS = {
   { "ltx_font_bold", "Strong" }, { "ltx_font_italic", "Emph" },
   { "ltx_underline", "Underline" }, { "ltx_framed_underline", "Underline" },
+  -- The ulem package's \uline, \uuline and \sout.
+  { "ltx_ulem_uline", "Underline" }, { "ltx_ulem_uuline", "Underline" }, { "ltx_ulem_sout", "Strikeout" },
 }
+
+-- \mdseries inside bold ends the bold: the span is kept, marked, until the
+-- bold around it is split there (Span), and unwrapped in the last pass.
+local UNBOLD = "unbold"
+
+local function is_unbold(el)
+  return el.t == "Span" and el.classes:includes(UNBOLD)
+end
+
+-- Bold content as runs: bold up to each unbold span, the span's own content plain.
+local function split_bold(content)
+  local runs, run = pandoc.List(), pandoc.List()
+  for _, el in ipairs(content) do
+    if is_unbold(el) then
+      if #run > 0 then runs:insert({ bold = true, content = run }) end
+      runs:insert({ bold = false, content = el.content })
+      run = pandoc.List()
+    else
+      run:insert(el)
+    end
+  end
+  if #run > 0 then runs:insert({ bold = true, content = run }) end
+  return runs
+end
 
 -- A space, or the no-break spaces LaTeXML pads a cell's text with.
 local function is_space(el)
@@ -521,6 +547,20 @@ local function trim_padding(text, at)
   return text
 end
 
+-- Content in a font mark, the spaces at either end outside it.
+local function font_mark(kind, content)
+  content = pandoc.List(content)
+  local before, after = pandoc.List(), pandoc.List()
+  while #content > 0 and is_space(content[1]) do before:insert(content:remove(1)) end
+  while #content > 0 and is_space(content[#content]) do after:insert(1, content:remove()) end
+  if #content == 0 then return before .. after end
+  -- The padding also comes joined to the first and the last word.
+  local first, last = content[1], content[#content]
+  if first.t == "Str" then first.text = trim_padding(first.text, "^") end
+  if last.t == "Str" then last.text = trim_padding(last.text, "$") end
+  return before .. pandoc.List({ pandoc[kind](content) }) .. after
+end
+
 function Span(el)
   local content = el.content
   -- A caption's "Table 7:" is matched as plain text (caption-numbers.py),
@@ -532,23 +572,33 @@ function Span(el)
   if not pandoc.utils.stringify(content):match("%S") then return content end
   -- Shading the converter kept (mark_shading in html-to-markdown.py).
   if el.classes:includes("mark") then
-    return pandoc.List({ pandoc.RawInline("html", "<mark>") }) .. content
+    -- The colour's name where the table has several: <mark class="red">.
+    local name = el.classes:filter(function(c) return c ~= "mark" end)[1]
+    local open = name and ('<mark class="' .. name .. '">') or "<mark>"
+    return pandoc.List({ pandoc.RawInline("html", open) }) .. content
       .. pandoc.List({ pandoc.RawInline("html", "</mark>") })
   end
+  local fonts = pandoc.List()
   for _, font in ipairs(FONTS) do
-    if el.classes:includes(font[1]) then
-      local kind = font[2]
-      -- Bold inside bold is still bold, and the spaces at either end stay outside the marks.
-      content = pandoc.Inlines(content):walk({ [kind] = function(inner) return inner.content end })
-      local before, after = pandoc.List(), pandoc.List()
-      while #content > 0 and is_space(content[1]) do before:insert(content:remove(1)) end
-      while #content > 0 and is_space(content[#content]) do after:insert(1, content:remove()) end
-      -- The padding also comes joined to the first and the last word.
-      local first, last = content[1], content[#content]
-      if first and first.t == "Str" then first.text = trim_padding(first.text, "^") end
-      if last and last.t == "Str" then last.text = trim_padding(last.text, "$") end
-      content = before .. pandoc.List({ pandoc[kind](content) }) .. after
+    if el.classes:includes(font[1]) then fonts:insert(font[2]) end
+  end
+  -- Striking out also comes as a style ("text-decoration:line-through").
+  if (el.attributes.style or ""):match("line%-through") then fonts:insert("Strikeout") end
+  for _, kind in ipairs(fonts) do
+    -- Bold inside bold is still bold.
+    content = pandoc.Inlines(content):walk({ [kind] = function(inner) return inner.content end })
+    if kind == "Strong" then
+      local split = pandoc.List()
+      for _, run in ipairs(split_bold(content)) do
+        split:extend(run.bold and font_mark(kind, run.content) or run.content)
+      end
+      content = split
+    else
+      content = font_mark(kind, content)
     end
+  end
+  if el.classes:includes("ltx_font_medium") then
+    return pandoc.Span(content, pandoc.Attr("", { UNBOLD }))
   end
   return content
 end
@@ -1026,5 +1076,6 @@ return {
     end },
   { Div = Div, Math = Math, Inlines = Inlines, Header = Header, Span = Span, Para = Para, Plain = Plain,
     Link = Link, Image = Image, Figure = Figure, Table = Table },
-  { Math = mark_math },
+  { Math = mark_math,
+    Span = function(el) if el.classes:includes(UNBOLD) then return el.content end end },
 }

@@ -36,18 +36,24 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
 10. Cross-references LaTeXML could not resolve keep their label as text.
 11. The warnings a conference style file typesets when a paper changed its
     page layout are dropped (see drop_style_warnings).
-12. Bold, italics and underlining are kept, and each footnote follows the
-    paragraph or table it annotates (both in arxiv-html.lua). Cell shading
-    is kept as <mark> where the caption refers to it (see mark_shading).
+12. Bold, italics, underlining and striking out are kept, and each footnote
+    follows the paragraph or table it annotates (both in arxiv-html.lua).
+    Cell shading and coloured text are kept as <mark> where the caption
+    refers to them, with the colour's name when there are several (see
+    mark_shading).
 13. The names of macros LaTeXML did not know are dropped, a value and the
     deviation printed small after it are set apart, and a column title's
     raised line is read first (see drop_undefined_macros, tidy_cells).
 14. A table panel gets the row labels it shares with the panel beside it,
     and a row label spanning a group of rows takes the group's last row
     (see share_panel_labels, extend_rowspans).
+15. A symbol set as a small picture becomes its file's name or what a vision
+    model reads in it (see small_pictures, picture_text), and a link to the
+    paper's own arXiv page an in-page link (see local_links).
 """
 
 import base64
+import colorsys
 import functools
 import gzip
 import html
@@ -64,7 +70,7 @@ from pathlib import Path
 
 from lxml import etree
 
-from paperlib import fetch, localize_figures, to_webp
+from paperlib import fetch, localize_figures, read_icon, to_webp
 
 FILTER = Path(__file__).with_name("arxiv-html.lua")
 EXTS = {"svg+xml": "svg", "png": "png", "jpeg": "jpg", "gif": "gif", "webp": "webp"}
@@ -280,6 +286,52 @@ def picture_kind(svg):
     return "diagram" if paths > 15 else "box"
 
 
+# The largest side, in pixels or points, of a picture that is a symbol in the text rather than a figure.
+ICON_SIDE = 40
+
+
+def icon_html(data):
+    """A small picture as text (see paperlib.read_icon): a symbol as it is, a name as a
+    label ("[OpenAI]"), "" for one that draws nothing; None when it was not read."""
+    text = read_icon(data)
+    if text is None:
+        return None
+    return html.escape(text if len(text) <= 2 else f"[{text}]")
+
+
+def small_pictures(article, version):
+    """Read the small pictures LaTeXML sets as <img> or <object> (a check mark in a
+    table cell, a logo before a model's name), whose alt text is a placeholder.
+
+    A file name that says what the picture is ("yes", "bert_bw") becomes its alt
+    text; arXiv gives an <object> none at all, and pandoc drops it. Otherwise the
+    picture is read by a vision model (icon_html) and replaced by what it shows.
+    """
+    def replace(m):
+        tag, kind = m.group(0), m.group(1) or m.group(2)
+        size = [int(v) for v in re.findall(r'\b(?:width|height)="(\d+)"', tag[:tag.index(">")])]
+        src = re.search(r'\b(?:src|data)="([^"]+)"', tag)
+        if len(size) != 2 or max(size) > ICON_SIDE or not src:
+            return tag
+        if kind == "img" and 'alt="[Uncaptioned image]"' not in tag:
+            return tag
+        path = html.unescape(src.group(1))
+        name = Path(path).stem if not path.startswith("data:") else ""
+        if name and not GENERIC_NAME.fullmatch(name):
+            return tag if kind == "img" else f'<img src="{src.group(1)}" alt="{html.escape(name)}" />'
+        if path.startswith("data:"):
+            data = base64.b64decode(path.partition(",")[2] or "")
+        elif re.match(r"\d{4}\.\d{4,5}v\d+/", path) or version:
+            data = fetch("https://arxiv.org/html/" + (path if re.match(r"\d{4}\.\d{4,5}v\d+/", path) else f"{version}/{path}"))
+        else:
+            data = None
+        reading = icon_html(data) if data else None
+        return tag if reading is None else reading
+
+    return re.sub(r'<(img)\b[^>]*>|<(object)\b[^>]*\btype="image/[^"]*"[^>]*>.*?</object\s*>',
+                  replace, article, flags=re.S)
+
+
 def picture_text(svg, save):
     """What to put in the markdown for one LaTeXML picture.
 
@@ -297,10 +349,17 @@ def picture_text(svg, save):
         return f'<img src="{save("svg+xml", svg.encode("utf-8"))}" alt="" />'
 
     kind = picture_kind(svg)
-    blocks = foreign_objects(svg)
+    # A TikZ node or a box sets its text in the medium series, which says nothing of the bold around it.
+    blocks = [re.sub(r"\bltx_font_medium\b", "", block) for block in foreign_objects(svg)]
     if kind == "badge":
         return f"<span>{' '.join(blocks)}</span>"
     if kind == "image":
+        size = [float(v) for v in re.findall(r'\b(?:width|height)="([\d.]+)"', re.match(r"<svg\b[^>]*>", svg).group(0))]
+        if len(size) == 2 and max(size) <= ICON_SIDE and not any(map(words, blocks)):
+            # The same drawing used twice differs only in its ids.
+            reading = icon_html(repair_svg(re.sub(r'\s(?:xml:)?id="[^"]*"', "", svg)).encode("utf-8"))
+            if reading is not None:
+                return reading
         return image()
     parts = []
     for k, block in enumerate(blocks):
@@ -532,6 +591,16 @@ def paper_version(page):
         if m:
             return m.group(1)
     return None
+
+
+def local_links(article, version):
+    """Make a link to a place in the paper's own arXiv page ("https://arxiv.org/html/2302.07730v4#S1.SS1",
+    any version) the in-page link "#S1.SS1". Some renderings write their table of contents and
+    cross-references that way, and they would leave the markdown."""
+    if not version:
+        return article
+    paper = re.escape(version.rpartition("v")[0])
+    return re.sub(rf'(<a\b[^>]*\bhref=")https?://arxiv\.org/html/{paper}(?:v\d+)?/?(?=#)', r"\1", article)
 
 
 @functools.cache
@@ -1119,6 +1188,10 @@ CAPTION_TYPE = re.compile(r'<span\b[^>]*\bclass="ltx_ERROR undefined"[^>]*>\\Dec
                           r'<p\b[^>]*>[^<]*\[[^<]*</p>')
 
 
+# ulem's \uline takes one token: "\uline 80.84" underlines the "8" alone.
+PART_UNDERLINED = re.compile(r'(<span\b[^>]*\bclass="[^"]*\bltx_ulem_uu?line\b[^"]*"[^>]*>[\d.,]+)</span>([\d.,]*\d)')
+
+
 def tidy_cells(article):
     """Set apart what LaTeX placed with a size, a colour or a raise.
 
@@ -1126,7 +1199,10 @@ def tidy_cells(article):
     arrives with no space between them ("0.340.01", "70.9+2.3"); it gets one.
     A column title set on two lines arrives lower line first, the upper one
     raised above it ("Pro" then "Gemini 2.5"); the raised line goes first.
+    A number underlined from its first digit only ("\\uline 80.84") is
+    underlined whole.
     """
+    article = PART_UNDERLINED.sub(r"\1\2</span>", article)
     article = CELL.sub(lambda cell: ANNOTATION.sub(r"\1 \2", cell.group(0)), article)
     return RAISED.sub(lambda m: f"{m.group(2)} {m.group(1)}" if float(m.group(3)) >= 8 else m.group(0), article)
 
@@ -1257,6 +1333,149 @@ def shading_pattern(rows):
     return "some cells" if shaded <= total / 3 else "many cells"
 
 
+# The colour words a caption names a table's colours by.
+COLOUR_WORD = re.compile(r"\b(red|pink|orange|yellow|gold|green|olive|lime|cyan|teal|turquoise|blue|navy|purple"
+                         r"|violet|magenta|brown|gr[ae]y)(?:ed|ish)?\b", re.I)
+COLOUR_SYNONYMS = {"grey": "gray", "gold": "yellow", "olive": "green", "lime": "green", "teal": "cyan",
+                   "turquoise": "cyan", "navy": "blue", "violet": "purple", "magenta": "pink"}
+# The hues next to each that a caption may mean by it: "red" for a light red the hue calls pink.
+NEAR_HUES = {"red": ("pink", "orange", "brown"), "pink": ("red", "purple"), "orange": ("red", "yellow", "brown"),
+             "yellow": ("orange",), "brown": ("orange", "red"), "green": ("cyan",), "cyan": ("green", "blue"),
+             "blue": ("cyan", "purple"), "purple": ("blue", "pink"), "gray": ()}
+# A caption about the colour of the numbers rather than of the cells ("gray numbers", "grayed out").
+TEXT_IN_COLOUR = re.compile(r"\b(?:red|pink|orange|yellow|gold|green|cyan|teal|blue|purple|violet|brown|gr[ae]y)"
+                            r"\s+(?:numbers?|text|font|values?|entries|scores?|words?)\b|\bgr[ae]yed\b", re.I)
+LAYER_COLOUR = {"bg": re.compile(r"--ltx-bg-color:\s*(#[0-9A-Fa-f]{6})"),
+                "fg": re.compile(r"--ltx-fg-color:\s*(#[0-9A-Fa-f]{6})")}
+# Colours that mark nothing: black or white, as text or as a fill. White text and a
+# black fill go with a fill or a text of another colour, which is the one marked.
+NO_COLOUR = ("white", "black")
+
+
+def hue_name(hex_colour):
+    """The plain name of a colour ("#B22222" is "red", "#E6E6E6" "gray")."""
+    r, g, b = (int(hex_colour[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    hue, light, saturation = colorsys.rgb_to_hls(r, g, b)
+    hue *= 360
+    if saturation < 0.15 or max(r, g, b) - min(r, g, b) < 0.08:
+        return "black" if light < 0.12 else "white" if light > 0.97 else "gray"
+    for bound, name in ((15, "red"), (45, "orange"), (70, "yellow"), (165, "green"), (195, "cyan"),
+                        (255, "blue"), (290, "purple"), (345, "pink"), (361, "red")):
+        if hue < bound:
+            if name == "red" and light > 0.8:
+                return "pink"
+            return "brown" if name == "orange" and light < 0.35 else name
+
+
+def coloured_spans(fragment, layer):
+    """(start, end, colour) of each span of a fragment set in a colour, its content's bounds."""
+    out = []
+    for m in re.finditer(rf'<span\b[^>]*--ltx-{layer}-color:\s*(#[0-9A-Fa-f]{{6}})[^>]*>', fragment):
+        end = balanced_end(fragment, m.start(), "span")
+        colour = m.group(1).lower()
+        if end and hue_name(colour) not in NO_COLOUR:
+            out.append((m.end(), fragment.rindex("</span", 0, end), colour))
+    return out
+
+
+def cell_colours(float_html, layer):
+    """A table float's rows as lists of (start, end, colour) for each cell's content:
+    the colour of its background ("bg") or text ("fg"), or None. A cell has a colour
+    when its own style sets it, or nearly all its text sits in spans of that colour."""
+    rows = []
+    for row in TABLE_ROW.finditer(float_html):
+        cells = []
+        for cell in TABLE_CELL.finditer(row.group(1)):
+            own = LAYER_COLOUR[layer].search(cell.group(2))
+            colour = own.group(1).lower() if own else None
+            if colour is None or hue_name(colour) in NO_COLOUR:
+                colour, text = None, len(cell_text(cell.group(3)))
+                inner = {}
+                for a, b, c in coloured_spans(cell.group(3), layer):
+                    inner[c] = inner.get(c, 0) + len(cell_text(cell.group(3)[a:b]))
+                best = max(inner, key=inner.get, default=None)
+                if best and text and inner[best] >= 0.8 * text:
+                    colour = best
+            cells.append((row.start(1) + cell.start(3), row.start(1) + cell.end(3), colour))
+        if cells:
+            rows.append(cells)
+    return rows
+
+
+def caption_colours(caption, colours):
+    """{(layer, colour): name} for the table's colours the caption refers to: those it
+    names ("the red denotes the highest"), by its own word, and those its own text is
+    set in (a legend: "✓ explicitly covered" with the ✓ in green), by their hue."""
+    words = dict.fromkeys(w.group(1).lower() for w in COLOUR_WORD.finditer(cell_text(caption)))
+    referred = {}
+    for near in (False, True):
+        for word in words:
+            base = COLOUR_SYNONYMS.get(word, word)
+            if near and word in referred.values():
+                continue
+            for key in colours:
+                if key not in referred and hue_name(key[1]) in (NEAR_HUES.get(base, ()) if near else (base,)):
+                    referred[key] = word
+    for layer in ("bg", "fg"):
+        for _, _, colour in coloured_spans(caption, layer):
+            if (layer, colour) in colours and (layer, colour) not in referred:
+                referred[(layer, colour)] = hue_name(colour)
+    # A colour named for both the cells and their text is the one the caption's words point at.
+    by_label = {}
+    for (layer, colour), label in referred.items():
+        by_label.setdefault(label, set()).add(layer)
+    keep = "fg" if TEXT_IN_COLOUR.search(cell_text(caption)) else "bg"
+    return {key: label for key, label in referred.items() if len(by_label[label]) == 1 or key[0] == keep}
+
+
+def mark_named_colours(body):
+    """Mark the cells of each colour a table's caption refers to, with the colour's
+    name where the table has several (<mark class="red">), or None if it refers to none."""
+    layers = {layer: cell_colours(body, layer) for layer in ("bg", "fg")}
+    colours = {(layer, c) for layer, rows in layers.items() for row in rows for _, _, c in row if c}
+    captions = [(m.start(), m.end()) for m in re.finditer(r"<figcaption\b.*?</figcaption>", body, re.S)]
+    caption = " ".join(body[a:b] for a, b in captions)
+    referred = caption_colours(caption, colours)
+    marks = []  # (start, end, label), and "■" for a legend's empty box
+    for (layer, colour), label in referred.items():
+        cells = layers[layer]
+        flags = [[c == colour for _, _, c in row] for row in cells]
+        pattern = shading_pattern(flags)
+        if pattern not in ("some rows", "some cells", "many cells", "whole columns"):
+            continue
+        if pattern == "whole columns":
+            width = max(map(len, cells))
+            for i in range(width):
+                column = [row[i] for row in cells if len(row) == width]
+                if sum(c == colour for _, _, c in column) >= 0.8 * len(column):
+                    marks.append((*column[0][:2], label))
+        else:
+            for row, row_flags in zip(cells, flags):
+                if len(row) > 1 and all(row_flags[1:]):
+                    marks.append((*row[0][:2], label))
+                else:
+                    marks += [(a, b, label) for a, b, c in row if c == colour]
+        # A legend in the caption: its coloured mark (an empty box is "■") says which is which.
+        for a, b in captions:
+            for x, y, c in coloured_spans(body[a:b], layer):
+                if c == colour and not re.search(rf"\b{label}", cell_text(body[a + x:a + y]), re.I):
+                    marks.append((a + x, a + y, label, "■"))
+    if not marks:
+        return None
+    plain = len({m[2] for m in marks}) == 1 and len(colours) == 1
+    kept, reach = [], -1
+    for mark in sorted(set(marks)):
+        if mark[0] >= reach:  # a span inside one already marked is not marked again
+            kept.append(mark)
+            reach = mark[1]
+    for a, b, label, *box in reversed(kept):
+        inner = body[a:b] if cell_text(body[a:b]) else "".join(box)
+        if inner:
+            tag = "<mark>" if plain else f'<mark class="{label}">'
+            body = f"{body[:a]}{tag}{inner}</mark>{body[b:]}"
+    return body
+
+
 def mark_shading(article, rule=None):
     """Keep the cell shading that says something, as <mark>.
 
@@ -1265,8 +1484,12 @@ def mark_shading(article, rule=None):
     It is kept only where the caption refers to it ("gray rows are ..."),
     since the caption would otherwise point at nothing: a shaded cell's
     content is marked, a row shaded from end to end on its first cell only,
-    a shaded column on its top cell. A table shaded in several colours is
-    left alone, as one mark cannot say which colour a cell had.
+    a shaded column on its top cell. Where the caption names a colour, or
+    shows it in a legend of its own ("✓ explicitly covered" with the ✓ in
+    green), the cells in that colour are marked, the colour's name added
+    when the table has several (<mark class="red">), and the legend's marks
+    too (see mark_named_colours). Several colours the caption does not refer
+    to are left alone, as one mark cannot say which colour a cell had.
 
     A table without shading whose caption refers to the colour of its text
     ("excluded topics are in gray") is treated the same: its cells set
@@ -1281,6 +1504,11 @@ def mark_shading(article, rule=None):
         if m.start() < pos or end is None:
             continue
         body = article[m.start():end]
+        named = mark_named_colours(body) if rule == "caption" else None
+        if named is not None:
+            out += [article[pos:m.start()], named]
+            pos = end
+            continue
         colour = BACKGROUND
         rows = shaded_cells(body) if "--ltx-bg-color" in body else []
         if not rows and "--ltx-fg-color" in body:
@@ -1699,6 +1927,7 @@ def main(html_path, body_path, images_dir, basename):
     # ("x1.png", "extracted/..."); the figure download needs the full path.
     base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
     article = extract_article(page)
+    article = local_links(article, paper_version(page))
     article = clean_math(article)
     article = drop_invisible(article)
     article = close_runaway_floats(article)
@@ -1723,6 +1952,7 @@ def main(html_path, body_path, images_dir, basename):
     article = bare_year_citations(article)
     article = extract_svgs(article, save)
     article = lift_blocks(article)
+    article = small_pictures(article, paper_version(page))
     article = objects_to_images(article)
     article = name_uncaptioned_images(article)
     body = subprocess.run(

@@ -29,7 +29,6 @@ Papers and key-content counts from the library `papers` on 2026-10-16.
 | [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 34 | 5 | unknown until its sub-causes are found |
 | [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 24 | 5 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 41 | 3 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
-| [Colour marking with more than one colour is dropped](html-table-colours.md) | `engine` `reconvert` `reread` | open | 28 | 3 | engine: small, measured as in experiments/table-emphasis; reconvert the papers; re-read three |
 | [PDF tables taken for pictures](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 2 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 77 | 1 | unknown until its sub-causes are found |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 15 | 1 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
@@ -49,17 +48,16 @@ Papers and key-content counts from the library `papers` on 2026-10-16.
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 12 |  | engine: medium; reconvert the papers overnight |
-| [Symbols set as small images in arXiv-HTML papers are lost](html-image-symbols.md) | `engine` `reconvert` | open | 8 |  | engine: small to medium (one vision-model call per distinct icon, cached); reconvert the papers with such icons |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 6 |  | engine: medium for one paper, or by hand |
-| [Underline, strikethrough and un-bold in arXiv's HTML are not read](html-text-marks.md) | `engine` `reconvert` | open | 3 |  | engine: small; reconvert the papers that use them |
 | [A hand-edited paper keeps an older converter's flaws](hand-edited-stale.md) | `by-hand` `reconvert` | open | 1 |  | by hand: reconvert with --force, then put the hand edit back |
-| [Links within an arXiv-HTML paper point to arxiv.org](html-self-links.md) | `engine` `reconvert` | open | 1 |  | engine: small; reconvert four papers |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open |  |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
+| [Colour marking with more than one colour is dropped](html-table-colours.md) | `engine` `reconvert` `reread` | fixed | 22 |  | engine: small, measured as in experiments/table-emphasis; reconvert the papers; re-read three |
+| [Symbols set as small images in arXiv-HTML papers are lost](html-image-symbols.md) | `engine` `reconvert` | fixed | 2 |  | engine: small to medium (one vision-model call per distinct icon, cached); reconvert the papers with such icons |
 
 ## Won't fix
 
@@ -118,4 +116,7 @@ Problems in single papers left as they are (42):
 
 ## Done
 
-No ticket is done yet.
+Fixed and reconverted (2), latest first:
+
+- 2026-10-16: [Underline, strikethrough and un-bold in arXiv's HTML are not read](done/html-text-marks.md)
+- 2026-10-16: [Links within an arXiv-HTML paper point to arxiv.org](done/html-self-links.md)

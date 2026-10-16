@@ -8,7 +8,10 @@ html-to-markdown.py (and so the Lua filter); no network is used. Prints one
 line per check and exits non-zero if any fails.
 """
 
+import hashlib
 import importlib.util
+import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -26,8 +29,9 @@ def load(name):
     return module
 
 
-def convert(fragment):
-    """Markdown for an article fragment, and the image files it wrote."""
+def convert(fragment, env=None):
+    """Markdown for an article fragment, and the image files it wrote. Small pictures are
+    not sent to a model unless `env` says so (PAPERLIB_ICONS)."""
     page = f'<html><body><div class="ltx_page_content">{fragment}</div></body></html>'
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -35,7 +39,7 @@ def convert(fragment):
         subprocess.run(
             [sys.executable, SCRIPTS / "html-to-markdown.py", tmp / "paper.html", tmp / "body.md",
              tmp / "images", "paper"],
-            check=True, capture_output=True, timeout=120,
+            check=True, capture_output=True, timeout=120, env={**os.environ, "PAPERLIB_ICONS": "off", **(env or {})},
         )
         images = sorted(p.name for p in (tmp / "images").glob("*")) if (tmp / "images").exists() else []
         return (tmp / "body.md").read_text(encoding="utf-8"), images
@@ -508,6 +512,70 @@ def checks():
     yield "text in a colour the caption refers to is marked", "<mark>47923</mark>" in md and md.count("<mark>") == 1
     md, _ = convert(coloured_table("Judging statistics for the two tasks."))
     yield "other coloured text is left plain", "<mark>" not in md and "47923" in md
+
+    def colour_table(cells, caption, row=""):
+        def text(colour, value):
+            return f'<span class="ltx_text" style="--ltx-fg-color:{colour};">{value}</span>' if colour else value
+        rows = "".join(f'<tr class="ltx_tr" {row if k == 0 else ""}><td class="ltx_td">M{k}</td>'
+                       + "".join(f'<td class="ltx_td">{text(c, v)}</td>' for c, v in line) + "</tr>"
+                       for k, line in enumerate(cells))
+        return ('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">Model</td>'
+                '<td class="ltx_td">A</td><td class="ltx_td">B</td></tr>' + rows + '</table><figcaption class="ltx_caption">'
+                f'<span class="ltx_tag ltx_tag_table">Table 2: </span>{caption}</figcaption></figure>')
+    red, blue, gray = "#B22222", "#0000FF", "#A6A6A6"
+    md, _ = convert(colour_table([[(red, "85.9"), (blue, "60.1")], [(blue, "80.6"), (red, "62.0")], [(None, "70.0"), (None, "50.0")]],
+                                 "Results. The red denotes the highest result, and the blue the second highest."))
+    yield "each colour a caption names is marked with its name", (
+        '<mark class="red">85.9</mark>' in md and '<mark class="blue">80.6</mark>' in md and md.count("<mark") == 4)
+    md, _ = convert(colour_table([[(None, "48.8"), (None, "50.1")], [(gray, "29.3"), (None, "43.4")], [(None, "70.0"), (gray, "50.0")]],
+                                 "Results. Gray numbers indicate usage of closed-set training data.",
+                                 row='style="--ltx-bg-color:#E6E6E6;"'))
+    yield "a caption about gray numbers marks the numbers, not a gray row", (
+        "<mark>29.3</mark>" in md and "<mark>50.0</mark>" in md and "M0</mark>" not in md and md.count("<mark") == 2)
+    green = "#1B8E3E"
+    md, _ = convert(colour_table([[(green, "✓"), (gray, "✓")], [(gray, "✓"), (None, "✗")], [(green, "✓"), (None, "✗")]],
+                                 f'Marks: <span class="ltx_text" style="--ltx-fg-color:{green};">✓</span>: covered; '
+                                 f'<span class="ltx_text" style="--ltx-fg-color:{gray};">✓</span>: partly covered; ✗: not covered.'))
+    yield "a legend set in the table's colours marks both", (
+        '<mark class="green">✓</mark>: covered' in md and '<mark class="gray">✓</mark>: partly' in md
+        and md.count('<mark class="green">') == 3 and md.count('<mark class="gray">') == 3)
+
+    md, _ = convert('<p class="ltx_p">The analytical ones in <span class="ltx_text ltx_font_bold">green<span class="ltx_text '
+                    'ltx_font_medium"> are from (13). The empirical</span></span> ones.</p><p class="ltx_p">A '
+                    '<span class="ltx_text ltx_ulem_uline ltx_font_bold">0.81</span>, <span class="ltx_text ltx_ulem_uline">0.7'
+                    '</span>, <span class="ltx_text" style="text-decoration:line-through;;">93.2</span> and <span class="ltx_text '
+                    'ltx_font_medium">plain</span>.</p>')
+    yield "\\mdseries ends the bold around it", "**green** are from (13). The empirical ones." in md
+    yield "ulem's underline and a struck-out value are kept", (
+        "<u>**0.81**</u>" in md and "<u>0.7</u>" in md and "~~93.2~~" in md and " plain." in md)
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">GPT-4</td><td class="ltx_td">'
+                    '<span class="ltx_text ltx_ulem_uline">8</span>0.84</td><td class="ltx_td">87.6</td></tr></table>')
+    yield "a number underlined from its first digit is underlined whole", "<u>80.84</u>" in md
+
+    h2m = load("html-to-markdown")
+    yield "links to the paper's own arXiv page stay in the paper", h2m.local_links(
+        '<a href="https://arxiv.org/html/2302.07730v4#S1.SS1">1.1</a> <a href="https://arxiv.org/html/2302.07730#S2">2</a> '
+        '<a href="https://arxiv.org/html/2401.00001v1#S2">other</a>', "2302.07730v4") == (
+        '<a href="#S1.SS1">1.1</a> <a href="#S2">2</a> <a href="https://arxiv.org/html/2401.00001v1#S2">other</a>')
+
+    cross = ('<svg id="S3.T2.pic1" class="ltx_picture" height="10.02" overflow="visible" version="1.1" viewBox="0 0 10.02 10.02" '
+             'width="10.02"><g fill="#000000" stroke="#000000" transform="translate(0,10.02) matrix(1 0 0 -1 0 0)">'
+             '<path style="fill:none" d="M 0 0 C 3.16 3.9 5.16 5.9 9.05 9.05"></path>'
+             '<path style="fill:none" d="M 1.81 8.6 C 3.77 5.3 4.95 3.53 7.24 0.45"></path></g></svg>')
+    empty = ('<svg id="alg1.l2.pic3" class="ltx_picture" height="1" overflow="visible" version="1.1" viewBox="0 0 1 1" width="1">'
+             '<g transform="translate(0,1) matrix(1 0 0 -1 0 0)"></g></svg>')
+    with tempfile.TemporaryDirectory() as cache:
+        drawn = h2m.repair_svg(re.sub(r'\s(?:xml:)?id="[^"]*"', "", cross)).encode("utf-8")
+        (Path(cache) / "icons").mkdir()
+        (Path(cache) / "icons" / (hashlib.sha256(drawn).hexdigest() + ".txt")).write_text("✗", encoding="utf-8")
+        md, images = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">Repo</td><td class="ltx_td">Unbiased?</td>'
+                             f'<td class="ltx_td">Yes</td></tr><tr class="ltx_tr"><td class="ltx_td">trl</td><td class="ltx_td">{cross}</td>'
+                             '<td class="ltx_td"><object type="image/svg+xml" data="yes.svg" width="10" height="1"></object>'
+                             f'</td></tr></table><p class="ltx_p">Step{empty} one.</p>',
+                             env={"PAPERLIB_ICONS": "haiku", "PAPERS_CACHE": cache})
+    yield "a small drawn symbol is read as text, by its cached reading", bool(re.search(r"\| trl +\| ✗ +\|", md))
+    yield "a small <object> keeps its file's name, an empty picture goes", (
+        "![yes](yes.svg)" in md and "Step one." in md and not images)
 
     def panel(rows, label):
         body = "".join('<tr class="ltx_tr">' + "".join(f'<td class="ltx_td">{c}</td>' for c in row) + "</tr>" for row in rows)

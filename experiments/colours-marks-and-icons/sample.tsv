@@ -1,0 +1,30 @@
+experimentation-and-metrics/causal-inference/A Large Scale Heterogeneous Treatment Effect Estimation Framework and Its Applications of Users'.md
+recommender-systems/llm-and-generative/RecAI. Leveraging Large Language Models for Next-Generation Recommender Systems.md
+llm/safety-and-privacy/Can LLMs Keep a Secret. Testing Privacy Implications of Language Models via Contextual Integrity.md
+llm/reasoning/Demystifying Long Chain-of-Thought Reasoning in LLMs.md
+nlp/pretrained-language-models/BART. Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and.md
+nlp/tasks-and-methods/Entity Matching using Large Language Models.md
+llm/personalization/methods/Cold-Start Personalization via Training-Free Priors from Structured World Models.md
+llm/retrieval-augmented/Unifying Large Language Models and Knowledge Graphs. A Roadmap.md
+llm/efficiency/AWQ. Activation-aware Weight Quantization for LLM Compression and Acceleration.md
+llm/post-training/fine-tuning/Olmo 3.md
+graphs/graph-embeddings/RotatE. Knowledge Graph Embedding by Relational Rotation in Complex Space.md
+deep-learning/theory/Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability.md
+recommender-systems/deep-and-sequential/Turning Dross Into Gold Loss. is BERT4Rec really better than SASRec.md
+llm/text-analytics/Sparse Autoencoders for Hypothesis Generation.md
+search-and-ranking/neural-ranking/End-to-End Neural Ad-hoc Ranking with Kernel Pooling.md
+llm/reasoning/Thinking LLMs. General Instruction Following with Thought Generation.md
+llm/agents/Codebase-Memory. Tree-Sitter-Based Knowledge Graphs for LLM Code Exploration via MCP.md
+llm/retrieval-augmented/Active Retrieval Augmented Generation.md
+llm/architecture/recurrent-and-state-space/Learning to (Learn at Test Time). RNNs with Expressive Hidden States.md
+deep-learning/architectures/Very Deep Convolutional Networks for Large-Scale Image Recognition.md
+generative-models/gans-and-vaes/Normalizing Flows. An Introduction and Review of Current Methods.md
+recommender-systems/llm-and-generative/OneRec Technical Report.md
+reinforcement-learning/world-models/Transformers are Sample-Efficient World Models.md
+robotics-and-embodied/Octo. An Open-Source Generalist Robot Policy.md
+ml-systems/distributed-training/Harmony. Overcoming the Hurdles of GPU Memory Capacity to Train Massive DNN Models on Commodity.md
+reinforcement-learning/deep-rl/Playing Atari with Deep Reinforcement Learning.md
+representation-learning/embeddings/Advances in Pre-Training Distributed Word Representations.md
+ml-systems/distributed-training/Ray. A Distributed Framework for Emerging AI Applications.md
+ml-systems/inference-and-serving/FlashAttention-3. Fast and Accurate Attention with Asynchrony and Low-precision.md
+nlp/generation-metrics/BARTScore. Evaluating Generated Text as Text Generation.md

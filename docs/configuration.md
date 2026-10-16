@@ -12,6 +12,7 @@ A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it
 | `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder and summary ([measured](../experiments/skill-models/README.md)). |
 | `info_model` | `sonnet` | The model `paperlib info` asks what a paper proposes and how it relates to the folder's papers. |
 | `reader_model` | `opus` | The model `paperlib read` gives each paper to for its note ([measured](../experiments/reading-models/README.md)). |
+| `icon_model` | `haiku` | The model that reads a symbol or logo an arXiv paper sets as a small picture, once per distinct picture, cached ([measured](../experiments/colours-marks-and-icons/README.md)); `off` keeps them as pictures. `PAPERLIB_ICONS` overrides it. |
 | `cache` | `~/.cache/papers` | arXiv downloads (HTML, figures, LaTeX sources) and marker's environment, shared by every library. |
 | `chrome` | found on PATH, then the macOS app | Headless Chrome, for web articles. |
 

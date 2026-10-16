@@ -1,0 +1,19 @@
+vision-and-multimodal/vision/SAM 3. Segment Anything with Concepts.md
+vision-and-multimodal/speech-and-audio/End-to-end Piano Performance-MIDI to Score Conversion with Transformers.md
+llm/memory/agent/A Survey of Agent Memory in the Second Half. Towards Self-Evolving and Long-Horizon Agents.md
+vision-and-multimodal/vision-language/MM-LLMs. Recent Advances in MultiModal Large Language Models.md
+llm/evaluation/methods/Checklists Are Better Than Reward Models For Aligning Language Models.md
+nlp/generation-metrics/Word Rotator's Distance.md
+nlp/generation-metrics/TRUE. Re-evaluating Factual Consistency Evaluation.md
+deep-learning/normalization-and-regularization/Batch Normalization Explained.md
+llm/evaluation/benchmarks/Spider 2.0. Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows.md
+llm/post-training/rl-for-reasoning/Understanding R1-Zero-Like Training. A Critical Perspective.md
+nlp/tasks-and-methods/The Harvard USPTO Patent Dataset. A Large-Scale, Well-Structured, and Multi-Purpose Corpus of.md
+nlp/tasks-and-methods/Robustness Gym. Unifying the NLP Evaluation Landscape.md
+nlp/pretrained-language-models/To Tune or Not to Tune. Adapting Pretrained Representations to Diverse Tasks.md
+nlp/pretrained-language-models/EuroBERT. Scaling Multilingual Encoders for European Languages.md
+llm/post-training/data/OpenThoughts. Data Recipes for Reasoning Models.md
+llm/foundation-models/Transformer models. an introduction and catalog.md
+ml-systems/inference-and-serving/MegaScale-Infer. Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism.md
+reinforcement-learning/world-models/Mastering Diverse Domains through World Models.md
+llm/agents/ReTool. Reinforcement Learning for Strategic Tool Use in LLMs.md

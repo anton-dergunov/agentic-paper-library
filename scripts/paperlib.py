@@ -370,6 +370,75 @@ def ask_model(model, system, prompt):
         "output": usage.get("output_tokens", 0), "usd": reply.get("total_cost_usd")}
 
 
+# A symbol or a logo a paper sets as a small picture, in a table cell or a sentence.
+ICON_PROMPT = (
+    "This small picture is set inline in a research paper, in a table cell or a sentence. Reply with "
+    "only what a reader sees in it: one Unicode symbol when one fits (✓ ✗ ○ ● ◐ ★ ☆ ▲ ▼ ❄ 🔥 🔒); for a "
+    "plain coloured shape (a dot, a square, a bar) its colour and the shape (\"green ●\"); else a word or "
+    "two naming a logo, an emoji, or the letter or number drawn in it. Reply - if it is blank.")
+# Which model reads them (`icon_model` in paper-library.yaml); "off" leaves them as pictures.
+ICON_MODEL = os.environ.get("PAPERLIB_ICONS") or CONFIG.get("icon_model", "haiku")
+
+
+def read_icon(data):
+    """What a small picture (SVG or raster bytes) shows, as text: "✓", "OpenAI"; "" when
+    it draws nothing; None when it could not be read (the picture then stays a picture).
+
+    One request to a vision model per distinct picture, through `claude -p` with the
+    picture in the message, its reply cached by the picture's hash under CACHE_DIR/icons,
+    so a reconversion asks nothing again.
+    """
+    import base64
+    import hashlib
+
+    from PIL import Image
+
+    if ICON_MODEL == "off":
+        return None
+    cached = CACHE_DIR / "icons" / (hashlib.sha256(data).hexdigest() + ".txt")
+    if cached.exists():
+        return cached.read_text(encoding="utf-8")
+    try:
+        if is_svg(data):
+            data = subprocess.run(["rsvg-convert", "--height", "64", "--keep-aspect-ratio", "--background-color", "white"],
+                                  input=data, capture_output=True, check=True, timeout=60).stdout
+        image = Image.open(io.BytesIO(data))
+        image.load()
+    except Exception:
+        return None
+    image = image.convert("RGBA")
+    flat = Image.new("RGBA", image.size, "white")
+    flat.alpha_composite(image)
+    flat = flat.convert("RGB")
+    if flat.getextrema() and all(lo == hi for lo, hi in flat.getextrema()):
+        text = ""  # one colour throughout: nothing drawn
+    else:
+        if max(flat.size) < 64:
+            flat = flat.resize((max(1, flat.width * 64 // max(flat.size)), max(1, flat.height * 64 // max(flat.size))))
+        png = io.BytesIO()
+        flat.save(png, "PNG")
+        message = {"type": "user", "message": {"role": "user", "content": [
+            {"type": "image", "source": {"type": "base64", "media_type": "image/png",
+                                         "data": base64.b64encode(png.getvalue()).decode()}},
+            {"type": "text", "text": ICON_PROMPT}]}}
+        env = {**os.environ, "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1", "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
+        with tempfile.TemporaryDirectory() as empty:
+            done = subprocess.run(
+                ["claude", "-p", "--model", ICON_MODEL, "--tools", "", "--input-format", "stream-json",
+                 "--output-format", "stream-json", "--verbose", "--no-session-persistence",
+                 "--system-prompt", "You say what small pictures show."],
+                input=json.dumps(message) + "\n", capture_output=True, text=True, cwd=empty, env=env, timeout=180)
+        replies = [json.loads(line) for line in done.stdout.splitlines() if line.startswith("{")]
+        result = next((r for r in replies if r.get("type") == "result"), {})
+        text = " ".join(str(result.get("result") or "").split()).strip("\"'`.")
+        if result.get("is_error") or not text or len(text) > 30 or len(text.split()) > 3:
+            return None
+        text = "" if text == "-" else text
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    cached.write_text(text, encoding="utf-8")
+    return text
+
+
 def filing_prompts(topics):
     """(system prompt, paper template) for a filing request: guide/filing-prompt.md.
 
