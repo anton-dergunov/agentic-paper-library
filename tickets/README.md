@@ -22,7 +22,7 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-16.
+Papers and key-content counts from the library `papers` on 2026-10-17.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
