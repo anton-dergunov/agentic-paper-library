@@ -540,6 +540,65 @@ def checks():
         '<mark class="green">✓</mark>: covered' in md and '<mark class="gray">✓</mark>: partly' in md
         and md.count('<mark class="green">') == 3 and md.count('<mark class="gray">') == 3)
 
+    def coloured(colour, text, layer="fg"):
+        return f'<span class="ltx_text" style="--ltx-{layer}-color:{colour};">{text}</span>'
+
+    def coloured_math(tex, tokens):
+        """A formula whose symbols are (text, colour or None), as LaTeXML colours them."""
+        mrow = "".join(f'<mn style="--ltx-fg-color:{c};" mathcolor="{c}">{t}</mn>' if c else f"<mn>{t}</mn>"
+                       for t, c in tokens)
+        return (f'<math class="ltx_Math" alttext="{tex}" display="inline"><semantics><mrow>{mrow}</mrow>'
+                f'<annotation encoding="application/x-tex">{tex}</annotation></semantics></math>')
+
+    md, _ = convert(colour_table([[(None, "Ron Weasley " + coloured(red, "is a President") + " of Hogwarts."), (None, "x")],
+                                  [(None, "He " + coloured(blue, "plays chess") + "."), (None, "y")]],
+                                 "Inconsistencies (in red); the parts of the input they contradict are in blue."))
+    yield "coloured words inside a cell are marked", (
+        '<mark class="red">is a President</mark> of Hogwarts' in md and '<mark class="blue">plays chess</mark>' in md)
+    md, _ = convert(colour_table([[(None, "6.2 " + coloured_math("+15\\%", [("+", gray), ("15", gray), ("%", "#000000")])),
+                                   (None, "5.4")],
+                                  [(None, coloured_math("\\underline{72.3}", [("72.3", blue)])), (None, "70.1")]],
+                                 "Accuracy. The gray text is the gain over the baseline; the best is in blue."))
+    yield "a formula set in a colour the caption names is marked", (
+        '6.2 <mark class="gray">$+15\\%$</mark>' in md and '<mark class="blue">$\\underline{72.3}$</mark>' in md)
+    def shaded_row(colour, *cells):
+        return '<tr class="ltx_tr">' + "".join(f'<td class="ltx_td" style="--ltx-bg-color:{colour};">{c}</td>' for c in cells) + "</tr>"
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">Step</td>'
+                    '<td class="ltx_td">GQA</td><td class="ltx_td">MME</td></tr>'
+                    + shaded_row("#D9F2FF", "+VQA-v2", "47.0", "1197") + shaded_row("#FFE6F2", "13B", "46.8", "1323")
+                    + '<tr class="ltx_tr"><td class="ltx_td">final</td><td class="ltx_td">62.0</td><td class="ltx_td">1510</td></tr>'
+                    '</table><figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 2: </span>'
+                    f'Scaling results on {coloured("#D9F2FF", "◼")} data and {coloured("#FFE6F2", "◼")} model.</figcaption></figure>')
+    yield "a legend box in a text colour marks the rows shaded in it", (
+        '<mark class="blue">+VQA-v2</mark>' in md and '<mark class="pink">13B</mark>' in md and '<mark class="blue">◼</mark> data' in md)
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
+                    '<td class="ltx_td ltx_colspan ltx_colspan_2" colspan="2" style="--ltx-bg-color:#FFE6CC;">Long-tail Knowledge</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">Jacobi</td><td class="ltx_td">68.9%</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td ltx_colspan ltx_colspan_2" colspan="2" style="--ltx-bg-color:#CCFFFF;">'
+                    'Semantic Coherence</td></tr><tr class="ltx_tr"><td class="ltx_td">the</td><td class="ltx_td">40.1%</td></tr>'
+                    '</table><figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 5: </span>Probabilities. '
+                    'Orange section: factual tokens. Cyan section: function words.</figcaption></figure>')
+    yield "a header row in a colour the caption names is marked", (
+        '<mark class="orange">Long-tail Knowledge</mark>' in md and '<mark class="cyan">Semantic Coherence</mark>' in md)
+    purple, green = "#E069FF", "#BDFF3D"
+    md, _ = convert('<figure class="ltx_float ltx_float_algorithm ltx_framed_top"><figcaption class="ltx_caption">'
+                    '<span class="ltx_tag ltx_tag_float">Algorithm 1 </span>'
+                    f'{coloured(purple, "SGD with L2 regularization", "bg")} and {coloured(green, "SGD with decoupled weight decay", "bg")}'
+                    '</figcaption><div class="ltx_listing ltx_listing">'
+                    f'<div class="ltx_listingline">6: g ← ∇f {coloured(purple, "+λθ", "bg")}</div>'
+                    f'<div class="ltx_listingline">9: θ ← θ − m {coloured(green, "−ηλθ", "bg")}</div></div></figure>')
+    yield "an algorithm's lines in the colours of its caption are marked", (
+        '<mark class="purple">+λθ</mark>' in md and '<mark class="green">−ηλθ</mark>' in md
+        and '<mark class="purple">SGD with L2 regularization</mark>' in md)
+
+    md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">Finding</td><td class="ltx_td">'
+                    '<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td">' + math("\\bullet")
+                    + ' Developers <span class="ltx_text ltx_font_bold">forecast</span> a speed-up</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">of <span class="ltx_text ltx_font_italic">24%</span></td></tr>'
+                    '</table></td></tr><tr class="ltx_tr"><td class="ltx_td">Other</td><td class="ltx_td">plain</td></tr></table>')
+    yield "a cell broken over lines keeps its formulas, bold and italics", (
+        "$\\bullet$ Developers **forecast** a speed-up of *24%*" in md)
+
     md, _ = convert('<p class="ltx_p">The analytical ones in <span class="ltx_text ltx_font_bold">green<span class="ltx_text '
                     'ltx_font_medium"> are from (13). The empirical</span></span> ones.</p><p class="ltx_p">A '
                     '<span class="ltx_text ltx_ulem_uline ltx_font_bold">0.81</span>, <span class="ltx_text ltx_ulem_uline">0.7'

@@ -1274,6 +1274,8 @@ SHADED_SPAN = re.compile(r"<span\b[^>]*--ltx-bg-color[^>]*>(.*?)</span>", re.S)
 TEXT_COLOUR = re.compile(r"--ltx-fg-color:\s*#(?!000000)[0-9A-Fa-f]{6}")
 COLOURED_SPAN = re.compile(r"<span\b[^>]*--ltx-fg-color:\s*#(?!000000)[^>]*>(.*?)</span>", re.S)
 TABLE_FLOAT = re.compile(r'<figure\b[^>]*\bclass="[^"]*\bltx_table\b[^"]*"[^>]*>')
+# An algorithm float, whose lines a caption may tell apart by colour, as a table's cells.
+ALGORITHM_FLOAT = re.compile(r'<figure\b[^>]*\bclass="[^"]*\bltx_float_algorithm\b[^"]*"[^>]*>')
 TABLE_ROW = re.compile(r"<tr\b[^>]*>(.*?)</tr\s*>", re.S)
 TABLE_CELL = re.compile(r"<(t[dh])\b([^>]*)>(.*?)</\1\s*>", re.S)
 NAMES_SHADING = re.compile(r"colou?r|shad|highlight|gr[ae]y|background|\b(?:green|red|blue|yellow|orange|purple|pink|cyan)\b")
@@ -1367,15 +1369,43 @@ def hue_name(hex_colour):
             return "brown" if name == "orange" and light < 0.35 else name
 
 
+MATH_ELEMENT = re.compile(r"<math\b([^>]*)>(.*?)</math>", re.S)
+MATH_TOKEN = re.compile(r"<(m[ino]|mtext)\b([^>]*)>(.*?)</\1>", re.S)
+
+
+def math_colour(attrs, inner, layer):
+    """The colour a formula is set in, from its own style or from the colour of most of
+    its symbols, or None. LaTeXML colours each symbol of a \\textcolor'd formula, and
+    may set one back in black ("+15%" with the "%" in black)."""
+    own = LAYER_COLOUR[layer].search(attrs)
+    if own and hue_name(own.group(1)) not in NO_COLOUR:
+        return own.group(1).lower()
+    lengths, total = {}, 0
+    for token in MATH_TOKEN.finditer(inner):
+        size = len(re.sub("[\u200b\u2061-\u2064]", "", cell_text(token.group(3))))  # invisible operators
+        total += size
+        colour = LAYER_COLOUR[layer].search(token.group(2))
+        if colour and hue_name(colour.group(1)) not in NO_COLOUR:
+            lengths[colour.group(1).lower()] = lengths.get(colour.group(1).lower(), 0) + size
+    best = max(lengths, key=lengths.get, default=None)
+    return best if best and lengths[best] >= 0.5 * total else None
+
+
 def coloured_spans(fragment, layer):
-    """(start, end, colour) of each span of a fragment set in a colour, its content's bounds."""
+    """(start, end, colour) of each span of a fragment set in a colour, its content's
+    bounds, and of each formula set in one, the whole <math> element's."""
     out = []
     for m in re.finditer(rf'<span\b[^>]*--ltx-{layer}-color:\s*(#[0-9A-Fa-f]{{6}})[^>]*>', fragment):
         end = balanced_end(fragment, m.start(), "span")
         colour = m.group(1).lower()
-        if end and hue_name(colour) not in NO_COLOUR:
+        # A \phantom in a text colour shows nothing; in a background colour it is a box.
+        if end and hue_name(colour) not in NO_COLOUR and not (layer == "fg" and "ltx_phantom" in m.group(0)):
             out.append((m.end(), fragment.rindex("</span", 0, end), colour))
-    return out
+    for m in MATH_ELEMENT.finditer(fragment):
+        colour = math_colour(m.group(1), m.group(2), layer) if f"--ltx-{layer}-color" in m.group(0) else None
+        if colour:
+            out.append((m.start(), m.end(), colour))
+    return sorted(out)
 
 
 def cell_colours(float_html, layer):
@@ -1402,24 +1432,32 @@ def cell_colours(float_html, layer):
     return rows
 
 
-def caption_colours(caption, colours):
+def caption_colours(caption, colours, inside=()):
     """{(layer, colour): name} for the table's colours the caption refers to: those it
     names ("the red denotes the highest"), by its own word, and those its own text is
-    set in (a legend: "✓ explicitly covered" with the ✓ in green), by their hue."""
+    set in (a legend: "✓ explicitly covered" with the ✓ in green), by their hue. A word
+    is matched to the colours of whole cells first, and to colours `inside` cells (a
+    word, a formula) only when it fits none of those: "red" is the light red of the
+    best cells, not a model's name set in a brand red."""
     words = dict.fromkeys(w.group(1).lower() for w in COLOUR_WORD.finditer(cell_text(caption)))
     referred = {}
-    for near in (False, True):
-        for word in words:
-            base = COLOUR_SYNONYMS.get(word, word)
-            if near and word in referred.values():
-                continue
-            for key in colours:
-                if key not in referred and hue_name(key[1]) in (NEAR_HUES.get(base, ()) if near else (base,)):
-                    referred[key] = word
-    for layer in ("bg", "fg"):
+    for pool in (colours, inside):
+        named = set(referred.values())
+        for near in (False, True):
+            for word in words:
+                base = COLOUR_SYNONYMS.get(word, word)
+                if word in named or (near and word in referred.values()):
+                    continue
+                for key in pool:
+                    if key not in referred and hue_name(key[1]) in (NEAR_HUES.get(base, ()) if near else (base,)):
+                        referred[key] = word
+    # A legend's box may be text in the colour the cells are shaded in ("◼ data").
+    every = set(colours) | set(inside)
+    for layer, other in (("bg", "fg"), ("fg", "bg")):
         for _, _, colour in coloured_spans(caption, layer):
-            if (layer, colour) in colours and (layer, colour) not in referred:
-                referred[(layer, colour)] = hue_name(colour)
+            key = next((k for k in ((layer, colour), (other, colour)) if k in every), None)
+            if key and key not in referred:
+                referred[key] = hue_name(colour)
     # A colour named for both the cells and their text is the one the caption's words point at.
     by_label = {}
     for (layer, colour), label in referred.items():
@@ -1430,34 +1468,45 @@ def caption_colours(caption, colours):
 
 def mark_named_colours(body):
     """Mark the cells of each colour a table's caption refers to, with the colour's
-    name where the table has several (<mark class="red">), or None if it refers to none."""
+    name where the table has several (<mark class="red">), or None if it refers to none.
+    Colour on part of a cell (a word, a formula, a bullet) is marked where it is, as is
+    colour in a float without cells (an algorithm's lines)."""
     layers = {layer: cell_colours(body, layer) for layer in ("bg", "fg")}
-    colours = {(layer, c) for layer, rows in layers.items() for row in rows for _, _, c in row if c}
     captions = [(m.start(), m.end()) for m in re.finditer(r"<figcaption\b.*?</figcaption>", body, re.S)]
     caption = " ".join(body[a:b] for a, b in captions)
-    referred = caption_colours(caption, colours)
+    parts = {layer: [(a, b, c) for a, b, c in coloured_spans(body, layer)
+                     if not any(x <= a < y for x, y in captions)] for layer in layers}
+    colours = {(layer, c) for layer, rows in layers.items() for row in rows for _, _, c in row if c}
+    inside = {(layer, c) for layer, found in parts.items() for _, _, c in found} - colours
+    referred = caption_colours(caption, colours, inside)
+    colours |= inside
     marks = []  # (start, end, label), and "■" for a legend's empty box
     for (layer, colour), label in referred.items():
         cells = layers[layer]
         flags = [[c == colour for _, _, c in row] for row in cells]
         pattern = shading_pattern(flags)
-        if pattern not in ("some rows", "some cells", "many cells", "whole columns"):
-            continue
+        found = []
         if pattern == "whole columns":
             width = max(map(len, cells))
             for i in range(width):
                 column = [row[i] for row in cells if len(row) == width]
                 if sum(c == colour for _, _, c in column) >= 0.8 * len(column):
-                    marks.append((*column[0][:2], label))
-        else:
+                    found.append((*column[0][:2], label))
+        # A header row is marked too when the caption names its colour ("Orange section: ...").
+        elif pattern in ("some rows", "some cells", "many cells", "header row"):
             for row, row_flags in zip(cells, flags):
                 if len(row) > 1 and all(row_flags[1:]):
-                    marks.append((*row[0][:2], label))
+                    found.append((*row[0][:2], label))
                 else:
-                    marks += [(a, b, label) for a, b, c in row if c == colour]
+                    found += [(a, b, label) for a, b, c in row if c == colour]
+        whole = [(a, b) for row in cells for a, b, c in row if c == colour]
+        found += [(a, b, label) for a, b, c in parts[layer] if c == colour and not any(x <= a < y for x, y in whole)]
+        if not found:
+            continue
+        marks += found
         # A legend in the caption: its coloured mark (an empty box is "■") says which is which.
         for a, b in captions:
-            for x, y, c in coloured_spans(body[a:b], layer):
+            for x, y, c in coloured_spans(body[a:b], "fg") + coloured_spans(body[a:b], "bg"):
                 if c == colour and not re.search(rf"\b{label}", cell_text(body[a + x:a + y]), re.I):
                     marks.append((a + x, a + y, label, "■"))
     if not marks:
@@ -1469,7 +1518,8 @@ def mark_named_colours(body):
             kept.append(mark)
             reach = mark[1]
     for a, b, label, *box in reversed(kept):
-        inner = body[a:b] if cell_text(body[a:b]) else "".join(box)
+        shown = re.sub(r'<span style="visibility:hidden">.*?</span>', "", body[a:b], flags=re.S)
+        inner = body[a:b] if cell_text(shown) else "".join(box)
         if inner:
             tag = "<mark>" if plain else f'<mark class="{label}">'
             body = f"{body[:a]}{tag}{inner}</mark>{body[b:]}"
@@ -1488,8 +1538,10 @@ def mark_shading(article, rule=None):
     shows it in a legend of its own ("✓ explicitly covered" with the ✓ in
     green), the cells in that colour are marked, the colour's name added
     when the table has several (<mark class="red">), and the legend's marks
-    too (see mark_named_colours). Several colours the caption does not refer
-    to are left alone, as one mark cannot say which colour a cell had.
+    too (see mark_named_colours): coloured words or formulas inside a cell
+    as well, and an algorithm's lines whose colours its caption shows.
+    Several colours the caption does not refer to are left alone, as one
+    mark cannot say which colour a cell had.
 
     A table without shading whose caption refers to the colour of its text
     ("excluded topics are in gray") is treated the same: its cells set
@@ -1499,7 +1551,8 @@ def mark_shading(article, rule=None):
     if rule == "none":
         return article
     out, pos = [], 0
-    for m in TABLE_FLOAT.finditer(article):
+    floats = sorted([*TABLE_FLOAT.finditer(article), *ALGORITHM_FLOAT.finditer(article)], key=lambda m: m.start())
+    for m in floats:
         end = balanced_end(article, m.start(), "figure")
         if m.start() < pos or end is None:
             continue
@@ -1508,6 +1561,8 @@ def mark_shading(article, rule=None):
         if named is not None:
             out += [article[pos:m.start()], named]
             pos = end
+            continue
+        if ALGORITHM_FLOAT.match(m.group(0)):
             continue
         colour = BACKGROUND
         rows = shaded_cells(body) if "--ltx-bg-color" in body else []

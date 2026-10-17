@@ -775,17 +775,23 @@ end
 
 -- A table nested in a cell is how LaTeX \makecell / \shortstack line breaks
 -- come through ("Num. of" / "Samples"). Collapse a one-column nested table to
--- its cells' text joined by spaces.
+-- its lines joined by spaces, each line's bold, colour marks and formulas kept.
 local function flatten_cell_tables(blocks)
   return pandoc.walk_block(pandoc.Div(blocks), {
     Table = function(inner)
-      local parts = {}
+      local parts = pandoc.List()
       for _, body in ipairs(inner.bodies) do
         for _, row in ipairs(body.body) do
           if #row.cells ~= 1 then return nil end
-          local text = pandoc.utils.stringify(row.cells[1].contents)
-          if text ~= "" then table.insert(parts, pandoc.Str(text)) end
-          table.insert(parts, pandoc.Space())
+          for _, b in ipairs(row.cells[1].contents) do
+            if b.t == "Plain" or b.t == "Para" then
+              parts:extend(b.content)
+            else
+              local text = pandoc.utils.stringify(b)
+              if text ~= "" then parts:insert(pandoc.Str(text)) end
+            end
+            parts:insert(pandoc.Space())
+          end
         end
       end
       return pandoc.Plain(parts)

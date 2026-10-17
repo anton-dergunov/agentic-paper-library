@@ -22,7 +22,7 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-17.
+Papers and key-content counts from the library `papers` on 2026-10-18.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
@@ -45,7 +45,6 @@ Papers and key-content counts from the library `papers` on 2026-10-17.
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
 | [LaTeXML's macros left in formulas](html-latexml-macros.md) | `engine` `reconvert` | open | 18 |  | engine: small, fixtures; reconvert 20 papers |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
-| [Colour marking with more than one colour is dropped](html-table-colours.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, measured as in experiments/table-emphasis; reconvert the papers; re-read three |
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 12 |  | engine: medium; reconvert the papers overnight |
@@ -66,7 +65,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
-Problems in single papers left as they are (45):
+Problems in single papers left as they are (50):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -92,6 +91,11 @@ Problems in single papers left as they are (45):
 | Large language models can accurately predict searcher preferences | prose | html-symbols-lost | small: arXiv's HTML collapses the dashes; readable |
 | Neural Ranking Models with Weak Supervision | p. 5, Table 2; pp. 5-9, Tables 3, 5 | html-symbols-lost | arXiv's HTML carries the wrong glyphs for the significance marks, and the captions say what they mean; the odd P@20 value is in the HTML too |
 | Rubrics as Rewards. Reinforcement Learning Beyond Verifiable Domains | p. 1 | html-symbols-lost | small: only footnote links |
+| A continual learning survey. Defying forgetting in classification tasks | pp. 9-11, Tables IV-VII | html-table-colours | not in arXiv's HTML: the boxes and underlines are TikZ overlays drawn as empty 1×1 pictures, and Table XII has no red |
+| Batch Normalization Explained | p. 7, Figure 5 caption | html-table-colours | not in arXiv's HTML: the second curve sample is an empty span |
+| Continual Learning of Large Language Models. A Comprehensive Survey | pp. 11-12, Table 2 | html-table-colours | by design: the caption names no colour; the groups can be rebuilt from the columns |
+| Entropic Out-of-Distribution Detection. Seamless Detection of Unknown Examples | Table I, Table III (pp. 8-12) | html-table-colours | by design: the captions name no colour; the bold survives |
+| Swap-guided Preference Learning for Personalized Reinforcement Learning from Human Feedback | p. 8, Table 1 | html-table-colours | by design: the caption names no colour; the runs show as AU = 0.00 |
 | BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval | p. 3, Table 1 | html-table-structure | small: the merged cells read by order |
 | Chain-of-Verification Reduces Hallucination in Large Language Models | p. 6, Table 1 | html-table-structure | small: Table 1's header spans sit one column off in arXiv's HTML, and the table reads by order |
 | Flamingo. a Visual Language Model for Few-Shot Learning | pp. 1-3, Figure 1 | html-table-structure | small: an illustration of prompts; nothing rests on it |
@@ -118,8 +122,10 @@ Problems in single papers left as they are (45):
 
 ## Done
 
-Fixed and reconverted (4), latest first:
+Fixed and reconverted (6), latest first:
 
+- 2026-10-18: [Colour marking with more than one colour is dropped](done/html-table-colours.md)
+- 2026-10-18: [A cell broken over lines loses its bold, italics, colour and math](done/html-cell-lines-flattened.md)
 - 2026-10-16: [Underline, strikethrough and un-bold in arXiv's HTML are not read](done/html-text-marks.md)
 - 2026-10-16: [Links within an arXiv-HTML paper point to arxiv.org](done/html-self-links.md)
 - 2026-10-16: [Symbols set as small images in arXiv-HTML papers are lost](done/html-image-symbols.md)
