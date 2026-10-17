@@ -15,7 +15,8 @@ lacks the content:
   flat-table    a line of 25+ numbers: a table flattened into text
   forest        an empty "{forest}" where a tree should be
   pt-residue    a TeX length ("9.24994ptP") left inside an equation
-  macro         \\operatorname{mathsection}, esvect internals, an unresolved \\Cref
+  macro         \\operatorname{mathsection}, \\operatorname{mathchar} and other LaTeXML leftovers,
+                esvect internals, an unresolved \\Cref
   figure-link   a figure still linking to arXiv instead of images/
   empty-header  a pipe table whose header row is empty
   box, badge    a linked SVG that the converter would now turn into text
@@ -83,14 +84,17 @@ CHECKS = {
     "forest": lambda t: "{forest}" in t,
     # A length glued to the next symbol; \kern and \hspace lengths are fine.
     "pt-residue": lambda t: re.search(r"(?<!\\kern )(?<!\\kern)(?:^|[ ,;={(])\d+\.?\d*pt(?!s\b)[A-Za-z]", t, re.M),
-    "macro": lambda t: re.search(r"operatorname\{math(?:section|paragraph)\}|montrait|\\Cref[a-z]", t),
+    "macro": lambda t: re.search(
+        r"operatorname\{(?:math(?:section|paragraph|char|bfcal|makebox)|delimiter|pazocal|mathscrsfs|mdmathbb"
+        r"|sumop|displaylimits|cramped|mspace|makebox|quantity|bqty|expectationvalue|text(?:sub|super)script"
+        r"|mid[a-z]|displaystyle[a-zA-Z])\}|\[1\.0\]\{-\}|montrait|\\Cref[a-z]", t),
     "figure-link": lambda t: re.search(
         r"\]\((?:https://arxiv\.org/html/)?\d{4}\.\d{4,5}v\d+/|src=\"\d{4}\.\d{4,5}v\d+/", t),
     "empty-header": lambda t: re.search(r"^\|(?:\s*\|)+\s*\n\|[-:| ]+\|\s*$", t, re.M),
     "digit-groups": lambda t: re.search(r"\d\.\d{3}(?:[ \u2006\u2009\u202f]|\\,)\d{3}(?:[ \u2006\u2009\u202f]|\\,)\d", t),
     "raw-citations": lambda t: "LABEL:" in t or len(re.findall(
         r"\((?:[A-Za-z][\w-]*\d{4}[a-z][\w-]*)(?:; [A-Za-z][\w-]*\d{4}[a-z][\w-]*)*\)", t)) >= 5,
-    "true-digits": lambda t: re.search(r"\dtrue\d{3}(?!\d)", t),
+    "true-digits": lambda t: re.search(r"\dtrue\d", t),
     "tex-box": lambda t: re.search(r"\\mathchoice|operatorname\{vbox\}", t),
     "captionof": lambda t: "\\captionof" in t,
     "empty-ref": lambda t: len(re.findall(

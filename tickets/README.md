@@ -43,13 +43,12 @@ Papers and key-content counts from the library `papers` on 2026-10-18.
 | [PDF equations that are only their number](pdf-equation-number-only.md) | `engine` `reconvert` `reread` | open | 19 |  | engine: medium, measured on the papers; reconvert them overnight (about 3 hours); re-read those whose claims rest on the equations |
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 19 |  | engine: medium, a fixture; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
-| [LaTeXML's macros left in formulas](html-latexml-macros.md) | `engine` `reconvert` | open | 18 |  | engine: small, fixtures; reconvert 20 papers |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 12 |  | engine: medium; reconvert the papers overnight |
+| [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 7 |  | engine: medium for one paper, or by hand |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
-| [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 6 |  | engine: medium for one paper, or by hand |
 | [A hand-edited paper keeps an older converter's flaws](hand-edited-stale.md) | `by-hand` `reconvert` | open | 1 |  | by hand: reconvert with --force, then put the hand edit back |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
@@ -65,7 +64,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
-Problems in single papers left as they are (50):
+Problems in single papers left as they are (55):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -85,6 +84,11 @@ Problems in single papers left as they are (50):
 | Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift | p. 6 | html-figure-download | no intact copy exists on arXiv; the PDF has the figure |
 | Towards Automated Circuit Discovery for Mechanistic Interpretability | pp. 6, 21, 23 | html-figure-download | the source has only PDFs, and 4 of the 7 exist in two colour variants chosen by a LaTeX conditional; the PDF has the plots |
 | EuroBERT. Scaling Multilingual Encoders for European Languages | p. 5, Tables 1-2 | html-image-symbols | the badge that holds the digit is empty in arXiv's HTML; the PDF has the values |
+| Batch Normalization Explained | p. 8, Eq. 13 | html-latexml-macros | small: still readable |
+| Learning label-label correlations in Extreme Multi-label Classification via Label Features | p. 3, Eqs. 2-5 | html-latexml-macros | the paper's own macro (\probsymb), shown by name by design; readable |
+| Prevalence of Neural Collapse during the terminal phase of deep learning training | p. 4 Fig. 6 caption; p. 8 Theorem 4 proof | html-latexml-macros | the paper's own macros (\Tr, \Sw, \Sb), shown by name by design; readable |
+| The Llama 3 Herd of Models | p. 14, §3.4.1 | html-latexml-macros | small: renders, only verbose |
+| Three Mechanisms of Weight Decay Regularization | pp. 6-7, Lemma 1, Lemma 2, Theorem 1 | html-latexml-macros | the HTML lost it: LaTeXML read the paper's \depth as TeX's box dimension (0pt) |
 | Deep Reinforcement Learning, a textbook | table of contents | html-lost-labels | small: only the table of contents |
 | Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement | p. 5, Algorithm 1 | html-pseudocode | small and isolated; arXiv's HTML has the two lines joined |
 | Large language models can accurately predict searcher preferences | pp. 4–5, Table 1 | html-symbols-lost | arXiv's HTML has no ± in Table 1; a cell reads as the value, then its interval |
@@ -122,9 +126,10 @@ Problems in single papers left as they are (50):
 
 ## Done
 
-Fixed and reconverted (6), latest first:
+Fixed and reconverted (7), latest first:
 
 - 2026-10-18: [Colour marking with more than one colour is dropped](done/html-table-colours.md)
+- 2026-10-18: [LaTeXML's macros left in formulas](done/html-latexml-macros.md)
 - 2026-10-18: [A cell broken over lines loses its bold, italics, colour and math](done/html-cell-lines-flattened.md)
 - 2026-10-16: [Underline, strikethrough and un-bold in arXiv's HTML are not read](done/html-text-marks.md)
 - 2026-10-16: [Links within an arXiv-HTML paper point to arxiv.org](done/html-self-links.md)

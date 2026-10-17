@@ -299,6 +299,53 @@ def checks():
 
     md, _ = convert(f'<p>{math("2true294")} problems, {math("1true558")} lines, {math("x=true0")}.</p>')
     yield "digit groups joined by \"true\" are one number", "$2294$" in md and "$1558$" in md and "true0" in md
+    md, _ = convert(f'<p>{math("14.199802true398681true64")} and {math("-4.356true14")}</p>')
+    yield "\"true\" between groups of any length is dropped, raw input rounded", "$14.1998$" in md and "$-4.35614$" in md
+
+    md, _ = convert(f'<p>{math(r"{\tt KL\mathchar 45\relax UCB}")}, '
+                    f'{math(r"\mathchar 28999\mathchar 12349\delimiter 67273472 x\delimiter 84054785")}, '
+                    f'{math(r"\pi\mathrel{\mathop{\mathchar 58\relax}}X")}, {math(r"\mathchar 4944\displaylimits_{i}a")}, '
+                    f'{math(r"\texttt{num\char 95\relax pixels}")}, {math(r"(\mathchar 28673\mathchar 28999)")}, {math(r"{a\over\mathchar 28999}")}</p>')
+    yield "TeX character codes become the characters", (
+        r"{\tt KL-UCB}" in md and "$G=(x)$" in md and r"\mathop{:}}X" in md and r"\sum _{i}a" in md
+        and r"\texttt{num\_pixels}" in md and r"(\Delta G)" in md and r"{a\over G}" in md and "mathchar" not in md and "delimiter" not in md and "relax" not in md)
+
+    md, _ = convert(f'<p>{math(r"(\pazocal{S},\mdmathbb{E},\mathscrsfs{E},\widebar{C},\mathbfcal{S}_{3})")} '
+                    f'{math(r"\sumop\displaylimits_{m=1}^{N}e_{m}")}</p>')
+    yield "fonts loaded under another name are the usual ones", (
+        r"\mathcal{S},\mathbb{E},\mathscr{E},\overline{C},\boldsymbol{\mathcal{S}}_{3}" in md
+        and r"\sum_{m=1}^{N}e_{m}" in md and "operatorname" not in md)
+
+    md, _ = convert(f'<p>{math(r"k^{\cramped{{}^{\mathsf{T}}}}")} {math(r"\lambda_{1}\cdot\mspace{-26mu}r")} '
+                    f'{math(r"\makebox[120.00018pt][l]{Transition:} s")} {math(r"\mathmakebox[1em]{Z}\leftarrow 0")} '
+                    f'{math(r"z_{i}{\mathbin{\vbox{\hbox{{\(\textstyle\bullet\)}}}}}z_{j}")} '
+                    f'{math(r"\left.\vbox{\vrule height=0.0pt,width=0.0pt}\text{a}\right.")} '
+                    f'{math(r"\hbox{\pagecolor{cdelback}\vrule width=0.0pt,height=0.0pt,depth=0.0pt{b}}")} '
+                    f'{math(r"\{-1,\scalebox{1}[1.0]{-}1\}")}</p>')
+    yield "wrappers that only size, box or colour are dropped", (
+        r"k^{{{}^{\mathsf{T}}}}" in md and r"\cdot r" in md and r"\text{Transition:} s" in md
+        and r"{Z}\leftarrow 0" in md and r"\mathbin{{\hbox{" in md and r"\left.{}\text{a}\right." in md
+        and r"\hbox{{b}}" in md and r"\{-1,{-}1\}" in md
+        and not re.search(r"operatorname\{(cramped|mspace|makebox|mathmakebox|vbox|vrule)\}|pagecolor|\[1\.0\]", md))
+
+    md, _ = convert(f'<p>{math(r"-\eta\quantity[\nabla L]")} {math(r"\bqty{\Sigma}+\pqty{a}+\bqty{B\bqty{X}}")} '
+                    f'{math(r"\expectationvalue{\nabla S, w}")} {math(r"\expectationvalue{A}{\psi}")}</p>')
+    yield "the physics package's brackets and expectation values", (
+        r"-\eta[\nabla L]" in md and r"\left[\Sigma\right]+\left(a\right)+\left[B\left[X\right]\right]" in md
+        and r"\left\langle \nabla S, w\right\rangle" in md
+        and r"\left\langle \psi\middle|A\middle|\psi\right\rangle" in md and "operatorname" not in md)
+
+    md, _ = convert(f'<p>{math(r"c_{\textsubscript{best}}")} {math(r"20\textsuperscript{th}")} '
+                    f'{math(r"\mathrm{F\textsubscript{1}}")} {math(r"10\text{\sc{e}-3}")}</p>')
+    yield "\\textsubscript in an equation is a subscript; \\sc is dropped", (
+        r"c_{\text{best}}" in md and r"20^{\text{th}}" in md and r"\mathrm{F_{\text{1}}}" in md
+        and r"10\text{{e}-3}" in md and "textsub" not in md and "textsuper" not in md and "{sc}" not in md)
+
+    md, _ = convert(f'<p>{math(r"p(s_{t}\mids_{t-1})")} {math(r"\displaystyleh=1")} {math(r"\quadZ")} '
+                    f'{math(r"\rank(A)+\supp(x)")}</p>')
+    yield "a command run into the letter after it is split again; a paper's macro is not", (
+        r"p(s_{t}\mid s_{t-1})" in md and r"\displaystyle h=1" in md and r"\quad Z" in md
+        and r"\operatorname{rank}(A)" in md and r"\operatorname{supp}(x)" in md)
 
     md, _ = convert('<p>edits <span class="ltx_text ltx_lstlisting ltx_font_typewriter">'
                     '<span class="ltx_text ltx_lst_identifier">napoleon_use_param</span></span> first.</p>')

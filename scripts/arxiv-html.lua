@@ -50,7 +50,23 @@ local EQUIVALENT = {
   -- KaTeX has these, MathJax (GitHub, Obsidian) does not.
   argmax = "\\operatorname*{arg\\,max}", argmin = "\\operatorname*{arg\\,min}",
   -- The physics package's \qty only sizes the brackets after it.
-  qty = "",
+  qty = "", quantity = "",
+  -- Font packages loaded under another name: calligraphic, script, double-struck.
+  pazocal = "\\mathcal", mathscrsfs = "\\mathscr", mdmathbb = "\\mathbb",
+  widebar = "\\overline",
+  -- A paper's \sum redefined through \sumop; \displaylimits only places the limits.
+  sumop = "\\sum", displaylimits = "",
+  -- The old font switch {\sc e}: keep the text, lose the caps.
+  sc = "",
+}
+
+-- Commands LaTeXML wrote with the space after them lost ("\mid s" as "\mids",
+-- "\displaystyle h" as "\displaystyleh"). An unknown name made of one of these
+-- and a single letter is split again; the paper's own macros (\rank, \supp) are
+-- not, as their names do not start with one of these.
+local FUSED = {
+  mid = true, forall = true, quad = true, qquad = true,
+  displaystyle = true, textstyle = true, scriptstyle = true, scriptscriptstyle = true,
 }
 
 -- Commands whose braced argument is text, not math.
@@ -202,8 +218,11 @@ local function rewrite_commands(t)
       if name then
         i = i + 1 + #name
         local cmd = "\\" .. name
+        local fused = not SUPPORTED[name] and name:match("^(%a+)%a$")
         if EQUIVALENT[name] then
           cmd = EQUIVALENT[name]
+        elseif fused and FUSED[fused] then
+          cmd = "\\" .. fused .. " " .. name:sub(-1)
         elseif not SUPPORTED[name] then
           if mode() == "text" then
             cmd = "\\textrm{" .. name .. "}"
@@ -272,11 +291,19 @@ end
 -- ("0.769\,142\,111\,540\,03" where the PDF prints 0.77). Join the groups; a
 -- number with nine or more decimals is such raw input, so round it to four.
 local function join_digit_groups(t)
-  -- \num{2294} with a group separator LaTeXML did not resolve: "2true294".
-  local joined_true
+  -- \num{2294} with a group separator LaTeXML did not resolve: "2true294", and
+  -- groups of any length ("14.199802true398681true64"), which are raw input
+  -- like the long \, numbers below and are rounded the same way.
+  local joined_true, any_true = 0, false
   repeat
-    t, joined_true = t:gsub("(%d)true(%d%d%d)%f[%D]", "%1%2")
+    t, joined_true = t:gsub("(%d)true(%d)", "%1%2")
+    any_true = any_true or joined_true > 0
   until joined_true == 0
+  if any_true then
+    t = t:gsub("%d+%.%d+", function(number)
+      if #number:match("%.(%d+)$") >= 9 then return string.format("%.4f", tonumber(number)) end
+    end)
+  end
   return (t:gsub("%d[%d.]*\\,[%d\\,]*%d", function(number)
     local groups, valid = {}, true
     for group in (number .. "\\,"):gmatch("(.-)\\,") do
@@ -376,6 +403,130 @@ local function unwrap_mathchoice(t)
   end
 end
 
+-- A character LaTeXML left as its TeX code ("\mathchar 58\relax" for ":",
+-- "\delimiter 67273472" for "(", "\char 95\relax" for "_"), from a paper's
+-- \mathcode or \DeclareMathSymbol trickery. The code names a font family and a
+-- position in it; these are the positions of Computer Modern's math fonts.
+local CM_GREEK_UPPER = { [0] = "\\Gamma", "\\Delta", "\\Theta", "\\Lambda", "\\Xi", "\\Pi",
+  "\\Sigma", "\\Upsilon", "\\Phi", "\\Psi", "\\Omega" }
+local CM_ITALIC = { [0x3A] = ".", [0x3B] = ",", [0x3C] = "<", [0x3D] = "/", [0x3E] = ">" }
+for k, name in ipairs({ "alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
+    "iota", "kappa", "lambda", "mu", "nu", "xi", "pi", "rho", "sigma", "tau", "upsilon", "phi",
+    "chi", "psi", "omega", "varepsilon", "vartheta", "varpi", "varrho", "varsigma", "varphi" }) do
+  CM_ITALIC[0x0A + k] = "\\" .. name  -- cmmi has lower-case Greek from 0x0B
+end
+local CM_SYMBOL = {  -- cmsy
+  [0x00] = "-", [0x01] = "\\cdot", [0x02] = "\\times", [0x03] = "\\ast", [0x04] = "\\div",
+  [0x05] = "\\diamond", [0x06] = "\\pm", [0x07] = "\\mp", [0x0E] = "\\circ", [0x0F] = "\\bullet",
+  [0x11] = "\\equiv", [0x12] = "\\subseteq", [0x13] = "\\supseteq", [0x14] = "\\leq",
+  [0x15] = "\\geq", [0x18] = "\\sim", [0x19] = "\\approx", [0x1A] = "\\subset",
+  [0x1B] = "\\supset", [0x1C] = "\\ll", [0x1D] = "\\gg", [0x20] = "\\leftarrow",
+  [0x21] = "\\rightarrow", [0x30] = "\\prime", [0x31] = "\\infty", [0x32] = "\\in",
+  [0x33] = "\\ni", [0x36] = "\\not", [0x38] = "\\forall", [0x39] = "\\exists", [0x3A] = "\\neg",
+  [0x3B] = "\\emptyset", [0x5B] = "\\cup", [0x5C] = "\\cap", [0x5E] = "\\wedge", [0x5F] = "\\vee",
+  [0x66] = "\\{", [0x67] = "\\}", [0x68] = "\\langle", [0x69] = "\\rangle", [0x6A] = "|",
+  [0x6B] = "\\|",
+}
+local CM_LARGE = {  -- cmex, text and display sizes
+  [0x50] = "\\sum", [0x51] = "\\prod", [0x52] = "\\int", [0x53] = "\\bigcup", [0x54] = "\\bigcap",
+  [0x58] = "\\sum", [0x59] = "\\prod", [0x5A] = "\\int", [0x5B] = "\\bigcup", [0x5C] = "\\bigcap",
+}
+-- ASCII characters TeX would read as markup, written so they print.
+local ASCII_ESCAPED = { ["{"] = "\\{", ["}"] = "\\}", ["_"] = "\\_", ["#"] = "\\#", ["%"] = "\\%",
+  ["&"] = "\\&", ["$"] = "\\$" }
+
+local function ascii(pos)
+  if pos < 0x21 or pos > 0x7E then return nil end
+  local ch = string.char(pos)
+  if ch == "\\" or ch == "^" or ch == "~" then return nil end
+  return ASCII_ESCAPED[ch] or ch
+end
+
+local function char_for_code(name, n)
+  local fam, pos
+  if name == "char" then return n < 256 and ascii(n) or nil end
+  if name == "mathchar" then fam, pos = (n // 256) % 16, n % 256
+  else fam, pos = (n // 1048576) % 16, (n // 4096) % 256 end  -- \delimiter: its small variant
+  if fam == 0 then return CM_GREEK_UPPER[pos] or ascii(pos) end
+  if fam == 1 then return CM_ITALIC[pos] or ascii(pos) end
+  if fam == 2 then return CM_SYMBOL[pos] end
+  if fam == 3 then return CM_LARGE[pos] end
+end
+
+local CHAR_CODES = { mathchar = true, char = true, delimiter = true }
+
+local function decode_char_codes(t)
+  local out, i = {}, 1
+  while true do
+    local s, e, name = t:find("\\(%a+)", i)
+    if not s then break end
+    local done = false
+    if CHAR_CODES[name] then
+      local j = e + 1 + #(t:match("^%s*", e + 1))
+      local quoted = t:sub(j, j) == '"'
+      local digits = quoted and t:match("^%x+", j + 1) or (not quoted and t:match("^%d+", j))
+      local ch = digits and char_for_code(name, tonumber(digits, quoted and 16 or 10))
+      if ch then
+        local after = j + (quoted and 1 or 0) + #digits
+        -- The \relax (or the space) that ended the number goes with it, and
+        -- so do the spaces after \relax, as TeX skips them.
+        local relax = t:match("^%s*\\relax%f[%A]%s*", after) or t:match("^ ", after)
+        if relax then after = after + #relax end
+        -- A command name must not run into a letter after it, nor into the
+        -- next code's character ("\\Delta" before a decoded "G").
+        if ch:match("^\\%a+$") and t:sub(after, after):match("[%a\\]") then ch = ch .. " " end
+        -- Nor may a decoded letter run into a command before it ("\over" "G").
+        local before = t:sub(i, s - 1)
+        if ch:match("^%a") and (before ~= "" and before or out[#out] or ""):match("\\%a+$") then ch = " " .. ch end
+        table.insert(out, before .. ch)
+        i, done = after, true
+      end
+    end
+    if not done then
+      table.insert(out, t:sub(i, e))
+      i = e + 1
+    end
+  end
+  table.insert(out, t:sub(i))
+  return table.concat(out)
+end
+
+-- \makebox[width][pos]{...} and the like: the command and its optional
+-- arguments become `repl`, the braced argument stays.
+local function strip_box(t, name, repl)
+  local out, i = {}, 1
+  while true do
+    local s, e = t:find("\\" .. name .. "%f[%A]", i)
+    if not s then break end
+    local j = e + 1
+    for _ = 1, 2 do
+      local opt = t:match("^%s*%b[]", j)
+      if not opt then break end
+      j = j + #opt
+    end
+    table.insert(out, t:sub(i, s - 1) .. repl)
+    i = j
+  end
+  table.insert(out, t:sub(i))
+  return table.concat(out)
+end
+
+-- \vrule width=0.0pt,height=0.0pt,depth=0.0pt (a strut, or a rule drawn as a
+-- separator): nothing an equation needs.
+local function strip_vrule(t)
+  return (t:gsub("\\vrule%f[%A]([%s%a=,.%d%-+]*)", function(dims)
+    local rest = dims
+    while true do
+      local kw = rest:match("^%s*(%a+)")
+      if kw ~= "width" and kw ~= "height" and kw ~= "depth" then break end
+      local spec = rest:match("^%s*%a+%s*=?%s*[%-+]?[%d.]+%s*%a%a%s*,?")
+      if not spec then break end
+      rest = rest:sub(#spec + 1)
+    end
+    return rest
+  end))
+end
+
 local function hex(x)
   return string.format("%02X", math.floor(tonumber(x) * 255 + 0.5))
 end
@@ -406,7 +557,35 @@ local function normalise_math(t)
   -- A \par that came along inside a macro's argument.
   t = t:gsub("\\par%f[%A]", "")
   -- \scalebox{0.7}{$\pm$}: the size goes, what was scaled stays.
-  t = t:gsub("\\scalebox%s*%b{}", ""):gsub("\\resizebox%s*%b{}%s*%b{}", "")
+  -- \scalebox{1}[1.0]{-} has a vertical scale too.
+  t = t:gsub("\\scalebox%s*%b{}%s*%b[]", ""):gsub("\\scalebox%s*%b{}", "")
+  t = t:gsub("\\resizebox%s*%b{}%s*%b{}", "")
+  t = decode_char_codes(t)
+  -- \relax does nothing; a space keeps a command before it apart from a letter after it.
+  t = t:gsub("(\\%a+)\\relax%f[%A]%s*(%a)", "%1 %2"):gsub("\\relax%f[%A]%s*", "")
+  -- Commands that only size, box or colour what they hold: what they hold stays.
+  t = t:gsub("\\cramped%f[%A]", ""):gsub("\\vbox(%s*{)", "%1")
+  t = t:gsub("\\mspace%s*%b{}", " "):gsub("\\pagecolor%s*%b{}", "")
+  t = strip_vrule(t)
+  t = strip_box(t, "mathmakebox", "")
+  t = strip_box(t, "makebox", "\\mbox")  -- its argument is text
+  t = t:gsub("\\mathbfcal%s*(%b{})", "\\boldsymbol{\\mathcal%1}")
+  -- \textsubscript{best} in an equation: a subscript, as text.
+  t = t:gsub("([_^])%s*{%s*\\text(%a+)script%s*(%b{})%s*}", function(mark, kind, arg)
+    if (kind == "sub") == (mark == "_") then return mark .. "{\\text" .. arg .. "}" end
+  end)
+  t = t:gsub("\\textsubscript%s*(%b{})", "_{\\text%1}"):gsub("\\textsuperscript%s*(%b{})", "^{\\text%1}")
+  -- The physics package's brackets and expectation values.
+  local nested
+  repeat  -- \bqty{B\bqty{X}}: the inner one after the outer
+    t, nested = t:gsub("\\bqty%s*(%b{})", function(a) return "\\left[" .. a:sub(2, -2) .. "\\right]" end)
+    t = t:gsub("\\pqty%s*(%b{})", function(a) return "\\left(" .. a:sub(2, -2) .. "\\right)" end)
+  until nested == 0
+  t = t:gsub("\\expectationvalue%s*(%b{})%s*(%b{})", function(a, psi)
+    psi = psi:sub(2, -2)
+    return "\\left\\langle " .. psi .. "\\middle|" .. a:sub(2, -2) .. "\\middle|" .. psi .. "\\right\\rangle "
+  end)
+  t = t:gsub("\\expectationvalue%s*(%b{})", function(a) return "\\left\\langle " .. a:sub(2, -2) .. "\\right\\rangle " end)
   t = unwrap_mleft(t)
   t = unwrap_mathchoice(t)
   return rewrite_commands(strip_layout(join_digit_groups(t)))
