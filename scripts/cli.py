@@ -41,7 +41,10 @@ COMMANDS = {
     "issues": ("issues.py", True, "known conversion problems: list [<scope or paper.md> ...] [--kind K] [--counts], add <paper> <kind> \"<what>\" --where ..., close <kind> --state <file>"),
     "tickets": ("tickets.py", True, "the engine's conversion tickets with the papers each touches [--write]; move <id> <open|fixed|done|wont-fix> [--reason ...]"),
     "localize-figures": ("localize-figures.py", True, "download figures that still link to arXiv"),
-    "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.md> ... [--limit N]"),
+    "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.md> ... [--limit N] [--redo | --flagged]"),
+    "reading": ("reading.py", True, "what is left to read, area by area, and its cost: [<scope>]"),
+    "reread": ("reading.py", True, "mark notes to be read again: <paper or stem> ... --reason \"...\" | --clear"),
+    "corrections": ("corrections.py", True, "hand corrections, applied again on reconvert: [<scope>] [--stale | --drifted]; capture <paper.md> [--why ...]; retire <paper> <where>"),
     "read-view": ("read-view.py", True, "a paper's main text for reading, without references or link targets: <paper.md>"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
@@ -53,8 +56,8 @@ COMMANDS = {
     "page-map": ("page-map.py", False, "add (p. N) to headings from the PDF: <paper.pdf> <paper.md>"),
     "caption-numbers": ("caption-numbers.py", False, "number tables and figures as the PDF does: <paper.pdf> <paper.md>"),
 }
-# paperlib.py's own subcommands keep their name.
-PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename"}
+# paperlib.py's own subcommands keep their name, as does a command a script serves beside its own.
+PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename", "reread"}
 
 
 def usage():

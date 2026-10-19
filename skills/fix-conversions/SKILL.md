@@ -32,15 +32,16 @@ and only notes whose key content was broken are read again.
    - `paperlib tickets move <id> fixed` (`done` if no other paper has its records), and
      update the ticket's Fix with what was done. A ticket that turns out to need a design decision
      or a new tool: write down what was found in the ticket and leave it `open`.
-3. **By-hand tickets** (`takes: by-hand`) are done only when the reader asks, and the edit
-   is marked `<!-- hand-edited: <what> -->`.
+3. **By-hand tickets** (`takes: by-hand`) are done only when the reader asks: commit the
+   paper, edit it, `paperlib corrections capture <paper.md> --why "<what, from where>"`.
 4. **Close the loop.** `paperlib tickets --write`; `paperlib check` must pass.
 5. **Report.**
    - Per ticket: the cause, the fix, the papers it was checked on and what changed there.
    - The overnight command for the rest, one per fixed ticket:
      `caffeinate -i nice -n 19 paperlib reconvert --issue <id> --jobs 1 --state ~/.cache/papers/reconvert-<id>.jsonl`
      (`--list` instead of `--jobs` shows the papers), and after it
-     `paperlib issues close <id> --state ~/.cache/papers/reconvert-<id>.jsonl`, which prints
-     the `paperlib read --redo` command for the papers whose key content was broken.
+     `paperlib issues close <id> --state ~/.cache/papers/reconvert-<id>.jsonl`, which marks
+     the notes of papers whose key content was broken to be read again (`paperlib reading`
+     counts them), and `/reapply-corrections` if `paperlib corrections --stale` lists any.
    - Two commit messages, one per repository: the engine (converter, tests, tickets) and
      the library (the test papers, `issues/`). Never commit.

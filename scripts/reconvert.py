@@ -19,8 +19,14 @@ rendering of it (it becomes `source: html`). Otherwise it is skipped unless
 from the PDF with the current scripts/pdf-to-markdown.py; `--all --pdf-text`
 does just those papers. That is the quick PDF conversion; add --inline-math
 for the one the add scripts use, which also has the model read every
-paragraph with mathematics (minutes more for a paper with much of it). Papers containing `<!-- hand-edited -->` are skipped,
-since a reconversion would drop the edit.
+paragraph with mathematics (minutes more for a paper with much of it).
+
+A paper corrected by hand has corrections/<stem>.yaml (`paperlib corrections`): it is
+converted afresh and its corrections are applied again, the figure files they link kept.
+One the new conversion makes unnecessary is retired; one that cannot be placed is marked
+stale, and the paper says so under its conversion note (the reapply-corrections skill
+puts it back). A paper marked `<!-- hand-edited -->` without a corrections file is
+skipped, since a reconversion would drop the edit, unless --force is given.
 
 Downloads are cached (paperlib.CACHE_DIR), so reconverting again later needs
 no network. --jobs N converts N papers at a time. --state FILE records each
@@ -51,7 +57,9 @@ import pymupdf
 from tqdm import tqdm
 
 from paperlib import (
-    LIBRARY_DIR, all_issues, fetch, is_open, paper_files, pdf_path_for, read_paper, write_paper,
+    HAND_EDITED, LIBRARY_DIR, LIBRARY_ROOT, all_issues, apply_corrections, correction_images,
+    corrections_path, fetch, is_open, load_corrections, paper_files, pdf_path_for, read_paper, save_corrections,
+    write_paper,
 )
 
 # A PDF that breaks the syntax of its own drawings ("unknown keyword") still reads
@@ -59,8 +67,6 @@ from paperlib import (
 pymupdf.TOOLS.mupdf_display_errors(False)
 
 SCRIPTS = Path(__file__).resolve().parent
-# The marker, also when it carries a note: "<!-- hand-edited: the title moved to the top -->".
-HAND_EDITED = re.compile(r"<!--\s*hand-edited\b")
 
 
 def pdf_version(pdf, arxiv_id):
@@ -79,10 +85,13 @@ def fetch_page(url):
 
 
 def replace_images(md, new_images):
-    """Swap a paper's figure files for the ones a conversion just wrote."""
+    """Swap a paper's figure files for the ones a conversion just wrote, keeping those its
+    hand corrections link (a figure cropped from the PDF)."""
     images = md.parent / "images"
+    keep = correction_images(load_corrections(md))
     for old in images.glob(f"{glob_escape(md.stem)}-fig*"):
-        old.unlink()
+        if old.name not in keep:
+            old.unlink()
     if new_images.exists():
         images.mkdir(exist_ok=True)
         for f in new_images.iterdir():
@@ -112,13 +121,39 @@ def reconvert_pdf_text(md, meta, inline_math=False):
 
 
 def reconvert(md, force, pdf_text=False, inline_math=False):
-    """Reconvert one paper. Returns (status, message); the status is "ok",
-    "partial" (some figures did not download), "failed" (no HTML fetched, or
-    an error), or "skipped" (nothing to do, and a retry would not change that)."""
+    """Reconvert one paper and apply its hand corrections again. Returns (status,
+    message); the status is "ok", "partial" (some figures did not download), "failed"
+    (no HTML fetched, or an error), or "skipped" (nothing to do, and a retry would not
+    change that)."""
     meta, body = read_paper(md)
+    corrections = load_corrections(md)
+    if HAND_EDITED.search(body) and not corrections and not force:
+        return "skipped", "hand-edited without corrections/; use --force, or capture the edits first"
+    status, message = convert(md, meta, pdf_text, inline_math)
+    if corrections and status in ("ok", "partial"):
+        message += "; " + reapply(md, corrections)
+    return status, message
+
+
+def reapply(md, corrections):
+    """Apply a freshly converted paper's corrections; say how it went."""
+    meta, body = read_paper(md)
+    pointer = corrections_path(md).relative_to(LIBRARY_ROOT).as_posix() \
+        if corrections_path(md).is_relative_to(LIBRARY_ROOT) else corrections_path(md).name
+    body, kept, outcomes = apply_corrections(body, corrections, pointer=pointer)
+    write_paper(md, meta, body)
+    save_corrections(md, kept)
+    counts = {}
+    for _, outcome, _ in outcomes:
+        counts[outcome] = counts.get(outcome, 0) + 1
+    names = {"exact": "applied", "landmarks": "applied by landmarks", "drifted": "drifted",
+             "obsolete": "retired", "stale": "NOT applied"}
+    return "corrections: " + ", ".join(f"{n} {names[o]}" for o, n in counts.items())
+
+
+def convert(md, meta, pdf_text, inline_math):
+    """Regenerate a paper's body with the current converter."""
     arxiv_id = str(meta.get("arxiv") or "")
-    if HAND_EDITED.search(body) and not force:
-        return "skipped", "hand-edited; use --force"
     if meta.get("source") == "pdf-text":
         status, message = from_html(md, dict(meta, source="html"), arxiv_id) if arxiv_id else (None, "")
         if status in ("ok", "partial"):

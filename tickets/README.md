@@ -8,7 +8,7 @@ per problem, whose `kind` is the ticket's id (`paperlib issues --kind <id>` list
 - **Takes**: `engine` a change to the converters, with a fixture; `reconvert` the papers
   must be converted again to get it (`paperlib reconvert --issue <id>`, overnight for PDF
   papers); `reread` some notes rest on the broken part and are read again; `by-hand` an
-  edit in the paper, marked `<!-- hand-edited -->`.
+  edit in the paper, recorded with `paperlib corrections capture`.
 - **Status**: `open`; `fixed` in the engine, waiting for the reconversion (then
   `paperlib issues close <id> --state <file>`); `done`; `wont-fix`, with its `reason`.
 - **Won't fix**, below, is the list of what was decided not to fix: a whole cause (a ticket
@@ -47,14 +47,11 @@ Papers and key-content counts from the library `papers` on 2026-10-19.
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 12 |  | engine: medium; reconvert the papers overnight |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 7 |  | engine: medium for one paper, or by hand |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
-| [A hand-edited paper keeps an older converter's flaws](hand-edited-stale.md) | `by-hand` `reconvert` | open | 1 |  | by hand: reconvert with --force, then put the hand edit back |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open |  |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
-| [Bold in PDF tables is dropped](pdf-table-bold.md) | `engine` `reconvert` `reread` | fixed | 100 | 1 | engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the bold carries a claim |
-| [PDF equations that are only their number](pdf-equation-number-only.md) | `engine` `reconvert` `reread` | fixed | 51 |  | engine: medium, measured on the papers; reconvert them overnight (about 3 hours); re-read those whose claims rest on the equations |
 
 ## Won't fix
 
@@ -64,7 +61,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
-Problems in single papers left as they are (55):
+Problems in single papers left as they are (54):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -111,7 +108,6 @@ Problems in single papers left as they are (55):
 | Search Snippet Evaluation at Yandex. Lessons Learned and Future Directions | pp. 6–8, §3.2 | pdf-reading-order | the PDF's text layer itself splits each line into clipped fragments (p. 7); the findings are in Tables 2–6, which read cleanly |
 | The Lifetime of Email Messages. A Large-Scale Analysis of Email Revisitation | pp. 1-2 | pdf-reading-order | small: out of order but readable |
 | The Lifetime of Email Messages. A Large-Scale Analysis of Email Revisitation | p. 3 | pdf-reading-order | small: out of order but readable |
-| Toward Activity Discovery in the Personal Web | Tables 1-2 | pdf-table-bold | small: the values are there to compare |
 | Accurate predictions on small data with a tabular foundation model | pp. 18-23, Extended Data tables | pdf-table-image-ocr | the Extended Data tables are images in the PDF, so OCR is the only source |
 | Anatomy of a Privacy-Safe Large-Scale Information Extraction System Over Email | p. 4, Tables 1-2 | pdf-table-rows-collapsed | small: readable by order |
 | Navigating the Grey Area. Expressions of Overconfidence and Uncertainty in | p. 8, Table 3 | pdf-table-rows-collapsed | small: the two sub-rows share a cell and read by order |
@@ -126,8 +122,11 @@ Problems in single papers left as they are (55):
 
 ## Done
 
-Fixed and reconverted (7), latest first:
+Fixed and reconverted (10), latest first:
 
+- 2026-10-19: [Bold in PDF tables is dropped](done/pdf-table-bold.md)
+- 2026-10-19: [PDF equations that are only their number](done/pdf-equation-number-only.md)
+- 2026-10-19: [A hand-edited paper keeps an older converter's flaws](done/hand-edited-stale.md)
 - 2026-10-18: [Colour marking with more than one colour is dropped](done/html-table-colours.md)
 - 2026-10-18: [LaTeXML's macros left in formulas](done/html-latexml-macros.md)
 - 2026-10-18: [A cell broken over lines loses its bold, italics, colour and math](done/html-cell-lines-flattened.md)

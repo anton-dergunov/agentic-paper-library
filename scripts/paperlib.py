@@ -21,6 +21,7 @@ and fails outside a library.
 """
 
 import datetime
+import difflib
 import functools
 import gzip
 import io
@@ -33,9 +34,11 @@ import tarfile
 import tempfile
 import threading
 import time
+import unicodedata
 import zlib
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from urllib.parse import unquote
 
 import yaml
 
@@ -110,6 +113,10 @@ NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)
 # of a ticket in the engine's tickets/ (one ticket per cause), or `new` until triage
 # gives it one.
 ISSUES_DIR = _path(CONFIG.get("issues", "issues"), _BASE)
+# Hand corrections: corrections/<stem>.yaml for a paper corrected by hand, keyed by the
+# stem like the notes. `paperlib reconvert` converts the paper afresh and applies them
+# again (apply_corrections below).
+CORRECTIONS_DIR = _path(CONFIG.get("corrections", "corrections"), _BASE)
 # The tickets: the active ones (open, or fixed and waiting for a reconversion) at the top
 # of tickets/, the closed ones in tickets/done/ and tickets/wont-fix/, whose folder is their
 # status. TICKETS_DIR overrides it (the tests use a copy).
@@ -521,6 +528,45 @@ def note_path(paper):
     return NOTES_DIR / f"{Path(paper).stem}.md"
 
 
+def has_digest(paper):
+    """Whether a paper (a path or a stem) has been read: its note holds a digest."""
+    note = NOTES_DIR / f"{paper_stem(paper)}.md"
+    return note.exists() and "## Digest" in note.read_text(encoding="utf-8")
+
+
+# A note to read again: "reread: <why> (<date>)" among the lines above its digest, set when
+# a fix reaches a part of the paper its findings rest on (a key-content record closed), or
+# by hand. Reading the paper again writes a new note, which drops it.
+_REREAD = re.compile(r"^reread: (.*)$", re.M)
+
+
+def reread_reason(paper):
+    """Why a paper's note is to be read again, or "" when it is not."""
+    note = NOTES_DIR / f"{paper_stem(paper)}.md"
+    if not note.exists():
+        return ""
+    head = note.read_text(encoding="utf-8").split("\n## Digest", 1)[0]
+    m = _REREAD.search(head)
+    return m.group(1).strip() if m else ""
+
+
+def flag_reread(paper, reason=None, today=None):
+    """Mark a paper's note to be read again (reason None takes the mark off). Returns
+    False when the paper has no note with a digest, which a reading will write anyway."""
+    note = NOTES_DIR / f"{paper_stem(paper)}.md"
+    if not has_digest(paper):
+        return False
+    text = note.read_text(encoding="utf-8")
+    head, digest = text.split("\n## Digest", 1)
+    head = _REREAD.sub("", head).rstrip("\n")
+    head = re.sub(r"\n{3,}", "\n\n", head)
+    if reason:
+        reason = " ".join(str(reason).split())
+        head += f"\nreread: {reason} ({today or datetime.date.today().isoformat()})"
+    note.write_text(head + "\n\n## Digest" + digest, encoding="utf-8")
+    return True
+
+
 # A conversion problem's record, in issues/<stem>.yaml. `kind` is a ticket id, or `new`
 # with `suggested` naming the cause; `key-content` is set when a part the paper's findings
 # rest on is missing or wrong (a results table, the main equation, a section), so a note
@@ -628,6 +674,479 @@ def load_tickets():
         meta["status"] = folder or meta.get("status") or "open"
         tickets[meta["id"]] = {**meta, "body": body, "path": path}
     return tickets
+
+
+# A hand correction, in corrections/<stem>.yaml, replaces the converter's text `was` with
+# `now` (an empty `was` inserts `now` after the line `prev`; an empty `now` deletes).
+# `was` is the anchor: the converter's own text, matched line by line after
+# normalising (_norm_line), so a change elsewhere in the paper never moves it. When it
+# repeats, or the converter changed it slightly, the landmarks decide: `section` (the
+# heading above), `prev` and `next` (the first 80 normalised characters of the lines
+# around it) and `label` (its table, figure or equation). `where` and `why` are for
+# people and sessions and are never matched. `drifted` and `stale` record the last
+# reconversion that matched it only approximately, or not at all.
+CORRECTION_FIELDS = ["where", "why", "section", "label", "prev", "next", "was", "now", "by", "added",
+                     "drifted", "stale"]
+# The marker an applied correction leaves in the paper, also when it carries a note:
+# "<!-- hand-edited: Table 4 rewritten from the PDF page -->".
+HAND_EDITED = re.compile(r"<!--\s*hand-edited\b")
+HAND_EDITED_COMMENT = re.compile(r"<!--\s*hand-edited\b.*?-->", re.S)
+# How close the converter's new text must be to `was`, where the landmarks place it, for
+# the correction to replace it (experiments/hand-edit-corrections).
+DRIFT_MIN = 0.9
+# ... or this close, where `prev` and `next` both bound it, so its place is certain.
+DRIFT_BOUNDED_MIN = 0.5
+_PAGE_MARK = re.compile(r"\s*\((?:p|pp)\.\s[^)]*\)\s*$")
+_LABEL = re.compile(r"\b(Table|Figure|Fig\.|Algorithm)\s+([0-9]+[a-z]?|[IVXLC]+)\b")
+_EQ_TAG = re.compile(r"\\tag\{([^}]+)\}|\((\d+[a-z]?)\)\s*\$\$\s*$")
+
+
+class _BlockDumper(yaml.SafeDumper):
+    """Writes multi-line strings as literal blocks, so tables stay readable in the file."""
+
+
+_BlockDumper.add_representer(
+    str, lambda d, s: d.represent_scalar("tag:yaml.org,2002:str", s, style="|" if "\n" in s else None))
+
+
+def corrections_path(paper):
+    return CORRECTIONS_DIR / f"{paper_stem(paper)}.yaml"
+
+
+def load_corrections(paper):
+    """The hand corrections of a paper (a path or a stem); [] when it has none."""
+    path = corrections_path(paper)
+    if not path.exists():
+        return []
+    return [c for c in yaml.safe_load(path.read_text(encoding="utf-8")) or [] if isinstance(c, dict)]
+
+
+def save_corrections(paper, corrections):
+    """Write a paper's corrections, fields in their usual order; delete the file when none is left."""
+    path = corrections_path(paper)
+    if not corrections:
+        path.unlink(missing_ok=True)
+        return
+    ordered = []
+    for c in corrections:
+        c = {k: ("\n".join(line.rstrip() for line in v.split("\n")) if isinstance(v, str) else v)
+             for k, v in c.items()}  # a trailing space would force a quoted string
+        ordered.append({**{k: c[k] for k in CORRECTION_FIELDS if c.get(k) not in (None, "")},
+                        **{k: v for k, v in c.items() if k not in CORRECTION_FIELDS}})
+    CORRECTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    path.write_text(yaml.dump(ordered, Dumper=_BlockDumper, allow_unicode=True, sort_keys=False, width=100),
+                    encoding="utf-8")
+
+
+def all_corrections():
+    """{stem: corrections} for every paper with a corrections file."""
+    if not CORRECTIONS_DIR.is_dir():
+        return {}
+    return {p.stem: load_corrections(p.stem) for p in sorted(CORRECTIONS_DIR.glob("*.yaml"))}
+
+
+def correction_images(corrections):
+    """The figure files a paper's corrections link (a crop from the PDF), which a
+    reconversion must keep."""
+    return {Path(unquote(m)).name for c in corrections
+            for m in re.findall(r"\]\((?:\./)?images/([^)\s]+)\)", c.get("now") or "")}
+
+
+def _norm_line(line):
+    """A line as the matching compares it: Unicode NFC, whitespace collapsed, table cells
+    stripped of their padding (any separator row alike), headings without their (p. N)."""
+    line = unicodedata.normalize("NFC", line).strip()
+    if line.startswith("|"):
+        parts = line.strip().strip("|").split("|")
+        cells = [_norm_cell(c) if len(parts) == 1 else " ".join(c.split()) for c in parts]
+        if all(re.fullmatch(r":?-+:?", c) for c in cells if c) and any(cells):
+            cells = ["-"] * len(cells)
+        return "|" + "|".join(cells) + "|"
+    if line.startswith("#"):
+        line = _PAGE_MARK.sub("", line)
+    # An image's alt text is the converter's ("Refer to caption"); its target is the figure.
+    line = re.sub(r"!\[[^\]]*\]\(", "![](", line)
+    return " ".join(line.split())
+
+
+def _plain(norm):
+    """A normalised line without emphasis or escapes, which a converter adds and drops."""
+    return " ".join(re.sub(r"[*_`\\]", "", norm).split())
+
+
+def _fingerprint(norm):
+    """A landmark line as compared: its first 80 characters, plain (a caption's bold title)."""
+    return _plain(norm)[:80]
+
+
+def _norm_cell(cell):
+    """The cell of a one-column table (an algorithm set as a table) without its padding,
+    but with its indentation beyond the one space every cell starts with: the loop body's.
+    In a wider table, leading space is a table writer's alignment and is dropped."""
+    text = " ".join(cell.split())
+    indent = len(cell) - len(cell.lstrip(" \u00a0"))
+    return " " * (indent - 1) + text if indent > 1 and text else text
+
+
+def is_marker(line):
+    """A line holding only a hand-edited marker (and other comments), or a pointer to a
+    correction that was not applied: never part of what a correction matches."""
+    stripped = line.strip()
+    if stripped.startswith("> A hand correction of ") and "could not be re-applied" in stripped:
+        return True
+    return bool(HAND_EDITED.search(stripped)) and not re.sub(r"<!--.*?-->", "", stripped).strip()
+
+
+def _strip_markers(text):
+    """`text` without its marker lines and leading or trailing blank lines."""
+    lines = [line for line in (text or "").split("\n") if not is_marker(line)]
+    return "\n".join(lines).strip("\n")
+
+
+def content_lines(text):
+    """The normalised non-blank lines of `text`, markers left out: what is matched."""
+    return [_norm_line(line) for line in (text or "").split("\n") if line.strip() and not is_marker(line)]
+
+
+class BodyLines:
+    """A paper body as the matching sees it: its raw lines, and for each non-blank,
+    non-marker line its index, normalised text and the heading above it."""
+
+    def __init__(self, text):
+        self.raw = text.split("\n")
+        self.idx, self.seq, self.section, self.fp = [], [], [], []
+        heading = ""
+        for i, line in enumerate(self.raw):
+            if not line.strip() or is_marker(line):
+                continue
+            norm = _norm_line(line)
+            self.idx.append(i)
+            self.seq.append(norm)
+            self.fp.append(_fingerprint(norm))
+            self.section.append(heading)
+            if norm.startswith("#"):
+                heading = norm.lstrip("#").strip()
+
+    def find(self, pattern):
+        k = len(pattern)
+        if not k:
+            return []
+        return [i for i in range(len(self.seq) - k + 1) if self.seq[i] == pattern[0] and self.seq[i:i + k] == pattern]
+
+    def landmarks(self, i, k):
+        """(section, prev, next) around the span of k content lines starting at i."""
+        return (self.section[i] if i < len(self.section) else (self.section[-1] if self.section else ""),
+                self.fp[i - 1] if i > 0 else "",
+                self.fp[i + k] if i + k < len(self.seq) else "")
+
+    def text(self, i, k):
+        """The raw text of the span of k content lines starting at i."""
+        return "\n".join(self.raw[self.idx[i]:self.idx[i + k - 1] + 1])
+
+
+def _score(correction, landmarks):
+    section, prev, nxt = landmarks
+    return ((bool(correction.get("section")) and correction["section"] == section)
+            + (bool(correction.get("prev")) and _fingerprint(correction["prev"]) == prev)
+            + (bool(correction.get("next")) and _fingerprint(correction["next"]) == nxt))
+
+
+def _best(correction, lines, spans):
+    """The one span, of (start, length) pairs, whose landmarks agree best; None if tied."""
+    scored = sorted(((_score(correction, lines.landmarks(i, k)), i, k) for i, k in spans), reverse=True)
+    if not scored or (len(scored) > 1 and scored[0][0] == scored[1][0]):
+        return None
+    return scored[0][1], scored[0][2]
+
+
+def _drifted(correction, lines, was):
+    """(start, length, similarity, bounded) of the region the landmarks place `was` in, the
+    one most like it: `bounded` when it lies exactly between `prev` and `next`. None when
+    there is none, or a second region, apart from it, is as like."""
+    k, seq = len(was), lines.seq
+    prev, nxt = _fingerprint(correction.get("prev") or ""), _fingerprint(correction.get("next") or "")
+    starts, after_prev = set(), set()
+    for j, line in enumerate(lines.fp):
+        if prev and line == prev:
+            starts.add(j + 1)
+            after_prev.add(j + 1)
+        if correction.get("label") and line.startswith(correction["label"]):
+            starts.update((j, j + 1))
+    ends = {j for j, line in enumerate(lines.fp) if nxt and line == nxt}
+    candidates = set()
+    for s in starts:
+        candidates.update((s, n) for n in range(max(1, k - 3), k + 4) if s + n <= len(seq))
+        candidates.update((s, e - s) for e in ends if 0 < e - s <= 2 * k + 3)
+    for e in ends:
+        candidates.update((e - n, n) for n in range(max(1, k - 3), k + 4) if e - n >= 0)
+    target = "\n".join(was)
+    found = []
+    for s, n in candidates:
+        if s >= len(seq) or correction.get("section") and lines.section[s] != correction["section"]:
+            continue
+        bounded = s in after_prev and s + n in ends
+        floor = DRIFT_BOUNDED_MIN if bounded else DRIFT_MIN
+        matcher = difflib.SequenceMatcher(None, "\n".join(seq[s:s + n]), target, autojunk=False)
+        if matcher.real_quick_ratio() >= floor and matcher.quick_ratio() >= floor:
+            found.append((matcher.ratio(), bounded, s, n))
+    if not found:
+        return None
+    found.sort(reverse=True)
+    ratio, bounded, s, n = found[0]
+    # A second region as good, not overlapping the first, makes the place ambiguous.
+    if any(r >= ratio - 0.01 and (s2 + n2 <= s or s2 >= s + n) for r, _, s2, n2 in found[1:]):
+        return None
+    return s, n, ratio, bounded
+
+
+def block_start(raw, i):
+    """The first line of the block holding raw line i (the line after the blank before it)."""
+    while i > 0 and raw[i - 1].strip() and not is_marker(raw[i - 1]):
+        i -= 1
+    return i
+
+
+def marker_line(correction):
+    why = " ".join(str(correction.get("why") or "").split()).replace("-->", "→")
+    return f"<!-- hand-edited: {why} -->" if why else "<!-- hand-edited -->"
+
+
+def _replace(raw, start, end, correction):
+    """raw lines with lines start..end-1 replaced by the correction's `now` (start == end
+    inserts), and its marker before the block that holds them."""
+    now = _strip_markers(correction.get("now"))
+    new = now.split("\n") if now else []
+    block = block_start(raw, start) if start < len(raw) and raw[start].strip() else start
+    inside = block < start  # the edit is part of a block (rows of a table): no blank lines
+    if inside:
+        return raw[:block] + [marker_line(correction)] + raw[block:start] + new + raw[end:]
+    before = [] if block == 0 or not raw[block - 1].strip() else [""]
+    after = [""] if new and end < len(raw) and raw[end].strip() else []
+    if not new:  # a deletion leaves only its marker, saying what stood there
+        return raw[:block] + before + [marker_line(correction)] + after + raw[end:]
+    return raw[:block] + before + [marker_line(correction), ""] + new + after + raw[end:]
+
+
+def apply_corrections(body, corrections, pointer=None, today=None):
+    """Apply a paper's hand corrections to a fresh conversion of its body.
+
+    Returns (body, corrections, outcomes): the corrected body; the corrections to keep,
+    their landmarks and `was` taken afresh from the new conversion where they applied, an
+    obsolete one left out; and one (correction, outcome, similarity) per correction, the
+    outcome one of `exact`, `landmarks` (`was` repeats; the landmarks chose), `drifted`
+    (placed by the landmarks, `similarity` like `was`), `obsolete` (`was` is gone and `now`
+    is there already: the converter makes the fix itself) or `stale` (not applied). For
+    each stale one, a line naming `pointer` (the corrections file) goes under the
+    paper's conversion note, so that a reader of the paper knows to look there.
+    """
+    today = today or datetime.date.today().isoformat()
+    kept, outcomes = [], []
+    for given in corrections:
+        c = dict(given)
+        lines = BodyLines(body)
+        was, now = content_lines(c.get("was")), content_lines(c.get("now"))
+        span, outcome, similarity = None, "stale", None
+        # `now` already there means the converter makes the fix; a short `now` could be
+        # there by chance.
+        fixed = any(len(now) >= 2 or sum(map(len, now)) >= 40 or _score(c, lines.landmarks(i, len(now)))
+                    for i in lines.find(now))
+        if was:
+            hits = lines.find(was)
+            if len(hits) == 1:
+                span, outcome = (hits[0], len(was)), "exact"
+            elif hits:
+                span = _best(c, lines, [(i, len(was)) for i in hits])
+                outcome = "landmarks" if span else "stale"
+            elif fixed:
+                outcome = "obsolete"
+            else:
+                drift = _drifted(c, lines, was)
+                if drift:
+                    similarity = round(drift[2], 3)
+                if drift and (drift[2] >= DRIFT_MIN or drift[3] and drift[2] >= DRIFT_BOUNDED_MIN):
+                    span, outcome = drift[:2], "drifted"
+                elif not now and not drift:  # a deletion whose text the converter no longer writes
+                    outcome = "obsolete"
+        elif fixed:
+            outcome = "obsolete"
+        else:  # an insertion: after `prev`, or else before `next`
+            prev, nxt = _fingerprint(c.get("prev") or ""), _fingerprint(c.get("next") or "")
+            spots = [(j + 1, 0) for j, line in enumerate(lines.fp) if prev and line == prev]
+            if not spots:
+                spots = [(j, 0) for j, line in enumerate(lines.fp) if nxt and line == nxt]
+            span = spots[0] if len(spots) == 1 else _best(c, lines, spots) if spots else None
+            outcome = "exact" if span else "stale"
+        outcomes.append((given, outcome, similarity))
+        if outcome == "obsolete":
+            continue
+        if outcome == "stale":
+            kept.append({**c, "stale": today})
+            continue
+        i, k = span
+        c["section"], c["prev"], c["next"] = lines.landmarks(i, k)
+        if k:
+            c["was"] = lines.text(i, k)
+            start, end = lines.idx[i], lines.idx[i + k - 1] + 1
+        else:  # an insertion after content line i - 1
+            start = end = lines.idx[i - 1] + 1 if i > 0 else 0
+            if i > 0:  # past the end of the block that line is in, unless `now` continues it
+                continues = (_strip_markers(c.get("now")).lstrip().startswith("|")
+                             and lines.raw[start - 1].lstrip().startswith("|"))
+                while not continues and start < len(lines.raw) and lines.raw[start].strip():
+                    start = end = start + 1
+        c.pop("stale", None)
+        if outcome == "drifted":
+            c["drifted"] = f"{today}, similarity {similarity}"
+        body = "\n".join(_replace(lines.raw, start, end, c))
+        kept.append(c)
+    stale = [c for c, outcome, _ in outcomes if outcome == "stale"]
+    if stale and pointer:
+        body = _add_pointers(body, [c.get("where") or c.get("label") or "part of the paper" for c in stale], pointer)
+    return re.sub(r"\n{3,}", "\n\n", body), kept, outcomes
+
+
+def _add_pointers(body, wheres, pointer):
+    """A line for each correction not applied, under the conversion note (a blockquote at
+    the top of the body), or at the top when there is none."""
+    note = "\n".join(f"> A hand correction of {w} could not be re-applied to this conversion: "
+                     f"it is in {pointer}." for w in wheres)
+    lead = len(body) - len(body.lstrip("\n"))
+    rest = body[lead:]
+    if rest.startswith(">"):
+        m = re.search(r"\n(?!>)", rest)
+        cut = m.start() if m else len(rest)
+        return body[:lead] + rest[:cut] + "\n\n" + note + "\n" + rest[cut:]
+    return body[:lead] + note + "\n\n" + rest
+
+
+def _label(lines):
+    """The table, figure or equation a block of lines is or captions: "Table 4", "Eq. (3)"."""
+    for line in lines:
+        m = _LABEL.match(line.lstrip("*_ "))
+        if m:
+            return f"{m.group(1)} {m.group(2)}"
+    for line in lines:
+        m = _EQ_TAG.search(line)
+        if m:
+            return f"Eq. ({m.group(1) or m.group(2)})"
+    return ""
+
+
+def _page(raw, i):
+    """The page of raw line i, from the nearest heading above with a (p. N)."""
+    for line in reversed(raw[:i + 1]):
+        m = re.match(r"#+ .*\((p\. [^)–-]+)", line)
+        if m:
+            return m.group(1)
+    return ""
+
+
+def _marker_above(lines, j):
+    """The marker that covers line j from above: in its block, or above it with at most a
+    short block (a caption) between; None if there is none."""
+    own, between = True, 0
+    for x in reversed(lines[:j]):
+        if HAND_EDITED.search(x):
+            return x
+        if not x.strip():
+            own = False
+        elif not own:
+            between += 1
+            if between > 2:
+                return None
+    return None
+
+
+def _is_table(line):
+    return line.lstrip().startswith(("|", "<table"))
+
+
+def _block_end(raw, i):
+    """The line after the block that starts at raw line i (its blank line, or the end)."""
+    while i < len(raw) and raw[i].strip():
+        i += 1
+    return i
+
+
+def diff_corrections(base, edited, marked_only=False, why="", where="", by="session", today=None):
+    """The hand corrections that turn `base` (a paper body as converted) into `edited`.
+
+    Each run of changed lines is one correction, so an edit of two blocks is two; in a
+    table, the changed rows only, unless half its rows or more changed, when the whole
+    table is. With `marked_only`, only the runs a hand-edited marker covers (in their
+    block, or just above it) are kept: the rest is the converter's own drift. The marker's note, or the comment
+    beside it, is the `why` unless one is given.
+    """
+    today = today or datetime.date.today().isoformat()
+    a, b = base.split("\n"), edited.split("\n")
+    key = lambda lines: [("\0marker" if is_marker(x) else _norm_line(x)) for x in lines]
+    ops = difflib.SequenceMatcher(None, key(a), key(b), autojunk=False).get_opcodes()
+    hunks = [[i1, i2, j1, j2] for tag, i1, i2, j1, j2 in ops if tag != "equal"]
+    hunks = [h for h in hunks if any(x.strip() for x in a[h[0]:h[1]] + b[h[2]:h[3]])]
+
+    # Changed lines of one block close together (two rows apart at most: three lines, or
+    # eight in an HTML table, whose row takes four) are one correction; a table is taken
+    # whole when half its lines or more changed.
+    groups = []
+    for h in hunks:
+        block = block_start(a, h[0]) if h[0] < len(a) and a[h[0]].strip() else None
+        reach = 8 if block is not None and a[block].lstrip().startswith("<table") else 3
+        if groups and block is not None and groups[-1][0] == block and h[0] - groups[-1][1][1] <= reach:
+            groups[-1][1][1], groups[-1][1][3] = h[1], h[3]
+        else:
+            groups.append((block, list(h)))
+    by_block, out = {}, []
+    for n, (block, h) in enumerate(groups):
+        by_block.setdefault(block if block is not None else ("alone", n), []).append(h)
+    for block, group in by_block.items():
+        if isinstance(block, int) and _is_table(a[block]):
+            end = _block_end(a, block)
+            changed = sum(max(h[1] - h[0], h[3] - h[2]) for h in group)
+            if changed * 2 >= end - block:
+                out.append([block, end, group[0][2] - (group[0][0] - block), group[-1][3] + (end - group[-1][1])])
+                continue
+        out.extend(group)
+    corrections, lines = [], BodyLines(base)
+    for i1, i2, j1, j2 in sorted(out):
+        new = b[j1:j2]
+        was, now = "\n".join(a[i1:i2]).strip("\n"), _strip_markers("\n".join(new))
+        if not content_lines(was) and not content_lines(now):
+            continue  # only a marker: it marks the run below, or an edit the base has already
+        marker_lines = [x for x in new if HAND_EDITED.search(x)]
+        if not marker_lines:
+            above = _marker_above(b, j1)
+            marker_lines = [above] if above else []
+        if marked_only and not marker_lines:
+            continue
+        note = why
+        if not note:
+            for m in marker_lines:
+                tagged = re.search(r"<!--\s*hand-edited\s*:\s*(.*?)\s*-->", m, re.S)
+                beside = re.findall(r"<!--\s*(.*?)\s*-->", HAND_EDITED_COMMENT.sub("", m), re.S)
+                note = (tagged.group(1) if tagged else beside[0] if beside else "").strip()
+                if note:
+                    break
+        content_before = [n for n, idx in enumerate(lines.idx) if idx < i1]
+        i = content_before[-1] + 1 if content_before else 0
+        k = len(content_lines(was))
+        section, prev, nxt = lines.landmarks(i, k) if lines.seq else ("", "", "")
+        # A table is labelled by its caption just above or below it; anything else by its
+        # own lines, the line before it or the caption above its block.
+        top = block_start(a, i1) if i1 < len(a) and a[i1].strip() else i1
+        if top < len(a) and _is_table(a[top]):
+            bottom = _block_end(a, top)
+            near = [x for x in a[max(0, top - 4):top] + a[bottom:bottom + 4] if x.strip()]
+            label = _label([x for x in near if re.match(r"[*_ ]*(Table|Tab\.)", x)])
+        else:
+            caption = [x for x in a[max(0, top - 4):top] if x.strip()][-2:]
+            label = _label(a[i1:i2] + new + ([lines.raw[lines.idx[i - 1]]] if i > 0 else []) + caption)
+        page = _page(a, i1)
+        corrections.append({
+            "where": where or ", ".join(x for x in (page, label) if x) or section,
+            "why": note, "section": section, "label": label, "prev": prev, "next": nxt,
+            "was": was, "now": now, "by": by, "added": today,
+        })
+    return corrections
 
 
 # A markdown link's target, and the paper-map section of a review. Reviews use

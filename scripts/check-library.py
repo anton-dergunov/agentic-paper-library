@@ -32,7 +32,7 @@ from pathlib import Path
 from urllib.parse import unquote
 
 from paperlib import (
-    ISSUE_SOURCES, ISSUES_DIR, LIBRARY_DIR, NOTES_DIR, PDF_ROOT, LIBRARY_ROOT, REQUIRED, SOURCES,
+    HAND_EDITED, ISSUE_SOURCES, ISSUES_DIR, all_corrections, corrections_path, LIBRARY_DIR, NOTES_DIR, PDF_ROOT, LIBRARY_ROOT, REQUIRED, SOURCES,
     TOPIC_PATH, TYPES, load_issues, load_reviews, load_skipped, load_tickets, load_topics, norm_title,
     paper_files, pdf_path_for, read_paper, review_links,
 )
@@ -183,6 +183,15 @@ def main():
             problems.append(f"notes/{note.name}: no paper with this name in the library")
 
     problems += check_reviews(stems)
+
+    for stem in all_corrections():
+        if stem not in stems:
+            problems.append(f"corrections/{stem}.yaml: no paper with this name in the library")
+    unmigrated = [md for md in papers if HAND_EDITED.search(md.read_text(encoding="utf-8"))
+                  and not corrections_path(md).exists()]
+    for md in unmigrated:
+        print(f"warning: {md.relative_to(LIBRARY_DIR)} is marked hand-edited but has no corrections file, "
+              "so reconvert skips it (paperlib corrections capture)")
 
     # os.walk does not follow symlinks, so the pdf/ link to PDF_ROOT is skipped,
     # and so is PDF_ROOT itself when it is a (git-ignored) folder in the library.

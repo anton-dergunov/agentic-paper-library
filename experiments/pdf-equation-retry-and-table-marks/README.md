@@ -2,7 +2,7 @@
 
 **Question.** Why does a display equation of a PDF paper come out as `$$(7)$$`, and why are a PDF table's bold and underlining lost; what fixes each?
 
-**Status.** Run 19 Oct 2026 on nine library papers. **Both causes of number-only equations found and fixed: of the 9 such equations in the four test papers, 4 read as LaTeX, 3 as the text layer's raw text and 2 stayed number-only, in a run made before the last two fixes below; re-converting one paper after them turned a raw-text equation into LaTeX. Bold and underlining come back in the four test papers' tables exactly where the PDF's fonts and rules have them.** The tickets' papers (51 with number-only equations, 100 with bold-font numbers on a table page, 127 in all) are reconverted overnight from 19 Oct; their counts are added here after it.
+**Status.** Run 19 Oct 2026 on nine library papers. **Both causes of number-only equations found and fixed: of the 9 such equations in the four test papers, 4 read as LaTeX, 3 as the text layer's raw text and 2 stayed number-only, in a run made before the last two fixes below; re-converting one paper after them turned a raw-text equation into LaTeX. Bold and underlining come back in the four test papers' tables exactly where the PDF's fonts and rules have them.** **Overnight on 19 Oct the tickets' papers were reconverted (127 chosen, 121 converted; 6 hand-edited ones skipped): number-only equations 108 → 4 in the converted papers, table cells marked 17 → 1,676 in 75 papers, words +0.13% (no paper lost more than 0.2%).** The 4 left are the ones the model cannot read (DSSM, LLE, Greedy Function Approximation, Joachims); the 6 hand-edited papers wait for their edits to survive a reconversion ([`hand-edit-corrections`](../hand-edit-corrections/README.md)).
 
 **Serves.** [`docs/conversion.md`](../../docs/conversion.md#pdf-only-papers).
 
@@ -43,6 +43,19 @@ Two bugs were found on the way and fixed before the overnight run: the retry rea
 **Fix.** A cell is bold (italic) when every letter and digit under its box is in a bold (text-italic) font, and underlined when a drawn rule lies within 3 pt under the text and ends within 4 pt of its ends. The first version allowed a rule up to 1.5× the text's width and underlined GPT-1's Table 1 cell over the table's bottom rule and DSSM's header cells over Word's per-cell borders (each a separate segment of the cell's width); requiring the rule to stop at the text's ends removed both. Header cells and a mark shared by every body cell are left plain.
 
 **Results.** Glorot Table 1: bold on exactly the 14 cells set in `-Medi`. LambdaLoss Tables 3–4: the best value of each column bold. Interleaved Comparisons Tables 2 and 4: bold, and Table 4's underline on the best of each row, ties included; its grey cells are not read. GPT-1 Tables 2–5: the paper's own results bold and the previous best underlined, as the PDF has them. DSSM: a second header row that docling does not flag as a header comes out bold, as the PDF sets it.
+
+## The overnight run
+
+127 papers chosen (51 with a number-only equation, 100 with bold-font numbers on a table page), converted once each with the thorough conversion in 3 h 33 min (about 168 s a paper, `--jobs 1`); 121 ok, 6 skipped as hand-edited (two of them CLSM and Interleaved, holding 4 of the number-only equations left). Counts over the 121, before and after (`git show 8969b9e2` in the library):
+
+| | Before | After |
+|---|---|---|
+| Number-only equations (`$$(N)$$`) | 108 | 4 |
+| Display-equation blocks | 3,205 | 3,169 (equations written as raw text, the fallback) |
+| Bold, italic or underlined table cells | 17 | 1,676, in 75 papers |
+| Words | 1,307,441 | 1,309,149 (+0.13%); largest loss 0.2% (Greedy Function Approximation) |
+
+Of the 100 papers the font scan chose for bold, 73 have marked table cells now; the rest had bold numbers outside their tables (the scan reads the page, not the table), as expected. A check of the bold against the PDF: of 279 bold cells sampled (5 a paper) whose first token is in the text layer, 274 are set in a bold font there; the other five are row labels and a scanned table, none a false mark of a number. Glorot & Bengio's Table 1, whose bold marks significance, is the one paper whose note rests on the change and is read again.
 
 ## Apparatus
 

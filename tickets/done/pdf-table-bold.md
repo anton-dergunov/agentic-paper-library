@@ -3,14 +3,14 @@ id: pdf-table-bold
 title: Bold in PDF tables is dropped
 converter: pdf
 takes: [engine, reconvert, reread]
-status: fixed
+closed: '2026-10-19'
 cost: 'engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the
   bold carries a claim'
 ---
 
 # Bold in PDF tables is dropped
 
-`engine` `reconvert` `reread` · pdf · fixed
+`engine` `reconvert` `reread` · pdf · done
 
 **Broken.** docling keeps a table's text but not its weight, so the bold that marks the best or the significant result is gone. Underlining and grey cells go the same way. When filed, 12 of the 103 read PDF papers reported it.
 

@@ -47,11 +47,18 @@ pdf_link: pdf
 # writes there), e.g. in an Obsidian vault.
 # overview_dir: ~/obsidian/Papers
 
+# Optional: the areas to read and review, in order (paperlib reading); without
+# it, the top-level folders.
+# review_scopes:
+#   - Primary areas: [llm/evaluation, search-and-ranking]
+#   - Other areas: [deep-learning, nlp]
+
 # Defaults, change only to rename:
 # library: library
 # catalog: catalog
 # notes: notes
 # issues: issues           # conversion problems, one file per paper
+# corrections: corrections # hand corrections, applied again on reconvert
 # reviews: reviews
 # inbox: INBOX.txt
 # cache: ~/.cache/papers      # arXiv downloads, shared by every library

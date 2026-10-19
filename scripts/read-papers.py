@@ -2,7 +2,7 @@
 """Read papers and write their notes, one model request per paper.
 
     ./scripts/read-papers.py <scope or paper.md> ... [--limit N] [--jobs N] [--model ID]
-                             [--focus FILE] [--redo] [--appendix]
+                             [--focus FILE] [--redo | --flagged] [--appendix]
 
 For every paper named, or under a scope (a folder of the library), that has no digest in
 notes/<stem>.md yet, sends the paper's reading view (paperlib read-view) to a model through
@@ -19,6 +19,8 @@ existing note's Q&A is kept.
                   opus; experiments/reading-models compares the candidates)
     --focus FILE  a few lines on what the area's review will ask, put before the paper
     --redo        read again every paper named, whatever its note says
+    --flagged     read again the papers named whose note is marked `reread:` (paperlib
+                  reading lists them)
     --appendix    give the reader the appendices too (for papers whose note says the
                   main results are in them); use with --redo on those papers
 
@@ -48,7 +50,7 @@ from pathlib import Path
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, is_open, load_issues,
-    load_tickets, note_path, paper_files, read_paper, read_view, save_issues,
+    load_tickets, note_path, paper_files, read_paper, read_view, reread_reason, save_issues,
 )
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
@@ -192,7 +194,7 @@ def main(argv):
             if not args:
                 sys.exit(__doc__)
             options[arg] = args.pop(0)
-        elif arg in ("--redo", "--appendix"):
+        elif arg in ("--redo", "--flagged", "--appendix"):
             flags.add(arg)
         elif arg.startswith("-"):
             sys.exit(__doc__)
@@ -222,7 +224,12 @@ def main(argv):
     todo, done_before = [], 0
     for paper, scope_dir in papers:
         has_digest, _ = note_state(paper.stem)
-        if "--redo" in flags or not has_digest:
+        if "--flagged" in flags:
+            if has_digest and reread_reason(paper):
+                todo.append((paper, scope_dir))
+            else:
+                done_before += 1
+        elif "--redo" in flags or not has_digest:
             todo.append((paper, scope_dir))
         else:
             done_before += 1

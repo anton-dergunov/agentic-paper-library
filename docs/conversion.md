@@ -140,7 +140,8 @@ When a converter improves, `paperlib reconvert` regenerates paper bodies and kee
 
 - arXiv downloads are cached in `~/.cache/papers/`, so a reconversion needs no network.
 - `--jobs N --state <file>` runs many papers at once, resumably.
-- A paper containing `<!-- hand-edited -->` is skipped, also when the marker carries a note (`<!-- hand-edited: … -->`).
+- A paper corrected by hand keeps its corrections in `corrections/<stem>.yaml` (`paperlib corrections capture`), and they are applied again to the new conversion. A correction is located by the converter's text it replaces, compared line by line with whitespace, cell padding, page markers and image alt text ignored. When that text repeats, or changed a little, its landmarks place it: the heading above it, the lines around it, its table or equation label. One the new conversion makes unnecessary (its corrected text is already there) is retired; one that cannot be placed is kept, marked `stale`, and the paper gets a line under its conversion note pointing to it, for the `reapply-corrections` skill. → [`experiments/hand-edit-corrections`](../experiments/hand-edit-corrections/README.md)
+- A paper marked `<!-- hand-edited -->` without a corrections file is skipped, unless `--force` is given.
 
 A whole-library run is validated with:
 

@@ -245,6 +245,19 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   leaves my overview note, and reports the reviews and notes that still name the paper. It
   lists all this and asks before it deletes, since a PDF may hold highlights and is not in
   git.
+- **What to read next is a command, and re-reading is for broken key content only
+  (2026-10-19).** The rollout of the literature reviews lived in a hand-kept task file in
+  the library: the order, a status per scope, how many papers had no note, and a list of
+  39 notes to read again after a reconversion. Its counts went stale within days (it said
+  42 of `llm/memory`'s papers had no note when all 70 had one). `paperlib reading` now
+  computes the same from the library: per scope in the order of `review_scopes`, papers
+  read and left, notes to read again, the API cost of reading them (fitted to 1,061 logged
+  readings, $0.11 a paper plus $3.4 per million characters of reading view, median error
+  11%), and the review's state. A note to read again carries a `reread:` line, which
+  `paperlib issues close` writes only for records with key content broken, and a person by
+  hand: a reading costs about $0.30, and a session answering a question reads the paper as
+  it is now anyway. On that rule the 39-note list was dropped: none of its papers had a
+  record of key content broken.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

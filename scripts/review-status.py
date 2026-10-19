@@ -24,7 +24,7 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 
 from paperlib import (
-    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_LINK_BASE, REVIEWS_DIR, all_issues, is_open,
+    LIBRARY_DIR, LIBRARY_ROOT, PDF_LINK_BASE, REVIEWS_DIR, all_issues, has_digest, is_open,
     load_reviews, load_topics, note_path, paper_files, read_paper, review_coverage, review_links,
 )
 
@@ -40,12 +40,6 @@ def md_link(paper, from_file):
 def pdf_link(paper):
     return PDF_LINK_BASE + quote(
         paper.relative_to(LIBRARY_DIR).with_suffix(".pdf").as_posix(), safe="/&+")
-
-
-def has_digest(stem):
-    """Whether the paper has been read: its note holds a digest."""
-    note = NOTES_DIR / f"{stem}.md"
-    return note.exists() and "## Digest" in note.read_text(encoding="utf-8")
 
 
 def report(scope, review):

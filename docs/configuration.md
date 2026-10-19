@@ -8,7 +8,8 @@ A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it
 | `pdf_root` | `pdfs` | Where the original PDFs go, mirroring `library/`. Keep it out of git: a synced folder (Dropbox, Yandex Disk, iCloud) makes the PDFs readable on a tablet. |
 | `pdf_link` | none (`init` writes `pdf`) | A symlink in the library to `pdf_root`, made by `paperlib init` and ignored by git. An editor opened on the library then shows both trees, and the indexes link each paper's PDF through it. |
 | `overview_dir` | none | A folder for your own note per paper, which the `overview` skill writes, e.g. a folder in an Obsidian vault. Without it, the skill asks where notes should go. |
-| `library`, `catalog`, `notes`, `issues`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `issues`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
+| `library`, `catalog`, `notes`, `issues`, `corrections`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `issues`, `corrections`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
+| `review_scopes` | the top-level folders | The areas to read and review, in the order to do them: a list of folders, or of groups of them (`- Primary areas: [llm/evaluation, search-and-ranking]`). `paperlib reading` shows each one's progress and cost. |
 | `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder and summary ([measured](../experiments/skill-models/README.md)). |
 | `info_model` | `sonnet` | The model `paperlib info` asks what a paper proposes and how it relates to the folder's papers. |
 | `reader_model` | `opus` | The model `paperlib read` gives each paper to for its note ([measured](../experiments/reading-models/README.md)). |

@@ -10,7 +10,7 @@ A research-paper library kept with agentic-paper-library: agent-readable markdow
 |---|---|
 | Paper markdown (committed) | `library/<topic path>/<Title>.md` |
 | Its figures (committed) | `library/<topic path>/images/<Title>-figNN.<ext>` |
-| Original PDF (not committed) | `no-pdfs/<topic path>/<Title>.pdf` |
+| Original PDF (not committed) | `pdfs/<topic path>/<Title>.pdf` |
 | Indexes (generated) | `library/README.md` and a `README.md` in every folder |
 | Topic tree (declared) | `catalog/topics.yaml`: every folder with its scope |
 | Papers deliberately not added | `catalog/skipped.yaml`: title, reason, date |
@@ -38,7 +38,7 @@ A paper's markdown and PDF have the same topic path and filename stem.
 - **Don't re-propose skipped papers.** `paperlib lookup` flags those in `catalog/skipped.yaml` as `skipped earlier`. Record every new skip there, with the reason; if the reader changes their mind, remove the entry first.
 - **Prefer a better tool to a workaround, and conversion quality to speed.** When a library or model would do a job better than paperlib does, propose it rather than hand-tuning heuristics, and compare candidates on real papers first. A slow, precise conversion beats a fast, lossy one, except for hundreds of papers at once (then say what was traded away).
 - **Record broken conversions** (broken equations, flattened tables, missing sections or figures, a truncated body, implausible `pdf-text` numbers) with one call, `paperlib issues add <paper.md> <kind | new:slug> "<what>" --where "p. N, Table M" [--key-content]`, where `kind` is a ticket id from `paperlib tickets`; say so when you quote from such a paper. Fixing them is the engine's work (`triage-conversions`, then `fix-conversions`); edit a paper by hand only when the reader asks.
-- **Don't hand-edit a paper's markdown without `<!-- hand-edited -->` near the edit**: `paperlib reconvert <paper.md>` regenerates bodies from arXiv's HTML with the current converter, and skips only those.
+- **Record a hand edit of a paper**: commit the paper, edit it, then `paperlib corrections capture <paper.md> --why "<what, from where>"`. `paperlib reconvert` regenerates bodies and applies the corrections again; an edit not captured is lost.
 - **Start from the review, then check the paper.** For a question about an area, a comparison across papers, or "what exists on X", first read the review whose scope covers it: `reviews/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.
   - The review is a map, not evidence. Use it to find the papers and the shape of the answer. Before you state a number, or what a result means, read that paper's note or the paper at the cited page: an answer written from the review alone gets the numbers right and their meaning wrong. Say so when a point rests only on the review.
   - Search a review for the part you need (`grep -n` its headings and the terms) rather than reading it whole; the paper map and the link definitions at the end are for lookup.

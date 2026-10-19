@@ -112,6 +112,7 @@ Then do three things by hand:
 | PDFs | `paperlib`, when a paper is added | No |
 | `notes/`, `reviews/` | The agent | Yes |
 | `issues/` | `paperlib read`, and the agent | Yes |
+| `corrections/` | `paperlib corrections capture`, after a hand edit | Yes |
 | `catalog/skipped.yaml` | `paperlib` and the agent | Yes |
 
 Three things are worth knowing:
@@ -231,18 +232,27 @@ A review covers one topic folder and everything under it, and is written to `rev
 
 It takes two steps. Each can be run on its own day.
 
+### Which area next
+
+```bash
+paperlib reading                          # every area: papers read, left, to re-read, cost, review
+paperlib reading <topic>                  # one area: its papers to read and to re-read, each with its cost
+```
+
+The areas and their order are `review_scopes` in `paper-library.yaml` (by default the top-level folders). The cost is the API price of reading, a request a paper, estimated from the papers' length and the readings so far; spend spare usage on the next area in the list. A review shows as `written <date>`, `+N` when papers were added since, and `checked <date>` once you have gone through it (its `checked:` frontmatter).
+
 ### Step 1. Read the papers into notes (terminal)
 
 ```bash
-paperlib review-status <topic>            # how many papers have no note yet
 paperlib read <topic> --limit 30          # read 30 of them; run again to continue
-paperlib review-status <topic>            # done when no paper is "not read"
+paperlib reading <topic>                  # done when nothing is left to read
 ```
 
 - **Each paper is one request**, read in full by Opus, and the result is `notes/<Title>.md`. A paper costs about 35K tokens, so about 100 papers can use up a usage window. `--limit` keeps a run within a budget; leave it out to read everything that is left.
 - **It is resumable.** Papers that already have a note are skipped, so the same command continues after any stop.
 - **Exit code 3** means the usage limit was reached. The message gives the reset time; the notes written so far are kept.
 - **`--jobs N`** sets how many papers are read at once (default 4).
+- **Notes to read again.** A note is marked `reread:` when a conversion fix reached a part of the paper its findings rest on (`paperlib issues close` does this for records with key content broken), or by hand with `paperlib reread <paper.md> --reason "<why>"`. `paperlib read --flagged <topic>` reads those papers again. Re-reading costs as much as reading, so only broken key content earns the mark: a session answering a question reads the paper as it is now anyway.
 - **Results in an appendix.** When a note says the paper's main numbers are in an appendix, read that paper again with the appendix: `paperlib read --redo --appendix <paper.md>`.
 - **A focus file** is optional: 5 to 10 lines on the themes the review will have and what it will ask of each paper, passed with `--focus <file>`. `/literature-review read <topic> 30` in a session drafts one from the folder's summaries and then runs the same command.
 
@@ -262,7 +272,7 @@ It writes the review from the notes: the kinds of approaches, a map of the paper
 |---|---|
 | Do both steps in one go | `/literature-review <topic>`. It reads what is missing, then writes. Good for a small folder. |
 | Update a review after adding papers | `paperlib read <topic>`, then `/literature-review update <topic>`. |
-| See which reviews are behind | `paperlib review-status`, or `/literature-review status`. |
+| See which reviews are behind | `paperlib reading`, `paperlib review-status`, or `/literature-review status`. |
 
 ## 10. Check the library's health
 
@@ -288,7 +298,13 @@ paperlib reconvert <paper.md>                            # convert it again with
 paperlib reconvert --pdf-text --inline-math <paper.md>   # the same for a paper converted from its PDF
 ```
 
-The summary and the PDF are kept. A paper you corrected by hand is skipped when the correction is marked `<!-- hand-edited -->`.
+The summary and the PDF are kept. To correct a paper by hand (a table rewritten from the PDF, a cropped figure), commit it, edit it, and record the edit:
+
+```bash
+paperlib corrections capture <paper.md> --why "Table 4 rewritten from the PDF page"
+```
+
+A reconversion applies the corrections again; one it can no longer place is listed by `paperlib corrections --stale`, and `/reapply-corrections` puts it back.
 
 ### Conversion problems
 
@@ -319,9 +335,10 @@ In a terminal (`paperlib --help` has the full list):
 | `add`, `add-arxiv`, `add-pdf`, `add-web` | Add a paper | [6](#6-add-papers) |
 | `remove`, `move`, `rename` | Take out, refile, rename | [7](#7-remove-move-and-reorganise) |
 | `read` | Reads papers into notes | [9](#9-write-a-literature-review) |
+| `reading`, `reread` | What is left to read, by area, and its cost; mark a note to read again | [9](#9-write-a-literature-review) |
 | `review-status` | Review coverage and unread papers | [9](#9-write-a-literature-review), [10](#10-check-the-librarys-health) |
 | `build-index`, `check` | Rebuild the indexes, check consistency | [10](#10-check-the-librarys-health) |
-| `issues`, `tickets`, `symptoms`, `reconvert` | Find and repair conversion problems | [10](#10-check-the-librarys-health) |
+| `issues`, `tickets`, `symptoms`, `reconvert`, `corrections` | Find and repair conversion problems; hand corrections | [10](#10-check-the-librarys-health) |
 
 In a Claude Code session:
 
@@ -334,6 +351,7 @@ In a Claude Code session:
 | `/overview` | A short note to read before a paper | [8](#8-read-a-paper-with-the-agent) |
 | `/triage-conversions` | Files conversion problems under tickets, proposes what to fix | [10](#10-check-the-librarys-health) |
 | `/fix-conversions` | Fixes tickets in the converter | [10](#10-check-the-librarys-health) |
+| `/reapply-corrections` | Puts back hand corrections a reconversion could not place | [10](#10-check-the-librarys-health) |
 | `/literature-review` | Writes or updates the review of an area | [9](#9-write-a-literature-review) |
 
 The skills are available in a session opened on the library. To use them from other folders, install them as a plugin: `/plugin marketplace add anton-dergunov/agentic-paper-library`.

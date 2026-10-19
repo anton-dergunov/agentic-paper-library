@@ -233,6 +233,132 @@ def tickets_problems(root):
     return problems
 
 
+def matching_problems():
+    """apply_corrections places a correction by its text, by its landmarks when the text
+    repeats or drifted, retires one the converter now makes, and points to one it cannot
+    place; diff_corrections stores the changed rows of a table."""
+    sys.path.insert(0, str(ENGINE / "scripts"))
+    from paperlib import apply_corrections, diff_corrections
+    problems = []
+    rows = "\n".join(f"| m{i}  | {i}.{i}   |" for i in range(6))
+    base = ("> **Converted from the PDF.**\n\n# T\n\n## 2 Method (p. 2)\n\nThe loss is defined below, "
+            "with its two terms.\n\n$$L = a (1)$$\n\n## 3 Results (p. 3)\n\nTable 1: Scores.\n\n"
+            f"| Model | Score |\n|-------|-------|\n{rows}\n\nWe see the gains.\n\n## 4 More (p. 4)\n\n"
+            "We see the gains.\n")
+    edited = base.replace("$$L = a (1)$$", "$$L = a + b (1)$$").replace("| m2  | 2.2   |", "| m2 | 2.25 |")
+    found = diff_corrections(base, edited, why="from the PDF")
+    if [(c["where"], c["was"].strip(), c["now"].strip()) for c in found] != [
+            ("p. 2, Eq. (1)", "$$L = a (1)$$", "$$L = a + b (1)$$"),
+            ("p. 3, Table 1", "| m2  | 2.2   |", "| m2 | 2.25 |")]:
+        problems.append(f"diff_corrections did not take the two edits, the table's one row only: {found}")
+
+    def outcomes(fresh, corrections=found):
+        body, kept, out = apply_corrections(fresh, corrections, pointer="corrections/T.yaml", today="2026-01-01")
+        return body, kept, [o for _, o, _ in out]
+
+    repadded = base.replace("| m4  | 4.4   |", "| m4 | **4.4** |").replace("| m0  |", "|  m0 |") \
+        .replace("We see the gains.\n\n## 4", "We see larger gains.\n\n## 4")
+    body, kept, out = outcomes(repadded)
+    if out != ["exact", "exact"] or "| m2 | 2.25 |" not in body or "$$L = a + b (1)$$" not in body \
+            or "| m4 | **4.4** |" not in body:
+        problems.append(f"a re-padded conversion with a change elsewhere did not take both edits: {out}")
+    if "<!-- hand-edited: from the PDF -->\n| Model" not in body:
+        problems.append("a row's marker is not above its table")
+    twice = [{"where": "p. 4", "why": "x", "section": "4 More", "was": "We see the gains.",
+              "now": "We see the gains, twice."}]
+    body, _, out = outcomes(base, twice)
+    if out != ["landmarks"] or not body.rstrip().endswith("We see the gains, twice."):
+        problems.append(f"a repeated `was` was not placed by its section: {out}")
+    insert = [{"where": "p. 2", "why": "y", "prev": "The loss is defined below, with its two terms.",
+               "was": "", "now": "where b is the penalty."}]
+    body, _, out = outcomes(base, insert)
+    if out != ["exact"] or "terms.\n\n<!-- hand-edited: y -->\n\nwhere b is the penalty.\n\n$$L" not in body:
+        problems.append(f"an insertion was not placed after `prev`: {out}")
+    drifted = base.replace("$$L = a (1)$$", "$$L = a\\, (1)$$")
+    body, kept, out = outcomes(drifted)
+    if out[0] != "drifted" or "$$L = a + b (1)$$" not in body or "drifted" not in kept[0]:
+        problems.append(f"a slightly changed `was` was not placed by its landmarks: {out}")
+    body, kept, out = outcomes(edited)
+    if out != ["obsolete", "obsolete"] or kept:
+        problems.append(f"corrections the conversion already makes were not retired: {out}")
+    algo = "|  Algorithm 1 |\n|----|\n|  1. loop |\n|  x = 1 |\n|  2. end |"
+    indent = [{"where": "p. 5", "why": "loop body indented", "was": "|  x = 1 |", "now": "|      x = 1 |"}]
+    body, _, out = outcomes(f"# A\n\n{algo}\n", indent)
+    again = apply_corrections(body.replace("<!-- hand-edited: loop body indented -->\n", ""), indent)[2]
+    if out != ["exact"] or "|      x = 1 |" not in body or [o for _, o, _ in again] == ["exact"]:
+        problems.append(f"a one-column table's indentation is not told apart: {out}")
+    aligned = [{"where": "p. 3", "why": "z", "was": "|   Score | Model |\n|---|---|\n|    **4.3** | a |", "now": "| x |"}]
+    if outcomes("| Score   | Model |\n|---------|-------|\n| **4.3** | a |\n", aligned)[2] != ["exact"]:
+        problems.append("a table writer's right alignment is taken for indentation")
+    gone = base.replace("$$L = a (1)$$", "The loss is shown in Figure 2 instead.")
+    body, kept, out = outcomes(gone)
+    if out[0] != "stale" or kept[0].get("stale") != "2026-01-01" \
+            or "> A hand correction of p. 2, Eq. (1) could not be re-applied" not in body.split("# T")[0]:
+        problems.append(f"a correction that cannot be placed was not marked stale with a pointer: {out}")
+    return problems
+
+
+def corrections_problems(root):
+    """capture records an edit against a base and marks it; the listing shows it; check
+    accepts it and reports a corrections file without a paper."""
+    problems = []
+    paper = next(p for p in sorted(root.joinpath("library").rglob("*.md")) if p.name != "README.md")
+    text = paper.read_text()
+    line = next(x for x in text.split("\n") if len(x) > 200 and not x.startswith(("|", ">", "#")))
+    base = root.parent / "base.md"
+    base.write_text(text)
+    paper.write_text(text.replace(line, line[:120] + " [corrected]", 1))
+    result = run("corrections.py", root, "capture", str(paper), "--base", str(base), "--why", "a test edit")
+    path = root / "corrections" / f"{paper.stem}.yaml"
+    stored = yaml_list(path) if path.exists() else []
+    if result.returncode or len(stored) != 1 or stored[0]["was"] != line \
+            or "<!-- hand-edited: a test edit -->" not in paper.read_text():
+        problems.append(f"capture did not record and mark the edit: {result.stdout} {result.stderr[-300:]}")
+    if "1 in 1 papers" not in run("corrections.py", root).stdout:
+        problems.append("the listing does not show the correction")
+    if run("check-library.py", root).returncode:
+        problems.append("check fails on a valid corrections file")
+    orphan = root / "corrections" / "No Such Paper.yaml"
+    orphan.write_text(path.read_text())
+    if "No Such Paper" not in run("check-library.py", root).stdout:
+        problems.append("check does not report a corrections file without a paper")
+    orphan.unlink()
+    path.unlink()
+    paper.write_text(text)
+    return problems
+
+
+def reading_problems(root):
+    """reading counts the scopes' papers, reread marks a note and clears it, and issues close
+    marks the note of a paper whose key content it closed."""
+    problems = []
+    paper = next(p for p in sorted(root.joinpath("library").rglob("*.md")) if p.name != "README.md")
+    note = root / "notes" / f"{paper.stem}.md"
+    note.parent.mkdir(exist_ok=True)
+    note.write_text("# T\n\ntype: method\n\n## Digest\n\n- a claim\n\n## Q&A\n")
+    listing = run("reading.py", root)
+    top = paper.relative_to(root / "library").parts[0]
+    row = next((x for x in listing.stdout.splitlines() if x.split()[:1] == [top]), "")
+    if listing.returncode or not row or "all scopes" not in listing.stdout:
+        problems.append(f"reading does not list the scopes: {listing.stdout[-300:]} {listing.stderr[-300:]}")
+    run("reading.py", root, "reread", str(paper), "--reason", "Table 1 was broken")
+    if "reread: Table 1 was broken (" not in note.read_text() or "## Digest" not in note.read_text():
+        problems.append("reread did not mark the note above its digest")
+    row = next((x for x in run("reading.py", root).stdout.splitlines() if x.split()[:1] == [top]), "")
+    if len(row.split()) < 5 or row.split()[4] != "1":
+        problems.append(f"reading does not count the note to re-read: {row}")
+    run("reading.py", root, "reread", str(paper), "--clear")
+    if "reread:" in note.read_text():
+        problems.append("reread --clear left the mark")
+    rel = str(paper.relative_to(root))
+    run("issues.py", root, "add", rel, "pdf-table-bold", "bold lost", "--where", "p. 2, Table 1", "--key-content")
+    run("issues.py", root, "close", "pdf-table-bold", rel)
+    if "reread: pdf-table-bold fixed" not in note.read_text():
+        problems.append("issues close did not mark the note of a paper whose key content it closed")
+    note.unlink()
+    return problems
+
+
 def yaml_list(path):
     import yaml
     return yaml.safe_load(path.read_text()) or []
@@ -272,6 +398,15 @@ def main():
         problems = tickets_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} tickets.py: " + ("; ".join(problems) or "move to wont-fix/ and back, closed status checked"))
+        problems = matching_problems()
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} corrections matching: " + ("; ".join(problems) or "exact, landmarks, drifted, obsolete, stale; table rows"))
+        problems = corrections_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} corrections.py: " + ("; ".join(problems) or "capture against a base, list, check"))
+        problems = reading_problems(root)
+        failures += bool(problems)
+        print(f"{'FAIL' if problems else 'ok  '} reading.py: " + ("; ".join(problems) or "scopes counted, notes marked to re-read and cleared"))
         problems = remove_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} remove-paper.py: " + ("; ".join(problems) or "asks first, deletes the paper's files, records the skip"))

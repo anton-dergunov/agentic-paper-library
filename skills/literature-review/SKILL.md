@@ -15,9 +15,9 @@ library's.
 **Scopes.** A review covers a folder in `catalog/topics.yaml` and everything under it:
 usually one per top-level area, except an area too large for one review, which has one per
 subarea (e.g. `llm/memory`, `llm/evaluation`, … under `llm/`). An area kept outside the
-reader's interests (papers kept for fun, say) may have none. If the library keeps a review
-plan (e.g. `docs/tasks/literature-review.md`), it holds the rollout order and its progress
-while the first pass is running.
+reader's interests (papers kept for fun, say) may have none. `review_scopes` in
+`paper-library.yaml` lists them in the reader's order; `paperlib reading` shows each
+one's papers read, still to read and to re-read, what reading them costs, and its review.
 
 **Modes.** `read <scope> [N]` (read papers into notes, and stop), `write <scope>` (there is
 no review yet), `update <scope>` (bring one up to date: new papers were added, or time has
@@ -109,8 +109,6 @@ all of them again on each request.
    - Run `paperlib build-index` (the folder indexes now link the review), then
      `paperlib check`, which must pass.
    - Delete `reviews/.work/<scope>/`.
-   - If the library keeps a review plan (e.g. `docs/tasks/literature-review.md`), mark the
-     scope as written there.
 6. **Report.**
    - A link to the review and three or four lines on what the area looks like.
    - The conversion problems with key content broken that the review leans on, and the
@@ -174,9 +172,11 @@ Steps:
 
 ## status
 
-`paperlib review-status`: for each review, list the papers not yet covered and the broken
-links. Also list the scopes in the rollout (the review plan, if the library keeps one) that
-have no review yet. Recommend `update` for reviews with several uncovered papers.
+`paperlib reading` shows every scope in order: papers read and left, the cost of the rest,
+and its review (`+N` uncovered papers). `paperlib review-status` lists each review's
+uncovered papers and broken links. Recommend `update` for reviews with several uncovered
+papers, and the next scope without a review. When the reader says they have gone through a
+review, add `checked: <date>` to its frontmatter.
 
 ## Iterating on this skill
 

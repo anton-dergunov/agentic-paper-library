@@ -13,7 +13,7 @@ cost: "engine: medium, with a measurement; reconvert the papers at PDF speed; re
 
 **Broken.** arXiv's rendering lacks pages of the paper: when filed, 27 papers missed eight pages or a quarter of the paper, and `paperlib symptoms --pages` listed 73 missing three pages or more. `paperlib reconvert` cannot convert a `source: html` paper from its PDF.
 
-**Fix.** Add `--from-pdf` to `paperlib reconvert`, and compare it on five papers with adding only the missing pages to the HTML conversion.
+**Fix.** Add `--from-pdf` to `paperlib reconvert`, and compare it on five papers with adding only the missing pages to the HTML conversion. A third route is the paper's LaTeX source through LaTeXML run locally ([`experiments/latex-source`](../experiments/latex-source/README.md)): Confident Learning was converted that way by hand, so it is marked hand-edited and skipped by every reconversion until `reconvert` has such a route (`source: latex`); a hand correction cannot hold a whole conversion.
 
 **What it gives.** The whole paper readable; today an agent answering about the missing part must open the PDF.
 

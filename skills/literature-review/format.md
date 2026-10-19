@@ -79,7 +79,8 @@ updated: 2026-10-02
 ```
 
 `title` is a plain name for the area, not the folder path. `updated` is the date the review
-last took in new papers or changed a finding.
+last took in new papers or changed a finding. `checked: <date>` is added once the reader has
+gone through the review and its corrections are in.
 
 The body has these sections, in this order:
 

@@ -3,14 +3,14 @@ id: pdf-equation-number-only
 title: PDF equations that are only their number
 converter: pdf
 takes: [engine, reconvert, reread]
-status: fixed
+closed: '2026-10-19'
 cost: 'engine: medium, measured on the papers; reconvert them overnight (about 3 hours); re-read those
   whose claims rest on the equations'
 ---
 
 # PDF equations that are only their number
 
-`engine` `reconvert` `reread` · pdf · fixed
+`engine` `reconvert` `reread` · pdf · done
 
 **Broken.** A display equation reads `$$(7)$$`: the crop held the number and not the formula. When filed, 97 equations in 42 PDF papers.
 

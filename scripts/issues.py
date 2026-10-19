@@ -19,8 +19,9 @@ marked `wont-fix: <reason>`, or one filed under a ticket whose status is wont-fi
 
 `close` deletes the records of one kind once the converter fix has reached the papers:
 those that `paperlib reconvert --state <file>` reconverted `ok`, or the papers named. It
-prints the papers whose closed records broke key content, with the command that reads them
-again, since their notes may rest on the broken part.
+marks the notes of the papers whose closed records broke key content to be read again
+(`reread:`, which `paperlib reading` counts), since they may rest on the broken part, and
+prints the command that reads them.
 """
 
 import datetime
@@ -31,8 +32,8 @@ from collections import Counter
 from pathlib import Path
 
 from paperlib import (
-    LIBRARY_DIR, all_issues, describe_issue as describe, is_open, load_issues, load_tickets, paper_files, paper_stem,
-    save_issues,
+    LIBRARY_DIR, all_issues, describe_issue as describe, flag_reread, is_open, load_issues, load_tickets, paper_files,
+    paper_stem, save_issues,
 )
 
 
@@ -143,14 +144,16 @@ def close_issues(argv):
         kept = [r for r in records if r.get("kind") != kind]
         if len(kept) < len(records):
             closed += len(records) - len(kept)
-            if any(r.get("key-content") and is_open(r) for r in records if r.get("kind") == kind):
+            broken = [r for r in records if r.get("kind") == kind and r.get("key-content") and is_open(r)]
+            if broken:
                 reread.append(stem)
+                flag_reread(stem, f"{kind} fixed, which broke key content ({broken[0].get('where', '?')})")
             save_issues(stem, kept)
     left = sum(1 for records in all_issues().values() for r in records if r.get("kind") == kind)
     print(f"issues: closed {closed} `{kind}` records; {left} still open in other papers")
     if reread:
         paths = {p.stem: p for p in paper_files()}
-        print("Their key content was broken; read them again:")
+        print("Their key content was broken; their notes are marked to be read again:")
         print("  paperlib read --redo " + " ".join(f'"{os.path.relpath(paths[s])}"' for s in reread if s in paths))
 
 

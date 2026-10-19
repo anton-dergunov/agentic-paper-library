@@ -50,7 +50,7 @@ per problem, whose `kind` is the ticket's id (`paperlib issues --kind <id>` list
 - **Takes**: `engine` a change to the converters, with a fixture; `reconvert` the papers
   must be converted again to get it (`paperlib reconvert --issue <id>`, overnight for PDF
   papers); `reread` some notes rest on the broken part and are read again; `by-hand` an
-  edit in the paper, marked `<!-- hand-edited -->`.
+  edit in the paper, recorded with `paperlib corrections capture`.
 - **Status**: `open`; `fixed` in the engine, waiting for the reconversion (then
   `paperlib issues close <id> --state <file>`); `done`; `wont-fix`, with its `reason`.
 - **Won't fix**, below, is the list of what was decided not to fix: a whole cause (a ticket
