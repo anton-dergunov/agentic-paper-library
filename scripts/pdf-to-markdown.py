@@ -27,7 +27,12 @@ this script writes:
   text layer holds an equation only as scattered glyphs, so a model is the
   only way to get it; it can misread, and the note at the top says so. With
   --raw-equations, or when that model is not installed, an equation is the
-  PDF's raw text in a block marked as such.
+  PDF's raw text in a block marked as such. An equation read as only its
+  number ("(7)") is read again from a crop 2 points wider, and, where its
+  box is narrow (a formula with no text in the text layer), from the band
+  between the blocks above and below (reread_number_only);
+- bold, italics and underlining in table cells, which docling drops, from the
+  font of each character under the cell and the rules drawn under it;
 - text blocks whose mathematics the text layer lost (a PDF made with Word
   leaves "a task _ ~ ( )" where the symbols were) read by the same model, with
   the mathematics as $...$. A reading replaces the text layer's text only if
@@ -377,6 +382,167 @@ def trusted_reading(original, reading):
     return all(n in plain for n in NUMBER.findall(original))
 
 
+# An equation's number as the model or the text layer writes it: "(3)",
+# "(2.1)", "(A.4)", "(3a)", "\tag{3}", or a bare "3" standing alone.
+EQ_NUMBER = re.compile(r"\\tag\*?\{\s*\(?\s*([A-Z]?\d+(?:\.\d+)*[a-z]?)\s*\)?\s*\}"
+                       r"|\(\s*([A-Z]?\d+(?:\.\d+)*[a-z]?)\s*\)|^\s*(\d+(?:\.\d+)*)\s*$")
+# What else a crop holding only the number yields: spacing, an arrow, a stray mark.
+EQ_FILLER = re.compile(r"\\(?:q?quad|hspace\*?\{[^}]*\}|[,;:! ]|(?:up|down|left|right)arrow)")
+
+
+def equation_number(text):
+    """The last equation number in an equation's text, or None."""
+    found = [next(g for g in m.groups() if g) for m in EQ_NUMBER.finditer(text or "")]
+    return found[-1] if found else None
+
+
+def number_only(text):
+    """Whether an equation's text is its number and nothing else ("(7)", "\\tag{3}", "↑ (4)")."""
+    if equation_number(text) is None:
+        return False
+    rest = EQ_FILLER.sub("", EQ_NUMBER.sub("", text))
+    return not re.search(r"[A-Za-z0-9\\]", rest)
+
+
+def keeps_number(reading, number, own_box=False):
+    """Whether a new reading of a number-only equation can replace it: it has
+    more than the number, and the same number, so it is that equation (a crop
+    over an empty margin can make the model invent a sentence). A reading of
+    the equation's own box, grown a little, may leave the number out (CG's
+    Eq. 5) if it reads as mathematics: an "=" or a TeX command."""
+    if not reading or number_only(reading):
+        return False
+    found = equation_number(reading)
+    return found == number or (own_box and found is None and bool(re.search(r"=|\\[A-Za-z]", reading)))
+
+
+# How far a band crop reaches above and below a number-only equation (points).
+BAND_REACH = 60
+
+
+def retry_boxes(box, neighbours):
+    """Crops to read a number-only equation again, tightest first.
+
+    A crop that held the formula can still read as its number alone: the
+    model is sensitive to a point of margin (GPT-1's Eq. 5), so the box grown
+    by 2 points comes first. A formula without text in the PDF's text layer
+    (Word's, mostly) gets a box only around its number, since docling fits a
+    box to the text it holds; then the formula is in the band between the
+    blocks above and below, across their column. neighbours: the boxes of
+    every other block on the page; all boxes (x0, y0, x1, y1), top-left origin.
+    """
+    x0, y0, x1, y1 = box
+    crops = [[x0 - 2, y0 - 2, x1 + 2, y1 + 2]]
+    centre = (x0 + x1) / 2
+    others = [b for b in neighbours if list(b) != list(box)]
+    # The column: that of the nearest block across the box's centre. A line
+    # ending short of the number (a ragged paragraph) is in it all the same.
+    seeds = [b for b in others if b[0] <= centre <= b[2]]
+    if not seeds:
+        return crops
+    nearest = min(seeds, key=lambda b: max(b[1] - y1, y0 - b[3]))
+    left, right = nearest[0], max(nearest[2], x1)
+    if x1 - x0 >= 0.5 * (right - left):
+        return crops
+    column = [b for b in others if min(b[2], right) - max(b[0], left) >= 0.5 * min(b[2] - b[0], right - left)]
+    above = [b for b in column if b[3] <= y0 + 1]
+    below = [b for b in column if b[1] >= y1 - 1]
+    top = max([b[3] + 1 for b in above] + [y0 - BAND_REACH])
+    bottom = min([b[1] - 1 for b in below] + [y1 + BAND_REACH])
+    crops.append([left, min(top, y0), right, max(bottom, y1)])
+    return crops
+
+
+# Fonts a table's marks are set in. Bold also comes from the span's flags
+# (PyMuPDF sets bit 16 from the font's descriptor).
+BOLD_FONT = re.compile(r"bold|black|heavy|demi|medi|cmbx|sfbx|lmbx|ptmb", re.I)
+ITALIC_FONT = re.compile(r"italic|oblique|slant|cmti|cmsl|sfti|ptmri|-it\b", re.I)
+
+
+def page_rules(page):
+    """The page's horizontal rules as (x0, x1, y): drawn lines and thin rectangles."""
+    rules = []
+    for path in page.get_drawings():
+        for entry in path["items"]:
+            if entry[0] == "l" and abs(entry[1].y - entry[2].y) < 0.5:
+                rules.append((min(entry[1].x, entry[2].x), max(entry[1].x, entry[2].x), entry[1].y))
+            elif entry[0] == "re" and entry[1].height <= 1.5 and entry[1].width > 0:
+                rules.append((entry[1].x0, entry[1].x1, entry[1].y1))
+    return rules
+
+
+def cell_marks(page, box, rules):
+    """The marks of a table cell's text in the PDF: a set of "bold", "italic", "underline".
+
+    Bold or italic when every letter and digit inside the box (by its centre)
+    is set in such a font; a dagger or an asterisk in a symbol font does not
+    count. Underlined when a rule runs just under the text and no further
+    than its ends: a table's own rules, \\cmidrule's included, run past them.
+    Mathematics fonts are never italic.
+    """
+    chars = []
+    for block in page.get_text("rawdict", clip=pymupdf.Rect(*box))["blocks"]:
+        for line in block.get("lines", []):
+            for span in line["spans"]:
+                for ch in span["chars"]:
+                    cx, cy = (ch["bbox"][0] + ch["bbox"][2]) / 2, (ch["bbox"][1] + ch["bbox"][3]) / 2
+                    if ch["c"].isalnum() and box[0] <= cx <= box[2] and box[1] <= cy <= box[3]:
+                        chars.append((ch["bbox"], span["font"], span["flags"]))
+    if not chars:
+        return set()
+    marks = set()
+    if all(BOLD_FONT.search(font) or flags & 16 for _, font, flags in chars):
+        marks.add("bold")
+    if all(ITALIC_FONT.search(font) and not MATH_FONT.search(font) for _, font, _ in chars):
+        marks.add("italic")
+    left, right = min(b[0] for b, _, _ in chars), max(b[2] for b, _, _ in chars)
+    bottom, width = max(b[3] for b, _, _ in chars), right - left
+    for x0, x1, y in rules:
+        overlap = min(x1, right) - max(x0, left)
+        if bottom - 2 <= y <= bottom + 3 and overlap >= 0.7 * width and x0 >= left - 4 and x1 <= right + 4:
+            marks.add("underline")
+            break
+    return marks
+
+
+MARKED = Counter()  # table cells given a mark, by mark
+
+
+def mark_table_cells(table, page, page_height):
+    """Write the bold, italic and underline of a docling table's cells into their text.
+
+    docling keeps a cell's text but not its weight, so the bold that marks a
+    best or significant result is lost; the PDF's text layer still has it, in
+    the font of each character. Header cells are left plain, and so is a mark
+    every body cell has (it distinguishes nothing).
+    """
+    rules = page_rules(page)
+    found = []
+    for cell in table.data.table_cells:
+        if cell.bbox is None or not cell.text.strip() or cell.column_header:
+            continue
+        box = cell.bbox
+        if box.coord_origin.name == "BOTTOMLEFT":
+            box = box.to_top_left_origin(page_height=page_height)
+        found.append((cell, cell_marks(page, (box.l, box.t, box.r, box.b), rules)))
+    everywhere = set.intersection(*(m for _, m in found)) if found else set()
+    for cell, marks in found:
+        marks -= everywhere
+        if not marks:
+            continue
+        text = cell.text.strip()
+        if "bold" in marks and "italic" in marks:
+            text = f"***{text}***"
+        elif "bold" in marks:
+            text = f"**{text}**"
+        elif "italic" in marks:
+            text = f"*{text}*"
+        if "underline" in marks:
+            text = f"<u>{text}</u>"
+        cell.text = text
+        MARKED.update(marks)
+
+
 def read_blocks(pdf_path, boxes):
     """What pdf-equations.py reads in each box; None if it cannot run."""
     if not boxes or not MARKER_PYTHON.exists():
@@ -440,13 +606,15 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     readable = (Label.TEXT, Label.PARAGRAPH, Label.LIST_ITEM, Label.CAPTION, Label.FOOTNOTE)
     boxes, owners = [], []  # owners[k]: the index in items of the block box k belongs to
     kinds = {}
-    pages = pymupdf.open(pdf_path) if inline_math else None
+    on_page = {}  # page number: the boxes of every block on it
+    pages = pymupdf.open(pdf_path)
     for n, item in enumerate(items):
         text = getattr(item, "text", "") or ""
         item_boxes = []
         for prov in item.prov:
             box = prov.bbox.to_top_left_origin(page_height=doc.pages[prov.page_no].size.height)
             item_boxes.append((prov.page_no, [box.l, box.t, box.r, box.b]))
+            on_page.setdefault(prov.page_no, []).append([box.l, box.t, box.r, box.b])
         if item.label == Label.FORMULA:
             kinds[n] = "equation"
         elif item.label in readable and needs_reading(
@@ -459,9 +627,12 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             boxes.append({"page": page_no, "bbox": box, "kind": kinds[n]})
             owners.append(n)
     readings = {}
-    for n, reading in zip(owners, (read_blocks(pdf_path, boxes) or []) if equation_model else []):
+    read = read_blocks(pdf_path, boxes) if equation_model else None
+    for n, reading in zip(owners, read or []):
         if reading.strip():
             readings.setdefault(n, []).append(reading.strip())
+    if read is not None:
+        reread_number_only(pdf_path, items, kinds, boxes, owners, readings, on_page)
     equations = None
 
     from paperlib import to_webp
@@ -486,6 +657,8 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
                 last_numbered = level
             parts.append(f"{'#' * level} {text}" + (f" (p. {page})" if page else ""))
         elif label == Label.TABLE:
+            if item.prov:
+                mark_table_cells(item, pages[page - 1], doc.pages[page].size.height)
             table = item.export_to_markdown(doc).strip()
             # docling writes the table's caption above it, and yields the
             # caption again as an item of its own.
@@ -554,6 +727,46 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     return "".join(out).strip() + "\n", equations
 
 
+REREAD = Counter()  # number-only equations read again: "fixed", "raw" (the text layer's text), "left"
+
+
+def reread_number_only(pdf_path, items, kinds, boxes, owners, readings, on_page):
+    """Read again the equations whose reading is only their number, from the
+    crops retry_boxes gives, and keep the first reading that is that equation.
+    When none is, the text layer's raw text is written instead if it holds
+    more than the number. Changes readings in place."""
+    candidates = []  # (item index, number, crops)
+    for n, kind in kinds.items():
+        mine = [k for k, owner in enumerate(owners) if owner == n]
+        if kind != "equation" or len(mine) != 1:
+            continue
+        raw = " ".join((getattr(items[n], "orig", "") or items[n].text or "").split())
+        text = "\n".join(readings.get(n, [])) or raw
+        if not number_only(text):
+            continue
+        page, box = boxes[mine[0]]["page"], boxes[mine[0]]["bbox"]
+        candidates.append((n, equation_number(text), page, retry_boxes(box, on_page[page])))
+    if not candidates:
+        return
+    crops = [{"page": page, "bbox": crop, "kind": "equation"}
+             for _, _, page, item_crops in candidates for crop in item_crops]
+    read = iter(read_blocks(pdf_path, crops) or [""] * len(crops))
+    for n, number, _, item_crops in candidates:
+        found = [reading.strip() for _, reading in zip(item_crops, read)]
+        better = next((r for k, r in enumerate(found) if keeps_number(r, number, own_box=k == 0)), None)
+        raw = " ".join((getattr(items[n], "orig", "") or items[n].text or "").split())
+        if better:
+            if equation_number(better) is None:
+                better += f" \\quad ({number})"
+            readings[n] = [better]
+            REREAD["fixed"] += 1
+        elif raw and not number_only(raw):
+            readings.pop(n, None)  # the raw-text block is written instead
+            REREAD["raw"] += 1
+        else:
+            REREAD["left"] += 1
+
+
 def join_split_tables(parts):
     """Rejoin a table docling split in two.
 
@@ -617,6 +830,12 @@ def main():
     if READ:
         print(f"text blocks read by the model: {READ['kept']} kept, {READ['rejected']} rejected "
               "(words or numbers differed from the text layer)", file=sys.stderr)
+    if REREAD:
+        print(f"number-only equations read again: {REREAD['fixed']} fixed, {REREAD['raw']} as raw text, "
+              f"{REREAD['left']} left", file=sys.stderr)
+    if MARKED:
+        print("table cells marked: " + ", ".join(f"{n} {mark}" for mark, n in sorted(MARKED.items())),
+              file=sys.stderr)
 
 
 if __name__ == "__main__":

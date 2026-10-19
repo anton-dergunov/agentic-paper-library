@@ -15,6 +15,8 @@ cost: "engine: small to medium; reconvert the papers with such tables; re-read t
 
 **Fix.** When a region labelled a picture carries a "Table N" caption, pass it to the table route instead: the table-structure model where the PDF has a text layer under it, the OCR route of `pdf-table-image-ocr` where it has none.
 
+**Found 19 Oct 2026.** ROUGE's tables (pp. 5–7) have their text in the text layer, so no OCR is needed, but PyMuPDF's own `find_tables` collapses their rows into one cell per column (tried on the random-walk paper's Table 2, p. 7). A good fix runs docling's table-structure model on the picture's region, which docling's pipeline does not offer for one region: a design question, left open.
+
 **What it gives.** Results tables back as text, where the findings rest on them.
 
 **Cost.** Engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them.

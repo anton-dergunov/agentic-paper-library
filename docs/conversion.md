@@ -119,6 +119,10 @@ A table or a code listing that is an image in the PDF is read by OCR (RapidOCR),
 
 docling writes a table's caption with the table and yields it again as an item of its own; the second copy is dropped.
 
+**An equation read as only its number** (`$$(7)$$`, 112 equations in 49 of 283 PDF papers) is read again. Mostly the crop was right and the model is sensitive to a point of margin: GPT-1's Eq. 5 reads as `(5)` from docling's box every time and in full from the box grown by 2 points, so that crop comes first. In a PDF whose formula has no text in the text layer (Word's), docling fits the box to the number alone; the formula is then read from the band between the blocks above and below, across their column. A new reading is kept only when it carries the same number (a crop over an empty margin made the model invent a sentence), or, from the equation's own box, reads as mathematics without one, and the number is added. When neither crop gives the equation, the text layer's raw text is written if it holds more than the number. → [`experiments/pdf-equation-retry-and-table-marks`](../experiments/pdf-equation-retry-and-table-marks/README.md)
+
+**Bold, italics and underlining in a table** come from the PDF, since docling keeps a cell's text and not its weight: a cell is bold or italic when every letter and digit under its box is set in such a font (`-Bold`, `-Medi`, `CMBX`, or the span's bold flag; a dagger in a symbol font does not count), and underlined when a rule runs just under its text and no further than its ends (a table's own rules, `\cmidrule`'s and Word's cell borders, run past them). Header cells stay plain, as in HTML papers, and so does a mark every body cell has. Grey shading is not read. → [`experiments/pdf-equation-retry-and-table-marks`](../experiments/pdf-equation-retry-and-table-marks/README.md)
+
 Known limitations:
 
 - Headings set as run-in bold text (as in PNAS) are not found.

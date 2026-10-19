@@ -945,8 +945,66 @@ def checks():
     yield "a table docling split in two is rejoined", pdf.join_split_tables(
         ["| Model | Hit |\n|---|---|\n| A | 0.4 |", "| B | 0.6 |\n|---|---|\n| C | 0.7 |"]
     ) == ["| Model | Hit |\n|---|---|\n| A | 0.4 |\n| B | 0.6 |\n| C | 0.7 |"]
+    gpt1_eq5 = "L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda * L_1(\\mathcal{C}) \\quad (5)"
+    yield "a PDF equation read as only its number is found", (
+        all(pdf.number_only(t) for t in ("(5)", "\\tag{3}", "↑ (4)", "\\quad (2.1)", "(3)"))
+        and not any(pdf.number_only(t) for t in (gpt1_eq5, "x = 1 \\quad (2)", "", "\\alpha"))
+        and pdf.equation_number("\\begin{aligned} l_1 &= W_1 x \\end{aligned} \\tag{3}") == "3")
+    yield "a number-only equation is re-read only into the same equation", (
+        pdf.keeps_number(gpt1_eq5, "5")
+        and not pdf.keeps_number("See the additional supplement for details of the remaining complex weights.", "5")
+        and not pdf.keeps_number("(5)", "5")
+        and not pdf.keeps_number("y = f(x) \\quad (6)", "5")
+        and pdf.keeps_number("\\langle v_1/i_1, \\dots \\rangle.", "5", own_box=True)
+        and not pdf.keeps_number("\\langle v_1/i_1, \\dots \\rangle.", "5")
+        and not pdf.keeps_number("See the additional supplement for details.", "5", own_box=True))
+    # DSSM, p. 3: docling's box for Eq. (3) holds only its number; the formula,
+    # which has no text in the PDF's text layer, is in the band between the blocks.
+    dssm = [[54, 364, 296, 404], [282, 432, 294, 440], [54, 462, 280, 480], [282, 493, 294, 500],
+            [54, 513, 296, 531], [318, 405, 560, 557]]
+    yield "a number-only equation is re-read from a wider crop, and the band of a narrow box", (
+        pdf.retry_boxes([282, 432, 294, 440], dssm) == [[280, 430, 296, 442], [54, 405, 296, 461]]
+        and pdf.retry_boxes([248, 689, 504, 699], [[108, 643, 504, 684], [108, 702, 504, 722]])
+        == [[246, 687, 506, 701]])
+    # Two number-only equations, each with one crop; the model reads both from them.
+    items = [SimpleNamespace(orig="(5)", text=""), SimpleNamespace(orig="a = b (6)", text="")]
+    boxes = [{"page": 1, "bbox": [100, 100, 400, 110], "kind": "equation"},
+             {"page": 1, "bbox": [100, 200, 400, 210], "kind": "equation"}]
+    readings = {0: ["(5)"], 1: ["(6)"]}
+    real_read = pdf.read_blocks
+    pdf.read_blocks = lambda path, crops: ["x = 1", "y = 2 \\quad (6)"][:len(crops)]
+    try:
+        pdf.reread_number_only("p.pdf", items, {0: "equation", 1: "equation"}, boxes, [0, 1], readings,
+                               {1: [b["bbox"] for b in boxes]})
+    finally:
+        pdf.read_blocks = real_read
+    yield "each number-only equation takes its own new reading", readings == {0: ["x = 1 \\quad (5)"], 1: ["y = 2 \\quad (6)"]}
 
     import pymupdf
+    doc = pymupdf.open()
+    page = doc.new_page()
+    for x, text, font in ((100, "53.80", "Times-Bold"), (200, "52.10", "Times-Roman"), (300, "51.20", "Times-Italic"),
+                          (400, "50.40", "Times-Roman")):
+        page.insert_text((x, 100), text, fontname=font, fontsize=10)
+    page.insert_text((100, 130), "0.71", fontname="Times-Bold", fontsize=10)
+    page.draw_line((400, 101.5), (424, 101.5), width=0.5)  # under 50.40
+    page.draw_line((80, 133), (480, 133), width=0.5)  # a table rule under the second row
+    rules = pdf.page_rules(page)
+    marks = [pdf.cell_marks(page, (x - 2, 90, x + 40, 104), rules) for x in (100, 200, 300, 400)]
+    yield "bold, italic and underline in a PDF table cell come from its fonts and rules", (
+        marks == [{"bold"}, set(), {"italic"}, {"underline"}]
+        and pdf.cell_marks(page, (98, 120, 140, 134), rules) == {"bold"})
+    box = lambda x0, y0, x1, y1: SimpleNamespace(coord_origin=SimpleNamespace(name="TOPLEFT"), l=x0, t=y0, r=x1, b=y1)
+    cells = [SimpleNamespace(text=t, bbox=box(x - 2, 90, x + 40, 104), column_header=False)
+             for x, t in ((100, "53.80"), (200, "52.10"), (400, "50.40"))]
+    pdf.mark_table_cells(SimpleNamespace(data=SimpleNamespace(table_cells=cells)), page, 842)
+    yield "a PDF table cell's marks are written into its text", (
+        [c.text for c in cells] == ["**53.80**", "52.10", "<u>50.40</u>"])
+    cells = [SimpleNamespace(text=t, bbox=box(x - 2, 90, x + 40, 104), column_header=False)
+             for x, t in ((100, "53.80"), (98, "53.80"))]
+    pdf.mark_table_cells(SimpleNamespace(data=SimpleNamespace(table_cells=cells)), page, 842)
+    yield "a mark every body cell of a PDF table has is left out", [c.text for c in cells] == ["53.80", "53.80"]
+
     page_map = load("page-map")
     said = [" ".join(f"{topic}{chr(97 + i % 26)}{chr(97 + i // 26)}" for i in range(130))
             for topic in ("intro", "method", "proof", "ablation", "prompts")]

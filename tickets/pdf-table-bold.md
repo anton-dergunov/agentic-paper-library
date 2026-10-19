@@ -1,19 +1,20 @@
 ---
 id: pdf-table-bold
-title: "Bold in PDF tables is dropped"
+title: Bold in PDF tables is dropped
 converter: pdf
 takes: [engine, reconvert, reread]
-status: open
-cost: "engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the bold carries a claim"
+status: fixed
+cost: 'engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the
+  bold carries a claim'
 ---
 
 # Bold in PDF tables is dropped
 
-`engine` `reconvert` `reread` · pdf · open
+`engine` `reconvert` `reread` · pdf · fixed
 
 **Broken.** docling keeps a table's text but not its weight, so the bold that marks the best or the significant result is gone. Underlining and grey cells go the same way. When filed, 12 of the 103 read PDF papers reported it.
 
-**Fix.** The text layer still has it: each word carries a font name (`-Bold`, `CMBX`, `SFBX`, `-Medi`). Mark a table cell bold when all its characters in the cell's box are set in a bold font. The hand fixes of 2026-10-16 read it that way with PyMuPDF. Underlining and shading are drawings, not fonts: a short rule under a cell, a filled rectangle behind it (PyMuPDF's `get_drawings`).
+**Fix.** Done 19 Oct 2026: a docling table cell is bold or italic when every letter and digit under its box is set in such a font (`-Bold`, `-Medi`, `CMBX`, `SFBX`, or the span's bold flag), and underlined when a drawn rule lies just under its text and ends within 4 pt of its ends (table rules, `\cmidrule`s and Word's per-cell borders run past them); header cells and a mark every body cell has stay plain. Checked on Glorot & Bengio Table 1, LambdaLoss Tables 3–4, Interleaved Comparisons Tables 2 and 4, GPT-1 and DSSM. Left: grey shading (filled rectangles behind cells), and a header row docling does not flag comes out bold. → [`experiments/pdf-equation-retry-and-table-marks`](../experiments/pdf-equation-retry-and-table-marks/README.md)
 
 **What it gives.** Which result is best or significant, without the PDF: key content where the bold is the paper's claim.
 

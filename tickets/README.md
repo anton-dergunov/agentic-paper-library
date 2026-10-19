@@ -22,7 +22,7 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-18.
+Papers and key-content counts from the library `papers` on 2026-10-19.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
@@ -32,7 +32,6 @@ Papers and key-content counts from the library `papers` on 2026-10-18.
 | [PDF tables taken for pictures](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 2 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 77 | 1 | unknown until its sub-causes are found |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 15 | 1 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
-| [Bold in PDF tables is dropped](pdf-table-bold.md) | `engine` `reconvert` `reread` | open | 12 | 1 | engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the bold carries a claim |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 47 |  | unknown until its sub-causes are found |
 | [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 34 |  | unknown until its sub-causes are found |
@@ -40,7 +39,6 @@ Papers and key-content counts from the library `papers` on 2026-10-18.
 | [Wrong characters from a PDF's text layer](pdf-text-layer-errors.md) | `engine` `reconvert` | open | 30 |  | unknown until its sub-causes are found |
 | [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 28 |  | unknown until its sub-causes are found |
 | [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | open | 19 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
-| [PDF equations that are only their number](pdf-equation-number-only.md) | `engine` `reconvert` `reread` | open | 19 |  | engine: medium, measured on the papers; reconvert them overnight (about 3 hours); re-read those whose claims rest on the equations |
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 19 |  | engine: medium, a fixture; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
@@ -55,6 +53,8 @@ Papers and key-content counts from the library `papers` on 2026-10-18.
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open |  |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
+| [Bold in PDF tables is dropped](pdf-table-bold.md) | `engine` `reconvert` `reread` | fixed | 100 | 1 | engine: small; reconvert the PDF papers with bold in tables overnight; re-read those where the bold carries a claim |
+| [PDF equations that are only their number](pdf-equation-number-only.md) | `engine` `reconvert` `reread` | fixed | 51 |  | engine: medium, measured on the papers; reconvert them overnight (about 3 hours); re-read those whose claims rest on the equations |
 
 ## Won't fix
 
