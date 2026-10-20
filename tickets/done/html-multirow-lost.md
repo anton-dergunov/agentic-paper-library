@@ -3,13 +3,13 @@ id: html-multirow-lost
 title: Row-group labels LaTeXML lost, cut short or set on another row
 converter: html
 takes: [engine, reconvert]
-status: fixed
+closed: '2026-10-21'
 cost: 'engine: large, the tabular matched in the LaTeX source; reconvert the papers'
 ---
 
 # Row-group labels LaTeXML lost, cut short or set on another row
 
-`engine` `reconvert` · html · fixed
+`engine` `reconvert` · html · done
 
 **Broken.** In arXiv's HTML itself, a label meant to span a group of rows does not: it sits on the group's middle row ("Encoder-Only" in "Large Language Models. A Survey" Table I, the model sizes in Cosmos Table 16) or on its last row with no rule to mark the group ("Fewshot-related" in "Entity Matching using LLMs" Table 6), or covers fewer rows than the group ("Coupling" in "Normalizing Flows" Table I, five rows of seven), or is missing from rows that share it (Emergent Abilities Table 1, Adafactor Table 2, LLaVA-1.5 Table 7). The rows it should cover read as belonging to no group, and a cell missing under a lost span moves the rest of its row one column left. Some of these are the author's own layout (a label typed on the middle row by hand), which looks the same in the PDF.
 

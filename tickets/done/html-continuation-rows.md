@@ -3,13 +3,13 @@ id: html-continuation-rows
 title: A cell's text continued on extra table rows
 converter: html
 takes: [engine, reconvert]
-status: fixed
+closed: '2026-10-21'
 cost: 'engine: medium, a heuristic with fixtures; reconvert the papers'
 ---
 
 # A cell's text continued on extra table rows
 
-`engine` `reconvert` · html · fixed
+`engine` `reconvert` · html · done
 
 **Broken.** An author breaks a long cell by starting a new table row (`\\` and `&` with the other cells empty), so a model's citation, the second line of a header ("PlaNet" over "MobileNet") or a category label in pieces ("self-" / "Model" / "improvement") lands on its own mostly empty row. arXiv's HTML keeps those rows, and the table gains rows that are neither data nor headers, sometimes above the row they belong to (LLMs-as-Judges Table 1).
 

@@ -56,8 +56,6 @@ Papers and key-content counts from the library `papers` on 2026-10-21.
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
-| [Row-group labels LaTeXML lost, cut short or set on another row](html-multirow-lost.md) | `engine` `reconvert` | fixed | 4 |  | engine: large, the tabular matched in the LaTeX source; reconvert the papers |
-| [A cell's text continued on extra table rows](html-continuation-rows.md) | `engine` `reconvert` | fixed | 1 |  | engine: medium, a heuristic with fixtures; reconvert the papers |
 
 ## Won't fix
 
@@ -141,8 +139,10 @@ Problems in single papers left as they are (67):
 
 ## Done
 
-Fixed and reconverted (14), latest first:
+Fixed and reconverted (16), latest first:
 
+- 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
+- 2026-10-21: [A cell's text continued on extra table rows](done/html-continuation-rows.md)
 - 2026-10-20: [A table's header loses a span into the body, or keeps a row of results](done/html-table-head-rows.md)
 - 2026-10-20: [The converter's row-label repairs move a value or stretch a label too far](done/html-row-span-heuristics.md)
 - 2026-10-20: [A footnote or badge inside a cell runs into the value](done/html-cell-attachments.md)
