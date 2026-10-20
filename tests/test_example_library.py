@@ -177,10 +177,18 @@ def issues_problems(root):
         problems.append("the listing lacks the records")
     if run("check-library.py", root).returncode:
         problems.append("check fails on valid records")
-    closed = run("issues.py", root, "close", "pdf-table-bold", rel)
+    tickets = root.parent / "closing-tickets"  # a fixed ticket of its own, to be moved to done
+    tickets.mkdir(exist_ok=True)
+    tickets.joinpath("pdf-table-bold.md").write_text(
+        "---\nid: pdf-table-bold\ntitle: Bold lost\nconverter: pdf\ntakes: [engine, reconvert]\nstatus: fixed\n"
+        "cost: small\n---\n\n# Bold lost\n\n`engine` `reconvert` · pdf · fixed\n", encoding="utf-8")
+    closed = run("issues.py", root, "close", "pdf-table-bold", rel, TICKETS_DIR=str(tickets))
     left = yaml_list(root / "issues" / f"{paper.stem}.yaml")
     if [r.get("kind") for r in left] != ["new", "new"] or "read --redo" not in closed.stdout:
         problems.append("close did not remove the kind's records or name the note to read again")
+    if "0 still open in other papers" not in closed.stdout or "pdf-table-bold is done" not in closed.stdout \
+            or not tickets.joinpath("done", "pdf-table-bold.md").exists():
+        problems.append(f"close did not move the ticket with no open records left to done: {closed.stdout[-300:]}")
     (root / "issues" / f"{paper.stem}.yaml").unlink()
 
     sys.path.insert(0, str(ENGINE / "scripts"))

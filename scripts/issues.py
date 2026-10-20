@@ -21,12 +21,15 @@ marked `wont-fix: <reason>`, or one filed under a ticket whose status is wont-fi
 those that `paperlib reconvert --state <file>` reconverted `ok`, or the papers named. It
 marks the notes of the papers whose closed records broke key content to be read again
 (`reread:`, which `paperlib reading` counts), since they may rest on the broken part, and
-prints the command that reads them.
+prints the command that reads them. The count it prints of records left is of open ones,
+the wont-fix ones apart; when none is open and the kind's ticket is `fixed`, the ticket
+moves to done (`paperlib tickets move <kind> done`).
 """
 
 import datetime
 import json
 import os
+import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
@@ -149,8 +152,13 @@ def close_issues(argv):
                 reread.append(stem)
                 flag_reread(stem, f"{kind} fixed, which broke key content ({broken[0].get('where', '?')})")
             save_issues(stem, kept)
-    left = sum(1 for records in all_issues().values() for r in records if r.get("kind") == kind)
-    print(f"issues: closed {closed} `{kind}` records; {left} still open in other papers")
+    left = [r for records in all_issues().values() for r in records if r.get("kind") == kind]
+    still = sum(map(is_open, left))
+    wont = f" (and {len(left) - still} wont-fix)" if len(left) > still else ""
+    print(f"issues: closed {closed} `{kind}` records; {still} still open in other papers{wont}")
+    # The fix has reached every paper it can: its ticket is done.
+    if not still and load_tickets().get(kind, {}).get("status") == "fixed":
+        subprocess.run([sys.executable, str(Path(__file__).with_name("tickets.py")), "move", kind, "done"], check=True)
     if reread:
         paths = {p.stem: p for p in paper_files()}
         print("Their key content was broken; their notes are marked to be read again:")
