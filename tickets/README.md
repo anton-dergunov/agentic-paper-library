@@ -22,7 +22,7 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-20.
+Papers and key-content counts from the library `papers` on 2026-10-21.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
@@ -41,12 +41,10 @@ Papers and key-content counts from the library `papers` on 2026-10-20.
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 21 |  | engine: medium, a fixture; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
-| [Row-group labels LaTeXML lost, cut short or set on another row](html-multirow-lost.md) | `engine` `reconvert` | open | 18 |  | engine: large, the tabular matched in the LaTeX source; reconvert the papers |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 15 |  | engine: medium; reconvert the papers overnight |
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [A table set as side-by-side panels loses its row labels or splits](html-table-panels.md) | `engine` `reconvert` | open | 11 |  | engine: medium, beside share_panel_labels; reconvert the papers with table panels |
-| [A cell's text continued on extra table rows](html-continuation-rows.md) | `engine` `reconvert` | open | 9 |  | engine: medium, a heuristic with fixtures; reconvert the papers |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 9 |  | unknown until its sub-causes are found |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 7 |  | engine: medium for one paper, or by hand |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
@@ -58,6 +56,8 @@ Papers and key-content counts from the library `papers` on 2026-10-20.
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
+| [Row-group labels LaTeXML lost, cut short or set on another row](html-multirow-lost.md) | `engine` `reconvert` | fixed | 4 |  | engine: large, the tabular matched in the LaTeX source; reconvert the papers |
+| [A cell's text continued on extra table rows](html-continuation-rows.md) | `engine` `reconvert` | fixed | 1 |  | engine: medium, a heuristic with fixtures; reconvert the papers |
 
 ## Won't fix
 
@@ -67,7 +67,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
-Problems in single papers left as they are (61):
+Problems in single papers left as they are (67):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -93,6 +93,12 @@ Problems in single papers left as they are (61):
 | The Llama 3 Herd of Models | p. 14, §3.4.1 | html-latexml-macros | small: renders, only verbose |
 | Three Mechanisms of Weight Decay Regularization | pp. 6-7, Lemma 1, Lemma 2, Theorem 1 | html-latexml-macros | the HTML lost it: LaTeXML read the paper's \depth as TeX's box dimension (0pt) |
 | Deep Reinforcement Learning, a textbook | table of contents | html-lost-labels | small: only the table of contents |
+| A Comprehensive Survey on World Models for Embodied AI | p. 3, Table II | html-multirow-lost | the author's typo: the DriveDreamer4D row is one cell short in the source, as in the PDF |
+| A Large-Scale Corpus for Conversation Disentanglement | p. 2–3, Table 1 | html-multirow-lost | the author's layout: "Train" is typed on one row with a drawn bracket for its three rows |
+| A Survey on Rubric-Guided Reinforcement Learning for Language Models | p. 4, Table 1, rDPO row | html-multirow-lost | the author's typo: the rDPO row has five cells in the source where the table has six, as in the PDF |
+| Adafactor. Adaptive Learning Rates with Sublinear Memory Cost | p. 5, Table 2 | html-multirow-lost | the author's layout: the source has no step size for rows (H)-(J), so the PDF is blank there too |
+| Emergent Abilities of Large Language Models | pp. 4-6, Table 1 | html-multirow-lost | the author's layout: the source leaves the Model and Reference cells blank for "as above", as the PDF does |
+| Improved Baselines with Visual Instruction Tuning | p. 9, Table 7 | html-multirow-lost | the author's layout: the prompt is typed once, on the group's first row, as in the PDF |
 | Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement | p. 5, Algorithm 1 | html-pseudocode | small and isolated; arXiv's HTML has the two lines joined |
 | Large language models can accurately predict searcher preferences | pp. 4–5, Table 1 | html-symbols-lost | arXiv's HTML has no ± in Table 1; a cell reads as the value, then its interval |
 | Large language models can accurately predict searcher preferences | prose | html-symbols-lost | small: arXiv's HTML collapses the dashes; readable |

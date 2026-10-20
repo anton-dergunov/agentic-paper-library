@@ -588,8 +588,8 @@ def checks():
                     f'<tr class="ltx_tr">{cells("HaluEval", "General", "5,000")}</tr>'
                     f'<tr class="ltx_tr">{ruled("Med-HALT", "-", "4,916")}</tr></table>'
                     '<figcaption class="ltx_caption">Table 4: Benchmarks.</figcaption></figure>')
-    yield "a group's label typed on its last row spans the group from its first", (
-        '<td rowspan="2">HaluEval</td>' in md and md.index("HaluEval") < md.index("Task-specific") < md.index("General"))
+    yield "a group's label typed on its last row opens the group, in a pipe table without a span", (
+        "rowspan" not in md and bool(re.search(r"\| HaluEval +\| Task-specific", md)) and md.count("HaluEval") == 1)
 
     def row(*cells):  # each cell: (tag, text[, classes[, attributes]])
         def cell(tag, text, classes="", attrs=""):
@@ -835,7 +835,144 @@ def checks():
     yield "a mark on a group's last row is that row's, not the group's label", (
         "rowspan" not in md and "<td>✓</td>\n<td></td>\n<td>73.0</td>" in md)
 
+    header = row(("td", "Type", "ltx_border_tt"), ("td", "Model", "ltx_border_tt"), ("td", "Size", "ltx_border_tt"))
+    md, _ = convert('<table class="ltx_tabular">' + header
+                    + row(("td", "", "ltx_border_t"), ("td", "BERT", "ltx_border_t"), ("td", "110M", "ltx_border_t"))
+                    + row(("td", "Encoder-Only"), ("td", "RoBERTa"), ("td", "355M"))
+                    + row(("td", ""), ("td", "XLNet"), ("td", "340M"))
+                    + row(("td", "", "ltx_border_t"), ("td", "GPT-1", "ltx_border_t"), ("td", "120M", "ltx_border_t"))
+                    + row(("td", "Decoder-Only"), ("td", "GPT-2"), ("td", "1.5B")) + "</table>")
+    yield "a group's label centred on its middle row by hand opens the group", (
+        "rowspan" not in md and bool(re.search(r"\| Encoder-Only +\| BERT", md))
+        and bool(re.search(r"\| Decoder-Only +\| GPT-1", md)) and md.count("Encoder-Only") == 1)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Architecture", "ltx_border_tt"), ("td", "Coupling", "ltx_border_tt"), ("td", "Flow", "ltx_border_tt"))
+                    + row(("td", "Coupling", "ltx_border_t", 'rowspan="2"'), ("td", "Affine", "ltx_border_t"), ("td", "RealNVP", "ltx_border_t"))
+                    + row(("td", "Splines", "ltx_border_t", 'rowspan="2"'), ("td", "cubic", "ltx_border_t"))
+                    + row(("td", ""), ("td", ""), ("td", "RQ-NSF"))
+                    + row(("td", ""), ("td", "Bijective", "ltx_border_t"), ("td", "RAD", "ltx_border_t"))
+                    + row(("td", "Residual", "ltx_border_t"), ("td", "", "ltx_border_t"), ("td", "iResNet", "ltx_border_t")) + "</table>")
+    yield "a label counted short spans its group to the next rule, nested in another", (
+        '<td rowspan="4">Coupling</td>' in md and '<td rowspan="2">Splines</td>' in md and "<td></td>\n<td>RQ-NSF" not in md)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Data", "ltx_border_tt"), ("td", "Size", "ltx_border_tt"), ("td", "Prompt", "ltx_border_tt"))
+                    + row(("td", "LLaVA", "ltx_border_t"), ("td", "158K", "ltx_border_t"), ("td", "–", "ltx_border_t"))
+                    + row(("td", "VQAv2", "ltx_border_t"), ("td", "83K", "ltx_border_t"), ("td", "Answer briefly.", "ltx_border_t"))
+                    + row(("td", "GQA"), ("td", "72K"), ("td", ""))
+                    + row(("td", "TextCaps", "ltx_border_t"), ("td", "22K", "ltx_border_t"), ("td", "Caption it.", "ltx_border_t"))
+                    + row(("td", "Total", "ltx_border_t"), ("td", "665K", "ltx_border_t"), ("td", "", "ltx_border_t")) + "</table>")
+    yield "a group's one entry outside the first column, on its first row, is left as typed", (
+        "rowspan" not in md and bool(re.search(r"\| GQA +\| 72K +\| +\|", md)) and md.count("Answer briefly") == 1)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Model", "ltx_border_tt"), ("td", "Data", "ltx_border_tt"), ("td", "Size", "ltx_border_tt"))
+                    + row(("td", "LLaMA", "ltx_border_t"), ("td", "", "ltx_border_t"), ("td", "7B", "ltx_border_t"))
+                    + row(("td", "Alpaca"), ("td", "Web"), ("td", "7B"))
+                    + row(("td", "PaLM", "ltx_border_t"), ("td", "Books", "ltx_border_t"), ("td", "8B", "ltx_border_t"))
+                    + row(("td", "Flan"), ("td", "Books"), ("td", "8B")) + "</table>")
+    yield "a group's one entry outside the first column, below its first row, opens the group", (
+        "rowspan" not in md and bool(re.search(r"\| LLaMA +\| Web +\| 7B", md)) and md.count("Web") == 1)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Model", "ltx_border_tt"), ("td", "Venue", "ltx_border_tt"), ("td", "F1", "ltx_border_tt"))
+                    + row(("td", "A", "ltx_border_t"), ("td", "ICLR", "ltx_border_t"), ("td", "70.1", "ltx_border_t"))
+                    + row(("td", "B"), ("td", ""), ("td", "71.0"))
+                    + row(("td", "C", "ltx_border_t"), ("td", "NeurIPS", "ltx_border_t"), ("td", "72.3", "ltx_border_t"))
+                    + row(("td", "D"), ("td", "ACL"), ("td", "73.0"))
+                    + row(("td", "E"), ("td", ""), ("td", "73.4")) + "</table>")
+    yield "a column whose groups leave some cells empty among filled ones keeps its blanks", (
+        bool(re.search(r"\| B +\| +\| 71\.0", md)) and md.count("ICLR") == 1)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("th", "", "ltx_border_tt"), ("th", "", "ltx_border_tt"), ("th", "TPR", "ltx_border_tt", 'colspan="2"'))
+                    + row(("th", "Dataset"), ("th", "Detector"), ("th", "@1%"), ("th", "@5%"))
+                    + row(("th", "", "ltx_border_t"), ("th", "PPL", "ltx_border_t"), ("td", "0.94", "ltx_border_t"), ("td", "0.98", "ltx_border_t"))
+                    + row(("th", "Writing"), ("th", "X-PPL"), ("td", "0.59"), ("td", "0.79"))
+                    + row(("th", "Prompts"), ("th", "Ours"), ("td", "0.92"), ("td", "0.98"))
+                    + row(("th", "Sampling", "ltx_border_tt", 'rowspan="2"'), ("th", "Random", "ltx_border_tt"),
+                          ("td", "M1", "ltx_border_tt"), ("td", "M2", "ltx_border_tt"))
+                    + row(("th", "Active"), ("td", "M3"), ("td", "M4")) + "</table>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a header's label is raised beside a body column it cannot fix", (
+        '<th rowspan="2">Dataset</th>' in head and "Sampling" not in head and '<th rowspan="2">Sampling</th>' in md)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("th", "", "ltx_border_tt"), ("th", "", "ltx_border_tt"), ("td", "Data usage", "ltx_border_tt", 'colspan="2"'))
+                    + row(("th", ""), ("th", ""), ("td", "GT", "ltx_border_t"), ("td", "LLM", "ltx_border_t"))
+                    + row(("th", "Sampling", "", 'rowspan="2"'), ("th", "Random", "ltx_border_t"), ("td", "M1", "ltx_border_t"),
+                          ("td", "M2", "ltx_border_t"))
+                    + row(("th", "Active"), ("td", "M3"), ("td", "M4")) + "</table>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a label spanning rows under the header is not raised into it", "Sampling" not in head and "M1" not in head
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Task", "ltx_border_tt"), ("td", "Size", "ltx_border_tt"), ("td", "LR", "ltx_border_tt"))
+                    + row(("td", "", "ltx_border_t"), ("td", "336M", "ltx_border_t"), ("td", "", "ltx_border_t"))
+                    + row(("td", "MNLI"), ("td", "1.3B"), ("td", "1e-5"))
+                    + row(("td", "QQP", "ltx_border_t"), ("td", "336M", "ltx_border_t"), ("td", "5e-5", "ltx_border_t"))
+                    + row(("td", ""), ("td", "1.3B"), ("td", "3e-5")) + "</table>")
+    yield "a number alone in a group is not repeated over it", (
+        md.count("1e-5") == 1 and bool(re.search(r"\| MNLI +\| 336M", md)))
+
+    cite = '(<a href="#bib.bib30">Socher et al., 2013b</a>)'
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Model", "ltx_border_tt"), ("td", "Error rate", "ltx_border_tt"), ("td", "Error rate", "ltx_border_tt"))
+                    + row(("td", ""), ("td", "(Positive/"), ("td", "(Fine-"))
+                    + row(("td", ""), ("td", "Negative)"), ("td", "grained)"))
+                    + row(("td", "Naïve Bayes", "ltx_border_t"), ("td", "18.2 %", "ltx_border_t"), ("td", "59.0%", "ltx_border_t"))
+                    + row(("td", cite), ("td", ""), ("td", ""))
+                    + row(("td", "SVMs " + cite), ("td", "20.6%"), ("td", "59.3%"))
+                    + row(("td", "Supervised"), ("td", ""), ("td", ""))
+                    + row(("td", "Paragraph Vector"), ("td", "12.2%"), ("td", "51.3%")) + "</table>")
+    yield "a citation or a column title continued on a row of its own joins its cell", (
+        "Error rate (Positive/Negative)" in md and "Error rate (Fine-grained)" in md
+        and bool(re.search(r"\| Naïve Bayes \(\[Socher et al\., 2013b\]\(#bib\.bib30\)\) +\| 18\.2 %", md))
+        and bool(re.search(r"\| Supervised +\| +\| +\|", md)) and len(re.findall(r"^\|", md, re.M)) == 6)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Category", "ltx_border_tt"), ("td", "Phenomena", "ltx_border_tt"), ("td", "Size", "ltx_border_tt"))
+                    + row(("td", "Lexical Semantics", "ltx_border_t", 'rowspan="2"'), ("td", "Entailment, Negation,", "ltx_border_t"),
+                          ("td", "368", "ltx_border_t", 'rowspan="2"'))
+                    + row(("td", "Symmetry, Redundancy"))
+                    + row(("td", "Logic", "ltx_border_t"), ("td", "", "ltx_border_t"), ("td", "364", "ltx_border_t"))
+                    + row(("td", "", "ltx_border_t"), ("td", "", "ltx_border_t"), ("td", "Pointwise, Pairwise,", "ltx_border_t"))
+                    + row(("td", "CompassJudger"), ("td", "Various"), ("td", "&amp; Generative")) + "</table>")
+    yield "a list going on under a row label joins its cell, a fragment above its row the row below", (
+        "rowspan" not in md and "Entailment, Negation, Symmetry, Redundancy" in md
+        and "Pointwise, Pairwise, & Generative" in md and len(re.findall(r"^\|", md, re.M)) == 5)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Scale", "ltx_border_tt"), ("td", "Im2GPS", "ltx_border_tt"), ("td", "PlaNet", "ltx_border_tt"))
+                    + row(("td", ""), ("td", ""), ("td", "MobileNet"))
+                    + row(("td", "Continent", "ltx_border_t"), ("td", "51.9%", "ltx_border_t"), ("td", "79.3%", "ltx_border_t"))
+                    + row(("td", "Country"), ("td", "35.4%"), ("td", "60.3%")) + "</table>")
+    yield "a column title's second line joins it", "| PlaNet MobileNet |" in md and len(re.findall(r"^\|", md, re.M)) == 4
+
     h2m = load("html-to-markdown")
+    tex = (r"\begin{table}\begin{tabular}{@{}l|c|cc@{}}\toprule Prompt & Shots & \multicolumn{2}{c}{F1} \\ \midrule"
+           "\n & 6 & 73.76 & 90.24 \\\\\n\\multirow{-2}{*}{Fewshot-related} & 10 & 76.56 & 90.80 \\\\\n"
+           " & 6 & 77.86 & 89.44 \\\\\n\\multirow{-2}{*}{\\textbf{Fewshot-random}} & 10 & 80.51 & 89.05 \\\\\n"
+           "Hand-written rules & 0 & 81.49 & 87.65 \\\\ \\bottomrule\\end{tabular}\\end{table}")
+    files, h2m.source_files = h2m.source_files, lambda version: {"main.tex": "\\documentclass{article}" + tex}
+
+    def unruled(head):
+        return ('<table class="ltx_tabular">' + head
+                + row(("th", ""), ("th", "6"), ("td", "73.76"), ("td", "90.24"))
+                + row(("th", "Fewshot-related"), ("th", "10"), ("td", "76.56"), ("td", "90.80"))
+                + row(("th", ""), ("th", "6"), ("td", "77.86"), ("td", "89.44"))
+                + row(("th", '<span class="ltx_text ltx_font_bold">Fewshot-random</span>'), ("th", "10"), ("td", "80.51"), ("td", "89.05"))
+                + row(("th", "Hand-written rules"), ("th", "0"), ("td", "81.49"), ("td", "87.65")) + "</table>")
+    page = '<base href="/html/2310.11244v4/">'
+    flat = h2m.source_row_spans(unruled(row(("th", "Prompt"), ("th", "Shots"), ("td", "F1"), ("td", ""))), page)
+    spanned = h2m.source_row_spans(unruled(row(("th", "Prompt"), ("th", "Shots"), ("td", "F1", "", 'colspan="2"'))), page)
+    h2m.source_files = files
+    yield "a \\multirow{-2} LaTeXML dropped takes its rows from the source", (
+        flat.index("Fewshot-related") < flat.index(">10<") and "rowspan" not in flat
+        and re.search(r'rowspan="2"[^>]*>Fewshot-related<', spanned) and 'rowspan="2"' in spanned.split("90.80")[1]
+        and spanned.count("<tr") == 6 and spanned.count("<th") == 10)
+
     cited = h2m.unknown_citations(
         "<p>introduced by Google researchers in 2017 ( ?). The encoder-decoder models ( ?) came first.</p>",
         r"introduced by Google researchers in 2017 \protect~\shortcite{vaswani2017attention}. Nothing else.",

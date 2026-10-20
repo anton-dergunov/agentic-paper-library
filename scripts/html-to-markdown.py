@@ -45,20 +45,25 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
     deviation printed small after it are set apart, and a column title's
     raised line is read first (see drop_undefined_macros, tidy_cells).
 14. A table panel gets the row labels it shares with the panel beside it,
-    and a row label spanning a group of rows takes the group's last row
-    (see share_panel_labels, extend_rowspans).
+    a row label spanning a group of rows takes the group's last row, a
+    group's label every row of the group, a \\multirow LaTeXML dropped its
+    span from the LaTeX source, and a cell's text continued on a row of its
+    own joins it (see share_panel_labels, extend_rowspans, span_group_labels,
+    source_row_spans, merge_continuation_rows).
 15. A symbol set as a small picture becomes its file's name or what a vision
     model reads in it (see small_pictures, picture_text), and a link to the
     paper's own arXiv page an in-page link (see local_links).
 """
 
 import base64
+import collections
 import colorsys
 import functools
 import gzip
 import html
 import html.entities
 import io
+import math
 import os
 import re
 import subprocess
@@ -1646,7 +1651,7 @@ def extend_rowspans(article):
     with an empty cell, which reads as a row belonging to no group. The
     spanning cell is extended over it and the empty cell dropped. A rule ends
     the group, and several empty cells above a lone label are that label's
-    group (a \\multirow{-n} on its last row; see raise_group_labels).
+    group (a \\multirow{-n} on its last row; see span_group_labels).
     """
     out, pos = [], 0
     for table in re.finditer(r"<table\b", article):
@@ -1707,20 +1712,64 @@ def head_through(body, first, last):
     return [(first, first, "<thead>"), (last, last, "</thead><tbody>"), (end, end, "</tbody>")]
 
 
-def raise_group_labels(article):
-    """Put a row group's label on the group's first row, spanning the group.
+# A number as a table prints it: "1e-5", "336M", "-0.3%", "~10K".
+NUMBER = r"[-+−~≈<>]?\d[\d.,]*(?:[eE][-+−]?\d+)?\s*[%KMBTkx×]?"
 
-    A \\multirow{-2} is typed on the last row of its group and reaches up
-    (the way to span rows that have a \\rowcolor). LaTeXML leaves the label
-    on that last row, so it reads as the name of one row and the rows above
-    it as nameless. Where a group between two rules has its only label on its
-    last row, the label moves to the first and spans the group, when it is a
-    word (not a "✓" or a number) and other groups in the body have labels. A
-    header written that way ("Metric" under an empty cell) is left alone in a
-    table without spans, which stays a pipe table. Raised in a header of up to five
-    rows, the label takes the header's rows into the head with it (see
-    head_through): pandoc cuts a span where the head ends.
+
+def table_grid(body):
+    """Where each cell of a table sits: {(row, column): (row, column, cell, rows, columns)}
+    for every position a cell covers, its own first among them, and the table's rows."""
+    rows = list(TABLE_ROW.finditer(body))
+    at = {}
+    for r, row in enumerate(rows):
+        col = 0
+        for cell in TABLE_CELL.finditer(body, row.start(1), row.end(1)):
+            while (r, col) in at:
+                col += 1
+            down, across = (int(m.group(1)) if (m := re.search(rf'\b{k}span="(\d+)"', cell.group(2))) else 1
+                            for k in ("row", "col"))
+            for i in range(min(down, len(rows) - r)):
+                for j in range(across):
+                    at.setdefault((r + i, col + j), (r, col, cell, down, across))
+            col += across
+    return rows, at
+
+
+def span_group_labels(article):
+    """Give a row group's label to every row of the group.
+
+    A rule marks off a group of rows, and its label is written once: on the
+    group's last row by a \\multirow{-2} (which reaches up, the way to span
+    rows that have a \\rowcolor), on its middle row by an author centring it
+    by hand, or with a \\multirow counted short ("Coupling" over five rows of
+    seven). LaTeXML leaves it there, so it names one row or a few and the
+    others read as belonging to no group. In each column, a group between two
+    rules whose only filled cell is a word (not a "✓" or a number) spans the
+    group from its first row; in a table without spans, which stays a pipe
+    table, the label moves to the first row instead. Outside the first column
+    only a label below the first row or spanning short is moved: one typed on
+    the first row may be the first of a list. It is done only in a column
+    where other groups have labels too and no group mixes several filled
+    cells with empty ones (results left blank). A header
+    written that way ("Metric" under an empty cell) is raised only in a table
+    with spans, of up to five rows, taking the header's rows into the head
+    with it (see head_through): pandoc cuts a span where the head ends.
     """
+    def rule_above(at, r, c):
+        own = at.get((r, c))
+        above = at.get((r - 1, c))
+        return r == 0 or bool(own and own[0] == r and re.search(r"\bltx_border_tt?\b", own[2].group(2))
+                              or above and above[0] + above[3] == r and re.search(r"\bltx_border_bb?\b", above[2].group(2)))
+
+    def filled(cell):
+        return bool(cell_text(cell.group(3)) or "<img" in cell.group(3))
+
+    def is_label(fragment, column):
+        """A word, not a mark ("✓") or a formula; outside the first column, where a group
+        is named "4B", not a number either ("1e-5", "336M")."""
+        text = cell_text(re.sub(r"<math\b.*?</math>", " ", fragment, flags=re.S))
+        return bool(re.search(r"[^\W\d_]", text)) and not (column and re.fullmatch(NUMBER, text))
+
     out, pos = [], 0
     for table in re.finditer(r"<table\b", article):
         end = balanced_end(article, table.start(), "table")
@@ -1729,33 +1778,49 @@ def raise_group_labels(article):
         body = article[table.start():end]
         if "ltx_border_t" not in body or body.count("<table") > 1:
             continue
-        rows = list(TABLE_ROW.finditer(body))
-        firsts = [FIRST_CELL.match(body, m.start(1), m.end(1)) for m in rows]
-        ruled = [bool(f and re.search(r"\bltx_border_tt?\b", f.group(2))) for f in firsts]
-        starts = [i for i, r in enumerate(ruled) if r] + [len(firsts)]
+        rows, at = table_grid(body)
+        spans = bool(re.search(r'\b(?:row|col)span="(?!1")\d+"', body))
         edits = []
-        for a, b in zip(starts, starts[1:]):
-            group = firsts[a:b]
-            if len(group) < 2 or not all(group) or any("span=" in f.group(2) for f in group):
-                continue
-            # A header's label is raised only in a table that is written as HTML anyway.
-            if a == 0 and (not re.search(r'\b(?:row|col)span="', body) or len(group) > 5 or b == len(firsts)):
-                continue
-            if any(cell_text(f.group(3)) or "<img" in f.group(3) for f in group[:-1]) or not cell_text(group[-1].group(3)):
-                continue
-            # A mark or a number on a group's last row is that row's value ("✓"), not a label,
-            # and a label is raised only where other groups have labels too.
-            if a > 0 and (not re.search(r"[^\W\d_]", cell_text(group[-1].group(3)))
-                          or not any(cell_text(f.group(3)) for c, d in zip(starts, starts[1:])
-                                     if c > 0 and c != a for f in firsts[c:d] if f)):
-                continue
-            top, label = group[0], group[-1]
-            edits.append((label.start(), label.end(), ""))
-            edits += [(f.start(), f.end(), "") for f in group[1:-1]]
-            edits.append((top.start(3), top.end(3), label.group(3)))
-            edits.append((top.start(2), top.start(2), f' rowspan="{len(group)}"'))
-            if a == 0:
-                edits += head_through(body, rows[0].start(), rows[b - 1].end())
+        for c in range(1 + max((col for _, col in at), default=-1)):
+            starts = [r for r in range(len(rows)) if rule_above(at, r, c)] + [len(rows)]
+            groups = []  # (first row, end row, the group's cells in this column, top to bottom)
+            for a, b in zip(starts, starts[1:]):
+                owners = [at.get((r, c)) for r in range(a, b)]
+                if all(o and o[1] == c and o[4] == 1 for o in owners):
+                    groups.append((a, b, list(dict.fromkeys((o[0], o[2], o[3]) for o in owners))))
+                else:
+                    groups.append((a, b, None))
+            # Several filled cells and empty ones in one group: blanks there are values left out.
+            mixed = any(cells and 1 < sum(filled(x) for _, x, _ in cells) < len(cells) for a, _, cells in groups if a > 0)
+            for a, b, cells in groups:
+                if not cells or b - a < 2 or (a == 0 and c > 0) or (a > 0 and mixed):
+                    continue
+                labels = [(r, x, n) for r, x, n in cells if filled(x)]
+                if len(labels) != 1 or (labels[0][0] == a and labels[0][2] >= b - a):
+                    continue
+                r, label, n = labels[0]
+                # Outside the first column, an entry on its group's first row is as the author typed it:
+                # shared by the rows, or the first of a list beside a longer one.
+                if c > 0 and r == a and n == 1:
+                    continue
+                if a == 0 and (not spans or b - a > 5 or b == len(rows) or r + n != b or n > 1):
+                    continue
+                if a > 0 and (not is_label(label.group(3), c)
+                              or not any(filled(x) for d, _, others in groups if d > 0 and d != a and others
+                                         for _, x, _ in others)):
+                    continue
+                top = cells[0][1]
+                if spans or a == 0:
+                    edits += [(x.start(), x.end(), "") for _, x, _ in cells[1:]]
+                    if top is not label:
+                        edits.append((top.start(3), top.end(3), label.group(3)))
+                    old = re.search(r'\s*\browspan="\d+"', top.group(2))
+                    at_attr = top.start(2) + old.start() if old else top.start(2)
+                    edits.append((at_attr, top.start(2) + old.end() if old else at_attr, f' rowspan="{b - a}"'))
+                elif top is not label:
+                    edits += [(top.start(3), top.end(3), label.group(3)), (label.start(3), label.end(3), "")]
+                if a == 0:
+                    edits += head_through(body, rows[0].start(), rows[b - 1].end())
         if not edits:
             continue
         for a, b, text in sorted(edits, reverse=True):
@@ -1763,6 +1828,331 @@ def raise_group_labels(article):
         out.append(article[pos:table.start()])
         out.append(body)
         pos = end
+    return "".join(out) + article[pos:]
+
+
+# A cell's text that goes on in the next row ("Factivity,", "(Fine-", "Human &") or
+# carries on from the row before ("& Generative", "grained)"); a whole parenthesis
+# is a citation or a note on the row above ("(Socher et al., 2013b)", "(O/E +1.84%)"),
+# but "[73] - image classification" and "(r) cut text" are items of their own.
+GOES_ON = re.compile(r"(?:[,/&(\[;-]|\b(?:and|or|of|with|for|the|a|in|to|on|by))$")
+CARRIES_ON = re.compile(r"^(?:[&,;)\]]|\([^()]*\)$|\[[^\[\]]*\]$)")
+
+
+def merge_continuation_rows(article):
+    """Join a cell's text that an author continued on a new table row.
+
+    A long cell is broken by starting a new row with the other cells empty: a
+    citation under a model's name, the second line of a column title ("PlaNet"
+    over "MobileNet"), a list going on under a row label. LaTeXML keeps those
+    rows, which read as rows of their own. A row with no rule above it, no
+    number or mark, and text in at most half the columns, is joined to the row
+    above it, cell to cell, when each fragment and the text it joins read as
+    one: the upper ends as if it goes on ("Factivity,", "Human &") or the
+    lower starts as if it carries on ("(Socher et al., 2013b)", "& Generative");
+    to the row below instead when that is how the fragment reads with it
+    ("Pointwise, Pairwise," over "& Generative"). Separate items under a
+    spanning label ("Synchronization", "Mood") stay rows, and so does a cell
+    spanning columns or rows, a formula or a picture. In a header (the
+    <thead>, or the rows above a rule under the first few) a fragment joins
+    the title above it whatever it reads like, in every column but the first
+    (where "CIFAR-10" under "Model" is a sub-heading), both being
+    short as titles are: "Error rate" over "(Fine-" over "grained)", "PlaNet"
+    over "MobileNet". A table of one
+    column, a box of text, keeps its lines. The joined row's spans shrink by
+    one.
+    """
+    def text(cell):
+        return cell_text(re.sub(r"<math\b.*?</math>", " M ", cell.group(3), flags=re.S))
+
+    def ruled(cell, side):
+        return bool(re.search(rf"\bltx_border_{side}{side}?\b", cell.group(2)))
+
+    def join(upper, lower):
+        upper, lower = upper.strip(), lower.strip()
+        if not upper or not lower:
+            return upper or lower
+        glue = "" if re.search(r"[-/(]$", cell_text(upper)) else " "
+        return upper + glue + lower
+
+    def merge_once(body):
+        rows, at = table_grid(body)
+        width = 1 + max((c for _, c in at), default=-1)
+        if width < 2:
+            return None  # a box of text (a prompt), its lines in rows
+        # The header: the rows above the rule under the first few (a rule above a row's cells,
+        # below the last row's, or drawn as a row of its own), and at least a <thead>'s.
+        thead = re.search(r"<thead\b.*?</thead\s*>", body, re.S)
+        head = max(sum(1 for row in rows if row.start() < thead.end()) if thead else 0,
+                   next((r for r in range(1, min(len(rows), 5)) if any(
+                       ruled(o[2], "t") and o[0] == r or ruled(o[2], "b") and o[0] + o[3] == r
+                       for (i, c), o in at.items() if i in (r, r - 1) and (i == r) == (o[0] == r))
+                       or "ltx_rule" in rows[r].group(1) and not cell_text(rows[r].group(1))), 0))
+        for f in range(len(rows)):
+            own = {c: o for (r, c), o in at.items() if r == f and o[0] == f and o[1] == c}
+            if not own or any(o[3] > 1 or o[4] > 1 for o in own.values()):
+                continue
+            filled = {c: o[2] for c, o in own.items() if text(o[2]) or re.search(r"<(?:img|svg|object|math)\b", o[2].group(3))}
+            if (not filled or (f >= head and len(filled) > max(1, width // 2)) or any(ruled(o[2], "t") for o in own.values())
+                    or any(re.search(r"<(?:img|svg|object|math)\b", x.group(3)) or not re.search(r"[^\W\d_]", text(x))
+                           or re.fullmatch(NUMBER, text(x)) for x in filled.values())):
+                continue
+            # A fragment going on downwards, else the row above it continued; in the body,
+            # each fragment and the text it joins must read as one ("Factivity," | "Symmetry").
+            down = f + 1 < len(rows) and all(
+                (o := at.get((f + 1, c))) and o[0] == f + 1 and o[1] == c and o[3] == 1 and not ruled(o[2], "t")
+                and text(o[2]) and (GOES_ON.search(text(x)) or CARRIES_ON.match(text(o[2])))
+                for c, x in filled.items())
+            m = f + 1 if down else f - 1
+            if m < 0 or (not down and any(ruled(at[(f - 1, c)][2], "b") for c in range(width) if (f - 1, c) in at)):
+                continue
+            targets = {c: at.get((m, c)) for c in filled}
+            if not all(o and o[0] == m and o[1] == c and o[3] == 1 and o[4] == 1 for c, o in targets.items()):
+                continue
+            # In a header only the first column, the row labels' title, needs it: a word under
+            # "Model" there is a sub-heading ("CIFAR-10") as often as the title's second line.
+            if not down and not all(text(targets[c][2]) and (GOES_ON.search(text(targets[c][2]))
+                                                             or CARRIES_ON.match(text(x)))
+                                    for c, x in filled.items() if f >= head or c == 0 and text(targets[c][2])):
+                continue
+            # A column title is short; a header that holds an example's text is not one to join.
+            if f < head and not all(len(text(x)) <= 25 and len(text(x).split()) <= 3
+                                    and len(text(t[2])) <= 40 and len(text(t[2]).split()) <= 5
+                                    for c, x in filled.items() for t in [targets[c]]):
+                continue
+            edits = []
+            for c, x in filled.items():
+                t = targets[c][2]
+                merged = join(x.group(3), t.group(3)) if down else join(t.group(3), x.group(3))
+                edits.append((t.start(3), t.end(3), merged))
+            row = rows[f]
+            edits.append((row.start(), row.end(), ""))
+            for (r, c), o in at.items():
+                if (r, c) == (o[0], o[1]) and o[0] < f < o[0] + o[3]:
+                    span = re.search(r'\browspan="(\d+)"', o[2].group(2))
+                    edits.append((o[2].start(2) + span.start(), o[2].start(2) + span.end(),
+                                  f'rowspan="{o[3] - 1}"' if o[3] > 2 else ""))
+            for a, b, new in sorted(edits, reverse=True):
+                body = body[:a] + new + body[b:]
+            return body
+        return None
+
+    out, pos = [], 0
+    for table in re.finditer(r"<table\b", article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        if body.count("<table") > 1:
+            continue
+        changed = False
+        for _ in range(200):
+            merged = merge_once(body)
+            if merged is None:
+                break
+            body, changed = merged, True
+        if not changed:
+            continue
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+TEX_TABULAR = re.compile(r"\\(begin|end)\{(tabular\*?|tabularx|tabulary|longtable\*?|NiceTabular\*?)\}")
+# What may open a row of a tabular before its first cell: rules, colours, spacing.
+TEX_ROW_PREFIX = re.compile(
+    r"\s*(?:\\(?:hline|toprule|midrule|bottomrule|endhead|endfirsthead|endfoot|endlastfoot|hdashline|Xhline|"
+    r"tabucline|morecmidrules)\b(?:\{[^}]*\})?|\\(?:cline|hhline|arrayrulecolor|specialrule|rowcolor|cdashline)"
+    r"(?:\[[^\]]*\])?(?:\{[^}]*\})+|\\cmidrule\s*(?:\([^)]*\))?\s*\{[^}]*\}|\\addlinespace\b(?:\[[^\]]*\])?|"
+    r"\\noalign\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}|\[[-\d.]+\s*(?:pt|em|ex|mm|cm)\])")
+
+
+def tex_argument(tex, at):
+    """The text of the braced argument opening at `at` (skipping blanks), and where it ends; or (None, at)."""
+    while at < len(tex) and tex[at] in " \t\n":
+        at += 1
+    if at >= len(tex) or tex[at] != "{":
+        return None, at
+    depth = 0
+    for i in range(at, len(tex)):
+        depth += {"{": 1, "}": -1}.get(tex[i], 0) if tex[i - 1] != "\\" else 0
+        if depth == 0:
+            return tex[at + 1:i], i + 1
+    return None, at
+
+
+def tex_split(tex, separator):
+    """`tex` cut at each `separator` ("\\\\" or "&") outside braces and nested tabulars."""
+    parts, start, depth, nested, i = [], 0, 0, 0, 0
+    while i < len(tex):
+        ch = tex[i]
+        if ch == "\\":
+            env = TEX_TABULAR.match(tex, i)
+            if env:
+                nested += 1 if env.group(1) == "begin" else -1
+                i = env.end()
+                continue
+            if separator == "\\\\" and tex.startswith("\\\\", i) and depth == 0 and nested == 0:
+                parts.append(tex[start:i])
+                i += 2
+                start = i
+                continue
+            if tex.startswith("\\tabularnewline", i) and separator == "\\\\" and depth == 0 and nested == 0:
+                parts.append(tex[start:i])
+                i += len("\\tabularnewline")
+                start = i
+                continue
+            i += 2
+            continue
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif ch == separator and depth == 0 and nested == 0:
+            parts.append(tex[start:i])
+            start = i + 1
+        i += 1
+    parts.append(tex[start:])
+    return parts
+
+
+def tex_tabulars(tex):
+    """The tabulars of a LaTeX source, each its rows, each row its cells as
+    (column, columns spanned, rows spanned by a \\multirow or 0 without one, label words)."""
+    out, stack = [], []
+    for m in TEX_TABULAR.finditer(tex):
+        if m.group(1) == "begin":
+            stack.append(m)
+            continue
+        if not stack:
+            continue
+        begin = stack.pop()
+        if stack:
+            continue  # a tabular inside a cell is part of that cell
+        at = begin.end()
+        if re.match(r"\s*\[", tex[at:]):
+            at = tex.index("]", at) + 1
+        for _ in range(2 if begin.group(2).rstrip("*") in ("tabular", "tabularx", "tabulary") and "*" in begin.group(2)
+                       or begin.group(2) in ("tabularx", "tabulary") else 1):
+            _, at = tex_argument(tex, at)
+        rows = []
+        for raw in tex_split(tex[at:m.start()], "\\\\"):
+            raw = re.sub(r"^\*?", "", raw)
+            while (prefix := TEX_ROW_PREFIX.match(raw)) and prefix.end() > 0:
+                raw = raw[prefix.end():]
+            if not raw.strip():
+                continue
+            cells, col = [], 0
+            for cell in tex_split(raw, "&"):
+                across, inner = 1, cell
+                multicolumn = re.match(r"\s*\\multicolumn\s*\{\s*(\d+)\s*\}", cell)
+                if multicolumn:
+                    across = int(multicolumn.group(1))
+                    _, after = tex_argument(cell, multicolumn.end())
+                    inner = tex_argument(cell, after)[0] or ""
+                down, label = 0, None
+                multirow = re.search(r"\\multirow\s*(?:\[[^\]]*\])?\s*\{\s*(-?[\d.]+)\s*\}", inner)
+                if multirow:
+                    try:
+                        down = float(multirow.group(1))
+                    except ValueError:
+                        down = 0
+                    after = multirow.end()
+                    after = re.match(r"\s*(?:\[[^\]]*\])?", inner[after:]).end() + after
+                    _, after = tex_argument(inner, after)
+                    after = re.match(r"\s*(?:\[[^\]]*\])?", inner[after:]).end() + after
+                    label = tex_argument(inner, after)[0]
+                rows_spanned = (1 if down > 0 else -1) * math.ceil(abs(down) - 0.01) if label is not None else 0
+                cells.append((col, across, rows_spanned, plain_words(re.sub(r"\$[^$]*\$", " ", label or ""))))
+                col += across
+            rows.append(cells)
+        out.append(rows)
+    return out
+
+
+def source_row_spans(article, page):
+    """Give back the \\multirow spans LaTeXML dropped, from the paper's LaTeX source.
+
+    LaTeXML drops every \\multirow{-n} (typed on a group's last row, reaching
+    up) and some \\multirow{n}, leaving the label in one cell and the rows it
+    covers with nothing in its column; without a rule to mark the group off,
+    the label's rows cannot be told from the table alone (span_group_labels,
+    run before, settles the groups that rules mark off). The source is fetched
+    when a column has two words each under an empty cell, the shape a lost
+    \\multirow{-n} leaves: its tabular with the same number of rows,
+    whose labels sit at the same places, gives each label's rows. As in
+    span_group_labels, the label spans them from the first, or moves to the
+    first in a table without spans.
+    """
+    def own(at, r, c):
+        o = at.get((r, c))
+        return o[2] if o and o[:2] == (r, c) and o[3] == o[4] == 1 else None
+
+    def closes_blanks(body):
+        """Whether a column has two words each on the row after an empty cell."""
+        rows, at = table_grid(body)
+        found = collections.Counter()
+        for r, c in at:
+            cell, above = own(at, r, c), own(at, r - 1, c)
+            if (cell and above is not None and not cell_text(above.group(3))
+                    and re.search(r"[^\W\d_]", cell_text(re.sub(r"<math\b.*?</math>", " ", cell.group(3), flags=re.S)))):
+                found[c] += 1
+        return any(n >= 2 for n in found.values())
+
+    def words(fragment):
+        return plain_words(html.unescape(re.sub(r"<math\b.*?</math>", " ", fragment, flags=re.S)))
+
+    tables = [(t.start(), balanced_end(article, t.start(), "table")) for t in re.finditer(r"<table\b", article)]
+    tables = [(a, b) for a, b in tables if b and article.count("<table", a, b) == 1]
+    if not any(closes_blanks(article[a:b]) for a, b in tables):
+        return article
+    version = paper_version(page)
+    tex = latex_source(version) if version else None
+    if not tex or "\\multirow" not in tex:
+        return article
+    tabulars = [t for t in tex_tabulars(tex) if any(cell[2] for row in t for cell in row)]
+    out, pos = [], 0
+    for a, b in tables:
+        body = article[a:b]
+        rows, at = table_grid(body)
+        spans = bool(re.search(r'\b(?:row|col)span="(?!1")\d+"', body))
+        edits = None
+        for tabular in tabulars:
+            if len(tabular) != len(rows):
+                continue
+            labels = [(r, cell) for r, row in enumerate(tabular) for cell in row if cell[2] and cell[3]]
+            placed = [(r, cell, at.get((r, cell[0]))) for r, cell in labels]
+            if not placed or not all(o and o[0] == r and o[1] == cell[0] and words(o[2].group(3)) == cell[3]
+                                     for r, cell, o in placed):
+                continue
+            edits = []
+            for r, (c, across, n, _), (_, _, label, down, _) in placed:
+                first, last = (r, r + n - 1) if n > 0 else (r + n + 1, r)
+                if down > 1 or first < 0 or last >= len(rows) or first == last:
+                    continue
+                owners = [at.get((i, c)) for i in range(first, last + 1)]
+                if not all(o and o[1] == c and o[3] == 1 and o[4] == across
+                           and (o[2] is label or not (cell_text(o[2].group(3)) or "<img" in o[2].group(3)))
+                           for o in owners):
+                    continue
+                top = owners[0][2]
+                if spans:
+                    edits += [(o[2].start(), o[2].end(), "") for o in owners[1:]]
+                    if top is not label:
+                        edits.append((top.start(3), top.end(3), label.group(3)))
+                    edits.append((top.start(2), top.start(2), f' rowspan="{last - first + 1}"'))
+                elif top is not label:
+                    edits += [(top.start(3), top.end(3), label.group(3)), (label.start(3), label.end(3), "")]
+            tabulars.remove(tabular)
+            break
+        if not edits:
+            continue
+        for x, y, text in sorted(edits, reverse=True):
+            body = body[:x] + text + body[y:]
+        out.append(article[pos:a])
+        out.append(body)
+        pos = b
     return "".join(out) + article[pos:]
 
 
@@ -2101,7 +2491,9 @@ def main(html_path, body_path, images_dir, basename):
     article = fix_text_encoding(article)
     article = tidy_cells(article)
     article = extend_rowspans(article)
-    article = raise_group_labels(article)
+    article = span_group_labels(article)
+    article = source_row_spans(article, page)
+    article = merge_continuation_rows(article)
     article = end_guessed_heads(article)
     article = span_header_rows(article)
     article = share_panel_labels(article)
