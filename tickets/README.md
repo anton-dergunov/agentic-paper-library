@@ -22,42 +22,44 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-19.
+Papers and key-content counts from the library `papers` on 2026-10-20.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
-| [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 34 | 5 | unknown until its sub-causes are found |
+| [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 36 | 6 | unknown until its sub-causes are found |
 | [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 24 | 5 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 41 | 3 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
-| [PDF tables taken for pictures](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 2 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
-| [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 77 | 1 | unknown until its sub-causes are found |
-| [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 15 | 1 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
+| [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
+| [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
+| [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 83 | 1 | unknown until its sub-causes are found |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
-| [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 47 |  | unknown until its sub-causes are found |
-| [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 34 |  | unknown until its sub-causes are found |
-| [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 32 |  | unknown until its sub-causes are found |
+| [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
+| [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 40 |  | unknown until its sub-causes are found |
+| [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 36 |  | unknown until its sub-causes are found |
 | [Wrong characters from a PDF's text layer](pdf-text-layer-errors.md) | `engine` `reconvert` | open | 30 |  | unknown until its sub-causes are found |
 | [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 28 |  | unknown until its sub-causes are found |
-| [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | open | 19 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
-| [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 19 |  | engine: medium, a fixture; reconvert the papers |
+| [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | open | 23 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
+| [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 21 |  | engine: medium, a fixture; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
+| [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 15 |  | engine: medium; reconvert the papers overnight |
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
-| [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 12 |  | engine: medium; reconvert the papers overnight |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 7 |  | engine: medium for one paper, or by hand |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
+| [The end of a PDF paragraph is lost after a page, column or footnote break](pdf-paragraph-tail-lost.md) | `engine` `reconvert` | open | 3 |  | engine: small to medium once the dropped region is found; reconvert the papers |
+| [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open | 2 |  | engine: small; reaches the PDF papers with their next reconversion |
+| [Two shades of one colour marked alike; a caption that points to another table's colours](html-colour-shades.md) | `engine` `reconvert` | open | 1 |  | engine: small; reconvert the papers with shaded tables |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert 5 papers |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
-| [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open |  |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
 
 ## Won't fix
 
 Causes left as they are:
 
-- [Results printed only in a plot](wont-fix/figure-values-in-plots.md): the numbers are not in the paper as text, only in the plot (2 records)
+- [Results printed only in a plot](wont-fix/figure-values-in-plots.md): the numbers are not in the paper as text, only in the plot (34 records)
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
