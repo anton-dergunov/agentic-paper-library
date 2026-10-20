@@ -31,7 +31,7 @@ Papers and key-content counts from the library `papers` on 2026-10-20.
 | [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 41 | 3 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
-| [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 83 | 1 | unknown until its sub-causes are found |
+| [A footnote or badge inside a cell runs into the value](html-cell-attachments.md) | `engine` `reconvert` `reread` | open | 4 | 1 | engine: small, fixtures; reconvert the papers with a footnote or picture in a cell; re-read EuroBERT |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
 | [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 40 |  | unknown until its sub-causes are found |
@@ -42,11 +42,19 @@ Papers and key-content counts from the library `papers` on 2026-10-20.
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 21 |  | engine: medium, a fixture; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 18 |  | unknown until its sub-causes are found |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 18 |  | engine: medium; reconvert the papers |
+| [Row-group labels LaTeXML lost, cut short or set on another row](html-multirow-lost.md) | `engine` `reconvert` | open | 18 |  | engine: large, the tabular matched in the LaTeX source; reconvert the papers |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 15 |  | engine: medium; reconvert the papers overnight |
 | [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 13 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 12 |  | engine: medium, measured on the 8 papers; reconvert them |
+| [A table set as side-by-side panels loses its row labels or splits](html-table-panels.md) | `engine` `reconvert` | open | 11 |  | engine: medium, beside share_panel_labels; reconvert the papers with table panels |
+| [A cell's text continued on extra table rows](html-continuation-rows.md) | `engine` `reconvert` | open | 9 |  | engine: medium, a heuristic with fixtures; reconvert the papers |
+| [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 9 |  | unknown until its sub-causes are found |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 7 |  | engine: medium for one paper, or by hand |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
+| [A table's header loses a span into the body, or keeps a row of results](html-table-head-rows.md) | `engine` `reconvert` | open | 7 |  | engine: small to medium, fixtures from the papers below; reconvert the papers with a rowspan in the header |
+| [Rows stacked inside cells come out as one row](html-stacked-cell-rows.md) | `engine` `reconvert` | open | 6 |  | engine: medium, fixtures from the papers below; reconvert the papers |
+| [The converter's row-label repairs move a value or stretch a label too far](html-row-span-heuristics.md) | `engine` `reconvert` | open | 5 |  | engine: small, fixtures from the papers below; reconvert the papers whose spans the repairs change |
+| [A boxed table taken for layout comes out as one line of text](html-boxed-table-as-text.md) | `engine` `reconvert` | open | 4 |  | engine: small, a fixture; reconvert the papers with a span tabular |
 | [The end of a PDF paragraph is lost after a page, column or footnote break](pdf-paragraph-tail-lost.md) | `engine` `reconvert` | open | 3 |  | engine: small to medium once the dropped region is found; reconvert the papers |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open | 2 |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Two shades of one colour marked alike; a caption that points to another table's colours](html-colour-shades.md) | `engine` `reconvert` | open | 1 |  | engine: small; reconvert the papers with shaded tables |
@@ -63,7 +71,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (7 records)
 
-Problems in single papers left as they are (54):
+Problems in single papers left as they are (61):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -101,8 +109,15 @@ Problems in single papers left as they are (54):
 | Swap-guided Preference Learning for Personalized Reinforcement Learning from Human Feedback | p. 8, Table 1 | html-table-colours | by design: the caption names no colour; the runs show as AU = 0.00 |
 | BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval | p. 3, Table 1 | html-table-structure | small: the merged cells read by order |
 | Chain-of-Verification Reduces Hallucination in Large Language Models | p. 6, Table 1 | html-table-structure | small: Table 1's header spans sit one column off in arXiv's HTML, and the table reads by order |
+| Feature Learning in Infinite-Width Neural Networks | p. 28, Table 2 | html-table-structure | small: arXiv's HTML lays the table out the same way, and it reads by column |
 | Flamingo. a Visual Language Model for Few-Shot Learning | pp. 1-3, Figure 1 | html-table-structure | small: an illustration of prompts; nothing rests on it |
+| Gemma 3 Technical Report | p. 3, Table 4 | html-table-structure | small: an example of the chat format, laid out as in arXiv's HTML |
+| LongBench v2. Towards Deeper Understanding and Reasoning on Realistic Long-context Multitasks | p. 6, Table 2 | html-table-structure | small: the header sits as in arXiv's HTML, a little off, and the table reads by column |
+| Movie Gen. A Cast of Media Foundation Models | p. 17, Table 4 | html-table-structure | small: arXiv's HTML has the same header, and it reads correctly |
 | Neural Ranking Models with Weak Supervision | pp. 5-9, Table 4 | html-table-structure | the odd P@20 value is in arXiv's HTML too |
+| Perceptual Losses for Real-Time Style Transfer and Super-Resolution | pp. 8-12, Figs. 8 and 9 | html-table-structure | small: the values are a figure's labels, readable by order |
+| RecToM. A Benchmark for Evaluating Machine Theory of Mind in LLM-based Conversational Recommender | p. 7, Table 5 | html-table-structure | small: a markdown table has no rule between blocks; the caption says the first ten rows are the Recommender's |
+| UltraFeedback. Boosting Language Models with Scaled AI Feedback | p. 7, Table 5 | html-table-structure | small: the two header rows are as in arXiv's HTML and read by column |
 | Anatomy of a Privacy-Safe Large-Scale Information Extraction System Over Email | pp. 1-2 | pdf-reading-order | small: the bullets are out of order but readable |
 | Privacy-Aware Personalized Entity Representations for Improved User | p. 3, Figure 2 | pdf-reading-order | small: readable |
 | Privacy-Aware Personalized Entity Representations for Improved User | p. 1 | pdf-reading-order | small: readable |
