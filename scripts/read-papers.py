@@ -2,7 +2,8 @@
 """Read papers and write their notes, one model request per paper.
 
     ./scripts/read-papers.py <scope or paper.md> ... [--limit N] [--jobs N] [--model ID]
-                             [--focus FILE] [--redo | --flagged] [--appendix]
+                             [--focus FILE] [--redo | --flagged] [--appendix] [--clean]
+    ./scripts/read-papers.py --all [--clean] [--limit N] ...
 
 For every paper named, or under a scope (a folder of the library), that has no digest in
 notes/<stem>.md yet, sends the paper's reading view (paperlib read-view) to a model through
@@ -23,6 +24,12 @@ existing note's Q&A is kept.
                   reading lists them)
     --appendix    give the reader the appendices too (for papers whose note says the
                   main results are in them); use with --redo on those papers
+    --all         every review scope (`review_scopes` in paper-library.yaml), in its order,
+                  so the areas to review first are read first
+    --clean       read only the papers whose conversion is likely sound: converted from
+                  arXiv's HTML, with no open record of broken key content, and lacking no
+                  pages of the PDF. Papers converted from a PDF have about ten times the
+                  problems; read them after their tickets are fixed
 
 The reader ends the note with the conversion problems it found, one a line, each under
 the id of a ticket in the engine's tickets/ (or `new:<slug>`). They are taken out of the
@@ -45,16 +52,17 @@ import re
 import sys
 import threading
 import time
-from concurrent.futures import CancelledError, ThreadPoolExecutor, as_completed
+from concurrent.futures import CancelledError, ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, is_open, load_issues,
-    load_tickets, note_path, paper_files, read_paper, read_view, reread_reason, save_issues,
+    load_tickets, note_path, paper_files, pdf_path_for, read_paper, read_view, reread_reason, save_issues,
 )
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
 RELATED_MAX = 150
+_PAGE_MAP = None
 
 
 def note_state(stem):
@@ -88,10 +96,40 @@ def related_list(paper, scope_dir):
 CONVERSION_SECTION = re.compile(r"^## Conversion[ \t]*\n(.*?)(?=^## |\Z)", re.M | re.S)
 
 
-def kinds_list(tickets):
-    """The known causes for the reading prompt: one line per ticket not yet done."""
-    return "\n".join(f"- {tid}: {t.get('title', '')}" for tid, t in tickets.items()
-                     if t.get("status") != "done") or "- (none yet)"
+def lacks_pages(paper):
+    """Whether the paper's markdown lacks pages of its PDF (arXiv's HTML stopped partway)."""
+    global _PAGE_MAP
+    import importlib.util
+    import pymupdf
+    if _PAGE_MAP is None:
+        spec = importlib.util.spec_from_file_location("page_map", Path(__file__).with_name("page-map.py"))
+        _PAGE_MAP = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(_PAGE_MAP)
+    pdf = pdf_path_for(paper)
+    if not pdf.exists():
+        return False
+    pymupdf.TOOLS.mupdf_display_errors(False)
+    with pymupdf.open(pdf) as doc:
+        missing, _ = _PAGE_MAP.missing_pages(doc, paper.read_text(encoding="utf-8"))
+    return len(missing) >= _PAGE_MAP.MIN_MISSING
+
+
+def unclean_reason(paper):
+    """Why a paper's conversion is likely to read badly, or "" when it is likely sound."""
+    source = (read_paper(paper)[0] or {}).get("source")
+    if source != "html":
+        return f"converted from {source or '?'}"
+    if any(r.get("key-content") and is_open(r) for r in load_issues(paper)):
+        return "key content broken"
+    return "lacks pages of its PDF" if lacks_pages(paper) else ""
+
+
+def kinds_list(tickets, status=None):
+    """The causes for the reading prompt, one line per ticket: those still to fix, or with
+    `status`, those of that status (the wont-fix ones, which the reader leaves unrecorded)."""
+    chosen = [(tid, t) for tid, t in tickets.items()
+              if (t.get("status") == status if status else t.get("status") not in ("done", "wont-fix"))]
+    return "\n".join(f"- {tid}: {t.get('title', '')}" for tid, t in chosen) or "- (none yet)"
 
 
 def take_conversion(note, tickets):
@@ -102,12 +140,17 @@ def take_conversion(note, tickets):
     today = datetime.date.today().isoformat()
     records = []
     for line in m.group(1).splitlines():
-        parts = [p.strip() for p in line.strip().lstrip("-*").split("|")]
+        # The description may hold a "|" of its own (p(w|z), |V|): split off the kind and the
+        # place from the left, and a closing "| key-content" from the right.
+        parts = [p.strip() for p in line.strip().lstrip("-*").split("|", 2)]
         if len(parts) < 3 or not parts[0] or parts[0].lower() == "none":
             continue
         kind, where, what = parts[0].strip("`"), parts[1], parts[2]
-        record = {"kind": kind, "where": where, "what": what,
-                  "key-content": any(p.lower().replace(" ", "-") == "key-content" for p in parts[3:]),
+        head, _, tail = what.rpartition("|")
+        key = bool(head) and tail.strip().lower().replace(" ", "-") == "key-content"
+        if key:
+            what = head.strip()
+        record = {"kind": kind, "where": where, "what": what, "key-content": key,
                   "by": "reader", "found": today}
         if kind.startswith("new:") or kind not in tickets:
             record.update(kind="new", suggested=kind.removeprefix("new:"))
@@ -194,12 +237,15 @@ def main(argv):
             if not args:
                 sys.exit(__doc__)
             options[arg] = args.pop(0)
-        elif arg in ("--redo", "--flagged", "--appendix"):
+        elif arg in ("--redo", "--flagged", "--appendix", "--all", "--clean"):
             flags.add(arg)
         elif arg.startswith("-"):
             sys.exit(__doc__)
         else:
             targets.append(arg)
+    if "--all" in flags:
+        from reading import review_scopes
+        targets += [s for _, scopes in review_scopes() for s in scopes]
     if not targets:
         sys.exit(__doc__)
     model = options["--model"] or CONFIG.get("reader_model") or "opus"
@@ -209,7 +255,8 @@ def main(argv):
                  + Path(options["--focus"]).read_text(encoding="utf-8").strip() + "\n\n")
     tickets = load_tickets()
     template = ((ENGINE_ROOT / "guide" / "reading-prompt.md").read_text(encoding="utf-8")
-                .replace("{{kinds}}", kinds_list(tickets)))
+                .replace("{{kinds}}", kinds_list(tickets))
+                .replace("{{wont_fix}}", kinds_list(tickets, "wont-fix")))
 
     papers = []  # (paper, the folder whose papers are offered as related)
     for target in targets:
@@ -221,6 +268,8 @@ def main(argv):
             papers += [(p.resolve(), scope_dir) for p in paper_files(scope_dir)]
         else:
             sys.exit(f"read: `{target}` is neither a paper nor a folder of the library")
+    seen = set()
+    papers = [(p, s) for p, s in papers if not (p in seen or seen.add(p))]
     todo, done_before = [], 0
     for paper, scope_dir in papers:
         has_digest, _ = note_state(paper.stem)
@@ -233,9 +282,18 @@ def main(argv):
             todo.append((paper, scope_dir))
         else:
             done_before += 1
+    skipped = {}
+    if "--clean" in flags and todo:
+        with ProcessPoolExecutor() as pool:  # the page check is CPU-bound
+            reasons = list(pool.map(unclean_reason, [paper for paper, _ in todo], chunksize=20))
+        for reason in filter(None, reasons):
+            skipped[reason] = skipped.get(reason, 0) + 1
+        todo = [item for item, reason in zip(todo, reasons) if not reason]
     if options["--limit"]:
         todo = todo[:int(options["--limit"])]
-    print(f"read: {len(papers)} papers, {done_before} already have a digest, reading {len(todo)} with {model}")
+    print(f"read: {len(papers)} papers, {done_before} already have a digest, reading {len(todo)} with {model}"
+          + ("; left for later, as likely to read badly: "
+             + ", ".join(f"{n} {reason}" for reason, n in sorted(skipped.items())) if skipped else ""))
 
     log = CACHE_DIR / "read-papers.jsonl"
     log.parent.mkdir(parents=True, exist_ok=True)

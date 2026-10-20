@@ -29,7 +29,7 @@ Rules:
 - Quote numbers exactly as the paper prints them. Never round, convert or compute a number, and never give one that is not in the text.
 - Every number names its baseline, or what it is compared with.
 - State only what the paper says. Do not add facts you know from elsewhere (a cited paper's authors, a predecessor's settings), and do not present an inference as the paper's statement.
-- `## Conversion` lists what the conversion broke in the markdown, one problem a line: garbled or missing equations, tables flattened into text or with rows out of order, a truncated body, numbers that look wrong. Write `- none` when nothing is. The missing references, appendices and figure images are not conversion problems, and neither are cosmetic flaws that leave the content readable (footnote markers fused into the text, a scrambled author block, stray cross-reference text). Nor are the paper's own errors: two numbers the paper prints differently go in the digest, unless their digits look garbled.
+- `## Conversion` lists what the conversion broke in the markdown, one problem a line: garbled or missing equations, tables flattened into text or with rows out of order, a truncated body, numbers that look wrong. Write `- none` when nothing is. The missing references, appendices and figure images are not conversion problems, nor are results the paper gives only in a plot (say so in the digest), and neither are cosmetic flaws that leave the content readable (footnote markers fused into the text, a scrambled author block, stray cross-reference text). Nor are the paper's own errors: two numbers the paper prints differently go in the digest, unless their digits look garbled.
   `kind` is the id of the cause from the list below, or `new:<a-short-slug>` when none fits.
   End the line with `| key-content` when a part the paper's findings rest on is missing or wrong in the markdown: a results table that is absent, flattened past reading, or has values in the wrong rows or columns; marking lost that carries a claim (bold for the significant results, shading that separates conditions); the main method's equation unreadable; a missing section or a truncated body. Leave it off when the meaning can still be recovered (an equation garbled but explained in the prose, a table readable by order, reading order scrambled on one page) or the broken part is incidental to the findings.
   Do not quote a number from a broken table without saying it is unreliable.
@@ -38,6 +38,10 @@ Rules:
 Known causes of conversion problems (`kind`):
 
 {{kinds}}
+
+Left as they are, so not listed under `## Conversion`:
+
+{{wont_fix}}
 
 Papers in the same area of the library:
 

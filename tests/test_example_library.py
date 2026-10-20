@@ -189,13 +189,26 @@ def issues_problems(root):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     note = ("# T\n\n## Digest\n\n- a claim\n\n## Related in library\n\n## Conversion\n\n"
-            "- pdf-table-bold | p. 4, Table 2 | bold lost | key-content\n- new:odd | p. 5 | a glyph\n- none\n")
-    body, records = module.take_conversion(note, {"pdf-table-bold": {}})
+            "- pdf-table-bold | p. 4, Table 2 | bold lost | key-content\n- new:odd | p. 5 | a glyph\n- none\n"
+            "- pdf-equation-garbled | p. 6 | p(w|z) reads p(w z) | key-content\n"
+            "- pdf-equation-garbled | p. 7 | |V| lost\n")
+    body, records = module.take_conversion(note, {"pdf-table-bold": {}, "pdf-equation-garbled": {}})
     if "## Conversion" in body or "## Related in library" not in body:
         problems.append("the Conversion section was not taken out of the note")
     if [(r["kind"], r.get("suggested"), r["key-content"]) for r in records] != \
-            [("pdf-table-bold", None, True), ("new", "odd", False)]:
+            [("pdf-table-bold", None, True), ("new", "odd", False), ("pdf-equation-garbled", None, True),
+             ("pdf-equation-garbled", None, False)] \
+            or [r["what"] for r in records[2:]] != ["p(w|z) reads p(w z)", "|V| lost"]:
         problems.append(f"the reader's records were parsed wrongly: {records}")
+    listed = {"a": {"title": "A", "status": "open"}, "b": {"title": "B", "status": "wont-fix"},
+              "c": {"title": "C", "status": "done"}}
+    if module.kinds_list(listed) != "- a: A" or module.kinds_list(listed, "wont-fix") != "- b: B":
+        problems.append("the reader is offered wont-fix or done causes as ones to record")
+    pdf_paper = root / "pdf-paper.md"
+    pdf_paper.write_text("---\ntitle: P\nsource: pdf-text\n---\n\nBody.\n")
+    if module.unclean_reason(pdf_paper) != "converted from pdf-text":
+        problems.append("read --clean would read a paper converted from a PDF")
+    pdf_paper.unlink()
     old = [{"kind": "a", "where": "p. 1", "what": "x", "by": "reader"},
            {"kind": "b", "where": "p. 2", "what": "y", "by": "session"},
            {"kind": "c", "where": "p. 3", "what": "z", "by": "reader", "wont-fix": "small"}]
