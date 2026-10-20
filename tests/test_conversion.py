@@ -113,6 +113,49 @@ def checks():
                     "</span></p>")
     yield "scaled table with full-width group rows is a table", "<table>" in md and "FLAN 50%" not in md
 
+    def lines(*texts):  # a multi-line cell: a one-column tabular nested in it
+        return ('<span class="ltx_tabular">'
+                + "".join(f'<span class="ltx_tr">{td(t)}</span>' for t in texts) + "</span>")
+
+    md, _ = convert('<p class="ltx_p"><span class="ltx_tabular">'
+                    '<span class="ltx_tr">' + td("Thinking") + td("Non-Thinking") + "</span>"
+                    '<span class="ltx_tr">' + td(lines("&lt;user&gt;", "{query} /think", "&lt;think&gt;"))
+                    + td(lines("&lt;user&gt;", "{query} /no_think", "&lt;think&gt;", "&lt;/think&gt;")) + "</span>"
+                    "</span></p>")
+    yield "scaled table with multi-line cells is a table", (
+        "| Thinking | Non-Thinking |" in md and "| &lt;user&gt; {query} /think &lt;think&gt; |" in md.replace("\\<", "&lt;").replace("\\>", "&gt;"))
+
+    md, _ = convert('<p class="ltx_p"><span class="ltx_tabular">'
+                    '<span class="ltx_tr">' + td("") + td("Subjective") + td("Objective") + "</span>"
+                    '<span class="ltx_tr">' + td("Video alignment", "ltx_rowspan ltx_rowspan_4") + td("Correctness")
+                    + td("ImageBind", "ltx_rowspan ltx_rowspan_4") + "</span>"
+                    '<span class="ltx_tr">' + td("Synchronization") + "</span>"
+                    '<span class="ltx_tr">' + td("Mood") + "</span>"
+                    '<span class="ltx_tr">' + td("Action") + "</span>"
+                    "</span></p>")
+    yield "scaled table whose rows sit under a \\multirow is a table", (
+        "<table>" in md and '<td rowspan="4">ImageBind</td>' in md)
+
+    md, _ = convert('<p class="ltx_p">A <span class="ltx_tabular">'
+                    '<span class="ltx_tr">' + td("Num. of") + "</span>"
+                    '<span class="ltx_tr">' + td("Samples") + "</span></span> cell.</p>")
+    yield "a one-column span tabular in text stays text", "<table>" not in md and "|" not in md and "Num. of" in md
+
+    def rotated(name):  # a column title turned on its side: a tabular of <th> around its lines
+        return ('<span class="ltx_td ltx_th ltx_th_column"> <span class="ltx_tabular"><span class="ltx_tr">'
+                '<span class="ltx_td ltx_th ltx_th_column"><span class="ltx_inline-block ltx_transformed_outer">'
+                '<span class="ltx_transformed_inner" style="transform:rotate(-90deg)"><span class="ltx_p">'
+                + lines(name, "4.2b") + "</span></span></span></span></span></span> </span>")
+
+    md, _ = convert('<p class="ltx_p"><span class="ltx_tabular">'
+                    '<span class="ltx_tr">' + td("") + rotated("Phi-3.5-Vision") + rotated("GPT-4O") + "</span>"
+                    '<span class="ltx_tr">' + td("MMMU", "ltx_border_t ltx_rowspan ltx_rowspan_2") + td("43.0", "ltx_border_t")
+                    + td("62.4", "ltx_border_t") + "</span>"
+                    '<span class="ltx_tr">' + td("44.1") + td("63.0") + "</span>"
+                    "</span></p>")
+    yield "a rotated column title set as a tabular of <th> keeps its text", (
+        "<th>Phi-3.5-Vision 4.2b</th>" in md and "<th>GPT-4O 4.2b</th>" in md)
+
     md, _ = convert(BORDER_TABLE)
     yield "header row above \\midrule becomes the header", md.lstrip().startswith("| Model | PPL")
 
@@ -212,6 +255,12 @@ def checks():
                          + picture(['<span class="ltx_text">+ MaTTS</span>'], height=7.77)
                          + '</td><td class="ltx_td">51.2</td></tr></table>')
     yield "small badge becomes its text", "+ MaTTS" in md and not images
+
+    rank = picture(['<span class="ltx_text">3</span>'], height=13.07)
+    md, _ = convert('<table class="ltx_tabular"><tr><td class="ltx_td">MIRACL</td><td class="ltx_td">42.0'
+                    f'<span class="ltx_inline-block">{rank}</span></td><td class="ltx_td">GPT '
+                    f'<span class="ltx_inline-block">{rank}</span></td></tr></table>')
+    yield "a badge on a value is set apart from it", "| 42.0 (3) |" in md and "| GPT 3 |" in md
 
     md, images = convert(picture(["0", "1", "2", "epochs"], paths=40))
     yield "plot stays an image", md.strip().startswith("![](images/") and len(images) == 1
@@ -437,6 +486,19 @@ def checks():
         "dataset<sup>1</sup> of" in md and "\n\n<sup>1</sup> Most samples are short.\n\nAfter." in md
         and md.count("<sup>1</sup>") == 2)
 
+    shared = note.replace("Most samples are short.", "Scores from the leaderboard.")
+    md, _ = convert('<table class="ltx_tabular"><tr><td class="ltx_td">Model</td><td class="ltx_td">MBPP</td></tr>'
+                    f'<tr><td class="ltx_td">A</td><td class="ltx_td">82.3{shared}</td></tr>'
+                    f'<tr><td class="ltx_td">B</td><td class="ltx_td">73.8{shared}</td></tr></table>')
+    yield "a note marked in several cells is written once", (
+        "82.3<sup>1</sup>" in md and "73.8<sup>1</sup>" in md and md.count("Scores from the leaderboard.") == 1)
+
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
+                    '<td class="ltx_td ltx_rowspan ltx_rowspan_2" rowspan="2"><span class="ltx_inline-block">\n <span class="ltx_p">'
+                    '<span class="ltx_text ltx_font_bold">Llama-3.3</span></span>\n <span class="ltx_p">70b</span>\n </span></td>'
+                    '<td class="ltx_td">66.3</td></tr><tr class="ltx_tr"><td class="ltx_td">78.9</td></tr></table></figure>')
+    yield "a cell written as HTML loses its padding", '<td rowspan="2"><b>Llama-3.3</b> 70b</td>' in md
+
     md, _ = convert(f'<p class="ltx_p">0.272<sup class="ltx_sup">{font("†", "ltx_font_italic")}</sup> and '
                     f'{font(" ±0.3 ")} hold.</p><table class="ltx_equation ltx_eqn_table"><tbody>'
                     + eqn_row(math(r"\displaystyle\geq q(U)"), "by Eq.\u00a06", number=1) + "</tbody></table>")
@@ -528,6 +590,47 @@ def checks():
                     '<figcaption class="ltx_caption">Table 4: Benchmarks.</figcaption></figure>')
     yield "a group's label typed on its last row spans the group from its first", (
         '<td rowspan="2">HaluEval</td>' in md and md.index("HaluEval") < md.index("Task-specific") < md.index("General"))
+
+    def row(*cells):  # each cell: (tag, text[, classes[, attributes]])
+        def cell(tag, text, classes="", attrs=""):
+            return f'<{tag} class="ltx_td {classes}" {attrs}>{text}</{tag}>'
+        return '<tr class="ltx_tr">' + "".join(cell(*c) for c in cells) + "</tr>"
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><thead class="ltx_thead">'
+                    + row(("th", "", "ltx_border_tt"), ("th", "BernNB", "ltx_border_tt", 'colspan="2"')) + '</thead><tbody class="ltx_tbody">'
+                    + row(("th", "Section"), ("td", "TOP1"), ("td", "TOP5"))
+                    + row(("th", "Abstract", "ltx_border_t"), ("td", "40.65", "ltx_border_t"), ("td", "63.92", "ltx_border_t"))
+                    + row(("th", "Claims"), ("td", "39.37"), ("td", "65.42")) + "</tbody></table></figure>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a header's label raised over its second row takes that row into the head", (
+        '<th rowspan="2">Section</th>' in head and "TOP5" in head and "Abstract" not in head)
+
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><tbody class="ltx_tbody">'
+                    + row(("th", "", "ltx_border_tt"), ("th", "Helium", "ltx_border_tt"), ("td", "Moshi", "ltx_border_tt", 'colspan="2"'))
+                    + row(("th", "Hyper-parameter"), ("th", "pre"), ("td", "post"), ("td", "fine"))
+                    + row(("th", "Temporal Transformer", "ltx_border_t", 'colspan="4"'))
+                    + row(("th", "Model dimension", "ltx_border_t"), ("th", "4096", "ltx_border_t"), ("td", "same", "ltx_border_t", 'colspan="2"'))
+                    + row(("th", "Heads"), ("th", "32"), ("td", "32"), ("td", "32")) + "</tbody></table></figure>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "the head a raised label opens ends at its group", (
+        '<th rowspan="2">Hyper-parameter</th>' in head and "fine" in head and "Temporal" not in head and "Temporal" in md)
+
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><tbody class="ltx_tbody">'
+                    + row(("th", "Dataset", "ltx_border_tt"), ("th", "Method", "ltx_border_tt"), ("th", "Error", "ltx_border_tt"))
+                    + row(("th", "CIFAR-10", "ltx_border_t", 'rowspan="3"'), ("th", "BatchNorm", "ltx_border_t"), ("th", "6.61", "ltx_border_t"))
+                    + row(("td", "Xavier", "ltx_border_t"), ("td", "7.78", "ltx_border_t"))
+                    + row(("td", "Fixup"), ("td", "7.24")) + "</tbody></table></figure>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a guessed header row below the rule, spanning into the body, is a body row", (
+        "Error" in head and "CIFAR" not in head and '<td rowspan="3">CIFAR-10</td>' in md and "<td>Xavier</td>\n<td>7.78</td>" in md)
+
+    md, _ = convert('<figure class="ltx_table"><table class="ltx_tabular ltx_guessed_headers"><tbody class="ltx_tbody">'
+                    + row(("th", "", "ltx_border_t"), ("td", "Architecture", "ltx_border_t"), ("td", "Err.", "ltx_border_t"))
+                    + row(("th", "DNN", "ltx_border_tt"), ("td", "2000-2000 + dropout", "ltx_border_tt"), ("td", "57.8%", "ltx_border_tt"))
+                    + row(("th", "SNN-30k", "ltx_border_t", 'rowspan="2"'), ("td", "128c-p-1200L", "ltx_border_t"),
+                          ("td", "21.8%", "ltx_border_t", 'rowspan="2"'))
+                    + row(("td", "+ dropout")) + "</tbody></table></figure>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a double rule under the header ends it", "Architecture" in head and "DNN" not in head
 
     def shaded_table(caption):
         gray = 'style="--ltx-bg-color:#E6E6E6;"'
@@ -704,6 +807,33 @@ def checks():
                     '<tr class="ltx_tr"><td class="ltx_td">Books</td><td class="ltx_td">9</td></tr></table>')
     yield "a row label spanning a group takes the group's last row", (
         '<td rowspan="3">Retrieval</td>' in md and "<td></td>" not in md and "<td>Wiki</td>" in md)
+
+    header = row(("td", "Set", "ltx_border_tt"), ("td", "Model", "ltx_border_tt"), ("td", "WER", "ltx_border_tt"))
+    md, _ = convert('<table class="ltx_tabular">' + header
+                    + row(("td", "YT", "ltx_border_t", 'rowspan="2"'), ("td", "De", "ltx_border_t"), ("td", "7.3", "ltx_border_t"))
+                    + row(("td", "AVG"), ("td", "7.5"))
+                    + row(("td", "", "ltx_border_t"), ("td", "De", "ltx_border_t"), ("td", "4.8", "ltx_border_t"))
+                    + row(("td", ""), ("td", "En"), ("td", "5.9"))
+                    + row(("td", "VB-Multi"), ("td", "AVG"), ("td", "5.0")) + "</table>")
+    yield "a row label is not stretched over the next group, under a rule", (
+        '<td rowspan="2">YT</td>' in md and '<td rowspan="3">VB-Multi</td>' in md)
+
+    md, _ = convert('<table class="ltx_tabular">' + header
+                    + row(("td", "YT", "ltx_border_t", 'rowspan="2"'), ("td", "De"), ("td", "7.3"))
+                    + row(("td", "AVG"), ("td", "7.5"))
+                    + row(("td", ""), ("td", "De"), ("td", "4.8"))
+                    + row(("td", ""), ("td", "En"), ("td", "5.9"))
+                    + row(("td", "VB-Multi"), ("td", "AVG"), ("td", "5.0")) + "</table>")
+    yield "nor over the rows above a lone label, which are that label's", (
+        '<td rowspan="2">YT</td>' in md and md.count("<td></td>") == 2)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Pointers", "ltx_border_tt"), ("td", "GRU", "ltx_border_tt"), ("td", "MOSE", "ltx_border_tt", 'colspan="2"'))
+                    + row(("td", "", "ltx_border_t"), ("td", "", "ltx_border_t"), ("td", "73.1", "ltx_border_t"), ("td", "64.5", "ltx_border_t"))
+                    + row(("td", ""), ("td", "✓"), ("td", "72.3"), ("td", "65.3"))
+                    + row(("td", "✓"), ("td", ""), ("td", "73.0"), ("td", "68.3")) + "</table>")
+    yield "a mark on a group's last row is that row's, not the group's label", (
+        "rowspan" not in md and "<td>✓</td>\n<td></td>\n<td>73.0</td>" in md)
 
     h2m = load("html-to-markdown")
     cited = h2m.unknown_citations(

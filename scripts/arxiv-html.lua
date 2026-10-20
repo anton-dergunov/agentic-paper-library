@@ -952,25 +952,34 @@ local function equation_rows(tbl)
   return out
 end
 
+-- All of a table's rows, head and foot included.
+local function table_rows(tbl)
+  local rows = pandoc.List(tbl.head.rows)
+  for _, body in ipairs(tbl.bodies) do
+    rows:extend(body.head)
+    rows:extend(body.body)
+  end
+  return rows .. tbl.foot.rows
+end
+
 -- A table nested in a cell is how LaTeX \makecell / \shortstack line breaks
 -- come through ("Num. of" / "Samples"). Collapse a one-column nested table to
 -- its lines joined by spaces, each line's bold, colour marks and formulas kept.
+-- Its lines can be header rows (a rotated column title set as a tabular of <th>).
 local function flatten_cell_tables(blocks)
   return pandoc.walk_block(pandoc.Div(blocks), {
     Table = function(inner)
       local parts = pandoc.List()
-      for _, body in ipairs(inner.bodies) do
-        for _, row in ipairs(body.body) do
-          if #row.cells ~= 1 then return nil end
-          for _, b in ipairs(row.cells[1].contents) do
-            if b.t == "Plain" or b.t == "Para" then
-              parts:extend(b.content)
-            else
-              local text = pandoc.utils.stringify(b)
-              if text ~= "" then parts:insert(pandoc.Str(text)) end
-            end
-            parts:insert(pandoc.Space())
+      for _, row in ipairs(table_rows(inner)) do
+        if #row.cells ~= 1 then return nil end
+        for _, b in ipairs(row.cells[1].contents) do
+          if b.t == "Plain" or b.t == "Para" then
+            parts:extend(b.content)
+          else
+            local text = pandoc.utils.stringify(b)
+            if text ~= "" then parts:insert(pandoc.Str(text)) end
           end
+          parts:insert(pandoc.Space())
         end
       end
       return pandoc.Plain(parts)
@@ -988,11 +997,34 @@ local function escape_math_pipes(el)
   }).content[1]
 end
 
+-- A cell's text without the spaces and line breaks around it and the runs of
+-- them inside it, which a table written as HTML keeps ("<td>  \n   MMMU  (val) </td>").
+local function trim_cell(blocks)
+  local out = pandoc.List()
+  for _, b in ipairs(blocks) do
+    if b.t == "Plain" or b.t == "Para" then
+      local content = pandoc.List()
+      for _, el in ipairs(b.content) do
+        if not is_space(el) then
+          content:insert(el)
+        elseif #content > 0 and not is_space(content[#content]) then
+          content:insert(pandoc.Space())
+        end
+      end
+      if #content > 0 and is_space(content[#content]) then content:remove() end
+      if #content > 0 then out:insert(pandoc[b.t](content)) end
+    else
+      out:insert(b)
+    end
+  end
+  return out
+end
+
 local function clean_row(row, head)
   row.attr = pandoc.Attr()
   for _, cell in ipairs(row.cells) do
     cell.attr = pandoc.Attr()
-    cell.contents = flatten_cell_tables(cell.contents)
+    cell.contents = trim_cell(flatten_cell_tables(cell.contents))
     if head then
       -- Bold column titles say nothing the header row does not.
       cell.contents = pandoc.walk_block(pandoc.Div(cell.contents), {
@@ -1091,12 +1123,19 @@ end
 -- pandoc writes an empty header and the real header becomes the first data
 -- row. The rule under the header is the cue: up to three leading rows ending
 -- in a bottom rule, or followed by a row with a top rule (\midrule), become
--- the head. The head grows to take in the rows a header cell spans
--- ("Length" over "Memory" / "Ability"), as long as it stays within three.
+-- the head; a double rule (\hline\hline) is a rule too. The head grows to
+-- take in the rows a header cell spans ("Length" over "Memory" / "Ability"),
+-- as long as it stays within three.
 local function promote_header(tbl)
   if #tbl.bodies == 0 then return end
   local limit = 3
   if #tbl.head.rows > 0 then
+    -- Under a head, rows of <th> opening the body are a group's title
+    -- ("Temporal Transformer") or results LaTeXML guessed as a header.
+    for _, body in ipairs(tbl.bodies) do
+      body.body = body.head .. body.body
+      body.head = pandoc.List()
+    end
     demote_data_rows(tbl)
     return
   end
@@ -1113,7 +1152,7 @@ local function promote_header(tbl)
   local k
   for r = 1, math.min(limit, #rows - 1) do
     if has_class(rows[r], "ltx_border_b") or has_class(rows[r], "ltx_border_bb")
-        or has_class(rows[r + 1], "ltx_border_t") then
+        or has_class(rows[r + 1], "ltx_border_t") or has_class(rows[r + 1], "ltx_border_tt") then
       k = r
       break
     end
@@ -1213,12 +1252,15 @@ local function lift_notes(blocks)
       block.content = lift_notes(block.content)
       out:insert(block)
     else
-      local notes = pandoc.List()
+      -- A note marked in many cells of a table ("Scores reported on EvalPlus") is written once.
+      local notes, seen = pandoc.List(), {}
       block = pandoc.walk_block(block, {
         Span = function(span)
           if not span.classes:includes("ltx_note") then return nil end
           local mark, text = note_parts(span)
-          if pandoc.utils.stringify(text):match("%S") then
+          local key = pandoc.utils.stringify(mark or {}) .. " " .. pandoc.utils.stringify(text)
+          if pandoc.utils.stringify(text):match("%S") and not seen[key] then
+            seen[key] = true
             local note = pandoc.List()
             if mark then note:extend({ mark, pandoc.Space() }) end
             note:extend(text)

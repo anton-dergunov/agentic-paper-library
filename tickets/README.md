@@ -31,7 +31,6 @@ Papers and key-content counts from the library `papers` on 2026-10-20.
 | [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 41 | 3 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
-| [A footnote or badge inside a cell runs into the value](html-cell-attachments.md) | `engine` `reconvert` `reread` | open | 4 | 1 | engine: small, fixtures; reconvert the papers with a footnote or picture in a cell; re-read EuroBERT |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
 | [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 40 |  | unknown until its sub-causes are found |
@@ -51,10 +50,7 @@ Papers and key-content counts from the library `papers` on 2026-10-20.
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 9 |  | unknown until its sub-causes are found |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 7 |  | engine: medium for one paper, or by hand |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 7 |  | engine: medium, a fixture; reconvert the papers |
-| [A table's header loses a span into the body, or keeps a row of results](html-table-head-rows.md) | `engine` `reconvert` | open | 7 |  | engine: small to medium, fixtures from the papers below; reconvert the papers with a rowspan in the header |
 | [Rows stacked inside cells come out as one row](html-stacked-cell-rows.md) | `engine` `reconvert` | open | 6 |  | engine: medium, fixtures from the papers below; reconvert the papers |
-| [The converter's row-label repairs move a value or stretch a label too far](html-row-span-heuristics.md) | `engine` `reconvert` | open | 5 |  | engine: small, fixtures from the papers below; reconvert the papers whose spans the repairs change |
-| [A boxed table taken for layout comes out as one line of text](html-boxed-table-as-text.md) | `engine` `reconvert` | open | 4 |  | engine: small, a fixture; reconvert the papers with a span tabular |
 | [The end of a PDF paragraph is lost after a page, column or footnote break](pdf-paragraph-tail-lost.md) | `engine` `reconvert` | open | 3 |  | engine: small to medium once the dropped region is found; reconvert the papers |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open | 2 |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Two shades of one colour marked alike; a caption that points to another table's colours](html-colour-shades.md) | `engine` `reconvert` | open | 1 |  | engine: small; reconvert the papers with shaded tables |
@@ -139,8 +135,12 @@ Problems in single papers left as they are (61):
 
 ## Done
 
-Fixed and reconverted (10), latest first:
+Fixed and reconverted (14), latest first:
 
+- 2026-10-20: [A table's header loses a span into the body, or keeps a row of results](done/html-table-head-rows.md)
+- 2026-10-20: [The converter's row-label repairs move a value or stretch a label too far](done/html-row-span-heuristics.md)
+- 2026-10-20: [A footnote or badge inside a cell runs into the value](done/html-cell-attachments.md)
+- 2026-10-20: [A boxed table taken for layout comes out as one line of text](done/html-boxed-table-as-text.md)
 - 2026-10-19: [Bold in PDF tables is dropped](done/pdf-table-bold.md)
 - 2026-10-19: [PDF equations that are only their number](done/pdf-equation-number-only.md)
 - 2026-10-19: [A hand-edited paper keeps an older converter's flaws](done/hand-edited-stale.md)
