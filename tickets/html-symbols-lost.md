@@ -13,7 +13,7 @@ cost: "unknown until its sub-causes are found"
 
 **Broken.** A symbol in a table or the text is lost or replaced by a stray glyph: ± between a value and its interval, a range's dash, significance markers. Symbols set as images are `html-image-symbols`.
 
-**Fix.** Not known yet: a catch-all. Group by symbol; each group is a mapping in `arxiv-html.lua`.
+**Fix.** Not known yet: a catch-all. Group by symbol; each group is a mapping in `arxiv-html.lua`. Split on 21 Oct 2026: lost approximation signs are `html-approx-sign-lost`.
 
 **What it gives.** Significance markers and intervals an agent can read.
 

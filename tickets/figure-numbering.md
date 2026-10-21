@@ -11,7 +11,7 @@ cost: "unknown until its sub-causes are found"
 
 `engine` `reconvert` · any · open
 
-**Broken.** A figure or table is cited by the wrong number or kind ("Table [4]" for Figure 4), or placed far from where the paper has it. Overlaps `html-shared-float-anchor`.
+**Broken.** A figure or table is cited by the wrong number or kind ("Table [4]" for Figure 4), or placed far from where the paper has it; so is a block of text: a function description from KAG's Table 1 sits in §2.3.2, and HackAPrompt opens with the abstract of the third-place report in its Appendix S, its own abstract missing. Overlaps `html-shared-float-anchor`.
 
 **Fix.** Not known yet: a catch-all. Move the records `html-shared-float-anchor` explains to it; look at what is left.
 

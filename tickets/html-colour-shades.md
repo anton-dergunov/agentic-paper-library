@@ -11,9 +11,9 @@ cost: "engine: small; reconvert the papers with shaded tables"
 
 `engine` `reconvert` · html · open
 
-**Broken.** Two gaps left by `html-table-colours`. A table that tells best from second best by a dark and a light shade of one hue gets one mark for both, since a colour is marked by its hue name only: AlignScore's #92D050 and #E0F1CB both come out as `<mark class="green">`. And a table whose caption names no colour but refers to another table's ("The color format is the same as in Table 2") loses its marking altogether. Checked with today's converter on AlignScore: the same 14 marks, all in Table 2, against 102 cells of each shade in arXiv's HTML.
+**Broken.** Two gaps left by `html-table-colours`. A table that tells best from second best by a dark and a light shade of one hue gets one mark for both, since a colour is marked by its hue name only: AlignScore's #92D050 and #E0F1CB both come out as `<mark class="green">`. And a table whose caption names no colour but refers to another table's ("The color format is the same as in Table 2") loses its marking altogether, and so does one whose legend is in a note under the table rather than its caption (Open Bandit Tables 4–6: red bold for the best and blue bold for the worst both come out as plain bold). Checked with today's converter on AlignScore: the same 14 marks, all in Table 2, against 102 cells of each shade in arXiv's HTML.
 
-**Fix.** Name a shade by its lightness too when a table holds two of one hue ("green", "light green"), as the caption names them. Take the colours a caption refers to from the table it cites when it names none of its own.
+**Fix.** Name a shade by its lightness too when a table holds two of one hue ("green", "light green"), as the caption names them. Take the colours a caption refers to from the table it cites when it names none of its own, and read a table's note as part of its caption.
 
 **What it gives.** Best and second best told apart in tables that mark them by shade; the ranking can be recovered from the values today, so no re-read.
 
