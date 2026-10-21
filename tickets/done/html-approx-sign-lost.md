@@ -3,13 +3,13 @@ id: html-approx-sign-lost
 title: The "~" or "≈" before a number is lost
 converter: html
 takes: [engine, reconvert]
-status: fixed
+closed: '2026-10-22'
 cost: 'engine: small, once the TeX form is found; reconvert the papers'
 ---
 
 # The "~" or "≈" before a number is lost
 
-`engine` `reconvert` · html · fixed
+`engine` `reconvert` · html · done
 
 **Broken.** An approximation sign before a number vanishes and leaves a double space: "reduced by  50%", "with  1 TB/s memory bandwidth" (printed "~1 TB/s" elsewhere in the paper), "ASR of  60%". The reader takes an estimate for an exact figure. Split from `html-symbols-lost` on 21 Oct 2026, eight papers.
 

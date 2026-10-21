@@ -22,7 +22,7 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-21.
+Papers and key-content counts from the library `papers` on 2026-10-22.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
@@ -58,8 +58,6 @@ Papers and key-content counts from the library `papers` on 2026-10-21.
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
-| [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | fixed | 38 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
-| [The "~" or "≈" before a number is lost](html-approx-sign-lost.md) | `engine` `reconvert` | fixed | 2 |  | engine: small, once the TeX form is found; reconvert the papers |
 
 ## Won't fix
 
@@ -148,8 +146,10 @@ Problems in single papers left as they are (72):
 
 ## Done
 
-Fixed and reconverted (18), latest first:
+Fixed and reconverted (20), latest first:
 
+- 2026-10-22: [References to floats that share an anchor print the wrong number](done/html-shared-float-anchor.md)
+- 2026-10-22: [The "~" or "≈" before a number is lost](done/html-approx-sign-lost.md)
 - 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
 - 2026-10-21: [Text-mode TeX inside a formula comes out raw](done/html-math-text-macros.md)
 - 2026-10-21: [A cell's text continued on extra table rows](done/html-continuation-rows.md)

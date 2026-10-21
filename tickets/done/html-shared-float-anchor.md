@@ -3,13 +3,13 @@ id: html-shared-float-anchor
 title: References to floats that share an anchor print the wrong number
 converter: html
 takes: [engine, reconvert]
-status: fixed
+closed: '2026-10-22'
 cost: 'engine: small; reconvert the HTML papers with such floats (minutes)'
 ---
 
 # References to floats that share an anchor print the wrong number
 
-`engine` `reconvert` · html · fixed
+`engine` `reconvert` · html · done
 
 **Broken.** arXiv's HTML puts two figures in one float with one anchor, and every reference to either names the second. ViT's Figures 3 and 4 share `S4.F4`, so its references to Figure 3 read "Figure [4]". When filed, at least 17 read papers reported numbers off by one.
 
