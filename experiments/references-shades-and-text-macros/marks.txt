@@ -1,0 +1,15 @@
+1906.06127v3 {'<mark class="blue">': 15} -> {'<mark class="dark-blue">': 8, '<mark class="light-blue">': 7}
+2008.07146v5 {} -> {'<mark class="blue">': 10, '<mark class="red">': 12}
+2303.18223v19 {'<mark class="blue">': 104, '<mark class="orange">': 108} -> {'<mark class="lightest-orange">': 26, '<mark class="dark-orange">': 27, '<mark class="darkest-orange">': 28, '<mark class="light-orange">': 27, '<mark class="dark-blue">': 27, '<mark class="darkest-blue">': 26, '<mark class="light-blue">': 27, '<mark class="lightest-blue">': 24}
+2305.16739v1 {'<mark class="green">': 14} -> {'<mark class="light-green">': 35, '<mark class="dark-green">': 35}
+2307.14338v2 {'<mark class="green">': 67} -> {'<mark class="light-green">': 48, '<mark class="dark-green">': 19}
+2310.03744v2 {'<mark class="orange">': 5} -> {'<mark class="light-orange">': 3, '<mark class="dark-orange">': 2}
+2404.10198v3 {} -> {'<mark class="red">': 5}
+2405.07437v2 {'<mark class="orange">': 22} -> {'<mark class="dark-orange">': 5, '<mark class="light-orange">': 17}
+2410.20788v3 {'<mark class="green">': 28} -> {'<mark class="light-green">': 16, '<mark class="dark-green">': 12}
+2411.00027v3 {'<mark class="blue">': 5} -> {'<mark class="light-blue">': 3, '<mark class="dark-blue">': 2}
+2510.17881v3 {'<mark class="blue">': 2} -> {'<mark class="dark-blue">': 1, '<mark class="light-blue">': 1}
+2601.17087v2 {'<mark class="blue">': 10} -> {'<mark class="light-blue">': 5, '<mark class="dark-blue">': 5}
+2607.01071v2 {'<mark class="red">': 10} -> {'<mark class="dark-red">': 7, '<mark class="light-red">': 3}
+2607.01935v2 {'<mark class="blue">': 2} -> {'<mark class="dark-blue">': 1, '<mark class="light-blue">': 1}
+papers 1336 changed 14

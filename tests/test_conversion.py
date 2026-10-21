@@ -412,6 +412,24 @@ def checks():
     md, _ = convert(f'<p>(0% {math(chr(92) + "rightarrow" + chr(92) + "penalty" + chr(92) + " ")}70%)</p>')
     yield "\\penalty with a control space leaves no escaped dollar", r"$\rightarrow$" in md and r"\$" not in md
 
+    for tex, want, name in [
+        (r"D_{i}{\mathrel{\hbox to0.0pt{$\textstyle\perp$\hss}\mkern 2.0mu{\textstyle\perp}}}D_{j}",
+         r"D_{i}{\mathrel{\perp\!\!\!\perp }}D_{j}", "two \\perp overlaid in a box are independence"),
+        (r"a\implies b,\>b\hbox to0.0pt{$\quad\not$\hss}\implies c", r"b\not\implies c", "a \\not laid over an arrow"),
+        (r"F^{\prime}\mathrel{{\vtop{\halign{#\cr$\displaystyle\not\phantom{=}$\cr$\displaystyle\implies$\crcr}}}}g",
+         r"F^{\prime}\mathrel{{\not\implies}}g", "a \\not stacked over an arrow"),
+        (r"\raise 0.73193pt\hbox{$\scriptstyle\sim$}2.1\%", r"\hbox{\(\scriptstyle\sim\)}2.1\%", "\\raise is layout"),
+        (r"W_{i}-\macc@depth\char 1\relax\macc@set@skewchar\macc@nested@a 111{W}_{\alpha}", r"W_{i}-\bar{W}_{\alpha}",
+         "amsmath's nested accent internals are \\bar"),
+        (r"(\text{\boldmath$y$},\text{\boldmath$y$}_{i})", r"(\boldsymbol{y},\boldsymbol{y}_{i})", "\\boldmath in a box is \\boldsymbol"),
+        (r"D\textquoteright", "D'", "\\textquoteright in math is a prime"),
+        (r"\textit{\textquotedblleft Think\textquotedblright}", r"\textit{“Think”}", "quotes in text are characters"),
+        (r"\textsl{CTR}^{\alpha}", r"\textit{CTR}^{\alpha}", "\\textsl is italic"),
+        (r"\rho\coloneqq\adjustlimits{\sup}_{x}{\sup}_{s}", r"\rho\coloneqq{\sup}_{x}{\sup}_{s}", "\\adjustlimits is dropped"),
+    ]:
+        md, _ = convert(f"<p>{math(tex.replace('&', '&amp;'))}</p>")
+        yield f"text macro in math: {name}", want in md and "operatorname" not in md and "textrm{" not in md
+
     md, _ = convert(f'<p>{math(r"\text{pass\textasciicircum k}=1")}</p>')
     yield "\\textasciicircum is kept", r"\text{pass\textasciicircum k}" in md
 
@@ -419,6 +437,15 @@ def checks():
                     'and 5\u03035% of failures</p>')
     yield "an empty accent between words is a caret", "pass^1" in md
     yield "a tilde set on a digit goes before the number", "~55%" in md
+
+    md, _ = convert('<p class="ltx_p">reduced by \xa050% with \xa0<math display="inline"><semantics><mi>±</mi>'
+                    r'<annotation encoding="application/x-tex">\pm</annotation></semantics></math> \xa00.8</p>'
+                    '<figcaption><span class="ltx_tag ltx_tag_figure">SuppFigure \xa01: </span>x</figcaption>'
+                    '<section class="ltx_bibliography"><ul><li><span class="ltx_bibblock">ICML, \xa013.</span></li></ul></section>'
+                    '<section class="ltx_appendix"><p class="ltx_p">lowest \xa030 layers</p></section>')
+    yield "a tilde typed between a word and a number is \"about\"", "reduced by ~50%" in md and "lowest ~30" in md
+    yield "a typed tilde after a formula, in a tag or a reference stays a space", \
+        "~0.8" not in md and "SuppFigure ~1" not in md and "ICML, ~13" not in md
 
     md, _ = convert(f'<p>indented{chr(160) * 40}{math("y")} line</p>')
     yield "a run of non-breaking spaces before other math converts", "$y$" in md
@@ -730,6 +757,46 @@ def checks():
                     'Orange section: factual tokens. Cyan section: function words.</figcaption></figure>')
     yield "a header row in a colour the caption names is marked", (
         '<mark class="orange">Long-tail Knowledge</mark>' in md and '<mark class="cyan">Semantic Coherence</mark>' in md)
+
+    def shade_table(anchor, rows, caption, head=("Metric", "CGS", "XSF")):
+        def cell(c, v):
+            return v if v.startswith("<th") else (f'<td class="ltx_td" style="--ltx-bg-color:{c};">{v}</td>' if c
+                                                  else f'<td class="ltx_td">{v}</td>')
+        body = "".join('<tr class="ltx_tr">' + "".join(cell(c, v) for c, v in cells) + "</tr>" for cells in rows)
+        return (f'<figure id="{anchor}" class="ltx_table"><table class="ltx_tabular"><tr class="ltx_tr">'
+                + "".join(f'<td class="ltx_td">{h}</td>' for h in head) + "</tr>" + body + '</table><figcaption class="ltx_caption">'
+                f'<span class="ltx_tag ltx_tag_table">Table {anchor[-1]}: </span>{caption}</figcaption></figure>')
+    dark, light = "#92D050", "#E0F1CB"
+    rows = [[(None, "DAE"), (dark, "76.7"), (light, "79.4")], [(None, "Align"), (light, "70.2"), (dark, "82.1")],
+            [(None, "BLEU"), (None, "50.0"), (None, "51.0")]]
+    md, _ = convert(shade_table("S3.T2", rows, "AUC. The dark green indicates the best metric. And the light green indicates the second best.")
+                    + shade_table("S3.T3", rows, 'AUC on TRUE. The color format is the same as in Table <a href="#S3.T2" class="ltx_ref">2</a>.'))
+    yield "two shades of one colour are told apart by their lightness", (
+        '<mark class="dark-green">76.7</mark>' in md and '<mark class="light-green">79.4</mark>' in md)
+    yield "a caption that refers to another table's colours marks them", (
+        md.count('<mark class="dark-green">82.1</mark>') == 2 and md.count('<mark class="light-green">70.2</mark>') == 2)
+
+    th = '<th class="ltx_th" rowspan="2">{}</th>'
+    red3, blue3 = "#FF0000", "#0000FF"
+    md, _ = convert(shade_table("S4.T2", [[(None, th.format("Opus")), (None, "Prior"), (None, "0.58"), (red3, "0.04")],
+                                          [(None, "Context"), (blue3, "0.31"), (None, "0.90")],
+                                          [(None, th.format("GPT")), (None, "Prior"), (None, "0.33"), (red3, "0.05")],
+                                          [(None, "Context"), (blue3, "0.47"), (None, "0.88")]],
+                                f'A model exhibits {coloured(red3, "prior bias")} or {coloured(blue3, "context bias")}.',
+                                head=("Model", "Chosen", "Prior Correct", "Context Correct")))
+    yield "a colour in every other row under spanning labels marks cells, not the column", (
+        '<mark class="red">0.04</mark>' in md and '<mark class="red">0.05</mark>' in md and "Context Correct</mark>" not in md)
+
+    red2, blue2 = "#CC0D0D", "#0D0DCC"
+    md, _ = convert('<figure id="S5.T5" class="ltx_table"><table class="ltx_tabular">'
+                    f'<tr class="ltx_tr"><td class="ltx_td">IPW</td><td class="ltx_td">{coloured(red2, "0.316")}</td><td class="ltx_td">0.789</td></tr>'
+                    f'<tr class="ltx_tr"><td class="ltx_td">DM</td><td class="ltx_td">{coloured(blue2, "1.026")}</td><td class="ltx_td">0.773</td></tr>'
+                    '<tr class="ltx_tr"><td class="ltx_td">DR</td><td class="ltx_td">0.482</td><td class="ltx_td">0.613</td></tr></table>'
+                    '<p class="ltx_p"><span class="ltx_text ltx_font_italic">Note</span>: RMSEs are reported. The '
+                    f'{coloured(red2, "red bold")} is used for the best. The {coloured(blue2, "blue bold")} is used for the worst.</p>'
+                    '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 4: </span>RMSE of OPE estimators'
+                    '</figcaption></figure>')
+    yield "a note under a table counts as its caption", '<mark class="red">0.316</mark>' in md and '<mark class="blue">1.026</mark>' in md
     purple, green = "#E069FF", "#BDFF3D"
     md, _ = convert('<figure class="ltx_float ltx_float_algorithm ltx_framed_top"><figcaption class="ltx_caption">'
                     '<span class="ltx_tag ltx_tag_float">Algorithm 1 </span>'
@@ -1068,6 +1135,48 @@ def checks():
         subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
         out = md_file.read_text(encoding="utf-8")
     yield "a caption does not take the number another caption keeps", out == text
+
+    with tempfile.TemporaryDirectory() as tmp:
+        pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
+        doc = pymupdf.open()
+        page = doc.new_page()
+        for y, line in enumerate(("weight decay, dropout, and label smoothing. Figure 3 shows the results after",
+                                  "fine-tuning. Figures 3 and 4 compare the two, and Theorem 1 states the bound.",
+                                  "Figure 3: Transfer to ImageNet across pre-training sizes.",
+                                  "Figure 4: Linear few-shot evaluation on ImageNet.",
+                                  "Image Captioning", "Figure 4 shows correlation results for the COCO challenge.",
+                                  "If the estimation procedure satisfies Figure 4, it holds.",
+                                  "We begin with a brief introduction to graphical modeling (Section 2.1) and then",
+                                  "over responses that correct the user (§4.3). Here, we find evidence",
+                                  "Each query returns the top-k neighbors. Figure 3 shows that performance improves with more neighbors.",
+                                  "in the dataset as shown in Table 1 RAPTOR achieves an accuracy of 62.4%.",
+                                  "in the dataset as shown in Table 2 RAPTOR sets a new state of the art."), 1):
+            page.insert_text((40, 60 + 30 * y), line, fontsize=9)
+        doc.save(pdf_file)
+        md_file.write_text("weight decay, dropout, and label smoothing. Figure [4](#S4.F4) shows the results after "
+                           "fine-tuning. Figures [4](#S4.F4) and [4](#S4.F4) compare the two, and Theorem [3.2](#S3.Thm2) "
+                           "states the bound.\n\n###### Theorem 3.2 (Bound)\n\n"
+                           "Figure 3: Transfer to ImageNet across pre-training sizes.\n\n"
+                           "Figure 4: Linear few-shot evaluation on ImageNet.\n\n#### Image Captioning (p. 7)\n\n"
+                           "Figure [5](#S5.F5) shows correlation results for the COCO challenge.\n\n"
+                           "Clearly, the estimation procedure $M$ satisfies Figure [3](#S4.F4).\n\n"
+                           "We begin with a brief introduction to graphical modeling (Section [1](#S1)) and then "
+                           "over responses that correct the user (§[7](#S4.F7)). Here, we find evidence\n\n"
+                           "Each query returns the top-$k$ neighbors. Figure [4](#S5.F4) shows that performance improves with more neighbors.\n\n"
+                           "Likewise, in the dataset as shown in Table [2](#S4.T2), RAPTOR achieves an accuracy of 62.4%.\n\n"
+                           "Table 1: Accuracy.\n\nTable 2: Results.\n\n"
+                           "## 1 Graphical Modeling\n\n### 2.1 Classification\n\n### 4.3 Humans\n", encoding="utf-8")
+        subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
+        out = md_file.read_text(encoding="utf-8")
+    yield "a reference to a float that shares an anchor takes the PDF's number", (
+        "smoothing. Figure [3](#S4.F4) shows" in out and "Figures [3](#S4.F4) and [4](#S4.F4)" in out)
+    yield "a reference opening a paragraph is found by the words after it", "Figure [4](#S5.F5) shows correlation" in out
+    yield "the words around a formula do not match words without it", "satisfies Figure [3](#S4.F4)" in out
+    yield "a reference keeps a number the markdown labels its target with", (
+        "Theorem [3.2](#S3.Thm2)" in out and "(Section [1](#S1))" in out)
+    yield "a section reference whose link reaches a figure takes the PDF's number", "§[4.3](#S4.F7)" in out
+    yield "a reference just after a formula is found by the words after it", "neighbors. Figure [3](#S5.F4) shows" in out
+    yield "words the PDF prints twice are told apart by the words after them", "Table [1](#S4.T2), RAPTOR" in out
 
     with tempfile.TemporaryDirectory() as tmp:
         pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"

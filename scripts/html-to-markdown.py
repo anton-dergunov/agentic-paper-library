@@ -1295,12 +1295,28 @@ def drop_tex_residue(article):
     return TEXT_NODE.sub(prose, article)
 
 
+# "reduced by ~50%": a tilde typed for "about" after a space, which LaTeX sets
+# as a non-breaking space, so the PDF prints none and the markdown a double space.
+TYPED_TILDE = re.compile("(?<=[A-Za-z,;:]) \xa0(?=\\d)")
+
+
 def fix_text_encoding(article):
     """A ">" or "<" typed in text comes out as "¿" or "¡" (the text font's
     encoding). Standing alone they are the comparison; before a letter they
-    are Spanish and stay."""
+    are Spanish and stay. A "~" typed between a word and a number is "about"
+    in the prose; in a reference list ("pp. ~12") and a number's tag
+    ("SuppFigure ~1") it is a space."""
     article = re.sub(r"(?<=[\s>])¿(?=[\s<])", "&gt;", article)
-    return re.sub(r"(?<=[\s>])¡(?=[\s<])", "&lt;", article)
+    article = re.sub(r"(?<=[\s>])¡(?=[\s<])", "&lt;", article)
+    bib = re.search(r'<section\b[^>]*\bclass="[^"]*\bltx_bibliography\b', article)
+    begin = bib.start() if bib else len(article)
+    end = (balanced_end(article, begin, "section") or len(article)) if bib else begin
+
+    def prose(text):
+        return TEXT_NODE.sub(lambda m: m.group(0) if "ltx_tag" in m.group(1)
+                             else m.group(1) + TYPED_TILDE.sub(" ~", m.group(2)), text)
+
+    return prose(article[:begin]) + article[begin:end] + prose(article[end:])
 
 
 BACKGROUND = re.compile(r"--ltx-bg-color:\s*#[0-9A-Fa-f]{6}")
@@ -1347,6 +1363,12 @@ def table_only(float_html):
     return re.sub(r"<figcaption\b.*?</figcaption>", "", float_html, flags=re.S)
 
 
+def table_columns(rows):
+    """A table's columns, from rows of cells: those of its rows of full width."""
+    width = max(map(len, rows))
+    return [[r[c] for r in rows if len(r) == width] for c in range(width)]
+
+
 def shading_pattern(rows):
     """What a table's shading picks out, from rows of booleans: "whole table",
     "header row", "alternate rows", "some rows", "whole columns", "some cells"
@@ -1363,9 +1385,11 @@ def shading_pattern(rows):
         if len(at) >= 3 and all(b - a == 2 for a, b in zip(at, at[1:])):
             return "alternate rows"
         return "some rows"
-    width = max(map(len, rows))
-    columns = [[r[c] for r in rows if len(r) == width] for c in range(width)]
-    if sum(sum(c) for c in columns if sum(c) >= 0.8 * len(c)) >= 0.9 * shaded:
+    columns = table_columns(rows)
+    # Under labels spanning several rows most rows are short, and a column of the few
+    # full ones ("Prior" under each model) is not the table's column.
+    if (2 * len(columns[0]) >= len(rows)
+            and sum(sum(c) for c in columns if sum(c) >= 0.8 * len(c)) >= 0.9 * shaded):
         return "whole columns"
     return "some cells" if shaded <= total / 3 else "many cells"
 
@@ -1501,19 +1525,74 @@ def caption_colours(caption, colours, inside=()):
     return {key: label for key, label in referred.items() if len(by_label[label]) == 1 or key[0] == keep}
 
 
-def mark_named_colours(body):
+def table_notes(body):
+    """(start, end) of each note set under a table in its float ("Note: ... The red bold
+    is used when ..."), outside the table and its caption."""
+    tables = [(m.start(), balanced_end(body, m.start(), "table") or m.end()) for m in re.finditer(r"<table\b", body)]
+    notes = []
+    for m in re.finditer(r"<p\b[^>]*>", body):
+        end = balanced_end(body, m.start(), "p")
+        if end and not any(a <= m.start() < b for a, b in tables) and re.match(r"\s*notes?\b", cell_text(body[m.end():end]), re.I):
+            notes.append((m.start(), end))
+    return notes
+
+
+# A caption that tells shades of a colour apart: "dark green", "darker red", "the shade of the fonts".
+SHADE_WORDS = re.compile(r"\b(?:dark|deep|light|pale)(?:er|est)?\b|\bshades?\b|\bintensity\b|\bgradient\b", re.I)
+# The names of n shades of one colour, darkest first.
+SHADES = {2: ("dark", "light"), 3: ("dark", "", "light"), 4: ("darkest", "dark", "light", "lightest"),
+          5: ("darkest", "dark", "", "light", "lightest")}
+
+
+def luminance(hex_colour):
+    r, g, b = (int(hex_colour[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def shade_names(referred, caption):
+    """Tell apart the shades of one colour the caption refers to by one name ("green"
+    for the best and the second best) by their lightness, "dark-green" and
+    "light-green", where the caption tells shades apart ("the dark green ... the light
+    green", "darker red means more") or shows each in a legend of its own; else they
+    keep the one name. Beside a plain "green" in the caption, "light green" leaves the
+    darker shade plain "green". Up to five shades are named, darkest to lightest."""
+    by_label = {}
+    for (_, colour), label in referred.items():
+        by_label.setdefault(label, set()).add(colour)
+    text = cell_text(caption).lower()
+    legend = {c for layer in ("fg", "bg") for _, _, c in coloured_spans(caption, layer)}
+    names = {}
+    for label, colours in by_label.items():
+        # Over five shades, a scale of the values the cells hold anyway.
+        if not 2 <= len(colours) <= 5 or not (SHADE_WORDS.search(text) or colours <= legend):
+            continue
+        colours = sorted(colours, key=luminance)
+        shades = [f"{shade}-{label}" if shade else label for shade in SHADES[len(colours)]]
+        if len(colours) == 2 and re.search(rf"\b{label}\b", re.sub(rf"\b(?:dark|deep|light|pale)(?:er)?\s+{label}\b", "", text)):
+            dark, light = (re.search(rf"\b(?:{w})(?:er)?\s+{label}\b", text) for w in ("dark|deep", "light|pale"))
+            shades = [label if light and not dark else shades[0], label if dark and not light else shades[1]]
+        names.update(zip(colours, shades))
+    return {key: names.get(key[1], label) for key, label in referred.items()}
+
+
+def mark_named_colours(body, borrowed=""):
     """Mark the cells of each colour a table's caption refers to, with the colour's
     name where the table has several (<mark class="red">), or None if it refers to none.
     Colour on part of a cell (a word, a formula, a bullet) is marked where it is, as is
-    colour in a float without cells (an algorithm's lines)."""
+    colour in a float without cells (an algorithm's lines). A note under the table
+    counts as caption; `borrowed` is the caption of the table a caption names no
+    colours of its own for ("The color format is the same as in Table 2")."""
     layers = {layer: cell_colours(body, layer) for layer in ("bg", "fg")}
     captions = [(m.start(), m.end()) for m in re.finditer(r"<figcaption\b.*?</figcaption>", body, re.S)]
+    captions = sorted(captions + (table_notes(body) if TABLE_FLOAT.match(body) else []))
     caption = " ".join(body[a:b] for a, b in captions)
+    if borrowed and not COLOUR_WORD.search(cell_text(caption)):
+        caption += " " + borrowed
     parts = {layer: [(a, b, c) for a, b, c in coloured_spans(body, layer)
                      if not any(x <= a < y for x, y in captions)] for layer in layers}
     colours = {(layer, c) for layer, rows in layers.items() for row in rows for _, _, c in row if c}
     inside = {(layer, c) for layer, found in parts.items() for _, _, c in found} - colours
-    referred = caption_colours(caption, colours, inside)
+    referred = shade_names(caption_colours(caption, colours, inside), caption)
     colours |= inside
     marks = []  # (start, end, label), and "■" for a legend's empty box
     for (layer, colour), label in referred.items():
@@ -1522,9 +1601,7 @@ def mark_named_colours(body):
         pattern = shading_pattern(flags)
         found = []
         if pattern == "whole columns":
-            width = max(map(len, cells))
-            for i in range(width):
-                column = [row[i] for row in cells if len(row) == width]
+            for column in table_columns(cells):
                 if sum(c == colour for _, _, c in column) >= 0.8 * len(column):
                     found.append((*column[0][:2], label))
         # A header row is marked too when the caption names its colour ("Orange section: ...").
@@ -1542,7 +1619,7 @@ def mark_named_colours(body):
         # A legend in the caption: its coloured mark (an empty box is "■") says which is which.
         for a, b in captions:
             for x, y, c in coloured_spans(body[a:b], "fg") + coloured_spans(body[a:b], "bg"):
-                if c == colour and not re.search(rf"\b{label}", cell_text(body[a + x:a + y]), re.I):
+                if c == colour and not re.search(rf"\b{label.split('-')[-1]}", cell_text(body[a + x:a + y]), re.I):
                     marks.append((a + x, a + y, label, "■"))
     if not marks:
         return None
@@ -1587,12 +1664,23 @@ def mark_shading(article, rule=None):
         return article
     out, pos = [], 0
     floats = sorted([*TABLE_FLOAT.finditer(article), *ALGORITHM_FLOAT.finditer(article)], key=lambda m: m.start())
+    # Each table's caption by its anchor, for a caption that names another table's colours.
+    table_captions = {}
+    for m in TABLE_FLOAT.finditer(article):
+        anchor = re.search(r'\bid="([^"]+)"', m.group(0))
+        caption = re.search(r"<figcaption\b.*?</figcaption>", article[m.start():balanced_end(article, m.start(), "figure") or m.end()], re.S)
+        if anchor and caption:
+            table_captions[anchor.group(1)] = caption.group(0)
     for m in floats:
         end = balanced_end(article, m.start(), "figure")
         if m.start() < pos or end is None:
             continue
         body = article[m.start():end]
-        named = mark_named_colours(body) if rule == "caption" else None
+        caption = " ".join(re.findall(r"<figcaption\b.*?</figcaption>", body, re.S))
+        borrowed = ""
+        if NAMES_SHADING.search(cell_text(caption).lower()) and not COLOUR_WORD.search(cell_text(caption)):
+            borrowed = next((table_captions[a] for a in re.findall(r'href="#([^"]+)"', caption) if a in table_captions), "")
+        named = mark_named_colours(body, borrowed) if rule == "caption" else None
         if named is not None:
             out += [article[pos:m.start()], named]
             pos = end
@@ -1621,9 +1709,7 @@ def mark_shading(article, rule=None):
             continue
         marks = []
         if pattern == "whole columns":
-            width = max(map(len, rows))
-            for c in range(width):
-                column = [row[c] for row in rows if len(row) == width]
+            for column in table_columns(rows):
                 if sum(shaded for _, _, shaded in column) >= 0.8 * len(column):
                     marks.append(column[0][:2])
         else:

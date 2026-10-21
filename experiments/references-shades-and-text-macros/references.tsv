@@ -1,0 +1,125 @@
+sample	paper	anchor	HTML	PDF
+ticket	Hyper-Connections	#S4.F5	5	4
+ticket	Counterfactual Reasoning and Learning Systems	#S3.F6	6	5
+ticket	Counterfactual Reasoning and Learning Systems	#S3.F6	6	5
+ticket	Counterfactual Reasoning and Learning Systems	#S3.F9	9	7
+ticket	Counterfactual Reasoning and Learning Systems	#S3.F9	9	8
+ticket	Counterfactual Reasoning and Learning Systems	#S4.F11	11	10
+ticket	Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes	#S1.F3	Figs. 3	Figs. 1
+ticket	Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes	#S1.F3	3	2
+ticket	Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes	#S1.F3	Fig. 3	Fig. 1
+ticket	Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes	#S1.F3	Fig. 3	Fig. 2
+ticket	Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes	#S5.T3	Tables 3	Tables 2
+ticket	Off-Policy Evaluation for Large Action Spaces via Embeddings	#S4.F6	6	5
+ticket	Off-Policy Evaluation for Large Action Spaces via Embeddings	#S4.F6	6	5
+ticket	Off-Policy Evaluation for Large Action Spaces via Embeddings	#A4.F10	10	8
+ticket	Off-Policy Evaluation for Large Action Spaces via Embeddings	#A4.F10	10	8
+ticket	Off-Policy Evaluation for Large Action Spaces via Embeddings	#A4.F10	10	9
+ticket	Off-Policy Evaluation for Large Action Spaces via Embeddings	#A4.F10	10	9
+ticket	Into the Unknown Unknowns. Engaged Human Learning through Participation in Language Model Agent	#footnote8	8	4
+ticket	Into the Unknown Unknowns. Engaged Human Learning through Participation in Language Model Agent	#footnote8	8	4
+ticket	Into the Unknown Unknowns. Engaged Human Learning through Participation in Language Model Agent	#footnote8	8	4
+ticket	ReAct. Synergizing Reasoning and Acting in Language Models	#S3.T1	1	2
+ticket	ReAct. Synergizing Reasoning and Acting in Language Models	#S4.T4	4	3
+ticket	ReAct. Synergizing Reasoning and Acting in Language Models	#S4.T4	4	3
+ticket	Alignment faking in large language models	#footnote18	18	3
+ticket	Alignment faking in large language models	#footnote33	33	7
+ticket	Alignment faking in large language models	#footnote18	18	3
+ticket	Frontier Models are Capable of In-context Scheming	#A2.T11	Table 11	Table 10
+ticket	Language Models as Knowledge Bases	#footnote8	8	3
+ticket	Faith and Fate. Limits of Transformers on Compositionality	#S3.F4	4	3
+ticket	Faith and Fate. Limits of Transformers on Compositionality	#S3.F7	7	6
+ticket	Training Large Language Models to Reason in a Continuous Latent Space	#S4.F5	5	4
+ticket	Training Large Language Models to Reason in a Continuous Latent Space	#S4.F5	5	4
+ticket	Training Large Language Models to Reason in a Continuous Latent Space	#S4.F5	5	4
+ticket	Training Large Language Models to Reason in a Continuous Latent Space	#S4.F5	5	4
+ticket	Wiring the 'Why'. A Unified Taxonomy and Survey of Abductive Reasoning in LLMs	#S4.F8	8	7
+ticket	Wiring the 'Why'. A Unified Taxonomy and Survey of Abductive Reasoning in LLMs	#S4.F8	8	7
+ticket	GFM-RAG. Graph Foundation Model for Retrieval Augmented Generation	#S4.F4	Figure 4	Figure 3
+ticket	Generalization through Memorization. Nearest Neighbor Language Models	#S5.F5	5	4
+ticket	RAPTOR. Recursive Abstractive Processing for Tree-Organized Retrieval	#S4.T5.fig1	5	4
+ticket	RankRAG. Unifying Context Ranking with Retrieval-Augmented Generation in LLMs	#S5.F5	5	4
+ticket	Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks	#S4.T2	2	1
+ticket	AgentPoison. Red-teaming LLM Agents via Poisoning Memory or Knowledge Bases	#S4.F5	5	4
+ticket	Can AI-Generated Text be Reliably Detected	#S2.T2	2	1
+ticket	Can AI-Generated Text be Reliably Detected	#A2.T10	10	7
+ticket	Can AI-Generated Text be Reliably Detected	#S4.F10	10	9
+ticket	Can AI-Generated Text be Reliably Detected	#S2.T2	2	1
+ticket	Can AI-Generated Text be Reliably Detected	#A1.T6	6	5
+ticket	Can AI-Generated Text be Reliably Detected	#A1.T6	6	5
+ticket	Can AI-Generated Text be Reliably Detected	#A2.T10	10	7
+ticket	Can AI-Generated Text be Reliably Detected	#A2.T10	10	8
+ticket	Can AI-Generated Text be Reliably Detected	#A2.T10	10	9
+ticket	Fast-DetectGPT. Efficient Zero-Shot Detection of Machine-Generated Text via Conditional Probability	#S3.F4	4	3
+ticket	Jailbreaking Black Box Large Language Models in Twenty Queries	#S4.F4	4	3
+ticket	Jailbreaking Black Box Large Language Models in Twenty Queries	#S4.T7	Table 7	Table 6
+ticket	Jailbreaking Black Box Large Language Models in Twenty Queries	#S4.F6	Figure 6	Figure 5
+ticket	Language Models are Injective and Hence Invertible	#S4.T3	Tables 3	Tables 2
+ticket	Language Models are Injective and Hence Invertible	#A5.T9	tables 9	tables 8
+ticket	Memory Injection Attacks on LLM Agents via Query-Only Interaction	#S5.T4	4	3
+ticket	Memory Injection Attacks on LLM Agents via Query-Only Interaction	#S5.T4	4	2
+ticket	Demystifying Parallel and Distributed Deep Learning. An In-Depth Concurrency Analysis	#S4.T4.st1	4(a)	8(a)
+ticket	Demystifying Parallel and Distributed Deep Learning. An In-Depth Concurrency Analysis	#S7.F19	19	18
+ticket	ZeRO-Offload. Democratizing Billion-Scale Model Training	#S6.F9	9	8
+ticket	ZeRO-Offload. Democratizing Billion-Scale Model Training	#S6.F13	13	12
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S1.F2	Figure 2	Figure 1
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S1.F2	Figure 2	Figure 1
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S3.F1.fig1	Figure 1	Figure 3
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S4.F5	Figure 5	Figure 4
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S4.F4	4	2
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S4.F4	4	3
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S4.F4	4	2
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S4.F4	4	3
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S3.F1.fig1	Figure 1	Figure 3
+ticket	A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	#S3.F1.fig1	Figure 1	Figure 3
+ticket	FlashAttention. Fast and Memory-Efficient Exact Attention with IO-Awareness	#S4.T6	6	5
+ticket	Inference economics of language models	#S4.F5	5	3
+ticket	Inference economics of language models	#S4.F5	5	4
+ticket	Inference economics of language models	#S4.F5	5	3
+ticket	Inference economics of language models	#S4.F5	5	3
+ticket	Word Rotator's Distance	#footnote10	10	5
+ticket	Revisiting Few-sample BERT Fine-tuning	#S4.F3	3	2
+ticket	Revisiting Few-sample BERT Fine-tuning	#S5.F6	6	5
+ticket	Revisiting Few-sample BERT Fine-tuning	#S5.F6	6	5
+ticket	Dialogue Disentanglement in Software Engineering. How Far are We	#S4.F4	4	2
+ticket	Dialogue Disentanglement in Software Engineering. How Far are We	#S4.F4	4	3
+ticket	Dialogue Disentanglement in Software Engineering. How Far are We	#S4.F4	4	2
+ticket	FASTopic. Pretrained Transformer is a Fast, Adaptive, Stable, and Transferable Topic Model	#S3.T3	Table 3	Table 2
+ticket	Topic Modeling in Embedding Spaces	#S6	6	1
+ticket	Topic Modeling in Embedding Spaces	#S6	6	2
+ticket	Bigger, Regularized, Optimistic. scaling for compute and sample-efficient continuous control	#S2.F4	3(c)	4
+ticket	Bigger, Regularized, Optimistic. scaling for compute and sample-efficient continuous control	#S2.F4	3(c)	4
+ticket	Bigger, Regularized, Optimistic. scaling for compute and sample-efficient continuous control	#S2.F4	3(c)	4
+ticket	Bigger, Regularized, Optimistic. scaling for compute and sample-efficient continuous control	#S2.F4	3(c)	4
+ticket	Revisiting Feature Prediction for Learning Visual Representations from Video	#S4.T6	6	5
+ticket	Revisiting Feature Prediction for Learning Visual Representations from Video	#S3.T2	2	1
+ticket	Revisiting Feature Prediction for Learning Visual Representations from Video	#S4.T6	6	5
+ticket	Voicebox. Text-Guided Multilingual Universal Speech Generation at Scale	#S5.T7	Table 7	Table 6
+ticket	SAM 2. Segment Anything in Images and Videos	#A6.F16	16	15
+random	Mastering Diverse Domains through World Models	#Sx2.F5	Figures 5	Figures 1
+random	Mastering Diverse Domains through World Models	#S0.F1	1	5
+random	Do As I Can, Not As I Say. Grounding Language in Robotic Affordances	#A5.T6	6	5
+random	Do As I Can, Not As I Say. Grounding Language in Robotic Affordances	#S5.F7.sf1	7(a)	5(a)
+random	Do As I Can, Not As I Say. Grounding Language in Robotic Affordances	#S5.F7.sf2	7(b)	5(b)
+random	Do As I Can, Not As I Say. Grounding Language in Robotic Affordances	#A5.T6	6	5
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.T1	Table 1	Table 3
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F7	Figure 7	Figure 5
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F7	Figure 7	Figure 5
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F7	Figure 7	Figure 5
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F7	Figure 7	Figure 5
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F11	Table 5	Table 4
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F14	Table 8	Table 7
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F16	Table 10	Table 9
+random	Mamba. Linear-Time Sequence Modeling with Selective State Spaces	#S4.F11	Table 5	Table 4
+random	Mixture-of-Agents Enhances Large Language Model Capabilities	#S3.T4	Table 4	Table 3
+random	Representation Engineering. A Top-Down Approach to AI Transparency	#A2.T8	8	B.1
+random	Unpacking DPO and PPO. Disentangling Best Practices for Learning from Preference Feedback	#S3.T3	3	3.3
+random	Federated Learning Of Out-Of-Vocabulary Words	#S3.F3	3	2
+random	Diffusion for World Modeling. Visual Details Matter in Atari	#footnote2	2	5
+random	Diffusion for World Modeling. Visual Details Matter in Atari	#footnote2	2	5
+random	Resurrecting Recurrent Neural Networks for Long Sequences	#S3.F3	3	2
+random	LLM Pruning and Distillation in Practice. The Minitron Approach	#S3.F5	5	4
+random	LLM Pruning and Distillation in Practice. The Minitron Approach	#S4.F9	9	8
+random	LLM Pruning and Distillation in Practice. The Minitron Approach	#S3.F5	5	4
+random	LLM Pruning and Distillation in Practice. The Minitron Approach	#S4.F7	7	6
+random	LLM Pruning and Distillation in Practice. The Minitron Approach	#S4.F9	9	8

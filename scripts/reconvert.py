@@ -205,7 +205,7 @@ def from_html(md, meta, arxiv_id):
         [sys.executable, SCRIPTS / "caption-numbers.py", pdf, md], capture_output=True, text=True, check=True
     ).stdout.splitlines()[0].removeprefix("caption-numbers: ")
     message = f"{arxiv_id}{version or ' (latest)'}{note}: {out.stdout.splitlines()[0]}"
-    if not captions.startswith("0 captions renumbered from the PDF, 0 "):
+    if captions != "0 captions renumbered from the PDF, 0 given a number, 0 references renumbered":
         message += f"; {captions}"
     if "could not be downloaded" in warnings:
         return "partial", f"{message}; {warnings}"

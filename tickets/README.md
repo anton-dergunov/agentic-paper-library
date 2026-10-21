@@ -30,10 +30,8 @@ Papers and key-content counts from the library `papers` on 2026-10-21.
 | [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 36 | 6 | unknown until its sub-causes are found |
 | [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 42 | 3 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
-| [Two shades of one colour marked alike; a caption that points to another table's colours](html-colour-shades.md) | `engine` `reconvert` | open | 13 | 2 | engine: small; reconvert the papers with shaded tables |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
-| [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | open | 66 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
 | [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 47 |  | unknown until its sub-causes are found |
 | [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 45 |  | unknown until its sub-causes are found |
@@ -50,8 +48,6 @@ Papers and key-content counts from the library `papers` on 2026-10-21.
 | [Rows stacked inside cells come out as one row](html-stacked-cell-rows.md) | `engine` `reconvert` | open | 14 |  | engine: medium, fixtures from the papers below; reconvert the papers |
 | [A table set as side-by-side panels loses its row labels or splits](html-table-panels.md) | `engine` `reconvert` | open | 11 |  | engine: medium, beside share_panel_labels; reconvert the papers with table panels |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 10 |  | engine: medium for one paper, or by hand |
-| [Text-mode TeX inside a formula comes out raw](html-math-text-macros.md) | `engine` `reconvert` | open | 10 |  | engine: small to medium, a mapping per construct; reconvert the papers |
-| [The "~" or "≈" before a number is lost](html-approx-sign-lost.md) | `engine` `reconvert` | open | 7 |  | engine: small, once the TeX form is found; reconvert the papers |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open | 7 |  | engine: small; reconvert 5 papers |
 | [A row label typed in pieces on the data rows it covers](html-label-in-pieces.md) | `engine` `reconvert` | open | 4 |  | engine: medium, with the LaTeX source; reconvert the papers |
 | [Row-spanning labels the span repair does not reach](html-row-spans-unreached.md) | `engine` `reconvert` | open | 4 |  | engine: small to medium, a fixture per table below; reconvert the papers |
@@ -62,6 +58,8 @@ Papers and key-content counts from the library `papers` on 2026-10-21.
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
+| [References to floats that share an anchor print the wrong number](html-shared-float-anchor.md) | `engine` `reconvert` | fixed | 38 |  | engine: small; reconvert the HTML papers with such floats (minutes) |
+| [The "~" or "≈" before a number is lost](html-approx-sign-lost.md) | `engine` `reconvert` | fixed | 2 |  | engine: small, once the TeX form is found; reconvert the papers |
 
 ## Won't fix
 
@@ -150,10 +148,12 @@ Problems in single papers left as they are (72):
 
 ## Done
 
-Fixed and reconverted (16), latest first:
+Fixed and reconverted (18), latest first:
 
 - 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
+- 2026-10-21: [Text-mode TeX inside a formula comes out raw](done/html-math-text-macros.md)
 - 2026-10-21: [A cell's text continued on extra table rows](done/html-continuation-rows.md)
+- 2026-10-21: [Two shades of one colour marked alike; a caption that points to another table's colours](done/html-colour-shades.md)
 - 2026-10-20: [A table's header loses a span into the body, or keeps a row of results](done/html-table-head-rows.md)
 - 2026-10-20: [The converter's row-label repairs move a value or stretch a label too far](done/html-row-span-heuristics.md)
 - 2026-10-20: [A footnote or badge inside a cell runs into the value](done/html-cell-attachments.md)

@@ -247,7 +247,7 @@ def tickets_problems(root):
     back = copy / f"{tid}.md"
     if not back.exists() or "status: open" not in back.read_text() or "closed:" in back.read_text():
         problems.append("move back to open did not restore the ticket")
-    other = sorted(p for p in copy.glob("*.md") if p.name != "README.md")[1]
+    other = next(p for p in sorted(copy.glob("*.md")) if p.stem != tid and "status: open" in p.read_text())
     other.write_text(other.read_text().replace("status: open", "status: done", 1))
     if "belongs in done/" not in run("tickets.py", root, **env).stdout:
         problems.append("a done ticket at the top of tickets/ is not reported")

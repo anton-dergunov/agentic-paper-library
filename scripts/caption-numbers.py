@@ -38,6 +38,25 @@ LINK = re.compile(r'(?:\b(Tables?|Figures?|Figs?\.|Tab\.)(\s+))?\[([^\]]*)\]\((#
 LINK_TITLE = re.compile(r'(\]\(#[^ )]+) "[^"]*"(?=\))|(<a href="#[^"]*") title="[^"]*"')
 FLOAT = r"(?:Table|Figure)\s(?:[A-Z]\.?)?\d+(?:\.\d+)?"  # \s: LaTeXML joins them with a no-break space
 MIN_WORDS = 4
+# A link to a place in the paper whose text is a number ("[4](#S4.F4)", "[Table 5](#...)",
+# "[3(c)](#...)", "[(2)](#S2.E2)"); a citation's link is not one.
+REF_LINK = re.compile(r'\[([^\]\n]*)\]\((#(?!bib\.)[^ )]+)(?: "[^"]*")?\)')
+REF_TEXT = re.compile(r"^(\D*?\(?)((?:[A-Z]\.?)?\d+(?:\.\d+)*)(\)?\s*\(?([a-z])?\)?)$")
+# Words, and numbers with their dots and an appendix letter ("a.1", "b2"), as both texts are compared.
+TOKEN = re.compile(r"[a-z]\.?\d+(?:\.\d+)*|\d+(?:\.\d+)*|[a-z]+")
+PDF_REF = re.compile(r"(?:[a-z]\.?)?\d{1,3}(?:\.\d{1,3})*")
+REF_CONTEXT = (8, 6, 5)  # words before a reference that must match the PDF's, longest first
+# What a reference names, from the word before it, and the places in the markdown with
+# such a number: a caption ("Table 3:"), a heading ("### 4.3 ...", "###### Theorem 1 (...)").
+REF_KIND = {"fig": "figure", "tab": "table", "sec": "section", "appendix": "section", "app": "section",
+            "chapter": "section", **dict.fromkeys(("lemma", "proposition", "corollary", "assumption", "definition",
+                                                  "example", "remark", "condition", "claim"), "theorem")}
+# What a LaTeXML anchor is: "#S4.F4" a figure, "#A3.T5" a table, "#S4.SS3" a section,
+# "#S3.Thmtheorem2" a theorem, "#alg1.l17" a line of an algorithm, "#footnote8".
+ANCHOR_KIND = [(r"\.l\d+$", "line"), (r"(?:^#|\.)F\d", "figure"), (r"(?:^#|\.)T\d", "table"), (r"Thm", "theorem"),
+               (r"^#alg", "algorithm"), (r"footnote", "footnote"), (r"(?:^#|\.)E\d", "equation"),
+               (r"^#(?:S|A|Ch|Sx)\d+(?:\.(?:SS|SSS|P)\d+)*$", "section")]
+TARGET = re.compile(r"^(?:#+ +(?:([A-Z][a-z]+) +)?|(Table|Figure|Algorithm) +)((?:[A-Z]\.?)?\d+(?:\.\d+)*)(?=[:. (]|$)", re.M)
 
 
 def words(text, limit=30):
@@ -64,6 +83,108 @@ def pdf_captions(pdf_path):
                 kind = "Figure" if m.group(1) == "Fig." else m.group(1)
                 found.append((f"{kind} {m.group(2)}", words(m.group(3))))
     return found
+
+
+def tokens(text):
+    text = text.replace("ﬁ", "fi").replace("ﬂ", "fl").replace("ﬀ", "ff").replace("§", " section ")
+    return TOKEN.findall(text.lower())
+
+
+def pdf_tokens(pdf_path):
+    return tokens(" ".join(re.sub(r"-\n(?=[a-z])", "", page.get_text()) for page in pymupdf.open(pdf_path)))
+
+
+FORMULA = "zzformulazz"
+
+
+def md_tokens(text):
+    """The words of markdown as the PDF prints them: link text kept, markup left out, and a
+    formula a word no PDF holds, as its symbols are printed otherwise there."""
+    text = re.sub(r"\$\$.*?\$\$|\$[^$\n]*\$", f" {FORMULA} ", text, flags=re.S)
+    text = re.sub(r"!?\[([^\]]*)\]\([^)]*\)", r"\1", text)
+    return tokens(re.sub(r"<[^>]+>|\\[a-zA-Z]+", " ", text))
+
+
+def pdf_references(body, pdf):
+    """Give each link to a place in the paper the number the PDF prints there.
+
+    arXiv's HTML can number a reference differently from the PDF: two figures
+    set in one float share its anchor, so a reference to either names the
+    second; a \\label the HTML attached to a section or a line gives that
+    one's number. The words before the reference (where a paragraph or a
+    formula leaves few, the words after it) are looked up in the PDF's text, and the
+    number next to them there is taken, when the words occur once (or always
+    with the same number). The number must label a place
+    of the kind the reference names in the markdown too, and a section or a
+    theorem the link reaches by its own anchor keeps the HTML's number, as its
+    heading in the markdown does.
+    """
+    index = {}
+    k0 = min(REF_CONTEXT)
+    for i in range(len(pdf) - k0):
+        index.setdefault(tuple(pdf[i:i + k0]), []).append(i + k0)
+    def kind_of(word):
+        word = word.lower().rstrip("s")
+        return REF_KIND.get(word, word)
+
+    targets = {(kind_of(m.group(1) or m.group(2) or "section"), m.group(3).lower()) for m in TARGET.finditer(body)}
+    out, pos, fixed, paragraph = [], 0, 0, ""
+
+    def emit(text):
+        nonlocal paragraph
+        out.append(text)
+        paragraph = text[text.rfind("\n\n") + 2:] if "\n\n" in text else paragraph + text
+
+    for m in REF_LINK.finditer(body):
+        parts = REF_TEXT.match(m.group(1))
+        if not parts:
+            continue
+        before, label, after, sub = parts.groups()
+        emit(body[pos:m.start()])
+        pos = m.start()
+        # A formula is printed otherwise in the PDF's text: the words match up to it.
+        context = md_tokens(paragraph + " " + before)
+        context = context[len(context) - context[::-1].index(FORMULA):] if FORMULA in context else context
+        named = next((w for w in reversed(context[-4:]) if w.isalpha() and len(w) > 2 and w not in ("and", "the")), "")
+        kind = kind_of(named)
+        # The places in the PDF's words where the number stands: after the words
+        # before the reference, or, where few words precede it (a paragraph's start, a formula),
+        # before the words after it, those few words before the number.
+        ends = []
+        for k in REF_CONTEXT:
+            if len(context) >= k:
+                ends = [at for at in index.get(tuple(context[-k0:]), []) if at >= k and pdf[at - k:at] == context[-k:]]
+            if ends:  # a shorter run would match only more places
+                break
+        following = md_tokens(body[m.end():body.find("\n\n", m.end())])
+        following = following[:following.index(FORMULA)] if FORMULA in following else following
+        if 0 < len(context) < k0 and not sub:
+            for k in REF_CONTEXT:
+                if len(following) >= k:
+                    ends = [at - k0 - 1 for at in index.get(tuple(following[:k0]), [])
+                            if pdf[at - k0:at - k0 + k] == following[:k]
+                            and pdf[max(0, at - k0 - 1 - len(context)):at - k0 - 1] == context]
+                if ends:
+                    break
+        # Words the PDF prints twice, with two numbers: the words after the reference choose.
+        if len({pdf[at] for at in ends}) > 1 and len(following) >= 3:
+            ends = [at for at in ends if pdf[at + 1:at + 4] == following[:3]]
+        numbers = {pdf[at] for at in ends}
+        found = numbers.pop() if len(numbers) == 1 and PDF_REF.fullmatch(pdf[ends[0]]) else None
+        if not found or found == label.lower() or (kind, found) not in targets:
+            continue
+        # A section, a theorem or an equation the link reaches by its own anchor is numbered
+        # the HTML's way in the markdown too; a figure or a table the PDF's way (above).
+        anchor = next((name for pattern, name in ANCHOR_KIND if re.search(pattern, m.group(2))), None)
+        if anchor == "equation" or (kind not in ("figure", "table") and anchor == kind):
+            continue
+        if sub and pdf[ends[0] + 1:ends[0] + 2] != [sub]:
+            after = ""  # "Figure 3(c)" where the PDF prints "Figure 4"
+        new = found[0].upper() + found[1:]
+        emit(f"[{before}{new}{after}](" + body[m.start(2):m.end()])
+        pos = m.end()
+        fixed += 1
+    return "".join(out) + body[pos:], fixed
 
 
 def common_prefix(a, b):
@@ -182,12 +303,14 @@ def main(pdf_path, md_path):
         body = re.sub(r"\n{3,}", "\n\n", body)
     if renamed:
         body = LINK.sub(relink, body)
+    body, references = pdf_references(body, pdf_tokens(pdf_path))
     # A title named its link's float for the step above; an agent reads the
     # float's number in the text, so the title goes.
     untitled = LINK_TITLE.sub(lambda m: m.group(1) or m.group(2), body)
-    if renamed or labelled or dropped or untitled != body:
+    if renamed or labelled or dropped or references or untitled != body:
         Path(md_path).write_text(untitled, encoding="utf-8")
-    print(f"caption-numbers: {len(renamed)} captions renumbered from the PDF, {labelled} given a number")
+    print(f"caption-numbers: {len(renamed)} captions renumbered from the PDF, {labelled} given a number, "
+          f"{references} references renumbered")
     for old, new in renamed.items():
         print(f"  {old} -> {new}")
 

@@ -58,6 +58,24 @@ local EQUIVALENT = {
   sumop = "\\sum", displaylimits = "",
   -- The old font switch {\sc e}: keep the text, lose the caps.
   sc = "",
+  -- Slanted is near enough italic; the old switch {\sl x} keeps its text.
+  textsl = "\\textit", sl = "",
+  -- \boldmath left over once \text{\boldmath$y$} is \boldsymbol{y} (normalise_math).
+  boldmath = "", unboldmath = "",
+  -- \adjustlimits only aligns the limits of the two operators after it.
+  adjustlimits = "",
+}
+
+-- Text-mode symbols KaTeX lacks, as written in math and in a text argument.
+local TEXT_SYMBOL = {
+  textquoteright = { "'", "’" }, textquoteleft = { "\\text{‘}", "‘" },
+  textquotedblleft = { "\\text{“}", "“" }, textquotedblright = { "\\text{”}", "”" },
+  textendash = { "\\text{–}", "–" }, textemdash = { "\\text{—}", "—" },
+  textdagger = { "\\dagger", "†" }, textdaggerdbl = { "\\ddagger", "‡" },
+  textdoublevertline = { "\\|", "‖" }, textbackslash = { "\\backslash", "\\(\\backslash\\)" },
+  textunderscore = { "\\_", "\\_" }, texttimes = { "\\times", "×" },
+  textlangle = { "\\langle", "⟨" }, textrangle = { "\\rangle", "⟩" },
+  textperiodcentered = { "\\cdot", "·" },
 }
 
 -- Commands LaTeXML wrote with the space after them lost ("\mid s" as "\mids",
@@ -91,7 +109,7 @@ local INTERNAL = {
 local LAYOUT = {
   vskip = true, hskip = true, penalty = true, hfil = true, hfill = true,
   indent = true, noindent = true, nobreak = true, allowbreak = true,
-  centering = true,
+  centering = true, hss = true, vss = true, raise = true, lower = true,
 }
 local UNITS = {
   pt = true, em = true, ex = true, mu = true, bp = true, cm = true, mm = true,
@@ -219,7 +237,11 @@ local function rewrite_commands(t)
         i = i + 1 + #name
         local cmd = "\\" .. name
         local fused = not SUPPORTED[name] and name:match("^(%a+)%a$")
-        if EQUIVALENT[name] then
+        if TEXT_SYMBOL[name] and not SUPPORTED[name] then
+          cmd = TEXT_SYMBOL[name][mode() == "text" and 2 or 1]
+          -- The space that ended the command's name goes with it.
+          if not cmd:match("%a$") then i = i + #(t:match("^%s*", i)) end
+        elseif EQUIVALENT[name] then
           cmd = EQUIVALENT[name]
         elseif fused and FUSED[fused] then
           cmd = "\\" .. fused .. " " .. name:sub(-1)
@@ -403,6 +425,23 @@ local function unwrap_mathchoice(t)
   end
 end
 
+-- Symbols an author builds from boxes, which arrive as the boxes: two ⊥
+-- overlaid in a zero-width \hbox (independence), and a \not laid over an arrow
+-- in one or stacked above it in a \vtop (does not imply). A zero-width box
+-- left after these is only a box.
+local ZERO_BOX = "\\hbox%s*to%s*0%.?0*pt%s*"
+local function box_symbols(t)
+  t = t:gsub(ZERO_BOX .. "{%s*%$?%s*\\%a*style%s*\\perp%s*%$?%s*\\hss%s*}%s*\\mkern%s*[%d.]+%s*mu%s*"
+    .. "(%b{})", function(second)
+      if second:match("^{%s*\\%a*style%s*\\perp%s*}$") then return "\\perp\\!\\!\\!\\perp " end
+    end)
+  local over = ZERO_BOX .. "{[^{}]-\\not%s*%$?%s*\\hss%s*}%s*"
+  t = t:gsub(over .. "{%s*(\\%a+)%s*}", "\\not%1"):gsub(over .. "(\\%a+)", "\\not%1")
+  t = t:gsub("\\vtop%s*{%s*\\halign%s*{%s*#%s*\\cr%s*%$?[^{}$]-\\not%s*\\phantom%s*{=}%s*%$?%s*\\cr"
+    .. "%s*%$?[^$]-(\\%a+)%s*%$?%s*\\crcr%s*}%s*}", "\\not%1")
+  return (t:gsub("\\hbox%s*to%s*%-?[%d.]+%a%a%s*", "\\hbox"))
+end
+
 -- A character LaTeXML left as its TeX code ("\mathchar 58\relax" for ":",
 -- "\delimiter 67273472" for "(", "\char 95\relax" for "_"), from a paper's
 -- \mathcode or \DeclareMathSymbol trickery. The code names a font family and a
@@ -537,6 +576,13 @@ local function normalise_math(t)
     function(cmd, r, g, b) return "\\" .. cmd .. "{#" .. hex(r) .. hex(g) .. hex(b) .. "}" end)
   t = t:gsub("\\(%a*color)%[named%]", "\\%1")
   t = t:gsub("\\lx@sectionsign", "\\S ")
+  -- amsmath's \bar over a formula, as LaTeXML leaves its internals: the
+  -- accent's code is 111, the only one seen (Generalized Random Forests p. 20).
+  t = t:gsub("\\macc@depth%s*\\char%s*1%s*\\relax%s*\\macc@set@skewchar%s*\\macc@nested@a%s*111", "\\bar")
+  -- \text{\boldmath$y$}: a bold symbol.
+  t = t:gsub("\\(%a+)%s*{%s*\\boldmath%s*%$([^$]*)%$%s*}", function(box, inner)
+    if box == "text" or box == "mbox" or box == "hbox" then return "\\boldsymbol{" .. inner .. "}" end
+  end)
   t = t:gsub("\\addcontentsline%b{}%b{}%b{}", "")
   t = t:gsub("\\begin{array}%[%]", "\\begin{array}")
   -- "@{...}" in an array's columns ("{rcl@{\qquad}l}") sets the space between
@@ -587,7 +633,7 @@ local function normalise_math(t)
   end)
   t = t:gsub("\\expectationvalue%s*(%b{})", function(a) return "\\left\\langle " .. a:sub(2, -2) .. "\\right\\rangle " end)
   t = unwrap_mleft(t)
-  t = unwrap_mathchoice(t)
+  t = box_symbols(unwrap_mathchoice(t))
   return rewrite_commands(strip_layout(join_digit_groups(t)))
 end
 
