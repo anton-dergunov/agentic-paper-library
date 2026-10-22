@@ -257,9 +257,10 @@ def tickets_problems(root):
 def matching_problems():
     """apply_corrections places a correction by its text, by its landmarks when the text
     repeats or drifted, retires one the converter now makes, and points to one it cannot
-    place; diff_corrections stores the changed rows of a table."""
+    place, and brings a correction's text onto the converter's new text (rebase_now);
+    diff_corrections stores the changed rows of a table."""
     sys.path.insert(0, str(ENGINE / "scripts"))
-    from paperlib import apply_corrections, diff_corrections
+    from paperlib import apply_corrections, diff_corrections, rebase_now
     problems = []
     rows = "\n".join(f"| m{i}  | {i}.{i}   |" for i in range(6))
     base = ("> **Converted from the PDF.**\n\n# T\n\n## 2 Method (p. 2)\n\nThe loss is defined below, "
@@ -297,8 +298,25 @@ def matching_problems():
         problems.append(f"an insertion was not placed after `prev`: {out}")
     drifted = base.replace("$$L = a (1)$$", "$$L = a\\, (1)$$")
     body, kept, out = outcomes(drifted)
-    if out[0] != "drifted" or "$$L = a + b (1)$$" not in body or "drifted" not in kept[0]:
+    if out[0] != "drifted" or "$$L = a\\, + b (1)$$" not in body or "drifted" not in kept[0]:
         problems.append(f"a slightly changed `was` was not placed by its landmarks: {out}")
+    if outcomes(drifted, kept)[2][0] != "exact" or "drifted" in outcomes(drifted, kept)[1][0]:
+        problems.append("a drifted correction matched exactly later keeps its drift mark")
+    rebased = {
+        ("| x |\n| y |", "| **x** |\n| y |", "| x |\n| z |"): "| **x** |\n| z |",
+        ("<td> a  b </td>", "<td>a b</td>", "<td> <mark>a</mark>  b </td>"): "<td><mark>a</mark> b</td>",
+        ("| a   | b |", "| a | b |", "| c   | b |"): "| c   | b |",
+        ("| a |", "| *a* |", "| A |"): "| *A* |",
+        ("| a |", "| b |", "| c |"): "| c |",
+    }
+    for (was, fresh, now), want in rebased.items():
+        if rebase_now(was, fresh, now) != want:
+            problems.append(f"rebase_now({was!r}, {fresh!r}, {now!r}) gave {rebase_now(was, fresh, now)!r}, not {want!r}")
+    cell = [{"where": "p. 3", "why": "w", "prev": "|m0|0.0|", "next": "|m2|2.2|",
+             "was": "| m1  | 1.1   |", "now": "| m1  | 1.15   |"}]
+    body, kept, out = outcomes(base.replace("| m1  | 1.1   |", "| *m1*  | 1.1   |"), cell)
+    if out != ["drifted"] or "| *m1*  | 1.15   |" not in body or kept[0]["now"] != "| *m1*  | 1.15   |":
+        problems.append(f"a drifted correction's `now` did not take the converter's change: {out}, {kept}")
     body, kept, out = outcomes(edited)
     if out != ["obsolete", "obsolete"] or kept:
         problems.append(f"corrections the conversion already makes were not retired: {out}")

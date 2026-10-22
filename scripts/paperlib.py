@@ -684,7 +684,8 @@ def load_tickets():
 # heading above), `prev` and `next` (the first 80 normalised characters of the lines
 # around it) and `label` (its table, figure or equation). `where` and `why` are for
 # people and sessions and are never matched. `drifted` and `stale` record the last
-# reconversion that matched it only approximately, or not at all.
+# reconversion that matched it only approximately (cleared by a later exact match), or not
+# at all. Each reapplication also brings `now` onto the converter's new text (rebase_now).
 CORRECTION_FIELDS = ["where", "why", "section", "label", "prev", "next", "was", "now", "by", "added",
                      "drifted", "stale"]
 # The marker an applied correction leaves in the paper, also when it carries a note:
@@ -927,6 +928,66 @@ def _replace(raw, start, end, correction):
     return raw[:block] + before + [marker_line(correction), ""] + new + after + raw[end:]
 
 
+def _edits(base, other):
+    """The changes that turn `base` into `other`, as (start, end, new text) on `base`."""
+    matcher = difflib.SequenceMatcher(None, base, other, autojunk=False)
+    return [(i1, i2, other[j1:j2]) for op, i1, i2, j1, j2 in matcher.get_opcodes() if op != "equal"]
+
+
+def _merge_line(base, fresh, hand):
+    """`hand` with the converter's own changes from `base` to `fresh` made in it too: a
+    three-way merge by characters. None when the two change the same characters, or
+    insert different text at one place."""
+    ours, theirs = _edits(base, fresh), _edits(base, hand)
+    for a1, a2, at in ours:
+        for b1, b2, bt in theirs:
+            if (a1, a2, at) == (b1, b2, bt):
+                continue
+            if max(a1, b1) < min(a2, b2) or a1 == a2 == b1 == b2 \
+                    or a1 == a2 and b1 < a1 < b2 or b1 == b2 and a1 < b1 < a2:
+                return None
+    edits = sorted(set(ours) | set(theirs), key=lambda e: (e[0], e[1] != e[0]))
+    out, pos = [], 0
+    for i1, i2, text in edits:
+        out += [base[pos:i1], text]
+        pos = i2
+    return "".join(out) + base[pos:]
+
+
+def rebase_now(was, fresh, now):
+    """A correction's `now` brought onto the converter's new text for the same place.
+
+    `was` is the converter's text the correction was made against, `fresh` the text a new
+    conversion writes there, `now` the corrected text. A line of `now` the hand left as it
+    was in `was` becomes its line in `fresh`, so the converter's later improvements (bold,
+    escapes, a cell's padding) are kept rather than overwritten by an old copy; a line the
+    hand changed gets the converter's changes to it as well where they touch other
+    characters (_merge_line), and is kept as it is where they overlap or the converter
+    changed only a table's padding. A line of `was` is
+    paired with one of `fresh` when the two are alike after normalising, or stand at the
+    same place in a run of changed lines of the same length."""
+    was, fresh, now = was.split("\n"), fresh.split("\n"), now.split("\n")
+    pair = {}
+    norm = difflib.SequenceMatcher(None, [_norm_line(x) for x in was], [_norm_line(x) for x in fresh],
+                                   autojunk=False)
+    for op, i1, i2, j1, j2 in norm.get_opcodes():
+        if op == "equal" or op == "replace" and i2 - i1 == j2 - j1:
+            pair.update(zip(range(i1, i2), range(j1, j2)))
+    out = []
+    for op, i1, i2, j1, j2 in difflib.SequenceMatcher(None, was, now, autojunk=False).get_opcodes():
+        if op == "equal":
+            out += [fresh[pair[i]] if i in pair else was[i] for i in range(i1, i2)]
+        elif op == "replace" and i2 - i1 == j2 - j1:
+            for i, j in zip(range(i1, i2), range(j1, j2)):
+                # A change only to a table's padding would misalign the hand's columns.
+                padding = i in pair and _norm_line(was[i]) == _norm_line(fresh[pair[i]])
+                merged = _merge_line(was[i], fresh[pair[i]], now[j]) if i in pair and not padding else None
+                out.append(now[j] if merged is None else merged)
+        else:
+            out += now[j1:j2]
+    return "\n".join(out)
+
+
 def apply_corrections(body, corrections, pointer=None, today=None):
     """Apply a paper's hand corrections to a fresh conversion of its body.
 
@@ -985,7 +1046,10 @@ def apply_corrections(body, corrections, pointer=None, today=None):
         i, k = span
         c["section"], c["prev"], c["next"] = lines.landmarks(i, k)
         if k:
-            c["was"] = lines.text(i, k)
+            fresh = lines.text(i, k)
+            if c.get("now") and fresh != c.get("was"):
+                c["now"] = rebase_now(c["was"], fresh, c["now"])
+            c["was"] = fresh
             start, end = lines.idx[i], lines.idx[i + k - 1] + 1
         else:  # an insertion after content line i - 1
             start = end = lines.idx[i - 1] + 1 if i > 0 else 0
@@ -995,6 +1059,7 @@ def apply_corrections(body, corrections, pointer=None, today=None):
                 while not continues and start < len(lines.raw) and lines.raw[start].strip():
                     start = end = start + 1
         c.pop("stale", None)
+        c.pop("drifted", None)
         if outcome == "drifted":
             c["drifted"] = f"{today}, similarity {similarity}"
         body = "\n".join(_replace(lines.raw, start, end, c))
