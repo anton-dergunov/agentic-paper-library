@@ -257,10 +257,19 @@ BLOCK_SPANS = {
 
 def spans_to_blocks(html_text):
     """Turn paragraph and list spans into <p>/<div>, so a box's paragraphs and
-    list items stay apart. Inside a list item (a <p>) everything stays inline."""
+    list items stay apart. Inside a list item (a <p>) everything stays inline, and
+    so does a table's cell, whose lines break_cell_lines has set apart: paragraphs
+    in a cell would make pandoc write the table as HTML."""
     stack = []  # closing tag of each open span, and whether it opened an item
+    tables, at = [], 0
+    while (m := re.compile(r"<table\b").search(html_text, at)):
+        end = balanced_end(html_text, m.start(), "table") or len(html_text)
+        tables.append((m.start(), end))
+        at = end
 
     def rename(t):
+        if any(a <= t.start() < b for a, b in tables):
+            return t.group(0)
         if t.group(0).startswith("</"):
             return stack.pop()[0] if stack else t.group(0)
         in_item = any(item for _, item in stack)
@@ -278,11 +287,38 @@ def spans_to_blocks(html_text):
     return SPAN_TAG.sub(rename, html_text)
 
 
+def span_equations_to_tables(html_text):
+    """A numbered display equation LaTeXML set as spans (inside a box's text) as the table
+    it sets elsewhere, which the Lua filter writes as $$...\\tag{n}$$: its rows and cells
+    become <tr> and <td>, and a plain span between the table and its rows goes."""
+    stack = []  # (closing tag, kind) of each open span
+
+    def rename(t):
+        if t.group(0).startswith("</"):
+            return stack.pop()[0] if stack else t.group(0)
+        classes = re.search(r'\bclass="([^"]*)"', t.group(1) or "")
+        classes = classes.group(1).split() if classes else []
+        parent = stack[-1][1] if stack else None
+        kind = ("table" if "ltx_eqn_table" in classes else "tr" if "ltx_eqn_row" in classes
+                else "td" if "ltx_eqn_cell" in classes else None)
+        if kind == "table" or kind and parent in ("table", "tr"):
+            stack.append((f"</{kind}>", kind))
+            return f"<{kind}{t.group(1)}>"
+        if parent == "table":
+            stack.append(("", "table"))
+            return ""
+        stack.append(("</span>", None))
+        return t.group(0)
+
+    return SPAN_TAG.sub(rename, html_text)
+
+
 def picture_kind(svg):
     """What a LaTeXML picture is: "box", "diagram" (a drawing holding a text
     block), "badge" or "image"; see picture_text."""
     blocks = foreign_objects(svg)
-    counts = [words(b) for b in blocks]
+    # A formula set apart is a block of text: a box around a definition or a key equation.
+    counts = [max(words(b), 12) if re.search(r'<math\b[^>]*\bdisplay="block"', b) else words(b) for b in blocks]
     total = sum(counts)
     paths = len(re.findall(r"<path\b", svg))
     height = re.match(r"\s*<svg\b[^>]*?\bheight=\"([\d.]+)", svg)
@@ -383,7 +419,7 @@ def picture_text(svg, save, attached=False):
         else:
             # A list item's label ("1.") is a span of its own; keep it apart from the text.
             block = re.sub(r'(<span\b[^>]*class="ltx_tag\b[^"]*"[^>]*>[^<]*</span>)', r"\1 ", block)
-            parts.append(f"<div>{spans_to_blocks(extract_svgs(block, save))}</div>")
+            parts.append(f"<div>{spans_to_blocks(span_equations_to_tables(extract_svgs(block, save)))}</div>")
     quote = f"<blockquote {LIFT}>{''.join(parts)}</blockquote>"
     return image() + quote if kind == "diagram" else quote
 
@@ -863,7 +899,9 @@ def unknown_citations(article, tex, bib):
 
 
 def plain_words(text):
-    """The words of a LaTeX or HTML fragment, lowercased, markup dropped."""
+    """The words of a LaTeX or HTML fragment, lowercased, markup dropped, and so are
+    the colours named in it ("\\color{tableemphcolor} \\textbf{Hawk}" is "hawk")."""
+    text = re.sub(r"\\(?:(?:text|cell|row)?color|colorbox)\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}", " ", text)
     text = re.sub(r"\\[a-zA-Z]+\*?|<[^>]+>|[{}$~]", " ", text)
     return re.findall(r"[a-z0-9]+", text.lower())
 
@@ -1810,6 +1848,18 @@ def stack_lines(inner):
 VALUE = re.compile(r"[(\[]?[-+−±~≈<>]?\d[\d.,]*(?:[eE][-+−]?\d+)?\s*[%KMBTkx×]?\**[)\]]?|[±*†‡]+")
 
 
+def line_text(fragment):
+    """A line's text, a formula standing as "M", entities read ("&lt;story&gt;" is "<story>")."""
+    return html.unescape(cell_text(re.sub(r"<math\b.*?</math>", " M ", fragment, flags=re.S)))
+
+
+def reads_as_one(texts):
+    """Whether lines read as one text wrapped: a line going on in the next ("Q-Prop" over
+    "(DDPG)", a list after a comma), not a dash alone, which is a value missing."""
+    return any(GOES_ON.search(upper) and not re.fullmatch(r"[-–—]", upper) or CARRIES_ON.match(lower)
+               for upper, lower in zip(texts, texts[1:]))
+
+
 def is_values(fragment):
     """Whether a cell's text is numbers alone (a formula counts as one): "2.488", "0.55 0.45", "20.65***"."""
     text = cell_text(re.sub(r"<math\b.*?</math>", " 0 ", fragment, flags=re.S))
@@ -1834,9 +1884,7 @@ def split_stacked_rows(article):
     stack stays one cell.
     """
     def wrapped(lines):
-        texts = [cell_text(re.sub(r"<math\b.*?</math>", " M ", line, flags=re.S)) for line in lines]
-        return any(GOES_ON.search(upper) and not re.fullmatch(r"[-–—]", upper) or CARRIES_ON.match(lower)
-                   for upper, lower in zip(texts, texts[1:]))  # a lone dash is a value missing
+        return reads_as_one([line_text(line) for line in lines])
 
     def unruled(attrs, side):
         return re.sub(rf"\bltx_border_{side}{side}?\b\s?", "", re.sub(r'\s+id="[^"]*"', "", attrs))
@@ -1898,6 +1946,89 @@ def split_stacked_rows(article):
                         parts.append(f"<{c[2]}{spans.get(k, c[3])}>{body[c[4]:c[5]]}</{c[2]}>")
                 lines.append((opening if line == 0 else re.sub(r'\s+id="[^"]*"', "", opening)) + "".join(parts) + closing)
             edits.append((row[0], row[1], "".join(lines)))
+        for a, b, new in sorted(edits, reverse=True):
+            body = body[:a] + new + body[b:]
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+CELL_BREAK = '<span class="ltx_cell_break"> </span>'
+LINE_BREAK = re.compile(r'<br\b[^>]*\bclass="[^"]*\bltx_break\b[^"]*"[^>]*>')
+PARBOX_LINE = re.compile(r'<span\b[^>]*\bclass="[^"]*\bltx_p\b[^"]*"[^>]*>')
+# A line that opens with a word going on from the line above ("Kendall's Tau" over "for GPT-3.5 Judge").
+GOES_ON_FROM = re.compile(r"^(?:and|or|of|for|with|without|in|on|at|to|by|from|via|as|than|vs\.?|the|a|an|is|are|that|which|when|where)\b")
+
+
+def break_cell_lines(article):
+    """Keep the lines a body cell lists, one under another, apart with <br>.
+
+    A cell can hold several lines: a one-column tabular nested in it (\\makecell,
+    \\shortstack) that split_stacked_rows left whole, a parbox's lines, or a \\\\
+    line break. Pandoc joins them with spaces, which loses the items' bounds
+    ("GSM8K GaoKao MATH-500", "Context Relevance Faithfulness Answer Relevance").
+    A break between them becomes a marker the Lua filter writes as <br>, which
+    keeps a pipe table one (a line break pandoc made itself would write the table
+    as HTML). Lines that read as one text wrapped ("Number" over "of tasks", a
+    list going on after a comma) are joined with a space, and so are a header's:
+    a column title over two lines is one title. In a table of one column, a
+    box of text such as a prompt, every line stays a line.
+    """
+    out, pos = [], 0
+    for table in re.finditer(r'<table\b[^>]*\bclass="[^"]*\bltx_tabular\b', article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        outer = child_elements(body)[0]
+        rows = own_rows(body[outer[4]:outer[5]], outer[4])
+        # A table of one column is a box of text (a prompt): every line is the author's.
+        box = all(sum(1 for c in child_elements(body[row[4]:row[5]]) if c[2] in ("td", "th")) <= 1 for row in rows)
+        head = re.search(r"<thead\b.*?</thead\s*>", body, re.S)
+        # The header as the Lua filter makes it (promote_header): the leading rows of <th>,
+        # or up to three rows over a rule.
+        ruled = next((r for r in range(min(3, len(rows) - 1))
+                      if re.search(r"\bltx_border_bb?\b", body[rows[r][0]:rows[r][1]])
+                      or re.search(r"\bltx_border_tt?\b", body[rows[r + 1][0]:rows[r + 1][1]])), 0)
+        for r, row in enumerate(rows):
+            if not all(c[2] == "th" for c in child_elements(body[row[4]:row[5]]) if c[2] in ("td", "th")):
+                break
+            ruled = max(ruled, r)
+        r = 0
+        while r <= ruled and r < len(rows):  # and the rows a header cell spans
+            for span in re.findall(r'<t[dh]\b[^>]*\browspan="(\d+)"', body[rows[r][4]:rows[r][5]]):
+                ruled = max(ruled, min(r + int(span) - 1, 2))
+            r += 1
+        edits = []
+        for r, row in enumerate(rows):
+            heading = r <= ruled or bool(head and row[0] < head.end())
+            for c in child_elements(body[row[4]:row[5]]):
+                if c[2] not in ("td", "th"):
+                    continue
+                a, b = row[4] + c[4], row[4] + c[5]
+                inner = body[a:b]
+                lines = stack_lines(inner)
+                if lines:
+                    marked = "\0".join(line.strip() for line in lines
+                                       if line_text(line) or re.search(r"<(?:img|svg|object|math)\b", line))
+                elif TABULAR_START.search(inner):
+                    continue  # a table nested in the cell keeps its own lines
+                else:
+                    marked = inner
+                    for at in reversed([p.start() for p in PARBOX_LINE.finditer(inner)][1:]):
+                        marked = marked[:at] + "\0" + marked[at:]
+                marked = LINE_BREAK.sub("\0", marked)
+                if "\0" not in marked:
+                    continue
+                texts = [t for t in (line_text(piece) for piece in marked.split("\0")) if t]
+                apart = len(texts) > 1 and (box and not heading or not heading and "ltx_th_column" not in c[3]
+                                            and not reads_as_one(texts)
+                                            and not any(GOES_ON_FROM.match(lower) and not GOES_ON_FROM.match(upper)
+                                                        for upper, lower in zip(texts, texts[1:])))
+                edits.append((a, b, marked.replace("\0", CELL_BREAK if apart else " ")))
+        if not edits:
+            continue
         for a, b, new in sorted(edits, reverse=True):
             body = body[:a] + new + body[b:]
         out.append(article[pos:table.start()])
@@ -1978,6 +2109,27 @@ def head_through(body, first, last):
 NUMBER = r"[-+−~≈<>]?\d[\d.,]*(?:[eE][-+−]?\d+)?\s*[%KMBTkx×]?"
 
 
+def hide_nested_tables(body):
+    """A table's HTML with the tables nested in its cells (stacked lines) set aside, each
+    as a span holding its text, and a function that gives them back: table_grid's
+    regular expressions then see the table's own rows and cells only."""
+    nested = []
+    for m in re.finditer(r"<table\b", body):
+        if m.start() == 0 or nested and m.start() < nested[-1][1]:
+            continue
+        end = balanced_end(body, m.start(), "table")
+        if end:
+            nested.append((m.start(), end))
+    out, pos = [], 0
+    for k, (a, b) in enumerate(nested):
+        text = html.escape(" ".join(cell_text(re.sub(r"<math\b.*?</math>", " M ", body[a:b], flags=re.S)).split()))
+        out += [body[pos:a], f'<span data-nested="{k}">{text}</span>']
+        pos = b
+    hidden = "".join(out) + body[pos:]
+    tables = [body[a:b] for a, b in nested]
+    return hidden, lambda edited: re.sub(r'<span data-nested="(\d+)">[^<]*</span>', lambda m: tables[int(m.group(1))], edited)
+
+
 def table_grid(body):
     """Where each cell of a table sits: {(row, column): (row, column, cell, rows, columns)}
     for every position a cell covers, its own first among them, and the table's rows."""
@@ -2010,7 +2162,11 @@ def span_group_labels(article):
     group from its first row; in a table without spans, which stays a pipe
     table, the label moves to the first row instead. Outside the first column
     only a label below the first row or spanning short is moved: one typed on
-    the first row may be the first of a list. It is done only in a column
+    the first row may be the first of a list. A number or a formula is a label
+    only on the middle row of a group of three or more, where an author centres
+    a value by hand (a threshold shared by three categories), and only in a
+    column that does so for two groups or more, its other values filling their
+    groups: one value alone on a middle row is that row's (a coefficient). It is done only in a column
     where other groups have labels too and no group mixes several filled
     cells with empty ones (results left blank). A header
     written that way ("Metric" under an empty cell) is raised only in a table
@@ -2037,8 +2193,8 @@ def span_group_labels(article):
         end = balanced_end(article, table.start(), "table")
         if table.start() < pos or end is None:
             continue
-        body = article[table.start():end]
-        if "ltx_border_t" not in body or body.count("<table") > 1:
+        body, restore = hide_nested_tables(article[table.start():end])
+        if "ltx_border_t" not in body:
             continue
         rows, at = table_grid(body)
         spans = bool(re.search(r'\b(?:row|col)span="(?!1")\d+"', body))
@@ -2054,6 +2210,16 @@ def span_group_labels(article):
                     groups.append((a, b, None))
             # Several filled cells and empty ones in one group: blanks there are values left out.
             mixed = any(cells and 1 < sum(filled(x) for _, x, _ in cells) < len(cells) for a, _, cells in groups if a > 0)
+
+            def centred(a, b, cells):
+                """Whether a group's one entry sits on the middle row of three or more."""
+                labels = [(r, n) for r, x, n in cells if filled(x)] if cells else []
+                return b - a >= 3 and (b - a) % 2 == 1 and labels == [(a + (b - a) // 2, 1)]
+            # Values centred by hand on their groups: two such groups or more in the column,
+            # every other group with a value filled on all its rows (a threshold per category).
+            by_hand = sum(centred(*g) for g in groups if g[0] > 0) >= 2 and all(
+                centred(*g) or not any(filled(x) for _, x, _ in g[2]) or all(filled(x) for _, x, _ in g[2])
+                for g in groups if g[0] > 0 and g[2])
             for a, b, cells in groups:
                 if not cells or b - a < 2 or (a == 0 and c > 0) or (a > 0 and mixed):
                     continue
@@ -2067,7 +2233,9 @@ def span_group_labels(article):
                     continue
                 if a == 0 and (not spans or b - a > 5 or b == len(rows) or r + n != b or n > 1):
                     continue
-                if a > 0 and (not is_label(label.group(3), c)
+                # A number or a formula is a group's only when centred on it by hand: on the
+                # middle row of three or more ("$> 0.2$" between two empty cells).
+                if a > 0 and (not (is_label(label.group(3), c) or by_hand and centred(a, b, cells))
                               or not any(filled(x) for d, _, others in groups if d > 0 and d != a and others
                                          for _, x, _ in others)):
                     continue
@@ -2088,7 +2256,7 @@ def span_group_labels(article):
         for a, b, text in sorted(edits, reverse=True):
             body = body[:a] + text + body[b:]
         out.append(article[pos:table.start()])
-        out.append(body)
+        out.append(restore(body))
         pos = end
     return "".join(out) + article[pos:]
 
@@ -2113,22 +2281,49 @@ def merge_continuation_rows(article):
     one: the upper ends as if it goes on ("Factivity,", "Human &") or the
     lower starts as if it carries on ("(Socher et al., 2013b)", "& Generative");
     to the row below instead when that is how the fragment reads with it
-    ("Pointwise, Pairwise," over "& Generative"). Separate items under a
-    spanning label ("Synchronization", "Mood") stay rows, and so does a cell
-    spanning columns or rows, a formula or a picture. In a header (the
-    <thead>, or the rows above a rule under the first few) a fragment joins
-    the title above it whatever it reads like, in every column but the first
-    (where "CIFAR-10" under "Model" is a sub-heading), both being
-    short as titles are: "Error rate" over "(Fine-" over "grained)", "PlaNet"
-    over "MobileNet". A table of one
-    column, a box of text, keeps its lines. The joined row's spans shrink by
-    one.
+    ("Pointwise, Pairwise," over "& Generative"). A sentence wrapped onto the
+    next row joins too: five words or more not ended above, and below a
+    lower-case word or a formula ("as soon as either" | "$k$ have completed").
+    So does a row most of whose fragments go on from the cells above, though
+    it fills more than half the columns (an entry's every cell continued, its
+    label "LLM" over "Applications" too), and the second line of an entry two
+    or more of whose cells span both rows, one of its fragments going on; a
+    fragment's going on is then an upper left unfinished or a parenthesis
+    below, not a bracket (icons read as "[times]"). There a fragment that does not read
+    on from the cell above is a line of its own ("CLIP Score Fusion" over
+    "BLIP Feat. Fusion", kept apart with <br>). Separate items under a spanning
+    label ("Synchronization", "Mood") stay rows, and so does a cell spanning
+    columns or rows, a picture, or a formula outside a sentence. In a header
+    (the <thead>, or the rows above a rule under the first few) a fragment
+    joins the title above it whatever it reads like, in every column but the
+    first (where "CIFAR-10" under "Model" is a sub-heading), both being short
+    as titles are: "Error rate" over "(Fine-" over "grained)", "PlaNet" over
+    "MobileNet". A table of one column, a box of text, keeps its lines. The
+    joined row's spans shrink by one.
     """
     def text(cell):
         return cell_text(re.sub(r"<math\b.*?</math>", " M ", cell.group(3), flags=re.S))
 
     def ruled(cell, side):
         return bool(re.search(rf"\bltx_border_{side}{side}?\b", cell.group(2)))
+
+    def sentence_goes_on(upper, lower):
+        # A sentence wrapped onto the next row: the upper unfinished, ending in a word or a comma,
+        # the lower opening with a word in lower case or a formula ("as soon as either" | "$k$ have
+        # completed"), not a name ("word2vec – Considering Word Alignment").
+        words = text(upper).split()
+        if len(words) < 5 or not re.search(r"[^\W\d_],?$", words[-1]):
+            return False
+        lower = re.sub(r"<(?!math\b)[^>]*>", "", lower.group(3)).strip()
+        first = re.match(r"[^\s,.;:!?()]+", lower)
+        return lower.startswith("<math") or bool(first) and first.group(0).isalpha() and first.group(0).islower()
+
+    def reads_on(upper, lower):
+        return bool(text(upper) and (GOES_ON.search(text(upper)) or CARRIES_ON.match(text(lower))
+                                     or sentence_goes_on(upper, lower)))
+
+    def wordy(cell):
+        return bool(re.search(r"[^\W\d_]{3}", text(cell)))
 
     def join(upper, lower):
         upper, lower = upper.strip(), lower.strip()
@@ -2155,9 +2350,25 @@ def merge_continuation_rows(article):
             if not own or any(o[3] > 1 or o[4] > 1 for o in own.values()):
                 continue
             filled = {c: o[2] for c, o in own.items() if text(o[2]) or re.search(r"<(?:img|svg|object|math)\b", o[2].group(3))}
-            if (not filled or (f >= head and len(filled) > max(1, width // 2)) or any(ruled(o[2], "t") for o in own.values())
-                    or any(re.search(r"<(?:img|svg|object|math)\b", x.group(3)) or not re.search(r"[^\W\d_]", text(x))
-                           or re.fullmatch(NUMBER, text(x)) for x in filled.values())):
+            # Each fragment that reads as going on from the cell above it, and whether most do: an
+            # entry whose cells all go on in the next row ("LLM" | "Sparse Transformer (Child et al.),"
+            # over "Applications" | "LongFormer (Beltagy et al., 2020)").
+            above = {c: o for c in filled if (o := at.get((f - 1, c))) and o[0] == f - 1 and o[1] == c and o[3] == 1 and o[4] == 1}
+            # An upper left unfinished counts, or a citation in parentheses below; not a whole bracket
+            # (a cell of icons read as "[times]").
+            goes_on = [c for c, x in filled.items() if c in above and wordy(above[c][2]) and wordy(x)
+                       and (GOES_ON.search(text(above[c][2])) or sentence_goes_on(above[c][2], x)
+                            or re.fullmatch(r"\([^()]*\)", text(x)))]
+            continued = len(goes_on) >= 2 and 2 * len(goes_on) >= len(filled) and len(above) == len(filled)
+            # The second line of an entry whose other cells span both its rows, a fragment going on ("Large
+            # Action Model" beside "Interactive" over "Environment"); a lone label over its items is not one.
+            paired = sum(1 for (r, c), o in at.items() if r == f and c not in filled and o[0] == f - 1 and o[1] == c
+                         and o[3] == 2) >= 2 and len(above) == len(filled) and bool(goes_on)
+            if (not filled or (f >= head and len(filled) > max(1, width // 2) and not continued)
+                    or any(ruled(o[2], "t") for o in own.values())
+                    or any(re.search(r"<(?:img|svg|object)\b", x.group(3)) or not re.search(r"[^\W\d_]", text(x))
+                           or re.search(r"<math\b", x.group(3)) and not (c in above and sentence_goes_on(above[c][2], x))
+                           or re.fullmatch(NUMBER, text(x)) for c, x in filled.items())):
                 continue
             # A fragment going on downwards, else the row above it continued; in the body,
             # each fragment and the text it joins must read as one ("Factivity," | "Symmetry").
@@ -2166,16 +2377,16 @@ def merge_continuation_rows(article):
                 and text(o[2]) and (GOES_ON.search(text(x)) or CARRIES_ON.match(text(o[2])))
                 for c, x in filled.items())
             m = f + 1 if down else f - 1
-            if m < 0 or (not down and any(ruled(at[(f - 1, c)][2], "b") for c in range(width) if (f - 1, c) in at)):
+            if m < 0 or (not down and any(ruled(o[2], "b") for c in range(width)
+                                          if (o := at.get((f - 1, c))) and o[0] + o[3] == f)):
                 continue
             targets = {c: at.get((m, c)) for c in filled}
             if not all(o and o[0] == m and o[1] == c and o[3] == 1 and o[4] == 1 for c, o in targets.items()):
                 continue
             # In a header only the first column, the row labels' title, needs it: a word under
             # "Model" there is a sub-heading ("CIFAR-10") as often as the title's second line.
-            if not down and not all(text(targets[c][2]) and (GOES_ON.search(text(targets[c][2]))
-                                                             or CARRIES_ON.match(text(x)))
-                                    for c, x in filled.items() if f >= head or c == 0 and text(targets[c][2])):
+            if not down and not (f >= head and (continued or paired)) and not all(
+                    reads_on(targets[c][2], x) for c, x in filled.items() if f >= head or c == 0 and text(targets[c][2])):
                 continue
             # A column title is short; a header that holds an example's text is not one to join.
             if f < head and not all(len(text(x)) <= 25 and len(text(x).split()) <= 3
@@ -2185,7 +2396,11 @@ def merge_continuation_rows(article):
             edits = []
             for c, x in filled.items():
                 t = targets[c][2]
-                merged = join(x.group(3), t.group(3)) if down else join(t.group(3), x.group(3))
+                # Lines of an entry that do not read as one ("CLIP Score Fusion" over "BLIP Feat.
+                # Fusion") stay lines.
+                lines = not down and f >= head and not reads_on(t, x)
+                merged = (join(x.group(3), t.group(3)) if down else
+                          t.group(3).strip() + CELL_BREAK + x.group(3).strip() if lines else join(t.group(3), x.group(3)))
                 edits.append((t.start(3), t.end(3), merged))
             row = rows[f]
             edits.append((row.start(), row.end(), ""))
@@ -2215,6 +2430,71 @@ def merge_continuation_rows(article):
             body, changed = merged, True
         if not changed:
             continue
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
+
+
+def join_wrapped_labels(article):
+    """Join a group's label that its author wrapped onto the group's next row.
+
+    A label column names each group of rows once, on its first row; a label too
+    long for the column goes on in the cell below ("Reinforcement" over
+    "learning", "BASS and" over "Basic") while the other columns go on with the
+    group's values, so merge_continuation_rows cannot join the row. Two filled
+    cells, the upper opening a group (a rule or an empty cell above it) and the
+    lower closing the label (no rule above it, the group's empty cells below),
+    are joined when the lower reads on: the upper ends as if it goes on, or
+    the lower opens with a word in lower case under one in upper case.
+    """
+    def text(cell):
+        return cell_text(re.sub(r"<math\b.*?</math>", " M ", cell.group(3), flags=re.S))
+
+    def ruled(cell):
+        return bool(re.search(r"\bltx_border_tt?\b", cell.group(2)))
+
+    out, pos = [], 0
+    for table in re.finditer(r"<table\b", article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        if body.count("<table") > 1:
+            continue
+        rows, at = table_grid(body)
+
+        def own(r, c):
+            o = at.get((r, c))
+            return o[2] if o and o[:2] == (r, c) and o[3] == o[4] == 1 else None
+
+        edits = []
+        for (f, c), o in at.items():
+            upper, lower, before, after = own(f - 1, c), own(f, c), own(f - 2, c), own(f + 1, c)
+            if f < 2 or not upper or not lower or not text(upper) or not text(lower) or ruled(lower):
+                continue
+            if not (ruled(upper) or before is not None and not text(before)):
+                continue
+            # The group goes on under the label, its cells empty, beside the group's values:
+            # a label column, not a list or the lines of a one-column box.
+            if after is None or text(after) or ruled(after) or not any(
+                    (x := own(f, k)) is not None and text(x) for k in range(c + 1, 1 + max(col for _, col in at))):
+                continue
+            if not all(re.search(r"[^\W\d_]{2}", text(x)) and not re.fullmatch(NUMBER, text(x)) for x in (upper, lower)):
+                continue
+            # A word in lower case reads on only where the row holds nothing else of the label's
+            # kind beside it: "xl" with its own sub-label ("Nucleus") is a group of its own.
+            first = text(lower).split()[0]
+            beside = own(f, c + 1)
+            if not (GOES_ON.search(text(upper)) or first.isalpha() and first.islower() and text(upper)[0].isupper()
+                    and beside is not None and not text(beside)):
+                continue
+            glue = "" if re.search(r"[-/(]$", text(upper)) else " "
+            edits += [(upper.end(3), upper.end(3), glue + lower.group(3).strip()), (lower.start(3), lower.end(3), "")]
+        if not edits:
+            continue
+        for a, b, new in sorted(edits, reverse=True):
+            body = body[:a] + new + body[b:]
         out.append(article[pos:table.start()])
         out.append(body)
         pos = end
@@ -2418,6 +2698,81 @@ def source_row_spans(article, page):
     return "".join(out) + article[pos:]
 
 
+def restore_dropped_cells(article, page):
+    """Give back the cells LaTeXML dropped with an empty \\multirow.
+
+    An empty \\multirow{2}{*}{} on a row whose column a span from above already
+    covers (an example's datapoint centred by hand on its middle row, the rows
+    above and below given empty \\multirow cells) is dropped, and the row it
+    reaches into loses its cell too: that row comes out a cell short, its cells
+    one column left. A row short by as many cells as spans end on the row above
+    is checked against the paper's LaTeX source: where the source's row there
+    has an empty \\multirow in each of those columns, an empty cell goes back in
+    each, and span_group_labels then gives the group its label. An empty
+    \\multirow spans nothing, so no span is placed for it.
+    """
+    def gaps(body):
+        """{row: columns} of the rows short by the spans that end on the row above."""
+        rows, at = table_grid(body)
+        width = 1 + max((c for _, c in at), default=-1)
+        found = {}
+        for r in range(1, len(rows)):
+            short = width - sum(1 for c in range(width) if (r, c) in at)
+            ending = sorted({c for c in range(width) if (o := at.get((r - 1, c))) and o[0] < r - 1 and o[0] + o[3] == r})
+            if short > 0 and len(ending) == short:
+                found[r] = ending
+        return found
+
+    tables = [(t.start(), balanced_end(article, t.start(), "table")) for t in re.finditer(r"<table\b", article)]
+    tables = [(a, b) for a, b in tables if b and article.count("<table", a, b) == 1 and 'rowspan="' in article[a:b]]
+    short = {(a, b): found for a, b in tables if (found := gaps(article[a:b]))}
+    if not short:
+        return article
+    version = paper_version(page)
+    tex = latex_source(version) if version else None
+    if not tex or "\\multirow" not in tex:
+        return article
+    tabulars = tex_tabulars(tex)
+    out, pos = [], 0
+    for (a, b), found in short.items():
+        body = article[a:b]
+        rows, at = table_grid(body)
+        edits = []
+        tabular = next((t for t in tabulars if len(t) == len(rows)), None)
+        for r, columns in (found.items() if tabular else []):
+            source = {cell[0]: cell for cell in tabular[r]}
+            if not all(c in source and source[c][2] > 0 and not source[c][3] for c in columns):
+                continue
+            # Lay the row's own cells out again, an empty cell in each column found, the
+            # columns spanned from above skipped.
+            own = [o for (i, c), o in sorted(at.items()) if i == r and o[:2] == (r, c)]
+            width = 1 + max(c for _, c in at)
+            # The rule over the row, which marks off its group, over the new cell too.
+            rule = re.search(r"\bltx_border_tt?\b", own[0][2].group(2)) if own else None
+            empty = f'<td class="ltx_td{" " + rule.group(0) if rule else ""}"></td>'
+            c, k = 0, 0
+            while c < width:
+                if (o := at.get((r, c))) and o[0] < r:
+                    c += 1
+                elif c in columns:
+                    where = own[k][2].start() if k < len(own) else rows[r].end(1)
+                    edits.append((where, where, empty))
+                    c += 1
+                elif k < len(own):
+                    c += own[k][4]
+                    k += 1
+                else:
+                    break
+        if not edits:
+            continue
+        for x, y, text in sorted(edits, reverse=True):
+            body = body[:x] + text + body[y:]
+        out.append(article[pos:a])
+        out.append(body)
+        pos = b
+    return "".join(out) + article[pos:]
+
+
 def end_guessed_heads(article):
     """Give back to the body the rows of results LaTeXML took for header rows.
 
@@ -2464,7 +2819,8 @@ def span_header_rows(article):
     both rows, "Sent-lvl" over three columns) and leaves the second as <td>.
     pandoc ends the head where the <th> rows end and cuts the span there, so
     "Method" would sit over the first sub-column. The spanned rows' cells
-    become <th>.
+    become <th>, up to four rows ("Model" beside a title, its second line, the
+    methods and their units), the fourth only when it holds no results.
     """
     out, pos = [], 0
     for table in re.finditer(r"<table\b", article):
@@ -2472,25 +2828,24 @@ def span_header_rows(article):
         if table.start() < pos or end is None:
             continue
         body = article[table.start():end]
-        if 'rowspan="' not in body or "<thead" in body or body.count("<table") > 1:
+        if 'rowspan="' not in body or "<thead" in body:
             continue
-        rows = list(TABLE_ROW.finditer(body))
+        outer = child_elements(body)[0]
+        rows = own_rows(body[outer[4]:outer[5]], outer[4])
+        cells = [[(row[4] + c[0], row[4] + c[5], c[2], c[3], body[row[4] + c[4]:row[4] + c[5]])
+                  for c in child_elements(body[row[4]:row[5]]) if c[2] in ("td", "th")] for row in rows]
         head, i = 0, 0  # rows the header reaches; the row looked at
-        while i < min(len(rows), 3):
-            cells = list(TABLE_CELL.finditer(rows[i].group(1)))
-            if i >= head and not (cells and all(c.group(1) == "th" for c in cells)):
+        while i < min(len(rows), 4):
+            if i >= head and not (cells[i] and all(c[2] == "th" for c in cells[i])):
                 break
-            spans = [int(n) for c in cells for n in re.findall(r'\browspan="(\d+)"', c.group(2))]
+            spans = [int(n) for c in cells[i] for n in re.findall(r'\browspan="(\d+)"', c[3])]
             head = max([head, i + 1] + [i + n for n in spans])
             i += 1
-        if head > min(len(rows) - 1, 3):
+        # A fourth row joins a header that spans it only when it holds no results.
+        if head > min(len(rows) - 1, 4) or head == 4 and any(is_values(c[4]) for c in cells[3]):
             continue
-        edits = []
-        for row in rows[:head]:
-            for cell in TABLE_CELL.finditer(row.group(1)):
-                if cell.group(1) == "td":
-                    edits += [(row.start(1) + cell.start(1), "th"),
-                              (row.start(1) + cell.start() + cell.group(0).rindex("</") + 2, "th")]
+        edits = [(at, "th") for row in cells[:head] for start, close, tag, _, _ in row if tag == "td"
+                 for at in (start + 1, close + 2)]
         if not edits:
             continue
         for at, tag in sorted(edits, reverse=True):
@@ -2914,15 +3269,18 @@ def main(html_path, body_path, images_dir, basename):
     article = fix_text_encoding(article)
     article = tidy_cells(article)
     article = split_stacked_rows(article)
+    article = restore_dropped_cells(article, page)
     article = extend_rowspans(article)
     article = span_group_labels(article)
     article = source_row_spans(article, page)
     article = merge_continuation_rows(article)
+    article = join_wrapped_labels(article)
     article = end_guessed_heads(article)
     article = span_header_rows(article)
     article = join_table_halves(article)
     article = share_panel_labels(article)
     article = mark_shading(article)
+    article = break_cell_lines(article)
     article = bare_year_citations(article)
     article = extract_svgs(article, save)
     article = lift_blocks(article)

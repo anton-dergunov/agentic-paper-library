@@ -48,16 +48,12 @@ Papers and key-content counts from the library `papers` on 2026-10-22.
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open | 13 |  | engine: small; reconvert 5 papers |
 | [Captions numbered by LaTeXML's counters, not the PDF's](html-caption-numbers.md) | `engine` `reconvert` | open | 11 |  | engine: medium; reconvert the papers |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 10 |  | engine: medium for one paper, or by hand |
-| [Row-spanning labels the span repair does not reach](html-row-spans-unreached.md) | `engine` `reconvert` | open | 9 |  | engine: small to medium, a fixture per table below; reconvert the papers |
 | [A row label typed in pieces on the data rows it covers](html-label-in-pieces.md) | `engine` `reconvert` | open | 8 |  | engine: medium, with the LaTeX source; reconvert the papers |
-| [Lines stacked in one cell run together with spaces](html-cell-lines-run-together.md) | `engine` `reconvert` | open | 6 |  | engine: small; reconvert the papers with such cells |
 | [Footnotes missing from arXiv-HTML papers](html-footnotes-lost.md) | `engine` `reconvert` | open | 6 |  | engine: small once the form is found; reconvert the papers |
-| [Cells continued on a new row that the merge does not reach](html-continuation-rows-unreached.md) | `engine` `reconvert` | open | 5 |  | engine: small to medium, a fixture per table below; reconvert the papers |
 | [Lines of a code listing missing](html-listing-lines-lost.md) | `engine` `reconvert` | open | 5 |  | engine: small to medium once the dropped element is found; reconvert the papers |
 | [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 3 |  | unknown until its sub-causes are found |
 | [The end of a PDF paragraph is lost after a page, column or footnote break](pdf-paragraph-tail-lost.md) | `engine` `reconvert` | open | 3 |  | engine: small to medium once the dropped region is found; reconvert the papers |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open | 2 |  | engine: small; reaches the PDF papers with their next reconversion |
-| [A box around a formula is kept as an image](html-formula-box-as-image.md) | `engine` `reconvert` | open | 1 |  | engine: small; reconvert six papers |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
@@ -70,7 +66,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (16 records)
 
-Problems in single papers left as they are (74):
+Problems in single papers left as they are (78):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -86,6 +82,8 @@ Problems in single papers left as they are (74):
 | Improving language models by retrieving from trillions of tokens | p. 15–16, Tables 6–7 | html-colour-shades | per-token LCP shading is a heat map, which marks do not carry; the samples' text is all there |
 | Large Language Models as Optimizers | p. 6, Figure 3 | html-colour-shades | colour in a figure's text box, not a table; the caption's parts are told apart by their wording |
 | Trustworthiness in Retrieval-Augmented Generation Systems. A Survey | p. 27, Table 9 | html-colour-shades | graded heat-map shading; bold still marks the best per column and every value reads |
+| Entropic Out-of-Distribution Detection. Seamless Detection of Unknown Examples | Table I and Table VI header (pp. 8-12) | html-continuation-rows-unreached | Table VI's header fixed 22 Oct 2026; Table I sets each technique over four rows beside two-line values, as the PDF does, and reads in order |
+| Reflexion. Language Agents with Verbal Reinforcement Learning | p. 3, "Related work on programming" table | html-continuation-rows-unreached | the author's table: the source and the PDF put "Test execution" under "Approach" and leave Debugging's second line empty |
 | MM-LLMs. Recent Advances in MultiModal Large Language Models | p. 4, Fig. 3 | html-empty-tree-leaves | small: readable as a nested list |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 1 | html-equation-garbled | small: readable from the prose |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 4 Theorem 3.2; p. 6 Theorem 4.2 | html-equation-garbled | small: the split equations are all readable |
@@ -107,6 +105,8 @@ Problems in single papers left as they are (74):
 | Emergent Abilities of Large Language Models | pp. 4-6, Table 1 | html-multirow-lost | the author's layout: the source leaves the Model and Reference cells blank for "as above", as the PDF does |
 | Improved Baselines with Visual Instruction Tuning | p. 9, Table 7 | html-multirow-lost | the author's layout: the prompt is typed once, on the group's first row, as in the PDF |
 | Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement | p. 5, Algorithm 1 | html-pseudocode | small and isolated; arXiv's HTML has the two lines joined |
+| A Survey of Visual Transformers | p. 13, Table III(c) | html-row-spans-unreached | the author's table: the PDF prints Max-L's values in this order |
+| A Survey of Visual Transformers | p. 13, Table III(b) | html-row-spans-unreached | the author's table: the PDF has two QueryInst rows, both R-50-FPN |
 | Large language models can accurately predict searcher preferences | pp. 4–5, Table 1 | html-symbols-lost | arXiv's HTML has no ± in Table 1; a cell reads as the value, then its interval |
 | Large language models can accurately predict searcher preferences | prose | html-symbols-lost | small: arXiv's HTML collapses the dashes; readable |
 | Neural Ranking Models with Weak Supervision | p. 5, Table 2; pp. 5-9, Tables 3, 5 | html-symbols-lost | arXiv's HTML carries the wrong glyphs for the significance marks, and the captions say what they mean; the odd P@20 value is in the HTML too |
@@ -151,12 +151,16 @@ Problems in single papers left as they are (74):
 
 ## Done
 
-Fixed and reconverted (23), latest first:
+Fixed and reconverted (27), latest first:
 
 - 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)
 - 2026-10-22: [Rows stacked inside cells come out as one row](done/html-stacked-cell-rows.md)
 - 2026-10-22: [References to floats that share an anchor print the wrong number](done/html-shared-float-anchor.md)
+- 2026-10-22: [Row-spanning labels the span repair does not reach](done/html-row-spans-unreached.md)
+- 2026-10-22: [A box around a formula is kept as an image](done/html-formula-box-as-image.md)
 - 2026-10-22: [A figure arXiv serves broken, which the LaTeX source has only as a PDF](done/html-figure-source-pdf.md)
+- 2026-10-22: [Cells continued on a new row that the merge does not reach](done/html-continuation-rows-unreached.md)
+- 2026-10-22: [Lines stacked in one cell run together with spaces](done/html-cell-lines-run-together.md)
 - 2026-10-22: [The "~" or "≈" before a number is lost](done/html-approx-sign-lost.md)
 - 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
 - 2026-10-21: [Text-mode TeX inside a formula comes out raw](done/html-math-text-macros.md)

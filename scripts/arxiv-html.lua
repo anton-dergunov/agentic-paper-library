@@ -788,6 +788,8 @@ end
 
 function Span(el)
   local content = el.content
+  -- A line break between the lines a cell lists (break_cell_lines in html-to-markdown.py).
+  if el.classes:includes("ltx_cell_break") then return pandoc.RawInline("html", "<br>") end
   -- A caption's "Table 7:" is matched as plain text (caption-numbers.py),
   -- also when the style sets its two words in bold one by one.
   if el.classes:includes("ltx_tag") then
@@ -1045,19 +1047,40 @@ end
 
 -- A cell's text without the spaces and line breaks around it and the runs of
 -- them inside it, which a table written as HTML keeps ("<td>  \n   MMMU  (val) </td>").
+local function is_break(el)
+  return el.t == "RawInline" and el.text == "<br>"
+end
+
+-- A cell's line breaks without the spaces around them, one between two lines.
+local function tidy_breaks(ils)
+  local out = pandoc.List()
+  for _, el in ipairs(ils) do
+    if is_break(el) then
+      while #out > 0 and is_space(out[#out]) do out:remove() end
+      if not (#out > 0 and is_break(out[#out])) then out:insert(el) end
+    elseif not (is_space(el) and #out > 0 and is_break(out[#out])) then
+      out:insert(el)
+    end
+  end
+  return out
+end
+
 local function trim_cell(blocks)
+  blocks = pandoc.walk_block(pandoc.Div(blocks), { Inlines = tidy_breaks }).content
   local out = pandoc.List()
   for _, b in ipairs(blocks) do
     if b.t == "Plain" or b.t == "Para" then
       local content = pandoc.List()
       for _, el in ipairs(b.content) do
-        if not is_space(el) then
+        if is_break(el) and #content == 0 then
+          -- no line above the break
+        elseif not is_space(el) then
           content:insert(el)
         elseif #content > 0 and not is_space(content[#content]) then
           content:insert(pandoc.Space())
         end
       end
-      if #content > 0 and is_space(content[#content]) then content:remove() end
+      while #content > 0 and (is_space(content[#content]) or is_break(content[#content])) do content:remove() end
       if #content > 0 then out:insert(pandoc[b.t](content)) end
     else
       out:insert(b)

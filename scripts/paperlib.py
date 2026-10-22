@@ -755,8 +755,9 @@ def correction_images(corrections):
 
 def _norm_line(line):
     """A line as the matching compares it: Unicode NFC, whitespace collapsed, table cells
-    stripped of their padding (any separator row alike), headings without their (p. N)."""
-    line = unicodedata.normalize("NFC", line).strip()
+    stripped of their padding (any separator row alike), headings without their (p. N).
+    A line break (<br>) is a space, as older conversions joined a cell's lines."""
+    line = re.sub(r"<br\s*/?>", " ", unicodedata.normalize("NFC", line)).strip()
     if line.startswith("|"):
         parts = line.strip().strip("|").split("|")
         cells = [_norm_cell(c) if len(parts) == 1 else " ".join(c.split()) for c in parts]

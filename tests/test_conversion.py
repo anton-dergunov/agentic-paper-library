@@ -123,7 +123,8 @@ def checks():
                     + td(lines("&lt;user&gt;", "{query} /no_think", "&lt;think&gt;", "&lt;/think&gt;")) + "</span>"
                     "</span></p>")
     yield "scaled table with multi-line cells is a table", (
-        "| Thinking | Non-Thinking |" in md and "| &lt;user&gt; {query} /think &lt;think&gt; |" in md.replace("\\<", "&lt;").replace("\\>", "&gt;"))
+        "| Thinking | Non-Thinking |" in md
+        and "| &lt;user&gt;<br>{query} /think<br>&lt;think&gt; |" in md.replace("\\<", "&lt;").replace("\\>", "&gt;"))
 
     md, _ = convert('<p class="ltx_p"><span class="ltx_tabular">'
                     '<span class="ltx_tr">' + td("") + td("Subjective") + td("Objective") + "</span>"
@@ -656,7 +657,7 @@ def checks():
                     + row(("th", "SNN-30k", "ltx_border_t", 'rowspan="2"'), ("td", "128c-p-1200L", "ltx_border_t"),
                           ("td", "21.8%", "ltx_border_t", 'rowspan="2"'))
                     + row(("td", "+ dropout")) + "</tbody></table></figure>")
-    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    head = md[:md.index("</thead>")] if "</thead>" in md else md.split("\n")[0]
     yield "a double rule under the header ends it", "Architecture" in head and "DNN" not in head
 
     def shaded_table(caption):
@@ -1073,6 +1074,78 @@ def checks():
                     + row(("td", "Country"), ("td", "35.4%"), ("td", "60.3%")) + "</table>")
     yield "a column title's second line joins it", "| PlaNet MobileNet |" in md and len(re.findall(r"^\|", md, re.M)) == 4
 
+    formula = ('<math display="inline"><semantics><mi>k</mi>'
+               '<annotation encoding="application/x-tex">k</annotation></semantics></math>')
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("th", "Name", "ltx_border_tt"), ("th", "Description", "ltx_border_tt"))
+                    + row(("td", "ray.get", "ltx_border_t"), ("td", "Execute function f remotely, it can take objects as inputs", "ltx_border_t"))
+                    + row(("td", ""), ("td", "and returns one or more futures."))
+                    + row(("td", "ray.wait", "ltx_border_t"), ("td", "Return the futures whose tasks have completed as soon as either", "ltx_border_t"))
+                    + row(("td", ""), ("td", formula + " have completed or the timeout expires."))
+                    + "</table>")
+    yield "a sentence wrapped onto the next row joins its cell, a formula opening the rest too", (
+        "inputs and returns one or more futures." in md and "as soon as either $k$ have completed" in md
+        and len(re.findall(r"^\|", md, re.M)) == 4)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Attention", "ltx_border_tt"), ("td", "Selective", "ltx_border_tt"), ("td", "Sliding", "ltx_border_tt"))
+                    + row(("td", "References", "ltx_border_t", 'rowspan="2"'), ("td", "Top-k (Gupta et al., 2021),", "ltx_border_t"),
+                          ("td", "Sparse Transformer (Child et al., 2019),", "ltx_border_t"))
+                    + row(("td", "Sorting (Tay et al., 2020)"), ("td", "LongFormer (Beltagy et al., 2020)"))
+                    + row(("td", "LLM", "ltx_border_t"), ("td", "Scissorhands (Liu et al., 2023),", "ltx_border_t"),
+                          ("td", "Mistral-7B (Jiang et al., 2023),", "ltx_border_t"))
+                    + row(("td", "Applications"), ("td", "H2O (Zhang et al., 2023)"), ("td", "LongNet (Ding et al., 2023)"))
+                    + "</table>")
+    yield "an entry whose cells all go on in the next row is one row, its label too", (
+        "rowspan" not in md and "| LLM<br>Applications |" in md and "Sparse Transformer (Child et al., 2019), LongFormer" in md
+        and "(Liu et al., 2023), H2O" in md and len(re.findall(r"^\|", md, re.M)) == 4)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("th", "Model", "ltx_border_tt"), ("th", "Inputs", "ltx_border_tt"), ("th", "Objective", "ltx_border_tt"),
+                          ("th", "Definition", "ltx_border_tt"))
+                    + row(("td", "Large Action Model", "ltx_border_t", 'rowspan="2"'), ("td", "Interactive", "ltx_border_t"),
+                          ("td", "Executable Action", "ltx_border_t", 'rowspan="2"'), ("td", "LAM is to generate actions based on", "ltx_border_t"))
+                    + row(("td", "Environment"), ("td", "the interactions within the environment."))
+                    + row(("td", "Retrieval", "ltx_border_t", 'rowspan="2"'), ("td", "Web", "ltx_border_t"), ("td", "Recall", "ltx_border_t"),
+                          ("td", "Fetches pages.", "ltx_border_t"))
+                    + row(("td", "News"), ("td", "Precision"), ("td", "Fetches articles."))
+                    + "</table>")
+    yield "the second line of an entry whose other cells span both its rows joins it", (
+        "<td>Interactive<br>Environment</td>" in md and "based on the interactions within" in md and md.count("Large Action") == 1)
+    yield "but rows under one spanning label are rows of their own", "News" in md and "Web News" not in md
+
+    th = lambda text, attrs="": f'<th class="ltx_th ltx_border_tt" {attrs}>{text}</th>'
+    md, _ = convert('<table class="ltx_tabular"><tbody class="ltx_tbody">'
+                    + f'<tr class="ltx_tr">{th(stack("Model"), 'rowspan="4"')}{th(stack("Data"), 'rowspan="4"')}'
+                    + f'{th("OOD Detection:", 'colspan="2"')}</tr>'
+                    + f'<tr class="ltx_tr">{th("Inference Delays", 'colspan="2"')}</tr>'
+                    + cells("SoftMax", "IsoMax", border=" ltx_border_t") + cells("MPS (ms)", "ES (ms)")
+                    + cells("DenseNet", "CIFAR10", "18.1", "18.0", border=" ltx_border_t") + cells("ResNet", "SVHN", "11.6", "11.5")
+                    + "</tbody></table>")
+    head = md[:md.index("</thead>")] if "</thead>" in md else ""
+    yield "a header of four rows, its titles stacked, keeps its spans", (
+        '<th rowspan="4">Model</th>' in head and "MPS (ms)" in head and "DenseNet" not in head
+        and "<td>DenseNet</td>\n<td>CIFAR10</td>\n<td>18.1</td>" in md)
+
+    parbox = '<span class="ltx_inline-block ltx_parbox">{}</span>'.format
+    lines = lambda *ls: "\n".join(f'<span class="ltx_p">{line}</span>' for line in ls)
+    md, _ = convert('<table class="ltx_tabular">'
+                    + cells("Method", stack("Source", "Data"), "Metric", "Models", border=" ltx_border_tt")
+                    + cells("O1-Pruner", stack("GSM8K", "GaoKao", "MATH-500"), parbox(lines("Top-1 Acc.", "IoU")),
+                            stack("Marco-o1-7B", "QwQ-32B"), border=" ltx_border_t")
+                    + cells('<span class="ltx_text ltx_font_bold">LDA <br class="ltx_break">DMFVI</span>',
+                            stack("Kendall’s Tau", "for GPT-3.5 Judge"), stack("Q-Prop", "(DDPG)"), "")
+                    + "</table>")
+    yield "lines listed in a body cell are kept apart with <br>, a pipe table staying one", (
+        "<table>" not in md and "| GSM8K<br>GaoKao<br>MATH-500 |" in md and "| Top-1 Acc.<br>IoU |" in md
+        and "Marco-o1-7B<br>QwQ-32B" in md and "LDA<br>DMFVI" in md)
+    yield "lines of a column title, or reading as one text, are joined with a space", (
+        "| Source Data |" in md and "| Kendall’s Tau for GPT-3.5 Judge |" in md and "| Q-Prop (DDPG) |" in md)
+    h2m = load("html-to-markdown")
+    yield "a box's paragraphs become blocks, but not a table cell's lines", h2m.spans_to_blocks(
+        '<span class="ltx_p">a</span><table><tr><td><span class="ltx_p">b</span></td></tr></table>'
+    ) == '<p class="ltx_p">a</p><table><tr><td><span class="ltx_p">b</span></td></tr></table>'
+
     h2m = load("html-to-markdown")
     tex = (r"\begin{table}\begin{tabular}{@{}l|c|cc@{}}\toprule Prompt & Shots & \multicolumn{2}{c}{F1} \\ \midrule"
            "\n & 6 & 73.76 & 90.24 \\\\\n\\multirow{-2}{*}{Fewshot-related} & 10 & 76.56 & 90.80 \\\\\n"
@@ -1095,6 +1168,73 @@ def checks():
         flat.index("Fewshot-related") < flat.index(">10<") and "rowspan" not in flat
         and re.search(r'rowspan="2"[^>]*>Fewshot-related<', spanned) and 'rowspan="2"' in spanned.split("90.80")[1]
         and spanned.count("<tr") == 6 and spanned.count("<th") == 10)
+
+    tex = (r"\begin{tabular}{|c|c|c|}\toprule Method & Datapoint & Predictions \\ \midrule"
+           "\n\\multirow{2}{*}{A} & \\multirow{2}{*}{} & a1 \\\\\n\\multirow{2}{*}{B} & \\multirow{2}{*}{Group} & b1 \\\\\n"
+           "\\multirow{2}{*}{C} & \\multirow{2}{*}{} & c1 \\\\ \\midrule\n"
+           "\\multirow{2}{*}{A} & \\multirow{2}{*}{} & a2 \\\\\n\\multirow{2}{*}{B} & \\multirow{2}{*}{Oat} & b2 \\\\\n"
+           "\\multirow{2}{*}{C} & \\multirow{2}{*}{} & c2 \\\\ \\bottomrule\\end{tabular}")
+    files, h2m.source_files = h2m.source_files, lambda version: {"main.tex": "\\documentclass{article}" + tex}
+    dropped = h2m.restore_dropped_cells(
+        '<table class="ltx_tabular">' + row(("th", "Method", "ltx_border_tt"), ("th", "Datapoint", "ltx_border_tt"),
+                                            ("td", "Predictions", "ltx_border_tt"))
+        + row(("th", "A", "ltx_border_t"), ("th", "", "ltx_border_t"), ("td", "a1", "ltx_border_t"))
+        + row(("th", "B", "ltx_border_t"), ("th", "Group", "", 'rowspan="2"'), ("td", "b1", "ltx_border_t"))
+        + row(("th", "C", "ltx_border_t"), ("td", "c1", "ltx_border_t"))
+        + row(("th", "A", "ltx_border_t"), ("td", "a2", "ltx_border_t"))
+        + row(("th", "B", "ltx_border_t"), ("th", "Oat", "", 'rowspan="2"'), ("td", "b2", "ltx_border_t"))
+        + row(("th", "C", "ltx_border_t"), ("td", "c2", "ltx_border_t")) + "</table>", page)
+    h2m.source_files = files
+    _, at = h2m.table_grid(dropped)
+    yield "a cell dropped with an empty \\multirow LaTeXML placed is given back from the source", (
+        h2m.cell_text(at[(4, 1)][2].group(3)) == "" and h2m.cell_text(at[(4, 2)][2].group(3)) == "a2"
+        and h2m.cell_text(at[(5, 1)][2].group(3)) == "Oat")
+    md, _ = convert(dropped.replace('<table class="ltx_tabular">', '<table class="ltx_tabular"><tbody class="ltx_tbody">', 1)
+                    .replace("</table>", "</tbody></table>"))
+    yield "and the group's label spans it", bool(re.search(r'rowspan="3">Oat<', md)) and "<td>a2</td>" in md
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Category", "ltx_border_tt"), ("td", "Detected", "ltx_border_tt"), ("td", "Threshold", "ltx_border_tt"))
+                    + row(("td", "Diegetic", "ltx_border_t", 'rowspan="6"'), ("td", "sound", "ltx_border_t"), ("td", "", "ltx_border_t"))
+                    + row(("td", "voice"), ("td", "&gt; 0.2")) + row(("td", "voice + sound"), ("td", ""))
+                    + row(("td", "music", "ltx_border_t"), ("td", "", "ltx_border_t")) + row(("td", "music + sound"), ("td", "&gt; 0.3"))
+                    + row(("td", "voice + music"), ("td", ""))
+                    + row(("td", "Mixed", "ltx_border_t"), ("td", "all", "ltx_border_t"), ("td", "&gt; 0.1", "ltx_border_t"))
+                    + "</table>")
+    yield "a value centred by hand on its group's middle row labels the group", (
+        '<td rowspan="3">&gt; 0.2</td>' in md and '<td rowspan="3">&gt; 0.3</td>' in md and "<td></td>" not in md)
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + row(("td", "Group", "ltx_border_tt"), ("td", "Agents", "ltx_border_tt"), ("td", "Parameter", "ltx_border_tt"),
+                          ("td", "Value", "ltx_border_tt"))
+                    + row(("td", "Reinforcement", "ltx_border_t"), ("td", "All agents", "ltx_border_t"),
+                          ("td", "Discount factor", "ltx_border_t"), ("td", "0.999", "ltx_border_t"))
+                    + row(("td", "learning"), ("td", ""), ("td", "Exploration rate", "ltx_border_t"), ("td", "0.05", "ltx_border_t"))
+                    + row(("td", ""), ("td", "BASS and", "ltx_border_t"), ("td", "Learning rate", "ltx_border_t"), ("td", "0.5", "ltx_border_t"))
+                    + row(("td", ""), ("td", "Basic"), ("td", "Trace decay", "ltx_border_t"), ("td", "0.9", "ltx_border_t"))
+                    + row(("td", ""), ("td", ""), ("td", "Grid width", "ltx_border_t"), ("td", "16", "ltx_border_t"))
+                    + row(("td", ""), ("td", "BASS only", "ltx_border_t"), ("td", "Colours", "ltx_border_t"), ("td", "8", "ltx_border_t"))
+                    + row(("td", ""), ("td", "Basic only", "ltx_border_t"), ("td", "Colours", "ltx_border_t"), ("td", "128", "ltx_border_t"))
+                    + "</table>")
+    yield "a group's label wrapped onto the group's next row joins it", (
+        bool(re.search(r"\| Reinforcement learning +\| All agents", md)) and bool(re.search(r"\| BASS and Basic +\| Learning rate", md))
+        and bool(re.search(r"\| BASS only +\|", md)) and bool(re.search(r"\| Basic only +\|", md)))
+
+    yield "a colour named in a label is not one of its words", h2m.plain_words(
+        r"\multirow{-3}{*}{\color{tableemphcolor} \textbf{Hawk}} \textcolor{red}{Griffin}") == ["3", "hawk", "griffin"]
+
+    md, _ = convert('<table class="ltx_tabular"><tbody class="ltx_tbody">'
+                    + row(("th", "Category", "ltx_border_tt", 'colspan="2"'), ("th", "Publications", "ltx_border_tt"))
+                    + row(("td", "Recurrent GNNs", "ltx_border_t", 'colspan="2"'), ("td", "[15, 16]", "ltx_border_t"))
+                    + row(("td", "", "ltx_border_t"), ("td", "Spectral methods", "ltx_border_t"), ("td", "[19, 20]", "ltx_border_t"))
+                    + row(("td", "Convolutional GNNs"), ("td", "Spatial methods", "ltx_border_t"),
+                          ("td", stack("[24, 25]", "[45, 46]"), "ltx_border_t"))
+                    + row(("td", "Graph Autoencoders", "ltx_border_t", 'rowspan="2"'), ("td", "Network Embedding", "ltx_border_t"),
+                          ("td", "[59, 60]", "ltx_border_t"))
+                    + row(("td", "Graph Generation", "ltx_border_t"), ("td", "[65, 66]", "ltx_border_t"))
+                    + "</tbody></table>")
+    yield "a group's label takes its rows in a table with lines stacked in a cell", (
+        '<td rowspan="2">Convolutional GNNs</td>' in md and "[24, 25] [45, 46]" in md)
 
     cited = h2m.unknown_citations(
         "<p>introduced by Google researchers in 2017 ( ?). The encoder-decoder models ( ?) came first.</p>",
