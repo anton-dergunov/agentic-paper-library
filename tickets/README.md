@@ -70,7 +70,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (16 records)
 
-Problems in single papers left as they are (76):
+Problems in single papers left as they are (74):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -93,8 +93,6 @@ Problems in single papers left as they are (76):
 | Neural Ranking Models with Weak Supervision | p. 3, Eqs. 2-3 | html-equation-garbled | small: readable |
 | Reinforcement Learning. An Overview | pp. 52-57 | html-equation-garbled | small: two numbers of ellipsis rows |
 | Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset | p. 3, footnote 7 | html-equation-garbled | small and isolated: one footnote's token-id list |
-| Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift | p. 6 | html-figure-download | no intact copy exists on arXiv; the PDF has the figure |
-| Towards Automated Circuit Discovery for Mechanistic Interpretability | pp. 6, 21, 23 | html-figure-download | the source has only PDFs, and 4 of the 7 exist in two colour variants chosen by a LaTeX conditional; the PDF has the plots |
 | EuroBERT. Scaling Multilingual Encoders for European Languages | p. 5, Tables 1-2 | html-image-symbols | the badge that holds the digit is empty in arXiv's HTML; the PDF has the values |
 | Batch Normalization Explained | p. 8, Eq. 13 | html-latexml-macros | small: still readable |
 | Learning label-label correlations in Extreme Multi-label Classification via Label Features | p. 3, Eqs. 2-5 | html-latexml-macros | the paper's own macro (\probsymb), shown by name by design; readable |
@@ -153,11 +151,12 @@ Problems in single papers left as they are (76):
 
 ## Done
 
-Fixed and reconverted (22), latest first:
+Fixed and reconverted (23), latest first:
 
 - 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)
 - 2026-10-22: [Rows stacked inside cells come out as one row](done/html-stacked-cell-rows.md)
 - 2026-10-22: [References to floats that share an anchor print the wrong number](done/html-shared-float-anchor.md)
+- 2026-10-22: [A figure arXiv serves broken, which the LaTeX source has only as a PDF](done/html-figure-source-pdf.md)
 - 2026-10-22: [The "~" or "≈" before a number is lost](done/html-approx-sign-lost.md)
 - 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
 - 2026-10-21: [Text-mode TeX inside a formula comes out raw](done/html-math-text-macros.md)

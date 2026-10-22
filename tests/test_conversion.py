@@ -1334,7 +1334,20 @@ def checks():
         cache = Path(tmp)
         (cache / "cut.png").write_bytes(b"")
         served = {"cut.png": png[:len(png) // 2], "crc.png": bad_crc, "short.png": png[:len(png) // 2]}  # arXiv's HTML server
-        source = {"missing.png": png, "cut.png": png}  # the paper's LaTeX source
+        import pymupdf
+
+        def figure_pdf(colour):
+            doc = pymupdf.open()
+            doc.new_page(width=200, height=100).draw_rect(pymupdf.Rect(20, 20, 180, 80), fill=colour)
+            return doc.tobytes()
+
+        rgb, yellow = figure_pdf((1, 0, 0)), figure_pdf((1, 1, 0))
+        tex = (b"\\newboolean{pre}\n% \\setboolean{pre}{false}\n\\setboolean{pre}{true}\n"
+               b"\\newcommand{\\plot}[1]{\\ifthenelse{\\boolean{pre}}\n  {\\includegraphics{figs/rgb/#1}}\n"
+               b"  {\\includegraphics{figs/yellow/#1}}}\n")
+        source = {"missing.png": png, "cut.png": png, "figs/plot.pdf": rgb,  # the paper's LaTeX source
+                  "figs/rgb/var.pdf": rgb, "figs/yellow/var.pdf": yellow, "main.tex": tex,
+                  "a/twin.pdf": rgb, "b/twin.pdf": yellow}
         refetched = []
 
         def fetch(url, attempts=4, fresh=False):
@@ -1347,15 +1360,28 @@ def checks():
         figures = load("paperlib")
         figures.fetch = fetch
         figures.cache_path = lambda url: cache / url.rpartition("/")[2]
-        figures.source_images = lambda version: source if version == "2401.00001v1" else {}
-        names = iter(range(1, 10))
-        body = "".join(f"![](2401.00001v1/{n}.png)\n" for n in ("missing", "cut", "crc", "gone", "short"))
-        body, failed = figures.localize_figures(body, lambda data, ext: f"images/f{next(names)}.{ext}", pause=0)
+        figures.source_files = lambda version: source if version == "2401.00001v1" else {}
+        names, stored = iter(range(1, 10)), []
+
+        def save(data, ext):
+            stored.append(data)
+            return f"images/f{next(names)}.{ext}"
+
+        body = "".join(f"![](2401.00001v1/{n}.png)\n" for n in ("missing", "cut", "crc", "gone", "short", "plot", "var", "twin"))
+        body, failed = figures.localize_figures(body, save, pause=0)
     yield "a figure arXiv lacks comes from the source; a cut-off cached one is downloaded again", (
         body.startswith("![](images/f1.webp)\n![](images/f2.webp)\n") and refetched == ["cut.png"])
     yield "a PNG loses a text chunk with a bad checksum; a figure found nowhere, or only cut off, keeps its arXiv link", (
         "![](images/f3.webp)" in body and "](https://arxiv.org/html/2401.00001v1/gone.png)" in body
-        and "](https://arxiv.org/html/2401.00001v1/short.png)" in body and failed == 2)
+        and "](https://arxiv.org/html/2401.00001v1/short.png)" in body)
+    yield "a figure the source has only as a PDF, in another directory, is rendered", (
+        "![](images/f4.webp)" in body and stored[3] == figures.to_webp(figures.render_pdf_figure(rgb)))
+    yield "of an author's variants, the one the TeX's switch selects; two the TeX does not tell apart keep the link", (
+        stored[4] == figures.to_webp(figures.render_pdf_figure(rgb))
+        and "](https://arxiv.org/html/2401.00001v1/twin.png)" in body and failed == 3)
+    resolved = figures.tex_resolved("\\newif\\ifdraft\n\\drafttrue\n\\draftfalse\n"
+                                    "\\ifdraft figs/draft/ \\else figs/final/ \\fi")
+    yield "a \\newif switch is resolved by its last setting", "figs/final/" in resolved and "figs/draft/" not in resolved
 
     pdf = load("pdf-to-markdown")
     yield "PDF heading levels from numbering", [

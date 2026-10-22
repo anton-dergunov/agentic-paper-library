@@ -1437,20 +1437,110 @@ def png_without_bad_chunks(data):
     return b"".join(out) if dropped else None
 
 
-@functools.lru_cache(maxsize=1)
-def source_images(version):
-    """The image files of a paper's arXiv source (its e-print): {path: bytes}."""
+SOURCE_IMAGES =(".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tif", ".tiff", ".webp", ".svg")
+
+
+@functools.lru_cache(maxsize=4)
+def source_files(version):
+    """The image, PDF and TeX files of a paper's arXiv source (its e-print): {path: bytes}."""
     data = fetch(f"https://arxiv.org/e-print/{version}")
     files = {}
     try:
         with tarfile.open(fileobj=io.BytesIO(data or b""), mode="r:*") as tar:
             for member in tar.getmembers():
-                if member.isfile() and member.name.lower().endswith(
-                        (".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tif", ".tiff", ".webp", ".svg")):
+                if member.isfile() and member.name.lower().endswith(SOURCE_IMAGES + (".pdf", ".tex")):
                     files[member.name.removeprefix("./")] = tar.extractfile(member).read()
     except tarfile.TarError:
         pass
     return files
+
+
+def source_images(version):
+    """The image files of a paper's arXiv source: {path: bytes}."""
+    return {path: data for path, data in source_files(version).items() if path.lower().endswith(SOURCE_IMAGES)}
+
+
+def _tex_group(text, i):
+    """The end (just past its "}") of the brace group opening at text[i], or None."""
+    depth = 0
+    for j in range(i, len(text)):
+        if text[j] == "{" and text[j - 1] != "\\":
+            depth += 1
+        elif text[j] == "}" and text[j - 1] != "\\":
+            depth -= 1
+            if not depth:
+                return j + 1
+    return None
+
+
+def tex_resolved(text):
+    """TeX source with its simple switches resolved: `\\ifthenelse{\\boolean{x}}{a}{b}` (x
+    set by `\\setboolean`) and `\\ifx a \\else b \\fi` (x declared by `\\newif`, set by
+    `\\xtrue`); the last setting in the text wins, and a switch never set is false. Comments
+    are dropped first. Enough to tell which of two figure directories the paper uses."""
+    text = re.sub(r"(?<!\\)%.*", "", text)
+    booleans = {m.group(1): m.group(2) == "true"
+                for m in re.finditer(r"\\setboolean\{(\w+)\}\{(true|false)\}", text)}
+    pattern = re.compile(r"\\ifthenelse\s*\{\s*\\boolean\{(\w+)\}\s*\}\s*")
+    while m := pattern.search(text):
+        first = m.end()
+        end_a = _tex_group(text, first) if text[first:first + 1] == "{" else None
+        rest = end_a and end_a + len(text[end_a:]) - len(text[end_a:].lstrip())
+        end_b = _tex_group(text, rest) if end_a and text[rest:rest + 1] == "{" else None
+        if not end_b:
+            break
+        taken = text[first + 1:end_a - 1] if booleans.get(m.group(1)) else text[rest + 1:end_b - 1]
+        text = text[:m.start()] + taken + text[end_b:]
+    for name in re.findall(r"\\newif\s*\\if(\w+)", text):
+        sets = re.findall(rf"\\{name}(true|false)\b", text)
+        on = bool(sets) and sets[-1] == "true"
+        text = re.sub(rf"\\if{name}\b(.*?)(?:\\else(.*?))?\\fi",
+                      lambda m: m.group(1) if on else m.group(2) or "", text, flags=re.S)
+    return text
+
+
+def source_figure(version, name):
+    """A figure of arXiv's HTML (`name`, as its rendering links it) found in the paper's
+    LaTeX source: the file at that path; else one with that path or file name and another
+    extension, in any directory (LaTeXML links `figs/6_diff.pdf` as `6_diff.png`). A PDF
+    is rendered to PNG. Where several different files fit, the one in a directory the TeX
+    names once its switches are resolved (an author's colour variants); None when that
+    does not settle it."""
+    files = source_files(version)
+    if name.lower().endswith(SOURCE_IMAGES) and name in files:
+        return files[name]
+    stem = name.rsplit(".", 1)[0]
+    kinds = [p for p in files if p.lower().endswith(SOURCE_IMAGES + (".pdf",))]
+    found = [p for p in kinds if p.rsplit(".", 1)[0] == stem] \
+        or [p for p in kinds if p.rsplit("/", 1)[-1].rsplit(".", 1)[0] == stem.rsplit("/", 1)[-1]]
+    distinct = {files[p]: p for p in sorted(found)}
+    if len(distinct) > 1:
+        tex = "\n".join(tex_resolved(files[p].decode("utf-8", "replace")) for p in files if p.endswith(".tex"))
+        def named_in_tex(path):
+            # The directory, or its last parts (under a \graphicspath), as a whole path.
+            parts = path.split("/")[:-1]
+            return any(re.search(rf"(?<![\w.-]){re.escape('/'.join(parts[k:]))}/", tex) for k in range(len(parts)))
+
+        named = [p for p in distinct.values() if named_in_tex(p)]
+        distinct = {files[p]: p for p in named} if len(named) == 1 else {}
+    if len(distinct) != 1:
+        return None
+    path = next(iter(distinct.values()))
+    return render_pdf_figure(files[path]) if path.lower().endswith(".pdf") else files[path]
+
+
+def render_pdf_figure(data):
+    """The first page of a PDF figure as PNG, its longer side FIGURE_MAX_SIDE; None if it
+    does not open."""
+    import pymupdf
+
+    try:
+        with pymupdf.open(stream=data, filetype="pdf") as doc:
+            page = doc[0]
+            zoom = FIGURE_MAX_SIDE / max(page.rect.width, page.rect.height)
+            return page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), alpha=False).tobytes("png")
+    except Exception:
+        return None
 
 
 def localize_figures(body, save, pause=0.2):
@@ -1464,7 +1554,8 @@ def localize_figures(body, save, pause=0.2):
     arXiv's rendering links some files its server lacks or serves cut off, so a
     figure that will not decode is taken from the cache's copy downloaded again
     (it may predate the checks on downloads), then from the paper's LaTeX source
-    under the same path, then with a PNG's bad text chunks dropped. One that fails
+    (source_figure: under the same path or file name, a PDF rendered), then with a
+    PNG's bad text chunks dropped. One that fails
     all of them keeps an absolute arXiv link: a cut-off file is not decoded as far
     as it goes, since the missing part would read as part of the figure.
     Returns (new body, number failed).
@@ -1493,7 +1584,7 @@ def localize_figures(body, save, pause=0.2):
             time.sleep(pause)
             yield data
         version, _, name = path.partition("/")
-        yield source_images(version).get(name)
+        yield source_figure(version, name)
 
     def localize(path):
         tried = []
