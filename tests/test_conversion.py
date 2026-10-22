@@ -1459,6 +1459,11 @@ def checks():
         '<td><img src="images/T-fig08.svg" /></td><td><img src="images/x3.png" alt="snowflake" /></td>\n'))
     yield "the read view names icons and drops image paths", (
         view.count("[figure]") == 2 and "[check-mark]" in view and "[snowflake]" in view and "images/" not in view)
+    view = paperlib.read_view({"title": "T", "source": "html"}, (
+        "As Table [6](#A3.T6) and [Figure 2](#A1.F2) show, and Table [1](#S2.T1).\n\n| a |\n|---|\n\n"
+        "Table 1: Main.\n\n## References\n\n- A. 2020.\n\n## Appendix A\n\nTable 6: Late.\n\nFigure 2: Plot.\n"))
+    yield "the read view names the appendix floats the main text cites", (
+        "cites Table 6, Figure 2 from there: not shown, not lost" in view and "Table 1," not in view.split("[End")[1])
 
     import io
     import random
@@ -1545,6 +1550,17 @@ def checks():
         and not pdf.trusted_reading("a long paragraph about memory layers and retrieval quality", "a long"))
     yield "PDF text starting with # is not a heading", (
         pdf.reading_or_text(SimpleNamespace(text="# weights  learning rate"), None) == "\\# weights learning rate")
+    yield "a caption docling gives plain and bold is one caption", (
+        pdf.caption_key("Table 3: **Performance of medium-sized models.** The highest scores are shown in **bold**.")
+        == pdf.caption_key("Table 3: Performance of medium-sized models. The highest scores are shown in bold .")
+        and pdf.caption_key("Table 5: on the mount\\_doom query.") == pdf.caption_key("Table 5: on the mount_doom query.")
+        and pdf.caption_key("**Table 2:** The 'Score' column") == pdf.caption_key("Table 2: The “Score” column")
+        and pdf.caption_key("Table 2: Cascade of model design choices. A transformer with 𝑁 z = 64 tokens.")
+        == pdf.caption_key("**Table 2:** Cascade of model design choices. A transformer with $N_z = 64$ tokens.")
+        and pdf.caption_key("Table 2: Cascade of model design choices.") != pdf.caption_key("Table 3: Cascade of model design choices."))
+    yield "a heading at the page's edge on three pages is a running header", pdf.running_headers(
+        [("Anthropic", n, 43, 48, 792) for n in (10, 11, 12)] + [("Model Output:", n, 118, 132, 792) for n in (29, 30, 31)]
+        + [("Draft", 1, 750, 760, 792), ("Draft", 2, 750, 760, 792)]) == {"Anthropic"}
     yield "a table docling split in two is rejoined", pdf.join_split_tables(
         ["| Model | Hit |\n|---|---|\n| A | 0.4 |", "| B | 0.6 |\n|---|---|\n| C | 0.7 |"]
     ) == ["| Model | Hit |\n|---|---|\n| A | 0.4 |\n| B | 0.6 |\n| C | 0.7 |"]
@@ -1617,6 +1633,25 @@ def checks():
     lacking, texty = page_map.missing_pages(doc, said[0] + "\n\n" + said[1])
     yield "pages of the PDF the markdown lacks are found, a page of references aside", (
         (lacking, texty) == ([3, 4, 5], 6) and page_map.page_ranges([3, 4, 5, 9]) == "3–5, 9")
+
+    splice = load("missing-pages")
+    doc = pymupdf.open()
+    for text in said[:3] + ["Figure 4"] + said[3:]:
+        doc.new_page().insert_textbox(pymupdf.Rect(40, 40, 560, 800), text, fontsize=6)
+    yield "a sparse page between two missing ones is a candidate", (
+        splice.candidates(doc, said[0] + "\n\n" + said[1], page_map) == {3, 4, 5, 6})
+    lines = ["# T", "## 1 Intro (p. 1)", "x", "## 2 Method (p. 2)", "y", "## References", "z", "## Appendix A (p. 9)"]
+    yield "missing pages go before the first heading on a later page, the references counting", (
+        splice.place(lines, 1, 8) == 3 and splice.place(lines, 5, 8) == 5 and splice.place(lines, 8, 8) == 7
+        and splice.place(lines, 9, 8) == len(lines))
+
+    from docling_core.types.doc import DocItemLabel as Label
+    item = lambda label, page, words: SimpleNamespace(
+        label=label, text="word " * words, prov=[SimpleNamespace(page_no=page)])
+    items = [item(Label.TEXT, 3, 300), item(Label.PICTURE, 4, 0), item(Label.CAPTION, 4, 40),
+             item(Label.TEXT, 5, 150), item(Label.CAPTION, 8, 30), item(Label.TEXT, 9, 20)]
+    yield "pages of text are kept, a figure between two of them too, a lone figure not", (
+        pdf.keep_pages(None, items, {3, 4, 5, 8, 9}) == {3, 4, 5})
 
     symptoms = load("conversion-symptoms")
     yield "a < in an equation is not a tag", symptoms.prose_words(

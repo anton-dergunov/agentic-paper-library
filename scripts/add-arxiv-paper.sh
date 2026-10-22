@@ -221,6 +221,8 @@ fi
 if [ "${SOURCE:-}" = html ]; then
   python3 "$SCRIPTS_DIR/page-map.py" "$PDF" "$MD"
   python3 "$SCRIPTS_DIR/caption-numbers.py" "$PDF" "$MD"
+  # Pages arXiv's HTML lacks (it stopped partway, or dropped a page of tables): from the PDF.
+  python3 "$SCRIPTS_DIR/missing-pages.py" "$PDF" "$MD"
 fi
 
 echo "Done: $PDF"

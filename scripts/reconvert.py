@@ -204,9 +204,17 @@ def from_html(md, meta, arxiv_id):
     captions = subprocess.run(
         [sys.executable, SCRIPTS / "caption-numbers.py", pdf, md], capture_output=True, text=True, check=True
     ).stdout.splitlines()[0].removeprefix("caption-numbers: ")
+    # Pages arXiv's HTML lacks, from the PDF: minutes for a paper missing many.
+    pages = subprocess.run(
+        [sys.executable, SCRIPTS / "missing-pages.py", pdf, md], capture_output=True, text=True, timeout=8 * 3600,
+    )
+    if pages.returncode:
+        return "failed", f"missing-pages: {pages.stderr.strip().splitlines()[-1:]}"
     message = f"{arxiv_id}{version or ' (latest)'}{note}: {out.stdout.splitlines()[0]}"
     if captions != "0 captions renumbered from the PDF, 0 given a number, 0 references renumbered":
         message += f"; {captions}"
+    if pages.stdout.strip() != "missing pages: none":
+        message += f"; {pages.stdout.strip()}"
     if "could not be downloaded" in warnings:
         return "partial", f"{message}; {warnings}"
     return "ok", message + (f"; {warnings}" if warnings else "")

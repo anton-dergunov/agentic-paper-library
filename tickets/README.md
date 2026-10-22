@@ -26,9 +26,8 @@ Papers and key-content counts from the library `papers` on 2026-10-22.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
-| [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 31 | 10 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 36 | 6 | unknown until its sub-causes are found |
-| [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | open | 44 | 4 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
+| [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 11 | 3 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 78 | 1 | unknown until its sub-causes are found |
@@ -57,16 +56,17 @@ Papers and key-content counts from the library `papers` on 2026-10-22.
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
+| [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | fixed | 21 | 1 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
 
 ## Won't fix
 
 Causes left as they are:
 
-- [Results printed only in a plot](wont-fix/figure-values-in-plots.md): the numbers are not in the paper as text, only in the plot (34 records)
+- [Results printed only in a plot](wont-fix/figure-values-in-plots.md): the numbers are not in the paper as text, only in the plot (40 records)
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (16 records)
 
-Problems in single papers left as they are (78):
+Problems in single papers left as they are (83):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -84,6 +84,7 @@ Problems in single papers left as they are (78):
 | Trustworthiness in Retrieval-Augmented Generation Systems. A Survey | p. 27, Table 9 | html-colour-shades | graded heat-map shading; bold still marks the best per column and every value reads |
 | Entropic Out-of-Distribution Detection. Seamless Detection of Unknown Examples | Table I and Table VI header (pp. 8-12) | html-continuation-rows-unreached | Table VI's header fixed 22 Oct 2026; Table I sets each technique over four rows beside two-line values, as the PDF does, and reads in order |
 | Reflexion. Language Agents with Verbal Reinforcement Learning | p. 3, "Related work on programming" table | html-continuation-rows-unreached | the author's table: the source and the PDF put "Test execution" under "Approach" and leave Debugging's second line empty |
+| KAG. Boosting LLMs in Professional Domains via Knowledge Augmented Generation | p. 22–23, Section 4.2 | html-dropped-floats | the listing is an image in the PDF too |
 | MM-LLMs. Recent Advances in MultiModal Large Language Models | p. 4, Fig. 3 | html-empty-tree-leaves | small: readable as a nested list |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 1 | html-equation-garbled | small: readable from the prose |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 4 Theorem 3.2; p. 6 Theorem 4.2 | html-equation-garbled | small: the split equations are all readable |
@@ -92,6 +93,10 @@ Problems in single papers left as they are (78):
 | Reinforcement Learning. An Overview | pp. 52-57 | html-equation-garbled | small: two numbers of ellipsis rows |
 | Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset | p. 3, footnote 7 | html-equation-garbled | small and isolated: one footnote's token-id list |
 | EuroBERT. Scaling Multilingual Encoders for European Languages | p. 5, Tables 1-2 | html-image-symbols | the badge that holds the digit is empty in arXiv's HTML; the PDF has the values |
+| Confident Learning. Estimating Uncertainty in Dataset Labels | p. 12, Table 2 | html-incomplete | converted by hand from the LaTeX source; the values and the text naming the cells remain |
+| Confident Learning. Estimating Uncertainty in Dataset Labels | p. 14, Table 5 | html-incomplete | converted by hand from the LaTeX source; the values and the text naming the cells remain |
+| QLoRA. Efficient Finetuning of Quantized LLMs | p. 5, Paged Optimizers paragraph | html-incomplete | a run-in heading set as a heading of its own; the sentence reads on from it and nothing is lost |
+| Understanding Diffusion Models. A Unified Perspective | Contents | html-incomplete | the HTML leaves the contents list out; the headings carry it |
 | Batch Normalization Explained | p. 8, Eq. 13 | html-latexml-macros | small: still readable |
 | Learning label-label correlations in Extreme Multi-label Classification via Label Features | p. 3, Eqs. 2-5 | html-latexml-macros | the paper's own macro (\probsymb), shown by name by design; readable |
 | Prevalence of Neural Collapse during the terminal phase of deep learning training | p. 4 Fig. 6 caption; p. 8 Theorem 4 proof | html-latexml-macros | the paper's own macros (\Tr, \Sw, \Sb), shown by name by design; readable |

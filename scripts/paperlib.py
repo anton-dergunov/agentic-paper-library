@@ -175,6 +175,24 @@ def read_paper(path):
 _REFERENCES = re.compile(r"^#{1,3} +(References|Bibliography|REFERENCES)\b.*$", re.M)
 
 
+def cited_after(body, after):
+    """The tables and figures `body` links whose captions are only in `after`: "Table 6".
+
+    arXiv's HTML places a float where its source declares it, so a results table the
+    main text cites can sit in an appendix; a reader shown the main text alone took it
+    for a table the conversion lost.
+    """
+    found = []
+    # "Table [6](#A3.T6)" or "[Table 6](#A3.T6)"
+    for kind, number in re.findall(r"\b(Table|Tab\.|Figure|Fig\.)\s*\[?\s*\[?([\w.]+)\]\(#[^)]*\)", body):
+        name = f"{'Table' if kind.startswith('Tab') else 'Figure'} {number}"
+        kinds = r"(?:Table|Tab\.)" if kind.startswith("Tab") else r"(?:Figure|Fig\.)"
+        caption = re.compile(rf"^{kinds} {re.escape(number)}[:.]", re.M | re.I)
+        if name not in found and caption.search(after) and not caption.search(body):
+            found.append(name)
+    return found
+
+
 def read_view(meta, body, appendix=False):
     """A paper as a reader needs it: main text only, without link targets or inline tags.
 
@@ -192,6 +210,7 @@ def read_view(meta, body, appendix=False):
         if appendix:
             following = re.search(r"^#{1,3} ", after, re.M)
             body, after = body + (after[following.start():] if following else ""), ""
+    elsewhere = cited_after(body, after)
     # An icon keeps its name ("[check-mark]"); a picture without one is "[figure]".
     body = re.sub(r"!\[([^\]]*)\]\([^)]*\)", lambda m: f"[{m.group(1).strip() or 'figure'}]", body)
     def img(m):
@@ -211,6 +230,8 @@ def read_view(meta, body, appendix=False):
     if later:
         sections = "1 section" if len(later) == 1 else f"{len(later)} sections"
         left_out += f" and {sections} after them (first: {later[0]})"
+    if elsewhere:
+        left_out += f". The main text cites {', '.join(elsewhere)} from there: not shown, not lost"
     if cut and appendix:
         left_out = "the reference list only; the appendices are included"
     note = (f"[End of the main text. Left out of this view: {left_out}.]" if cut

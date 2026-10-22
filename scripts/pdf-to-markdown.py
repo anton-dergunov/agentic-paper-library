@@ -573,6 +573,71 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     The second value is "model", "raw" or None (the paper has no equations);
     see the module docstring.
     """
+    parts, equations = layout_parts(pdf_path, images_dir, basename, equation_model, inline_math)
+    return assemble([part for _, part in parts]), equations
+
+
+# A page given to convert_pages is kept with this many words outside its pictures and
+# captions. A page whose text is all in a figure (a plot's labels, examples set as a
+# picture) has under 60; a page of prose or of a table has 300 or more.
+PAGE_WORDS = 100
+PAGE_WORD = re.compile(r"[A-Za-z]{2,}|\d+(?:\.\d+)?")
+
+
+def convert_pages(pdf_path, candidates, images_dir=None, basename=None, first_figure=1):
+    """Some pages of the PDF, for a paper whose arXiv HTML lacks them: ([(first page,
+    last page, markdown)] for each run of consecutive pages kept, the pages left out,
+    how equations were written).
+
+    A candidate page is kept when it has PAGE_WORDS words outside its pictures and
+    captions, or lies between two kept pages of the same run of candidates (a page of
+    figures in a stretch the HTML lacks). Figures are numbered from `first_figure`.
+    """
+    parts, equations, kept = layout_parts(pdf_path, images_dir, basename, True, True,
+                                          candidates=set(candidates), first_figure=first_figure)
+    runs = []
+    for page in sorted(kept):
+        if runs and page == runs[-1][1] + 1:
+            runs[-1][1] = page
+        else:
+            runs.append([page, page])
+    out = [(a, b, assemble([part for page, part in parts if a <= page <= b])) for a, b in runs]
+    return out, sorted(set(candidates) - kept), equations
+
+
+def assemble(parts):
+    """The markdown of a sequence of parts: split tables rejoined, consecutive list items one list."""
+    parts = join_split_tables(parts)
+    out = []
+    for prev, part in zip([""] + parts, parts):
+        is_item = re.match(r"(?:-|\d+[.)]) ", part) is not None
+        was_item = re.match(r"(?:-|\d+[.)]) ", prev) is not None
+        out.append(("\n" if is_item and was_item else "\n\n") + part)
+    return "".join(out).strip() + "\n"
+
+
+def keep_pages(doc, items, candidates):
+    """The candidate pages convert_pages keeps (see there)."""
+    from docling_core.types.doc import DocItemLabel as Label
+
+    words = Counter()
+    for item in items:
+        if item.prov and item.label not in (Label.PICTURE, Label.CHART, Label.CAPTION):
+            text = item.export_to_markdown(doc) if item.label == Label.TABLE else getattr(item, "text", "") or ""
+            words[item.prov[0].page_no] += len(PAGE_WORD.findall(text))
+    kept = {p for p in candidates if words[p] >= PAGE_WORDS}
+    for p in candidates - kept:
+        before = [q for q in kept if q < p and all(r in candidates for r in range(q, p))]
+        after = [q for q in kept if q > p and all(r in candidates for r in range(p, q))]
+        if before and after:
+            kept.add(p)
+    return kept
+
+
+def layout_parts(pdf_path, images_dir=None, basename=None, equation_model=True, inline_math=True,
+                 candidates=None, first_figure=1):
+    """[(page, markdown part)] in reading order, and how equations were written; with
+    `candidates`, only the pages keep_pages keeps, and those pages as a third value."""
     from docling.datamodel.base_models import InputFormat
     from docling.datamodel.pipeline_options import OcrMacOptions, PdfPipelineOptions, RapidOcrOptions
     from docling.document_converter import DocumentConverter, PdfFormatOption
@@ -591,9 +656,23 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
     options.generate_picture_images = bool(images_dir)
     options.images_scale = 2.0
     converter = DocumentConverter(format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=options)})
-    doc = converter.convert(pdf_path).document
+    span = (min(candidates), max(candidates)) if candidates else (1, sys.maxsize)
+    doc = converter.convert(pdf_path, page_range=span).document
 
     items = [item for item, _ in doc.iterate_items()]
+    placed = []
+    for item in items:
+        if item.label in (Label.SECTION_HEADER, Label.TITLE) and item.prov:
+            prov = item.prov[0]
+            height = doc.pages[prov.page_no].size.height
+            box = prov.bbox.to_top_left_origin(page_height=height)
+            placed.append((item, (tidy(item.text), prov.page_no, box.t, box.b, height)))
+    running = running_headers([h for _, h in placed])
+    dropped = {id(item) for item, h in placed if h[0] in running}
+    items = [item for item in items if id(item) not in dropped]
+    if candidates:
+        kept_pages = keep_pages(doc, items, candidates)
+        items = [item for item in items if item.prov and item.prov[0].page_no in kept_pages]
     headings = [tidy(i.text) for i in items if i.label in (Label.SECTION_HEADER, Label.TITLE)]
     # "I.INTRODUCTION": IEEE numbering, sometimes set without the space.
     headings = [re.sub(r"^([IVXL]+\.)(?=\S)", r"\1 ", h) for h in headings]
@@ -637,9 +716,12 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
 
     from paperlib import to_webp
 
-    parts, figures, last_numbered, titled = [], 0, None, False
+    # Pages from the middle of a paper (candidates) have no title; their figures follow the HTML's.
+    parts, figures, last_numbered, titled = [], first_figure - 1, None, bool(candidates)
+    part_pages, page = [], None  # the page of each part: of the item that added it
     captions = set()  # docling yields a caption with its table or figure, and again on its own
     for n, item in enumerate(items):
+        part_pages += [page] * (len(parts) - len(part_pages))
         page = item.prov[0].page_no if item.prov else None
         label = item.label
         if kinds.get(n) == "equation" and label != Label.FORMULA:
@@ -665,7 +747,7 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             kept = []
             for line in table.split("\n"):
                 if line.strip() and not line.lstrip().startswith("|"):
-                    key = " ".join(line.split())
+                    key = caption_key(line)
                     if key in captions:
                         continue
                     captions.add(key)
@@ -710,21 +792,16 @@ def convert_layout(pdf_path, images_dir=None, basename=None, equation_model=True
             equations = "model" if n in readings else equations
             # The second copy is not always labelled a caption, so a block
             # that reads as one ("Table 1: ...") counts too.
-            if label == Label.CAPTION or re.match(r"(?:Table|Figure|Fig\.) \d+[:.] ", text):
-                key = " ".join(text.split())
+            if label == Label.CAPTION or re.match(r"(?:Table|Figure|Fig\.) \d+[:.] ", caption_key(text)):
+                key = caption_key(text)
                 if key in captions:
                     continue
                 captions.add(key)
             parts.append(text)
+    part_pages += [page] * (len(parts) - len(part_pages))
 
-    parts = join_split_tables(parts)
-    # Consecutive list items form one list.
-    out = []
-    for prev, part in zip([""] + parts, parts):
-        is_item = re.match(r"(?:-|\d+[.)]) ", part) is not None
-        was_item = re.match(r"(?:-|\d+[.)]) ", prev) is not None
-        out.append(("\n" if is_item and was_item else "\n\n") + part)
-    return "".join(out).strip() + "\n", equations
+    parts = list(zip(part_pages, parts))
+    return (parts, equations, kept_pages) if candidates else (parts, equations)
 
 
 REREAD = Counter()  # number-only equations read again: "fixed", "raw" (the text layer's text), "left"
@@ -765,6 +842,31 @@ def reread_number_only(pdf_path, items, kinds, boxes, owners, readings, on_page)
             REREAD["raw"] += 1
         else:
             REREAD["left"] += 1
+
+
+# A heading set this close to the top or bottom edge (points) on three or more pages is
+# a running header docling took for one ("Anthropic" over every page of a report).
+RUNNING_BAND = 60
+
+
+def running_headers(headings):
+    """The texts of `headings` [(text, page, top, bottom, page height)] that are running
+    headers: in the band at the page's edge on three or more pages."""
+    pages = {}
+    for text, page, top, bottom, height in headings:
+        if bottom < RUNNING_BAND or top > height - RUNNING_BAND:
+            pages.setdefault(text, set()).add(page)
+    return {text for text, found in pages.items() if len(found) >= 3}
+
+
+def caption_key(text):
+    """A caption's first eight words without their marks and quotes. docling yields one copy
+    as the text layer has it and the other with the bold and underlining read from the page
+    ("**Table 2:** …"), and its mathematics read by the model ("$N_z = 64$" for "𝑁 z = 64"),
+    which comes later in the caption."""
+    text = re.sub(r"\*\*|</?u>|</?i>|(?<!\w)_|_(?!\w)", "", text.replace("∗", "*").replace("\\_", "_"))
+    text = re.sub(r"[\"'‘’“”]", "", text)
+    return re.sub(r" (?=[.,;:)])", "", " ".join(text.split()[:8]))
 
 
 def join_split_tables(parts):

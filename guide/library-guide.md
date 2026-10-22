@@ -33,6 +33,7 @@ A paper's markdown and PDF have the same topic path and filename stem.
   - `pdf-text` "by layout analysis": headings, tables and figures rebuilt around the PDF's text, each equation read from its image by a model. Check the PDF before quoting an equation or a table whose columns look off, and say that you did.
   - `pdf-text` "from the PDF text layer" (older): no tables or headings. Treat its equations, tables and numbers as unreliable; reconvert with `paperlib reconvert --pdf-text <paper.md>`.
   - `web`: converted from a web article; interactive figures are missing, and the PDF is the page printed by Chrome.
+  - Pages arXiv's HTML lacked sit between `<!-- pp. N–M from the PDF … -->` and `<!-- end of … -->` in an `html` paper: treat them as `pdf-text` by layout analysis.
 - **Prefer the local copy to the web.** Search the web only for work not in the library.
 - **Indexes are generated.** Never edit a `README.md` under `{{library}}/`. After adding, moving or removing a paper, or changing `{{catalog}}/`, run `paperlib build-index`, then `paperlib check`, which must pass.
 - **Don't re-propose skipped papers.** `paperlib lookup` flags those in `{{catalog}}/skipped.yaml` as `skipped earlier`. Record every new skip there, with the reason; if {{reader}} changes their mind, remove the entry first.
