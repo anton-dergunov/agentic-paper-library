@@ -865,6 +865,62 @@ def checks():
     yield "a panel without row labels gets its neighbour's", bool(
         __import__("re").search(r"\| PFOR +\| 440 +\| 6\.8", md)) and md.count("BP32") == 2
 
+    def stack(*lines, wrap=""):  # a cell's rows set as a one-column tabular nested in it
+        return (f'{wrap}<span class="ltx_tabular">' + "\n".join(f'<span class="ltx_tr">{td(t)}</span>' for t in lines)
+                + "</span>" + ("</span>" if wrap else ""))
+
+    def cells(*texts, border=""):
+        return '<tr class="ltx_tr">' + "".join(f'<td class="ltx_td{border}">{t}</td>' for t in texts) + "</tr>"
+
+    md, _ = convert('<table class="ltx_tabular">'
+                    + cells("FLOPs", stack("Total", "Params"), "Loss", stack("Optimal", "Params"), border=" ltx_border_tt")
+                    + cells("1e22", stack("3.86", "7.08", "9.50"), stack("2.488", '<span class="ltx_text ltx_font_bold">2.400</span>',
+                                                                          "2.406", wrap='<span class="ltx_text">'), "10B",
+                            border=" ltx_border_t")
+                    + cells("Q-Prop", stack("HalfCheetah", "Hopper"), stack("6000", "-"), stack("7490", "2604"))
+                    + cells(stack("ImageNet", "Cls (%)"), stack("76.3", "(+0.0)"), stack("77.4", "(+1.1)"), "")
+                    + "</table>")
+    yield "rows stacked in cells become rows, a one-line cell spanning them", (
+        '<td rowspan="3">1e22</td>' in md and "<td>3.86</td>\n<td>2.488</td>" in md
+        and "<td>9.50</td>\n<td>2.406</td>" in md and "<td><b>2.400</b></td>" in md and '<td rowspan="3">10B</td>' in md)
+    yield "a header's two-line titles and a value over its gain stay one cell", (
+        ">Total Params</t" in md and "<td>76.3 (+0.0)</td>" in md and "<td>Hopper</td>\n<td>-</td>\n<td>2604</td>" in md)
+
+    def table(*rows):  # cells as given: ("text", 'attrs') or "text"
+        return ('<table class="ltx_tabular">' + "".join(
+            '<tr class="ltx_tr">' + "".join(f'<td class="ltx_td"{c[1]}>{c[0]}</td>' if isinstance(c, tuple)
+                                            else f'<td class="ltx_td">{c}</td>' for c in row) + "</tr>" for row in rows)
+                + "</table>")
+
+    def panels(*tables):
+        return ('<figure class="ltx_table"><div class="ltx_flex_figure">' + "".join(
+            f'<figure class="ltx_table ltx_figure_panel">{t}</figure>' for t in tables)
+            + '</div><figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 3: </span>Results.</figcaption></figure>')
+
+    md, _ = convert(panels(table(["Method", "ViT", "Fine", "iNat"], [("Agglomerative", ' colspan="2"'), "", ""],
+                                 ["RADIO", "g/14", "93.9", "79.0"], [("Self-supervised", ' colspan="2"'), "", ""],
+                                 ["DINOv2", "g/14", "92.6", "80.7"], ["DINOv3", "7B/16", "93.0", "85.6"]),
+                           table(["Oxford", "Paris"], ["47.5", "85.7"], ["-", "84.6"], ["60.7", "87.1"])))
+    yield "a panel matched to the other's rows of values gets all its label columns", bool(
+        re.search(r"\| DINOv2 +\| g/14 +\| \\?- +\| 84\.6", md))
+    md, _ = convert(panels(table(["", "L2", "cos"], [("GloVe", ' colspan="3"')], ["MEN", "73.36", "80.49"], ["RW", "45.13", "51.04"]),
+                           table(["cos", "cos"], ["vector", "+ A"], [("GloVe", ' colspan="2"')], ["80.49", "82.58"], ["51.04", "57.87"])))
+    yield "a panel with a header of two rows and group headings gets the labels", (
+        md.count("<td>RW</td>") == 2 and bool(re.search(r"<td>RW</td>\s*<td>51\.04</td>\s*<td>57\.87", md)))
+
+    half = '<div class="ltx_flex_cell">{}</div>'
+    md, _ = convert('<figure class="ltx_table"><div class="ltx_flex_figure">'
+                    + half.format(table(["Dataset", "ERM"], ["Abalone", "74.0"], ["Arcene", "57.6"]))
+                    + half.format(table(["Dataset", "ERM"], ["Htru2", "2.0"], ["Iris", "21.3"])) + "</div>"
+                    '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 4: </span>Errors.</figcaption></figure>'
+                    '<figure class="ltx_table"><div class="ltx_flex_figure">'
+                    + half.format(table(["Dataset", "A"], ["Boston", "3.09"], ["Energy", "1.20"]))
+                    + half.format(table(["Dataset", "A"], ["Boston", "17.28"], ["Energy", "5.10"])) + "</div>"
+                    '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">Table 5: </span>RMSE and NLL.</figcaption></figure>')
+    yield "the halves of a table under the same titles are one table", (
+        md.count("Dataset") == 3 and bool(re.search(r"Arcene +\| 57\.6 +\|\n\| Htru2", md)))
+    yield "tables under the same titles over the same rows stay apart", md.count("| Boston") == 2 and md.count("| Dataset") == 3
+
     md, _ = convert('<table class="ltx_tabular"><tr class="ltx_tr"><td class="ltx_td ltx_border_tt">Task</td>'
                     '<td class="ltx_td ltx_border_tt">Domain</td><td class="ltx_td ltx_border_tt">Size</td></tr>'
                     '<tr class="ltx_tr"><td class="ltx_td ltx_border_t" rowspan="2">Retrieval</td><td class="ltx_td ltx_border_t">Web</td>'
@@ -1063,7 +1119,9 @@ def checks():
                "\\caption[]{Samples from our models}\\label{fig:samples}\\end{figure}")
     files, h2m.source_files = h2m.source_files, lambda version: {
         "paper.tex": "\\documentclass{article}" + table.format("blog") + table.format("flickr") + table.format("youtube") + samples
-                     + "\\begin{equation}x\\label{eq:objective}\\end{equation}"}
+                     + "\\begin{equation}x\\label{eq:objective}\\end{equation}"
+                     + "\\begin{table}\\subfloat[Presence\\label{subtab:presence}]{x}\\subfloat[Negatives\\label{subtab:hn}]{y}"
+                       "\\caption{Selected model and data ablations}\\end{table}"}
     resolved = h2m.unresolved_citations(
         caption.format(2, "BlogCatalog") + caption.format(3, "Flickr") + caption.format(4, "YouTube")
         + '<figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_figure">(a) </span>Normal model, no trigger</figcaption>'
@@ -1071,12 +1129,15 @@ def checks():
         + '<p>See Table <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:tbl:youtube</span> and '
         'Table <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:tbl:blog</span> and '
         'Figure <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:fig:samples</span>. '
-        'Eq. <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:eq:objective</span></p>',
+        'Eq. <span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:eq:objective</span> '
+        '(<span class="ltx_ref ltx_missing_label ltx_ref_self">LABEL:subtab:hn</span>)</p>'
+        + caption.format(8, "x").replace("Multi-label classification results in x", "Selected model and data ablations"),
         '<base href="/html/1403.6652v2/">')
     h2m.source_files = files
     yield "captions that open alike are numbered by their order in the source", "See Table 4 and Table 2 and" in resolved
     yield "a label takes the caption before it, not a sub-figure's", "and Figure 9." in resolved
-    yield "a label outside a float does not take the float's number", "Eq. objective</p>" in resolved
+    yield "a label outside a float does not take the float's number", "Eq. objective (" in resolved
+    yield "a label in a \\subfloat is the float's number and the panel's letter", "(8(b))</p>" in resolved
     yield "an empty reference is found in the LaTeX source", (
         h2m.label_in_source("17 widely used <em>agentic</em> benchmarks (Table ", tex) == "tab:all"
         and h2m.label_in_source("held out. As shown in Figure ", tex) == "fig:flow"

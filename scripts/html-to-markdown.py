@@ -44,12 +44,15 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
 13. The names of macros LaTeXML did not know are dropped, a value and the
     deviation printed small after it are set apart, and a column title's
     raised line is read first (see drop_undefined_macros, tidy_cells).
-14. A table panel gets the row labels it shares with the panel beside it,
-    a row label spanning a group of rows takes the group's last row, a
+14. A row whose cells stack several rows' values becomes those rows, a
+    table panel gets the row labels it shares with the panel beside it,
+    the halves of a table set side by side are one table, a row label
+    spanning a group of rows takes the group's last row, a
     group's label every row of the group, a \\multirow LaTeXML dropped its
     span from the LaTeX source, and a cell's text continued on a row of its
-    own joins it (see share_panel_labels, extend_rowspans, span_group_labels,
-    source_row_spans, merge_continuation_rows).
+    own joins it (see split_stacked_rows, share_panel_labels,
+    join_table_halves, extend_rowspans, span_group_labels, source_row_spans,
+    merge_continuation_rows).
 15. A symbol set as a small picture becomes its file's name or what a vision
     model reads in it (see small_pictures, picture_text), and a link to the
     paper's own arXiv page an in-page link (see local_links).
@@ -684,6 +687,8 @@ TEX_REF = r"\\(?:ref|cref|Cref|autoref|vref)\*?\{([^}]+)\}"
 TEX_CITE = r"\\[a-zA-Z]*cite[a-zA-Z]*\*?(?:\[[^\]]*\])*\{([^}]+)\}"
 TEX_FLOAT = re.compile(r"\\begin\{(table|figure|algorithm)\*?\}")
 TEX_CAPTION = re.compile(r"\\caption\*?\s*(?:\[[^\]]*\])?\s*\{")
+# Where a panel of a float opens: subfig's commands, or subcaption's environments (group 1).
+TEX_PANEL = re.compile(r"\\(?:subfloat|subcaptionbox|subtable|subfigure)\b(?!\s*\})|\\begin\{(sub(?:table|figure))\}")
 # A citation command LaTeXML did not know leaves no key at all: "( ?)".
 UNKNOWN_CITATION = re.compile(r"\(\s\?\)|\[\s?\?\]")
 # What may stand between two words of a sentence in its LaTeX source.
@@ -736,7 +741,8 @@ def unresolved_citations(article, page):
     table or figure LaTeXML lost ("Table LABEL:tab:x") gets its number from
     the float whose caption follows that \\label in the source, one to a
     section the number of the section the label follows (see
-    section_numbers), or else it shows the label's name. Where not even the label is left ("Table "), it
+    section_numbers), one to a panel of a float the float's number and the
+    panel's letter ("8(b)"), or else it shows the label's name. Where not even the label is left ("Table "), it
     is the one the same sentence refers to in the source.
     """
     keys = list(dict.fromkeys(k.strip() for k in MISSING_CITATION.findall(article)))
@@ -783,6 +789,16 @@ def unresolved_citations(article, page):
             end = tex_group_end(tex, caption.end() - 1) or len(tex)
             return plain_words(tex[caption.end():min(end, caption.end() + 200)])[:5]
 
+        def tag_of(caption):
+            """The tag of the float whose caption opens as this one in the source ("Table 3")."""
+            start = opening(caption)
+            same = [tag for tag, body in captions if start and body[:len(start)] == start]
+            if len(same) > 1:
+                # Captions that open alike ("… results in \\flickr") are told apart by their order in the source.
+                alike = [m.start() for m in TEX_CAPTION.finditer(tex) if opening(m) == start]
+                same = [same[alike.index(caption.start())]] if len(alike) == len(same) else []
+            return same[0] if same else None
+
         def number(label):
             if label in sections:
                 return sections[label][0]
@@ -795,18 +811,22 @@ def unresolved_citations(article, page):
             end = closed.start() if closed else len(tex)
             caption = None
             if opened and at < end:
+                # A label inside a panel (\\subfloat, a subtable) is the float's number and the panel's letter.
+                panels = list(TEX_PANEL.finditer(tex, opened.end(), at))
+                inner = [(b.start(), (e.end() if (e := re.compile(r"\\end\{%s\}" % b.group(1)).search(tex, b.end(), end)) else end))
+                         for b in re.finditer(r"\\begin\{(sub(?:table|figure))\}", tex[:end]) if b.start() >= opened.end()]
+                last = panels[-1] if panels else None
+                if last and (last.group(1) and not any(a <= last.start() < b <= at for a, b in inner)
+                             or not last.group(1) and not TEX_CAPTION.search(tex, last.end(), at)):
+                    main = next((c for c in TEX_CAPTION.finditer(tex, opened.end(), end)
+                                 if not any(a <= c.start() < b for a, b in inner)), None)
+                    tag = main and tag_of(main)
+                    if tag:
+                        return f"{tag.split()[-1]}({'abcdefghijklmnopqrstuvwxyz'[min(len(panels), 26) - 1]})"
                 caption = (max(TEX_CAPTION.finditer(tex, opened.end(), at), key=lambda m: m.start(), default=None)
                            or TEX_CAPTION.search(tex, at, end))
-            if caption:
-                start = opening(caption)
-                same = [tag for tag, body in captions if start and body[:len(start)] == start]
-                if len(same) > 1:
-                    # Captions that open alike ("… results in \\flickr") are told apart by their order in the source.
-                    alike = [m.start() for m in TEX_CAPTION.finditer(tex) if opening(m) == start]
-                    same = [same[alike.index(caption.start())]] if len(alike) == len(same) else []
-                if same:
-                    return same[0].split()[-1]  # "Table 3" -> "3", after the "Table" already in the text
-            return label.split(":", 1)[-1]
+            tag = caption and tag_of(caption)
+            return tag.split()[-1] if tag else label.split(":", 1)[-1]  # "Table 3" -> "3", after the "Table" already in the text
 
         def from_source(m):
             label = label_in_source(article[max(0, m.start() - 400):m.start()], tex)
@@ -1728,6 +1748,162 @@ def mark_shading(article, rule=None):
 
 
 FIRST_CELL = re.compile(r"\s*<(t[dh])\b([^>]*)>(.*?)</\1\s*>", re.S)
+# Any tag, opening, closing or self-closed, skipping over quoted attribute values.
+ANY_TAG = re.compile(r"""<(/?)([a-zA-Z][\w:.-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)(/?)>""")
+TABULAR_START = re.compile(r'<(table|span)\b[^>]*\bclass="[^"]*\bltx_tabular\b[^"]*"[^>]*>')
+
+
+def child_elements(fragment):
+    """The top-level elements of an HTML fragment: (start, end, tag, attrs, inner start, inner end)."""
+    out, stack = [], []
+    for t in ANY_TAG.finditer(fragment):
+        name = t.group(2).lower()
+        if t.group(1):
+            if not any(s[0] == name for s in stack):
+                continue
+            while stack[-1][0] != name:
+                stack.pop()
+            name, start, attrs, inner = stack.pop()
+            if not stack:
+                out.append((start, t.end(), name, attrs, inner, t.start()))
+        elif not t.group(4) and name not in VOID:
+            stack.append((name, t.start(), t.group(3), t.end()))
+    return out
+
+
+def own_rows(fragment, offset=0):
+    """The rows directly inside a table's inner HTML (in its head, body or foot too), not
+    those of the tables nested in its cells, as child_elements gives them, shifted by `offset`."""
+    rows = []
+    for e in child_elements(fragment):
+        if e[2] == "tr" or re.search(r'\bclass="[^"]*\bltx_tr\b', e[3]):
+            rows.append((e[0] + offset, e[1] + offset, e[2], e[3], e[4] + offset, e[5] + offset))
+        elif e[2] in ("thead", "tbody", "tfoot") or re.search(r'\bclass="[^"]*\bltx_t(?:head|body|foot)\b', e[3]):
+            rows += own_rows(fragment[e[4]:e[5]], offset + e[4])
+    return rows
+
+
+def stack_lines(inner):
+    """A cell's lines when it is a stack, a one-column tabular nested in it with nothing
+    else in the cell but what wraps the tabular (bold, a colour): each line wrapped the
+    same way. None for any other cell."""
+    m = TABULAR_START.search(inner)
+    end = m and balanced_end(inner, m.start(), m.group(1))
+    if not end or TABULAR_START.search(inner, end):
+        return None
+    before, after = inner[:m.start()], inner[end:]
+    if cell_text(before + after) or re.search(r"<(?:img|svg|object|math)\b", before + after):
+        return None
+    tabular = inner[m.start():end]
+    outer = child_elements(tabular)[0]
+    lines = []
+    for row in own_rows(tabular[outer[4]:outer[5]], outer[4]):
+        cells = [c for c in child_elements(tabular[row[4]:row[5]])
+                 if c[2] in ("td", "th") or re.search(r'\bclass="[^"]*\bltx_td\b', c[3])]
+        if len(cells) != 1:
+            return None
+        lines.append(before + tabular[row[4] + cells[0][4]:row[4] + cells[0][5]] + after)
+    return lines
+
+
+# A value as a table cell holds it: a number, perhaps with a deviation or significance stars.
+VALUE = re.compile(r"[(\[]?[-+−±~≈<>]?\d[\d.,]*(?:[eE][-+−]?\d+)?\s*[%KMBTkx×]?\**[)\]]?|[±*†‡]+")
+
+
+def is_values(fragment):
+    """Whether a cell's text is numbers alone (a formula counts as one): "2.488", "0.55 0.45", "20.65***"."""
+    text = cell_text(re.sub(r"<math\b.*?</math>", " 0 ", fragment, flags=re.S))
+    return bool(text) and all(VALUE.fullmatch(t) for t in text.split())
+
+
+def split_stacked_rows(article):
+    """Split a row that stacks several rows in its cells into those rows.
+
+    Some authors set a group of rows as one, each cell a one-column tabular
+    with a line per row: a FLOPs budget's four model sizes, their losses and
+    their token counts in three cells of one row (PaLM 2 Table 1), train over
+    test. Joined into one cell each, the values can be matched across columns
+    only by counting. Where at least two cells, and at least half of the filled
+    ones, are stacks of the same height, and one of them holds values (numbers
+    alone on every line), the row becomes that many rows, line by line; a cell of one
+    line (the label the rows share) spans them, and so does a cell spanning the
+    row from above, and so does a stack whose lines read as one text: a label
+    wrapped ("Q-Prop" over "(DDPG)"), a value over its gain ("76.3" over
+    "(+0.0)"), a list going on after a comma. A header row (the first, the
+    <thead>'s, a stack of column titles) keeps its titles' lines, and a lone
+    stack stays one cell.
+    """
+    def wrapped(lines):
+        texts = [cell_text(re.sub(r"<math\b.*?</math>", " M ", line, flags=re.S)) for line in lines]
+        return any(GOES_ON.search(upper) and not re.fullmatch(r"[-–—]", upper) or CARRIES_ON.match(lower)
+                   for upper, lower in zip(texts, texts[1:]))  # a lone dash is a value missing
+
+    def unruled(attrs, side):
+        return re.sub(rf"\bltx_border_{side}{side}?\b\s?", "", re.sub(r'\s+id="[^"]*"', "", attrs))
+
+    out, pos = [], 0
+    for table in re.finditer(r"<table\b", article):
+        end = balanced_end(article, table.start(), "table")
+        if table.start() < pos or end is None:
+            continue
+        body = article[table.start():end]
+        if body.count("ltx_tabular") < 3:
+            continue
+        outer = child_elements(body)[0]
+        rows = own_rows(body[outer[4]:outer[5]], outer[4])
+        head = re.search(r"<thead\b.*?</thead\s*>", body, re.S)
+        cells, splits = [], {}  # splits: row -> (height, {cell: lines})
+        for r, row in enumerate(rows):
+            cells.append([(a + row[4], b + row[4], tag, attrs, i + row[4], j + row[4])
+                          for a, b, tag, attrs, i, j in child_elements(body[row[4]:row[5]]) if tag in ("td", "th")])
+            if r == 0 or head and row[0] < head.end():
+                continue
+            # A stack whose lines read as one text wrapped ("Q-Prop" over "(DDPG)", a value over
+            # its gain, a list going on after a comma) is one cell, which the new rows share.
+            lines_of = {k: stack_lines(body[c[4]:c[5]]) for k, c in enumerate(cells[r])}
+            stacks = {k: lines for k, lines in lines_of.items() if lines and not wrapped(lines)}
+            heights = {len(lines) for lines in stacks.values()}
+            filled = [c for c in cells[r] if cell_text(body[c[4]:c[5]]) or re.search(r"<(?:img|svg|object|math)\b", body[c[4]:c[5]])]
+            if (len(stacks) < 2 or len(heights) != 1 or min(heights) < 2 or 2 * len(stacks) < len(filled)
+                    or any(re.search(r'\b(?:row|col)span="(?!1")', cells[r][k][3]) or "ltx_th_column" in cells[r][k][3]
+                           for k in stacks)
+                    or any(TABULAR_START.search(body[c[4]:c[5]]) for k, c in enumerate(cells[r]) if not lines_of[k])
+                    or not any(all(is_values(line) for line in lines) for lines in stacks.values())):
+                continue
+            splits[r] = (min(heights), stacks)
+        if not splits:
+            continue
+        edits = []
+        for r, row in enumerate(rows):
+            spans = {}
+            for k, c in enumerate(cells[r]):
+                span = re.search(r'\browspan="(\d+)"', c[3])
+                down = int(span.group(1)) if span else 1
+                grow = sum(splits[j][0] - 1 for j in range(r, r + down) if j in splits and (j > r or k not in splits[r][1]))
+                if grow:
+                    spans[k] = re.sub(r'\s*\browspan="\d+"', "", c[3]) + f' rowspan="{down + grow}"'
+            if r not in splits and not spans:
+                continue
+            opening, closing = body[row[0]:row[4]], body[row[5]:row[1]]
+            height, stacks = splits.get(r, (1, {}))
+            lines = []
+            for line in range(height):
+                parts = []
+                for k, c in enumerate(cells[r]):
+                    if k in stacks:
+                        attrs = c[3] if line == 0 else unruled(c[3], "t")
+                        attrs = attrs if line == height - 1 else unruled(attrs, "b")
+                        parts.append(f"<{c[2]}{attrs}>{stacks[k][line]}</{c[2]}>")
+                    elif line == 0:
+                        parts.append(f"<{c[2]}{spans.get(k, c[3])}>{body[c[4]:c[5]]}</{c[2]}>")
+                lines.append((opening if line == 0 else re.sub(r'\s+id="[^"]*"', "", opening)) + "".join(parts) + closing)
+            edits.append((row[0], row[1], "".join(lines)))
+        for a, b, new in sorted(edits, reverse=True):
+            body = body[:a] + new + body[b:]
+        out.append(article[pos:table.start()])
+        out.append(body)
+        pos = end
+    return "".join(out) + article[pos:]
 
 
 def extend_rowspans(article):
@@ -2328,31 +2504,119 @@ def span_header_rows(article):
 PANEL = re.compile(r'<figure\b[^>]*\bclass="[^"]*\bltx_figure_panel\b[^"]*"[^>]*>')
 
 
-def panel_rows(table):
-    """A panel table's rows as lists of whole cells, or None when a cell spans rows or columns."""
-    if re.search(r'\b(?:row|col)span="', table):
-        return None
-    return [(row.start(1), [cell.group(0) for cell in TABLE_CELL.finditer(row.group(1))])
-            for row in TABLE_ROW.finditer(table)]
+def is_number(text):
+    """Whether a cell's text is a number, or a dash for one missing."""
+    return bool(re.fullmatch(r"[-+−±<>≈~]?\$?\d[\d.,]*\s*[%KMBkx×]?|[-–—]", text))
 
 
-def numeric_share(cells):
+def numeric_share(texts):
     """The share of a column's filled cells that hold a number."""
-    texts = [t for t in (cell_text(re.sub(r"<math\b.*?</math>", "0", c, flags=re.S)) for c in cells) if t]
-    return sum(bool(re.fullmatch(r"[-+−±<>≈~]?\$?\d[\d.,]*\s*[%KMBkx×]?", t)) for t in texts) / max(len(texts), 1)
+    texts = [t for t in texts if t]
+    return sum(map(is_number, texts)) / max(len(texts), 1)
+
+
+def own_text(at, r, c):
+    """The text of the cell that starts at row r, column c of a grid (see table_grid),
+    a formula counting as a number; "" where no cell starts there."""
+    o = at.get((r, c))
+    return cell_text(re.sub(r"<math\b.*?</math>", " 0 ", o[2].group(3), flags=re.S)) if o and o[:2] == (r, c) else ""
+
+
+def panel_layout(table, labels=None):
+    """A panel table's rows, its grid (see table_grid), its width, the number of
+    leading columns that name its rows (found when not given), and each row's
+    kind: "H" a header row, "G" a group's heading (one cell across, or a name
+    with no values), "D" a row of values. None for a table nested or too small."""
+    if table.count("<table") > 1:
+        return None
+    rows, at = table_grid(table)
+    width = 1 + max((c for _, c in at), default=-1)
+    if len(rows) < 3 or width < 2:
+        return None
+
+    def kinds(n):
+        out = ""
+        for r in range(len(rows)):
+            own = [o for (i, c), o in at.items() if i == r and o[:2] == (r, c)]
+            values = [t for c in range(n, width) if (t := own_text(at, r, c))]
+            if len(own) == 1 and own[0][4] == width or n and not values and any(own_text(at, r, c) for c in range(n)):
+                out += "G"
+            else:
+                out += "D" if values and numeric_share(values) >= 0.5 else "H"
+        return out
+
+    if labels is None:
+        found = kinds(0)
+        data = [r for r in range(len(rows)) if found[r] == "D" and "D" in found[:r + 1]]
+        labels = 0
+        while labels < width - 1 and numeric_share([own_text(at, r, labels) for r in data]) < 0.2:
+            labels += 1
+    return rows, at, width, labels, kinds(labels)
+
+
+def header_rows(kinds):
+    return len(kinds) - len(kinds.lstrip("H"))
 
 
 def share_panel_labels(article):
     """Give a table panel the row labels it shares with the panel beside it.
 
     A float of several tables side by side often names the rows in the left
-    panel only: the right one has the same rows in the same order and one
-    column fewer, and read on its own its numbers belong to nothing. Each
-    such panel gets the first column of the last panel that had one, when
-    that column is names and the panel's own first column is numbers.
+    panel only: the right one has the same rows in the same order and fewer
+    columns, and read on its own its numbers belong to nothing. Such a panel
+    gets the label columns (those of names) of the last panel that had them,
+    when its own first column is numbers and the two panels' rows match: kind
+    by kind (header, group heading, values), or its rows of values with the
+    other's, whose group headings it lacks. The labels' titles span a header
+    of more rows, and a group heading across the panel widens with it.
     """
+    def cell(o, rowspan=None):
+        attrs = re.sub(r'\s*\browspan="\d+"', "", o[2].group(2)) if rowspan is not None else o[2].group(2)
+        span = f' rowspan="{rowspan}"' if rowspan and rowspan > 1 else ""
+        return f"<{o[2].group(1)}{attrs}{span}>{o[2].group(3)}</{o[2].group(1)}>"
+
+    def labels_for(body, layout, labelled):
+        """The edits that give a panel the labels of `labelled`, or None when its rows do not match."""
+        rows, at, width, _, kinds = layout
+        lrows, lat, lwidth, n, lkinds = labelled
+        heads, lheads = header_rows(kinds), header_rows(lkinds)
+        if kinds[heads:] == lkinds[lheads:]:
+            pairs, whole = list(zip(range(heads, len(rows)), range(lheads, len(lrows)))), True
+        elif set(kinds[heads:]) == {"D"} and kinds[heads:] == lkinds[lheads:].replace("G", ""):
+            pairs, whole = list(zip(range(heads, len(rows)), [r for r in range(lheads, len(lrows)) if lkinds[r] == "D"])), False
+        else:
+            return None
+        if (lwidth - n != width or bool(heads) != bool(lheads)
+                or numeric_share([own_text(at, r, 0) for r in range(len(rows)) if kinds[r] == "D"]) <= 0.6
+                # a label cell running on into the values
+                or any(o[1] + o[4] > n for (r, c), o in lat.items() if c < n and o[:2] == (r, c) and lkinds[r] == "D")):
+            return None
+        edits = []  # (start, end, text) in the panel's table
+        if heads:
+            titles = []
+            for c in range(n):
+                o = lat.get((lheads - 1, c))
+                titles.append(cell(o, heads) if o and o[1] == c else
+                              f'<td rowspan="{heads}"></td>' if heads > 1 else "<td></td>")
+            edits.append((rows[0].start(1), rows[0].start(1), "".join(titles)))
+        for r, lr in pairs:
+            if kinds[r] == "G":
+                o = next(o for (i, c), o in sorted(at.items()) if i == r and o[0] == r)
+                span = re.search(r'\bcolspan="(\d+)"', o[2].group(2))
+                if span:
+                    edits.append((o[2].start(2) + span.start(1), o[2].start(2) + span.end(1), str(int(span.group(1)) + n)))
+                continue
+            labels = ""
+            for c in range(n):
+                o = lat.get((lr, c))
+                # Row by row a label keeps its span; matched to rows of values only, it is repeated.
+                if o and o[1] == c and (o[0] == lr or not whole):
+                    labels += cell(o) if whole else cell(o, 1)
+            edits.append((rows[r].start(1), rows[r].start(1), labels))
+        return edits
+
     out, pos = [], 0
-    labelled = None  # (end of its float, rows) of the last panel with a label column
+    labelled = None  # (end of its float, layout) of the last panel with label columns
     for m in PANEL.finditer(article):
         end = balanced_end(article, m.start(), "figure")
         table = re.search(r"<table\b", article[m.start():end or m.start()])
@@ -2360,25 +2624,98 @@ def share_panel_labels(article):
             continue
         begin = m.start() + table.start()
         table_end = balanced_end(article, begin, "table")
-        rows = panel_rows(article[begin:table_end]) if table_end else None
-        if not rows or len(rows) < 3 or len({len(cells) for _, cells in rows}) != 1:
-            labelled = None
+        if table_end is None:
             continue
-        width = len(rows[0][1])
+        body = article[begin:table_end]
         # Panels of one float follow each other with only layout between them.
         beside = labelled and not re.search(r"<(?:p|h\d|section)\b", article[labelled[0]:m.start()])
-        if (beside and len(labelled[1]) == len(rows) and len(labelled[1][0][1]) == width + 1
-                and numeric_share(cells[0] for _, cells in labelled[1]) < 0.2
-                and numeric_share(cells[0] for _, cells in rows) > 0.6):
-            body = article[begin:table_end]
-            for (at, _), (_, cells) in reversed(list(zip(rows, labelled[1]))):
-                body = body[:at] + cells[0] + body[at:]
-            out.append(article[pos:begin])
-            out.append(body)
-            pos = table_end
-            labelled = (end, labelled[1])
-        else:
-            labelled = (end, rows)
+        layout = panel_layout(body, 0) if beside else None
+        edits = layout and labels_for(body, layout, labelled[1])
+        if not edits:
+            own = panel_layout(body)
+            labelled = (end, own) if own and own[3] else None
+            continue
+        for a, b, text in sorted(edits, reverse=True):
+            body = body[:a] + text + body[b:]
+        out.append(article[pos:begin])
+        out.append(body)
+        pos = table_end
+        labelled = (end, labelled[1])
+    return "".join(out) + article[pos:]
+
+
+def join_table_halves(article):
+    """Join the halves of a table set side by side in one float into one table.
+
+    A long table is often wrapped into halves beside each other, the same
+    column titles over each and the rows going on (mixup Table 4's datasets).
+    LaTeXML keeps them as tables of their own, which read as two tables where
+    the paper has one. Tables of the same width that follow each other in one
+    float, with nothing but layout between them (no caption, no text), the
+    second repeating the first's titles over rows of other names, are joined,
+    and the repeated titles dropped. Tables under the same titles with the
+    same rows (one per metric, told apart by the caption alone) stay apart,
+    and so do tables of the same rows under other titles (a wide table
+    wrapped), each read with its own titles.
+    """
+    def texts(body, row):
+        return tuple(cell_text(c.group(3)) for c in TABLE_CELL.finditer(body, row.start(1), row.end(1)))
+
+    def joined(first, second):
+        """The two tables as one, or None when they are not halves of one."""
+        if first.count("<table") > 1 or second.count("<table") > 1:
+            return None
+        one, two = panel_layout(first, 0), panel_layout(second, 0)
+        if not one or not two or one[2] != two[2]:
+            return None
+        rows, others = one[0], two[0]
+        repeated = 0
+        while (repeated < min(len(rows), len(others)) - 1 and any(texts(first, rows[repeated]))
+               and texts(first, rows[repeated]) == texts(second, others[repeated])):
+            repeated += 1
+        labels = [[own_text(at, r, 0) for r in range(len(kinds)) if kinds[r] == "D"] for _, at, _, _, kinds in (one, two)]
+        # Under the same titles the second goes on with other rows.
+        if (not repeated or not labels[0] or not labels[1] or numeric_share(labels[0] + labels[1]) > 0.2
+                or set(labels[0]) & set(labels[1])):
+            return None
+        added = "".join(second[r.start():r.end()] for r in others[repeated:])
+        close = re.search(r"(?:</tbody\s*>\s*)?</table\s*>\s*$", first)
+        return first[:close.start()] + added + first[close.start():]
+
+    out, pos = [], 0
+    for m in TABLE_FLOAT.finditer(article):
+        end = balanced_end(article, m.start(), "figure")
+        if m.start() < pos or end is None:
+            continue
+        seg, tables, at = article[m.start():end], [], 0
+        while (t := re.compile(r"<table\b").search(seg, at)):
+            close = balanced_end(seg, t.start(), "table")
+            if close is None:
+                break
+            tables.append([t.start(), close])
+            at = close
+        if len(tables) < 2:
+            continue
+        changed = False
+        i = 0
+        while i + 1 < len(tables):
+            (a, b), (c, d) = tables[i], tables[i + 1]
+            one = re.fullmatch(r"(?:\s|</?(?:div|span|figure)\b[^>]*>)*", seg[b:c]) and joined(seg[a:b], seg[c:d])
+            if not one:
+                i += 1
+                continue
+            seg = seg[:a] + one + seg[b:c] + seg[d:]
+            shift = len(one) - (b - a) - (d - c)
+            tables[i] = [a, a + len(one)]
+            del tables[i + 1]
+            for t in tables[i + 1:]:
+                t[0] += shift
+                t[1] += shift
+            changed = True
+        if changed:
+            out.append(article[pos:m.start()])
+            out.append(seg)
+            pos = end
     return "".join(out) + article[pos:]
 
 
@@ -2576,12 +2913,14 @@ def main(html_path, body_path, images_dir, basename):
     article = drop_tex_residue(article)
     article = fix_text_encoding(article)
     article = tidy_cells(article)
+    article = split_stacked_rows(article)
     article = extend_rowspans(article)
     article = span_group_labels(article)
     article = source_row_spans(article, page)
     article = merge_continuation_rows(article)
     article = end_guessed_heads(article)
     article = span_header_rows(article)
+    article = join_table_halves(article)
     article = share_panel_labels(article)
     article = mark_shading(article)
     article = bare_year_citations(article)

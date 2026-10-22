@@ -45,8 +45,6 @@ Papers and key-content counts from the library `papers` on 2026-10-22.
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 20 |  | engine: medium, a fixture; reconvert the papers |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 16 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 15 |  | engine: medium; reconvert the papers overnight |
-| [Rows stacked inside cells come out as one row](html-stacked-cell-rows.md) | `engine` `reconvert` | open | 14 |  | engine: medium, fixtures from the papers below; reconvert the papers |
-| [A table set as side-by-side panels loses its row labels or splits](html-table-panels.md) | `engine` `reconvert` | open | 11 |  | engine: medium, beside share_panel_labels; reconvert the papers with table panels |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 10 |  | engine: medium for one paper, or by hand |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open | 7 |  | engine: small; reconvert 5 papers |
 | [A row label typed in pieces on the data rows it covers](html-label-in-pieces.md) | `engine` `reconvert` | open | 4 |  | engine: medium, with the LaTeX source; reconvert the papers |
@@ -67,7 +65,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (11 records)
 
-Problems in single papers left as they are (72):
+Problems in single papers left as they are (73):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -113,6 +111,7 @@ Problems in single papers left as they are (72):
 | Continual Learning of Large Language Models. A Comprehensive Survey | pp. 11-12, Table 2 | html-table-colours | by design: the caption names no colour; the groups can be rebuilt from the columns |
 | Entropic Out-of-Distribution Detection. Seamless Detection of Unknown Examples | Table I, Table III (pp. 8-12) | html-table-colours | by design: the captions name no colour; the bold survives |
 | Swap-guided Preference Learning for Personalized Reinforcement Learning from Human Feedback | p. 8, Table 1 | html-table-colours | by design: the caption names no colour; the runs show as AU = 0.00 |
+| Don't Stop Pretraining. Adapt Language Models to Domains and Tasks | p. 5, Table 6 | html-table-panels | a wide table wrapped by columns: each half keeps its own column titles, which joining would turn into body rows |
 | BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval | p. 3, Table 1 | html-table-structure | small: the merged cells read by order |
 | Chain-of-Verification Reduces Hallucination in Large Language Models | p. 6, Table 1 | html-table-structure | small: Table 1's header spans sit one column off in arXiv's HTML, and the table reads by order |
 | Feature Learning in Infinite-Width Neural Networks | p. 28, Table 2 | html-table-structure | small: arXiv's HTML lays the table out the same way, and it reads by column |
@@ -146,8 +145,10 @@ Problems in single papers left as they are (72):
 
 ## Done
 
-Fixed and reconverted (20), latest first:
+Fixed and reconverted (22), latest first:
 
+- 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)
+- 2026-10-22: [Rows stacked inside cells come out as one row](done/html-stacked-cell-rows.md)
 - 2026-10-22: [References to floats that share an anchor print the wrong number](done/html-shared-float-anchor.md)
 - 2026-10-22: [The "~" or "≈" before a number is lost](done/html-approx-sign-lost.md)
 - 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
