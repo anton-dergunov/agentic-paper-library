@@ -153,16 +153,34 @@ def text_words(text):
     return re.findall(r"[a-z]{3,}", re.sub(r"-\n", "", text.translate(LIGATURES)).lower())
 
 
+# Pages missing-pages.py has handled: taken from the PDF, or left out as text inside pictures.
+HANDLED = re.compile(r"<!-- pp?\. ([\d–, ]+?) (?:from the PDF, not in arXiv's HTML|of the PDF left out)")
+
+
+def handled_pages(markdown):
+    """The PDF pages the markdown's splice markers name ("pp. 9–10, 12" → 9, 10, 12)."""
+    pages = set()
+    for spans in HANDLED.findall(markdown):
+        for span in spans.split(","):
+            a, _, b = span.strip().partition("–")
+            if a.isdigit():
+                pages.update(range(int(a), int(b or a) + 1))
+    return pages
+
+
 def missing_pages(doc, markdown):
     """(pages of the PDF whose text the markdown lacks, pages with text): 1-based.
 
     A page with 120 or more words is missing when under a quarter of its
     three-word sequences occur in the markdown. A page of references (twelve
     years and a venue) is not counted: arXiv's HTML often sets the list
-    differently.
+    differently. Nor is a page missing-pages.py handled: taken from the PDF
+    (its text can still read as missing where docling took part of it for a
+    picture) or left out because its text is inside a picture.
     """
     words = text_words(markdown)
     known = set(zip(words, words[1:], words[2:]))
+    handled = handled_pages(markdown)
     missing, texty = [], 0
     for number, page in enumerate(doc, 1):
         text = page.get_text()
@@ -170,6 +188,8 @@ def missing_pages(doc, markdown):
         if len(words) < 120:
             continue
         texty += 1
+        if number in handled:
+            continue
         grams = list(zip(words, words[1:], words[2:]))
         if sum(g in known for g in grams) >= 0.25 * len(grams):
             continue

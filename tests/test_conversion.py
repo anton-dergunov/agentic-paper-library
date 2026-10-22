@@ -1634,6 +1634,10 @@ def checks():
     yield "pages of the PDF the markdown lacks are found, a page of references aside", (
         (lacking, texty) == ([3, 4, 5], 6) and page_map.page_ranges([3, 4, 5, 9]) == "3–5, 9")
 
+    handled = "<!-- pp. 3–4 from the PDF, not in arXiv's HTML. … -->\n\n<!-- p. 5 of the PDF left out: its text is inside pictures, which the HTML has -->"
+    yield "pages the splice took or left out are not missing", (
+        page_map.handled_pages(handled + "\n<!-- pp. 9–10, 12 from the PDF, not in arXiv's HTML -->") == {3, 4, 5, 9, 10, 12}
+        and page_map.missing_pages(doc, said[0] + "\n\n" + said[1] + "\n\n" + handled)[0] == [])
     splice = load("missing-pages")
     doc = pymupdf.open()
     for text in said[:3] + ["Figure 4"] + said[3:]:

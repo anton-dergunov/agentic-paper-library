@@ -21,8 +21,10 @@ table from it:
     …
     <!-- end of pp. 10–55 from the PDF -->
 
-Its figures are numbered after the HTML's. Prints one line: the pages taken, and those
-left out.
+Its figures are numbered after the HTML's. Pages left out are named in a marker where they
+would go (`<!-- p. 71 of the PDF left out: … -->`), and page-map.py's measure skips the pages
+both markers name, so a paper is not reported as lacking them and running this again adds
+nothing. Prints one line: the pages taken, and those left out.
 """
 
 import importlib.util
@@ -38,6 +40,7 @@ REFERENCES = re.compile(r"^#{1,3} +(?:References|Bibliography|REFERENCES)\b")
 REFERENCES_LINE = re.compile(r"(?:\d+\.?\s+)?(?:References|Bibliography|REFERENCES|BIBLIOGRAPHY)")
 MARK = ("<!-- {pages} from the PDF, not in arXiv's HTML. Converted by layout analysis{equations};"
         " check the PDF before quoting a table whose columns look off. -->")
+LEFT_OUT = "<!-- {pages} of the PDF left out: its text is inside pictures, which the HTML has -->"
 EQUATIONS = ", equations read from the page image by a model (check the PDF before quoting one)"
 
 
@@ -113,6 +116,17 @@ def place(lines, last, refs_page):
     return len(lines)
 
 
+def spans(pages):
+    """[(first, last)] of each run of consecutive pages."""
+    runs = []
+    for page in sorted(pages):
+        if runs and page == runs[-1][1] + 1:
+            runs[-1][1] = page
+        else:
+            runs.append([page, page])
+    return [tuple(run) for run in runs]
+
+
 def next_figure(md):
     """The number after the highest of the paper's figure files."""
     images = md.parent / "images"
@@ -140,6 +154,9 @@ def main(pdf_path, md_path):
         mark = MARK.format(pages=span, equations=EQUATIONS if equations == "model" else "")
         block = f"{mark}\n\n{body.strip()}\n\n<!-- end of {span} from the PDF -->"
         inserts.setdefault(place(lines, last, refs_page), []).append(block)
+    for first, last in spans(left):
+        span = ("p. " if first == last else "pp. ") + page_map.page_ranges(list(range(first, last + 1)))
+        inserts.setdefault(place(lines, last, refs_page), []).append(LEFT_OUT.format(pages=span))
     for i in sorted(inserts, reverse=True):
         lines[i:i] = ["\n\n".join(inserts[i]), ""] if i < len(lines) else ["", "\n\n".join(inserts[i])]
     md.write_text("\n".join(lines).rstrip("\n") + "\n", encoding="utf-8")
