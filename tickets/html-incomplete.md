@@ -11,7 +11,7 @@ cost: "engine: medium, with a measurement; reconvert the papers at PDF speed; re
 
 `engine` `reconvert` `reread` · html · open
 
-**Broken.** arXiv's rendering lacks pages of the paper: when filed, 27 papers missed eight pages or a quarter of the paper, and `paperlib symptoms --pages` listed 73 missing three pages or more. `paperlib reconvert` cannot convert a `source: html` paper from its PDF.
+**Broken.** arXiv's rendering lacks pages of the paper: when filed, 27 papers missed eight pages or a quarter of the paper, and `paperlib symptoms --pages` listed 73 missing three pages or more. `paperlib reconvert` cannot convert a `source: html` paper from its PDF. Parts can be missing as well as pages: in "Knowledge Graphs" every inline TikZ drawing of nodes and edges (781 of them, including the RDFS/OWL axioms and examples of Tables 2–6) is an empty `<svg>` in arXiv's HTML, which the markdown links as a blank image.
 
 **Fix.** Add `--from-pdf` to `paperlib reconvert`, and compare it on five papers with adding only the missing pages to the HTML conversion. A third route is the paper's LaTeX source through LaTeXML run locally ([`experiments/latex-source`](../experiments/latex-source/README.md)): Confident Learning was converted that way by hand, so it is marked hand-edited and skipped by every reconversion until `reconvert` has such a route (`source: latex`); a hand correction cannot hold a whole conversion.
 
