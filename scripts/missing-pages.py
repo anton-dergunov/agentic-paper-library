@@ -35,6 +35,7 @@ import pymupdf
 SCRIPTS = Path(__file__).resolve().parent
 HEADING = re.compile(r"^#{1,6} .*?(?:\(p\. (\d+)\))?\s*$")
 REFERENCES = re.compile(r"^#{1,3} +(?:References|Bibliography|REFERENCES)\b")
+REFERENCES_LINE = re.compile(r"(?:\d+\.?\s+)?(?:References|Bibliography|REFERENCES|BIBLIOGRAPHY)")
 MARK = ("<!-- {pages} from the PDF, not in arXiv's HTML. Converted by layout analysis{equations};"
         " check the PDF before quoting a table whose columns look off. -->")
 EQUATIONS = ", equations read from the page image by a model (check the PDF before quoting one)"
@@ -63,8 +64,10 @@ def candidates(doc, markdown, page_map):
 
 
 def references_page(doc, lines, page_map):
-    """The PDF page the reference list starts on: its heading's (p. N), else the first
-    page with a quarter of its text in the markdown's list. None without a list."""
+    """The PDF page the reference list starts on: its heading's (p. N); else the first page
+    with a quarter of its text in the markdown's list; else, since a truncated HTML lists
+    only the works its part cites, the first page after the markdown's last placed heading
+    with a line that is only "References" (a contents page aside). None without a list."""
     start = next((i for i, line in enumerate(lines) if REFERENCES.match(line)), None)
     if start is None:
         return None
@@ -74,10 +77,22 @@ def references_page(doc, lines, page_map):
     end = next((i for i in range(start + 1, len(lines)) if re.match(r"#{1,3} ", lines[i])), len(lines))
     words = page_map.text_words("\n".join(lines[start:end]))
     listed = set(zip(words, words[1:], words[2:]))
-    for n, page in enumerate(doc, 1):
-        words = page_map.text_words(page.get_text())
+    texts = [page.get_text() for page in doc]
+    for n, text in enumerate(texts, 1):
+        words = page_map.text_words(text)
         grams = list(zip(words, words[1:], words[2:]))
         if len(grams) >= 100 and sum(g in listed for g in grams) >= 0.25 * len(grams):
+            return n
+    placed = [int(m.group(1)) for line in lines[:start] if (m := HEADING.match(line)) and m.group(1)]
+    return list_heading_page(texts, max(placed, default=0), page_map)
+
+
+def list_heading_page(texts, after, page_map):
+    """The first page after `after` with a line that is only a reference list's heading,
+    a contents page (dot leaders) aside; None if there is none."""
+    for n, text in enumerate(texts, 1):
+        if n > after and len(page_map.DOT_LEADER.findall(text)) < 5 and any(
+                REFERENCES_LINE.fullmatch(line.strip()) for line in text.splitlines()):
             return n
     return None
 

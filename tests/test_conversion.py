@@ -1641,6 +1641,10 @@ def checks():
     yield "a sparse page between two missing ones is a candidate", (
         splice.candidates(doc, said[0] + "\n\n" + said[1], page_map) == {3, 4, 5, 6})
     lines = ["# T", "## 1 Intro (p. 1)", "x", "## 2 Method (p. 2)", "y", "## References", "z", "## Appendix A (p. 9)"]
+    yield "a reference list's page is found by its heading after the HTML's part, a contents page aside", (
+        splice.list_heading_page(["Contents\n" + "Intro . . . . . 1\n" * 5 + "References", "x", "References\n[1] A.",
+                                  "Appendix"], 1, page_map) == 3
+        and splice.list_heading_page(["References"], 1, page_map) is None)
     yield "missing pages go before the first heading on a later page, the references counting", (
         splice.place(lines, 1, 8) == 3 and splice.place(lines, 5, 8) == 5 and splice.place(lines, 8, 8) == 7
         and splice.place(lines, 9, 8) == len(lines))
