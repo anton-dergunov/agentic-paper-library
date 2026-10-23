@@ -30,25 +30,35 @@ Papers and key-content counts from the library `papers` on 2026-10-23.
 | [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 11 | 3 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
+| [TikZ pictures LaTeXML drew empty](html-empty-pictures.md) | `engine` `reconvert` `reread` | open | 1 | 2 | engine: medium (splice the regions from the PDF); reconvert 8 papers |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 78 | 1 | unknown until its sub-causes are found |
-| [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 60 | 1 | unknown until its sub-causes are found |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
-| [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 58 |  | unknown until its sub-causes are found |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
+| [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 42 |  | unknown until its sub-causes are found |
 | [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 40 |  | unknown until its sub-causes are found |
-| [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 32 |  | engine: medium; reconvert the papers |
+| [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 39 |  | engine: medium; reconvert the papers |
 | [Wrong characters from a PDF's text layer](pdf-text-layer-errors.md) | `engine` `reconvert` | open | 30 |  | unknown until its sub-causes are found |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 29 |  | engine: medium, a fixture; reconvert the papers |
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 21 |  | engine: medium, a fixture; reconvert the papers |
+| [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 19 |  | unknown until its sub-causes are found |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 18 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 15 |  | engine: medium; reconvert the papers overnight |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open | 13 |  | engine: small; reconvert 5 papers |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 10 |  | engine: medium for one paper, or by hand |
 | [A row label typed in pieces on the data rows it covers](html-label-in-pieces.md) | `engine` `reconvert` | open | 8 |  | engine: medium, with the LaTeX source; reconvert the papers |
 | [Footnotes missing from arXiv-HTML papers](html-footnotes-lost.md) | `engine` `reconvert` | open | 6 |  | engine: small once the form is found; reconvert the papers |
+| [LaTeXML's TeX for a formula is garbled; its MathML is not](html-alttext-garbled.md) | `engine` `reconvert` | open | 5 |  | engine: medium (MathML to TeX for the formulas that fail a check); reconvert the papers |
 | [Lines of a code listing missing](html-listing-lines-lost.md) | `engine` `reconvert` | open | 5 |  | engine: small to medium once the dropped element is found; reconvert the papers |
-| [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 3 |  | unknown until its sub-causes are found |
+| [A paper's own macros print as their names](html-own-macros-as-names.md) | `engine` `reconvert` | open | 5 |  | engine: medium (macro definitions from the LaTeX source); reconvert about 170 papers |
+| [Figures and tables cited or placed wrongly](figure-numbering.md) | `engine` `reconvert` | open | 4 |  | unknown until its sub-causes are found |
+| [A citation's label has lost its author or year](html-citation-label-parts.md) | `engine` `reconvert` | open | 4 |  | engine: small to medium, once the forms are seen; reconvert 4 papers |
+| [A character the PDF prints is missing from arXiv's HTML](html-latexml-dropped-characters.md) | `engine` `reconvert` | open | 4 |  | engine: large (align the text with the PDF's text layer); reconvert the papers it finds |
+| [A macro LaTeXML did not know is dropped with its meaning](html-undefined-macros-dropped.md) | `engine` `reconvert` | open | 4 |  | engine: small to medium, a mapping plus the source's definitions; reconvert the papers |
+| [A gap lands inside a formula split at its alignment points](html-aligned-cells-split.md) | `engine` `reconvert` | open | 3 |  | engine: small, a fixture; reconvert the papers with aligned equations |
+| ["¿" and "¡" stand for ">" and "<"](html-ot1-angle-glyphs.md) | `engine` `reconvert` | open | 3 |  | engine: small, one mapping; reconvert about 35 papers |
 | [The end of a PDF paragraph is lost after a page, column or footnote break](pdf-paragraph-tail-lost.md) | `engine` `reconvert` | open | 3 |  | engine: small to medium once the dropped region is found; reconvert the papers |
+| [The "~" or "≈" before a number is lost](html-approx-sign-lost.md) | `engine` `reconvert` | open | 2 |  | engine: small, once the TeX form is found; reconvert the papers |
+| [A marker told apart only by its colour loses the colour](html-coloured-markers.md) | `engine` `reconvert` | open | 2 |  | engine: small; reconvert the papers |
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open | 2 |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
@@ -62,7 +72,7 @@ Causes left as they are:
 - [Title and author lines at the top of the body garbled](wont-fix/front-matter.md): the frontmatter carries the title and authors an agent reads; the lines at the top of the body add nothing (7 records)
 - [Text arXiv's HTML itself garbles or leaves out](wont-fix/html-arxiv-text-garbled.md): arXiv's HTML has the fault itself; only the PDF or the LaTeX source has the text right, and the gaps are small (16 records)
 
-Problems in single papers left as they are (83):
+Problems in single papers left as they are (87):
 
 | Paper | Where | Ticket | Reason |
 |---|---|---|---|
@@ -84,7 +94,9 @@ Problems in single papers left as they are (83):
 | MM-LLMs. Recent Advances in MultiModal Large Language Models | p. 4, Fig. 3 | html-empty-tree-leaves | small: readable as a nested list |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 1 | html-equation-garbled | small: readable from the prose |
 | Accelerating Large-Scale Inference with Anisotropic Vector Quantization | p. 4 Theorem 3.2; p. 6 Theorem 4.2 | html-equation-garbled | small: the split equations are all readable |
+| Autoencoding Variational Inference For Topic Models | p. 4, Eq. 5 | html-equation-garbled | the \( … \) inside \textbf is how the converter writes math inside text; KaTeX draws it as g(1ᵀh) |
 | Cartridges. Lightweight and general-purpose long context representations via self-study | p. 6, §3.2 | html-equation-garbled | small: readable, its two halves labelled inline |
+| Do Membership Inference Attacks Work on Large Language Models | p. 2, Min-k% Prob formula | html-equation-garbled | the \( … \) inside \text is how the converter writes math inside text; KaTeX draws it as min-k(x), and the TeX reads plainly |
 | Neural Ranking Models with Weak Supervision | p. 3, Eqs. 2-3 | html-equation-garbled | small: readable |
 | Reinforcement Learning. An Overview | pp. 52-57 | html-equation-garbled | small: two numbers of ellipsis rows |
 | Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset | p. 3, footnote 7 | html-equation-garbled | small and isolated: one footnote's token-id list |
@@ -108,9 +120,11 @@ Problems in single papers left as they are (83):
 | Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement | p. 5, Algorithm 1 | html-pseudocode | small and isolated; arXiv's HTML has the two lines joined |
 | A Survey of Visual Transformers | p. 13, Table III(c) | html-row-spans-unreached | the author's table: the PDF prints Max-L's values in this order |
 | A Survey of Visual Transformers | p. 13, Table III(b) | html-row-spans-unreached | the author's table: the PDF has two QueryInst rows, both R-50-FPN |
+| Challenges and Applications of Large Language Models | p. 31, Table 2 | html-symbols-lost | only the links behind the ✓ marks are lost; the marks and the cited works are in the table |
 | Large language models can accurately predict searcher preferences | pp. 4–5, Table 1 | html-symbols-lost | arXiv's HTML has no ± in Table 1; a cell reads as the value, then its interval |
 | Large language models can accurately predict searcher preferences | prose | html-symbols-lost | small: arXiv's HTML collapses the dashes; readable |
 | Neural Ranking Models with Weak Supervision | p. 5, Table 2; pp. 5-9, Tables 3, 5 | html-symbols-lost | arXiv's HTML carries the wrong glyphs for the significance marks, and the captions say what they mean; the odd P@20 value is in the HTML too |
+| OpenThoughts. Data Recipes for Reasoning Models | pp. 5-10, Tables 3-8 | html-symbols-lost | the paper prints each standard error as a subscript of its value; the markdown keeps that form, and the pair reads unambiguously |
 | Rubrics as Rewards. Reinforcement Learning Beyond Verifiable Domains | p. 1 | html-symbols-lost | small: only footnote links |
 | A continual learning survey. Defying forgetting in classification tasks | pp. 9-11, Tables IV-VII | html-table-colours | not in arXiv's HTML: the boxes and underlines are TikZ overlays drawn as empty 1×1 pictures, and Table XII has no red |
 | Batch Normalization Explained | p. 7, Figure 5 caption | html-table-colours | not in arXiv's HTML: the second curve sample is an empty span |
@@ -152,7 +166,7 @@ Problems in single papers left as they are (83):
 
 ## Done
 
-Fixed and reconverted (31), latest first:
+Fixed and reconverted (30), latest first:
 
 - 2026-10-23: [Citations LaTeXML could not resolve](done/html-unresolved-citations.md)
 - 2026-10-23: [References the PDF number check does not reach still print the HTML's number](done/html-reference-number-unmatched.md)
@@ -166,7 +180,6 @@ Fixed and reconverted (31), latest first:
 - 2026-10-22: [A figure arXiv serves broken, which the LaTeX source has only as a PDF](done/html-figure-source-pdf.md)
 - 2026-10-22: [Cells continued on a new row that the merge does not reach](done/html-continuation-rows-unreached.md)
 - 2026-10-22: [Lines stacked in one cell run together with spaces](done/html-cell-lines-run-together.md)
-- 2026-10-22: [The "~" or "≈" before a number is lost](done/html-approx-sign-lost.md)
 - 2026-10-21: [Row-group labels LaTeXML lost, cut short or set on another row](done/html-multirow-lost.md)
 - 2026-10-21: [Text-mode TeX inside a formula comes out raw](done/html-math-text-macros.md)
 - 2026-10-21: [A cell's text continued on extra table rows](done/html-continuation-rows.md)
