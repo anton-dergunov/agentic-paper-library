@@ -77,6 +77,7 @@ from urllib.parse import quote
 from pathlib import Path
 
 from lxml import etree
+from pylatexenc.latex2text import LatexNodes2Text
 
 from paperlib import fetch, localize_figures, read_icon, to_webp
 
@@ -725,24 +726,42 @@ TEX_FLOAT = re.compile(r"\\begin\{(table|figure|algorithm)\*?\}")
 TEX_CAPTION = re.compile(r"\\caption\*?\s*(?:\[[^\]]*\])?\s*\{")
 # Where a panel of a float opens: subfig's commands, or subcaption's environments (group 1).
 TEX_PANEL = re.compile(r"\\(?:subfloat|subcaptionbox|subtable|subfigure)\b(?!\s*\})|\\begin\{(sub(?:table|figure))\}")
-# A citation command LaTeXML did not know leaves no key at all: "( ?)".
-UNKNOWN_CITATION = re.compile(r"\(\s\?\)|\[\s?\?\]")
-# What may stand between two words of a sentence in its LaTeX source.
-TEX_GAP = r"(?:[^a-zA-Z0-9\\]|\\(?:begin|end|label)\{[^}]*\}|\\[a-zA-Z]+\*?|\\.)*"
+# A citation LaTeXML could not resolve leaves no key: "( ?)", "(?, ?)", "[ ?]"
+# or an empty "( )" in parentheses, and in the running text "? (?)" or a "?", bold or not (group
+# "text"), with the ")" of a citation command it half knew after it.
+UNKNOWN_CITATION = re.compile(
+    r'(?P<text>(?<![\w?])\?\s\(\?\)|<span\b[^>]*\bclass="ltx_text ltx_font_bold"[^>]*>\?</span>\)?|(?<=\s)\?\))'
+    r"|\(\s?\?(?:,\s?\?)*\)|\[\s?\?(?:,\s?\?)*\]|<cite\b[^>]*>\s*\(\s*\)\s*</cite>")
+# What may stand between two words of a sentence in its LaTeX source: a link's
+# address and a colour's name too ("\\\\ \\rowcolor{Gray}").
+TEX_GAP = (r"(?:[^a-zA-Z0-9\\]|\\(?:begin|end|label|href|(?:text|cell|row)?color|colorbox)\s*(?:\[[^\]]*\])?\s*\{[^}]*\}"
+           r"|\\[a-zA-Z]+\*?|\\.)*")
+# A word that stands for a citation among the words before a place (see unknown_citations).
+CITED = "qqcitedqq"
 
 
 def label_in_source(before, tex, command=TEX_REF, least=3):
     """The label of the \\ref (or the keys of the \\cite, given TEX_CITE) that
     follows the words `before` in the LaTeX source: the last five of them,
-    then fewer, down to `least`."""
-    said = plain_words(re.sub(r"<math\b.*?</math>", " ", before, flags=re.S))[-5:]
-    while len(said) >= least:
-        found = {m.group(1) for m in re.finditer(TEX_GAP.join(map(re.escape, said)) + TEX_GAP + command, tex, re.I)}
-        if len(found) == 1:
-            return found.pop()
-        if found:
-            return None  # the same words lead to two different floats
-        said = said[1:]
+    then fewer, down to `least`; more, up to ten, where five lead to two
+    places ("CLBL refers to the work of \\cite{a} and CANLM refers to the
+    work of \\cite{b}"). The word CITED is any \\cite."""
+    said = plain_words(re.sub(r"<math\b.*?</math>", " ", before, flags=re.S))[-10:]
+
+    def found(n):
+        words = (TEX_CITE if w == CITED else re.escape(w) for w in said[-n:])
+        return {m.groups()[-1] for m in re.finditer(TEX_GAP.join(words) + TEX_GAP + command, tex, re.I)}
+
+    for n in range(min(5, len(said)), least - 1, -1):
+        labels = found(n)
+        if len(labels) == 1:
+            return labels.pop()
+        if labels:  # the same words lead to two different places: take more of them
+            for more in range(n + 1, len(said) + 1):
+                labels = found(more)
+                if len(labels) <= 1:
+                    return labels.pop() if labels else None
+            return None
     return None
 
 
@@ -790,12 +809,15 @@ def unresolved_citations(article, page):
     files = source_files(version) if version else {}
 
     if unknown:
-        article = unknown_citations(article, latex_source(version) or "" if version else "",
-                                    "\n".join(text for name, text in files.items() if name.endswith(".bib")))
+        article = unknown_citations(article, latex_source(version) or "" if version else "", files)
 
     if keys:
         bib = "\n".join(text for name, text in files.items() if name.endswith(".bib"))
         labels, entries = citations_from_bibtex(keys, bib) if bib else ({}, {})
+        if len(labels) < len(keys):  # the rest as the compiled bibliography prints them
+            bbl = "\n".join(text for name, text in files.items() if name.endswith(".bbl"))
+            printed = citations_from_bbl(bbl) if bbl else {}
+            labels |= {k: " ".join(filter(None, printed[k])) for k in keys if k not in labels and k in printed}
         article = MISSING_CITATION.sub(lambda m: labels.get(m.group(1).strip(), m.group(0)), article)
         cited = [entries[k] for k in keys if k in entries]
         if cited and "ltx_bibitem" not in article:
@@ -809,7 +831,7 @@ def unresolved_citations(article, page):
                 cut = article.rindex("</div>")
                 article = article[:cut] + "<h2>References</h2>" + listing + article[cut:]
         if len(labels) < len(keys):
-            print(f"warning: {len(keys) - len(labels)} of {len(keys)} unresolved citations not in the paper's .bib",
+            print(f"warning: {len(keys) - len(labels)} of {len(keys)} unresolved citations not in the paper's .bib or .bbl",
                   file=sys.stderr)
 
     if labels_missing:
@@ -873,29 +895,118 @@ def unresolved_citations(article, page):
     return article
 
 
-def unknown_citations(article, tex, bib):
-    """Name the papers behind each "( ?)": the keys of the \\cite that follows the
-    same words in the LaTeX source, labelled from the paper's .bib. One whose
-    words are not found once in the source, or whose keys the .bib lacks, stays."""
-    if not tex or not bib:
+def unknown_citations(article, tex, files):
+    """Name the papers behind each "( ?)", "(?)", "? (?)" or bold "?": the keys
+    of the \\cite that follows the same words in the LaTeX source, labelled as
+    the paper's .bbl prints them, else from its .bib. One whose words are not
+    found once in the source, or whose keys neither has, stays."""
+    bbl = "\n".join(text for name, text in files.items() if name.endswith(".bbl"))
+    bib = "\n".join(text for name, text in files.items() if name.endswith(".bib"))
+    if not tex or not (bbl or bib):
         return article
     cited = {}
     for m in UNKNOWN_CITATION.finditer(article):
-        # From the end of a tag, so that no attribute is taken for words. Two
-        # words are enough for a catalogue's "BART ... Reference: ( ?)".
+        # From the end of a tag, so that no attribute is taken for words, and
+        # each citation before it, resolved or not, one word that stands for a
+        # \\cite. Two words are enough for a catalogue's "BART ... Reference: ( ?)".
         before = re.sub(r"\A[^<]*>", "", article[max(0, m.start() - 1500):m.start()])
+        before = UNKNOWN_CITATION.sub(f" {CITED} ", re.sub(r"<cite\b.*?</cite>", f" {CITED} ", before, flags=re.S))
         found = label_in_source(before, tex, TEX_CITE, least=2)
         if found:
             cited[m.start()] = [k.strip() for k in found.split(",")]
-    labels, _ = citations_from_bibtex(list(dict.fromkeys(k for keys in cited.values() for k in keys)), bib)
+    keys = list(dict.fromkeys(k for keys in cited.values() for k in keys))
+    labels = citations_from_bbl(bbl) if bbl else {}
+    missing = [k for k in keys if k not in labels]
+    if missing and bib:
+        for key, label in citations_from_bibtex(missing, bib)[0].items():
+            author, _, year = label.rpartition(" ")
+            labels[key] = (author or None, year)
 
     def name(m):
         keys = cited.get(m.start())
         if not keys or any(k not in labels for k in keys):
             return m.group(0)
-        return m.group(0)[0] + "; ".join(labels[k] for k in keys) + m.group(0)[-1]
+        if all(labels[k][0] is None for k in keys):  # a numbered list
+            return "[" + ", ".join(labels[k][1] for k in keys) + "]"
+        if m.group("text"):
+            return "; ".join(f"{labels[k][0]} ({labels[k][1]})" for k in keys)
+        brackets = "[]" if m.group(0).startswith("[") else "()"
+        return brackets[0] + "; ".join(" ".join(filter(None, labels[k])) for k in keys) + brackets[1]
 
     return UNKNOWN_CITATION.sub(name, article)
+
+
+def tex_groups(text, i, count):
+    """The `count` brace groups that start at text[i] (spaces between them
+    skipped), and where the last ends; None if they are not all there."""
+    groups = []
+    for _ in range(count):
+        while i < len(text) and text[i].isspace():
+            i += 1
+        end = tex_group_end(text, i) if i < len(text) and text[i] == "{" else None
+        if end is None:
+            return None
+        groups.append(text[i + 1:end - 1])
+        i = end
+    return groups, i
+
+
+def tex_text(tex):
+    """Plain text of a short LaTeX fragment: an author list or a year."""
+    tex = re.sub(r"\\(?:protect|bgroup|egroup)\b", "", tex)
+    tex = re.sub(r"\\(?:BBA|harvardand)\b\\?", r"\\&", tex)
+    return " ".join(LatexNodes2Text().latex_to_text(tex).split())
+
+
+def citations_from_bbl(bbl):
+    """{key: (author, year)} for the entries of a compiled bibliography, as the
+    paper prints its citations. The label is natbib's "Ling et~al.(2015)", ACL's
+    "\\citename{Ling et al.}2015", apacite's "\\BCAY{full}{short}{2015}", a
+    "\\citeauthoryear{...}{2015}", or harvard's \\harvarditem; an entry with none
+    is numbered in order, (None, "3")."""
+    items = []  # (key, the optional label or None)
+    for m in re.finditer(r"\\(bibitem|harvarditem)\b", bbl):
+        i, label = m.end(), None
+        while i < len(bbl) and bbl[i].isspace():
+            i += 1
+        if i < len(bbl) and bbl[i] == "[":
+            depth, j = 0, i + 1
+            while j < len(bbl) and not (bbl[j] == "]" and depth == 0):
+                depth += {"{": 1, "}": -1}.get(bbl[j], 0)
+                j += 1
+            label, i = bbl[i + 1:j], j + 1
+        if m.group(1) == "harvarditem":
+            got = tex_groups(bbl, i, 3)
+            if got:
+                (full, year, key), _ = got
+                items.append((key, (label or full, year)))
+            continue
+        got = tex_groups(bbl, i, 1)
+        if got:
+            items.append((got[0][0], label))
+
+    labels = {}
+    for number, (key, label) in enumerate(items, 1):
+        if isinstance(label, tuple):
+            author, year = label
+        elif label is None:
+            author, year = None, str(number)
+        elif cmd := re.search(r"\\(BCAY|citeauthoryear|citename)\s*(?=\{)", label):
+            count = {"BCAY": 3, "citename": 1}.get(cmd.group(1)) or (3 if tex_groups(label, cmd.end(), 3) else 2)
+            got = tex_groups(label, cmd.end(), count)
+            if not got:
+                continue
+            groups, end = got
+            if cmd.group(1) == "citename":
+                author, year = groups[0], label[end:]
+            else:
+                author, year = groups[-2], groups[-1]
+        elif natbib := re.fullmatch(r"\s*\{?(.*?)\((.*?)\).*", label, re.S):
+            author, year = natbib.groups()
+        else:
+            author, year = None, label
+        labels[key.strip()] = (author and tex_text(author), tex_text(year))
+    return labels
 
 
 def plain_words(text):
@@ -3137,6 +3248,39 @@ def tidy_authors(article):
 FIGURE_PARTS = re.compile(r"<figure\b[^>]*>|</figure\s*>|<figcaption\b[^>]*>|</figcaption\s*>")
 
 
+def shared_label_titles(article):
+    """Tell apart, in the titles of the links to them, floats LaTeXML gave one
+    label: a link to the second of two "Table 3"s is titled "Table 3 #2".
+    caption-numbers.py, which numbers the captions as the PDF does, renumbers
+    a link by the caption it reaches; the plain "Table 3" would not say which."""
+    floats = [(m.start(), balanced_end(article, m.start(), "figure") or 0, m.group(1))
+              for m in re.finditer(r'<figure\b[^>]*\bid="([^"]+)"', article)]
+    owner = {}  # float id -> its caption's label
+    for cap in re.finditer(r'<figcaption\b[^>]*>\s*<span class="ltx_tag ltx_tag_(?:table|figure)">((?:Table|Figure)(?:\s|&nbsp;)+[\w.]+):?\s*</span>', article):
+        inside = [fid for start, end, fid in floats if start < cap.start() < end]
+        if inside:  # the innermost float holding the caption
+            owner[inside[-1]] = " ".join(cap.group(1).replace("&nbsp;", " ").split())
+    counts = collections.Counter(owner.values())
+    if all(n == 1 for n in counts.values()):
+        return article
+    seen, titled = collections.Counter(), {}
+    for fid, label in owner.items():  # in reading order
+        if counts[label] > 1:
+            seen[label] += 1
+            titled[fid] = f"{label} #{seen[label]}"
+
+    def retitle(m):
+        target = m.group(2)
+        while target and target not in titled:
+            target = target.rpartition(".")[0]  # a panel's anchor: its float's
+        if not target:
+            return m.group(0)
+        tag = re.sub(r'\s*\btitle="[^"]*"', "", m.group(0))
+        return tag[:-1] + f' title="{titled[target]}">'
+
+    return re.sub(r'<a\b([^>]*?)\bhref="#([^"]+)"[^>]*>', retitle, article)
+
+
 def split_captions(article):
     """Keep each caption by its own table when one float holds several.
 
@@ -3258,6 +3402,7 @@ def main(html_path, body_path, images_dir, basename):
     article = drop_style_warnings(article)
     article = name_icons(article)
     article = split_captions(article)
+    article = shared_label_titles(article)
     article = tidy_authors(article)
     article = convert_listings(article)
     article = span_tabulars_to_tables(article)

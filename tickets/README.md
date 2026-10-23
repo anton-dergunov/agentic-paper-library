@@ -33,19 +33,16 @@ Papers and key-content counts from the library `papers` on 2026-10-23.
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 78 | 1 | unknown until its sub-causes are found |
 | [Symbols lost or replaced in arXiv-HTML text and tables](html-symbols-lost.md) | `engine` `reconvert` | open | 60 | 1 | unknown until its sub-causes are found |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
-| [References the PDF number check does not reach still print the HTML's number](html-reference-number-unmatched.md) | `engine` `reconvert` | open | 72 |  | engine: medium; reconvert the papers (minutes) |
 | [arXiv-HTML formulas garbled](html-equation-garbled.md) | `engine` `reconvert` | open | 58 |  | unknown until its sub-causes are found |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
 | [Text of a PDF paper out of reading order](pdf-reading-order.md) | `engine` `reconvert` | open | 40 |  | unknown until its sub-causes are found |
 | [References to an equation, a theorem or an appendix show the label's name](html-lost-labels.md) | `engine` `reconvert` | open | 32 |  | engine: medium; reconvert the papers |
 | [Wrong characters from a PDF's text layer](pdf-text-layer-errors.md) | `engine` `reconvert` | open | 30 |  | unknown until its sub-causes are found |
 | [Pseudocode in arXiv-HTML papers runs together](html-pseudocode.md) | `engine` `reconvert` | open | 29 |  | engine: medium, a fixture; reconvert the papers |
-| [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | open | 25 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 | [Pseudocode in PDF papers runs together](pdf-pseudocode.md) | `engine` `reconvert` | open | 21 |  | engine: medium, a fixture; reconvert the papers |
 | [Page markers in long documents are sparse or out of order](page-markers-long-docs.md) | `engine` `reconvert` | open | 18 |  | engine: medium, measured on the 8 papers; reconvert them |
 | [PDF paragraphs that lost their symbols without a mark](pdf-inline-symbols-lost.md) | `engine` `reconvert` | open | 15 |  | engine: medium; reconvert the papers overnight |
 | [TeX that KaTeX does not draw](katex-undrawable-tex.md) | `engine` `reconvert` | open | 13 |  | engine: small; reconvert 5 papers |
-| [Captions numbered by LaTeXML's counters, not the PDF's](html-caption-numbers.md) | `engine` `reconvert` | open | 11 |  | engine: medium; reconvert the papers |
 | [Taxonomy-tree leaves holding only citations arrive empty; paragraph tables run on](html-empty-tree-leaves.md) | `engine` `by-hand` | open | 10 |  | engine: medium for one paper, or by hand |
 | [A row label typed in pieces on the data rows it covers](html-label-in-pieces.md) | `engine` `reconvert` | open | 8 |  | engine: medium, with the LaTeX source; reconvert the papers |
 | [Footnotes missing from arXiv-HTML papers](html-footnotes-lost.md) | `engine` `reconvert` | open | 6 |  | engine: small once the form is found; reconvert the papers |
@@ -56,6 +53,8 @@ Papers and key-content counts from the library `papers` on 2026-10-23.
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
+| [References the PDF number check does not reach still print the HTML's number](html-reference-number-unmatched.md) | `engine` `reconvert` | fixed | 55 |  | engine: medium; reconvert the papers (minutes) |
+| [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | fixed | 8 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 
 ## Won't fix
 
@@ -155,9 +154,10 @@ Problems in single papers left as they are (83):
 
 ## Done
 
-Fixed and reconverted (28), latest first:
+Fixed and reconverted (29), latest first:
 
 - 2026-10-23: [arXiv's HTML is incomplete](done/html-incomplete.md)
+- 2026-10-23: [Captions numbered by LaTeXML's counters, not the PDF's](done/html-caption-numbers.md)
 - 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)
 - 2026-10-22: [Rows stacked inside cells come out as one row](done/html-stacked-cell-rows.md)
 - 2026-10-22: [References to floats that share an anchor print the wrong number](done/html-shared-float-anchor.md)

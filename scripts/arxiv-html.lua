@@ -850,12 +850,14 @@ Plain = plain_label
 -- LaTeXML gives every cross-reference a hover title, the path to its target
 -- ("Table 8 ‣ 4.2 Results ‣ 4 Experiments ‣ <the paper's title>"): a twelfth
 -- of a paper's text, repeated at each reference. Only the float it names is
--- kept, for caption-numbers.py, which removes it once the captions are numbered.
+-- kept, with the "#2" of the second of two floats LaTeXML gave one label, for
+-- caption-numbers.py, which removes it once the captions are numbered.
 function Link(el)
   el.attr = pandoc.Attr()
   if el.target:sub(1, 1) == "#" then
     local title = el.title:gsub("\u{a0}", " ")
-    el.title = title:match("^Table [%w.]+") or title:match("^Figure [%w.]+") or ""
+    el.title = title:match("^Table [%w.]+ #%d+") or title:match("^Figure [%w.]+ #%d+")
+      or title:match("^Table [%w.]+") or title:match("^Figure [%w.]+") or ""
   end
   return el
 end

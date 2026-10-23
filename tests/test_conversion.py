@@ -1239,10 +1239,52 @@ def checks():
     cited = h2m.unknown_citations(
         "<p>introduced by Google researchers in 2017 ( ?). The encoder-decoder models ( ?) came first.</p>",
         r"introduced by Google researchers in 2017 \protect~\shortcite{vaswani2017attention}. Nothing else.",
-        "@article{vaswani2017attention, author={Vaswani, Ashish and Shazeer, Noam and Parmar, Niki}, "
-        "title={Attention is all you need}, year={2017}}")
+        {"paper.bib": "@article{vaswani2017attention, author={Vaswani, Ashish and Shazeer, Noam and Parmar, Niki}, "
+                      "title={Attention is all you need}, year={2017}}"})
     yield "a citation with no key left is found in the LaTeX source", (
         "(Vaswani et al. 2017)" in cited and "models ( ?)" in cited)
+
+    titled = h2m.shared_label_titles(
+        '<p><a href="#S6.T3" title="Table 3 ‣ 6">3</a>, <a href="#S6.T3a" title="Table 3 ‣ 6">3</a>, '
+        '<a href="#S6.T2" title="Table 2 ‣ 6">2</a></p>'
+        + "".join(f'<figure class="ltx_table" id="{fid}"><figcaption class="ltx_caption"><span class="ltx_tag ltx_tag_table">'
+                  f'Table {n}: </span>Caption.</figcaption></figure>' for fid, n in (("S6.T2", 2), ("S6.T3", 3), ("S6.T3a", 3))))
+    yield "links to two floats with one label say which in their titles", (
+        'href="#S6.T3" title="Table 3 #1"' in titled and 'href="#S6.T3a" title="Table 3 #2"' in titled
+        and 'title="Table 2 ‣ 6"' in titled)
+
+    bbl = h2m.citations_from_bbl(r"""\begin{thebibliography}{}
+        \bibitem[\protect\citename{Ballesteros \bgroup et al.\egroup
+          }2015]{lstm15} Miguel Ballesteros.
+        \bibitem[{Ling et~al.(2015)Ling, Dyer, and Black}]{ling2015} Wang Ling.
+        \bibitem[\protect\BCAY{Abdolmaleki, Springenberg,\ \BBA\ Riedmiller}{Abdolmaleki
+          et~al.}{2018}]{abdol2018} Abdolmaleki, A.
+        \harvarditem{Anderson \harvardand\ Barrios}{1961}{anderson1961} Anderson, N.~H.
+        \bibitem[\protect\citeauthoryear{Dud{\'\i}k}{2014}]{dudik2014} Miroslav Dud{\'\i}k.
+        \end{thebibliography}""")
+    yield "citation labels from a compiled bibliography, in five dialects", bbl == {
+        "lstm15": ("Ballesteros et al.", "2015"), "ling2015": ("Ling et al.", "2015"),
+        "abdol2018": ("Abdolmaleki et al.", "2018"), "anderson1961": ("Anderson & Barrios", "1961"),
+        "dudik2014": ("Dudík", "2014")}
+    yield "a numbered bibliography numbers its entries", h2m.citations_from_bbl(
+        "\\bibitem{a} A.\n\\bibitem{b} B.") == {"a": (None, "1"), "b": (None, "2")}
+
+    bold = '<span class="ltx_text ltx_font_bold">?</span>'
+    cited = h2m.unknown_citations(
+        f'<p>language models have been used <cite class="ltx_cite">[Bazzi (2000)]</cite>. {bold}) investigate '
+        f'subword models from autonomous vehicles (?) and robots (?, ?). '
+        f'CLBL refers to the work of {bold}) and CANLM refers to the work of {bold}).</p>',
+        r"language models have been used \cite{bazzi}. \newcite{mikolov} investigate subword models from "
+        r"autonomous vehicles \shortcite{filos} and robots \shortcite{todorov,brockman}. \textsc{CLBL} refers to the "
+        r"work of \protect\newcite{botha} and \textsc{CANLM} refers to the work of \protect\newcite{kim}.",
+        {"paper.bbl": "\n".join(rf"\bibitem[\protect\citename{{{name}}}{year}]{{{key}}}" for key, name, year in [
+            ("bazzi", "Bazzi", 2000), ("mikolov", "Mikolov et al.", 2012), ("filos", "Filos et al.", 2020),
+            ("todorov", "Todorov", 2012), ("brockman", "Brockman", 2016), ("botha", "Botha", 2014), ("kim", "Kim", 2016)])})
+    yield "a bold \"?\" is a citation in the text, after one the HTML resolved", "Mikolov et al. (2012) investigate" in cited
+    yield "\"(?)\" and \"(?, ?)\" are citations in parentheses", (
+        "vehicles (Filos et al. 2020)" in cited and "(Todorov 2012; Brockman 2016)" in cited)
+    yield "words that lead to two citations are told apart by more of them", (
+        "work of Botha (2014) and" in cited and "work of Kim (2016)." in cited)
 
     tex = r"and 17 widely used \emph{agentic} benchmarks (Table \ref{tab:all}). As shown in Figure~\ref{fig:flow}, we then"
     files, h2m.source_files = h2m.source_files, lambda version: {
@@ -1301,14 +1343,15 @@ def checks():
         page.insert_text((72, 100), "Figure 2: Agreement and win rate difference of judges.")
         page.insert_text((72, 300), "Table 7: Category-wise win rate of all models.")
         doc.save(pdf_file)
-        md_file.write_text("See Table [8](#S4.T8 \"Table 8 ‣ 4 Results\") and [Figure\xa07](#S4.T7 \"In 4 Results\").\n\n"
+        md_file.write_text("See Table [8](#S4.T8 \"Table 8 ‣ 4 Results\") and [Figure\xa07](#S4.T7 \"In 4 Results\"); "
+                           "[Tables 8](#S4.T8 \"In 4 Results\").\n\n"
                            "Table 7: Agreement and win rate difference of judges.\n\n"
                            "Table 8: Category-wise win rate of all models.\n", encoding="utf-8")
         subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
         out = md_file.read_text(encoding="utf-8")
     yield "captions and their links are renumbered from the PDF", (
         "Figure 2: Agreement" in out and "Table 7: Category-wise" in out
-        and "Table [7](#S4.T8)" in out and "[Figure\xa07](#S4.T7)" in out)
+        and "Table [7](#S4.T8)" in out and "[Figure\xa07](#S4.T7)" in out and "[Tables 7](#S4.T8)" in out)
 
     with tempfile.TemporaryDirectory() as tmp:
         pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
@@ -1336,6 +1379,41 @@ def checks():
         subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
         out = md_file.read_text(encoding="utf-8")
     yield "a caption does not take the number another caption keeps", out == text
+
+    with tempfile.TemporaryDirectory() as tmp:
+        pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
+        doc = pymupdf.open()
+        page = doc.new_page()
+        for y, line in enumerate(("Table2 Induction heads. Models are trained on short sequences only.",
+                                  "Table 3 Zero-shot evaluations on the standard benchmarks.",
+                                  "Figure 6 Great apes classification. Accuracy after fine-tuning on short ones.",
+                                  "Table 11 Induction heads. Models are trained on long sequences.",
+                                  "Table 13 Great apes classification. Accuracy after fine-tuning on DNA of length 1k.",
+                                  "Table 14: StackedMNIST [46] result for each loss function.",
+                                  "Figure 3: Comparison of zero-shot neural retrieval performances.")):
+            page.insert_text((40, 60 + 40 * y), line, fontsize=9)
+        doc.save(pdf_file)
+        md_file.write_text("See Table [1](#S4.T1 \"Table 1 #1\"), Table [1](#S4.T1a \"Table 1 #2\") and Figure [8](#S4.F8 \"Figure 8\").\n\n"
+                           "Table 1: Selective copying.\n\n"
+                           "Figure 5: Induction heads. Models are trained on sequence length 256.\n\n"
+                           "Table 1: Zero-shot evaluations on the standard benchmarks.\n\n"
+                           "Figure 8: Great apes classification. Accuracy after fine-tuning on DNA of length 1k.\n\n"
+                           "Table 3: Induction heads. Models are trained on sequences of 256 tokens.\n\n"
+                           "Table 5: Great apes classification. Accuracy after fine-tuning on DNA of length 1k.\n\n"
+                           "Table 9: StackedMNIST [Lin et al. \\[2018\\]](#bib.bib46) result for each loss function.\n\n"
+                           "![](images/p-fig05.svg) Figure 4: Comparison of zero-shot neural retrieval performances.\n",
+                           encoding="utf-8")
+        subprocess.run([sys.executable, SCRIPTS / "caption-numbers.py", pdf_file, md_file], check=True, capture_output=True)
+        out = md_file.read_text(encoding="utf-8")
+    yield "a caption with no punctuation after its label is found in the PDF", "Table 3: Zero-shot" in out
+    yield "captions that open alike are paired with the PDF's in reading order", (
+        "Table 2: Induction heads. Models are trained on sequence" in out
+        and "Table 11: Induction heads. Models are trained on sequences of" in out
+        and "Figure 6: Great apes" in out and "Table 13: Great apes" in out)
+    yield "a citation in a caption is left out of the words compared", "Table 14: StackedMNIST" in out
+    yield "a caption after its picture on one line is numbered too", "p-fig05.svg) Figure 3: Comparison" in out
+    yield "a link to the second of two floats with one label takes that one's number", (
+        "Table [1](#S4.T1)," in out and "Table [3](#S4.T1a)" in out)
 
     with tempfile.TemporaryDirectory() as tmp:
         pdf_file, md_file = Path(tmp) / "p.pdf", Path(tmp) / "p.md"
