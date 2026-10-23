@@ -3,13 +3,13 @@ id: html-unresolved-citations
 title: Citations LaTeXML could not resolve
 converter: html
 takes: [engine, reconvert, reread]
-status: fixed
+closed: '2026-10-23'
 cost: 'engine: small, a fixture; reconvert 19 papers; re-read NER only'
 ---
 
 # Citations LaTeXML could not resolve
 
-`engine` `reconvert` `reread` · html · fixed
+`engine` `reconvert` `reread` · html · done
 
 **Broken.** `**?**)` and `(?)` appear where a citation was: 593 times in 19 papers when filed. The existing lookup in the LaTeX source does not catch this form.
 

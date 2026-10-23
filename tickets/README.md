@@ -53,8 +53,6 @@ Papers and key-content counts from the library `papers` on 2026-10-23.
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
-| [References the PDF number check does not reach still print the HTML's number](html-reference-number-unmatched.md) | `engine` `reconvert` | fixed | 55 |  | engine: medium; reconvert the papers (minutes) |
-| [Citations LaTeXML could not resolve](html-unresolved-citations.md) | `engine` `reconvert` `reread` | fixed | 8 |  | engine: small, a fixture; reconvert 19 papers; re-read NER only |
 
 ## Won't fix
 
@@ -154,8 +152,10 @@ Problems in single papers left as they are (83):
 
 ## Done
 
-Fixed and reconverted (29), latest first:
+Fixed and reconverted (31), latest first:
 
+- 2026-10-23: [Citations LaTeXML could not resolve](done/html-unresolved-citations.md)
+- 2026-10-23: [References the PDF number check does not reach still print the HTML's number](done/html-reference-number-unmatched.md)
 - 2026-10-23: [arXiv's HTML is incomplete](done/html-incomplete.md)
 - 2026-10-23: [Captions numbered by LaTeXML's counters, not the PDF's](done/html-caption-numbers.md)
 - 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)

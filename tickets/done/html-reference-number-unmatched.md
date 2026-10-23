@@ -3,13 +3,13 @@ id: html-reference-number-unmatched
 title: References the PDF number check does not reach still print the HTML's number
 converter: html
 takes: [engine, reconvert]
-status: fixed
+closed: '2026-10-23'
 cost: 'engine: medium; reconvert the papers (minutes)'
 ---
 
 # References the PDF number check does not reach still print the HTML's number
 
-`engine` `reconvert` · html · fixed
+`engine` `reconvert` · html · done
 
 **Broken.** `caption-numbers.py` takes a reference's number from the PDF when the words around it match (`html-shared-float-anchor`, done 21 Oct 2026). The references it leaves still print what arXiv's HTML gives, which is often wrong. The HTML can name the wrong kind ("Figure [1]" for Table 1, "Tab. [2]-(c)" for Fig. 2(c), "[Footnote 18]" or "[Section 4.2]" for a figure or table). It can drop a subfigure letter ("Figures [16] and [16]"), print a row number or a section-numbered label ("Table [5.2.2]", "Assumptions [2.1]–[2.1]"), or be off by one or more ("Table [5]" for Table 4). This ticket holds the 21 records the check of 21 Oct re-filed, plus the reference records moved from `figure-numbering` on 22 Oct 2026. Some of these may be the paper's own slips: the PDF settles each one.
 
