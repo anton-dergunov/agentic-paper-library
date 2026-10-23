@@ -1147,6 +1147,47 @@ def checks():
     ) == '<p class="ltx_p">a</p><table><tr><td><span class="ltx_p">b</span></td></tr></table>'
 
     h2m = load("html-to-markdown")
+    sty = (r"\tikzset{arr/.style={->}, arrin/.style={arr, latex-}, arrout/.style={arr, -latex}}"
+           r"\newcommand{\gnode}[1]{\begin{tikzpicture}\node[iri]{\scriptsize #1};\end{tikzpicture}}"
+           r"\NewDocumentCommand{\gedge}{ O{arrin} O{1.3cm} m m m }{\begin{tikzpicture}\node(A){#3};"
+           "\n  \\node[right=#2 of A]{#5}\n  edge[#1] node[lab] {#4} (A);\\end{tikzpicture}}"
+           r"\newcommand{\ymark}{\ding{51}}"
+           r"\newcommand\encircle[1]{\tikz \node (X) [draw, shape=circle] {\strut #1};}"
+           r"\newcommand{\ce}[1]{\raisebox{0.4ex}{\encircle{\tiny #1}}}\newcommand{\id}{\ce{\ymark}}\newcommand{\ib}{\ce{}}")
+    tex = (r"\documentclass{article}\usepackage{kg}\newcommand{\unused}{\gnode{x}}\begin{document}"
+           r"nodes like \gnode{Santiago}, an edge \gedge{Santa Luc\'ia}{city}{Santiago}, back \gedge[arrout]{a}{p}{b}, "
+           r"a mark \tikz[remember picture]\node(m){}; and $\#\{\gnode{$y$}\}$."
+           r"\begin{tabular}{cc}\id & \ib\end{tabular}"
+           r"\begin{tikzpicture}\Tree [.Event [.Festival Food\ Festival {\ldots} ] Market ]\end{tikzpicture}"
+           r"\end{document}")
+
+    def empty(width, height=12):
+        return (f'<svg class="ltx_picture" height="{height}" width="{width}" viewBox="0 0 {width} {height}">'
+                f'<g transform="translate(0,{height}) matrix(1 0 0 -1 0 0)"></g></svg>')
+    fragment = (f"<p>nodes like {empty(40)}, an edge {empty(90)}, back {empty(30)}, a mark {empty(1, 1)} and "
+                r'<math alttext="\#\{\hbox to 10pt{\vbox to 12pt{\pgfpicture}}\}"><semantics><mrow>' + empty(10) + "</mrow>"
+                r'<annotation encoding="application/x-tex">\#\{\hbox to 10pt{\vbox to 12pt{\pgfpicture}}\}</annotation>'
+                f'</semantics></math>.</p><table><tr><td>{empty(14, 14)}</td><td>{empty(14, 14)}</td></tr></table>'
+                f"<figure>{empty(300, 80)}</figure>")
+    page = '<base href="/html/2003.02320v6/">'
+    files, h2m.source_files = h2m.source_files, lambda version: {"main.tex": tex, "kg.sty": sty}
+    filled = h2m.empty_pictures(fragment, page)
+    h2m.source_files = lambda version: {"main.tex": tex.replace(r"\gnode{Santiago}", "Santiago"), "kg.sty": sty}
+    unmatched = h2m.empty_pictures(fragment, page)
+    h2m.source_files = files
+    yield "an empty TikZ picture is filled in from the source, its edges as arrows", (
+        "<span>Santiago</span>" in filled and "<span>Santa Lucía –city→ Santiago</span>" in filled
+        and "<span>b –p→ a</span>" in filled and "<td><span>✓</span></td><td><span>○</span></td>" in filled
+        and "<span>Event (Festival (Food Festival, …), Market)</span>" in filled)
+    yield "a TikZ mark is left alone, and a picture in a formula keeps its text there", (
+        filled.count('width="1"') == 1 and "{y}" in h2m.clean_math(filled))
+    yield "empty pictures the source does not line up with are marked lost", (
+        unmatched.count("[picture lost]") == 7 and "Santiago" not in unmatched.replace("nodes like", ""))
+    yield "a TikZ path's arrows and labels: --, to, a coordinate", h2m.tikz_text(
+        r"\begin{tikzpicture}\node (a) {A}; \node (b) {B}; \draw[<-] (a) -- node[above] {x} (b);"
+        r"\path (b) edge[->, auto] node {y} (a.east); \node[circle, fill=black] (c) {};\end{tikzpicture}",
+        {}, {}) == "B –x→ A; B –y→ A; ●"
+
     tex = (r"\begin{table}\begin{tabular}{@{}l|c|cc@{}}\toprule Prompt & Shots & \multicolumn{2}{c}{F1} \\ \midrule"
            "\n & 6 & 73.76 & 90.24 \\\\\n\\multirow{-2}{*}{Fewshot-related} & 10 & 76.56 & 90.80 \\\\\n"
            " & 6 & 77.86 & 89.44 \\\\\n\\multirow{-2}{*}{\\textbf{Fewshot-random}} & 10 & 80.51 & 89.05 \\\\\n"

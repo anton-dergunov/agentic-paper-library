@@ -30,7 +30,6 @@ Papers and key-content counts from the library `papers` on 2026-10-23.
 | [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 11 | 3 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
-| [TikZ pictures LaTeXML drew empty](html-empty-pictures.md) | `engine` `reconvert` `reread` | open | 1 | 2 | engine: medium (splice the regions from the PDF); reconvert 8 papers |
 | [arXiv-HTML tables flattened, shifted or split](html-table-structure.md) | `engine` `reconvert` | open | 78 | 1 | unknown until its sub-causes are found |
 | [Old PDFs with a broken text layer](pdf-broken-text-layer.md) | `by-hand` `reconvert` | open | 2 | 1 | by hand: find a cleaner PDF of each, then reconvert it |
 | [PDF equations read wrongly by the equation model](pdf-equation-garbled.md) | `engine` `reconvert` | open | 53 |  | unknown until its sub-causes are found |
@@ -166,11 +165,12 @@ Problems in single papers left as they are (87):
 
 ## Done
 
-Fixed and reconverted (30), latest first:
+Fixed and reconverted (31), latest first:
 
 - 2026-10-23: [Citations LaTeXML could not resolve](done/html-unresolved-citations.md)
 - 2026-10-23: [References the PDF number check does not reach still print the HTML's number](done/html-reference-number-unmatched.md)
 - 2026-10-23: [arXiv's HTML is incomplete](done/html-incomplete.md)
+- 2026-10-23: [TikZ pictures LaTeXML drew empty](done/html-empty-pictures.md)
 - 2026-10-23: [Captions numbered by LaTeXML's counters, not the PDF's](done/html-caption-numbers.md)
 - 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)
 - 2026-10-22: [Rows stacked inside cells come out as one row](done/html-stacked-cell-rows.md)

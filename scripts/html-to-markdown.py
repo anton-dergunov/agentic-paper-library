@@ -32,7 +32,9 @@ Writes the paper body (no frontmatter) to <body.md> and any inline figures to
    as an SVG frame with the text inside, becomes a quote, and small text
    badges become their text (see picture_text).
 9. Trees drawn with the forest package, which LaTeXML cannot render, are
-   taken from the paper's LaTeX source as nested lists (see forest_trees).
+   taken from the paper's LaTeX source as nested lists (see forest_trees);
+   so are TikZ pictures LaTeXML drew empty, as their nodes and labelled
+   edges (see empty_pictures).
 10. Cross-references LaTeXML could not resolve keep their label as text.
 11. The warnings a conference style file typesets when a paper changed its
     page layout are dropped (see drop_style_warnings).
@@ -680,7 +682,7 @@ def local_links(article, version):
 
 @functools.cache
 def source_files(version):
-    """The text files of a paper's arXiv source (.tex, .bib, .bbl): {name: text}."""
+    """The text files of a paper's arXiv source (.tex, .sty, .bib, .bbl): {name: text}."""
     data = fetch(f"https://arxiv.org/e-print/{version}")
     if not data:
         return {}
@@ -688,7 +690,7 @@ def source_files(version):
     try:
         with tarfile.open(fileobj=io.BytesIO(data), mode="r:*") as tar:
             for member in tar.getmembers():
-                if member.isfile() and member.name.endswith((".tex", ".bib", ".bbl")):
+                if member.isfile() and member.name.endswith((".tex", ".sty", ".bib", ".bbl")):
                     files[member.name.removeprefix("./")] = tar.extractfile(member).read()
     except tarfile.TarError:
         try:
@@ -1174,6 +1176,417 @@ def forest_trees(article, page):
     macros = "\n".join(re.findall(r"^\s*\\(?:re)?newcommand\b.*$|^\s*\\DeclareMathOperator\b.*$", tex, re.M))
     lists = iter(forest_html(trees, macros, section_numbers(article, tex)))
     return placeholder.sub(lambda m: f"<div {LIFT}>{next(lists)}</div>", article)
+
+
+def tex_span(tex, begin, opening="{", closing="}"):
+    """(inside, end) of the group that opens at tex[begin]: braces, brackets or parentheses."""
+    depth, i = 0, begin
+    while i < len(tex):
+        c = tex[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == opening:
+            depth += 1
+        elif c == closing:
+            depth -= 1
+            if depth == 0:
+                return tex[begin + 1:i], i + 1
+        i += 1
+    return tex[begin + 1:], len(tex)
+
+
+def skip_space(tex, i):
+    while i < len(tex) and tex[i].isspace():
+        i += 1
+    return i
+
+
+TEX_DEFINITION = re.compile(r"\\(?:(?:re)?newcommand|providecommand|DeclareRobustCommand)\*?"
+                            r"|\\(?:New|Renew|Declare|Provide)DocumentCommand|\\def(?=\\)")
+
+
+def tex_definitions(tex):
+    """The macros a source defines: {"\\name": (arguments, body)}, each argument
+    ("m",) or ("o", default), as \\newcommand, \\NewDocumentCommand and \\def write them."""
+    out = {}
+    for m in TEX_DEFINITION.finditer(tex):
+        i = skip_space(tex, m.end())
+        if tex.startswith("{", i):
+            name, i = tex_span(tex, i)
+        else:
+            token = re.match(r"\\[A-Za-z@]+|\\.", tex[i:])
+            if not token:
+                continue
+            name, i = token.group(0), i + token.end()
+        i, spec = skip_space(tex, i), []
+        if "DocumentCommand" in m.group(0):
+            if not tex.startswith("{", i):
+                continue
+            args, i = tex_span(tex, i)
+            spec = [("m",) if a.group(1) == "m" else ("o", a.group(2) or "")
+                    for a in re.finditer(r"([mO])\s*(?:\{([^{}]*)\})?", args)]
+        elif m.group(0) == "\\def":
+            params = re.match(r"(?:#\d)*", tex[i:])
+            spec, i = [("m",)] * (len(params.group(0)) // 2), i + params.end()
+        elif count := re.match(r"\[(\d)\]\s*", tex[i:]):
+            i += count.end()
+            spec = [("m",)] * int(count.group(1))
+            if tex.startswith("[", i):
+                default, i = tex_span(tex, i, "[", "]")
+                spec[0] = ("o", default)
+        i = skip_space(tex, i)
+        if tex.startswith("{", i):
+            out[name.strip()] = (spec, tex_span(tex, i)[0])
+    return out
+
+
+def tikz_styles(tex):
+    """The TikZ styles a source defines ("arrin/.style={arr, latex-}", \\tikzstyle): {name: options}."""
+    out = {}
+    for m in re.finditer(r"([\w ]+?)/\.style\s*=\s*\{", tex):
+        out[m.group(1).strip()] = tex_span(tex, m.end() - 1)[0]
+    for m in re.finditer(r"\\tikzstyle\{([^}]*)\}\s*=\s*\[", tex):
+        out[m.group(1).strip()] = tex_span(tex, m.end() - 1, "[", "]")[0]
+    return out
+
+
+PICTURE_ENV = re.compile(r"\\begin\{(tikzpicture|picture|tikzcd)\}|\\tikz(?![A-Za-z@])")
+TEX_COMMAND = re.compile(r"\\begin\{(tikzpicture|picture|tikzcd)\}|\\tikz(?![A-Za-z@])|\\([A-Za-z@]+)")
+
+
+def tex_arguments(tex, i, spec):
+    """The arguments of a macro call that ends its name at i, and the index after them."""
+    values = []
+    for arg in spec:
+        j = skip_space(tex, i)
+        if arg[0] == "o":
+            if tex.startswith("[", j):
+                value, i = tex_span(tex, j, "[", "]")
+            else:
+                value = arg[1]
+        elif tex.startswith("{", j):
+            value, i = tex_span(tex, j)
+        else:  # one token
+            token = re.match(r"\\[A-Za-z@]+|.", tex[j:], re.S)
+            value, i = (token.group(0), j + token.end()) if token else ("", j)
+        values.append(value)
+    return values, i
+
+
+def source_pictures(tex, macros, depth=0):
+    """The pictures a source draws, in document order, as TikZ: each tikzpicture, \\tikz and
+    picture, including those a macro of the paper's own draws (\\gnode{Santiago}), with its
+    arguments put in. A picture inside another is part of it, as LaTeXML nests them."""
+    drawing = {name for name, (_, body) in macros.items() if PICTURE_ENV.search(body)}
+    while more := {name for name, (_, body) in macros.items() if name not in drawing
+                   and any(re.search(re.escape(d) + r"(?![A-Za-z@])", body) for d in drawing)}:
+        drawing |= more
+    out, i = [], 0
+    while m := TEX_COMMAND.search(tex, i):
+        if m.group(1):
+            nesting, end = 0, len(tex)
+            for t in re.finditer(rf"\\(begin|end)\{{{m.group(1)}\}}", tex[m.start():]):
+                nesting += 1 if t.group(1) == "begin" else -1
+                if nesting == 0:
+                    end = m.start() + t.end()
+                    break
+            out.append(tex[m.start():end])
+            i = end
+        elif m.group(0) == "\\tikz":
+            j = skip_space(tex, m.end())
+            if tex.startswith("[", j):
+                j = skip_space(tex, tex_span(tex, j, "[", "]")[1])
+            j = tex_span(tex, j)[1] if tex.startswith("{", j) else tex.find(";", j) + 1 or len(tex)
+            out.append(tex[m.start():j])
+            i = j
+        elif TEX_DEFINITION.fullmatch(m.group(0)) or m.group(2) == "def":
+            # A definition draws nothing where it stands: skip its name, arguments and body.
+            j = skip_space(tex, m.end() + tex.startswith("*", m.end()))
+            j = tex_span(tex, j)[1] if tex.startswith("{", j) else j + len(re.match(r"\\[A-Za-z@]*|", tex[j:]).group(0)) or j
+            if "DocumentCommand" in m.group(0) and tex.startswith("{", j := skip_space(tex, j)):
+                j = tex_span(tex, j)[1]
+            while (j := skip_space(tex, j)) < len(tex) and tex[j] in "[#":
+                j = tex_span(tex, j, "[", "]")[1] if tex[j] == "[" else j + 2
+            i = tex_span(tex, j)[1] if tex.startswith("{", j) else j
+        elif m.group(0) in drawing and depth < 8:
+            spec, body = macros[m.group(0)]
+            values, i = tex_arguments(tex, m.end(), spec)
+            for k, value in enumerate(values, 1):
+                body = body.replace(f"#{k}", value)
+            out += source_pictures(body, macros, depth + 1)
+        else:
+            i = m.end()
+    return out
+
+
+def split_tex(tex, separator):
+    """tex split at each separator outside braces and brackets."""
+    parts, depth, start, i = [], 0, 0, 0
+    while i < len(tex):
+        c = tex[i]
+        if c == "\\":
+            i += 2
+            continue
+        depth += (c in "{[") - (c in "}]")
+        if c == separator and depth == 0:
+            parts.append(tex[start:i])
+            start = i + 1
+        i += 1
+    return parts + [tex[start:]]
+
+
+def tikz_options(options, styles, depth=0):
+    """A TikZ option list with the styles it names expanded."""
+    out = []
+    for option in map(str.strip, split_tex(options or "", ",")):
+        if option in styles and depth < 10:
+            out += tikz_options(styles[option], styles, depth + 1)
+        elif option:
+            out.append(option)
+    return out
+
+
+ARROW_TIP = r"(?:<|>|latex|Latex|stealth|Stealth|to|To|>>|<<|\||\{?[A-Z][A-Za-z]*(?:\[[^\]]*\])?\}?)"
+ARROWS = re.compile(rf"({ARROW_TIP}*)-({ARROW_TIP}*)")
+
+
+def arrow_direction(options):
+    """Where the last arrow option points: 1 to the end, -1 to the start, 2 both ways, 0 neither; None if none is set."""
+    direction = None
+    for option in options:
+        if m := ARROWS.fullmatch(option):
+            start, end = bool(m.group(1)), bool(m.group(2))
+            direction = 2 if start and end else -1 if start else 1 if end else 0
+    return direction
+
+
+DINGBATS = {"51": "✓", "52": "✔", "55": "✗", "56": "✘", "72": "★", "108": "●", "109": "❍"}
+TEX_TO_TEXT = LatexNodes2Text(math_mode="verbatim")
+
+
+def tikz_label(tex, text_macros):
+    """A node's or an edge's TeX as text, its formulas kept as $...$."""
+    for _ in range(6):  # the paper's own macros without arguments (\ymark for \ding{51})
+        expanded = re.sub(r"\\[A-Za-z@]+(?![A-Za-z@])", lambda m: text_macros.get(m.group(0), m.group(0)), tex)
+        if expanded == tex:
+            break
+        tex = expanded
+    tex = re.sub(r"\\ding\{(\d+)\}", lambda m: DINGBATS.get(m.group(1), ""), tex)
+    # What sets a colour, a size or a raise prints nothing; a line break in a node is a "/".
+    tex = re.sub(r"\\(?:color|raisebox)\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}", "", tex)
+    tex = re.sub(r"\\\\(?:\[[^\]]*\])?", " / ", tex)
+    try:
+        text = TEX_TO_TEXT.latex_to_text(tex)
+    except Exception:
+        text = tex
+    return " ".join(text.split()).strip(" /")
+
+
+def tikz_tree(tex, text_macros):
+    """A tikz-qtree \\Tree ("[.Event [.Festival Food\\ Festival ] ]") as "Event (Festival (Food Festival))"."""
+    tokens = re.findall(r"\[\.(?:\{[^{}]*\}|(?:\\.|[^\s\[\]])+)|\]|\{[^{}]*\}|(?:\\.|[^\s\[\]])+", tex)
+    stack = [[]]
+    for token in tokens:
+        if token.startswith("[."):
+            stack.append([tikz_label(token[2:].strip("{}"), text_macros)])
+        elif token == "]" and len(stack) > 1:
+            label, *children = stack.pop()
+            stack[-1].append(f"{label} ({', '.join(children)})" if children else label)
+        elif token != "]" and not token.startswith("\\edge"):
+            stack[-1].append(tikz_label(token.strip("{}"), text_macros))
+    return ", ".join(filter(None, stack[0]))
+
+
+def tikz_text(code, styles, text_macros):
+    """What a TikZ picture says, as text: the edges between its nodes ("Santa Lucía –city→ Santiago"),
+    then the nodes on no edge, each by its text; "" when it has no text (a mark, a shape)."""
+    code = re.sub(r"\A\s*(?:\\begin\{(?:tikzpicture|picture|tikzcd)\}|\\tikz)|\\end\{(?:tikzpicture|picture|tikzcd)\}\s*\Z",
+                  "", code)
+    styles = dict(styles)
+    if (start := skip_space(code, 0)) < len(code) and code[start] == "[":
+        options, end = tex_span(code, start, "[", "]")
+        styles |= tikz_styles(options)
+        code = code[end:]
+    styles |= tikz_styles(code)
+    if code.strip().startswith("{"):
+        code = tex_span(code.strip(), 0)[0]
+    if tree := re.search(r"\\Tree\b", code):
+        return tikz_tree(code[tree.end():], text_macros)
+    nodes, order, edges = {}, [], []
+    for statement in split_tex(code, ";"):
+        statement = statement.strip()
+        command = re.match(r"\\(draw|path|node|coordinate|fill|filldraw)\b", statement)
+        if not command:
+            continue
+        i, kind, path_options = command.end(), command.group(1), []
+        current, edge = None, None  # the node a path is at; an edge waiting for its target
+        while (i := skip_space(statement, i)) < len(statement):
+            c = statement[i]
+            word = re.match(r"(node|edge|to|at)(?![A-Za-z])|--", statement[i:])
+            if (word and word.group(1) == "node") or (kind in ("node", "coordinate") and current is None):
+                if word and word.group(1) == "node":
+                    i += 4
+                options, name, label = [], None, None
+                while (i := skip_space(statement, i)) < len(statement):
+                    if statement[i] == "[":
+                        inside, i = tex_span(statement, i, "[", "]")
+                        options += tikz_options(inside, styles)
+                    elif statement[i] == "(":
+                        inside, i = tex_span(statement, i, "(", ")")
+                        name = inside.strip()
+                    elif re.match(r"at\s*\(", statement[i:]):
+                        i = tex_span(statement, statement.index("(", i), "(", ")")[1]
+                    elif statement[i] == "{":
+                        label, i = tex_span(statement, i)
+                        break
+                    else:
+                        break
+                if kind == "coordinate":
+                    kind, current = "draw", name
+                elif edge is not None:  # a label on the edge being drawn
+                    edge[2] = tikz_label(label or "", text_macros) or edge[2]
+                else:
+                    name = name or f"\ue000{len(order)}"
+                    nodes[name] = (tikz_label(label or "", text_macros), options)
+                    order.append(name)
+                    kind, current = "draw", name
+            elif word:
+                i += len(word.group(0))
+                options = []
+                if (i := skip_space(statement, i)) < len(statement) and statement[i] == "[":
+                    inside, i = tex_span(statement, i, "[", "]")
+                    options = tikz_options(inside, styles)
+                if word.group(1) != "at":
+                    edge = [word.group(1) == "edge", options, "", current]
+            elif c == "[":
+                inside, i = tex_span(statement, i, "[", "]")
+                path_options += tikz_options(inside, styles)
+            elif c == "(":
+                inside, i = tex_span(statement, i, "(", ")")
+                target = re.sub(r"\.[\w ]+$", "", inside.strip())
+                if edge is not None:
+                    direction = arrow_direction(path_options + edge[1])
+                    edges.append((edge[3], target, edge[2], 1 if direction is None else direction))
+                    if not edge[0]:  # "--" and "to" move the path on; an edge leaves it where it was
+                        current = target
+                    edge = None
+                else:
+                    current = target
+            elif c == "{":
+                i = tex_span(statement, i)[1]
+            else:  # a word of the path (circle, rectangle) or a mark
+                i += len(re.match(r"[A-Za-z]*", statement[i:]).group(0)) or 1
+
+    def text(name):
+        if name not in nodes:
+            return ""
+        label, options = nodes[name]
+        if not label and any(re.fullmatch(r"(?:shape\s*=\s*)?circle", o) for o in options):
+            return "●" if any(re.match(r"fill\b", o) for o in options) else "○"
+        return label
+
+    parts, linked = [], set()
+    for source, target, label, direction in edges:
+        if direction == -1:
+            source, target, direction = target, source, 1
+        if not (text(source) or text(target) or label):
+            continue
+        linked |= {source, target}
+        arrow = {1: f"–{label}→", 2: f"←{label}→", 0: f"–{label}–"}[direction]
+        parts.append(" ".join(filter(None, (text(source), arrow, text(target)))))
+    parts += [text(n) for n in order if n not in linked and text(n)]
+    return "; ".join(parts)
+
+
+DRAWN = re.compile(r"<(?:path|rect|circle|ellipse|line|polyline|polygon|text|image|use|foreignObject)\b", re.I)
+# A picture of this size or less is a mark TikZ places to draw from later (\tikzmark); it never shows anything.
+MARK_SIDE = 1
+
+
+def top_svgs(article):
+    """(start, end) of each <svg> that is not inside another."""
+    spans, pos = [], 0
+    while (begin := article.find("<svg", pos)) >= 0:
+        end = balanced_end(article, begin, "svg") or len(article)
+        spans.append((begin, end))
+        pos = end
+    return spans
+
+
+def text_html(text):
+    """Text with $...$ formulas as the markup the pipeline writes formulas in."""
+    parts = re.split(r"(?<!\\)\$(.+?)(?<!\\)\$", text)
+    return "".join(
+        html.escape(part, quote=False) if k % 2 == 0 else
+        f'<math display="inline" alttext="{html.escape(part)}"><semantics><mrow></mrow>'
+        f'<annotation encoding="application/x-tex">{html.escape(part, quote=False)}</annotation></semantics></math>'
+        for k, part in enumerate(parts))
+
+
+def empty_pictures(article, page):
+    """Fill in the TikZ pictures LaTeXML drew empty from the paper's LaTeX source.
+
+    LaTeXML writes a TikZ picture as an <svg>, and for some it draws nothing (an empty <g>):
+    in a survey that draws every node and edge it names ("like Santiago", "an edge
+    Santa Lucía –city→ Santiago") as a picture, the examples, the cells of its feature
+    tables and its figures are lost. The pictures are taken from the source on arXiv, in
+    document order, as text: the edges between the nodes, an arrow for each ("–city→"), then
+    the nodes on no edge; a picture of a circle as "○", "●", or what is set in it ("✓").
+    A picture in a formula keeps its text as the formula's (see clean_math). An empty
+    picture the source does not give (no source, the source's pictures not matching the
+    HTML's, a picture with no text) becomes "[picture lost]"; a TikZ mark is left alone.
+    """
+    spans = top_svgs(article)
+    svgs = [article[a:b] for a, b in spans]
+
+    def size(svg):
+        tag = re.match(r"<svg\b[^>]*>", svg).group(0)
+        return [float(v) for v in re.findall(r'\s(?:width|height)="([\d.]+)"', tag)] or [0.0]
+
+    lost = [k for k, svg in enumerate(svgs) if not DRAWN.search(svg) and max(size(svg)) > MARK_SIDE]
+    if not lost:
+        return article
+    version = paper_version(page)
+    files = source_files(version) if version else {}
+    tex = latex_source(version) if version else None
+    texts = {}
+    if tex:
+        own = {name: re.sub(r"(?<!\\)%.*", "", text) for name, text in files.items() if name.endswith((".sty", ".tex"))}
+        macros = {}
+        for name in sorted(own, key=lambda n: not n.endswith(".sty")):  # the document's definitions last
+            macros |= tex_definitions(own[name])
+        styles = {}
+        for text in own.values():
+            styles |= tikz_styles(text)
+        text_macros = {name: body for name, (spec, body) in macros.items() if not spec}
+        pictures = source_pictures(tex[max(tex.find("\\begin{document}"), 0):], macros)
+        if len(pictures) == len(svgs):
+            texts = {k: tikz_text(pictures[k], styles, text_macros) for k in lost}
+            # A picture of one node is as wide as its text: when most are not, the pictures are out of step.
+            ratios = [max(size(svgs[k])) / len(t) for k, t in texts.items() if len(t) > 2 and not re.search(r"[–;$]", t)]
+            if len(ratios) >= 5:
+                middle = sorted(ratios)[len(ratios) // 2]
+                if sum(not 0.4 * middle < r < 2.5 * middle for r in ratios) > 0.1 * len(ratios):
+                    print(f"warning: the source's pictures do not line up with the HTML's; {len(lost)} empty pictures left lost",
+                          file=sys.stderr)
+                    texts = {}
+        else:
+            print(f"warning: {len(svgs)} pictures, {len(pictures)} in the LaTeX source; "
+                  f"{len(lost)} empty pictures left lost", file=sys.stderr)
+    out, pos = [], 0
+    for k in lost:
+        begin, end = spans[k]
+        text = texts.get(k) or "[picture lost]"
+        if article.rfind("<math", 0, begin) > article.rfind("</math", 0, begin):
+            # clean_math reads a picture in a formula from its foreignObject (see picture_label).
+            tag = re.match(r"<svg\b[^>]*>", svgs[k]).group(0)
+            replacement = f"{tag}<foreignObject>{text_html(text)}</foreignObject></svg>"
+        else:
+            replacement = f"<span>{text_html(text)}</span>"
+        out += [article[pos:begin], replacement]
+        pos = end
+    return "".join(out) + article[pos:]
 
 
 BIBITEM = re.compile(r'<li\b[^>]*\bid="(bib\.[^"]+)"[^>]*\bclass="[^"]*\bltx_bibitem\b[^"]*"[^>]*>(.*?)</li>', re.S)
@@ -3396,6 +3809,7 @@ def main(html_path, body_path, images_dir, basename):
     base = re.search(r'<base href="/html/(\d{4}\.\d{4,5}v\d+/)"', page)
     article = extract_article(page)
     article = local_links(article, paper_version(page))
+    article = empty_pictures(article, page)
     article = clean_math(article)
     article = drop_invisible(article)
     article = close_runaway_floats(article)
