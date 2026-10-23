@@ -22,11 +22,11 @@ edit the tickets, not this file.
 
 ## Tickets
 
-Papers and key-content counts from the library `papers` on 2026-10-22.
+Papers and key-content counts from the library `papers` on 2026-10-23.
 
 | Ticket | Takes | Status | Papers | Key content | Cost |
 |---|---|---|---|---|---|
-| [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 36 | 6 | unknown until its sub-causes are found |
+| [PDF tables with a garbled header or merged columns](pdf-table-structure.md) | `engine` `reconvert` | open | 37 | 7 | unknown until its sub-causes are found |
 | [Tables and figures LaTeXML dropped](html-dropped-floats.md) | `engine` `reconvert` `reread` | open | 11 | 3 | engine: medium, by the route of html-incomplete; reconvert; re-read the papers whose results are in the missing tables |
 | [Rows of a PDF table without rules collapse into one row](pdf-table-rows-collapsed.md) | `engine` `reconvert` `reread` | open | 18 | 2 | engine: medium, with a comparison on the papers; reconvert them; re-read where a results table was involved |
 | [PDF tables taken for pictures, and figures for tables](pdf-table-as-picture.md) | `engine` `reconvert` `reread` | open | 3 | 2 | engine: small to medium; reconvert the papers with such tables; re-read those whose results are in them |
@@ -56,7 +56,6 @@ Papers and key-content counts from the library `papers` on 2026-10-22.
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
-| [arXiv's HTML is incomplete](html-incomplete.md) | `engine` `reconvert` `reread` | fixed | 21 | 1 | engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30 each) |
 
 ## Won't fix
 
@@ -156,8 +155,9 @@ Problems in single papers left as they are (83):
 
 ## Done
 
-Fixed and reconverted (27), latest first:
+Fixed and reconverted (28), latest first:
 
+- 2026-10-23: [arXiv's HTML is incomplete](done/html-incomplete.md)
 - 2026-10-22: [A table set as side-by-side panels loses its row labels or splits](done/html-table-panels.md)
 - 2026-10-22: [Rows stacked inside cells come out as one row](done/html-stacked-cell-rows.md)
 - 2026-10-22: [References to floats that share an anchor print the wrong number](done/html-shared-float-anchor.md)

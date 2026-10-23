@@ -3,14 +3,14 @@ id: html-incomplete
 title: arXiv's HTML is incomplete
 converter: html
 takes: [engine, reconvert, reread]
-status: fixed
+closed: '2026-10-23'
 cost: 'engine: medium, with a measurement; reconvert the papers at PDF speed; re-read them (about $0.30
   each)'
 ---
 
 # arXiv's HTML is incomplete
 
-`engine` `reconvert` `reread` · html · fixed
+`engine` `reconvert` `reread` · html · done
 
 **Broken.** arXiv's rendering lacks pages of the paper: when filed, 27 papers missed eight pages or a quarter of the paper, and `paperlib symptoms --pages` listed 73 missing three pages or more. `paperlib reconvert` cannot convert a `source: html` paper from its PDF. Parts can be missing as well as pages: in "Knowledge Graphs" every inline TikZ drawing of nodes and edges (781 of them, including the RDFS/OWL axioms and examples of Tables 2–6) is an empty `<svg>` in arXiv's HTML, which the markdown links as a blank image.
 
