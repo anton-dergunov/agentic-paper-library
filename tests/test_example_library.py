@@ -24,7 +24,8 @@ EXAMPLE = ENGINE / "examples" / "library"
 
 def run(script, root, *args, **extra_env):
     env = dict(os.environ, PAPER_LIBRARY=str(root), PDF_ROOT=str(root / "no-pdfs"),
-               PAPERS_CACHE=str(root.parent / "cache"), **extra_env)
+               PAPERS_CACHE=str(root.parent / "cache"))
+    env.update(extra_env)
     env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env["PATH"]
     return subprocess.run([sys.executable, str(ENGINE / "scripts" / script), *args], env=env,
                           capture_output=True, text=True)
@@ -190,6 +191,39 @@ def issues_problems(root):
             or not tickets.joinpath("done", "pdf-table-bold.md").exists():
         problems.append(f"close did not move the ticket with no open records left to done: {closed.stdout[-300:]}")
     (root / "issues" / f"{paper.stem}.yaml").unlink()
+
+    # look: the same place in the markdown, arXiv's HTML (formulas as their TeX, a table row
+    # on one line) and the PDF's text layer.
+    import gzip
+    import pymupdf
+    paper = next(p for p in sorted(root.joinpath("library").rglob("*.md")) if p.name != "README.md"
+                 and "\nsource: html\n" in p.read_text() and "\narxiv:" in p.read_text())
+    text = paper.read_text()
+    arxiv_id = re.search(r"^arxiv: '?([\d.]+)", text, re.M).group(1)
+    paper.write_text(text + "\nSuppose there are three actions with mean rewards $\\theta\\in 3$.\n")
+    cached = root.parent / "cache" / "arxiv" / "html" / f"{arxiv_id}v2" / "index.html.gz"
+    cached.parent.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(gzip.compress(
+        b'<html><head><title>mean rewards</title></head><body>\n<p>three actions with mean\n rewards '
+        b'<math alttext="\\theta\\in 3"><mi>&#952;</mi></math>.</p><table><tr>\n<td>Base</td>\n<td>0.65</td>'
+        b'</tr></table></body></html>'))
+    pdf = root / "no-pdfs" / paper.parent.relative_to(root / "library") / f"{paper.stem}.pdf"
+    pdf.parent.mkdir(parents=True, exist_ok=True)
+    with pymupdf.open() as doc:
+        doc.new_page().insert_text((72, 72), "three actions with mean rewards theta in R3.")
+        doc.save(pdf)
+    out = run("issues.py", root, "look", str(paper.relative_to(root / "library")), "mean  rewards").stdout
+    for want in ("md line", "$\\theta\\in 3$.", f"html {arxiv_id}v2: …three actions with mean rewards $\\theta\\in 3$.",
+                 "pdf p. 1: …three actions with mean rewards theta in R3."):
+        if want not in out:
+            problems.append(f"look: `{want}` missing from: {out}")
+    if "Base | 0.65 |" not in run("issues.py", root, "look", paper.stem, "Base").stdout:
+        problems.append("look: a table row of the HTML is not on one line")
+    if "html: not in the cache" not in run("issues.py", root, "look", paper.stem, "x",
+                                           PAPERS_CACHE=str(root.parent / "empty-cache")).stdout:
+        problems.append("look: a missing rendering is not reported")
+    paper.write_text(text)
+    pdf.unlink()
 
     sys.path.insert(0, str(ENGINE / "scripts"))
     import importlib.util
@@ -433,7 +467,7 @@ def main():
             print(f"{'ok  ' if same else 'FAIL'} {rel} matches the committed index")
         problems = issues_problems(root)
         failures += bool(problems)
-        print(f"{'FAIL' if problems else 'ok  '} issues.py: " + ("; ".join(problems) or "add, list, close; the reader's records parsed and merged"))
+        print(f"{'FAIL' if problems else 'ok  '} issues.py: " + ("; ".join(problems) or "add, list, close, look; the reader's records parsed and merged"))
         problems = tickets_problems(root)
         failures += bool(problems)
         print(f"{'FAIL' if problems else 'ok  '} tickets.py: " + ("; ".join(problems) or "move to wont-fix/ and back, closed status checked"))
