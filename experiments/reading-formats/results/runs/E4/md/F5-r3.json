@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F5",
+ "rep": 3,
+ "paper": "qwen3vl",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "GPT-5 (high) appears to score **78.4** on MMMU-Pro, and it is the top reasoning-model score in that row (Table 2, p. 15).\n\nThis table comes from pages the document says were converted by layout analysis, and it warns to check the PDF before quoting a table whose columns look off (pp. 15–16). The columns around MMMU-Pro are misaligned:\n\n- The 78.4 is bolded on a separate line.\n- An asterisk sits in the GPT-5 high column.\n- The GPT-5 high MMMU score (84.2) has slipped into the header row.\n\nReading the cells back into order, 78.4 lands in the GPT-5 high column. Still, check the original PDF before citing it.",
+ "input": 83290,
+ "cache_write": 0,
+ "cache_read": 83288,
+ "output": 913,
+ "thinking": 677,
+ "usd": 0.0349256,
+ "seconds": 10.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-24 23:32"
+}

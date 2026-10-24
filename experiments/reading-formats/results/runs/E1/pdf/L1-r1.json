@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "L1",
+ "rep": 1,
+ "paper": "litm",
+ "form": "pdf",
+ "page": 18,
+ "status": "ok",
+ "answer": "**With 20 documents, GPT-3.5-Turbo scores 75.8% when the answer document is first and 53.8% at its worst reported position, which is 2.3 points below its closed-book score of 56.1%.**\n\n**Accuracy by position** (Table 6, page 18):\n\n| Answer position | Accuracy |\n|---|---|\n| 1st | 75.8% |\n| 5th | 57.2% |\n| 10th (worst) | 53.8% |\n| 15th | 55.4% |\n| 20th | 63.2% |\n\nThe worst position is the 10th, in the middle of the context. That is 22.0 points below the first position. This matches the paper's statement that GPT-3.5-Turbo's performance \"can drop by more than 20%\" (page 5).\n\nThe table only reports positions 1, 5, 10, 15 and 20, so \"worst\" here means worst among those. Figure 1 plots every position, but its exact values aren't given as numbers (page 1).\n\n**Compared with closed-book:** in the closed-book setting, GPT-3.5-Turbo gets 56.1% with no documents at all (Table 1, page 5). The paper confirms that in the worst case, performance in the 20- and 30-document settings \"is lower than performance without any input documents (i.e., closed-book performance; 56.1%)\" (page 5; also page 2).",
+ "input": 54360,
+ "cache_write": 54358,
+ "cache_read": 0,
+ "output": 716,
+ "thinking": 278,
+ "usd": 0.449192,
+ "seconds": 8.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.74,
+ "date": "2026-10-24 23:35"
+}

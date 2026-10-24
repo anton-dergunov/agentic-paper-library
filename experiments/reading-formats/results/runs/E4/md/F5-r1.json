@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F5",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "GPT-5 (high) scores **78.4 on MMMU-Pro** (Table 2, p. 15). This is the highest score among the reasoning models on that benchmark. The table marks it in bold, and the closest competitor is Gemini 2.5 Pro thinking at 68.8 (p. 15).\n\nThe MMMU and MMMU-Pro rows in Table 2 came through misaligned in the text extraction, so I matched values to columns by reconstructing the layout. A note on p. 15 also warns to check the PDF before quoting a table whose columns look off. You may want to confirm this number against the original PDF.",
+ "input": 83290,
+ "cache_write": 541,
+ "cache_read": 82747,
+ "output": 1329,
+ "thinking": 1126,
+ "usd": 0.047465400000000005,
+ "seconds": 12.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.68,
+ "date": "2026-10-24 23:31"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "G5",
+ "rep": 3,
+ "paper": "gpt1",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give these numbers.** The RACE accuracy by number of layers transferred is shown only in the plot in Figure 2 (left), and this conversion includes that figure as an image, not as data.\n\nWhat the text does say:\n\n- **Where the result is:** Figure 2 (left) shows performance on MultiNLI and RACE as a function of the number of layers transferred (p. 7).\n- **What the text says about the trend:** transferring embeddings improves performance, and each transformer layer adds more benefit. The only number given is a gain of up to 9% for full transfer, and that figure is for **MultiNLI**, not RACE (p. 7).\n- **A number that is not the answer:** Table 3 reports 59.0 on RACE overall for the fine-tuned model (p. 6). That is the headline result against prior methods. The document doesn't label it as dev accuracy or tie it to the layer-transfer experiment, so it shouldn't be read as the 12-layer point on the plot.\n\nTo get the 0-layer and 12-layer RACE values, read them from Figure 2 (left) in the original PDF. They would be approximate readings from a chart, because the paper does not state them as exact values.",
+ "input": 17499,
+ "cache_write": 0,
+ "cache_read": 17497,
+ "output": 571,
+ "thinking": 184,
+ "usd": 0.014927399999999999,
+ "seconds": 7.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.74,
+ "date": "2026-10-24 23:34"
+}

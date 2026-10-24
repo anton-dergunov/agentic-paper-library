@@ -1,0 +1,30 @@
+{
+ "key": "8e2825aff30fe203",
+ "usd": 0.030052000000000002,
+ "grades": {
+  "E1/md/S4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/S4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/S4-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No page cited; values given from memory."
+  },
+  "E1/pdf/S4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

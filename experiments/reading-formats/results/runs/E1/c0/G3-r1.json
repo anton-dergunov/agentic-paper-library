@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "G3",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "c0",
+ "page": 6,
+ "status": "ok",
+ "answer": "**No paper or document came through with your question.** The working directory is empty, so I can't tell which model you mean. RACE-h results appear in several papers.\n\nMy best guess is **GPT-1** (Radford et al., 2018, *\"Improving Language Understanding by Generative Pre-Training\"*). If that's the one, these are the RACE-h figures as I recall them from its Table 3:\n\n- **GPT-1 on RACE-h:** 57.4% accuracy\n- **Previous best:** 50.3%, from the BiAttention MRU ensemble (Tay et al., 2018)\n\nThat's a gain of about 7 points. For context, the same table reports RACE-m at 62.9 (vs. 60.2) and overall RACE at 59.0 (vs. 53.3).\n\nIf you meant a different paper, the numbers will be quite different. XLNet, RoBERTa and ALBERT all report RACE-high scores in the 80s. Please share the paper or its title and I'll check the exact figures rather than relying on memory.",
+ "input": 770,
+ "cache_write": 768,
+ "cache_read": 0,
+ "output": 825,
+ "thinking": 493,
+ "usd": 0.022652000000000002,
+ "seconds": 9.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.72,
+ "date": "2026-10-24 23:33"
+}

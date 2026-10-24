@@ -1,0 +1,22 @@
+{
+ "exp": "E0",
+ "cond": "img2576",
+ "qid": "D2",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "img2576",
+ "page": 9,
+ "status": "ok",
+ "answer": "At temperature 0.25 on CNN/DailyMail, **DPO gets a GPT-4 win rate of 0.31 against the ground truth, and PPO gets 0.23** (Table 1, page 9).\n\nThese are out-of-distribution results. The policies were trained on Reddit TL;DR summarization and then tested on news articles from the CNN/DailyMail test split. Temperatures 0 and 0.25 were used because they were the best sampling temperatures from TL;DR (page 9). The paper concludes that DPO still beats PPO by a significant margin on this new distribution (page 9).",
+ "input": 4911,
+ "cache_write": 4909,
+ "cache_read": 0,
+ "output": 237,
+ "thinking": 40,
+ "usd": 0.044020000000000004,
+ "seconds": 4.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:23"
+}

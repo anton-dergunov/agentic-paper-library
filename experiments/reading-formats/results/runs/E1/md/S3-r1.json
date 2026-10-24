@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "S3",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "# SimPO objective and its two differences from DPO\n\n## The SimPO objective (Eq. 6, p. 4)\n\n$$\\mathcal{L}_{\\text{SimPO}}(\\pi_{\\theta})=-\\mathbb{E}_{(x,y_{w},y_{l})\\sim\\mathcal{D}}\\left[\\log\\sigma\\left(\\frac{\\beta}{|y_{w}|}\\log\\pi_{\\theta}(y_{w}|x)-\\frac{\\beta}{|y_{l}|}\\log\\pi_{\\theta}(y_{l}|x)-\\gamma\\right)\\right]$$\n\nHere $y_w$ is the winning response and $y_l$ is the losing response. $\\beta$ scales the reward difference, and $\\gamma > 0$ is the target reward margin (pp. 3–4).\n\nFor comparison, DPO's reward is $r(x,y)=\\beta\\log\\frac{\\pi_{\\theta}(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}+\\beta\\log Z(x)$ (Eq. 1, p. 3).\n\n## The two differences (as the paper frames them, p. 1)\n\n**1. A length-normalized, reference-free reward.**\n- SimPO's reward is the *average* log probability of the response's tokens under the policy: $r_{\\text{SimPO}}(x,y)=\\frac{\\beta}{|y|}\\log\\pi_{\\theta}(y\\mid x)$ (Eq. 4, p. 3).\n- DPO's reward is a log ratio between the policy and a reference (SFT) model (p. 3).\n- SimPO's reward matches the likelihood metric that guides generation. It also removes the need for a reference model, which saves memory and compute (p. 3).\n- Without length normalization, the model is biased toward longer but lower-quality outputs (p. 3).\n\n**2. A target reward margin $\\gamma$.**\n- SimPO adds $\\gamma$ to the Bradley–Terry objective: $p(y_w \\succ y_l \\mid x)=\\sigma(r(x,y_w)-r(x,y_l)-\\gamma)$ (Eq. 5, p. 3).\n- This requires the winning response's reward to exceed the losing one's by at least $\\gamma$ (p. 3).\n- Strictly speaking, this change is to the objective, not the reward formula. The paper presents it as SimPO's second key component alongside the reward (p. 1).\n\n## Evidence that both matter (Table 5, p. 6; p. 7)\n\n- Removing length normalization caused the largest drop. On Mistral-Base, AlpacaEval 2 LC fell from 21.5 to 11.9.\n- Setting $\\gamma = 0$ also hurt performance. On the same setting, LC fell from 21.5 to 16.8.",
+ "input": 66495,
+ "cache_write": 542,
+ "cache_read": 65951,
+ "output": 1216,
+ "thinking": 277,
+ "usd": 0.0418542,
+ "seconds": 10.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-24 23:28"
+}

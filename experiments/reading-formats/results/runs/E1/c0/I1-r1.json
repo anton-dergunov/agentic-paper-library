@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "I1",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "c0",
+ "page": 33,
+ "status": "ok",
+ "answer": "This sounds like the **InstructGPT** paper (Ouyang et al., 2022, *\"Training language models to follow instructions with human feedback\"*). There's no paper file in the working directory, so this is from memory. Please check it against Table 6 in the appendix.\n\n**Reward model (RM) dataset, training split:**\n- **Labeler-written prompts:** 6,623\n- **Customer (API) prompts:** 26,584\n- **Total:** about 33,207. This matches the paper's \"~33k training prompts\" for the RM.\n\n**RM validation split**, if you need it:\n- Labeler: 3,488\n- Customer: 14,399\n\nFor comparison, the SFT training set was mostly labeler-written (11,295 labeler vs. 1,430 customer). The PPO set used only customer prompts.\n\nIf you meant a different paper, tell me which one and I'll answer for that one.",
+ "input": 768,
+ "cache_write": 766,
+ "cache_read": 0,
+ "output": 519,
+ "thinking": 232,
+ "usd": 0.016516,
+ "seconds": 11.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.79,
+ "date": "2026-10-24 23:38"
+}

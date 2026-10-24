@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "G3",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "The fine-tuned Transformer LM scores **57.4% on RACE-h**. The previous best was **50.3%**, from BiAttention MRU [59], an ensemble of 9 models (Table 3, page 6).\n\nThat is a gain of about 7.1 points. My subtraction isn't stated in the paper, which only gives the overall RACE gain of 5.7% (59.0 vs. 53.3) (page 6). The paper notes that RACE comes from middle and high school English exams, and RACE-h is the high-school portion (page 6).",
+ "input": 34871,
+ "cache_write": 544,
+ "cache_read": 34325,
+ "output": 285,
+ "thinking": 106,
+ "usd": 0.016925000000000003,
+ "seconds": 4.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.71,
+ "date": "2026-10-24 23:33"
+}

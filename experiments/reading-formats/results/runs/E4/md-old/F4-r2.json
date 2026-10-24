@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F4",
+ "rep": 2,
+ "paper": "qwen3vl",
+ "form": "md-old",
+ "page": 15,
+ "status": "ok",
+ "answer": "**The document doesn't give either score.**\n\nWhat it does say:\n\n- **Qwen3-VL-235B-A22B-Thinking:** It \"achieves state-of-the-art results on MathVista<sub>mini</sub>, MathVision, MathVerse<sub>mini</sub>, ZeroBench, LogicVista, and VisuLogic\" (p. 14). No number is given.\n- **Qwen3-VL-235B-A22B-Instruct:** It \"achieves the best reported results among non-thinking or low-thinking-budget models\" on several benchmarks, including MathVision (p. 14).\n- **Gemini 2.5 Pro:** The text names it as a comparison model in several sections, but gives no MathVision score for it.\n\nThe text says the multimodal reasoning results are \"shown in\" a flagship results table (p. 14). That table isn't included in this version of the document; only the text-centric tables (Tables 5–10) and the ablation tables (Tables 11–12) are present. Taken together, the \"state-of-the-art\" claim implies that Qwen3-VL-235B-A22B-Thinking scored higher than Gemini 2.5 Pro (thinking) on MathVision (p. 14), but the document doesn't state the actual numbers.",
+ "input": 74423,
+ "cache_write": 0,
+ "cache_read": 74421,
+ "output": 517,
+ "thinking": 106,
+ "usd": 0.0252322,
+ "seconds": 16.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.69,
+ "date": "2026-10-24 23:32"
+}

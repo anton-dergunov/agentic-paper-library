@@ -1,0 +1,84 @@
+{
+ "key": "e7daaa02ae799b4e",
+ "usd": 0.074932,
+ "grades": {
+  "E1/txt/D5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says plot values unavailable; gives no temperature-1.0 values."
+  },
+  "E1/pdf/D5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/D5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no temperature-1.0 values."
+  },
+  "E1/pdf/D5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/D5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no temperature-1.0 values."
+  },
+  "E1/html/D5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says plot is an image; gives no values or pages."
+  },
+  "E1/html/D5-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says plot is an image; gives no values or pages."
+  },
+  "E1/md/D5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no temperature-1.0 values."
+  },
+  "E1/txt/D5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says plotted values unavailable; gives no temperature-1.0 values."
+  },
+  "E1/pdf/D5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/html/D5-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says plot is an image; gives no values or pages."
+  },
+  "E1/txt/D5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives only qualitative trend, no temperature-1.0 values."
+  },
+  "E1/c0/D5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Answers from memory; gives no exact values."
+  }
+ }
+}

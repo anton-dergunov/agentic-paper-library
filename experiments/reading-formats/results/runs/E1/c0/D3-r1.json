@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "D3",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "c0",
+ "page": 10,
+ "status": "ok",
+ "answer": "This sounds like the human study in the **DPO paper** (Rafailov et al., 2023, *\"Direct Preference Optimization: Your Language Model is Secretly a Reward Model\"*), Table 2. The study checked GPT-4 as a judge of summarization quality. If I recall that table correctly:\n\n- **Human–human agreement on the PPO-1 comparison:** about **87%**\n- **GPT-4 (C)–human agreement on the DPO comparison:** about **67%**\n\nFor context, human–human agreement on the DPO comparison was about 65%. So GPT-4 (C) agreed with humans about as often as humans agreed with each other.\n\nThese figures are from memory, so check them against Table 2 if you need exact numbers. If you meant a different paper, let me know.",
+ "input": 821,
+ "cache_write": 819,
+ "cache_read": 0,
+ "output": 559,
+ "thinking": 305,
+ "usd": 0.01774,
+ "seconds": 6.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.18,
+ "date": "2026-10-24 23:24"
+}

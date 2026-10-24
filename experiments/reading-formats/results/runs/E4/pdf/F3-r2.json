@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "pdf",
+ "qid": "F3",
+ "rep": 2,
+ "paper": "gpt1",
+ "form": "pdf",
+ "page": 3,
+ "status": "ok",
+ "answer": "**Eq. 5 (page 3):**\n\n$$L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda \\cdot L_1(\\mathcal{C})$$\n\n**What the terms mean:**\n\n- **L₂(𝒞)** is the supervised objective over the labeled dataset 𝒞 (Eq. 4, page 3):\n  $$L_2(\\mathcal{C}) = \\sum_{(x,y)} \\log P(y \\mid x^1, \\ldots, x^m)$$\n  Here $P(y \\mid x^1, \\ldots, x^m) = \\text{softmax}(h_l^m W_y)$ (Eq. 3, page 3).\n- **L₁(𝒞)** is the language modeling objective from Eq. 1 (page 3), applied to the fine-tuning data:\n  $$L_1 = \\sum_i \\log P(u_i \\mid u_{i-k}, \\ldots, u_{i-1}; \\Theta)$$\n- **λ** is the weight on the auxiliary LM objective. It was set to 0.5 (page 5).\n\n**Why it is used:** The authors found that adding language modeling as an auxiliary objective during fine-tuning (a) improved generalization of the supervised model and (b) sped up convergence (page 3). In their ablation, the auxiliary objective helped on the NLI tasks and QQP. Overall, larger datasets benefited from it but smaller ones did not (page 8).",
+ "input": 34866,
+ "cache_write": 0,
+ "cache_read": 34864,
+ "output": 524,
+ "thinking": 36,
+ "usd": 0.017460800000000002,
+ "seconds": 5.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-24 23:30"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "S4",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "pdf",
+ "page": 18,
+ "status": "ok",
+ "answer": "For the original Llama-3-Instruct (8B) setting, SimPO uses **β = 2.5, γ = 1.4, and a learning rate of 1e-6** (Table 8, p. 18).\n\nThe paper also reports an updated setup that uses different values:\n\n- **Llama-3-Instruct v0.2:** This version labels preferences with the stronger ArmoRM reward model. It uses **β = 10 and γ = 3**. The learning rate, batch size and max sequence length are unchanged from the original setting (p. 29), so the learning rate stays at 1e-6.\n- **Large β:** In some settings, such as Llama-3-Instruct, a large β (e.g., β = 10) performs better (footnote 11, p. 10).\n- **Released checkpoint:** The released Llama-3-SimPO checkpoint is the one trained with lr = 1e-6 (Table 16, p. 31).",
+ "input": 95947,
+ "cache_write": 553,
+ "cache_read": 95392,
+ "output": 436,
+ "thinking": 137,
+ "usd": 0.0322304,
+ "seconds": 13.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-24 23:28"
+}

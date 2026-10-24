@@ -1,0 +1,30 @@
+{
+ "key": "80ba23dfb6229e56",
+ "usd": 0.026156000000000002,
+ "grades": {
+  "E1/txt/S2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/S2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "ORPO bullet is garbled but not contradictory"
+  },
+  "E1/c0/S2-r1": {
+   "score": "wrong",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Claims SimPO highest; gold is CPO at 22.6"
+  },
+  "E1/pdf/S2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

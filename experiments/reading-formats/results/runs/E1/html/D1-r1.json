@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "html",
+ "qid": "D1",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "html",
+ "page": 4,
+ "status": "ok",
+ "answer": "**Note on citations:** The document is an HTML rendering with no page numbers, so I can't give page numbers. I cite section and equation numbers instead.\n\n## The DPO loss (Eq. 7, Section 4)\n\n$$\n\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta;\\pi_{\\text{ref}}) = -\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log\\sigma\\left(\\beta\\log\\frac{\\pi_\\theta(y_w\\mid x)}{\\pi_{\\text{ref}}(y_w\\mid x)} - \\beta\\log\\frac{\\pi_\\theta(y_l\\mid x)}{\\pi_{\\text{ref}}(y_l\\mid x)}\\right)\\right]\n$$\n\nThe terms are:\n- **y_w and y_l** are the preferred and dispreferred completions for prompt x (Section 3).\n- **σ** is the logistic function (Section 3).\n- **β** controls how far the policy can deviate from the reference policy π_ref, which is usually the SFT model (Section 3, after Eq. 3).\n\nThe paper says this objective is \"analogous to the reward modeling approach (i.e. Eq. 2)\" (Section 4). That reward-model loss is −E[log σ(r_φ(x,y_w) − r_φ(x,y_l))] (Eq. 2, Section 3).\n\n## What plays the role of the reward\n\nThe reward is the scaled log-ratio between the policy and the reference model. The paper defines the implicit reward as:\n\n$$\n\\hat{r}_\\theta(x,y) = \\beta\\log\\frac{\\pi_\\theta(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}\n$$\n\nIt calls this \"the reward implicitly defined by the language model π_θ and reference model π_ref\" (Section 4, \"What does the DPO update do?\").\n\nThis comes from the following derivation:\n- **Eq. 5 (Section 4):** The optimal policy for the KL-constrained objective is rearranged to give r(x,y) = β log(π_r(y|x)/π_ref(y|x)) + β log Z(x).\n- **Section 4, leading to Eq. 6:** The Bradley-Terry model depends only on reward differences, so the β log Z(x) term cancels. Only the log-ratio term remains.\n- **Theorem 1 (Section 5.1; proof in Appendix A.6):** Under mild assumptions, every reward equivalence class consistent with the Plackett-Luce and Bradley-Terry models can be represented as r(x,y) = β log(π(y|x)/π_ref(y|x)). The reparameterization therefore loses no generality.\n- **Section 4, introduction:** The paper concludes that \"the policy network represents both the language model and the (implicit) reward.\"\n\nThe reference code in Appendix B computes the same quantity as `rewards = beta * (pi_logps - ref_logps).detach()`.",
+ "input": 197077,
+ "cache_write": 197075,
+ "cache_read": 0,
+ "output": 1291,
+ "thinking": 299,
+ "usd": 1.602428,
+ "seconds": 15.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:24"
+}

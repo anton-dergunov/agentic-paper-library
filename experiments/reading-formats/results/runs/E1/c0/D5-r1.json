@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "D5",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "I can't give you exact numbers for that point with confidence. The DPO paper (Rafailov et al., 2023, Figure 2, right panel) reports these win rates only as a plot, not in a table, and I don't reliably remember the plotted values at T = 1.0.\n\nWhat I do recall:\n\n- **At low temperature (T = 0)**, DPO reaches about **61%** win rate against the reference summaries, judged by GPT-4. PPO's best is about **57%**.\n- **At T = 1.0**, PPO collapses. The paper says its performance \"can degrade to that of the base GPT-J model at high temperatures.\" That puts it far below 50%, and I believe near the bottom of the plot.\n- **DPO is described as much more robust to temperature.** It declines somewhat at T = 1.0 but stays well above PPO.\n\nFor the exact values, check Figure 2 in the arXiv version (2305.18290). If you have the PDF or figure locally, give me the path and I can look at it.",
+ "input": 786,
+ "cache_write": 784,
+ "cache_read": 0,
+ "output": 802,
+ "thinking": 480,
+ "usd": 0.02232,
+ "seconds": 11.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-24 23:26"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "S5",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "txt",
+ "page": 2,
+ "status": "ok",
+ "answer": "**The document does not report SimPO being applied to Llama-3-70B, so it gives no AlpacaEval 2 LC win rate for that.**\n\nLlama-3-70B appears only once, as the unmodified **Llama-3-70B-Instruct** in the AlpacaEval 2 leaderboard comparison (Table 1, page 2). Its scores there are 34.4% LC, 33.2% WR and an average length of 1919. That is the off-the-shelf model, not one trained with SimPO.\n\nThe paper uses SimPO only on smaller models:\n\n- **Llama-3-8B and Mistral-7B**, each in Base and Instruct setups (page 4).\n- **Gemma-2-9B-it**, its strongest model (pages 4 and 31).\n\nThe closest Llama-3 results are both 8B:\n\n- **Llama-3-8B-Instruct-SimPO:** 44.7% LC on AlpacaEval 2 (Table 1, page 2; Table 4, page 6).\n- **Llama-3-8B-Instruct-SimPO v0.2:** 53.7% LC, using the stronger ArmoRM reward model (Table 12, page 29).",
+ "input": 49352,
+ "cache_write": 555,
+ "cache_read": 48795,
+ "output": 585,
+ "thinking": 198,
+ "usd": 0.025907,
+ "seconds": 7.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-24 23:28"
+}

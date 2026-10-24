@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L3",
+ "rep": 3,
+ "paper": "litm",
+ "form": "txt",
+ "page": 10,
+ "status": "ok",
+ "answer": "**The document doesn't give either number.** Figure 11 plots Contriever recall and reader accuracy against the number of retrieved documents, but the text you provided contains only the chart's axes and legend, not the actual data points (p. 10). The appendix tables of exact results (Tables 5–7, p. 18) cover only the controlled multi-document QA task with 10, 20 and 30 documents, not this open-domain experiment.\n\nThe document does say the following about this experiment:\n\n- **Accuracy levels off before recall does.** Model performance \"saturates long before retriever recall,\" meaning the models do not make good use of the extra documents (p. 10).\n- **Going past 20 documents helps only slightly.** Using more than 20 retrieved documents \"only marginally improves reader performance (∼1.5% for GPT-3.5-Turbo and ∼1% for Claude-1.3)\" (p. 10; also p. 3). This figure is for GPT-3.5-Turbo; the 16K variant is not reported separately.\n- **The chart's scale is about 50–90.** Figure 11's y-axis (\"Metric\") runs roughly from 50 to 90, but the exact values for Contriever or GPT-3.5-Turbo (16K) at 50 documents can't be read from the text (p. 10).\n\nThe document has no printed page numbers. I counted pages from the start of the paper, so they may be off slightly.",
+ "input": 28632,
+ "cache_write": 0,
+ "cache_read": 28630,
+ "output": 856,
+ "thinking": 401,
+ "usd": 0.022854,
+ "seconds": 8.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.79,
+ "date": "2026-10-24 23:37"
+}

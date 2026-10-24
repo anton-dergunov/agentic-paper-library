@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "S3",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "# SimPO's Objective and How It Differs from DPO\n\n## The SimPO objective (Eq. 6, page 4)\n\n$$\n\\mathcal{L}_{\\text{SimPO}}(\\pi_\\theta) = -\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log \\sigma\\left(\\frac{\\beta}{|y_w|}\\log \\pi_\\theta(y_w|x) - \\frac{\\beta}{|y_l|}\\log \\pi_\\theta(y_l|x) - \\gamma\\right)\\right]\n$$\n\nHere (x, y_w, y_l) is a prompt with its winning and losing responses (page 3). β scales the reward difference (page 3). γ > 0 is a target reward margin (pages 3–4).\n\nThe objective is built from SimPO's reward (Eq. 4, page 3):\n\n$$\nr_{\\text{SimPO}}(x,y) = \\frac{\\beta}{|y|}\\log \\pi_\\theta(y|x) = \\frac{\\beta}{|y|}\\sum_{i=1}^{|y|}\\log \\pi_\\theta(y_i \\mid x, y_{<i})\n$$\n\nFor comparison, DPO's reward is r(x,y) = β log [π_θ(y|x) / π_ref(y|x)] + β log Z(x) (Eq. 1, page 3).\n\n## The two differences in the reward\n\n1. **No reference model.** DPO's reward is a log ratio between the policy and a reference model, usually the SFT model. That reference model adds memory and compute costs during training (page 3). SimPO's reward uses only the policy model, which removes the reference model (page 3). In the Llama-3-Base setting, this cut run time by about 20% and GPU memory by about 10% (page 10).\n\n2. **Length-normalized reward that matches generation.** SimPO's reward is the average log probability of the response's tokens (page 2). This is the same metric that guides generation (page 3). DPO's reward does not match the log-likelihood used at inference. With DPO, only about 50% of training triples have a likelihood ranking that agrees with the reward ranking (page 3). Normalizing by |y| also prevents a bias toward long but low-quality responses (page 3).\n\n## Also: the target reward margin\n\nThe paper calls SimPO's two main components (1) the length-normalized reward and (2) the target reward margin γ (page 2). The margin is not part of the reward itself. It is added to the Bradley-Terry objective, so the winning response's reward must beat the losing response's by at least γ:\n\np(y_w ≻ y_l | x) = σ(r(x,y_w) − r(x,y_l) − γ) (Eq. 5, page 4)\n\nAblations show both length normalization and the margin are important. Removing length normalization hurts the most (page 7, Table 5).",
+ "input": 49339,
+ "cache_write": 542,
+ "cache_read": 48795,
+ "output": 1342,
+ "thinking": 399,
+ "usd": 0.040943,
+ "seconds": 13.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-24 23:28"
+}

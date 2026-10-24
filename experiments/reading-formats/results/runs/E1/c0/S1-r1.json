@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "S1",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "c0",
+ "page": 6,
+ "status": "ok",
+ "answer": "In the SimPO paper (Meng, Xia & Chen, 2024), the **Llama-3-Instruct (8B)** results on **Arena-Hard** are:\n\n| Method | Arena-Hard WR (%) |\n|---|---|\n| SFT (Llama-3-8B-Instruct) | 22.3 |\n| **DPO** | **32.6** |\n| **SimPO** | **33.8** |\n\nSo SimPO beats DPO by about 1.2 points on Arena-Hard in this setting. The gap is wider on AlpacaEval 2, where SimPO scores 44.7 LC and 40.5 WR, against DPO's 40.3 LC and 37.9 WR.\n\nLater versions of the paper add a \"Llama-3-Instruct v0.2\" setting, which uses preference data labeled by the stronger ArmoRM reward model. I recall that the numbers there are higher, with roughly 36.5 for SimPO and 35.2 for DPO on Arena-Hard. I'm less sure of those figures, so check them against the paper version you're reading.",
+ "input": 787,
+ "cache_write": 785,
+ "cache_read": 0,
+ "output": 655,
+ "thinking": 301,
+ "usd": 0.019388,
+ "seconds": 8.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-24 23:28"
+}

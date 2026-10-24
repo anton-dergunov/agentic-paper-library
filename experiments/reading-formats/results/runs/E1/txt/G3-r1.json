@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "G3",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "The model scores **57.4 on RACE-h**. The previous best was **50.3**, from BiAttention MRU, so the gain is 7.1 points (Table 3, page 6).\n\nDetails from Table 3 (page 6):\n\n| Method | RACE-h |\n|---|---|\n| Dynamic Fusion Net (9x) | 49.4 |\n| BiAttention MRU (9x) | 50.3 |\n| Finetuned Transformer LM (ours) | 57.4 |\n\n- **Single model vs. ensemble:** Both earlier results came from ensembles of 9 models (\"9x means an ensemble of 9 models\"). The paper's 57.4 is from a single model (page 6).\n- **Metric:** Table 3 does not name its metric. Table 2 states that its NLI datasets use accuracy, but Table 3 does not say this (page 6). So calling 57.4 \"accuracy\" is a likely reading, not something the document says directly.\n- **Context:** RACE-h is the high-school part of RACE, which uses passages and questions from middle and high school exams (page 6). On RACE overall, the model reaches 59.0 versus the previous 53.3, which is the 5.7% gain cited in the paper (pages 1 and 6).",
+ "input": 16607,
+ "cache_write": 543,
+ "cache_read": 16062,
+ "output": 633,
+ "thinking": 223,
+ "usd": 0.0202244,
+ "seconds": 6.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.71,
+ "date": "2026-10-24 23:33"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F1",
+ "rep": 2,
+ "paper": "musique",
+ "form": "md-old",
+ "page": 11,
+ "status": "ok",
+ "answer": "On MuSiQue-Ans, the C-only model scores **53.4 answer F1 and 50.0 support F1** on the validation set (Table 4, p. 10).\n\n- **Test set:** It scores 53.7 answer F1 and 50.0 support F1 (Table 5, p. 10). The paper reports test numbers in Table 5 and validation numbers everywhere else (p. 10).\n- **How it works:** The C-only model sees only the context and gets an empty question. It is a Longformer-Large End2End model (p. 10).\n- **Interpretation:** On HotpotQA and 2WikiMultihopQA, this model identifies supporting paragraphs well without the question (67.6 and 92.0 support F1). On MuSiQue-Ans it \"fails\" (p. 10).\n- **Distractor effect:** The 53.4 / 50.0 result comes from the final setup of 20 paragraphs with positive distractors. With 20 distractors drawn from full Wikipedia instead, the C-only model would have reached 66.4 support F1 (Table 7, p. 12).\n- **MuSiQue-Full (for comparison):** The C-only model scores 51.6 answer+sufficiency and 51.1 support+sufficiency (Table 5, p. 10).",
+ "input": 33878,
+ "cache_write": 0,
+ "cache_read": 33876,
+ "output": 637,
+ "thinking": 216,
+ "usd": 0.0195232,
+ "seconds": 8.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-24 23:30"
+}

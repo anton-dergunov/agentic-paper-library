@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F3",
+ "rep": 3,
+ "paper": "gpt1",
+ "form": "md",
+ "page": 3,
+ "status": "ok",
+ "answer": "**Eq. 5 (p. 3):**\n\n$$L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda * L_1(\\mathcal{C})$$\n\nThis is the objective maximized during fine-tuning. It is the supervised loss plus language modeling as an auxiliary objective, weighted by λ (p. 3).\n\n**The terms:**\n\n- **L₂(𝒞)** is the supervised objective (Eq. 4, p. 3): $L_2(\\mathcal{C}) = \\sum_{(x,y)} \\log P(y \\mid x^1, \\dots, x^m)$. Here 𝒞 is a labeled dataset of token sequences $x^1, \\dots, x^m$, each with a label $y$.\n- **L₁(𝒞)** is the language modeling objective from Eq. 1 (p. 3), applied to the fine-tuning data: $\\sum_i \\log P(u_i \\mid u_{i-k}, \\dots, u_{i-1}; \\Theta)$. Here $k$ is the context window size.\n- **λ** was set to 0.5 (p. 4).\n\n**Why the paper adds the auxiliary term:** the authors found it improved generalization of the supervised model and sped up convergence (p. 3). However, their ablations found that the auxiliary objective helps on larger datasets, such as the NLI tasks and QQP, but not on smaller ones (p. 7).\n\n**Caveat:** this document is a PDF conversion, and its note says equations were read from the page image by a model and \"can be wrong in a symbol or an index.\" Check Eq. 5 against the original PDF before quoting it.",
+ "input": 17490,
+ "cache_write": 0,
+ "cache_read": 17488,
+ "output": 667,
+ "thinking": 123,
+ "usd": 0.0168456,
+ "seconds": 8.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-24 23:31"
+}

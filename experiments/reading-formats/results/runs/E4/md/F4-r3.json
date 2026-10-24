@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F4",
+ "rep": 3,
+ "paper": "qwen3vl",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "**Qwen3-VL-235B-A22B (thinking) scores 74.6 on MathVision, and Gemini 2.5 Pro (thinking) scores 73.3** (Table 2, pp. 15–16).\n\nThe 74.6 is in bold, which marks it as the highest score among the reasoning models. This fits the text on p. 14, which says Qwen3-VL-235B-A22B-Thinking achieves state-of-the-art results on MathVision.\n\nThe non-thinking versions in the same row are 66.5 for Qwen3-VL-235B-A22B (instruct) and 66.0 for Gemini 2.5 Pro (thinking budget 128) (Table 2, pp. 15–16).\n\nOne caveat: this table was not in arXiv's HTML version and was rebuilt from the PDF by layout analysis. A note in the document says to check the PDF before quoting tables whose columns look off. The MathVision row looks properly aligned, but some other rows in the table are garbled.",
+ "input": 83316,
+ "cache_write": 0,
+ "cache_read": 83314,
+ "output": 689,
+ "thinking": 362,
+ "usd": 0.0304508,
+ "seconds": 9.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.69,
+ "date": "2026-10-24 23:32"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "S3",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "pdf",
+ "page": 4,
+ "status": "ok",
+ "answer": "# SimPO objective\n\nThe SimPO objective is Eq. (6) on page 4:\n\n$$\n\\mathcal{L}_{\\text{SimPO}}(\\pi_\\theta) = -\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log \\sigma\\left(\\frac{\\beta}{|y_w|}\\log \\pi_\\theta(y_w|x) - \\frac{\\beta}{|y_l|}\\log \\pi_\\theta(y_l|x) - \\gamma\\right)\\right]\n$$\n\nHere $y_w$ and $y_l$ are the winning and losing responses (p. 3). β controls how the reward difference is scaled (p. 3). γ > 0 is the target reward margin (p. 3).\n\nFor comparison, DPO's reward is $r(x,y) = \\beta \\log \\frac{\\pi_\\theta(y|x)}{\\pi_{\\text{ref}}(y|x)}$, plus a partition-function term (Eq. 1, p. 3).\n\n# The two differences\n\nThe paper names two components in which SimPO differs from DPO (p. 2):\n\n1. **A length-normalized reward with no reference model.** SimPO's reward is the average log probability of the response's tokens under the policy, scaled by β: $r_{\\text{SimPO}}(x,y) = \\frac{\\beta}{|y|}\\log \\pi_\\theta(y|x)$ (Eq. 4, p. 3). This brings two changes:\n   - **No reference model.** DPO's reward needs a reference model $\\pi_{\\text{ref}}$, which costs extra memory and compute (p. 3). SimPO's reward does not, which saves memory and compute (p. 3). In one setting, SimPO used about 20% less run time and about 10% less GPU memory (p. 10).\n   - **Training matches generation.** DPO's reward does not match the likelihood that guides generation (p. 3). With DPO, only about 50% of training triples satisfied the likelihood ranking (p. 3). SimPO's average-log-likelihood reward matches the generation metric (p. 3).\n   - **Length normalization matters.** Removing it biases the model toward long but lower-quality outputs (p. 3).\n\n2. **A target reward margin γ.** This term is added to the Bradley-Terry objective. It requires the winning response's reward to exceed the losing response's reward by at least γ: $p(y_w \\succ y_l|x) = \\sigma(r(x,y_w) - r(x,y_l) - \\gamma)$ (Eq. 5, pp. 3–4). DPO has no explicit margin.\n\nStrictly speaking, γ changes the objective rather than the reward function itself. If you count only differences in the reward formula, the two are (a) length normalization and (b) removing the reference model (p. 3).",
+ "input": 95937,
+ "cache_write": 543,
+ "cache_read": 95392,
+ "output": 1188,
+ "thinking": 256,
+ "usd": 0.04719040000000001,
+ "seconds": 12.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-24 23:28"
+}

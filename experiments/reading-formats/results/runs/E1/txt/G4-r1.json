@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "G4",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "All of these specifications are on **page 5**, in the \"Model specifications\" paragraph.\n\n| Spec | Value |\n|---|---|\n| Layers | 12-layer decoder-only Transformer with masked self-attention heads |\n| State size | 768-dimensional states |\n| Attention heads | 12 |\n| Context length | 512 tokens (trained on minibatches of 64 randomly sampled, contiguous sequences of 512 tokens) |\n| Optimizer | Adam |\n| Peak learning rate | 2.5e-4 |\n\n**Related details (also page 5):**\n- The position-wise feed-forward layers have 3072-dimensional inner states.\n- The learning rate rose linearly from zero over the first 2,000 updates, then annealed to 0 on a cosine schedule.\n- The 2.5e-4 peak applies to pre-training. Fine-tuning used a learning rate of 6.25e-5 for most tasks.",
+ "input": 16614,
+ "cache_write": 550,
+ "cache_read": 16062,
+ "output": 507,
+ "thinking": 197,
+ "usd": 0.0177604,
+ "seconds": 5.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.71,
+ "date": "2026-10-24 23:33"
+}

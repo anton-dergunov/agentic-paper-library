@@ -1,0 +1,66 @@
+{
+ "key": "62f6c74fd3847687",
+ "usd": 0.059376,
+ "grades": {
+  "E1/pdf/L2-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/L2-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says figure values are unavailable; gold is about 45%."
+  },
+  "E1/c0/L2-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Declines from memory; wrongly claims an appendix key-value table exists."
+  },
+  "E1/txt/L2-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Cannot read Figure 7 values; gold is about 45%."
+  },
+  "E1/md/L2-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says figure values are unavailable; gold is about 45%."
+  },
+  "E1/pdf/L2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/L2-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/L2-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Does not tie 45.6% to the 200th position."
+  },
+  "E1/txt/L2-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Declines; gold is about 45% from Figure 7."
+  },
+  "E1/md/L2-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Cannot read Figure 7 image; gold is about 45%."
+  }
+ }
+}

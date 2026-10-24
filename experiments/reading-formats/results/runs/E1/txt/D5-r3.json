@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "D5",
+ "rep": 3,
+ "paper": "dpo",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give PPO's or DPO's exact win rates at temperature 1.0.** Figure 2 (right) is a plot, and the extracted text has only its axis labels and legend, not the plotted values (page 7).\n\nThe text does say this about temperature effects:\n\n- **Qualitative trend:** DPO is \"much more robust to the sampling temperature than PPO, the performance of which can degrade to that of the base GPT-J model at high temperatures\" (page 9). The Figure 2 caption also says DPO is \"more robust to changes in the sampling temperature\" (page 7).\n- **Numbers given (temperature 0.0 only):** DPO has a win rate of about 61% at temperature 0.0. PPO reaches 57% at its optimal temperature, which is also 0.0 (page 9).\n\nSo at temperature 1.0, PPO likely falls toward GPT-J's level and DPO holds up better, but the figures themselves aren't recoverable from this text. You would need to read them off the original plot.",
+ "input": 40202,
+ "cache_write": 0,
+ "cache_read": 40200,
+ "output": 481,
+ "thinking": 151,
+ "usd": 0.017668,
+ "seconds": 7.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.43,
+ "date": "2026-10-24 23:27"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "D3",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "txt",
+ "page": 10,
+ "status": "ok",
+ "answer": "**Human–human agreement on the PPO-1 comparison was 87%, and GPT-4 (C)–human agreement on the DPO comparison was 67%** (Table 2, page 10).\n\nFor context:\n- Multiple human judgments were collected only for the DPO and PPO-1 comparisons, because the number of human raters was limited (page 10). Each of those comparisons had two human raters, which gave 200 judgments for PPO-1 vs. PPO-0 (page 27).\n- On the DPO comparison, GPT-4 (C) agreed with humans slightly more often (67%) than humans agreed with each other (65%) (Table 2, page 10).\n- In both cases the baseline was a PPO summary sampled at temperature 0 (page 10).",
+ "input": 40237,
+ "cache_write": 40235,
+ "cache_read": 0,
+ "output": 407,
+ "thinking": 159,
+ "usd": 0.330028,
+ "seconds": 5.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.2,
+ "date": "2026-10-24 23:24"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "D2",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "c0",
+ "page": 9,
+ "status": "ok",
+ "answer": "This is from the DPO paper (Rafailov et al., 2023, *\"Direct Preference Optimization: Your Language Model is Secretly a Reward Model\"*). Table 1 reports GPT-4 win rates against the ground-truth summaries on CNN/DailyMail articles. At **temperature 0.25**:\n\n- **DPO: 0.31**\n- **PPO: 0.23**\n\nFor comparison, at temperature 0 the paper reports DPO at 0.36 and PPO at 0.26.\n\nThis was an **out-of-distribution** test. Both policies were trained on Reddit TL;DR summarization and then evaluated on CNN/DailyMail news articles. The paper uses this result to show that DPO generalizes at least as well as PPO under a distribution shift.\n\nThese numbers are from memory, so check them against Table 1 if you need exact values.",
+ "input": 811,
+ "cache_write": 809,
+ "cache_read": 0,
+ "output": 572,
+ "thinking": 290,
+ "usd": 0.01792,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.15,
+ "date": "2026-10-24 23:24"
+}

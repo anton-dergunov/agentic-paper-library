@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F3",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "md",
+ "page": 3,
+ "status": "ok",
+ "answer": "# Fine-tuning objective (Eq. 5)\n\nEq. 5 is on p. 3:\n\n$$L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda * L_1(\\mathcal{C}) \\quad (5)$$\n\nIt combines two terms:\n\n- **$L_2(\\mathcal{C})$** is the supervised objective over the labeled dataset $\\mathcal{C}$ (Eq. 4, p. 3):\n  $$L_2(\\mathcal{C}) = \\sum_{(x,y)} \\log P(y \\mid x^1, \\dots, x^m)$$\n- **$L_1(\\mathcal{C})$** is the language modeling objective from pre-training (Eq. 1, p. 3), applied here to $\\mathcal{C}$:\n  $$L_1 = \\sum_i \\log P(u_i \\mid u_{i-k}, \\dots, u_{i-1}; \\Theta)$$\n  Here $k$ is the context window size.\n- **$\\lambda$** weights the auxiliary language modeling term (p. 3). It was set to 0.5 (Section 4.1, p. 4).\n\nThe authors say the auxiliary language modeling term helped in two ways: it improved generalization and it sped up convergence (p. 3).\n\n**Caveat:** The document says its equations were read from the page image by a model and \"can be wrong in a symbol or an index.\" Check the PDF before quoting this equation.",
+ "input": 17490,
+ "cache_write": 17488,
+ "cache_read": 0,
+ "output": 757,
+ "thinking": 278,
+ "usd": 0.155052,
+ "seconds": 8.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.61,
+ "date": "2026-10-24 23:30"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F4",
+ "rep": 3,
+ "paper": "qwen3vl",
+ "form": "md-old",
+ "page": 15,
+ "status": "ok",
+ "answer": "**The document does not give the MathVision scores for either model.**\n\nWhat it does say:\n\n- **Qwen3-VL-235B-A22B-Thinking** achieves state-of-the-art results on MathVision, along with MathVista<sub>mini</sub>, MathVerse<sub>mini</sub>, ZeroBench, LogicVista, and VisuLogic (p. 14). Since it is called state of the art, it presumably scores at or above Gemini 2.5 Pro (thinking) on MathVision, but no numbers are given.\n- **Qwen3-VL-235B-A22B-Instruct** achieves the best reported MathVision result among non-thinking or low-thinking-budget models (p. 14).\n- The abstract names MathVision as one of the visual-math benchmarks where Qwen3-VL leads (p. 1).\n\nThe per-benchmark scores are in a flagship results table that Section 5.2 refers to (p. 14), but that table is not in this version of the document. The tables that are included (Tables 5–12) cover text-only benchmarks and ablations, not MathVision. To get the exact figures, check the original paper at arxiv.org/abs/2511.21631.",
+ "input": 74423,
+ "cache_write": 0,
+ "cache_read": 74421,
+ "output": 501,
+ "thinking": 113,
+ "usd": 0.024912200000000002,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.69,
+ "date": "2026-10-24 23:32"
+}

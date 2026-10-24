@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "D5",
+ "rep": 2,
+ "paper": "dpo",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document does not give PPO's or DPO's win rates at temperature 1.0 in the TL;DR plot.** That plot (Figure 2, right) is included only as an image, and the text does not report its values at temperature 1.0.\n\nWhat the text does say about that plot:\n\n- Completions were sampled at temperatures from 0.0 to 1.0, and win rates were measured against the reference summaries in the test set (p. 9).\n- At temperature 0.0, DPO's win rate was about 61% and PPO's was about 57%. Temperature 0.0 was PPO's best temperature (p. 9).\n- DPO is \"much more robust to the sampling temperature than PPO.\" PPO's performance \"can degrade to that of the base GPT-J model at high temperatures\" (p. 9; also the Figure 2 caption, p. 7).\n\nThere is one related number, but it measures something different. In the human study (Table 2, p. 10), PPO at temperature 1.0 (\"PPO-1\") had a GPT-4 (S) win rate of 13%, a GPT-4 (C) win rate of 12% and a human win rate of 17%. Those rates are against PPO at temperature 0, not against the reference summaries, so they are not the values from the Figure 2 plot. The table has no DPO result at temperature 1.0; DPO was evaluated at temperature 0.25 there.",
+ "input": 45597,
+ "cache_write": 0,
+ "cache_read": 45595,
+ "output": 615,
+ "thinking": 171,
+ "usd": 0.021427,
+ "seconds": 6.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-24 23:26"
+}

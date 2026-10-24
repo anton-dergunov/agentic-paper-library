@@ -1,0 +1,60 @@
+{
+ "key": "f59284aa3c2766ae",
+ "usd": 0.042984,
+ "grades": {
+  "E4/md/F4-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/pdf/F4-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md/F4-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md/F4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/pdf/F4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md-old/F4-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says table missing; scores 74.6 and 73.3 not given"
+  },
+  "E4/md-old/F4-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says table missing; scores 74.6 and 73.3 not given"
+  },
+  "E4/pdf/F4-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md-old/F4-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says table missing; scores 74.6 and 73.3 not given"
+  }
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "key": "c543a82c17cecc51",
+ "usd": 0.0603,
+ "grades": {
+  "E1/md/L3-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives no recall or accuracy values; says they are only in Figure 11."
+  },
+  "E1/pdf/L3-r2": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Recall ~88–89% correct; GPT-3.5-Turbo (16K) accuracy not given."
+  },
+  "E1/txt/L3-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives no values; says the plot cannot be read."
+  },
+  "E1/txt/L3-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives no values; describes the axes only."
+  },
+  "E1/c0/L3-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Answers from memory and gives no values."
+  },
+  "E1/txt/L3-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives no values; describes the axis scale only."
+  },
+  "E1/md/L3-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives no values; says the figure is only an image."
+  },
+  "E1/pdf/L3-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/L3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/L3-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives no values; says the figure is only an image."
+  }
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "key": "ba9efbfc3317079c",
+ "usd": 0.030496000000000002,
+ "grades": {
+  "E1/md/L1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/L1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/L1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/L1-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Values recalled from memory, no page cited"
+  }
+ }
+}

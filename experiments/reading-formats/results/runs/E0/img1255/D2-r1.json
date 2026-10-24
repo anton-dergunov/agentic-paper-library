@@ -1,0 +1,22 @@
+{
+ "exp": "E0",
+ "cond": "img1255",
+ "qid": "D2",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "img1255",
+ "page": 9,
+ "status": "ok",
+ "answer": "At temperature 0.25, **DPO scores 0.31** and **PPO scores 0.23** (Table 1, page 9).\n\nThese are GPT-4 win rates against ground-truth summaries on CNN/DailyMail news articles. The policies were trained on Reddit TL;DR, so this tests how well they handle a new kind of input (page 9). DPO outperforms PPO by a significant margin, even though DPO doesn't use the extra unlabeled Reddit TL;DR prompts that PPO uses (page 9).",
+ "input": 2409,
+ "cache_write": 2407,
+ "cache_read": 0,
+ "output": 215,
+ "thinking": 41,
+ "usd": 0.023563999999999998,
+ "seconds": 2.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:23"
+}

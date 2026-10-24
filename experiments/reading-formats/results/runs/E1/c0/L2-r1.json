@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "L2",
+ "rep": 1,
+ "paper": "litm",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "I can't give you that number reliably. The task sounds like the synthetic key-value retrieval experiment in **\"Lost in the Middle: How Language Models Use Long Contexts\"** (Liu et al., 2023). That paper tests 75, 140 and 300 key-value pairs, and its appendix reports a table of accuracy for each model at each key position.\n\nThe broad pattern I remember is this: accuracy for GPT-3.5-Turbo (16K) was near-perfect with fewer pairs. At 300 pairs it dropped noticeably when the key was in the middle of the context, while staying high at the start. I don't remember the exact value at the 200th position, and any specific figure I gave would be a guess.\n\nTo get the precise number, check the appendix table for the key-value retrieval results at 300 pairs (arXiv:2307.03172). If you can share the paper or table, I can find the value for you.",
+ "input": 795,
+ "cache_write": 793,
+ "cache_read": 0,
+ "output": 711,
+ "thinking": 420,
+ "usd": 0.020572,
+ "seconds": 8.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.76,
+ "date": "2026-10-24 23:35"
+}

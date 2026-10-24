@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "G2",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "c0",
+ "page": 8,
+ "status": "ok",
+ "answer": "I don't see a paper attached; your working directory is empty. I'm assuming you mean the ablation table (Table 5) in Radford et al., 2018, *\"Improving Language Understanding by Generative Pre-Training\"* (GPT-1), which includes a \"Transformer w/o pre-training\" row.\n\nFrom memory, the averages in that table are:\n\n| Variant | Avg. score |\n|---|---|\n| Transformer w/ aux LM (full) | 74.7 |\n| **Transformer w/o pre-training** | **59.9** |\n| Transformer w/o aux LM | **75.0** |\n| LSTM w/ aux LM | 69.1 |\n\n- **Without pre-training**, the Transformer averages **59.9**, about 15 points below the full model.\n- **Highest average:** the **Transformer without the auxiliary LM objective** (75.0) slightly beats the full model (74.7). The authors note the auxiliary objective helps on larger datasets (e.g., QQP, MNLI) but not on smaller ones.\n\nPlease double-check these numbers against the PDF. If you meant a different paper, send it or tell me the title and I'll look at that table instead.",
+ "input": 779,
+ "cache_write": 777,
+ "cache_read": 0,
+ "output": 1028,
+ "thinking": 646,
+ "usd": 0.026784000000000002,
+ "seconds": 12.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.71,
+ "date": "2026-10-24 23:33"
+}

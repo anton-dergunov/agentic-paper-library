@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "pdf",
+ "qid": "F5",
+ "rep": 2,
+ "paper": "qwen3vl",
+ "form": "pdf",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2 (page 15), **GPT-5 (high)** scores **78.4** on MMMU-Pro. The asterisk on that number means it was taken from GPT-5's own technical report rather than measured by the Qwen team (page 15).\n\nIt is the highest MMMU-Pro score in that table. For comparison (page 15):\n- Qwen3-VL-235B-A22B Thinking: 69.3\n- Gemini 2.5 Pro Thinking: 68.8*\n- Claude Opus 4.1 Thinking: 64.8\n\nThe smaller GPT-5 variants in \"high\" mode score lower:\n- GPT-5-mini: 67.3 (Table 3, page 16)\n- GPT-5-nano: 57.2 (Table 4, page 18)",
+ "input": 133804,
+ "cache_write": 0,
+ "cache_read": 133802,
+ "output": 392,
+ "thinking": 135,
+ "usd": 0.034608400000000004,
+ "seconds": 7.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.69,
+ "date": "2026-10-24 23:32"
+}

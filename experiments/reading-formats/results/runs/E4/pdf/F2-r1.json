@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "pdf",
+ "qid": "F2",
+ "rep": 1,
+ "paper": "toolformer",
+ "form": "pdf",
+ "page": 9,
+ "status": "ok",
+ "answer": "With k = 3, Toolformer calls an API for **99.3%** of WebQS examples (Table 9, page 9).\n\nThe same row reports these WebQS scores (page 9):\n- **Overall:** 26.3\n- **Examples with an API call:** 26.5\n- **Remaining examples:** 6.6\n\nFor comparison, the model calls an API for 8.5% of WebQS examples with k = 1 (regular greedy decoding) and 100% with k = 10 (page 9). The paper notes that on WebQS, the model \"only starts to make a substantial number of API calls as we slightly increase k\" (page 9).",
+ "input": 56125,
+ "cache_write": 56123,
+ "cache_read": 0,
+ "output": 249,
+ "thinking": 48,
+ "usd": 0.453972,
+ "seconds": 4.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.58,
+ "date": "2026-10-24 23:30"
+}

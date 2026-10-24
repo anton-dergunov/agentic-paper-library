@@ -1,0 +1,36 @@
+{
+ "key": "fb9550c5708ae394",
+ "usd": 0.032451999999999995,
+ "grades": {
+  "E1/c0/D3-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Values match; recalled from memory and no page cited."
+  },
+  "E1/md/D3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/D3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/html/D3-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No page cited."
+  },
+  "E1/pdf/D3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

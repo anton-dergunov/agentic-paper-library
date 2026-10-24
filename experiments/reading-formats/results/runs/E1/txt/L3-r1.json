@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L3",
+ "rep": 1,
+ "paper": "litm",
+ "form": "txt",
+ "page": 10,
+ "status": "ok",
+ "answer": "**The document doesn't give either number.**\n\nThe open-domain results appear only as a plot, Figure 11 (page 10). It shows \"contriever recall\" and each model's accuracy against 1–50 retrieved documents, on an axis from about 50 to 90 (page 10). The plotted values aren't in the text, and no table lists them. Appendix G tabulates only the controlled multi-document QA task with 10, 20 and 30 documents (page 17).\n\nThe paper does describe these results in words:\n\n- **Reader performance levels off well before retriever recall does.** The authors take this to mean that \"readers are not effectively using the extra context\" (page 10).\n- **Going beyond 20 documents helps only slightly.** Using more than 20 retrieved documents improves reader performance by about 1.5% for GPT-3.5-Turbo and about 1% for Claude-1.3 (page 10). The introduction says the same, comparing 50 documents with 20 (page 3).\n- **The 1.5% figure may not be for the 16K variant.** These statements say \"GPT-3.5-Turbo,\" not GPT-3.5-Turbo (16K) specifically, though Figure 11's legend includes both (page 10).\n\nThe text has no printed page numbers, so I counted pages from the start of the document. Page 10 is the page with Figure 11 and the start of Section 6 (Related Work).",
+ "input": 28632,
+ "cache_write": 572,
+ "cache_read": 28058,
+ "output": 981,
+ "thinking": 535,
+ "usd": 0.029815600000000005,
+ "seconds": 10.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

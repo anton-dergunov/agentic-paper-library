@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L3",
+ "rep": 3,
+ "paper": "litm",
+ "form": "md",
+ "page": 10,
+ "status": "ok",
+ "answer": "The document doesn't state either number. The figures are only available as images, so the values aren't in the text.\n\n**What the document does say about this experiment (p. 9):**\n- **Setup:** Contriever, fine-tuned on MS-MARCO, retrieves the top-*k* Wikipedia documents for NaturalQuestions-Open queries. Retriever recall and reader accuracy are measured as *k* varies.\n- **Where the results are:** they appear only in Figure 11, which the document includes as an image.\n- **Qualitative result:** reader performance \"saturates long before retriever performance saturates.\"\n- **Gain beyond 20 documents:** using more than 20 retrieved documents \"only marginally improves reader performance (~1.5% for GPT-3.5-Turbo and ~1% for Claude-1.3).\" The introduction says the same about 50 versus 20 documents (p. 1).\n\n**What's missing:**\n- No recall value for Contriever at *k* = 50.\n- No accuracy figure for GPT-3.5-Turbo (16K) specifically. The ~1.5% gain is reported for \"GPT-3.5-Turbo,\" and it is a relative improvement, not an absolute accuracy.\n\nTo get the exact values, you'd need to read them off Figure 11 in the original paper.",
+ "input": 26918,
+ "cache_write": 0,
+ "cache_read": 26916,
+ "output": 527,
+ "thinking": 104,
+ "usd": 0.0159312,
+ "seconds": 6.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.79,
+ "date": "2026-10-24 23:37"
+}

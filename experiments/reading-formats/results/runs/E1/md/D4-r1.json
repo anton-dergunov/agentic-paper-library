@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "D4",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "md",
+ "page": 20,
+ "status": "ok",
+ "answer": "The defaults appear in **Appendix B (p. 19)**:\n\n- **β:** 0.1\n- **Batch size:** 64\n- **Optimizer:** RMSprop\n- **Learning rate:** 1e-6\n- **Warm-up:** the learning rate rises linearly from 0 to 1e-6 over 150 steps\n\n**For TL;DR summarization**, β = 0.5. All other settings stay the same (p. 19).\n\nThe paper also says it \"did not meaningfully tune DPO's β hyperparameter\" for summarization, so the TL;DR results may understate DPO's potential (p. 9).",
+ "input": 45596,
+ "cache_write": 558,
+ "cache_read": 45036,
+ "output": 219,
+ "thinking": 17,
+ "usd": 0.0178592,
+ "seconds": 4.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.37,
+ "date": "2026-10-24 23:25"
+}

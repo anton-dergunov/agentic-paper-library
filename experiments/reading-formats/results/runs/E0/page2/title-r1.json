@@ -1,0 +1,22 @@
+{
+ "exp": "E0",
+ "cond": "page2",
+ "qid": "title",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "page",
+ "page": 2,
+ "status": "ok",
+ "answer": "**The document doesn't include the title.** It contains only page 2, which starts partway through the introduction. That page describes the paper's main contribution as \"Direct Preference Optimization (DPO), a simple RL-free algorithm for training language models from preferences\" (p. 2), but the title itself isn't there.",
+ "input": 3802,
+ "cache_write": 3800,
+ "cache_read": 0,
+ "output": 313,
+ "thinking": 215,
+ "usd": 0.036668,
+ "seconds": 3.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.07,
+ "date": "2026-10-24 23:23"
+}

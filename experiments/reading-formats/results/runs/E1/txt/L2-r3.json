@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L2",
+ "rep": 3,
+ "paper": "litm",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document does not give this number.** The key-value results for GPT-3.5-Turbo (16K) at 300 pairs appear only as a plot, and the text never states its accuracy at the 200th position.\n\nThese page numbers are my count of the pages in the extracted text, because the document has no printed page numbers.\n\n- **Page 7, Figure 7:** This plot shows key-value accuracy against key position for 75, 140 and 300 pairs. The 300-pair panel has a 200th-position tick, but the extracted text contains no values for any model at that point. The caption only says that performance \"rapidly degrades when models must retrieve from the middle of the input context.\"\n- **Page 6, Section 3.2:** GPT-3.5-Turbo, GPT-3.5-Turbo (16K) and MPT-30B-Instruct \"have the lowest performance when they must access key-value pairs in the middle of their input context.\" No figure is given.\n- **Page 8, Section 4.2:** With query-aware contextualization, GPT-3.5-Turbo (16K) \"achieves perfect performance when evaluated with 300 key-value pairs.\" Without it, \"the worst-case performance is 45.6% (Figure 7).\" This 45.6% is the overall worst case. It is not stated to occur at the 200th position.\n- **Appendix G (final pages, Tables 5–7):** These tables list exact numbers only for multi-document QA. They do not include key-value retrieval.\n\nFor the exact value, you would need to read it off the original Figure 7 plot or use the authors' released data (nelsonliu.me/papers/lost-in-the-middle, page 3).",
+ "input": 28628,
+ "cache_write": 0,
+ "cache_read": 28626,
+ "output": 1023,
+ "thinking": 490,
+ "usd": 0.0261932,
+ "seconds": 12.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.79,
+ "date": "2026-10-24 23:37"
+}

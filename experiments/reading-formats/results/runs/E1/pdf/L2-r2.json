@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "L2",
+ "rep": 2,
+ "paper": "litm",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "GPT-3.5-Turbo (16K) reaches about **45.6% accuracy** when the key is at the 200th position of 300 key-value pairs. The paper doesn't state this number for that position directly; I derived it as follows.\n\n- **What the text says:** Without query-aware contextualization, GPT-3.5-Turbo (16K)'s worst-case accuracy on the 300 key-value pair setting is 45.6% (page 8, referring to Figure 7).\n- **What the figure shows:** In the 300 key-value pairs (~16K tokens) panel of Figure 7, the GPT-3.5-Turbo (16K) curve hits its lowest point at the 200th position, at roughly 45% (page 7). The x-axis marks positions 1st, 50th, 100th, 150th, 200th, 250th and 300th.\n- **The inference:** Since the curve's lowest point is at the 200th position, the stated 45.6% worst case is the accuracy at that position.\n\nFor comparison, the same model is near 100% when the key is at the start or end (Figure 7, page 7). With query-aware contextualization, it gets perfect accuracy on 300 key-value pairs (page 8).\n\nThere is no table of exact key-value results by position; the appendix tables cover only the multi-document QA task (page 18). So the 45.6% figure depends on reading the 200th position as the minimum on the plot.",
+ "input": 54354,
+ "cache_write": 0,
+ "cache_read": 54352,
+ "output": 998,
+ "thinking": 540,
+ "usd": 0.030838400000000002,
+ "seconds": 10.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.78,
+ "date": "2026-10-24 23:36"
+}

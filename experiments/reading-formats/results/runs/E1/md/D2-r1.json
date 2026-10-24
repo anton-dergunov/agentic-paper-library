@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "D2",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "md",
+ "page": 9,
+ "status": "ok",
+ "answer": "At temperature 0.25 on out-of-distribution CNN/DailyMail articles, **DPO gets a 0.31 GPT-4 win rate against the ground-truth summaries, and PPO gets 0.23** (Table 1, p. 9).\n\n- The policies are the ones trained in the Reddit TL;DR summarization experiment. They were tested on news articles from the CNN/DailyMail test split, using the best TL;DR sampling temperatures, 0 and 0.25 (p. 9).\n- GPT-4 judged with the same \"GPT-4 (C)\" prompt used for TL;DR, with \"forum post\" replaced by \"news article\" (p. 9).\n- At temperature 0, the win rates were 0.36 for DPO and 0.26 for PPO (Table 1, p. 9).\n- The authors say DPO \"continues to outperform the PPO policy by a significant margin.\" They add that DPO did this without the extra unlabeled Reddit TL;DR prompts that PPO uses (p. 9).",
+ "input": 45623,
+ "cache_write": 45621,
+ "cache_read": 0,
+ "output": 377,
+ "thinking": 41,
+ "usd": 0.372516,
+ "seconds": 20.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.18,
+ "date": "2026-10-24 23:24"
+}

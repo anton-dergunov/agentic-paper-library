@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L2",
+ "rep": 3,
+ "paper": "litm",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give this number.** The key-value retrieval results appear only in Figure 7 (p. 6), which is included as an image. The text gives no per-position values, and the full results tables in Appendix G (p. 18) cover only multi-document QA, not key-value retrieval. The text also doesn't say whether position 200 was one of the positions tested.\n\nThe document does say the following about this setting:\n\n- **Setup:** Key-value experiments used 75, 140, and 300 key-value pairs, with 500 examples each (p. 6).\n- **Overall trend:** GPT-3.5-Turbo (16K) is among the models with the lowest performance when the key-value pair is in the middle of the context. Models struggle most with 140 or 300 pairs (p. 6).\n- **Worst case:** Without query-aware contextualization, the worst-case key-value performance is 45.6% (p. 7). The text doesn't say which model, setting, or position this comes from.\n- **With query-aware contextualization:** Placing the query both before and after the data gives GPT-3.5-Turbo (16K) perfect performance with 300 key-value pairs (p. 7). This is a different setup from the standard one in Figure 7.\n- **Context size:** The 300-pair inputs average 14,929.4 tokens (maximum 15,048) for GPT-3.5-Turbo (p. 17). That fits within GPT-3.5-Turbo (16K)'s 16K-token context window (p. 4).\n\nTo get the exact accuracy at that position, you would need to read it off Figure 7 itself or use the authors' released results (p. 2).",
+ "input": 26914,
+ "cache_write": 0,
+ "cache_read": 26912,
+ "output": 806,
+ "thinking": 278,
+ "usd": 0.0215104,
+ "seconds": 8.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.78,
+ "date": "2026-10-24 23:36"
+}

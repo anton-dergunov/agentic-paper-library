@@ -1,0 +1,22 @@
+{
+ "exp": "E0",
+ "cond": "md-noanchors",
+ "qid": "D1",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "md-noanchors",
+ "page": 4,
+ "status": "ok",
+ "answer": "# The DPO loss\n\nThe paper's DPO objective is Eq. 7 **(p. 4)**:\n\n$$\\mathcal{L}_{\\text{DPO}}(\\pi_{\\theta};\\pi_{\\text{ref}})=-\\mathbb{E}_{(x,y_{w},y_{l})\\sim\\mathcal{D}}\\left[\\log\\sigma\\left(\\beta\\log\\frac{\\pi_{\\theta}(y_{w}\\mid x)}{\\pi_{\\text{ref}}(y_{w}\\mid x)}-\\beta\\log\\frac{\\pi_{\\theta}(y_{l}\\mid x)}{\\pi_{\\text{ref}}(y_{l}\\mid x)}\\right)\\right]$$\n\nThe symbols mean the following:\n- $y_w$ and $y_l$ are the preferred and dispreferred completions for prompt $x$ **(p. 3)**.\n- $\\sigma$ is the logistic function **(p. 3)**.\n- $\\beta$ controls how far the policy may drift from the reference policy $\\pi_{\\text{ref}}$ **(p. 3)**.\n- $\\pi_{\\text{ref}}$ is normally the SFT model. If no SFT model is available, it is set by maximizing the likelihood of the preferred completions **(p. 4)**.\n- By default $\\beta = 0.1$. For TL;DR summarization they use $\\beta = 0.5$ **(p. 19)**.\n\nThis loss has the same form as the reward-model loss in Eq. 2, $-\\mathbb{E}[\\log\\sigma(r_\\phi(x,y_w)-r_\\phi(x,y_l))]$ **(p. 3)**. The difference is that the policy log-ratio terms replace $r_\\phi$ **(p. 4)**.\n\n# What plays the role of the reward\n\nThe reward is an **implicit reward** defined by the policy and the reference model **(p. 4)**:\n\n$$\\hat{r}_{\\theta}(x,y)=\\beta\\log\\frac{\\pi_{\\theta}(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}$$\n\nThere is no separately trained reward model. The paper says the policy network represents both the language model and the (implicit) reward **(p. 4)**.\n\n**Why this works:**\n1. The optimal policy for the KL-constrained objective is $\\pi_r = \\frac{1}{Z(x)}\\pi_{\\text{ref}}\\exp(r/\\beta)$ (Eq. 4). Rearranging gives $r(x,y)=\\beta\\log\\frac{\\pi_r}{\\pi_{\\text{ref}}}+\\beta\\log Z(x)$ (Eq. 5) **(p. 4)**.\n2. The Bradley-Terry model depends only on the difference between two rewards. So when Eq. 5 is substituted, the $\\beta\\log Z(x)$ term cancels, leaving only the policy terms **(p. 4)**.\n3. This reparameterization loses no generality. Every reward equivalence class consistent with Bradley-Terry or Plackett-Luce can be written as $\\beta\\log\\frac{\\pi(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}$ (Theorem 1, **p. 6**; full proof on **p. 18**). Rewards that differ only by a function of $x$ give the same preferences and the same optimal policy (Lemmas 1–2, **p. 5**).\n\nThe gradient shows how this reward is used during training. Each example is weighted by $\\sigma(\\hat{r}_\\theta(x,y_l)-\\hat{r}_\\theta(x,y_w))$, so examples where the implicit reward ranks the pair wrongly get more weight. The update then raises the likelihood of $y_w$ and lowers that of $y_l$ **(p. 4)**. The authors report that removing this weighting can cause the model to degenerate **(p. 4)**.\n\n**A note on Appendix A.4 (p. 17):** Eq. 21 writes the sigmoid argument with $y_l$ and $y_w$ swapped compared with Eq. 7. The final gradient on the same page matches the main-text form, so the swap appears to be a typo.",
+ "input": 44226,
+ "cache_write": 44224,
+ "cache_read": 0,
+ "output": 1670,
+ "thinking": 264,
+ "usd": 0.3872,
+ "seconds": 15.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.06,
+ "date": "2026-10-24 23:23"
+}

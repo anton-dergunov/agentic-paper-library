@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F1",
+ "rep": 1,
+ "paper": "musique",
+ "form": "md",
+ "page": 11,
+ "status": "ok",
+ "answer": "On MuSiQue-Ans, the **C-only model gets about 3.4–3.7 answer F1 and 0.0 support F1**. The exact answer score depends on the split:\n\n- **Validation set:** 3.4 answer F1 and 0.0 support F1 (Table 4, p. 10). For comparison, the same model scores 18.4 / 67.6 on HotpotQA and 50.1 / 92.0 on 2WikiMultihopQA (p. 10).\n- **Test set:** 3.7 answer F1 and 0.0 support F1 (Table 5, p. 11). The paper says Table 5 reports test-set numbers and everything else uses the validation set (p. 10).\n\nThe C-only model sees only the context, not the question (p. 10). The authors say that support identification on HotpotQA and 2WikiMultihopQA works surprisingly well without the question, but \"fails on ♫-Ans\" (p. 11).\n\nOn the stricter MuSiQue-Full variant, the C-only model scores 1.6 An+Sf and 1.1 Sp+Sf (Table 5, p. 11).",
+ "input": 31028,
+ "cache_write": 31026,
+ "cache_read": 0,
+ "output": 512,
+ "thinking": 145,
+ "usd": 0.258456,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-24 23:29"
+}

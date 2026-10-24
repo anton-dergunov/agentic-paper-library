@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F1",
+ "rep": 3,
+ "paper": "musique",
+ "form": "md-old",
+ "page": 11,
+ "status": "ok",
+ "answer": "On MuSiQue-Ans, the **C-only model gets 53.4 answer F1 and 50.0 support F1** on the validation set (Table 4, p. 10).\n\n- **Test set:** It gets 53.7 answer F1 and 50.0 support F1 (Table 5, p. 10). The paper says Table 5 reports test numbers and everything else is on the validation set (p. 10).\n- **What the model sees:** It receives only the context, with no question. It is a Longformer-Large End2End model given an empty question (p. 10).\n- **Support:** The paper says context-only support identification \"fails on ♫-Ans.\" The same model scores 67.6 support F1 on HotpotQA and 92.0 on 2WikiMultihopQA (p. 10).\n- **Distractors:** The 53.4 / 50.0 result is for the final setup of 20 paragraphs with positive distractors. If distractors had come from full Wikipedia, C-only support would rise to 77.7 with 10 paragraphs or 66.4 with 20 (Table 7, p. 12).\n\nThe paper does not explain the 53.4 answer F1. That score is higher than any of the multihop models on the validation set; the best of them, EX(SA), reaches 49.8 (Table 4, p. 10).",
+ "input": 33878,
+ "cache_write": 0,
+ "cache_read": 33876,
+ "output": 760,
+ "thinking": 339,
+ "usd": 0.0219832,
+ "seconds": 8.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.58,
+ "date": "2026-10-24 23:30"
+}

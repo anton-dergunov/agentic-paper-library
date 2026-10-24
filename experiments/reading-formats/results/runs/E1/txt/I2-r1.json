@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "I2",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "txt",
+ "page": 42,
+ "status": "ok",
+ "answer": "# PPO-ptx Coefficients and RL Training Length\n\n**KL reward coefficient (β): 0.02.** The RL policies are initialized from the supervised fine-tuned models with pretraining mix. These models also compute the KL reward, with β = 0.02 (p. 42). An ablation found the optimal KL reward coefficient is around 0.01 to 0.02. Values of 0 and 2 both performed poorly (p. 56).\n\n**Pretraining-gradient coefficient (γ): 27.8.** The pretraining gradients are multiplied by γ = 27.8 to set their strength relative to the PPO gradients (p. 42). Setting γ ≥ 20 recovered the regressions on the 1.3B model, and the single value of 27.8 worked well for all model sizes from 1.3B to 175B (p. 53). For the plain \"PPO\" models, γ is set to 0 (p. 9).\n\n**RL training length: 256k episodes.** All RL models are trained for 256k episodes, which cover about 31k unique prompts after PII filtering and deduplication (p. 42). On the 1.3B model, training beyond 256k episodes for PPO-ptx did not help (p. 58). Training for 512k episodes caused performance on DROP and SQuADv2 to fall slightly below GPT-3 (p. 56).\n\nRelated details:\n- The pretraining mix uses 8 times as many pretraining examples as RL training episodes (p. 42).\n- The batch size is 512 with a minibatch size of 64 (p. 42).",
+ "input": 72607,
+ "cache_write": 563,
+ "cache_read": 72042,
+ "output": 646,
+ "thinking": 136,
+ "usd": 0.0318404,
+ "seconds": 8.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.86,
+ "date": "2026-10-24 23:38"
+}

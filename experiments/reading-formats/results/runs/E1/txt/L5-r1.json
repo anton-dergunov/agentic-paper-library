@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L5",
+ "rep": 1,
+ "paper": "litm",
+ "form": "txt",
+ "page": 15,
+ "status": "ok",
+ "answer": "**The document doesn't report GPT-4 accuracy with 30 documents.**\n\nGPT-4 (8K) was tested only on a limited subset of the multi-document QA experiments:\n\n- **What was run:** 500 random multi-document QA examples with **20 total documents** per input context (Appendix D, Figure 15, p. 15).\n- **What was found:** GPT-4 had higher absolute performance than any other model but still showed the U-shaped curve. It did best when the relevant information was at the very start or end of the context and worse when it was in the middle (p. 15). The document gives no exact percentages, even for the 20-document setting.\n- **Why it wasn't run more widely:** Running GPT-4 on the full multi-document QA and key-value retrieval experiments \"would cost upwards of $6000\" (footnote 6, p. 5).\n- **The 30-document table:** Table 7 lists only Claude-1.3, Claude-1.3 (100K), GPT-3.5-Turbo (16K), MPT-30B-Instruct and LongChat-13B (16K). GPT-4 is not included (p. 18).\n\nThe page numbers are my count of the PDF pages, since the provided text has no printed page numbers.",
+ "input": 28600,
+ "cache_write": 540,
+ "cache_read": 28058,
+ "output": 884,
+ "thinking": 487,
+ "usd": 0.027619600000000005,
+ "seconds": 9.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:36"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "D2",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "pdf",
+ "page": 9,
+ "status": "ok",
+ "answer": "At **temperature 0.25**, GPT-4 win rates against the ground-truth CNN/DailyMail summaries were:\n\n- **DPO: 0.31**\n- **PPO: 0.23**\n\nThese figures come from Table 1 (page 9).\n\n**How the evaluation was set up (page 9):**\n- The DPO and PPO policies were the ones trained on Reddit TL;DR.\n- They were tested on news articles from the CNN/DailyMail test split, an out-of-distribution input set.\n- The temperatures used (0 and 0.25) were the best ones from the TL;DR experiments.\n- GPT-4 used the same (C) prompt as for TL;DR, with \"forum post\" replaced by \"news article.\"\n\n**Result:** The authors say DPO \"continues to outperform the PPO policy by a significant margin\" on this new distribution (page 9).",
+ "input": 80079,
+ "cache_write": 80077,
+ "cache_read": 0,
+ "output": 316,
+ "thinking": 36,
+ "usd": 0.646944,
+ "seconds": 5.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.15,
+ "date": "2026-10-24 23:24"
+}

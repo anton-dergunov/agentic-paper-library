@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "D5",
+ "rep": 2,
+ "paper": "dpo",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "The paper doesn't print exact win rates at temperature 1.0. These are my estimates from reading the plot in Figure 2 (right), \"TL;DR Summarization Win Rate vs Reference\" (page 7), so treat them as approximate:\n\n- **DPO: about 0.38 (≈38%).** It falls from about 0.62 at low temperatures but stays well above PPO.\n- **PPO: about 0.07 (≈7%).** That is close to the GPT-J baseline (also about 0.06–0.07) and the lowest of all methods at that temperature.\n\nThe text supports this pattern. On page 9 it says PPO's performance \"can degrade to that of the base GPT-J model at high temperatures\" and that DPO is \"much more robust to the sampling temperature than PPO.\" The Figure 2 caption on page 7 also says DPO is \"more robust to changes in the sampling temperature.\" In the human study on page 10, PPO at temperature 1.0 is called the \"lowest\" performing setting. Against greedy PPO (a different baseline from the reference summaries in Figure 2), it won 12–13% of the time by GPT-4 and 17% by human judges (Table 2).",
+ "input": 88682,
+ "cache_write": 88680,
+ "cache_read": 0,
+ "output": 770,
+ "thinking": 385,
+ "usd": 0.7248479999999999,
+ "seconds": 14.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.42,
+ "date": "2026-10-24 23:27"
+}

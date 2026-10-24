@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "S1",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "In the main Llama-3-Instruct (8B) setting, **SimPO gets a 33.8% Arena-Hard win rate and DPO gets 32.6%**, so SimPO leads by 1.2 points (Table 4, p. 6).\n\n**Confidence intervals.** The 95% intervals overlap, so this gap is small (Table 10, p. 20):\n- SimPO: 33.8, with an interval of 32.0–35.9\n- DPO: 32.6, with an interval of 30.3–34.8\n\n**v0.2 setting.** The appendix also reports an updated version that uses a stronger reward model (ArmoRM) to label the preference data (Table 12, p. 29):\n- SimPO v0.2: 36.5%\n- DPO: 35.2%\n- IPO: 36.6%, which is the highest in that table\n\nThe authors note that with a strong SFT model and higher-quality preference data, the differences between algorithms become less pronounced. They say DPO, IPO and R-DPO reach similar raw win rates on Arena-Hard (p. 30).",
+ "input": 66513,
+ "cache_write": 66511,
+ "cache_read": 0,
+ "output": 494,
+ "thinking": 142,
+ "usd": 0.541976,
+ "seconds": 7.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.49,
+ "date": "2026-10-24 23:28"
+}

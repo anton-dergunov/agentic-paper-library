@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "S3",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "c0",
+ "page": 4,
+ "status": "ok",
+ "answer": "# SimPO Objective\n\nSimPO (Meng, Xia & Chen, 2024) minimizes:\n\n$$\n\\mathcal{L}_{\\text{SimPO}}(\\pi_\\theta) = -\\,\\mathbb{E}_{(x, y_w, y_l)\\sim\\mathcal{D}}\\left[\\log \\sigma\\!\\left(\\frac{\\beta}{|y_w|}\\log \\pi_\\theta(y_w \\mid x) \\;-\\; \\frac{\\beta}{|y_l|}\\log \\pi_\\theta(y_l \\mid x) \\;-\\; \\gamma\\right)\\right]\n$$\n\nIts implicit reward is\n\n$$\nr_{\\text{SimPO}}(x, y) = \\frac{\\beta}{|y|}\\log \\pi_\\theta(y \\mid x) = \\frac{\\beta}{|y|}\\sum_{i=1}^{|y|}\\log \\pi_\\theta(y_i \\mid x, y_{<i})\n$$\n\nDPO's reward, for comparison, is\n\n$$\nr_{\\text{DPO}}(x, y) = \\beta \\log \\frac{\\pi_\\theta(y \\mid x)}{\\pi_{\\text{ref}}(y \\mid x)}\n$$\n\n## Two differences from DPO's reward\n\n1. **No reference model.** SimPO drops $\\pi_{\\text{ref}}$ entirely. The reward depends only on the policy's own likelihood. This aligns the training reward with the quantity used at generation time, and it saves the memory and compute of running a reference model.\n\n2. **Length normalization.** SimPO divides the log-likelihood by the response length $|y|$, so the reward is an average per-token log-probability rather than a summed one. This removes the bias toward longer responses that a summed log-probability can introduce.\n\nThe paper also adds a **target reward margin** $\\gamma > 0$ inside the Bradley–Terry term. It requires the winning response's reward to exceed the losing one's by at least $\\gamma$. This is part of the objective rather than the reward itself. Some summaries list the two key changes as (1) the length-normalized, reference-free reward and (2) the margin $\\gamma$.",
+ "input": 769,
+ "cache_write": 767,
+ "cache_read": 0,
+ "output": 1061,
+ "thinking": 346,
+ "usd": 0.027364000000000003,
+ "seconds": 10.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-24 23:28"
+}

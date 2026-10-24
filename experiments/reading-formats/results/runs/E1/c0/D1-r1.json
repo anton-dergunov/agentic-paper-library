@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "D1",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "c0",
+ "page": 4,
+ "status": "ok",
+ "answer": "# DPO Loss (Rafailov et al., 2023)\n\nIn *\"Direct Preference Optimization: Your Language Model is Secretly a Reward Model\"*, the objective is:\n\n$$\n\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta; \\pi_{\\text{ref}}) = -\\,\\mathbb{E}_{(x,\\,y_w,\\,y_l)\\sim\\mathcal{D}}\\left[\\log \\sigma\\!\\left(\\beta \\log \\frac{\\pi_\\theta(y_w \\mid x)}{\\pi_{\\text{ref}}(y_w \\mid x)} \\;-\\; \\beta \\log \\frac{\\pi_\\theta(y_l \\mid x)}{\\pi_{\\text{ref}}(y_l \\mid x)}\\right)\\right]\n$$\n\nwhere:\n- $x$ is the prompt, $y_w$ is the preferred completion and $y_l$ is the dispreferred one.\n- $\\pi_\\theta$ is the policy being trained, and $\\pi_{\\text{ref}}$ is the frozen reference model (typically the SFT model).\n- $\\sigma$ is the logistic sigmoid.\n- $\\beta$ is the KL-penalty strength.\n\n## What plays the role of the reward\n\nThe scaled log-ratio between the policy and the reference model acts as the reward:\n\n$$\n\\hat{r}_\\theta(x, y) = \\beta \\log \\frac{\\pi_\\theta(y \\mid x)}{\\pi_{\\text{ref}}(y \\mid x)}\n$$\n\nThis is why the paper says the language model is \"secretly a reward model.\"\n\n**Where it comes from.** The KL-constrained RLHF objective has a closed-form optimal policy:\n\n$$\n\\pi^*(y \\mid x) = \\frac{1}{Z(x)}\\, \\pi_{\\text{ref}}(y \\mid x)\\, \\exp\\!\\left(\\tfrac{1}{\\beta} r(x,y)\\right)\n$$\n\nSolving this for the reward gives:\n\n$$\nr(x,y) = \\beta \\log \\frac{\\pi^*(y \\mid x)}{\\pi_{\\text{ref}}(y \\mid x)} + \\beta \\log Z(x)\n$$\n\nYou then substitute this into the Bradley–Terry preference model, $p(y_w \\succ y_l \\mid x) = \\sigma\\big(r(x,y_w) - r(x,y_l)\\big)$. The intractable partition function $Z(x)$ depends only on $x$, so it cancels in the difference. That cancellation is what leaves the loss above.\n\n**Interpretation of the gradient.** The paper shows that each example's gradient is weighted by $\\sigma\\big(\\hat{r}_\\theta(x,y_l) - \\hat{r}_\\theta(x,y_w)\\big)$. This weight is large when the implicit reward wrongly ranks the dispreferred completion higher. The update raises the likelihood of $y_w$ and lowers that of $y_l$.\n\nBecause $Z(x)$ was dropped, the implicit reward is only defined up to a function of the prompt. It is meaningful for comparing completions of the same prompt, not as an absolute score across prompts.",
+ "input": 795,
+ "cache_write": 793,
+ "cache_read": 0,
+ "output": 1470,
+ "thinking": 414,
+ "usd": 0.035752,
+ "seconds": 13.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:24"
+}

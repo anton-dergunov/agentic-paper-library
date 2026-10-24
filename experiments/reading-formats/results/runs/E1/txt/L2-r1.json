@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L2",
+ "rep": 1,
+ "paper": "litm",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give this number.**\n\n- **Figure 7 (p. 7)** plots key-value retrieval accuracy by key position for the 300-pair setting, including GPT-3.5-Turbo (16K). But the text I have contains only the axis labels and tick marks (1st, 50th, … 300th), not the plotted values, so I can't read off an accuracy at position 200.\n- **Appendix G (p. 19)** has full numeric tables, but only for the multi-document QA task, not key-value retrieval.\n\nThe document does say these related things:\n\n- In the key-value task, GPT-3.5-Turbo, GPT-3.5-Turbo (16K) and MPT-30B-Instruct do worst when the key is in the middle of the context (p. 6).\n- Without query-aware contextualization, worst-case key-value accuracy is 45.6% (p. 8). The text doesn't say which model, context length or position this refers to.\n- With query-aware contextualization (the query placed both before and after the data), GPT-3.5-Turbo (16K) reaches perfect accuracy with 300 key-value pairs (p. 8).\n\nTo get the exact value at position 200, you would need the figure itself or the authors' released evaluation data (p. 3: nelsonliu.me/papers/lost-in-the-middle).",
+ "input": 28628,
+ "cache_write": 568,
+ "cache_read": 28058,
+ "output": 1081,
+ "thinking": 652,
+ "usd": 0.0317836,
+ "seconds": 13.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.76,
+ "date": "2026-10-24 23:35"
+}

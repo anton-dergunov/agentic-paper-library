@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "S2",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "**CPO** has the highest Arena-Hard win rate in the Mistral-Instruct (7B) setting, at **22.6%**. This comes from Table 4 on page 6, where 22.6 is bolded as the top value.\n\nThe next-highest methods in the same column are:\n- SimPO: 21.0%\n- ORPO: 20.8%\n- SLiC-HF: 18.9%\n\nAll figures are from page 6.\n\nTable 10 on page 25 gives the same 22.6% for CPO, with a 95% confidence interval of 20.8–25.0. It also shows that CPO's average Arena-Hard response length was 812, compared with 539 for SimPO.\n\nThe authors comment on this result on page 7. They say SimPO is \"occasionally surpassed by CPO\" on Arena-Hard. They note that CPO's responses are on average 50% longer than SimPO's, and that Arena-Hard \"might favor longer generations due to the absence of a length penalty in its evaluation.\"",
+ "input": 95954,
+ "cache_write": 560,
+ "cache_read": 95392,
+ "output": 525,
+ "thinking": 203,
+ "usd": 0.0340664,
+ "seconds": 12.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.52,
+ "date": "2026-10-24 23:28"
+}

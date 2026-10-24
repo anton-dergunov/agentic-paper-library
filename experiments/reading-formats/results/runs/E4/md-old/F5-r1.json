@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F5",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "md-old",
+ "page": 15,
+ "status": "ok",
+ "answer": "The document doesn't contain this number. MMMU-Pro is listed as one of the multimodal reasoning benchmarks (p. 14; also Appendix A, p. 33). The text refers to the results tables, such as \"results_flagship,\" but those multimodal benchmark tables aren't included in this version. So no MMMU-Pro score is given for GPT-5 (high) or any other model.\n\nThe only GPT-5 \"high\" result in the text is on MIA-Bench. There, Qwen3-VL-235B-A22B-Thinking beats GPT-5-high-thinking by 10.0 points on the *math* subtask and 5.0 points on the *textual* subtask (p. 14). The absolute scores aren't stated.\n\nThe original arXiv paper (2511.21631) has the full results tables if you need the number.",
+ "input": 74397,
+ "cache_write": 541,
+ "cache_read": 73854,
+ "output": 420,
+ "thinking": 156,
+ "usd": 0.027506799999999998,
+ "seconds": 9.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.68,
+ "date": "2026-10-24 23:31"
+}

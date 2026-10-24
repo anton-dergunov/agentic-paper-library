@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "pdf",
+ "qid": "F1",
+ "rep": 3,
+ "paper": "musique",
+ "form": "pdf",
+ "page": 11,
+ "status": "ok",
+ "answer": "The C-only model (which sees only the context, not the question) scores very low on MuSiQue-Ans. The numbers depend on the split:\n\n| Split | Answer F1 (An) | Support F1 (Sp) | Source |\n|---|---|---|---|\n| Validation | 3.4 | 0.0 | Table 4, p. 11 |\n| Test | 3.7 | 0.0 | Table 5, p. 11 |\n\nThe paper says Table 5 reports test-set numbers and all other results are on the validation set (p. 10). The validation figures (3.4 | 0.0) appear again in Tables 6 (p. 11) and 7 (p. 12) as the reference row.\n\n**Context:**\n- **Comparison with other datasets:** On HotpotQA and 2WikiMultihopQA, the C-only model identifies supporting paragraphs well (67.6 and 92.0 Sp). It \"fails on MuSiQue-Ans\" (p. 11).\n- **Why the support score is low:** The authors attribute this to using \"positive distractors\" rather than full Wikipedia. With full-Wikipedia distractors, the C-only support score on MuSiQue-Ans would have been 66.4 Sp (p. 12).\n- **MuSiQue-Full:** On the harder variant, the C-only model scores 1.6 An+Sf and 1.1 Sp+Sf (Table 5, p. 11).",
+ "input": 54391,
+ "cache_write": 0,
+ "cache_read": 54389,
+ "output": 645,
+ "thinking": 180,
+ "usd": 0.023785799999999996,
+ "seconds": 6.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.58,
+ "date": "2026-10-24 23:30"
+}

@@ -1,0 +1,60 @@
+{
+ "key": "24f44bff438bfb1e",
+ "usd": 0.039639999999999995,
+ "grades": {
+  "E4/pdf/F5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md/F5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/pdf/F5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md-old/F5-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says table missing; gold is 78.4 in Table 2."
+  },
+  "E4/md/F5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md/F5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/pdf/F5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md-old/F5-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says table missing; gold is 78.4 in Table 2."
+  },
+  "E4/md-old/F5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says table missing; gold is 78.4 in Table 2."
+  }
+ }
+}

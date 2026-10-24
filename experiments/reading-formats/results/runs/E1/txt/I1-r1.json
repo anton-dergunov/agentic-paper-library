@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "I1",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "txt",
+ "page": 33,
+ "status": "ok",
+ "answer": "## Reward-model prompts by source\n\nFrom **Table 6** (page 33):\n\n| Split | Labeler-written | Customer (API) | Total |\n|---|---|---|---|\n| Train | 6,623 | 26,584 | 33,207 |\n| Validation | 3,488 | 14,399 | 17,887 |\n\nSo the RM **training** set had **6,623 labeler-written prompts** and **26,584 customer prompts** (page 33). This is consistent with the main text, which says the RM dataset has \"33k training prompts (from the API and labeler-written)\" (page 7). It also matches the RM train count of 33,207 in Table 9 (page 34).\n\nThe number of comparisons the reward model was trained on is about ten times larger than the prompt counts. For each prompt, labelers ranked K = 4 to 9 outputs, and the model was trained on all pairwise comparisons from each ranking (page 33).",
+ "input": 72585,
+ "cache_write": 72583,
+ "cache_read": 0,
+ "output": 404,
+ "thinking": 107,
+ "usd": 0.5887519999999999,
+ "seconds": 8.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.79,
+ "date": "2026-10-24 23:38"
+}

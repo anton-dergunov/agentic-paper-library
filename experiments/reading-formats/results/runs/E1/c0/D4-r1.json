@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "D4",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "c0",
+ "page": 20,
+ "status": "ok",
+ "answer": "In the original DPO paper (Rafailov et al., 2023, Appendix B), the default hyperparameters are:\n\n- **β:** 0.1\n- **Batch size:** 64\n- **Optimizer:** RMSprop\n- **Learning rate:** 1e-6\n- **Warm-up:** linear, from 0 to 1e-6 over 150 steps\n\nFor **TL;DR summarization**, they use **β = 0.5** and keep everything else the same.",
+ "input": 806,
+ "cache_write": 804,
+ "cache_read": 0,
+ "output": 297,
+ "thinking": 145,
+ "usd": 0.01238,
+ "seconds": 4.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.26,
+ "date": "2026-10-24 23:24"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F3",
+ "rep": 3,
+ "paper": "gpt1",
+ "form": "md-old",
+ "page": 3,
+ "status": "ok",
+ "answer": "**The document doesn't contain Eq. 5.** In this conversion the equation is blank: only the label \"(5)\" appears where it should be (p. 3). The conversion note says equations were read from the page image and may be wrong or missing, so the original PDF is the place to get the exact formula.\n\nThe surrounding text describes it:\n\n- **What it combines:** Language modeling is added \"as an auxiliary objective to the fine-tuning.\" The authors say this helped by \"(a) improving generalization of the supervised model, and (b) accelerating convergence\" (p. 3).\n- **The weight:** They \"optimize the following objective (with weight λ)\" (p. 3).\n- **The two parts:** The supervised objective is Eq. 4, $L_2(\\mathcal{C}) = \\sum_{(x,y)} \\log P(y|x^1, \\dots, x^m)$ (p. 3). The language modeling objective is Eq. 1, $L_1(\\mathcal{U}) = \\sum_i \\log P(u_i | u_{i-k}, \\dots, u_{i-1}; \\Theta)$ (p. 3).\n- **The value of λ:** \"λ was set to 0.5\" (p. 4).\n\nFrom this text, Eq. 5 is most likely the supervised objective plus λ times the language modeling objective. The document doesn't state the formula, though. Details such as whether $L_1$ is computed on the labeled dataset $\\mathcal{C}$ instead of $\\mathcal{U}$ can't be confirmed from it.",
+ "input": 17355,
+ "cache_write": 0,
+ "cache_read": 17353,
+ "output": 800,
+ "thinking": 305,
+ "usd": 0.019478600000000002,
+ "seconds": 10.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-24 23:31"
+}

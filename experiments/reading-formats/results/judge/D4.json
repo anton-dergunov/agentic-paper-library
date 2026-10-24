@@ -1,0 +1,36 @@
+{
+ "key": "60aeb4c6db04f0c5",
+ "usd": 0.021528,
+ "grades": {
+  "E1/pdf/D4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/D4-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/html/D4-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/D4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Cites p. 19, within ±1 of gold page 20."
+  },
+  "E1/txt/D4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

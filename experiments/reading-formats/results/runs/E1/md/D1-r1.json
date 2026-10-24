@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "D1",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "# The DPO loss and its implicit reward\n\n## The loss (Eq. 7, p. 4)\n\n$$\\mathcal{L}_{\\text{DPO}}(\\pi_{\\theta};\\pi_{\\text{ref}})=-\\mathbb{E}_{(x,y_{w},y_{l})\\sim\\mathcal{D}}\\left[\\log\\sigma\\left(\\beta\\log\\frac{\\pi_{\\theta}(y_{w}\\mid x)}{\\pi_{\\text{ref}}(y_{w}\\mid x)}-\\beta\\log\\frac{\\pi_{\\theta}(y_{l}\\mid x)}{\\pi_{\\text{ref}}(y_{l}\\mid x)}\\right)\\right]$$\n\nThe terms are:\n- $y_w$ and $y_l$ are the preferred and dispreferred completions for prompt $x$ (p. 3).\n- $\\sigma$ is the logistic function (p. 3).\n- $\\beta$ controls how far the policy may deviate from the reference policy $\\pi_{\\text{ref}}$, which is normally the SFT model (p. 3).\n- By default the paper uses $\\beta = 0.1$, and $\\beta = 0.5$ for TL;DR summarization (p. 19).\n\nThe paper presents this as directly analogous to the reward-model loss in Eq. 2 (p. 4):\n\n$$-\\mathbb{E}\\bigl[\\log\\sigma(r_{\\phi}(x,y_{w})-r_{\\phi}(x,y_{l}))\\bigr]$$\n\n## What plays the role of the reward\n\nThe reward is the scaled log-ratio between the policy and the reference model (p. 4):\n\n$$\\hat{r}_{\\theta}(x,y)=\\beta\\log\\frac{\\pi_{\\theta}(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}$$\n\nThe paper calls this \"the reward implicitly defined by the language model $\\pi_{\\theta}$ and reference model $\\pi_{\\text{ref}}$\" (p. 4). There is no separate reward network. \"The policy network represents both the language model and the (implicit) reward\" (p. 4).\n\n## Why this works\n\n1. **The optimal policy has a closed form.** For the KL-constrained objective, the optimal policy is $\\pi_r \\propto \\pi_{\\text{ref}}\\exp(r/\\beta)$ (Eq. 4, p. 4).\n2. **Rearranging gives the reward.** Rearranging Eq. 4 yields $r(x,y)=\\beta\\log\\frac{\\pi_r(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}+\\beta\\log Z(x)$ (Eq. 5, p. 4).\n3. **The partition function drops out.** The Bradley-Terry model depends only on reward differences. So when Eq. 5 is substituted into it, the partition-function term $\\beta\\log Z(x)$ cancels (p. 4).\n4. **No generality is lost.** Under mild assumptions, every reward equivalence class can be represented by this parameterization (Theorem 1, p. 6). Within each class, the representative is unique (Proposition 1, p. 18).\n\n## Interpretation via the gradient (p. 4)\n\nThe gradient raises the likelihood of $y_w$ and lowers the likelihood of $y_l$. Each example is weighted by $\\sigma(\\hat{r}_{\\theta}(x,y_l)-\\hat{r}_{\\theta}(x,y_w))$, which is larger when the implicit reward orders the pair incorrectly.\n\n## A caution if you check the appendix\n\nEq. 21 in Appendix A.4 (p. 17) writes the argument of the log-sigmoid with $y_l$ first and $y_w$ second. That is the reverse of Eq. 7. The final gradient on that same page uses the Eq. 7 ordering, so Eq. 21 appears to be a typo. Eq. 7 matches the PyTorch reference code on p. 19:\n\n```python\n-F.logsigmoid(beta * (pi_logratios - ref_logratios))\n```\n\nHere `pi_logratios` is the policy's log-probability of $y_w$ minus that of $y_l$, and `ref_logratios` is the same quantity for the reference model.",
+ "input": 45606,
+ "cache_write": 45604,
+ "cache_read": 0,
+ "output": 1797,
+ "thinking": 368,
+ "usd": 0.40077999999999997,
+ "seconds": 17.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:24"
+}

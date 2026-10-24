@@ -1,0 +1,166 @@
+# The test set of docs/plans/reading-formats.md. Pages are the PDF's; "tolerance" is for
+# values read off a plot; answerable: false marks questions whose right answer is that the
+# paper does not report it. Paper paths are under the library's library/ folder.
+
+papers:
+  dpo: llm/post-training/preference-learning/Direct Preference Optimization. Your Language Model is Secretly a Reward Model.md
+  simpo: llm/post-training/preference-learning/SimPO. Simple Preference Optimization with a Reference-Free Reward.md
+  gpt1: llm/foundation-models/Improving Language Understanding by Generative Pre-Training.md
+  litm: llm/context/Lost in the Middle. How Language Models Use Long Contexts.md
+  instructgpt: llm/post-training/preference-learning/Training language models to follow instructions with human feedback.md
+  musique: llm/evaluation/benchmarks/MuSiQue. Multihop Questions via Single-hop Question Composition.md
+  toolformer: llm/agents/Toolformer. Language Models Can Teach Themselves to Use Tools.md
+  qwen3vl: vision-and-multimodal/vision-language/Qwen3-VL Technical Report.md
+  ruler: llm/evaluation/benchmarks/RULER. What's the Real Context Size of Your Long-Context Language Models.md
+  nolima: llm/evaluation/benchmarks/NoLiMa. Long-Context Evaluation Beyond Literal Matching.md
+  orpo: llm/post-training/preference-learning/ORPO. Monolithic Preference Optimization without Reference Model.md
+  ipo: llm/post-training/preference-learning/A General Theoretical Paradigm to Understand Learning from Human Preferences.md
+
+# E4: the markdown before a fix, as a git revision of the library.
+old_revs:
+  musique: 7f5bc9b3a
+  toolformer: 7f5bc9b3a
+  gpt1: 8969b9e25^
+  qwen3vl: c4100a513^
+
+questions:
+# ---- E1: single paper, format only ----
+- {id: D1, exp: E1, paper: dpo, kind: equation, page: 4,
+   question: 'Write the DPO loss as the paper gives it, and say what plays the role of the reward.',
+   gold: 'Eq. 7: L_DPO = -E_{(x,y_w,y_l)~D}[log σ(β log(π_θ(y_w|x)/π_ref(y_w|x)) - β log(π_θ(y_l|x)/π_ref(y_l|x)))]; the implicit reward r̂_θ(x,y) = β log(π_θ(y|x)/π_ref(y|x)).'}
+- {id: D2, exp: E1, paper: dpo, kind: table, page: 9,
+   question: 'On CNN/DailyMail, what GPT-4 win rates against the ground truth do DPO and PPO get at temperature 0.25?',
+   gold: 'DPO 0.31, PPO 0.23 (Table 1).'}
+- {id: D3, exp: E1, paper: dpo, kind: table, page: 10,
+   question: 'In the human study, how often did humans agree with each other on the PPO-1 comparison, and how often did GPT-4 (C) agree with humans on the DPO comparison?',
+   gold: 'Human–human agreement 87% (PPO-1); GPT-4 (C)–human agreement 67% (DPO) (Table 2).'}
+- {id: D4, exp: E1, paper: dpo, kind: appendix, page: 20,
+   question: 'What β, batch size, optimizer, learning rate and warm-up does DPO use by default, and what β for TL;DR?',
+   gold: 'β = 0.1, batch size 64, RMSprop, learning rate 1e-6, linear warm-up from 0 to 1e-6 over 150 steps; β = 0.5 for TL;DR.'}
+- {id: D5, exp: E1, paper: dpo, kind: figure, page: 7,
+   question: 'In the TL;DR win-rate plot, what are PPO''s and DPO''s win rates at sampling temperature 1.0?',
+   gold: 'PPO ≈ 0.07, DPO ≈ 0.39 (Figure 2, right).', tolerance: 'PPO 0.05–0.10; DPO 0.35–0.42'}
+- {id: D6, exp: E1, paper: dpo, kind: unanswerable, answerable: false,
+   question: 'What AlpacaEval 2 win rate does DPO report?',
+   gold: 'Not reported: the paper evaluates on IMDb, TL;DR, Anthropic-HH and CNN/DailyMail, not AlpacaEval 2.'}
+
+- {id: S1, exp: E1, paper: simpo, kind: table, page: 6,
+   question: 'In the Llama-3-Instruct (8B) setting, what Arena-Hard win rate do SimPO and DPO get?',
+   gold: 'SimPO 33.8, DPO 32.6 (Table 4).'}
+- {id: S2, exp: E1, paper: simpo, kind: table, page: 6,
+   question: 'In the Mistral-Instruct (7B) setting, which method has the highest Arena-Hard win rate, and what is it?',
+   gold: 'CPO, 22.6 (SimPO gets 21.0) (Table 4).'}
+- {id: S3, exp: E1, paper: simpo, kind: equation, page: 4,
+   question: 'Write SimPO''s objective and name its two differences from DPO''s reward.',
+   gold: 'Eq. 6: L_SimPO = -E[log σ((β/|y_w|) log π_θ(y_w|x) - (β/|y_l|) log π_θ(y_l|x) - γ)]; the reward is the length-normalised (average) log-likelihood with no reference model, and a target reward margin γ is added.'}
+- {id: S4, exp: E1, paper: simpo, kind: appendix, page: 18,
+   question: 'Which β, γ and learning rate does SimPO use for Llama-3-Instruct (8B)?',
+   gold: 'β = 2.5, γ = 1.4 (γ/β = 0.56 is also acceptable if it is right), learning rate 1e-6 (Table 8).'}
+- {id: S5, exp: E1, paper: simpo, kind: unanswerable, answerable: false, page: 2,
+   question: 'What AlpacaEval 2 LC win rate does SimPO reach when applied to Llama-3-70B?',
+   gold: 'Not reported: SimPO is not trained on a 70B model; the 34.4 LC in Table 1 is the off-the-shelf Llama-3-70B-Instruct from the leaderboard.'}
+- {id: S6, exp: E1, paper: simpo, kind: citation, page: 14,
+   question: 'Which work does SimPO cite for Arena-Hard, and under what reference number?',
+   gold: '[54], Li et al., "From live data to high-quality benchmarks: The Arena-Hard pipeline", April 2024.'}
+
+- {id: G1, exp: E1, paper: gpt1, kind: equation, page: 3,
+   question: 'What objective is optimised during fine-tuning, and with what weight on the auxiliary term?',
+   gold: 'Eq. 5: L_3(C) = L_2(C) + λ·L_1(C), the supervised objective plus the language-modelling objective as an auxiliary term; λ = 0.5 (p. 5).'}
+- {id: G2, exp: E1, paper: gpt1, kind: table, page: 8,
+   question: 'In the ablation table, what average score does the Transformer without pre-training get, and which variant has the highest average?',
+   gold: 'Transformer w/o pre-training: 59.9 average; the highest average is Transformer w/o aux LM, 75.0 (Table 5).'}
+- {id: G3, exp: E1, paper: gpt1, kind: table, page: 6,
+   question: 'What accuracy does the model get on RACE-h, and what was the previous best?',
+   gold: '57.4; previous best 50.3, BiAttention MRU (9x ensemble) (Table 3).'}
+- {id: G4, exp: E1, paper: gpt1, kind: setup, page: 5,
+   question: 'Give the model''s layers, state size, attention heads, context length, optimizer and peak learning rate.',
+   gold: '12 layers, 768-dimensional states, 12 attention heads (3072-d feed-forward), contiguous sequences of 512 tokens, Adam, max learning rate 2.5e-4 (100 epochs, minibatches of 64).'}
+- {id: G5, exp: E1, paper: gpt1, kind: figure, page: 7,
+   question: 'What RACE dev accuracy is reached with 0 layers transferred and with all 12?',
+   gold: 'About 40% with 0 layers and about 60% with all 12 (Figure 2, left).', tolerance: '±3 points each'}
+
+- {id: L1, exp: E1, paper: litm, kind: appendix, page: 18,
+   question: 'With 20 documents, what is GPT-3.5-Turbo''s accuracy when the answer document is first, and at its worst position; and how does the worst compare with closed-book?',
+   gold: '75.8% at position 1 (index 0); worst 53.8% at index 9 (the 10th position); closed-book is 56.1%, so the worst position is below closed-book (Tables 6 and 1, pp. 18 and 5).'}
+- {id: L2, exp: E1, paper: litm, kind: figure, page: 7,
+   question: 'In the key-value task with 300 pairs, what accuracy does GPT-3.5-Turbo (16K) reach when the key is at the 200th position?',
+   gold: 'About 45% (Figure 7).', tolerance: '40–50%'}
+- {id: L3, exp: E1, paper: litm, kind: figure, page: 10,
+   question: 'With 50 retrieved documents, what are Contriever''s recall and GPT-3.5-Turbo (16K)''s accuracy in the open-domain experiment?',
+   gold: 'Recall about 89%, accuracy about 60% (Figure 11).', tolerance: 'recall 87–91%; accuracy 58–62%'}
+- {id: L4, exp: E1, paper: litm, kind: prose, page: 6,
+   question: 'How is the key-value retrieval task built: how many pairs, what are the keys, how many examples?',
+   gold: 'Contexts of 75, 140 and 300 key-value pairs; keys and values are random 128-bit UUIDs; 500 examples per setting.'}
+- {id: L5, exp: E1, paper: litm, kind: unanswerable, answerable: false, page: 15,
+   question: 'What accuracy does GPT-4 reach with 30 documents?',
+   gold: 'Not reported: GPT-4 is evaluated only with 20 documents, on a subset of 500 random examples (Appendix D).'}
+
+- {id: I1, exp: E1, paper: instructgpt, kind: table, page: 33,
+   question: 'How many reward-model training prompts came from labelers and how many from customers?',
+   gold: '6,623 from labelers, 26,584 from customers (Table 6).'}
+- {id: I2, exp: E1, paper: instructgpt, kind: appendix, page: 42,
+   question: 'What KL coefficient and pretraining-gradient coefficient are used in PPO-ptx, and for how many episodes is RL trained?',
+   gold: 'KL reward coefficient β = 0.02, pretraining loss coefficient γ = 27.8; 256k episodes (about 31k unique prompts).'}
+- {id: I3, exp: E1, paper: instructgpt, kind: appendix, page: 40,
+   question: 'What learning rate, batch size and number of epochs are used for the 175B SFT model?',
+   gold: 'Learning rate 5.03e-6, batch size 8, 16 epochs.'}
+- {id: I4, exp: E1, paper: instructgpt, kind: prose, page: 11,
+   question: 'How often are 175B InstructGPT outputs preferred to GPT-3''s, and to few-shot GPT-3''s?',
+   gold: '85 ± 3% of the time to GPT-3, 71 ± 4% to few-shot GPT-3.'}
+- {id: I5, exp: E1, paper: instructgpt, kind: unanswerable, answerable: false, page: 17,
+   question: 'How many GPU-hours did PPO training of the 175B model take?',
+   gold: 'Not reported in GPU-hours; the paper gives 60 petaflop/s-days for 175B PPO-ptx (4.9 for 175B SFT, against 3,640 for GPT-3).'}
+
+# ---- E4: conversion fixes (old markdown, new markdown, PDF) ----
+- {id: F1, exp: E4, paper: musique, kind: table, page: 11,
+   question: 'What answer and support scores does the C-only artifact model get on MuSiQue-Ans?',
+   gold: 'An 3.4, Sp 0.0 (Table 4).', old_says: '53.4 / 50.0'}
+- {id: F2, exp: E4, paper: toolformer, kind: table, page: 9,
+   question: 'With k = 3, for what share of WebQS examples does Toolformer call an API?',
+   gold: '99.3% (Table 9).', old_says: '199.3'}
+- {id: F3, exp: E4, paper: gpt1, kind: equation, page: 3,
+   question: 'Write the fine-tuning objective, Eq. 5.',
+   gold: 'L_3(C) = L_2(C) + λ·L_1(C).', old_says: 'only "(5)"'}
+- {id: F4, exp: E4, paper: qwen3vl, kind: table, page: 15,
+   question: 'What MathVision scores do Qwen3-VL-235B-A22B (thinking) and Gemini 2.5 Pro (thinking) get?',
+   gold: 'Qwen3-VL-235B-A22B thinking 74.6; Gemini 2.5 Pro thinking 73.3 (Table 2).', old_says: 'table absent'}
+- {id: F5, exp: E4, paper: qwen3vl, kind: table, page: 15,
+   question: 'What MMMU-Pro score does GPT-5 (high) get?',
+   gold: '78.4 (Table 2).', old_says: 'table absent; the new markdown merges the MMMU and MMMU-Pro rows'}
+- {id: F6, exp: E4, paper: qwen3vl, kind: table, page: 15,
+   question: 'What MMBench-EN score does Qwen3-VL-235B-A22B (instruct) get?',
+   gold: '89.3 (Table 2).', old_says: 'table absent; the new markdown leaves the cell empty and shows 89.3 in the MMBench-CN row'}
+
+# ---- E5: small print and resolution ----
+- {id: R1, exp: E5, paper: qwen3vl, kind: small-print, page: 15,
+   question: 'In Qwen3-VL''s Table 2, what OCRBench score does Claude Opus 4.1 (non-thinking) get?',
+   gold: '750.'}
+- {id: R2, exp: E5, paper: qwen3vl, kind: small-print, page: 15,
+   question: 'In Qwen3-VL''s Table 2, what ZeroBench score does GPT-5 (minimal) get?',
+   gold: '2.'}
+- {id: R3, exp: E5, paper: qwen3vl, kind: small-print, page: 15,
+   question: 'In Qwen3-VL''s Table 2, what HallusionBench score does Claude Opus 4.1 (thinking) get?',
+   gold: '60.4.'}
+- {id: R4, exp: E5, paper: litm, kind: figure, page: 7,
+   question: 'In Lost in the Middle''s Figure 7, with 140 pairs, what accuracy does LongChat-13B (16K) reach with the key at the 70th position?',
+   gold: 'About 35%.', tolerance: '32–40%'}
+
+# ---- E3: across papers (agent conditions; pages of X3, X5, X6 to be checked first) ----
+- {id: X1, exp: E3, papers: [dpo, ipo, simpo], kind: equations,
+   question: 'How do the DPO, IPO and SimPO losses differ? Write each.',
+   gold: 'DPO Eq. 7 (p. 4): -log σ of the β-scaled difference of policy/reference log-ratios; IPO empirical loss Eq. 17 (p. 7): E[(h_π(y_w,y_l) - τ^{-1}/2)^2], a squared loss towards a fixed margin; SimPO Eq. 6 (p. 4): length-normalised log-likelihood, no reference model, target margin γ.'}
+- {id: X2, exp: E3, papers: [dpo, orpo, simpo], kind: tables,
+   question: 'What AlpacaEval 2 score does each of DPO, ORPO and SimPO report for its own method on Mistral-7B?',
+   gold: 'DPO: none (no AlpacaEval 2 in the paper); ORPO: Mistral-ORPO-β 12.20% raw win rate (Table 1, p. 6); SimPO: 21.5 LC / 20.8 WR (Mistral-Base), 32.1 LC / 34.8 WR (Mistral-Instruct) (Table 4, p. 6). Not comparable: LC vs raw win rate, different bases.'}
+- {id: X3, exp: E3, papers: [ruler, nolima], kind: numbers,
+   question: 'What effective context length do RULER and NoLiMa report for Llama 3.1 70B, and why do they differ?',
+   gold: 'RULER 64K of 128K claimed (Table 3, p. 6); NoLiMa 2K of 128K (Table 3, p. 5); NoLiMa''s needles share no literal words with the question, so retrieval needs a latent association; the thresholds differ too (RULER: Llama-2-7B''s 85.6; NoLiMa: 85% of each model''s base score).'}
+- {id: X4, exp: E3, papers: [], kind: library,
+   question: 'Which papers in the library propose a preference-optimisation method without a reference model?',
+   gold: 'SimPO, ORPO; anything else found must be checked against catalog and reviews/llm/post-training.md before the run.'}
+- {id: X5, exp: E3, papers: [], kind: library,
+   question: 'Which papers in the library propose a remedy for the lost-in-the-middle position bias, and what does each change?',
+   gold: 'Found in the Middle (subtracts measured positional attention bias); Make Your LLM Fully Utilize the Context (IN2 training on synthetic long-context data); STRING in Why Does the Effective Context Length of LLMs Fall Short (shifts position indices); Lost in the Middle''s own query-aware contextualization helps key-value retrieval only.'}
+- {id: X6, exp: E3, papers: [instructgpt, dpo], kind: equations,
+   question: 'InstructGPT and DPO both start from a KL-regularised RL objective. Write each and say how they differ.',
+   gold: 'InstructGPT Eq. 2 (p. 9): E[r_θ(x,y) - β log(π^RL_φ(y|x)/π^SFT(y|x))] + γ E_{x~D_pretrain}[log π^RL_φ(x)]; DPO Eq. 3 (p. 3): max_π E[r_φ(x,y)] - β D_KL[π_θ(y|x) || π_ref(y|x)]; InstructGPT adds the pretraining term (γ = 27.8).'}

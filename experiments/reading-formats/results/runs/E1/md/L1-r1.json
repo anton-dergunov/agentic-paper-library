@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L1",
+ "rep": 1,
+ "paper": "litm",
+ "form": "md",
+ "page": 18,
+ "status": "ok",
+ "answer": "**GPT-3.5-Turbo with 20 documents:**\n\n- **Answer document first (index 0):** 75.8% accuracy (Table 6, p. 18).\n- **Worst position:** 53.8%, when the answer document is at index 9, the 10th of 20 positions, in the middle of the context (Table 6, p. 18). Table 6 reports only indices 0, 4, 9, 14 and 19, so this is the worst of those positions.\n- **Compared with closed-book:** GPT-3.5-Turbo scores 56.1% closed-book, with no documents given (Table 1, p. 5). Its worst 20-document result is therefore 2.3 points lower than answering with no documents at all. The paper states this directly: \"in the worst case, performance in 20- and 30-document settings is lower than performance without *any* input documents (i.e., closed-book performance; 56.1%)\" (p. 5).\n\nFrom first position to worst position, accuracy drops by 22.0 points (75.8% → 53.8%). This matches the paper's statement that GPT-3.5-Turbo's performance \"can drop by more than 20%\" (p. 5).",
+ "input": 26920,
+ "cache_write": 26918,
+ "cache_read": 0,
+ "output": 563,
+ "thinking": 188,
+ "usd": 0.226612,
+ "seconds": 7.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.74,
+ "date": "2026-10-24 23:35"
+}

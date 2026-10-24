@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "D1",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "# The DPO loss (Eq. 7, page 4)\n\n$$\n\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta;\\pi_{\\text{ref}}) = -\\,\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log\\sigma\\!\\left(\\beta\\log\\frac{\\pi_\\theta(y_w\\mid x)}{\\pi_{\\text{ref}}(y_w\\mid x)} - \\beta\\log\\frac{\\pi_\\theta(y_l\\mid x)}{\\pi_{\\text{ref}}(y_l\\mid x)}\\right)\\right]\n$$\n\n**Symbols:**\n- $y_w$ and $y_l$ are the preferred and dispreferred completions for prompt $x$ (p. 3).\n- $\\sigma$ is the logistic function (p. 3).\n- $\\beta$ controls how far the policy may deviate from the reference policy $\\pi_{\\text{ref}}$, which is usually the SFT model (p. 4).\n\nThe paper presents this as the analogue of the reward-model loss in Eq. 2, $-\\mathbb{E}[\\log\\sigma(r_\\phi(x,y_w)-r_\\phi(x,y_l))]$ (pp. 3–4). Its PyTorch version computes the same quantity as `-F.logsigmoid(beta * (pi_logratios - ref_logratios))` (p. 20).\n\n# What plays the role of the reward\n\nThe reward is implicit. It is the scaled log-ratio between the policy and the reference model:\n\n$$\n\\hat r_\\theta(x,y) = \\beta\\log\\frac{\\pi_\\theta(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}\n$$\n\nThe paper calls this \"the reward implicitly defined by the language model $\\pi_\\theta$ and reference model $\\pi_{\\text{ref}}$\" (p. 5). It follows from the steps below.\n\n**Where it comes from.**\n- Rearranging the optimal KL-constrained policy gives $r(x,y) = \\beta\\log\\frac{\\pi_r(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)} + \\beta\\log Z(x)$ (Eq. 5, p. 4).\n- The Bradley-Terry model depends only on reward differences, so the partition function $Z(x)$ cancels (p. 4).\n- As a result, the policy network \"represents both the language model and the (implicit) reward\" (p. 4). DPO thereby \"fit[s] an implicit reward using an alternative parameterization, whose optimal policy is simply $\\pi_\\theta$\" (p. 4).\n\n**Why this costs no generality.** Theorem 1 states that, under mild assumptions, every reward class consistent with Plackett-Luce/Bradley-Terry can be represented as $\\beta\\log\\frac{\\pi(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}$ for some model $\\pi$ (p. 6). This is the sense of the section title \"Your Language Model Is Secretly a Reward Model\" (p. 5).\n\n**How it appears in training.**\n- In the gradient, each example is weighted by $\\sigma(\\hat r_\\theta(x,y_l)-\\hat r_\\theta(x,y_w))$. That weight is higher when the implicit reward orders the pair incorrectly (p. 5).\n- The reference code returns `rewards = beta * (pi_logps - ref_logps).detach()` (p. 20).\n\n# A note on sign\n\nAppendix A.4, Eq. 21 (p. 17), writes the argument of $\\log\\sigma$ with the $y_l$ and $y_w$ terms swapped relative to Eq. 7. The main-text Eq. 7 (p. 4), the A.2 derivation (p. 16), and the code (p. 20) all use the \"preferred minus dispreferred\" form shown above.",
+ "input": 40210,
+ "cache_write": 40208,
+ "cache_read": 0,
+ "output": 1769,
+ "thinking": 454,
+ "usd": 0.35705200000000004,
+ "seconds": 16.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:24"
+}

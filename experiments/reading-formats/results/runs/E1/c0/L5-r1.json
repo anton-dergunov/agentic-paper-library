@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "L5",
+ "rep": 1,
+ "paper": "litm",
+ "form": "c0",
+ "page": 15,
+ "status": "ok",
+ "answer": "I can't answer that reliably. No paper or document came with your question, and your working directory (`reading-formats/empty`) appears to be empty, so I don't know which source you mean.\n\nIf you mean **\"Lost in the Middle: How Language Models Use Long Contexts\"** (Liu et al., 2023), which tests multi-document question answering with 10, 20 and 30 documents:\n\n- The main experiments used other models, including GPT-3.5-Turbo, Claude-1.3, MPT-30B-Instruct and LongChat-13B.\n- As far as I remember, GPT-4 appeared only in a smaller supplementary experiment with 20 documents, not 30.\n- I don't remember exact accuracy figures from that paper well enough to quote them.\n\nIf you share the paper, a link to it, or the relevant table, I can find the exact number for you.",
+ "input": 767,
+ "cache_write": 765,
+ "cache_read": 0,
+ "output": 676,
+ "thinking": 401,
+ "usd": 0.019648,
+ "seconds": 7.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

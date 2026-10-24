@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "S6",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "pdf",
+ "page": 14,
+ "status": "ok",
+ "answer": "SimPO cites Arena-Hard as **reference [54]**:\n\n> Tianle Li, Wei-Lin Chiang, Evan Frick, Lisa Dunlap, Banghua Zhu, Joseph E. Gonzalez, and Ion Stoica. *From live data to high-quality benchmarks: The Arena-Hard pipeline*, April 2024. (p. 14)\n\nWhere [54] appears in the paper:\n- **p. 2:** The introduction calls Arena-Hard \"the challenging Arena-Hard [54] benchmark.\"\n- **p. 5:** Table 2's caption cites it, and the evaluation section lists \"Arena-Hard v0.1 [54]\" as one of the three main benchmarks. Arena-Hard is described as \"an enhanced version of an MT-Bench, incorporating 500 well-defined technical problem-solving queries.\" It uses GPT-4-0314 as the baseline model and GPT-4 Turbo as the judge.\n- **p. 6:** Table 4's caption cites it again.\n- **p. 7:** The paper cites [54] to support its finding that MT-Bench separates methods poorly (\"This finding aligns with observations reported in [54]\").",
+ "input": 95940,
+ "cache_write": 546,
+ "cache_read": 95392,
+ "output": 598,
+ "thinking": 196,
+ "usd": 0.0354144,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-24 23:29"
+}

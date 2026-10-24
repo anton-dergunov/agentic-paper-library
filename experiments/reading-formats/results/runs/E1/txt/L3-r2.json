@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L3",
+ "rep": 2,
+ "paper": "litm",
+ "form": "txt",
+ "page": 10,
+ "status": "ok",
+ "answer": "**The document doesn't give either number.** Contriever's recall and GPT-3.5-Turbo (16K)'s accuracy at 50 retrieved documents appear only as lines in Figure 11, and the text never states the values (page 10). I can't read exact numbers from the plot as extracted here.\n\nNote on page numbers: the extracted text has no printed page numbers, so I counted them from the start of the paper.\n\n**What the paper does say about this experiment:**\n\n- **Overall pattern:** Reader accuracy levels off long before Contriever's recall does. The paper takes this to mean the models aren't using the extra retrieved documents effectively (page 10, Figure 11 caption and text).\n- **Gain beyond 20 documents:** Using more than 20 retrieved documents improves reader performance only slightly: about 1.5% for GPT-3.5-Turbo and about 1% for Claude-1.3. It also increases input length, latency and cost (page 10; also on page 3). This figure is given for \"GPT-3.5-Turbo\" generally, not specifically for the 16K variant.\n- **Setup:** Contriever, fine-tuned on MS-MARCO, retrieves the top-k Wikipedia documents for each NaturalQuestions-Open query. The paper measures retriever recall and reader accuracy as k changes (page 9).\n\nFor exact values at k = 50, you'd need the original figure or the authors' released data (nelsonliu.me/papers/lost-in-the-middle, page 3).",
+ "input": 28632,
+ "cache_write": 0,
+ "cache_read": 28630,
+ "output": 936,
+ "thinking": 443,
+ "usd": 0.024454000000000004,
+ "seconds": 9.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.79,
+ "date": "2026-10-24 23:37"
+}

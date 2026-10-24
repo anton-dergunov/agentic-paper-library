@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "G1",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 3,
+ "status": "ok",
+ "answer": "During fine-tuning the model maximises a **combined objective**: the supervised task loss plus the language-modelling loss as an auxiliary term, **with the auxiliary weight λ set to 0.5**.\n\n**The objective (page 3)**\n\nL₃(C) = L₂(C) + λ · L₁(C)  (Eq. 5)\n\n- **L₂(C)** is the supervised objective, Σ₍ₓ,ᵧ₎ log P(y | x₁,…,xₘ) (Eq. 4). Here P(y | x₁,…,xₘ) = softmax(hₗᵐ W_y), where hₗᵐ is the final transformer block's activation, fed into an added linear output layer W_y (Eq. 3) (page 3).\n- **L₁(C)** is the standard language-modelling objective, Σᵢ log P(uᵢ | uᵢ₋ₖ,…,uᵢ₋₁; Θ) (Eq. 1), applied to the labelled dataset C (page 3).\n\n**The weight (page 5)**\n\nIn the fine-tuning details, the paper states \"λ was set to 0.5.\"\n\n**Why the auxiliary term is included**\n\n- The authors found it helped learning by \"(a) improving generalization of the supervised model, and (b) accelerating convergence,\" which matches prior work (page 3).\n- In the ablation study, it helped on the NLI tasks and QQP. Larger datasets tended to benefit from it, but smaller datasets did not (page 8).",
+ "input": 16612,
+ "cache_write": 16610,
+ "cache_read": 0,
+ "output": 685,
+ "thinking": 190,
+ "usd": 0.146588,
+ "seconds": 7.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-24 23:33"
+}

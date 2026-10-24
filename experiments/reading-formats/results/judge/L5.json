@@ -1,0 +1,30 @@
+{
+ "key": "fd4a2be0270d97e3",
+ "usd": 0.034952,
+ "grades": {
+  "E1/txt/L5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/L5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/L5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/L5-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No document found; correctly recalls GPT-4 tested only with 20 documents."
+  }
+ }
+}

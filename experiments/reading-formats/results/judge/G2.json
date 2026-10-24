@@ -1,0 +1,30 @@
+{
+ "key": "366f8e2b8746d3a3",
+ "usd": 0.025544,
+ "grades": {
+  "E1/txt/G2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/G2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/G2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/G2-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Answered from memory without document; values match gold"
+  }
+ }
+}

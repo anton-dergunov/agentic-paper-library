@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "L1",
+ "rep": 1,
+ "paper": "litm",
+ "form": "c0",
+ "page": 18,
+ "status": "ok",
+ "answer": "This is from **\"Lost in the Middle: How Language Models Use Long Contexts\"** (Liu et al., 2023). From memory, for GPT-3.5-Turbo with 20 retrieved documents:\n\n- **Answer document first (position 1):** about **75.8%**\n- **Worst position (middle, around position 10):** about **53.8%**\n- **Closed-book (no documents):** about **56.1%**\n\nAt its worst position, the model with 20 documents scores **below closed-book**. That is roughly 2 points lower than answering with no documents at all, and about 22 points below the first-position result. The paper uses this to show that a relevant document placed in the middle of a long context can be effectively lost. Here, giving the model the documents makes it worse than giving it nothing. For reference, the oracle setting, where only the answer document is provided, is about 88%.\n\nThese figures are recalled rather than checked against the paper. If you need exact values, check the paper's results table.",
+ "input": 801,
+ "cache_write": 799,
+ "cache_read": 0,
+ "output": 629,
+ "thinking": 319,
+ "usd": 0.01898,
+ "seconds": 7.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.74,
+ "date": "2026-10-24 23:35"
+}

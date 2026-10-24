@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "I2",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "pdf",
+ "page": 42,
+ "status": "ok",
+ "answer": "**KL reward coefficient (β): 0.02.** The RL policies are initialized from the supervised fine-tuned models, which are also used to compute the KL reward with β = 0.02 (page 42). On page 9, β is defined as the coefficient that controls the strength of the per-token KL penalty from the SFT model in Equation 2. Appendix E.7 adds that the best value is around 0.01–0.02, and that values of 0 or 2 perform poorly (page 56).\n\n**Pretraining-gradient coefficient (γ): 27.8.** The pretraining gradients are multiplied by γ = 27.8 to set their strength relative to the PPO gradients (page 42). The paper says this single value \"seems to work well across model sizes, from 1.3B to 175B\" (page 53). For plain \"PPO\" models, γ is set to 0 (page 9). PPO-ptx also uses 8 times more pretraining examples than RL training episodes (page 42).\n\n**Number of RL episodes: 256k.** All RL models are trained for 256k episodes, which cover about 31k unique prompts (page 42). On the 1.3B model, training beyond 256k episodes did not help PPO-ptx (page 58). Training for 512k episodes caused regressions on DROP and SQuADv2 (page 56).",
+ "input": 174215,
+ "cache_write": 564,
+ "cache_read": 173649,
+ "output": 506,
+ "thinking": 78,
+ "usd": 0.0493698,
+ "seconds": 9.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.86,
+ "date": "2026-10-24 23:38"
+}

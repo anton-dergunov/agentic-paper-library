@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L2",
+ "rep": 2,
+ "paper": "litm",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give this number.** Per-position key-value retrieval results appear only in Figure 7 (p. 6), which is an image here, so I can't read values from it. The full results tables in Appendix G (p. 18) cover only the multi-document QA task.\n\nThe text does give some related figures:\n\n- **Without query-aware contextualization**, the worst-case key-value retrieval performance is 45.6% (p. 7). The paper doesn't say which model, context length, or position this belongs to.\n- **With query-aware contextualization** (the query placed before and after the key-value pairs), GPT-3.5-Turbo (16K) \"achieves perfect performance when evaluated with 300 key-value pairs\" (p. 7).\n- GPT-3.5-Turbo (16K) is among the models with the lowest performance when the key is in the middle of the context. Models struggle most in the 140- and 300-pair settings (p. 6).\n\nFor the exact accuracy at position 200, you'd need to read it off Figure 7 or use the authors' released code and data (nelsonliu.me/papers/lost-in-the-middle, p. 2).",
+ "input": 26914,
+ "cache_write": 0,
+ "cache_read": 26912,
+ "output": 486,
+ "thinking": 119,
+ "usd": 0.0151104,
+ "seconds": 6.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.78,
+ "date": "2026-10-24 23:36"
+}

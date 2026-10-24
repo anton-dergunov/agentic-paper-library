@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "D3",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "pdf",
+ "page": 10,
+ "status": "ok",
+ "answer": "According to Table 2 (page 10):\n\n- **Human–human agreement on the PPO-1 comparison:** 87%.\n- **GPT-4 (C)–human agreement on the DPO comparison:** 67%.\n\nIn each comparison, a summary from the named method was compared with a summary from PPO at temperature 0 (page 10). The PPO-1 comparison used PPO at temperature 1.0, and the DPO comparison used DPO at temperature 0.25 (pages 10, 27).\n\nThe study only collected multiple human judgments for the DPO and PPO-1 comparisons, so there is no human–human agreement figure for SFT (page 10). The authors conclude that GPT-4 agrees with humans about as often as humans agree with each other (page 10).",
+ "input": 80087,
+ "cache_write": 80085,
+ "cache_read": 0,
+ "output": 297,
+ "thinking": 49,
+ "usd": 0.646628,
+ "seconds": 4.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.18,
+ "date": "2026-10-24 23:24"
+}

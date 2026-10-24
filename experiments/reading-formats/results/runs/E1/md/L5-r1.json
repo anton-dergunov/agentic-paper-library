@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L5",
+ "rep": 1,
+ "paper": "litm",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "**The document does not report GPT-4 accuracy with 30 documents.**\n\n- **Only a subset was tested.** GPT-4 (8K) was evaluated only \"on a subset of multi-document QA experiments,\" because running the full experiments would cost more than $6000 (p. 4, footnote 6).\n- **That subset used 20 documents.** It was \"500 random multi-document QA examples with 20 total documents in each input context\" (p. 15, Appendix D).\n- **No exact numbers are given in the text, even for 20 documents.** The paper says only that GPT-4 \"achieves higher absolute performance than any other language model, but still shows a U-shaped performance curve\" (p. 15). The specific values appear only in Figure 15, which isn't readable here.\n- **The 30-document table has no GPT-4 row.** Table 7 lists only Claude-1.3, Claude-1.3 (100K), GPT-3.5-Turbo (16K), MPT-30B-Instruct and LongChat-13B (16K) (p. 18).\n\nIf a 30-document comparison is useful, the best result in Table 7 is GPT-3.5-Turbo (16K): 73.4% when the answer document comes first, falling to 50.5% at index 9 (p. 18).",
+ "input": 26886,
+ "cache_write": 540,
+ "cache_read": 26344,
+ "output": 544,
+ "thinking": 131,
+ "usd": 0.0204768,
+ "seconds": 6.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

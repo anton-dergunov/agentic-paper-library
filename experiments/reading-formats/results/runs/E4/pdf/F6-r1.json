@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "pdf",
+ "qid": "F6",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "pdf",
+ "page": 15,
+ "status": "ok",
+ "answer": "Qwen3-VL-235B-A22B-Instruct scores **89.3** on MMBench-EN (Table 2, page 15). The thinking variant scores 88.8 on the same benchmark (page 15).\n\nThe text on page 13 also cites this result. It says the Instruct model has the highest MMBench scores among non-reasoning models, at 89.3/88.9. The second number is the MMBench-CN score, which Table 2 lists as 88.9 (page 15).",
+ "input": 133814,
+ "cache_write": 552,
+ "cache_read": 133260,
+ "output": 221,
+ "thinking": 65,
+ "usd": 0.035496,
+ "seconds": 7.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.69,
+ "date": "2026-10-24 23:31"
+}

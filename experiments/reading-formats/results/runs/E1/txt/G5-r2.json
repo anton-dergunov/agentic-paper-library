@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "G5",
+ "rep": 2,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give these numbers.**\n\nThe values you're asking about would be in **Figure 2 (left)** on **page 7**, which plots RACE and MultiNLI performance against the number of layers transferred. The figure itself isn't in the text provided, only its caption. The caption describes the plot as showing the \"Effect of transferring increasing number of layers from the pre-trained language model on RACE and MultiNLI\" (page 7).\n\nThe surrounding text on **page 7** gives only general findings:\n- Transferring embeddings improves performance.\n- Each transformer layer adds further benefit, \"up to 9% for full transfer on MultiNLI.\"\n- No RACE figure is given for either 0 or 12 layers.\n\nThe model has 12 layers, so \"all 12\" is full transfer (**page 5**).\n\nThe only RACE accuracy in the document is **59.0** overall for the full fine-tuned model in Table 3 (**page 6**). That is the main reported result, not a dev-set value from the layer-transfer experiment, so it doesn't answer your question.",
+ "input": 16611,
+ "cache_write": 0,
+ "cache_read": 16609,
+ "output": 496,
+ "thinking": 152,
+ "usd": 0.013249799999999999,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.73,
+ "date": "2026-10-24 23:34"
+}

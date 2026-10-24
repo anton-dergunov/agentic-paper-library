@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "G1",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "pdf",
+ "page": 3,
+ "status": "ok",
+ "answer": "During fine-tuning the model optimises a combined objective, **L3(C) = L2(C) + λ · L1(C)**, and **λ is set to 0.5**.\n\n**The two terms (page 3):**\n- **L2(C)** is the supervised objective. It sums log P(y | x¹,…,xᵐ) over labelled examples (x, y). P(y | …) is a softmax over the final transformer block's activation h_l^m, multiplied by an added linear output layer W_y (Eqs. 3–4).\n- **L1(C)** is the language modelling objective from pre-training, applied as an auxiliary term to the fine-tuning data C. In pre-training it is defined as Σ log P(uᵢ | u_{i−k},…,u_{i−1}; Θ) (Eq. 1).\n\n**The weight (page 5):** The fine-tuning details state that \"λ was set to 0.5.\"\n\n**Why the auxiliary term is included (page 3):** The authors found it helped by \"(a) improving generalization of the supervised model, and (b) accelerating convergence.\" This is consistent with prior work [50, 43].\n\n**Ablation result (page 8, Table 5):** The auxiliary objective helps on the NLI tasks and QQP. The trend suggests larger datasets benefit from it but smaller datasets do not. The average score without the auxiliary LM (75.0) is slightly higher than the full model (74.7).",
+ "input": 34876,
+ "cache_write": 549,
+ "cache_read": 34325,
+ "output": 544,
+ "thinking": 79,
+ "usd": 0.022145,
+ "seconds": 6.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-24 23:33"
+}

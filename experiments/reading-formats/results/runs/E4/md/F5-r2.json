@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md",
+ "qid": "F5",
+ "rep": 2,
+ "paper": "qwen3vl",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "GPT-5 (high) scores **78.4 on MMMU-Pro**, according to Table 2 (pp. 15–16). This is the highest MMMU-Pro score in the table and is shown in bold.\n\nYou may want to check this against the original PDF. The text version of Table 2 is garbled, and the document itself warns that tables with misaligned columns should be checked before quoting (pp. 15–16). In that version, the MMMU and MMMU-Pro rows are merged, and GPT-5 (high)'s MMMU-Pro value has slipped onto a separate line. I matched values to models by reading the columns in order. The result is consistent: 78.4 is the only bolded MMMU-Pro value, which fits the caption's note that bold marks the top reasoning-model score (p. 15).\n\nFor comparison, the same reading of the MMMU-Pro row gives these scores (pp. 15–16):\n\n| Model | MMMU-Pro |\n|---|---|\n| GPT-5 (high) | **78.4** |\n| Gemini 2.5 Pro (budget-128) | 71.2 |\n| Qwen3-VL-235B-A22B Thinking | 69.3 |\n| Gemini 2.5 Pro (thinking) | 68.8 |\n| Qwen3-VL-235B-A22B Instruct | 68.1 |\n| Claude Opus 4.1 (thinking) | 64.8 |\n| GPT-5 (minimal) | 62.7 |\n| Claude Opus 4.1 (non-thinking) | 60.7 |",
+ "input": 83290,
+ "cache_write": 0,
+ "cache_read": 83288,
+ "output": 1115,
+ "thinking": 602,
+ "usd": 0.0389656,
+ "seconds": 12.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.69,
+ "date": "2026-10-24 23:32"
+}

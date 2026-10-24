@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "pdf",
+ "qid": "F1",
+ "rep": 2,
+ "paper": "musique",
+ "form": "pdf",
+ "page": 11,
+ "status": "ok",
+ "answer": "The C-only model (which sees the context but not the question) scores almost nothing on MuSiQue-Ans. Two sets of numbers are reported:\n\n| Split | Answer F1 (An) | Support F1 (Sp) | Source |\n|---|---|---|---|\n| Validation | 3.4 | 0.0 | Table 4, p. 11 |\n| Test | 3.7 | 0.0 | Table 5, p. 11 |\n\nTable 5 reports test-set numbers for MuSiQue-Ans and MuSiQue-Full, while all other results are on the validation set (p. 10).\n\n**Comparison with other datasets (Table 4, p. 11):**\n- On HotpotQA (HQ-20K), C-only gets 18.4 An and 67.6 Sp.\n- On 2WikiMultihopQA (2W-20K), it gets 50.1 An and 92.0 Sp.\n- The authors note that support identification on those datasets \"can be done to a surprisingly high degree (67.6 and 92.0 F1) even without the question (C-only model), but fails on MuSiQue-Ans\" (p. 11).\n\n**Related figures:**\n- On MuSiQue-Full, C-only gets 1.6 An+Sf and 1.1 Sp+Sf (Table 5, p. 11).\n- Without the Disconnection Filter, C-only rises to 8.6 An and 22.4 Sp. Without the Reduced Train-Test Leakage split, it rises to 69.5 An and 42.3 Sp (Table 6, p. 11).\n- The low support score depends on the \"positive distractors\" used to build the context. With 20 distractor paragraphs drawn from full Wikipedia instead, C-only would reach 12.4 An and 66.4 Sp (Table 7, p. 12).",
+ "input": 54391,
+ "cache_write": 0,
+ "cache_read": 54389,
+ "output": 760,
+ "thinking": 163,
+ "usd": 0.0260858,
+ "seconds": 8.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.58,
+ "date": "2026-10-24 23:30"
+}

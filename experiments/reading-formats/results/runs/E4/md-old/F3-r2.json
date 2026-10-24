@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F3",
+ "rep": 2,
+ "paper": "gpt1",
+ "form": "md-old",
+ "page": 3,
+ "status": "ok",
+ "answer": "**The document doesn't contain Eq. 5.** In this conversion, the equation is blank: only the label \"(5)\" appears (p. 3). The conversion note also warns that equations were reconstructed by a model and should be checked against the PDF.\n\nThe surrounding text does describe what the equation is about:\n\n- **What it does:** Language modeling is added as an auxiliary objective during fine-tuning. The authors say this improves generalization of the supervised model and speeds up convergence (p. 3).\n- **Weight:** The objective is optimized \"with weight λ\" (p. 3), and λ is set to 0.5 (p. 4).\n- **Likely components:** The two objectives defined earlier are probably what Eq. 5 combines, but the document never shows how they are combined:\n  - The language modeling objective, Eq. 1 (p. 3): $L_1(\\mathcal{U}) = \\sum_i \\log P(u_i \\mid u_{i-k}, \\dots, u_{i-1}; \\Theta)$\n  - The supervised objective, Eq. 4 (p. 3): $L_2(\\mathcal{C}) = \\sum_{(x,y)} \\log P(y \\mid x^1, \\dots, x^m)$\n\nTo get the exact form of Eq. 5, check the original PDF on page 3, Section 3.2.",
+ "input": 17355,
+ "cache_write": 0,
+ "cache_read": 17353,
+ "output": 961,
+ "thinking": 530,
+ "usd": 0.022698600000000003,
+ "seconds": 11.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-24 23:31"
+}

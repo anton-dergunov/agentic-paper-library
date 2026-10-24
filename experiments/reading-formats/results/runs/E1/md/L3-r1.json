@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L3",
+ "rep": 1,
+ "paper": "litm",
+ "form": "md",
+ "page": 10,
+ "status": "ok",
+ "answer": "**The document doesn't give either number.** The values appear only in Figure 11 (p. 9), which is included as an image with no data in the text.\n\nWhat the text does say about the open-domain experiment:\n\n- **Setup:** Contriever, fine-tuned on MS-MARCO, retrieves the top *k* Wikipedia documents for NaturalQuestions-Open queries. The authors measure retriever recall and reader accuracy as *k* changes (p. 9).\n- **Overall finding:** Reader performance levels off long before retriever recall does, so the models aren't making effective use of the extra documents (p. 9; also p. 2).\n- **20 vs. 50 documents:** Going beyond 20 retrieved documents improves performance only slightly: about 1.5% for GPT-3.5-Turbo and about 1% for Claude-1.3 (p. 9; p. 2). These are gains, not absolute accuracies. The text attributes the 1.5% to \"GPT-3.5-Turbo\" and doesn't separately name GPT-3.5-Turbo (16K) here.\n\nThe Appendix G tables (p. 18) report accuracies for GPT-3.5-Turbo (16K), but they cover the controlled multi-document QA task with 10, 20 or 30 documents. They don't apply to the 50-document open-domain setting.",
+ "input": 26918,
+ "cache_write": 572,
+ "cache_read": 26344,
+ "output": 580,
+ "thinking": 143,
+ "usd": 0.021452799999999998,
+ "seconds": 6.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.76,
+ "date": "2026-10-24 23:35"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F1",
+ "rep": 1,
+ "paper": "musique",
+ "form": "md-old",
+ "page": 11,
+ "status": "ok",
+ "answer": "On MuSiQue-Ans, the C-only model (which sees the context but not the question) scores **53.4 answer F1** and **50.0 support F1** on the validation set (Table 4, p. 10). On the test set it scores **53.7 answer F1** and **50.0 support F1** (Table 5, p. 10).\n\nThe model is built as an End2End Longformer-Large model given an empty question (p. 10).\n\nThe authors highlight the support score. C-only identifies supporting paragraphs well on HotpotQA (67.6 F1) and 2WikiMultihopQA (92.0 F1) without seeing the question, but this \"fails on ♫-Ans\" (p. 10). They credit the \"positive distractors\": distractor paragraphs drawn from the gold paragraphs of other single-hop questions. With distractors from full Wikipedia instead, C-only support F1 would have been 66.4 (Table 7, p. 12).",
+ "input": 33878,
+ "cache_write": 33876,
+ "cache_read": 0,
+ "output": 522,
+ "thinking": 218,
+ "usd": 0.28145600000000004,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-24 23:29"
+}

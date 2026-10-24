@@ -1,0 +1,30 @@
+{
+ "key": "146af28a79ddfb50",
+ "usd": 0.036211999999999994,
+ "grades": {
+  "E1/pdf/G1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/G1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/G1-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Answered from memory without the document; values match gold."
+  },
+  "E1/md/G1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

@@ -1,0 +1,66 @@
+{
+ "key": "df81b7ab6d7d9ea0",
+ "usd": 0.051452,
+ "grades": {
+  "E1/md/G5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the figure values cannot be read; gives no RACE values."
+  },
+  "E1/pdf/G5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/G5-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Values from recollection fall within tolerance; no page cited."
+  },
+  "E1/txt/G5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the document doesn't give the numbers."
+  },
+  "E1/pdf/G5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/G5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/G5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the figure values aren't available."
+  },
+  "E1/txt/G5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the document doesn't give the numbers."
+  },
+  "E1/txt/G5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the document doesn't give the numbers."
+  },
+  "E1/md/G5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the document doesn't give the numbers."
+  }
+ }
+}

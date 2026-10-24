@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "S4",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "txt",
+ "page": 18,
+ "status": "ok",
+ "answer": "For Llama-3-Instruct (8B), the paper gives two configurations, depending on which reward model labeled the preference data.\n\n**Original setting (PairRM preference labels)**\n\nTable 8 lists these values for Llama-3-Instruct (page 18):\n- **β = 2.5**\n- **γ = 1.4**\n- **Learning rate = 1e-6**\n\nThe other preference-optimization settings were shared across all setups (page 18):\n- Batch size of 128.\n- A single training epoch.\n- Max sequence length of 2048.\n- Cosine learning rate schedule with 10% warmup.\n\n**v0.2 setting (ArmoRM preference labels)**\n\nWhen the data was relabeled with the stronger ArmoRM reward model, the paper uses (page 29):\n- **β = 10**\n- **γ = 3**\n- **Learning rate = 1e-6.** The paper says the other hyperparameters, including learning rate, batch size and max sequence length, stayed the same as in the original Llama-3-8B-Instruct setting.\n\n**Related notes**\n- Footnote 11 says that in some settings, such as Llama-3-Instruct, a large β like 10 performs better (page 10).\n- Table 16 marks the released checkpoint as SimPO (lr=1e-6). The paper notes this higher learning rate gave stronger chat-benchmark results but caused catastrophic forgetting on GSM8K and MMLU (page 31). Lower learning rates (4e-7 and 5e-7) kept those capabilities better but scored lower on AlpacaEval 2 (page 31).\n- As general guidance, the paper says β between 2.0 and 2.5 and γ between 0.5 and 1.5 work well across setups (page 5). The v0.2 values fall outside that range.",
+ "input": 49349,
+ "cache_write": 552,
+ "cache_read": 48795,
+ "output": 747,
+ "thinking": 160,
+ "usd": 0.029123,
+ "seconds": 13.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-24 23:28"
+}

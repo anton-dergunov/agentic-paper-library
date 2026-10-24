@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "S5",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "c0",
+ "page": 2,
+ "status": "ok",
+ "answer": "I don't know of a reliable figure for this.\n\nThe SimPO paper (Meng, Xia & Chen, 2024) reports results for smaller models, as far as I remember:\n\n- **Llama-3-8B-Instruct:** about 44.7% LC win rate on AlpacaEval 2. A later version trained with ArmoRM-annotated preference data reached about 53.7%.\n- **Gemma-2-9B-it:** about 72.4% LC win rate.\n- **Mistral-7B and Llama-3-8B base models:** these were also tested.\n\nI don't remember any Llama-3-70B result in that paper, and I can't confirm a number from other work. If you saw a 70B figure somewhere, check the source directly, such as the paper's latest arXiv version, the SimPO GitHub repo (princeton-nlp/SimPO), or the AlpacaEval leaderboard.",
+ "input": 782,
+ "cache_write": 780,
+ "cache_read": 0,
+ "output": 498,
+ "thinking": 207,
+ "usd": 0.016208,
+ "seconds": 5.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-24 23:28"
+}

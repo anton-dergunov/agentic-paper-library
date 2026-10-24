@@ -1,0 +1,30 @@
+{
+ "key": "ccb426b5cf2c8195",
+ "usd": 0.049288,
+ "grades": {
+  "E1/md/S3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/S3-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Lists margin γ as an extra rather than one of the two differences."
+  },
+  "E1/txt/S3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Lists margin γ as an extra rather than one of the two differences."
+  },
+  "E1/pdf/S3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

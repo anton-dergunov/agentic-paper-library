@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "S5",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "pdf",
+ "page": 2,
+ "status": "ok",
+ "answer": "**The document doesn't say. It never applies SimPO to Llama-3-70B.**\n\nLlama-3-70B appears only once, as a reference entry from the AlpacaEval 2 leaderboard. In Table 1, the untuned **Llama-3-70B-Instruct** has a 34.4% LC win rate, a 33.2% raw win rate and an average length of 1919 (page 2). The bold entries in that table are the models the authors trained, and Llama-3-70B is not one of them (page 2).\n\nThe paper does apply SimPO to these models:\n\n- **Llama-3-8B-Instruct:** 44.7% LC win rate (Table 4, page 6; Table 1, page 2). With the stronger ArmoRM reward model (v0.2), this rises to 53.7% (Table 12, page 29).\n- **Llama-3-8B-Base:** 22.0% LC win rate (Table 4, page 6).\n- **Gemma-2-9B-it:** 72.4% LC win rate, the paper's top result (Table 1, page 2; Table 17, page 32).",
+ "input": 95950,
+ "cache_write": 556,
+ "cache_read": 95392,
+ "output": 434,
+ "thinking": 78,
+ "usd": 0.032214400000000004,
+ "seconds": 8.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-24 23:29"
+}

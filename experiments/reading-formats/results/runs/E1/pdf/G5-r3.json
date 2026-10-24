@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "G5",
+ "rep": 3,
+ "paper": "gpt1",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "**RACE dev accuracy is roughly 40% with 0 layers transferred and roughly 60% with all 12 layers.** The paper doesn't state these numbers. I read them from the plot in Figure 2 (left) on page 7, so treat them as approximate.\n\n- **0 layers transferred:** about 40%. This is the leftmost point of the solid blue \"RACE Dev\" line, read against the left y-axis \"RACE Dev Accuracy,\" which runs from 30 to 100.\n- **12 layers transferred (full transfer):** about 60%. This is the rightmost point of the same line.\n\nThe text only gives a number for MultiNLI: each transformer layer adds benefit, \"up to 9% for full transfer on MultiNLI\" (page 7). It gives no RACE figures for this analysis.\n\nTable 3 on page 6 reports 59.0 on RACE for the fine-tuned model. That is the overall benchmark result, not the dev-set figure in this plot, so it isn't a direct answer.",
+ "input": 34875,
+ "cache_write": 0,
+ "cache_read": 34873,
+ "output": 609,
+ "thinking": 279,
+ "usd": 0.019162600000000002,
+ "seconds": 10.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.73,
+ "date": "2026-10-24 23:35"
+}

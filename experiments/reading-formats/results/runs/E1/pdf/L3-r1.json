@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "L3",
+ "rep": 1,
+ "paper": "litm",
+ "form": "pdf",
+ "page": 10,
+ "status": "ok",
+ "answer": "**The document does not report exact numbers for either value at 50 retrieved documents.** These results appear only in Figure 11, a line plot, and the paper has no table for the open-domain experiment (page 10).\n\n**Approximate readings from Figure 11 (page 10)**\n- **Contriever recall:** the top curve ends at about **88–89%** at 50 documents. This is my reading of the plot, not a stated value.\n- **GPT-3.5-Turbo (16K) accuracy:** its curve sits in a cluster of reader lines around the **high-50s to roughly 60%**. The GPT-3.5-Turbo (16K) and LongChat-13B (16K) lines overlap near the top of that cluster, so I can't reliably give a more precise value for this model.\n\n**What the text does state**\n- Reader performance \"saturates long before retriever performance saturates,\" which suggests the readers are not using the extra context effectively (page 10).\n- Using 50 documents instead of 20 improves GPT-3.5-Turbo only by about 1.5% (Claude-1.3 by about 1%) (pages 3 and 10). This figure is reported for \"GPT-3.5-Turbo,\" not specifically the 16K version.",
+ "input": 54358,
+ "cache_write": 573,
+ "cache_read": 53783,
+ "output": 786,
+ "thinking": 390,
+ "usd": 0.031068600000000005,
+ "seconds": 9.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

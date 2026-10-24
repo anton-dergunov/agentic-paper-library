@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "L4",
+ "rep": 1,
+ "paper": "litm",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "The key-value retrieval task is a synthetic test of whether a model can find and copy matching tokens from its input.\n\n**Input format**\n- Each input has two parts: a string-serialized JSON object with *k* key-value pairs, and one key from that object. The model must return the value paired with that key (p. 6).\n- Exactly one pair is relevant. The other *k*−1 pairs are \"distractors\" (p. 6).\n\n**What the keys and values are**\n- Every key and every value is a unique, randomly generated UUID (p. 6). Specifically, they are 128-bit UUIDs (Figure 6 caption, p. 5).\n- The authors used random UUIDs instead of natural language to strip out language meaning, which could confound the results (p. 6).\n\n**How many pairs and examples**\n- Inputs contain 75, 140, or 300 key-value pairs, with 500 examples for each size (p. 6).\n- Average token counts with the GPT-3.5-Turbo/Claude-1.3 tokenizer are about 3,769, 6,993, and 14,929 tokens. With LongChat-13B's tokenizer, the 300-pair setting averages about 21,467 tokens (Table 4, p. 17).\n\n**How the experiment varies the input**\n- To change where the relevant information sits, they move the queried key to a different position in the JSON object (p. 6).\n- To change the input length, they add or remove random pairs, which changes the number of distractors (p. 6).\n\n**Scoring**\n- An answer counts as correct if the right value appears anywhere in the model's output (p. 6).\n\n**Variant: query placement**\n- By default, the query comes after the data. In the \"query-aware contextualization\" variant, the key appears both before and after the pairs (p. 7).",
+ "input": 26895,
+ "cache_write": 549,
+ "cache_read": 26344,
+ "output": 878,
+ "thinking": 308,
+ "usd": 0.0272288,
+ "seconds": 8.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

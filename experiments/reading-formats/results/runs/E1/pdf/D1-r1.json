@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "D1",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "pdf",
+ "page": 4,
+ "status": "ok",
+ "answer": "# The DPO loss and its implicit reward\n\n## The loss (Eq. 7, page 4)\n\n$$\n\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta;\\pi_{\\text{ref}}) = -\\,\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log\\sigma\\!\\left(\\beta\\log\\frac{\\pi_\\theta(y_w\\mid x)}{\\pi_{\\text{ref}}(y_w\\mid x)} - \\beta\\log\\frac{\\pi_\\theta(y_l\\mid x)}{\\pi_{\\text{ref}}(y_l\\mid x)}\\right)\\right]\n$$\n\nThe terms are:\n- $y_w$ is the preferred completion and $y_l$ is the dispreferred one (page 3).\n- $\\sigma$ is the logistic function (page 3).\n- $\\beta$ controls how far the policy may deviate from the reference policy $\\pi_{\\text{ref}}$, which is normally the SFT model (page 4).\n\n## What plays the role of the reward\n\nThe reward is the scaled log-ratio between the policy and the reference model:\n\n$$\n\\hat r_\\theta(x,y) = \\beta\\log\\frac{\\pi_\\theta(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}\n$$\n\nThe paper calls this \"the reward implicitly defined by the language model $\\pi_\\theta$ and reference model $\\pi_{\\text{ref}}$\" (page 5).\n\n**Why this works.** The paper rearranges the closed-form optimal policy of the KL-constrained objective. This expresses any reward in terms of its optimal policy (Eq. 5, page 4):\n\n$$\nr(x,y) = \\beta\\log\\frac{\\pi_r(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)} + \\beta\\log Z(x)\n$$\n\nThe Bradley-Terry model depends only on the difference between two rewards. When this expression is substituted into it, the partition function $Z(x)$ cancels (page 4). The loss therefore has the same form as the reward-model loss in Eq. 2, where $\\mathcal{L}_R = -\\mathbb{E}[\\log\\sigma(r_\\phi(x,y_w) - r_\\phi(x,y_l))]$ (page 3). The only change is that $r_\\phi$ is replaced by the implicit reward. The paper describes this as fitting \"an implicit reward using an alternative parameterization, whose optimal policy is simply $\\pi_\\theta$\" (page 4). This is also the meaning of the title claim that \"the policy network represents both the language model and the (implicit) reward\" (page 4; Section 5.1, page 5).\n\n**No loss of generality.** Theorem 1 states that, under mild assumptions, every reward equivalence class consistent with Plackett-Luce or Bradley-Terry can be represented as $\\beta\\log\\frac{\\pi(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}$ for some model $\\pi$ (page 6). The proof is in Appendix A.6 (page 18).\n\n**In code.** The PyTorch implementation computes this reward as `rewards = beta * (pi_logps - ref_logps).detach()`, next to `losses = -F.logsigmoid(beta * (pi_logratios - ref_logratios))` (page 20).",
+ "input": 80063,
+ "cache_write": 80061,
+ "cache_read": 0,
+ "output": 1244,
+ "thinking": 108,
+ "usd": 0.665376,
+ "seconds": 13.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-24 23:24"
+}

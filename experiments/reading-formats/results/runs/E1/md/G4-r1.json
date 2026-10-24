@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "G4",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "All of these come from the \"Model specifications\" paragraph in Section 4.1 (Setup), which the document marks as **p. 4**.\n\n| Item | Value | Page |\n|---|---|---|\n| Layers | 12-layer decoder-only transformer with masked self-attention heads | p. 4 |\n| State size | 768-dimensional states (3072-dimensional inner states in the position-wise feed-forward networks) | p. 4 |\n| Attention heads | 12 | p. 4 |\n| Context length | Contiguous sequences of 512 tokens, in minibatches of 64, for 100 epochs | p. 4 |\n| Optimizer | Adam | p. 4 |\n| Peak learning rate | 2.5e-4, increased linearly from zero over the first 2000 updates, then annealed to 0 with a cosine schedule | p. 4 |\n\nFine-tuning used a different learning rate: 6.25e-5 with batch size 32 for most tasks (p. 4).\n\nThe document only gives a page number for each section heading, so p. 4 is the page where Section 4.1 starts. This paragraph comes after Table 1, so it may actually be on p. 5 of the PDF. Check the PDF if you need the exact page.",
+ "input": 17502,
+ "cache_write": 550,
+ "cache_read": 16950,
+ "output": 640,
+ "thinking": 234,
+ "usd": 0.020598,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.72,
+ "date": "2026-10-24 23:33"
+}

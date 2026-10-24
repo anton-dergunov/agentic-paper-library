@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "L4",
+ "rep": 1,
+ "paper": "litm",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "The task gives a model a JSON object of random UUID pairs and asks it to return the value for one key. It is tested with **75, 140 and 300 pairs**, using **500 examples** at each size.\n\n**Structure**\n- Each input has two parts: a JSON object (as a string) holding *k* key-value pairs, and one key from that object. The model must return that key's value (p. 6).\n- Each object has one relevant pair and *k* − 1 irrelevant \"distractor\" pairs (p. 6).\n- The prompt says \"Extract the value corresponding to the specified key in the JSON object below,\" then gives the JSON data, the key, and \"Corresponding value:\" (Figure 6, p. 6).\n\n**Keys and values**\n- Every key and value is a unique, randomly generated 128-bit UUID (p. 6, Figure 6 caption).\n- The authors used random UUIDs to strip out as much natural-language meaning as possible. Language features could otherwise act as confounders (p. 6).\n\n**Number of pairs and examples**\n- Contexts hold 75, 140 or 300 key-value pairs, with 500 examples each (p. 6).\n- These sizes are about 4K, 8K and 16K tokens (Figure 7, p. 7).\n- Average lengths with the GPT-3.5-Turbo/Claude tokenizer are about 3,769, 6,993 and 14,929 tokens (Table 4, p. 17).\n\n**What is varied**\n- Position of the relevant information: the key to retrieve is moved within the JSON object (p. 6).\n- Context length: random keys are added or removed, which changes the number of distractor pairs (p. 6).\n\n**Scoring**\n- Accuracy is whether the correct value appears in the model's output (p. 6).\n\n**Query-aware variant**\n- The standard setup puts the key after the data (p. 7).\n- A variant also puts the query before the data (pp. 7–8).",
+ "input": 54335,
+ "cache_write": 550,
+ "cache_read": 53783,
+ "output": 920,
+ "thinking": 293,
+ "usd": 0.0335646,
+ "seconds": 8.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

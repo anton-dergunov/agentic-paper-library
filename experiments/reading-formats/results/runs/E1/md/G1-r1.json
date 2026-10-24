@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "G1",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "md",
+ "page": 3,
+ "status": "ok",
+ "answer": "During fine-tuning the model optimises the **supervised objective plus a weighted language-modelling auxiliary term**, and the auxiliary term's weight **λ is set to 0.5**.\n\n**The objective (p. 3)**\n\nThe paper optimises:\n\n$$L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda * L_1(\\mathcal{C}) \\quad (5)$$\n\nThe two parts are:\n- **$L_2(\\mathcal{C})$** is the supervised objective: $\\sum_{(x,y)} \\log P(y|x^1, \\dots, x^m)$ (Eq. 4). Here $P(y|x^1,\\dots,x^m) = \\text{softmax}(h_l^m W_y)$ (Eq. 3). That is, the final transformer block's activation goes into an added linear output layer with parameters $W_y$ (p. 3).\n- **$L_1(\\mathcal{C})$** is the language-modelling objective from pre-training (Eq. 1): $\\sum_i \\log P(u_i | u_{i-k}, \\dots, u_{i-1}; \\Theta)$. During fine-tuning it is applied to the labelled dataset $\\mathcal{C}$ (p. 3).\n\nThe authors say the auxiliary LM objective helped in two ways: it improved generalisation of the supervised model, and it sped up convergence. This agrees with prior work [50, 43] (p. 3).\n\n**The weight (p. 4)**\n\nThe fine-tuning details state: \"λ was set to 0.5\" (p. 4).\n\n**Related point from the ablations (p. 7)**\n\nRemoving the auxiliary LM objective showed that it helps on the NLI tasks and QQP. The authors conclude that \"larger datasets benefit from the auxiliary objective but smaller datasets do not\" (p. 7, Table 5).\n\n**Caveat:** The document's header warns that its equations were read from the page image by a model and may have a wrong symbol or index. Check Eq. 5 against the PDF before quoting it exactly.",
+ "input": 17500,
+ "cache_write": 548,
+ "cache_read": 16950,
+ "output": 813,
+ "thinking": 134,
+ "usd": 0.024042,
+ "seconds": 8.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-24 23:33"
+}

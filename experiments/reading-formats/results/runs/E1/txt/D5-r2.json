@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "D5",
+ "rep": 2,
+ "paper": "dpo",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give these numbers.** Figure 2 (right) plots TL;DR win rates against sampling temperature (p. 7), but the extracted text contains only the axes and legend, not the plotted values. So I can't report PPO's or DPO's win rate at temperature 1.0.\n\nThe text does say the following:\n\n- **At temperature 0.0:** DPO's win rate is about 61%, and PPO's is 57%. 0.0 is also PPO's best temperature (p. 9).\n- **At high temperatures:** DPO is \"much more robust to the sampling temperature than PPO.\" PPO's performance \"can degrade to that of the base GPT-J model at high temperatures\" (p. 9). The Figure 2 caption makes the same point (p. 7).\n\nTable 2 (p. 10) includes PPO at temperature 1.0 (\"PPO-1\"), but that is a different measurement. It compares PPO-1 head-to-head against PPO at temperature 0, not against the reference summaries. PPO-1's GPT-4 (C) win rate there is 12%, and its human win rate is 17%. It doesn't answer your question about the Figure 2 plot.",
+ "input": 40202,
+ "cache_write": 0,
+ "cache_read": 40200,
+ "output": 604,
+ "thinking": 221,
+ "usd": 0.020128,
+ "seconds": 6.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.42,
+ "date": "2026-10-24 23:26"
+}

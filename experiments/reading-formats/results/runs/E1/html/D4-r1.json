@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "html",
+ "qid": "D4",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "html",
+ "page": 20,
+ "status": "ok",
+ "answer": "By default DPO uses **β = 0.1**, a **batch size of 64**, and the **RMSprop optimizer** with a **learning rate of 1e-6**. The learning rate is **warmed up linearly from 0 to 1e-6 over 150 steps**. For **TL;DR summarization**, the paper uses **β = 0.5** and keeps all other settings the same.\n\nSource: Appendix B, \"DPO Implementation Details and Hyperparameters.\" I can't give a page number because this HTML version of the paper has no page markers.",
+ "input": 197067,
+ "cache_write": 197065,
+ "cache_read": 0,
+ "output": 216,
+ "thinking": 39,
+ "usd": 1.580848,
+ "seconds": 6.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-24 23:25"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E0",
+ "cond": "page1",
+ "qid": "title",
+ "rep": 2,
+ "paper": "dpo",
+ "form": "page",
+ "page": 1,
+ "status": "ok",
+ "answer": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model (p. 1)",
+ "input": 3445,
+ "cache_write": 538,
+ "cache_read": 2905,
+ "output": 122,
+ "thinking": 86,
+ "usd": 0.007332999999999999,
+ "seconds": 2.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.07,
+ "date": "2026-10-24 23:23"
+}

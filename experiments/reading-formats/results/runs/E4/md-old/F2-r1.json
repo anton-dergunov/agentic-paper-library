@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "md-old",
+ "qid": "F2",
+ "rep": 1,
+ "paper": "toolformer",
+ "form": "md-old",
+ "page": 9,
+ "status": "ok",
+ "answer": "With k = 3, Toolformer calls an API on **about 99.3%** of WebQS examples, but that figure is my reading of a garbled table cell (Table 9, p. 8).\n\n**What the document shows**\n\n- In Table 9, the WebQS \"%\" cell for k = 3 reads **199.3** (p. 8). The caption says \"%\" is \"the percentage of examples for which the model decides to call an API\" (p. 8). A share can't exceed 100%, so the cell is mis-rendered.\n- The rest of that column has the same problem. k = 0 shows 100.0, but with k = 0 the model makes no API calls. k = 1 shows 108.5 (p. 8).\n- The text gives the true values for two rows: 8.5% at k = 1 and 100% at k = 10 (p. 8). The k = 1 cell is therefore 8.5 with a stray leading \"1\". Removing that digit from the k = 3 cell gives **99.3%**.\n\n**Supporting context**\n\n- At k = 3, Toolformer scores 26.3 overall on WebQS. It scores 26.5 on examples where it calls an API and 6.6 on the rest (Table 9, p. 8).\n- The text explains that on WebQS the model \"only starts to make a substantial number of API calls as we slightly increase k\" (p. 8). This fits a jump from 8.5% at k = 1 to near 100% at k = 3.\n\nThe paper's text never states the k = 3 figure directly, so check the original PDF if you need it confirmed.",
+ "input": 36264,
+ "cache_write": 36262,
+ "cache_read": 0,
+ "output": 647,
+ "thinking": 152,
+ "usd": 0.30304400000000004,
+ "seconds": 8.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.58,
+ "date": "2026-10-24 23:30"
+}

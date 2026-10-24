@@ -1,0 +1,30 @@
+{
+ "key": "dea3ddd5af018e0f",
+ "usd": 0.031984,
+ "grades": {
+  "E1/pdf/S6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/S6-r1": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Points to references starting p.11, not the entry's page 14."
+  },
+  "E1/c0/S6-r1": {
+   "score": "partial",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Correct work identified but reference number [54] not given."
+  },
+  "E1/txt/S6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

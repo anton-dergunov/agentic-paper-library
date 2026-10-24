@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "S1",
+ "rep": 1,
+ "paper": "simpo",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "In the main Llama-3-Instruct (8B) setting, **SimPO gets a 33.8% Arena-Hard win rate and DPO gets 32.6%** (Table 4, page 6).\n\n- **SimPO:** 33.8%, with a 95% CI of 32.0–35.9 and an average generation length of 504 tokens (Table 10, page 25).\n- **DPO:** 32.6%, with a 95% CI of 30.3–34.8 and an average generation length of 528 tokens (Table 10, page 25).\n\nThe paper also reports an updated \"v0.2\" version of this setting. In v0.2 the preference data is labeled with a stronger reward model, ArmoRM, instead of PairRM. There, **SimPO v0.2 gets 36.5% and DPO gets 35.2%** on Arena-Hard (Table 12, page 29). The authors say SimPO v0.2 beats the earlier SimPO by 2.7 points on Arena-Hard (page 29).",
+ "input": 49357,
+ "cache_write": 49355,
+ "cache_read": 0,
+ "output": 464,
+ "thinking": 136,
+ "usd": 0.40412800000000004,
+ "seconds": 7.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-24 23:28"
+}

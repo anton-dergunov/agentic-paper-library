@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "L5",
+ "rep": 1,
+ "paper": "litm",
+ "form": "pdf",
+ "page": 15,
+ "status": "ok",
+ "answer": "**The document does not report GPT-4 accuracy with 30 documents.** GPT-4 was only tested with 20 documents.\n\n- **Limited GPT-4 testing:** The authors evaluated GPT-4 (8K) only \"on a subset of multi-document QA experiments.\" They say running it on the full set of experiments \"would cost upwards of $6000\" (page 5, footnote 6).\n- **20-document setting only:** GPT-4 was tested on \"a subset of 500 random multi-document QA examples with 20 total documents in each input context\" (page 15, Appendix D).\n- **No GPT-4 row in the 30-document results:** The 30-document table (Table 7) includes only Claude-1.3, Claude-1.3 (100K), GPT-3.5-Turbo (16K), MPT-30B-Instruct and LongChat-13B (16K) (page 18).\n\n**What the document does say about GPT-4 (20 documents):**\n- It \"achieves higher absolute performance than any other language model, but still shows a U-shaped performance curve.\" Accuracy is highest when the relevant document is at the very start or end of the context and drops when it is in the middle (page 15).\n- No exact numbers are given in text. Reading Figure 15 by eye, accuracy is roughly 88% when the answer is in the 1st position, about 74–76% in the middle positions, and about 77% in the 20th position (page 15). These are estimates from the chart.",
+ "input": 54326,
+ "cache_write": 541,
+ "cache_read": 53783,
+ "output": 652,
+ "thinking": 181,
+ "usd": 0.0281326,
+ "seconds": 7.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.77,
+ "date": "2026-10-24 23:35"
+}

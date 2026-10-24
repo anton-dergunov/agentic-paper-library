@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "G2",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 8,
+ "status": "ok",
+ "answer": "In Table 5 (page 8), the **Transformer without pre-training** has an **average score of 59.9**.\n\nThe variant with the **highest average** is the **Transformer without the auxiliary LM objective**, at **75.0** (page 8). It edges out the full model (Transformer with auxiliary LM), which scores **74.7** (page 8). The remaining variant, **LSTM with auxiliary LM**, scores **69.1** (page 8).\n\nThe paper describes the drop from the full model to the no-pre-training variant as a **14.8% decrease**, with the lack of pre-training hurting performance on every task (page 8). On the auxiliary objective, it says the objective helps on the NLI tasks and QQP. It adds that larger datasets tend to benefit from it while smaller ones do not (page 8). That is consistent with the variant without it having a slightly higher unweighted average.",
+ "input": 16616,
+ "cache_write": 552,
+ "cache_read": 16062,
+ "output": 434,
+ "thinking": 146,
+ "usd": 0.016316400000000002,
+ "seconds": 4.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.71,
+ "date": "2026-10-24 23:33"
+}

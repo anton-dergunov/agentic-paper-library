@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "G5",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "This appears to be from the GPT-1 paper (Radford et al., 2018, *\"Improving Language Understanding by Generative Pre-Training\"*), Figure 2 (left). That figure shows how RACE and MultiNLI accuracy change as more pre-trained layers are transferred.\n\nI can't give you exact numbers from memory with confidence. The paper reports this result only as a plot, not a table. My rough recollection of the RACE dev curve is:\n\n- **0 layers transferred:** low, roughly around 40%.\n- **All 12 layers transferred:** roughly 58–60%, close to the model's reported RACE test score of 59.0%.\n\nThe text itself only quantifies the MultiNLI side. It says transferring embeddings helps and that each layer adds further benefit, \"up to 9% for full transfer on MultiNLI.\" It doesn't state specific RACE values.\n\nYour working directory is empty, so I couldn't check the figure. If you share the PDF or the figure, I can read the values more precisely.",
+ "input": 774,
+ "cache_write": 772,
+ "cache_read": 0,
+ "output": 830,
+ "thinking": 500,
+ "usd": 0.022784000000000002,
+ "seconds": 50.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.73,
+ "date": "2026-10-24 23:34"
+}

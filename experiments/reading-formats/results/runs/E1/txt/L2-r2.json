@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "L2",
+ "rep": 2,
+ "paper": "litm",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give this number.** The paper never states GPT-3.5-Turbo (16K)'s accuracy with the key at the 200th position in the 300-pair setting.\n\nWhat the document does contain:\n\n- **Figure 7 (page 7)** plots key-value retrieval accuracy across key positions for 75, 140 and 300 pairs. The 300-pair x-axis has a tick at 200th, but the figure gives no numeric value for any specific position.\n- **Section 4.2 (page 8)** gives one related number. GPT-3.5-Turbo (16K) \"with query-aware contextualization achieves perfect performance when evaluated with 300 key-value pairs,\" whereas \"without query-aware contextualization, the worst-case performance is 45.6% (Figure 7).\" The text doesn't say which key position produced that 45.6%, so it can't be tied to the 200th position.\n- **Section 3.2 (page 6)** says only that GPT-3.5-Turbo (16K) and other models \"have the lowest performance when they must access key-value pairs in the middle of their input context.\"\n- **Appendix G (page 18)** has tables of exact accuracies by position, but only for multi-document QA. There is no equivalent table for the key-value task.",
+ "input": 28628,
+ "cache_write": 0,
+ "cache_read": 28626,
+ "output": 1385,
+ "thinking": 977,
+ "usd": 0.033433199999999996,
+ "seconds": 31.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.78,
+ "date": "2026-10-24 23:37"
+}

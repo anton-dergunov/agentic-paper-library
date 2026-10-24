@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "D6",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "**The paper does not report an AlpacaEval 2 win rate.** AlpacaEval is not mentioned anywhere in the document.\n\nThe paper reports these win rates instead, all judged by GPT-4 except where noted:\n\n- **TL;DR summarization (vs. reference summaries):** DPO reaches about 61% at temperature 0.0. PPO's best is 57%, also at temperature 0.0 (p. 9; Figure 2 right, p. 7).\n- **Human evaluation, DPO vs. PPO:** DPO samples at temperature 0.25 were preferred over PPO samples at temperature 0 58% of the time (p. 9). Table 2 gives the full figures for DPO vs. PPO-0: GPT-4 (S) 47%, GPT-4 (C) 54%, human 58% (p. 10).\n- **Anthropic-HH single-turn dialogue (vs. preferred responses):** DPO is described as the only computationally efficient method that improves over the preferred completions. It performs similarly to or better than Best of 128 (pp. 8–9; Figure 3). The text gives no single exact number. From the Figure 3 plot, DPO appears to be around 0.6 at higher temperatures, but that is my reading of the chart.\n- **Out-of-distribution CNN/DailyMail (vs. ground-truth summaries):** DPO scores 0.36 at temperature 0 and 0.31 at temperature 0.25. PPO scores 0.26 and 0.23 (Table 1, p. 9).\n\nAlpacaEval 2 results for DPO may come from later papers that use DPO as a baseline, but they are not in this document.",
+ "input": 80033,
+ "cache_write": 80031,
+ "cache_read": 0,
+ "output": 591,
+ "thinking": 40,
+ "usd": 0.652076,
+ "seconds": 7.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-24 23:25"
+}

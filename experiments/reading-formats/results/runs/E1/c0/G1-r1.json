@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "G1",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "c0",
+ "page": 3,
+ "status": "ok",
+ "answer": "There's no paper in your working directory (`reading-formats/empty` is empty), so I'm answering from memory. The wording matches **GPT-1** (Radford et al., 2018, *\"Improving Language Understanding by Generative Pre-Training\"*). If you meant a different paper, please share it.\n\n**Objective during fine-tuning**\n\nThe model optimises the supervised task loss plus an auxiliary language-modelling loss:\n\n$$\nL_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda \\cdot L_1(\\mathcal{C})\n$$\n\n- **L₂(𝒞)** is the supervised objective, the log-likelihood of the correct label given the input: Σ log P(y | x¹,…,xᵐ). The prediction comes from a linear + softmax layer on the final transformer block's activation.\n- **L₁(𝒞)** is the standard next-token language-modelling objective, computed on the same labelled fine-tuning corpus 𝒞.\n\n**Weight on the auxiliary term**\n\n**λ = 0.5.**\n\nThe paper says the auxiliary LM objective improves generalisation of the supervised model and speeds up convergence. Its ablations suggest the benefit is larger on bigger datasets (e.g., NLI, QQP) and smaller or absent on smaller ones.",
+ "input": 775,
+ "cache_write": 773,
+ "cache_read": 0,
+ "output": 659,
+ "thinking": 220,
+ "usd": 0.019372,
+ "seconds": 8.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-24 23:33"
+}

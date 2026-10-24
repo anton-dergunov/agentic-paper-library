@@ -1,0 +1,30 @@
+{
+ "key": "b35d24036c04ec03",
+ "usd": 0.028192,
+ "grades": {
+  "E1/txt/S5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/S5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/S5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Doesn't identify the 34.4 as off-the-shelf Llama-3-70B-Instruct"
+  },
+  "E1/pdf/S5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}
