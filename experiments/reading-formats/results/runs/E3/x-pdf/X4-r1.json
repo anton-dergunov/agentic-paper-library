@@ -1,0 +1,31 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X4",
+ "rep": 1,
+ "paper": [],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "Two papers in the library propose a preference-optimisation method that needs no reference model: **ORPO** and **SimPO**. A third, **KTO**, includes a reference-free version only as a weaker variant. Page numbers below are PDF page numbers.\n\n### 1. ORPO: Monolithic Preference Optimization without Reference Model (Hong, Lee, Thorne, KAIST AI)\n`llm/post-training/preference-learning/`\n- The abstract calls it a \"reference model-free monolithic odds ratio preference optimization algorithm\" that removes the need for a separate preference-alignment phase (p. 1).\n- It works by adding a small penalty for the disfavoured response, measured with an odds ratio, during supervised fine-tuning (SFT) (p. 1).\n- Figure 2 shows ORPO aligning the model without a reference model (p. 2), and the conclusion repeats that it is \"reference-free\" (p. 9).\n- Results: Phi-2, Llama-2 and Mistral fine-tuned with ORPO on UltraFeedback reach up to 12.20% on AlpacaEval 2.0, 66.19% on IFEval and 7.32 on MT-Bench (p. 1).\n\n### 2. SimPO: Simple Preference Optimization with a Reference-Free Reward (Meng, Xia, Chen, UVA / Princeton)\n`llm/post-training/preference-learning/`\n- It uses the average log probability of a sequence as the implicit reward. This \"eliminates the need for a reference model, making it more compute and memory efficient\" (p. 1; derived in §2.2, p. 3).\n- It also adds a target reward margin to the Bradley-Terry objective (p. 1, p. 4).\n- Results: it beats DPO by up to 6.4 points on AlpacaEval 2 and up to 7.5 on Arena-Hard (p. 1).\n- It calls ORPO \"a recent reference-free objective\" and compares against it (p. 2).\n\n### Partial case: KTO: Model Alignment as Prospect Theoretic Optimization\n- Standard KTO uses a reference model. The paper also tests a memory-saving variant that assumes the reference model gives a uniform distribution over outputs. It says \"KTO works without a reference model or SFT, but not as well as standard KTO\" (p. 8; the \"no π_ref\" ablation is on p. 18).\n- So it offers a reference-free option, but that is not its main contribution.\n\nThe DPO survey in the same folder (*A Comprehensive Survey of Direct Preference Optimization*) sorts DPO variants into reference-based and reference-free groups (p. 9). The reward-model survey lists ORPO and SimPO among the reference-free methods (p. 5).",
+ "input": 86230,
+ "cache_write": 20031,
+ "cache_read": 66189,
+ "output": 2164,
+ "thinking": 250,
+ "usd": 0.2168058,
+ "seconds": 132.2,
+ "turns": 5,
+ "calls": [
+  "Bash find . -type f | head -100 && which pdftotext pdfgrep",
+  "Bash find . -type f -name \"*.pdf\" | wc -l; find . -type d; find . -type f -iname \"*.pdf\" | grep -iE \"prefer|align|rlhf|dpo|orpo|simpo|odds|reward|feedback|kto|ipo\"",
+  "Bash mkdir -p /tmp/pt && cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf\" && for f in llm/post-training/*/*.pdf llm/personalization/methods/*.pdf generative-models/diffusion/\"Diffusion Model Alignment Using Direct Preference Optimization.pdf\"; do n=$(pdfinfo \"$f\" 2>/dev/null | awk '",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/post-training/preference-learning\" && pdftotext -f 8 -l 8 \"KTO. Model Alignment as Prospect Theoretic Optimization.pdf\" - | grep -iB4 -A8 \"without a reference\"; echo ----; pdftotext -f 1 -l 2 \"ORPO. Monolithic Preference Optim"
+ ],
+ "opened_pdf": true,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.85,
+ "date": "2026-10-25 11:55"
+}

@@ -15,6 +15,17 @@ papers:
   nolima: llm/evaluation/benchmarks/NoLiMa. Long-Context Evaluation Beyond Literal Matching.md
   orpo: llm/post-training/preference-learning/ORPO. Monolithic Preference Optimization without Reference Model.md
   ipo: llm/post-training/preference-learning/A General Theoretical Paradigm to Understand Learning from Human Preferences.md
+  # Tier D's review-mined questions (X7–X11)
+  selfinstruct: llm/post-training/data/Self-Instruct. Aligning Language Models with Self-Generated Instructions.md
+  s1: llm/post-training/data/s1. Simple test-time scaling.md
+  openthoughts: llm/post-training/data/OpenThoughts. Data Recipes for Reasoning Models.md
+  mistral: llm/foundation-models/Mistral 7B.md
+  gemma3: llm/foundation-models/Gemma 3 Technical Report.md
+  phi4: llm/foundation-models/Phi-4 Technical Report.md
+  glm5: llm/foundation-models/GLM-5. from Vibe Coding to Agentic Engineering.md
+  mem0: llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md
+  memoryr1: llm/memory/agent/Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement.md
+  olmo2: llm/foundation-models/2 OLMo 2 Furious.md
   # B2: published after the model's training cutoff (June 2026)
   pair: recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.md
   sftrl: llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.md
@@ -300,3 +311,22 @@ questions:
 - {id: X6, exp: E3, papers: [instructgpt, dpo], kind: equations,
    question: 'InstructGPT and DPO both start from a KL-regularised RL objective. Write each and say how they differ.',
    gold: 'InstructGPT Eq. 2 (p. 9): E[r_θ(x,y) - β log(π^RL_φ(y|x)/π^SFT(y|x))] + γ E_{x~D_pretrain}[log π^RL_φ(x)]; DPO Eq. 3 (p. 3): max_π E[r_φ(x,y)] - β D_KL[π_θ(y|x) || π_ref(y|x)]; InstructGPT adds the pretraining term (γ = 27.8).'}
+# Mined from the library's reviews (25 Oct, at the author's suggestion): written by agents
+# reading the markdown and notes, not the PDF pages, and chosen for surprising findings
+# spread over papers, appendix tables and figures. Golds checked against the PDFs: the
+# reviews cite Self-Instruct, Memory-R1 and OLMo 2 one page early.
+- {id: X7, exp: E3, papers: [selfinstruct, s1, openthoughts], kind: tables,
+   question: 'In the library''s papers on instruction and reasoning data, how much of the training data is actually correct? Give Self-Instruct''s share of generated examples whose fields are all valid, s1''s share of correct distilled answers, and what OpenThoughts finds when answers are filtered by a GPT verifier.',
+   gold: 'Self-Instruct: 54% of examples have all fields valid (Table 2, p. 5); s1: 53.6% of the distilled answers are correct (p. 3); OpenThoughts: filtering answers with a GPT verifier is slightly worse than no filtering, 40.0 against 41.9 (Table 7, p. 9).'}
+- {id: X8, exp: E3, papers: [mistral, gemma3, phi4, glm5], kind: synthesis,
+   question: 'Does a sliding attention window cost model quality? What do the Mistral 7B, Gemma 3, Phi-4 and GLM-5 reports find?',
+   gold: 'Mistral 7B uses sliding-window attention in every layer and still beats Llama 2 13B (p. 2); Gemma 3''s ablation finds almost no perplexity cost, but on 2B text-only models and shown only in figures (p. 6); Phi-4 went back from a sliding window to full attention (p. 7); GLM-5 found that retrofitting a window to a trained model (SWA interleave) collapses long-context retrieval: RULER at 128K 44.93 against 75.28 for full attention (Table 5, p. 7). Training with the window from the start is the difference.'}
+- {id: X9, exp: E3, papers: [mem0], kind: numbers,
+   question: 'How many tokens per LoCoMo conversation do Mem0 and Zep store as memory, compared with the raw conversation, and how soon can Zep''s new memories be retrieved?',
+   gold: 'Mem0 about 7k tokens, Mem0 with graph memory about 14k, Zep''s graph over 600k, against about 26k for the raw conversation (Zep 20 times more); retrieval right after adding memories to Zep often failed, and the same searches did better after several hours (Mem0 paper, Section 4.5, p. 14).'}
+- {id: X10, exp: E3, papers: [memoryr1], kind: tables,
+   question: 'How many training questions does Memory-R1 use, what does it score against Mem0 on Llama-3.1-8B, and how large is its gain on LongMemEval?',
+   gold: '152 training questions (p. 1–2); 62.74 against 45.68 for Mem0 on Llama-3.1-8B (Table 1, p. 6); on LongMemEval only 55.4 against 54.2 (Table 5, p. 18).'}
+- {id: X11, exp: E3, papers: [olmo2], kind: appendix,
+   question: 'What does OLMo 2 find when it varies the peak learning rate?',
+   gold: 'Almost no difference: four variants end at the same training loss, the lowest lagging slightly; repeated for 1T and 2T tokens with 3·10⁻⁴ and 6·10⁻⁴, virtually no difference in training loss or on nine OLMES tasks (Table 8, p. 19).'}

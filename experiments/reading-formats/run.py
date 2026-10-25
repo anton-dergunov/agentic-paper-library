@@ -31,6 +31,8 @@ import concurrent.futures
 import json
 import os
 import re
+import shutil
+import tempfile
 import subprocess
 import sys
 import threading
@@ -53,6 +55,7 @@ AGENT_COPIES = {"x-lib": "lib", "x-pdf": "pdf", "x-txt": "txt"}
 AGENT_TOOLS = "Read,Grep,Glob,Bash"
 AGENT_SUFFIX = "\n\nAnswer from the papers in this folder. Give the page number for every fact you use."
 AGENT_BUDGET = "5"
+SHARED_TMP = "/private/tmp"  # /tmp on macOS
 PDF_TOOLS = r"(?i)pdftotext|pdfinfo|pdfimages|pdftoppm|fitz|pymupdf|pypdf|pdfplumber|qpdf"  # dollars a session may spend before Claude Code stops it
 CLI_VERSION = subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()
 
@@ -225,7 +228,11 @@ def agent_request(cwd, prompt, stream_path):
     that reaches outside the copy is recorded, not prevented. Returns (result event, rate-limit info, the
     session's tool calls as short strings). Raises Stop on a usage limit."""
     GUARD.check()
-    env = {**os.environ, "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
+    # Its own temporary folder, and afterwards whatever it made in /tmp under a name its calls
+    # use, removed: a later session must not find another's converted papers.
+    scratch = tempfile.mkdtemp(prefix="reading-formats-agent-")
+    before = set(os.listdir(SHARED_TMP))
+    env = {**os.environ, "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1", "TMPDIR": scratch}
     done = subprocess.run(
         ["claude", "-p", prompt, "--model", MODEL, "--output-format", "stream-json", "--verbose",
          "--tools", AGENT_TOOLS, "--allowedTools", AGENT_TOOLS, "--setting-sources", "project,local",
@@ -250,6 +257,12 @@ def agent_request(cwd, prompt, stream_path):
                     detail = given.get("file_path") or given.get("command") or given.get("pattern") or ""
                     ranged = " [%s+%s]" % (given.get("offset"), given.get("limit")) if "offset" in given or "limit" in given else ""
                     calls.append("%s %s%s" % (part.get("name"), str(detail)[:300], ranged))
+    shutil.rmtree(scratch, ignore_errors=True)
+    for name in set(os.listdir(SHARED_TMP)) - before:
+        if any("/tmp/" + name in call for call in calls):
+            target = os.path.join(SHARED_TMP, name)
+            shutil.rmtree(target, ignore_errors=True) if os.path.isdir(target) else os.remove(target)
+            print("  removed %s, which the session wrote" % target, flush=True)
     GUARD.record((result or {}).get("total_cost_usd"), rate)
     text = str((result or {}).get("result") or done.stderr or done.stdout)[-500:]
     if result is None or (result.get("is_error") and result.get("subtype") != "error_max_budget_usd"):

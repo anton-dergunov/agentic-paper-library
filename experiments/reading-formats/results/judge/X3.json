@@ -1,0 +1,30 @@
+{
+ "key": "d7f1d5cf2fd0e0b9",
+ "usd": 0.071732,
+ "grades": {
+  "E3/x-att/X3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-txt/X3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Cites p. 6 and p. 4; both within ±1 of gold."
+  }
+ }
+}

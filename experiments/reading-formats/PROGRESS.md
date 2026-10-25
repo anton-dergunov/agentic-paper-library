@@ -26,7 +26,7 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); the hand check is still to do |
 | C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
 | C2 small print and equations on unseen papers | E5 on PAIR, SFT Conflicts, KV transfer, GenRec pages chosen by the author for small print (R5–R9), in page, img1255, img2576, md and txt; E6, nine equation-structure questions (Q1–Q9) in pdf, txt, md | done 25 Oct |
-| D | E3 across papers (X1–X6) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, X1–X3 and X6) | code, copies and golds ready 25 Oct; X3 piloted in x-lib, x-pdf, x-txt; the rest to run: see "Tier D: run plan" |
+| D | E3 across papers (X1–X11) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | code, copies and golds ready 25 Oct; X3 piloted in all four conditions and X4 in x-pdf and x-txt (6 of 42 first answers, all correct); the rest to run: see "Tier D: run plan" |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
 
 How a tier runs: group by group (a paper); the conditions of a group in parallel, each asking its questions in turn so that the document is read from the cache; then the group is judged, and every question whose answers differ between conditions (closed book aside) is asked twice more in each condition while the cache is warm (one hour on the subscription) and judged again. Only differences that hold in two of three runs count.
@@ -133,32 +133,35 @@ Sessions: `claude -p` with `--tools Read,Grep,Glob,Bash`, `--setting-sources pro
 
 **What the smoke tests and the X3 pilot showed (25 Oct).**
 - `--restricted` stops the copy's `CLAUDE.md` from loading (the library agent found its guide only by reading the files), so it is not used; the copies' read-only bits and the `outside` record take its place.
-- The user's `~/.claude/CLAUDE.md` (git workflow, changelog rules) loads in every condition alike: noise common to all, left in.
+- The user's `~/.claude/CLAUDE.md` (git workflow, changelog rules) loads in every condition alike: about 1K tokens, read from the cache after the first turn, and unrelated to answering. Left in (decided with the author 25 Oct): removing it means pointing `CLAUDE_CONFIG_DIR` at an empty folder, which risks the subscription login.
 - `subprocess.run` must close stdin, or the session reads the caller's stdin as part of the prompt (fixed).
 - X3 pilot: x-lib $0.33 (6 turns: notes, then grep in the markdown; it also found that NoLiMa quotes RULER as 32K, against RULER's own 64K); x-txt $0.21 (6 turns, grep on the `[page N]` files); x-pdf $0.36 (12 turns: it ran `pdftotext` itself into `/tmp/rn` and tracked pages with awk, which is the author's point: an agent with PDFs builds the text layer it needs). All three gave 64K against 2K and the reasons. Not yet judged.
-- Risk: an x-pdf session writes text files to `/tmp`; a later session could find them. `outside` lists such calls; check them in the results, and if one session reads another's files, rerun it after clearing `/tmp`.
+- An x-pdf session writes its converted text to `/tmp` (`/tmp/rn`, `/tmp/pt`), where a later session could find it. Now each session gets its own `TMPDIR`, removed afterwards, and anything new in `/tmp` whose name the session's calls use is deleted when it ends (the run prints "removed …"). Sessions of one condition run in turn, so no running session loses its files. `outside` still lists every call that leaves the copy.
+- Second pilot (25 Oct, $1.68, sessions capped at $2): X3 in x-att correct ($1.16: RULER and NoLiMa, 139K tokens); X4 in x-pdf correct ($0.22, 5 turns: it listed the tree, picked candidates by file name, and checked KTO and ORPO with `pdftotext` on a few pages) and in x-txt correct ($0.20, 8 turns: grep for "reference-free" over the whole tree). Both named SimPO and ORPO and set KTO's reference-free variant aside. The judge graded X3 correct in all four conditions and X4 correct in both. The enumeration question, where the reviews were expected to help, is answered as well and as cheaply by grep over text.
+
+**Review-mined questions (X7–X11), added 25 Oct at the author's suggestion.** The other questions were written by a model reading the PDF and checked by looking at page images, which favours what is visible on a page. The library's reviews were written by agents reading the markdown and notes, so questions taken from their surprising findings come by the other route, and they are cross-paper by nature: how much training data is correct (Self-Instruct, s1, OpenThoughts), whether a sliding window costs quality (Mistral 7B, Gemma 3, Phi-4, GLM-5; Gemma 3's evidence is in figures only), Mem0 against Zep's memory size and delay, Memory-R1's 152 training questions and small LongMemEval gain, OLMo 2's learning-rate result. Their golds were checked against the PDFs. **The reviews cite three of these ten papers one page early** (Self-Instruct's Table 2 is on p. 5, cited p. 4; Memory-R1's Tables 1 and 5 on pp. 6 and 18, cited 5 and 17; OLMo 2's Table 8 on p. 19, cited 18): a citation problem in the library itself, to check (is it the markdown's page markers or the review's writer?) before the write-up.
 
 **Golds** checked 25 Oct: RULER's Table 3 is on p. 7, not p. 6 (fixed); X4 checked against the preference-learning folder (SimPO and ORPO only; KTO and DPO keep a reference model); X5 gained LongLLMLingua's document reordering (§4.2, p. 4) beside the review's three "Repairing the reader" papers; X1, X2, X6 pages match.
 
-**Cost.** Pilot sessions cost $0.21–0.36 on a two-paper question. X4 and X5 (find papers in a 2,275-file tree) will cost more in x-pdf and x-txt, perhaps $1–3 each; x-att with InstructGPT and DPO is about 250K tokens (it may record `too_long`). First answers: about $5–10; with reruns of disagreements (two more runs in every condition): $10–20, a third to a half of a window. Every session is capped at $5.
+**Cost.** Agent sessions cost $0.20–0.36 in the pilots, the enumeration question included; x-att $1.16 for two papers, and with InstructGPT and DPO, or X8's four technical reports, 250K tokens or more (it may record `too_long`). The 36 first answers left: about $10–15; with reruns of disagreements (two more runs in every condition): $15–25, half to two-thirds of a window. Every session is capped at $5. With the hand check and the write-up, the experiment needs about one more window.
 
 **How to run it** (from this directory):
 
 ```bash
-PAPER_LIBRARY=~/papers uv run python run.py status                   # tier D: 3 of 22 first answers
+PAPER_LIBRARY=~/papers uv run python run.py status                   # tier D: 6 of 42 first answers
 PAPER_LIBRARY=~/papers uv run python copies.py                       # only if ~/.cache/.../copies is gone
 PAPER_LIBRARY=~/papers uv run python run.py D --budget 20 --stop-at 0.9
 PAPER_LIBRARY=~/papers uv run python report.py                       # "E3: across papers" in results/summary.md
 ```
 
-It runs the four conditions in parallel, each condition's questions in turn, judges, then reruns the questions whose grades differ between conditions (r2, r3). It can be stopped and repeated; it skips what is done. Expect 20–60 minutes.
+It runs the four conditions in parallel (about 40–90 minutes), each condition's questions in turn, judges, then reruns the questions whose grades differ between conditions (r2, r3). It can be stopped and repeated; it skips what is done. If it stops at the budget or the window, run the same command again later.
 
 **What to look at afterwards.** Scores per condition, with the hand check of every disagreement (the judge cannot verify X4 and X5's names beyond the gold); cost and turns per condition (`Sessions` table); whether x-lib used reviews and notes (`calls`), whether x-pdf converted PDFs itself and how; the `outside` column. Then decide E2 (single paper as an agent): if x-lib ≈ x-txt across papers, the library's structure is not what answers questions, and the case for it becomes cost, citations and the notes; if x-lib wins, measure where (X4, X5 enumeration from reviews, or equations).
 
 ## Generated
 
 <!-- report.py -->
-Requests: 426, $46.19; judge (latest grading of each question) $2.71; last five-hour utilisation seen: 70%.
+Requests: 429, $47.77; judge (latest grading of each question) $2.81; last five-hour utilisation seen: 85%.
 
 ```
 tier A: 38 of 38 first answers
@@ -166,7 +169,7 @@ tier B: 102 of 102 first answers
 tier B2: 102 of 102 first answers
 tier C: 16 of 16 first answers
 tier C2: 55 of 55 first answers
-tier D: 3 of 22 first answers
-reruns: 111; requests so far $46.19
+tier D: 6 of 42 first answers
+reruns: 111; requests so far $47.77
 ```
 <!-- /report.py -->
