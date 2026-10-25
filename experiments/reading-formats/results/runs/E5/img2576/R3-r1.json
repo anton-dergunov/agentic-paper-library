@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R3",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "img2576",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, Claude Opus 4.1 (thinking) scores **60.4** on HallusionBench (page 15).\n\nFor comparison, here is the rest of that row from the same table (page 15):\n- Qwen3-VL-235B-A22B: 66.7 (thinking) and 63.2 (instruct). These are the top scores, shown in bold and underlined.\n- Gemini 2.5 Pro: 63.7* (thinking) and 60.9 (budget-128). The asterisk means the score comes from Gemini's technical report.\n- GPT-5: 65.7 (high) and 53.7 (minimal).\n- Claude Opus 4.1: 55.1 (non-thinking).",
+ "input": 10106,
+ "cache_write": 10104,
+ "cache_read": 0,
+ "output": 307,
+ "thinking": 76,
+ "usd": 0.08698,
+ "seconds": 4.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.45,
+ "date": "2026-10-25 10:24"
+}

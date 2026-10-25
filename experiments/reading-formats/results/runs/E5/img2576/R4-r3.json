@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R4",
+ "rep": 3,
+ "paper": "litm",
+ "form": "img2576",
+ "page": 7,
+ "status": "ok",
+ "answer": "With 140 key-value pairs (~8K tokens), **LongChat-13B (16K) reaches about 35% accuracy** when the key is at the 70th position. This is its lowest point in that subplot. It scores about 37% at the 1st position and about 38% at the 35th, then rises to about 65% at the 105th and about 88% at the 140th.\n\nThese values are read from the gray dashed line in the middle subplot of Figure 7, so they are approximate. The document doesn't give the exact number in text or a table.\n\nI can't give a page number because none appears on the page you shared. All of this comes from Figure 7 on that page.",
+ "input": 4538,
+ "cache_write": 0,
+ "cache_read": 4536,
+ "output": 285,
+ "thinking": 83,
+ "usd": 0.006615200000000001,
+ "seconds": 5.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-25 10:25"
+}

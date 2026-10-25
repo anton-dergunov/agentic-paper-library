@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R1",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, **Claude Opus 4.1 (non-thinking)** scores **750 on OCRBench** (Table 2, p. 15).\n\nFor comparison, the OCRBench row reads:\n\n| Model | Score |\n|---|---|\n| Qwen3-VL-235B-A22B thinking | 875 |\n| Qwen3-VL-235B-A22B instruct | 920 |\n| Gemini 2.5 Pro thinking | 866 |\n| Gemini 2.5 Pro budget-128 | 872 |\n| GPT-5 high | 810 |\n| GPT-5 minimal | 787 |\n| Claude Opus 4.1 thinking | 764 |\n| **Claude Opus 4.1 non-thinking** | **750** |\n\nYour copy says Table 2 (pp. 15–16) was converted from the PDF by layout analysis and that tables with misaligned columns should be checked against the PDF. This row has all eight values in order, so it looks aligned. The bolding in this row is inconsistent, though: 875 is marked as the best reasoning score while the instruct model's 920 is higher. That suggests some formatting errors in the conversion. It's worth checking the original PDF before citing the number.",
+ "input": 83311,
+ "cache_write": 83309,
+ "cache_read": 0,
+ "output": 633,
+ "thinking": 230,
+ "usd": 0.67914,
+ "seconds": 9.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.43,
+ "date": "2026-10-25 10:24"
+}

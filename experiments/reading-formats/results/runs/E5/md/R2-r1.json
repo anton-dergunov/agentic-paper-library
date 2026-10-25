@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R2",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "md",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, **GPT-5 (minimal) scores 2 on ZeroBench** (p. 15).\n\nThis score is underlined, which marks the best result among non-reasoning models. It ties with Qwen3-VL-235B-A22B-Instruct, which also scores 2 (p. 15).\n\nFor comparison, the other models in that row score:\n- **Qwen3-VL-235B-A22B-Thinking:** 4, the highest overall (bold)\n- **Gemini 2.5 Pro thinking:** 3\n- **Gemini 2.5 Pro budget-128:** 1\n- **GPT-5 high:** 2\n- **Claude Opus 4.1 thinking:** 3\n- **Claude Opus 4.1 non-thinking:** 1\n\nTable 2 was extracted from the PDF by layout analysis, and the document notes that some columns may be misaligned. The ZeroBench row has the expected eight values and looks consistent, but you may want to check it against the original PDF before quoting it.",
+ "input": 83305,
+ "cache_write": 556,
+ "cache_read": 82747,
+ "output": 533,
+ "thinking": 200,
+ "usd": 0.0316654,
+ "seconds": 5.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.45,
+ "date": "2026-10-25 10:24"
+}

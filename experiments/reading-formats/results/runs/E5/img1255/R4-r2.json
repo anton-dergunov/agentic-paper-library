@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img1255",
+ "qid": "R4",
+ "rep": 2,
+ "paper": "litm",
+ "form": "img1255",
+ "page": 7,
+ "status": "ok",
+ "answer": "LongChat-13B (16K) reaches **roughly 35% accuracy** with the key at the 70th position in the 140-pair (~8K tokens) setting. This is read from the gray dashed line in the middle subplot of Figure 7, so it is approximate.\n\nThat point is LongChat's lowest in this subplot. It is slightly below its accuracy at the 1st position (~37%) and the 35th (~38%). Its accuracy then rises to about 66% at the 105th position and about 89% at the 140th.\n\nThe provided page has no printed page number, so I can't cite one. This is the only page in the document.",
+ "input": 2261,
+ "cache_write": 0,
+ "cache_read": 2259,
+ "output": 322,
+ "thinking": 125,
+ "usd": 0.006899800000000001,
+ "seconds": 4.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-25 10:25"
+}

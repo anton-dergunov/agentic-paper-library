@@ -1,0 +1,78 @@
+{
+ "key": "e15d40493d548f12",
+ "usd": 0.056436,
+ "grades": {
+  "E5/img1255/R4-r2": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img1255/R4-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/page/R4-r2": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 7."
+  },
+  "E5/md/R4-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says the value is not given; it is readable from Figure 7."
+  },
+  "E5/img1255/R4-r3": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img2576/R4-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img2576/R4-r2": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/md/R4-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the value is not given; it is readable from Figure 7."
+  },
+  "E5/md/R4-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says the value is not given; it is readable from Figure 7."
+  },
+  "E5/page/R4-r3": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 7."
+  },
+  "E5/page/R4-r1": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 7."
+  },
+  "E5/img2576/R4-r3": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

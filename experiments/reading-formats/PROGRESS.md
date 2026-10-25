@@ -24,7 +24,7 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | B core | E1 on SimPO, GPT-1, Lost in the Middle, InstructGPT in c0, pdf, txt, md; E4 | done 25 Oct |
 | B2 unseen papers | E1 in c0, pdf, txt, md on four papers published after the model's training cutoff (June 2026), all with arXiv HTML: PAIR (LinkedIn, arXiv 2610.30941, 22 Oct), SFT Conflicts, RL Coexists (4 Aug, theory and equations), Cross-Model KV Cache Transfer in LLM Families (4 Aug, a closed-form mapping, tables), GenRec at Netflix (10 Aug, industrial tables and plots). Six questions each (two tables, an equation, an appendix or setup detail, a figure-only value, an unanswerable trap), drafted by `draft.py` (one request per paper from the PDF, `results/drafts/`) and checked by hand against the PDF pages and with `inputs.py check`. Plus a txt condition in E4: does the naive text layer have the converter's errors? Chosen 24 Oct: DPO is answered from memory, and memory can hide what a form loses | done 25 Oct |
 | Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); the hand check is still to do |
-| C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | not started |
+| C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
 | D | E3 across papers: needs `copies.py` and agent runs in `run.py` (not written yet), and the pages of X3, X5, X6 checked | not started |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
 
@@ -71,7 +71,7 @@ How a tier runs: group by group (a paper); the conditions of a group in parallel
 - **Cost**: the markdown is 55–57% of the PDF's tokens and about the same as the text layer; HTML is 2.5× the PDF. With the cache, a further question on a paper already read costs $0.02–0.05 in any form.
 - **Memory**: closed book is right on 15.5 of 22, DPO almost wholly. Hence tier B2 (papers after the training cutoff).
 
-Decisions for the next session, in order (1 and 2 done 25 Oct, below):
+Decisions for the next session, in order (1–3 done 25 Oct, below):
 1. Finish tier B (InstructGPT): `run.py B`.
 2. Tier B2, the papers the model cannot know: this tests the figure and table results without memory to fall back on.
 3. Tier C: run E5 (the resolution question is cheap, and it says whether small print comes from the text layer or the image). E1 html beyond DPO is dropped (agreed with the author 24 Oct): HTML costs 2.5× the PDF and cannot cite pages.
@@ -86,19 +86,26 @@ Decisions for the next session, in order (1 and 2 done 25 Oct, below):
 - **The figure questions include a diagram label, not only plot values.** PAIR has no plot, so P5 asks for the pooling labels of its architecture diagram; "Temporal-Gated Pooling" exists only in the picture. The PDF answer read it and also noticed that the diagram disagrees with the caption and Section 4.3 (positional attention, not GeM pooling, for the history). The text forms quoted the caption and declined.
 - **Axis ticks in the text layer do not tempt a guess.** pdftotext keeps a vector plot's tick labels (SFT Conflicts' 83.0–88.0, GenRec's 1.00–1.16); the TXT answers named the axis range and declined.
 - **E4 in txt: the naive text layer has none of the converter's errors.** `pdftotext -layout` got F1–F6 right, in 3 of 3 runs where rerun, including Qwen3-VL Table 2 (F4–F6), which both markdown versions broke. The converter's errors are its own, not the PDF's: the text layer is the baseline a conversion must not fall below.
-- **Tokens, unseen papers**: MD is 63–73% of the PDF (GenRec 22K of 35K, PAIR 23K of 36K, KV transfer 38K of 60K, SFT Conflicts 89K of 123K), more than the 55–57% of the older papers; TXT is 47–66%, well below MD on the two papers with many equations and tables (KV transfer 28K, SFT Conflicts 69K). Where MD's extra tokens go on these papers is worth a look before the write-up.
+- **Tokens, all nine E1 papers: MD is 40–73% of the PDF, not "55–57%"** (that was DPO's figure, generalised too early at checkpoint 1). The spread is set by equations and complex tables, not by the paper's date. Where the markdown carries much LaTeX and many HTML tables (merged cells), it costs 1.3× the text layer and runs at 2.0 characters a token (SimPO 1.35×, KV transfer 1.36×, SFT Conflicts 1.30×: 34K characters of LaTeX, 785 `<td>`); elsewhere it costs 0.94–1.14× the text layer at 2.5–2.6 characters a token (GPT-1, LitM, PAIR, GenRec, DPO, InstructGPT). The PDF costs 2,600–4,000 tokens a page, about 1,550 of them the page image. On these questions the extra structure bought nothing: TXT answered every equation (7) and table (15) question MD did. Whether LaTeX pays on harder equation questions (derivations, a term's role across equations) is not tested here.
 - **How B2's questions were made**: `draft.py` wrote six per paper from the PDF ($0.32–1.03 each, `results/drafts/`); each value was checked against the PDF page by eye and with `inputs.py check`, the comparison claims (K2, M2) against their tables, and the traps for absence. Changed from the drafts: M5 asked the peak of a curve, which sits on the 86.0 grid line printed in the text layer, so it asks two points off the grid lines instead; P5 is a diagram label (above); GenRec's only table repeats its cells in the prose, so N1 and N2 test reading, not table structure; P4 and N4 are setup details, the papers having no appendix.
+
+### Tier C, E5: small print and resolution (25 Oct 2026, $1.51; window 48% at the end)
+
+- **Small print is read from the image at the standard resolution.** Qwen3-VL's Table 2 (R1–R3: OCRBench 750, ZeroBench 2, HallusionBench 60.4) was right in all four forms: page 15 as a one-page PDF, as a 1,255 px image (2,250 tokens), as a 2,576 px image, and the current markdown. The 1,255 px image alone (about 115 dpi), with no text layer, was enough: P9's middle claim (small print in a dense table is read from the text layer, not the image) does not hold for this table. Its last claim holds: the plot value read from the images is within the tolerance. The test was easier than planned: the table's print is small but clean.
+- **A plot value, again only from a picture.** R4 (LitM Figure 7, LongChat-13B at the 70th of 140 pairs, about 35%): the page and both images 3 of 3, the markdown declined 3 of 3.
+- **The smallest form that answers is a 1,255 px image of the page**: 2,250 tokens against 3,900–5,100 for the one-page PDF. For a question about one known page, an agent that renders that page to an image pays the least.
+- **Image token counts are not stable.** The same 2,576 px image was counted as about 4,530 tokens in four requests and about 10,110 in two (R3 r1, R4 r2), the request otherwise identical; and its Qwen3-VL requests were never read from the cache, though the 1,255 px image's LitM requests were. Cost per image above the standard cap is therefore uncertain by about 2×; the 1,255 px image (about 2,250) and the one-page PDF did not vary.
 
 ## Generated
 
 <!-- report.py -->
-Requests: 324, $41.58; judge (latest grading of each question) $2.09; last five-hour utilisation seen: 41%.
+Requests: 348, $43.09; judge (latest grading of each question) $2.20; last five-hour utilisation seen: 48%.
 
 ```
 tier A: 38 of 38 first answers
 tier B: 102 of 102 first answers
 tier B2: 102 of 102 first answers
-tier C: 0 of 16 first answers
-reruns: 83; requests so far $41.58
+tier C: 16 of 16 first answers
+reruns: 91; requests so far $43.09
 ```
 <!-- /report.py -->

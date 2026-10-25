@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "page",
+ "qid": "R1",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "page",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, **Claude Opus 4.1 (non-thinking) scores 750 on OCRBench** (page 15).\n\nFor comparison, the other OCRBench scores in that row are (page 15):\n- Qwen3-VL-235B-A22B: 875 (thinking) and 920 (instruct). The 920 is underlined as the top non-reasoning score.\n- Gemini 2.5 Pro: 866 (thinking) and 872 (budget-128)\n- OpenAI GPT-5: 810 (high) and 787 (minimal)\n- Claude Opus 4.1: 764 (thinking) and 750 (non-thinking)\n\nSo Claude Opus 4.1 (non-thinking) has the lowest OCRBench score of all the models in the table.",
+ "input": 5141,
+ "cache_write": 5139,
+ "cache_read": 0,
+ "output": 364,
+ "thinking": 110,
+ "usd": 0.048400000000000006,
+ "seconds": 5.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.43,
+ "date": "2026-10-25 10:24"
+}

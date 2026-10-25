@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "page",
+ "qid": "R2",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "page",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, **GPT-5 (minimal) scores 2 on ZeroBench** (page 15 of the paper; page 1 of the provided document).\n\nIt is underlined, marking it as the top non-reasoning score. It ties with Qwen3-VL-235B-A22B Instruct, which also scores 2 (page 15).",
+ "input": 5135,
+ "cache_write": 557,
+ "cache_read": 4576,
+ "output": 267,
+ "thinking": 157,
+ "usd": 0.0107192,
+ "seconds": 3.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.45,
+ "date": "2026-10-25 10:24"
+}

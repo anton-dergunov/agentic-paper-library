@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R1",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "img2576",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, **Claude Opus 4.1 (non-thinking)** scores **750** on OCRBench (page 15).\n\nFor comparison, Claude Opus 4.1 (thinking) scores 764. Qwen3-VL-235B-A22B scores 875 (thinking) and 920 (instruct). The 920 is underlined as the highest among non-reasoning models (page 15).",
+ "input": 4528,
+ "cache_write": 4526,
+ "cache_read": 0,
+ "output": 180,
+ "thinking": 50,
+ "usd": 0.039816,
+ "seconds": 3.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.43,
+ "date": "2026-10-25 10:24"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "page",
+ "qid": "R4",
+ "rep": 2,
+ "paper": "litm",
+ "form": "page",
+ "page": 7,
+ "status": "ok",
+ "answer": "With 140 key-value pairs (~8K tokens), **LongChat-13B (16K) reaches roughly 35–36% accuracy when the key is at the 70th position** (page 1, Figure 7, middle subplot). This is my reading of the plot. The document doesn't state the exact number in text or a table.\n\nThat point is the lowest on LongChat's curve in this subplot (page 1):\n- **1st position:** about 37%\n- **35th position:** about 38%\n- **70th position:** about 35–36%\n- **105th position:** about 66%\n- **140th position:** about 88%\n\nThe caption describes the general pattern: performance \"is often highest when relevant information is occurs at the very start or end of the context, and rapidly degrades when models must retrieve from the middle of the input context\" (page 1). The text also notes that LongChat-13B (16K) \"tends to generate code to retrieve the key, rather than outputting the value directly\" when the relevant information is placed at the start of the context (page 1). That may help explain why its accuracy is also low at the early positions.",
+ "input": 3865,
+ "cache_write": 0,
+ "cache_read": 3863,
+ "output": 557,
+ "thinking": 217,
+ "usd": 0.0119206,
+ "seconds": 8.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.47,
+ "date": "2026-10-25 10:25"
+}

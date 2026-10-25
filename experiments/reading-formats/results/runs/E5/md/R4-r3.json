@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R4",
+ "rep": 3,
+ "paper": "litm",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give this number.** Figure 7 (p. 6) appears only as an image, so its plotted values aren't in the text. The full numeric tables in Appendix G (p. 18) cover only the multi-document QA task, not key-value retrieval.\n\nWhat the text does say about LongChat-13B (16K) in the 140 key-value setting:\n\n- It \"exhibits a different trend in the 140 key-value setting.\" When the relevant information is at the start of the input context, it \"tends to generate code to retrieve the key, rather than outputting the value directly\" (p. 6).\n- Models other than Claude-1.3 struggle with key-value retrieval, \"especially when contexts have 140 or 300 key-value pairs\" (p. 6).\n- Without query-aware contextualization, the worst-case key-value retrieval performance is 45.6% (p. 7). The paper doesn't say which model, context size, or position this refers to, so it can't be read as LongChat's accuracy at position 70.\n\nTo get the value, you'd need to read it off the Figure 7 image or use the released evaluation data (p. 2, footnote 1: nelsonliu.me/papers/lost-in-the-middle).",
+ "input": 26918,
+ "cache_write": 0,
+ "cache_read": 26916,
+ "output": 534,
+ "thinking": 148,
+ "usd": 0.016071199999999997,
+ "seconds": 5.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-25 10:25"
+}
