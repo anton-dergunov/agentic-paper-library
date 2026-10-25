@@ -277,7 +277,11 @@ questions:
    question: 'Write g_SFT and g_RL as the paper defines them, and say exactly where they differ.',
    gold: 'g_SFT = E_{x∼D, y∼π_expert}[∇_θ log π_θ(y|x)]; g_RL = E_{x∼D, y∼π_θ}[A(x,y) ∇_θ log π_θ(y|x)]: y is drawn from the expert in SFT and from the policy itself in RL, and RL weights the score function by the advantage A(x,y) (Eq. 1).'}
 
-# ---- E3: across papers (agent conditions; pages of X3, X5, X6 to be checked first) ----
+- {id: Q10, exp: E6, paper: sftrl, kind: equation-unusual, page: 20,
+   question: 'In the appendix''s model of score functions as a shared direction plus noise, what lower bound does the paper derive on |cos(g_i^SFT, g_j^SFT)|, and what upper bound on |cos(g_i^RL, g_j^RL)|? Give both formulas and say what η, γ_{i,j} and γ_in are.',
+   gold: 'SFT: |cos| ≥ (1 − 2η − η²)/(1 + η)² (Eq. 9, p. 19), η = σ/M_μ ≪ 1, the noise norm relative to the shared direction μ (‖ε‖ = σ = ηM_μ). RL: |cos| ≤ γ_{i,j}G/(1 − γ_in G) (Eq. 10, p. 21), ≲ O(γ_{i,j}G) as γ_in → 0; γ_{i,j} bounds |⟨ε_{i,k}, ε_{j,m}⟩|/σ² across the two tasks, γ_in the same within one task (k ≠ m). Asked because no prior knowledge gives these forms: a formula the model cannot complete from what such formulas usually are.'}
+
+# ---- E3: across papers (tier D; golds checked against the PDFs and the library 25 Oct) ----
 - {id: X1, exp: E3, papers: [dpo, ipo, simpo], kind: equations,
    question: 'How do the DPO, IPO and SimPO losses differ? Write each.',
    gold: 'DPO Eq. 7 (p. 4): -log σ of the β-scaled difference of policy/reference log-ratios; IPO empirical loss Eq. 17 (p. 7): E[(h_π(y_w,y_l) - τ^{-1}/2)^2], a squared loss towards a fixed margin; SimPO Eq. 6 (p. 4): length-normalised log-likelihood, no reference model, target margin γ.'}
@@ -286,13 +290,13 @@ questions:
    gold: 'DPO: none (no AlpacaEval 2 in the paper); ORPO: Mistral-ORPO-β 12.20% raw win rate (Table 1, p. 6); SimPO: 21.5 LC / 20.8 WR (Mistral-Base), 32.1 LC / 34.8 WR (Mistral-Instruct) (Table 4, p. 6). Not comparable: LC vs raw win rate, different bases.'}
 - {id: X3, exp: E3, papers: [ruler, nolima], kind: numbers,
    question: 'What effective context length do RULER and NoLiMa report for Llama 3.1 70B, and why do they differ?',
-   gold: 'RULER 64K of 128K claimed (Table 3, p. 6); NoLiMa 2K of 128K (Table 3, p. 5); NoLiMa''s needles share no literal words with the question, so retrieval needs a latent association; the thresholds differ too (RULER: Llama-2-7B''s 85.6; NoLiMa: 85% of each model''s base score).'}
+   gold: 'RULER 64K of 128K claimed (Table 3, p. 7); NoLiMa 2K of 128K (Table 3, p. 5); NoLiMa''s needles share no literal words with the question, so retrieval needs a latent association; the thresholds differ too (RULER: Llama-2-7B''s 85.6; NoLiMa: 85% of each model''s base score).'}
 - {id: X4, exp: E3, papers: [], kind: library,
    question: 'Which papers in the library propose a preference-optimisation method without a reference model?',
-   gold: 'SimPO, ORPO; anything else found must be checked against catalog and reviews/llm/post-training.md before the run.'}
+   gold: 'SimPO and ORPO. No other paper in llm/post-training/preference-learning proposes one (checked 25 Oct); KTO and DPO keep a reference model. A paper named from elsewhere counts only if the answer shows that it proposes a reference-free preference-optimisation method.'}
 - {id: X5, exp: E3, papers: [], kind: library,
    question: 'Which papers in the library propose a remedy for the lost-in-the-middle position bias, and what does each change?',
-   gold: 'Found in the Middle (subtracts measured positional attention bias); Make Your LLM Fully Utilize the Context (IN2 training on synthetic long-context data); STRING in Why Does the Effective Context Length of LLMs Fall Short (shifts position indices); Lost in the Middle''s own query-aware contextualization helps key-value retrieval only.'}
+   gold: 'Found in the Middle (subtracts the positional attention bias measured with a dummy document); Make Your LLM Fully Utilize the Context (FILM-7B, IN2 training on synthetic long-context data); STRING in Why Does the Effective Context Length of LLMs Fall Short (reuses well-trained smaller position indices for distant tokens); LongLLMLingua (reorders documents by importance after compression, §4.2, p. 4); Lost in the Middle''s own query-aware contextualization (the question before and after the data) helps key-value retrieval only. The first three are the review''s "Repairing the reader" (reviews/llm/context.md); naming at least those three with what each changes is correct.'}
 - {id: X6, exp: E3, papers: [instructgpt, dpo], kind: equations,
    question: 'InstructGPT and DPO both start from a KL-regularised RL objective. Write each and say how they differ.',
    gold: 'InstructGPT Eq. 2 (p. 9): E[r_θ(x,y) - β log(π^RL_φ(y|x)/π^SFT(y|x))] + γ E_{x~D_pretrain}[log π^RL_φ(x)]; DPO Eq. 3 (p. 3): max_π E[r_φ(x,y)] - β D_KL[π_θ(y|x) || π_ref(y|x)]; InstructGPT adds the pretraining term (γ = 27.8).'}

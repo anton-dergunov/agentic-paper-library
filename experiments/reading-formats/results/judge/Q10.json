@@ -1,0 +1,24 @@
+{
+ "key": "cc96de877fdcc415",
+ "usd": 0.050748,
+ "grades": {
+  "E6/txt/Q10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/md/Q10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Cites p.19 for Eq. 10, which is actually on p.21."
+  },
+  "E6/pdf/Q10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

@@ -10,6 +10,8 @@ Tiers, in priority order (see PROGRESS.md):
   B2 E1 in c0, pdf, txt, md on four papers published after the model's training cutoff; E4 in txt
   C  E5 (E1 in html beyond DPO was dropped at checkpoint 1)
   C2 E5 on the unseen papers, with txt; E6, equation structure, in pdf, txt, md
+  D  E3 across papers: Claude Code sessions in the library, PDF and text-layer copies
+     (copies.py builds them), and the papers' PDFs attached to one request
 
 A tier runs group by group (a paper, for E1). The conditions of a group run in parallel,
 each asking its questions one after another so that the document is read from the cache
@@ -28,6 +30,7 @@ import base64
 import concurrent.futures
 import json
 import os
+import re
 import subprocess
 import sys
 import threading
@@ -45,6 +48,12 @@ SYSTEM_DOC = ("Answer the question using only the document provided. Give the pa
               "If the document does not contain the answer, say so.")
 SYSTEM_C0 = "Answer the question from what you know. If you do not know, say so."
 Q = {q["id"]: q for q in inputs.QUESTIONS}
+# Tier D's agent sessions: the copy each runs in, the tools it has, what the prompt adds.
+AGENT_COPIES = {"x-lib": "lib", "x-pdf": "pdf", "x-txt": "txt"}
+AGENT_TOOLS = "Read,Grep,Glob,Bash"
+AGENT_SUFFIX = "\n\nAnswer from the papers in this folder. Give the page number for every fact you use."
+AGENT_BUDGET = "5"
+PDF_TOOLS = r"(?i)pdftotext|pdfinfo|pdfimages|pdftoppm|fitz|pymupdf|pypdf|pdfplumber|qpdf"  # dollars a session may spend before Claude Code stops it
 CLI_VERSION = subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()
 
 
@@ -146,6 +155,8 @@ def blocks(form, paper, page=None):
         return []
     if form == "pdf":
         return [document(inputs.pdf(paper))]
+    if form == "pdfs":  # several papers, one request (E3's X-ATT)
+        return [document(inputs.pdf(p)) for p in paper]
     if form == "page":
         return [document(inputs.page_pdf(paper, page))]
     if form.startswith("img"):
@@ -158,7 +169,7 @@ def blocks(form, paper, page=None):
 def job(exp, cond, qid, rep=1, form=None, question=None, paper=None, page=None):
     q = Q.get(qid, {})
     return {"exp": exp, "cond": cond, "qid": qid, "rep": rep, "form": form or cond,
-            "question": question or q["question"], "paper": paper or q["paper"],
+            "question": question or q["question"], "paper": paper or q.get("paper") or q.get("papers"),
             "page": page or q.get("page"), "system": SYSTEM_C0 if cond == "c0" else SYSTEM_DOC}
 
 
@@ -171,6 +182,8 @@ def ask(j):
     target = path_of(j)
     if target.exists():
         return None
+    if j["form"] in AGENT_COPIES:
+        return ask_agent(j, target)
     content = blocks(j["form"], j["paper"], j["page"])
     if content is None:
         return None
@@ -202,6 +215,85 @@ def ask(j):
         j["exp"], j["cond"], j["qid"], j["rep"], record["input"], record["output"] or 0, record["usd"] or 0,
         record["status"], "%.0f%%" % (100 * record["five_hour"]) if record["five_hour"] is not None else "?"),
         flush=True)
+    return record
+
+
+def agent_request(cwd, prompt, stream_path):
+    """One Claude Code session in `cwd` that may read files and run shell commands but not
+    edit, search the web or start subagents. It loads the copy's CLAUDE.md (`--restricted`
+    would not) and no user settings (hooks, plugins); the copies are read-only, and a call
+    that reaches outside the copy is recorded, not prevented. Returns (result event, rate-limit info, the
+    session's tool calls as short strings). Raises Stop on a usage limit."""
+    GUARD.check()
+    env = {**os.environ, "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
+    done = subprocess.run(
+        ["claude", "-p", prompt, "--model", MODEL, "--output-format", "stream-json", "--verbose",
+         "--tools", AGENT_TOOLS, "--allowedTools", AGENT_TOOLS, "--setting-sources", "project,local",
+         "--strict-mcp-config", "--no-session-persistence", "--max-budget-usd", AGENT_BUDGET],
+        stdin=subprocess.DEVNULL, capture_output=True, text=True, cwd=cwd, env=env, timeout=3600)
+    stream_path.parent.mkdir(parents=True, exist_ok=True)
+    stream_path.write_text(done.stdout)
+    result, rate, calls = None, None, []
+    for line in done.stdout.splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if event.get("type") == "result":
+            result = event
+        elif event.get("type") == "rate_limit_event":
+            rate = event.get("rate_limit_info")
+        elif event.get("type") == "assistant":
+            for part in event["message"].get("content", []):
+                if part.get("type") == "tool_use":
+                    given = part.get("input") or {}
+                    detail = given.get("file_path") or given.get("command") or given.get("pattern") or ""
+                    ranged = " [%s+%s]" % (given.get("offset"), given.get("limit")) if "offset" in given or "limit" in given else ""
+                    calls.append("%s %s%s" % (part.get("name"), str(detail)[:300], ranged))
+    GUARD.record((result or {}).get("total_cost_usd"), rate)
+    text = str((result or {}).get("result") or done.stderr or done.stdout)[-500:]
+    if result is None or (result.get("is_error") and result.get("subtype") != "error_max_budget_usd"):
+        if any(word in text.lower() for word in ("limit", "429", "overloaded", "credit")):
+            GUARD.reason = GUARD.reason or "usage limit: " + text[:200]
+            raise Stop(GUARD.reason)
+        raise RuntimeError(text[:300])
+    return result, rate, calls
+
+
+def ask_agent(j, target):
+    copy = inputs.OUT / "copies" / ("lib-asis" if AGENT_COPIES[j["form"]] == "lib" else AGENT_COPIES[j["form"]])
+    if not copy.exists():
+        raise RuntimeError("no copy at %s: run copies.py first" % copy)
+    started = time.time()
+    stream = STREAMS / j["exp"] / j["cond"] / ("%s-r%d.jsonl" % (j["qid"], j["rep"]))
+    result, rate, calls = agent_request(copy, j["question"] + AGENT_SUFFIX, stream)
+    usage = result.get("usage") or {}
+    record = {
+        "exp": j["exp"], "cond": j["cond"], "qid": j["qid"], "rep": j["rep"], "paper": j["paper"],
+        "form": j["form"], "page": None,
+        "status": "over_budget" if result.get("subtype") == "error_max_budget_usd" else "ok",
+        "answer": result.get("result"),
+        "input": sum(usage.get(k) or 0 for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")),
+        "cache_write": usage.get("cache_creation_input_tokens"), "cache_read": usage.get("cache_read_input_tokens"),
+        "output": usage.get("output_tokens"), "thinking": (usage.get("output_tokens_details") or {}).get("thinking_tokens"),
+        "usd": result.get("total_cost_usd"), "seconds": round(time.time() - started, 1),
+        "turns": result.get("num_turns"), "calls": calls,
+        "opened_pdf": any(c.startswith("Read ") and ".pdf" in c or c.startswith("Bash ") and re.search(PDF_TOOLS, c)
+                          for c in calls),
+        "outside": [c for c in calls if any(mark in c for mark in ("~/", "/Users/", "../", "/private/", "/tmp"))
+                    and str(copy) not in c],
+        "model": MODEL, "cli": CLI_VERSION,
+        "five_hour": (((rate or {}).get("unifiedWindows") or {}).get("five_hour") or {}).get("utilization"),
+        "date": time.strftime("%Y-%m-%d %H:%M"),
+    }
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.with_suffix(".tmp")
+    tmp.write_text(json.dumps(record, ensure_ascii=False, indent=1))
+    tmp.rename(target)
+    print("  %-3s %-12s %-5s r%d  %3s turns %3d calls  %7d in  $%.3f  %s%s  [window %s]" % (
+        j["exp"], j["cond"], j["qid"], j["rep"], record["turns"], len(calls), record["input"], record["usd"] or 0,
+        record["status"], "  OUTSIDE" if record["outside"] else "",
+        "%.0f%%" % (100 * record["five_hour"]) if record["five_hour"] is not None else "?"), flush=True)
     return record
 
 
@@ -267,6 +359,14 @@ def groups(tier):
             if qids("E6", paper):
                 out.append(("E6 " + paper, {c: [job("E6", c, i) for i in qids("E6", paper)] for c in ("pdf", "txt", "md")},
                             ("pdf", "txt", "md")))
+    elif tier == "D":
+        # One group: every condition's six questions run in parallel across conditions, in
+        # turn within one, so that a condition's later sessions find its copy's files in the
+        # operating system's cache. X-ATT asks only the questions with named papers.
+        across = [q["id"] for q in inputs.QUESTIONS if q["exp"] == "E3"]
+        conditions = {c: [job("E3", c, i) for i in across] for c in AGENT_COPIES}
+        conditions["x-att"] = [job("E3", "x-att", i, form="pdfs") for i in across if Q[i]["papers"]]
+        out.append(("E3 across papers", conditions, tuple(conditions)))
     return out
 
 
@@ -320,7 +420,7 @@ def run_tier(tier):
 
 
 def status():
-    for tier in ("A", "B", "B2", "C", "C2"):
+    for tier in ("A", "B", "B2", "C", "C2", "D"):
         done = total = 0
         for name, conditions, _ in groups(tier):
             for jobs in conditions.values():

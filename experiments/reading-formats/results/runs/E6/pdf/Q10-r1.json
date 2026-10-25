@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q10",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 20,
+ "status": "ok",
+ "answer": "# Cross-task cosine similarity bounds (Appendix C.4)\n\n## The model\n\nFor two independent tasks *i* and *j*, each task generates *G* rollouts per prompt. Each rollout's score function is split into a shared part plus a residual: S_{i,k}(x_i) = μ + ε_{i,k} and S_{j,m}(x_j) = μ + ε_{j,m} (p. 19).\n- μ is a \"task-shared dominant direction.\"\n- ε is a \"task- and sample-specific residual component.\"\n\n## What η, γ_{i,j} and γ_in are\n\nAll three are defined on a high-probability event ℰ (p. 19).\n\n- **η** is the ratio of residual size to shared-direction size. The paper assumes ‖μ‖ = M_μ and ‖ε_{i,k}‖ = ‖ε_{j,m}‖ = σ = ηM_μ, with η ≪ 1. In words, the residuals are much smaller than the shared direction.\n- **γ_{i,j} ∈ [0,1]** is the *task residual coupling factor*. It bounds how aligned residuals from different tasks can be: max_{k,m} |⟨ε_{i,k}, ε_{j,m}⟩| / σ² ≤ γ_{i,j}.\n- **γ_in ≪ 1** is the *intra-task coupling factor*. It bounds how aligned residuals from distinct rollouts of the same task can be: max_{k≠m} |⟨ε_{i,k}, ε_{i,m}⟩| / σ² ≤ γ_in.\n\n## SFT lower bound (Eq. 9, p. 19)\n\nThe SFT gradient is a plain average, g_i^SFT = μ + ε̄_i, where ‖ε̄_i‖ ≤ ηM_μ. The paper bounds the numerator below by M_μ²(1 − 2η − η²) and the denominator above by M_μ²(1 + η)². This gives:\n\n**|cos(g_i^SFT, g_j^SFT)| ≥ (1 − 2η − η²) / (1 + η)²**\n\nWhen η ≪ 1, this bound stays strictly positive and close to 1. The paper's reason is that \"the shared component μ cannot be removed by uniform averaging\" (p. 19).\n\n## RL upper bound (Eq. 10, pp. 20–21)\n\nGRPO advantages satisfy Σ_k Â_{i,k} = 0 and Σ_k Â²_{i,k} = G (p. 19). Because they sum to zero, μ drops out and g_i^RL = (1/G) Σ_k Â_{i,k} ε_{i,k} (p. 20).\n\nThe paper then shows two bounds (p. 20):\n- The numerator satisfies |⟨g_i^RL, g_j^RL⟩| ≤ γ_{i,j} σ².\n- Each gradient's norm satisfies ‖g_i^RL‖² ≥ (σ²/G)(1 − γ_in G).\n\nCombining them gives (p. 21):\n\n**|cos(g_i^RL, g_j^RL)| ≤ γ_{i,j} G / (1 − γ_in G)**\n\nWhen γ_in → 0, this simplifies to |cos| ≲ O(γ_{i,j} G) (p. 21).\n\n## How the paper interprets this (p. 21)\n\nSFT averaging keeps μ, which forces cross-task cosine similarity to stay positive. RL's zero-sum advantage weighting removes μ algebraically, so the similarity depends only on residual coupling. Under weak coupling, RL gradients from different tasks become nearly orthogonal.\n\nThe authors add a caveat: γ_{i,j} \"need not always be very small,\" so not every task pair is non-interfering in RL. They point to Appendix D.1 for how to assess such cases.\n\n## My own observation\n\nThis is not stated in the paper. The RL bound only means something when γ_in G < 1, since otherwise the denominator is zero or negative. G is the number of rollouts per prompt, which the paper sets to 16 in its RL setup (p. 13).",
+ "input": 123013,
+ "cache_write": 629,
+ "cache_read": 122382,
+ "output": 1865,
+ "thinking": 496,
+ "usd": 0.0668164,
+ "seconds": 18.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-25 11:09"
+}

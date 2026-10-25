@@ -1,0 +1,35 @@
+{
+ "exp": "E3",
+ "cond": "x-lib",
+ "qid": "X3",
+ "rep": 1,
+ "paper": [
+  "ruler",
+  "nolima"
+ ],
+ "form": "x-lib",
+ "page": null,
+ "status": "ok",
+ "answer": "Both papers give the same short-context baseline, and Llama 3.1 70B is near-perfect at short lengths in each. But RULER reports an effective length of **64K**, while NoLiMa reports only **2K**. NoLiMa also quotes RULER as giving **32K**, which doesn't match RULER's own headline table.\n\n## The numbers\n\n| | RULER | NoLiMa |\n|---|---|---|\n| Claimed length | 128K | 128K |\n| Effective length | **64K** | **2K** |\n| Threshold | Fixed 85.6% (Llama2-7B's score at 4K) | 85% of the model's own base score: 94.5 → threshold 80.3 |\n| Scores | 96.5 at 4K, 88.4 at 64K, 66.6 at 128K | 91.0 at 1K, 81.8 at 2K, 71.2 at 4K, 43.2 at 32K |\n| Source | [RULER, p. 6, Table 3](http://pdf.invalid/llm/evaluation/benchmarks/RULER.%20What's%20the%20Real%20Context%20Size%20of%20Your%20Long-Context%20Language%20Models.pdf?dest=table.3&page=6) | [NoLiMa, p. 4, Table 3](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=table.3&page=4); threshold rule on [p. 5, §4.3](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=subsection.4.3&page=5) |\n\nRULER's figure is an average over 13 synthetic tasks: retrieval, variable tracking, aggregation and QA. The tests run from 4K to 128K ([RULER, p. 6](http://pdf.invalid/llm/evaluation/benchmarks/RULER.%20What's%20the%20Real%20Context%20Size%20of%20Your%20Long-Context%20Language%20Models.pdf?dest=section.4&page=6)). NoLiMa tests from 250 tokens to 32K ([p. 5](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=subsection.4.3&page=5)).\n\n## Why they differ\n\n**1. The task: literal matching versus a reasoning step.** This is NoLiMa's own explanation and the main reason.\n- In RULER-style tasks, the question shares words with the passage that holds the answer. NoLiMa measures this overlap with ROUGE-1 precision between question and context ([p. 2, Table 1](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=table.1&page=2)):\n  - RULER single-needle retrieval: 0.571\n  - RULER QA: 0.809\n  - NoLiMa: 0.069\n- NoLiMa's needle shares no keywords with the question. For example, the question asks who has been to Dresden, and the needle says a character lives next to the Semper Opera House. The model has to make that link from world knowledge ([pp. 1–3](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=section.3&page=3)).\n- NoLiMa argues that attention is good at finding repeated surface patterns. Matching words therefore act as cues that make long-context retrieval easy ([p. 2](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=section.2&page=2)).\n- Its ablation tests this directly, on Llama 3.3 rather than 3.1 ([p. 8, Table 6](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=table.6&page=8)). At 32K:\n  - Questions that literally state the needle's keyword: 98.5\n  - Two-hop questions as multiple choice: 87.2, against 25.9 without the options\n\n**2. The threshold makes little difference here.**\n- RULER uses a fixed 85.6%. NoLiMa uses 85% of each model's own short-context score ([p. 5](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=subsection.4.3&page=5)).\n- For this model, NoLiMa's threshold (80.3) is actually *more lenient* than RULER's. Applying RULER's 85.6 to NoLiMa's scores would fail 2K (81.8) and leave only **1K**.\n- So the gap comes from the task, not the definition. (This calculation is mine, from the Table 3 numbers above.)\n\n## A discrepancy to know about\n\nNoLiMa's text says Llama 3.1 70B reaches 32K on RULER and 16K on BABILong QA1 ([p. 5, §4.4](http://pdf.invalid/llm/evaluation/benchmarks/NoLiMa.%20Long-Context%20Evaluation%20Beyond%20Literal%20Matching.pdf?dest=subsection.4.4&page=5&search=achieves%20effective%20lengths)). But the RULER copy in the library gives **64K** in its main 13-task Table 3 (p. 6).\n- A 32K figure does appear in RULER's appendix: the effective length on the variable-tracking task alone ([Appendix F, from p. 25, Table 14](http://pdf.invalid/llm/evaluation/benchmarks/RULER.%20What's%20the%20Real%20Context%20Size%20of%20Your%20Long-Context%20Language%20Models.pdf?dest=table.14&page=25)).\n- NoLiMa may have quoted an earlier version of RULER, or a single-task table. Neither paper says which.\n- The same paragraph has a second slip. It gives \"42.7% vs. 94.3% base score\" for Llama 3.1 70B, but Table 3 has 43.2 and 94.5. The 42.7 is Llama 3.3 70B's score at 32K (p. 4, Table 3).\n\nWhichever RULER figure you use, 32K or 64K, the gap to NoLiMa's 2K is 16–32×.\n\nI didn't check these values against the PDFs, and I made no changes to the library.",
+ "input": 140965,
+ "cache_write": 27075,
+ "cache_read": 113878,
+ "output": 4385,
+ "thinking": 791,
+ "usd": 0.32712360000000007,
+ "seconds": 46.8,
+ "turns": 6,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; ls; find . -iname \"*RULER*\" -o -iname \"*NoLiMa*\" | head",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; cat notes/RULER*.md notes/NoLiMa*.md; ls reviews -R; d=library/llm/evaluation/benchmarks; grep -n -i \"70B\\|effective\\|^#\" \"$d/RULER. What's the Real Context Size of Your Long-Context Language Models.md\" | head -80",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; d=library/llm/evaluation/benchmarks; sed -n 205,225p \"$d/RULER. What's the Real Context Size of Your Long-Context Language Models.md\"; f=\"$d/NoLiMa. Long-Context Evaluation Beyond Literal Matching.md\"; grep -n \"^#\\|RULER\\|Rul",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; f=\"library/llm/evaluation/benchmarks/NoLiMa. Long-Context Evaluation Beyond Literal Matching.md\"; sed -n 60,110p \"$f\" | grep -v \"^<t[dh]>[^R]*</t[dh]>$\" | head -0; sed -n 75,115p \"$f\" | tr -d '\\n' | sed 's/<\\/tr>/\\n/g'; echo;",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; f=\"library/llm/evaluation/benchmarks/RULER. What's the Real Context Size of Your Long-Context Language Models.md\"; for n in 1149 1516; do sed -n \"${n},$((n+12))p\" \"$f\" | tr -d '\\n'; echo; done; grep -n \"^Table\\|^\\*\\*Table\\|Ta"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-25 11:16"
+}

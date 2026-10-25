@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q10",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 20,
+ "status": "ok",
+ "answer": "Both bounds come from **Appendix C.4**, which models each rollout's score function as a shared direction plus a small residual.\n\n## The model (p. 19)\n\nFor tasks *i* and *j*, each with *G* rollouts:\n\nS_{i,k}(x_i) = µ + ϵ_{i,k},  S_{j,m}(x_j) = µ + ϵ_{j,m}\n\n- **µ** is a task-shared dominant direction.\n- **ϵ** is a task- and sample-specific residual.\n\nOn a high-probability event:\n\n∥µ∥ = M_µ,  ∥ϵ_{i,k}∥ = ∥ϵ_{j,m}∥ = σ = ηM_µ,  η ≪ 1\n\n## The three parameters (p. 19)\n\n- **η**: the ratio of the residual norm to the shared direction's norm (σ = ηM_µ). Assuming η ≪ 1 means the residual is much smaller than the shared direction.\n- **γ_{i,j} ∈ [0, 1]**: the *task residual coupling factor* between two tasks, defined by max_{k,m} |⟨ϵ_{i,k}, ϵ_{j,m}⟩| / σ² ≤ γ_{i,j}.\n- **γ_in ≪ 1**: the *intra-task coupling factor* for distinct rollouts within the same task, defined by max_{k≠m} |⟨ϵ_{i,k}, ϵ_{i,m}⟩| / σ² ≤ γ_in.\n\n## SFT lower bound (Eq. 9, p. 19)\n\nThe SFT gradient is a uniform average, g_i^SFT = µ + ϵ̄_i, where ∥ϵ̄_i∥ ≤ ηM_µ. The paper bounds the inner product from below by M_µ²(1 − 2η − η²) and the product of norms from above by M_µ²(1 + η)². This gives:\n\n**|cos(g_i^SFT, g_j^SFT)| ≥ (1 − 2η − η²) / (1 + η)²**\n\nWhen η ≪ 1, this bound is strictly positive and close to 1. Uniform averaging cannot remove µ, so SFT gradients stay aligned even across different tasks (p. 19).\n\n## RL upper bound (Eq. 10, pp. 19–21)\n\nThe advantages satisfy Σ_k Â_{i,k} = 0 and Σ_k Â²_{i,k} = G. This cancels µ, leaving g_i^RL = (1/G) Σ_k Â_{i,k} ϵ_{i,k} (pp. 19–20). The paper then shows two things (p. 20):\n\n- The inner product is at most γ_{i,j}σ².\n- Each squared norm is at least (σ²/G)(1 − γ_in G).\n\nCombining these (p. 21):\n\n**|cos(g_i^RL, g_j^RL)| ≤ γ_{i,j} G / (1 − γ_in G)**\n\nIn the high-dimensional regime where γ_in → 0, this becomes |cos(g_i^RL, g_j^RL)| ≲ O(γ_{i,j} G) (p. 21).\n\n## Interpretation and caveat (p. 21)\n\nThe zero-sum advantage weighting removes the shared direction algebraically. RL cosine similarity is therefore controlled only by the residual coupling γ_{i,j}. Under weak coupling, gradients from different tasks become nearly orthogonal.\n\nThe authors stress that this does not mean all RL task pairs are non-interfering, because γ_{i,j} need not always be small. They refer to Appendix D.1 for how to assess such cases.",
+ "input": 68878,
+ "cache_write": 628,
+ "cache_read": 68248,
+ "output": 1852,
+ "thinking": 627,
+ "usd": 0.055721599999999996,
+ "seconds": 16.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-25 11:09"
+}

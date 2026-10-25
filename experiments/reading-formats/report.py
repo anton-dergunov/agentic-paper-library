@@ -47,7 +47,7 @@ def scores_grid(recs, grades, exp, conds):
     for r in recs:
         if r["exp"] == exp and r["cond"] in conds:
             g = grades.get(run_id(r), {})
-            mark = "TL" if r["status"] == "too_long" else LETTER[g.get("score")]
+            mark = {"too_long": "TL", "over_budget": "OB"}.get(r["status"]) or LETTER[g.get("score")]
             if g.get("confident_wrong"):
                 mark += "!"
             cells[r["qid"]].setdefault(r["cond"], {})[r["rep"]] = mark
@@ -96,6 +96,17 @@ def costs(recs, exp, conds):
                   "$", "mean s"], rows)
 
 
+def sessions(recs):
+    """Tier D: one row per session or request, with what an agent did."""
+    rows = []
+    for r in sorted((r for r in recs if r["exp"] == "E3"), key=lambda r: (r["qid"], r["cond"], r["rep"])):
+        rows.append([r["qid"], r["cond"], r["rep"], r.get("turns") or "", len(r.get("calls") or []),
+                     "{:,}".format(r["input"]), "%.2f" % (r["usd"] or 0), "%.0f" % r["seconds"],
+                     "yes" if r.get("opened_pdf") else "", len(r.get("outside") or []) or ""])
+    return table(["Q", "condition", "r", "turns", "tool calls", "input tokens", "$", "s", "opened a PDF",
+                  "calls outside the copy"], rows)
+
+
 def e0(recs):
     rows = [[r["cond"], r["qid"], r["rep"], "{:,}".format(r["input"]), r["cache_read"], r["output"], "%.3f" % (r["usd"] or 0),
              (r["answer"] or "")[:80].replace("\n", " ").replace("|", "/")]
@@ -124,6 +135,10 @@ def main():
         if any(r["exp"] == exp for r in rs):
             parts += ["## " + title, score_summary(rs, grades, exp, conds), scores_grid(rs, grades, exp, conds),
                       "Cost", costs(rs, exp, conds)]
+    if any(r["exp"] == "E3" for r in recs):
+        conds = ("x-lib", "x-pdf", "x-txt", "x-att")
+        parts += ["## E3: across papers", score_summary(recs, grades, "E3", conds),
+                  scores_grid(recs, grades, "E3", conds), "Sessions", sessions(recs)]
     if any(r["exp"] == "E0" for r in recs):
         parts += ["## E0: token cost and page resolution", e0(recs)]
     notes = [(run_id(r), grades[run_id(r)]["note"]) for r in recs

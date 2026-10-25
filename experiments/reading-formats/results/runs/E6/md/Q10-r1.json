@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q10",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 20,
+ "status": "ok",
+ "answer": "# Cosine-similarity bounds in Appendix C.4\n\n## The model\n\nFor two independent tasks *i* and *j*, each with *G* rollouts, every rollout's score function is split into two parts (p. 19):\n\n- **S_{i,k} = μ + ε_{i,k}** and **S_{j,m} = μ + ε_{j,m}**\n- **μ** is a dominant direction shared across tasks.\n- **ε** is a residual specific to the task and the sample.\n\nOn a high-probability event ℰ, the paper assumes ‖μ‖ = M_μ and ‖ε_{i,k}‖ = ‖ε_{j,m}‖ = σ = ηM_μ, with η ≪ 1 (p. 19).\n\n## The three parameters (p. 19)\n\n- **η** is the ratio of residual norm to shared-direction norm (σ = ηM_μ). The paper assumes η ≪ 1, meaning \"the residual norm is concentrated and much smaller than the shared dominant direction.\"\n- **γ_{i,j} ∈ [0,1]** is the *task residual coupling factor*. It bounds how strongly residuals from different tasks align: max_{k,m} |⟨ε_{i,k}, ε_{j,m}⟩| / σ² ≤ γ_{i,j}.\n- **γ_in ≪ 1** is the *intra-task coupling factor*. It plays the same role for distinct rollouts within one task: max_{k≠m} |⟨ε_{i,k}, ε_{i,m}⟩| / σ² ≤ γ_in.\n\n## SFT lower bound, Eq. (9) (p. 19)\n\n$$|\\cos(g_i^{\\mathrm{SFT}}, g_j^{\\mathrm{SFT}})| \\ge \\frac{1-2\\eta-\\eta^2}{(1+\\eta)^2}$$\n\nThe SFT gradient is a uniform average, so g_i^SFT = μ + ε̄_i, with ‖ε̄_i‖ ≤ ηM_μ. The bound comes from two steps:\n\n- The numerator is bounded below by M_μ²(1−2η−η²).\n- The denominator is bounded above by M_μ²(1+η)².\n\nWhen η ≪ 1, the right-hand side stays strictly positive and close to 1. The paper's explanation is that uniform averaging cannot remove μ, so gradients from different tasks stay directionally aligned (p. 19).\n\n## RL upper bound, Eq. (10) (p. 19)\n\n$$|\\cos(g_i^{\\mathrm{RL}}, g_j^{\\mathrm{RL}})| \\le \\frac{\\gamma_{i,j}\\,G}{1-\\gamma_{\\mathrm{in}}\\,G}$$\n\nThe derivation uses the advantage properties Σ_k Â_{i,k} = 0 and Σ_k Â²_{i,k} = G. The zero-sum property cancels μ exactly, leaving g_i^RL = (1/G) Σ_k Â_{i,k} ε_{i,k}. Then:\n\n- The numerator is bounded above by γ_{i,j}σ².\n- Each gradient's squared norm is bounded below by (σ²/G)(1 − γ_in G).\n\nIn the high-dimensional regime where γ_in → 0, this simplifies to |cos| ≲ 𝒪(γ_{i,j} G) (p. 19).\n\n## The paper's interpretation and caveat (p. 21)\n\nSFT's averaging keeps μ, which forces a strictly positive lower bound on cross-task cosine similarity. RL's zero-sum advantage weighting removes μ algebraically, so similarity depends only on residual coupling. RL gradients from different tasks are therefore nearly orthogonal when that coupling is weak.\n\nThe authors add that this does **not** mean every RL task pair is non-interfering, because γ_{i,j} need not always be very small. They refer to Appendix D.1 for how to assess such cases.\n\n*A note of my own, not from the paper:* Eq. (10) only makes sense when γ_in G < 1. The paper does not state this condition explicitly; it is implied by the γ_in ≪ 1 assumption.",
+ "input": 89433,
+ "cache_write": 628,
+ "cache_read": 88803,
+ "output": 1793,
+ "thinking": 390,
+ "usd": 0.058652600000000006,
+ "seconds": 19.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.62,
+ "date": "2026-10-25 11:09"
+}

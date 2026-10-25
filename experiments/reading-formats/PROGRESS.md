@@ -9,7 +9,7 @@ All commands run from this directory with `PAPER_LIBRARY=~/papers uv run python 
 ```bash
 cd experiments/reading-formats
 PAPER_LIBRARY=~/papers uv run python run.py status          # what is done
-PAPER_LIBRARY=~/papers uv run python run.py B --budget 15    # the next tier; stops by itself at 80% of the five-hour window
+PAPER_LIBRARY=~/papers uv run python run.py D --budget 20    # the next tier (see "Tier D: run plan"); stops by itself at 80% of the five-hour window
 PAPER_LIBRARY=~/papers uv run python judge.py               # grade anything not yet graded (run.py does this per group)
 PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md and the block below
 ```
@@ -26,7 +26,7 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); the hand check is still to do |
 | C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
 | C2 small print and equations on unseen papers | E5 on PAIR, SFT Conflicts, KV transfer, GenRec pages chosen by the author for small print (R5–R9), in page, img1255, img2576, md and txt; E6, nine equation-structure questions (Q1–Q9) in pdf, txt, md | done 25 Oct |
-| D | E3 across papers: needs `copies.py` and agent runs in `run.py` (not written yet), and the pages of X3, X5, X6 checked | not started |
+| D | E3 across papers (X1–X6) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, X1–X3 and X6) | code, copies and golds ready 25 Oct; X3 piloted in x-lib, x-pdf, x-txt; the rest to run: see "Tier D: run plan" |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
 
 How a tier runs: group by group (a paper); the conditions of a group in parallel, each asking its questions in turn so that the document is read from the cache; then the group is judged, and every question whose answers differ between conditions (closed book aside) is asked twice more in each condition while the cache is warm (one hour on the subscription) and judged again. Only differences that hold in two of three runs count.
@@ -72,7 +72,7 @@ How a tier runs: group by group (a paper); the conditions of a group in parallel
 - **Cost**: the markdown is 55–57% of the PDF's tokens and about the same as the text layer; HTML is 2.5× the PDF. With the cache, a further question on a paper already read costs $0.02–0.05 in any form.
 - **Memory**: closed book is right on 15.5 of 22, DPO almost wholly. Hence tier B2 (papers after the training cutoff).
 
-Decisions for the next session, in order (1–3 done 25 Oct, below):
+Decisions for the next session, in order (1–3 done 25 Oct, below; 4 ready to run, see "Tier D: run plan"):
 1. Finish tier B (InstructGPT): `run.py B`.
 2. Tier B2, the papers the model cannot know: this tests the figure and table results without memory to fall back on.
 3. Tier C: run E5 (the resolution question is cheap, and it says whether small print comes from the text layer or the image). E1 html beyond DPO is dropped (agreed with the author 24 Oct): HTML costs 2.5× the PDF and cannot cite pages.
@@ -103,20 +103,70 @@ Asked because tier C's papers may be in the model's memory and its table's print
 
 - **Small print: every form read it** (R5–R7: PAIR Table 2's operations column, SFT Conflicts Table 4's superscripts on the 7B rows, KV transfer Table 4's Ministral 3B→8B shifts): page, 1,255 px image, 2,576 px image, txt and md all correct. With tier C, 6 small-print questions on 4 papers, none lost in any form.
 - **Text inside vector figures is in the text layer and not in the markdown.** R8 (GenRec Figure 3's bar labels: +0.115%, P = 3.1 × 10⁻¹⁰) and R9 (SFT Conflicts Figure 2's heatmap cells: −3.92e-04, 8.7e-02): page, both images and txt 3 of 3; md declined 3 of 3. The first questions in this experiment where the text layer beats the markdown: the converter keeps a figure as a picture file, so the numbers drawn as text inside it are lost to a reader of the markdown.
-- **Equation structure: PDF, TXT and MD all 9 of 9** (Q1–Q9: PAIR's positional attention, normalised fusion and Matryoshka sum; GenRec's verbaliser; SFT Conflicts' KL argmin over P* ∩ Π, the 1/G in the advantage's standard deviation, Lemma 4.3's double sum over Â·Â·⟨δS, δS⟩, the 2 exp(−c t² d) tail bound, g_SFT against g_RL). Read by hand: the TXT answers rebuild each formula as clean LaTeX from a text layer that scatters it over lines and interleaves the other column. The formulas here are all standard forms (softmax attention, a population standard deviation, a KL argmin), so the model may be completing them from what such formulas usually are, not reading them; a formula that breaks convention would tell the two apart. Not run.
-- **So far the markdown's LaTeX has bought no accuracy** over the raw text layer, on 16 equation questions over 7 papers.
+- **Equation structure: PDF, TXT and MD all 9 of 9** (Q1–Q9: PAIR's positional attention, normalised fusion and Matryoshka sum; GenRec's verbaliser; SFT Conflicts' KL argmin over P* ∩ Π, the 1/G in the advantage's standard deviation, Lemma 4.3's double sum over Â·Â·⟨δS, δS⟩, the 2 exp(−c t² d) tail bound, g_SFT against g_RL). Read by hand: the TXT answers rebuild each formula as clean LaTeX from a text layer that scatters it over lines and interleaves the other column. The formulas here are all standard forms (softmax attention, a population standard deviation, a KL argmin), so the model may be completing them from what such formulas usually are, not reading them; a formula that breaks convention would tell the two apart. Q10 is one: SFT Conflicts' appendix bounds |cos(g_SFT)| ≥ (1 − 2η − η²)/(1 + η)² and |cos(g_RL)| ≤ γ_{i,j}G/(1 − γ_in G) (Eqs. 9–10, pp. 19, 21), forms no prior gives, with each fraction spread over three lines of the text layer and its bar lost. PDF, TXT and MD were all correct, the TXT answer with every coefficient and the definitions of η, γ_{i,j} and γ_in ($0.18, from the cache). The text layer is read, not completed.
+- **So far the markdown's LaTeX has bought no accuracy** over the raw text layer, on 17 equation questions over 7 papers.
+- **Filed**: ticket `figure-text-lost` (engine `tickets/`): take the text-layer words inside a vector figure's region into the markdown under the figure; issue records on GenRec (Figure 3) and SFT Conflicts (Figure 2) in the library's `issues/`. The Qwen3-VL record (`pdf-table-structure`, p. 15) now names F6's MMBench cell.
+
+### How often would the text layer fail? A scan of the library's PDFs (25 Oct 2026, no model requests)
+
+PyMuPDF over all 2,275 PDFs: characters per page, unmapped glyphs (U+FFFD and private-use characters), and raster images by area. The script and its output are not committed (a scratch measurement; rerun in about 30 minutes on one core if needed).
+
+- **No PDF lacks a text layer** (none has a median page under 200 characters). The 50 with a few near-empty pages covered by an image are full-page figures (Taming Transformers' sample grids, ExpeL's screenshots), not scans.
+- **Unmapped glyphs**: one PDF over 1% (a piano-transcription paper, 3.9%), 31 between 0.1% and 1%.
+- **What the scan cannot see**, from the library's issue records: dropped ligatures and OCR text layers count as text. `pdf-broken-text-layer` has 2 papers (LSTM, a PostScript conversion with "signi cant", "e cient" and garbled equations; Google's Anatomy of a Search Engine, an OCR layer with garbled headings), `pdf-text-layer-errors` 30 papers (41 records).
+- So the text layer is badly broken in about 2 papers of 2,275 and imperfect in about 60 (under 3%); in this library, which is mostly arXiv, it almost never fails outright. Its own weakness is elsewhere: in 58% of the PDFs at least one figure is a raster image (over 3% of a page), whose numbers no text form carries; in the other 42% the figures, if any, are vector, and their printed numbers are in the text layer and not in the markdown (ticket `figure-text-lost`).
+
+## Tier D: run plan (written 25 Oct 2026, to run in a fresh session and window)
+
+**What it tests.** Whether the library's structure (indexes, notes, reviews, markdown with page markers) helps an agent answer across papers, against an agent with only the PDFs, and against an agent with the PDFs' text layers, the cheap pipeline that needs no conversion. Single-paper accuracy is settled ("PDF ≥ MD = TXT, the gap being drawn values"); this is the library's main claim.
+
+**Conditions.**
+
+| Id | Where | What it has |
+|---|---|---|
+| x-lib | `copies/lib-asis` | the library as an agent finds it: `CLAUDE.md` → `AGENTS.md` → the guide, `catalog/`, `notes/`, `reviews/`, the markdown (no figures, no PDFs) |
+| x-pdf | `copies/pdf` | the 2,275 PDFs under the same topic tree (APFS clones) and a one-line `CLAUDE.md` |
+| x-txt | `copies/txt` | each PDF's `pdftotext -layout` text, with a line `[page N]` at each page, same tree, one-line `CLAUDE.md` |
+| x-att | one request | the PDFs of the papers the gold rests on, attached; not for X4, X5 (what the library holds) |
+
+Sessions: `claude -p` with `--tools Read,Grep,Glob,Bash`, `--setting-sources project,local` (no user settings, hooks or plugins), `--strict-mcp-config`, `--max-budget-usd 5`, stdin closed, no session persistence. The copies are read-only. Each record keeps every tool call (`calls`), turns, cost, `opened_pdf` (a `Read` of a PDF or a PDF tool in the shell) and `outside` (calls naming a path outside the copy). The prompt is the question plus "Answer from the papers in this folder. Give the page number for every fact you use." The copies live in `~/.cache/papers/experiments/reading-formats/copies/` (`copies.py` rebuilds them in about 2 minutes).
+
+**What the smoke tests and the X3 pilot showed (25 Oct).**
+- `--restricted` stops the copy's `CLAUDE.md` from loading (the library agent found its guide only by reading the files), so it is not used; the copies' read-only bits and the `outside` record take its place.
+- The user's `~/.claude/CLAUDE.md` (git workflow, changelog rules) loads in every condition alike: noise common to all, left in.
+- `subprocess.run` must close stdin, or the session reads the caller's stdin as part of the prompt (fixed).
+- X3 pilot: x-lib $0.33 (6 turns: notes, then grep in the markdown; it also found that NoLiMa quotes RULER as 32K, against RULER's own 64K); x-txt $0.21 (6 turns, grep on the `[page N]` files); x-pdf $0.36 (12 turns: it ran `pdftotext` itself into `/tmp/rn` and tracked pages with awk, which is the author's point: an agent with PDFs builds the text layer it needs). All three gave 64K against 2K and the reasons. Not yet judged.
+- Risk: an x-pdf session writes text files to `/tmp`; a later session could find them. `outside` lists such calls; check them in the results, and if one session reads another's files, rerun it after clearing `/tmp`.
+
+**Golds** checked 25 Oct: RULER's Table 3 is on p. 7, not p. 6 (fixed); X4 checked against the preference-learning folder (SimPO and ORPO only; KTO and DPO keep a reference model); X5 gained LongLLMLingua's document reordering (§4.2, p. 4) beside the review's three "Repairing the reader" papers; X1, X2, X6 pages match.
+
+**Cost.** Pilot sessions cost $0.21–0.36 on a two-paper question. X4 and X5 (find papers in a 2,275-file tree) will cost more in x-pdf and x-txt, perhaps $1–3 each; x-att with InstructGPT and DPO is about 250K tokens (it may record `too_long`). First answers: about $5–10; with reruns of disagreements (two more runs in every condition): $10–20, a third to a half of a window. Every session is capped at $5.
+
+**How to run it** (from this directory):
+
+```bash
+PAPER_LIBRARY=~/papers uv run python run.py status                   # tier D: 3 of 22 first answers
+PAPER_LIBRARY=~/papers uv run python copies.py                       # only if ~/.cache/.../copies is gone
+PAPER_LIBRARY=~/papers uv run python run.py D --budget 20 --stop-at 0.9
+PAPER_LIBRARY=~/papers uv run python report.py                       # "E3: across papers" in results/summary.md
+```
+
+It runs the four conditions in parallel, each condition's questions in turn, judges, then reruns the questions whose grades differ between conditions (r2, r3). It can be stopped and repeated; it skips what is done. Expect 20–60 minutes.
+
+**What to look at afterwards.** Scores per condition, with the hand check of every disagreement (the judge cannot verify X4 and X5's names beyond the gold); cost and turns per condition (`Sessions` table); whether x-lib used reviews and notes (`calls`), whether x-pdf converted PDFs itself and how; the `outside` column. Then decide E2 (single paper as an agent): if x-lib ≈ x-txt across papers, the library's structure is not what answers questions, and the case for it becomes cost, citations and the notes; if x-lib wins, measure where (X4, X5 enumeration from reviews, or equations).
 
 ## Generated
 
 <!-- report.py -->
-Requests: 420, $45.11; judge (latest grading of each question) $2.66; last five-hour utilisation seen: 59%.
+Requests: 426, $46.19; judge (latest grading of each question) $2.71; last five-hour utilisation seen: 70%.
 
 ```
 tier A: 38 of 38 first answers
 tier B: 102 of 102 first answers
 tier B2: 102 of 102 first answers
 tier C: 16 of 16 first answers
-tier C2: 52 of 52 first answers
-reruns: 111; requests so far $45.11
+tier C2: 55 of 55 first answers
+tier D: 3 of 22 first answers
+reruns: 111; requests so far $46.19
 ```
 <!-- /report.py -->

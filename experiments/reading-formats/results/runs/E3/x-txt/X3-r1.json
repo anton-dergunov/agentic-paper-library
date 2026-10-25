@@ -1,0 +1,35 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X3",
+ "rep": 1,
+ "paper": [
+  "ruler",
+  "nolima"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "**Short answer:** Llama 3.1 70B claims a 128K context. RULER finds it effective up to **64K**; NoLiMa finds only **2K**. The gap has two causes. NoLiMa's task is harder because it removes word overlap between question and answer, and the two papers define \"effective\" differently.\n\n## The numbers\n\n**RULER:**\n- Llama 3.1 70B scores 96.5 / 95.8 / 95.4 / 94.8 / 88.4 / 66.6 at 4K–128K. That makes its effective length 64K against a claimed 128K (p. 7, Table 3).\n- A model is effective at a length if it beats a fixed threshold there. The threshold is Llama2-7B's score at 4K, which is 85.6% (p. 6; p. 7, Table 3 caption).\n- Score 85.6+ at a length and you pass. The 70B model passes at 64K (88.4) and fails at 128K (66.6).\n\n**NoLiMa:**\n- Llama 3.1 70B has a base score of 94.5, so its threshold is 80.3. It scores 91.0 / 81.8 / 71.2 / 62.7 / 51.8 / 43.2 at 1K–32K, giving an effective length of **2K** (p. 5, Table 3).\n- Split by question type, it reaches 4K on one-hop questions (p. 16, Table 11) and only 1K on two-hop questions (p. 17, Table 12).\n\n## Why they differ\n\n1. **Literal matching (the main reason).** In RULER-style tests, the question usually repeats words from the hidden fact (the \"needle\"), so the model can find it by surface matching. NoLiMa's questions share almost no words with their needles. The model has to connect them through world knowledge, for example knowing the Semper Opera House is in Dresden (pp. 1–2).\n   - NoLiMa measures this word overlap: question-to-context ROUGE-1 precision is 0.571 for RULER's single-needle test and 0.809 for RULER QA, versus 0.069 for NoLiMa (p. 2, Table 1).\n   - The authors attribute the drop to attention struggling over long contexts when there are no literal matches to latch onto (p. 1). Their ablations show that literal matches make the task much easier, and that literal matches used as distractors hurt accuracy badly (p. 2).\n   - They note that in RULER the same model reaches 32K, and in BABILong 16K, yet on NoLiMa only 2K (p. 6).\n\n2. **Different threshold.** RULER uses one fixed bar for every model (85.6%). NoLiMa uses 85% of each model's own short-context base score (p. 5). For this model the bars are close (80.3 vs 85.6), so the threshold explains little of the gap. The task design does most of it.\n\n3. **Different length grids.** RULER tests 4K–128K and NoLiMa tests 250 tokens to 32K (p. 5; p. 7). So 64K and 2K are the top passing points on different scales.\n\n## Two inconsistencies in NoLiMa's text\n- **RULER figure:** NoLiMa says RULER gives this model **32K** (p. 6), but RULER's own Table 3 says **64K** (p. 7). In RULER's appendix tables the effective lengths are 64K, 64K, 32K and 64K (pp. 25–27). So NoLiMa may be quoting one of those breakdowns or an earlier version of RULER. I can't tell which from these papers.\n- **Llama 3.1 70B figures:** NoLiMa's text quotes \"42.7% vs. 94.3% base score\" at 32K (p. 6). Its Table 3 gives 43.2 and 94.5 for this model, and 42.7 is the Llama 3.3 70B figure (p. 5).",
+ "input": 86074,
+ "cache_write": 18184,
+ "cache_read": 67878,
+ "output": 2592,
+ "thinking": 338,
+ "usd": 0.2109356,
+ "seconds": 48.4,
+ "turns": 6,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | grep -i -E \"ruler|nolima\"; grep -l -i \"nolima\" -r . | head; grep -l \"RULER\" -r . | head",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/evaluation/benchmarks\"; for f in RULER*.txt NoLiMa*.txt; do echo \"=== $f\"; grep -n -E \"\\[page [0-9]+\\]|Llama.?3\\.1.?\\(?70B|Llama 3.1 70B|effective|Effective\" \"$f\" | head -120; done",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/evaluation/benchmarks\"; sed -n 395,470p RULER*.txt; echo =====; sed -n 300,445p NoLiMa*.txt; grep -n -E \"^ *5 |footnote|RULER\" NoLiMa*.txt | head -30",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/evaluation/benchmarks\"; sed -n 300,445p NoLiMa*.txt; echo -----; grep -n -E \"^ *5 |RULER|literal|lexical overlap\" NoLiMa*.txt | head -40",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/evaluation/benchmarks\"; sed -n 15,50p NoLiMa*.txt; echo ----; sed -n 75,100p NoLiMa*.txt; echo ----; sed -n 130,142p NoLiMa*.txt"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.7,
+ "date": "2026-10-25 11:16"
+}

@@ -1,0 +1,50 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X3",
+ "rep": 1,
+ "paper": [
+  "ruler",
+  "nolima"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "RULER reports an effective length of **64K** for Llama 3.1 70B, and NoLiMa reports **2K**. Both papers claim 128K support for the model. The gap comes from two differences: what each benchmark asks the model to do, and how each one sets its pass mark.\n\n## What each paper reports\n\n**RULER: 64K** (Table 3, p. 7)\n- Llama 3.1 70B scores 96.5 at 4K, 95.8 at 8K, 95.4 at 16K, 94.8 at 32K, 88.4 at 64K and 66.6 at 128K (p. 7).\n- The pass mark is one fixed number for every model: Llama2-7B's score at 4K, which is 85.6% (p. 6; Table 3 caption, p. 7). The effective length is the longest context whose score stays above it (p. 6). The 64K score of 88.4 passes; the 128K score of 66.6 does not.\n\n**NoLiMa: 2K** (Table 3, p. 5)\n- Llama 3.1 70B's short-context \"base score\" is 94.5, so its pass mark is 80.3. It scores 91.0 at 1K, 81.8 at 2K, 71.2 at 4K, 62.7 at 8K, 51.8 at 16K and 43.2 at 32K (p. 5).\n- The base score is the model's best result at the three shortest lengths (250, 500 and 1K tokens), averaged over all examples (p. 5).\n- NoLiMa says it follows RULER's approach but changes the pass mark to 85% of each model's own base score (p. 5). The effective length is the longest tested context above that mark (p. 5).\n\n## Why they differ\n\n**1. Literal matches (the main reason).** In RULER-style tests the question usually shares words with the hidden fact (the \"needle\"), so the model can find the answer by word matching.\n- NoLiMa measured this word overlap. RULER's single-needle retrieval task scores 0.571 ROUGE-1 and RULER QA scores 0.809; NoLiMa is designed to be much lower (Table 1, pp. 2–3).\n- In NoLiMa, the question and needle share no keywords. For example, the question asks \"Which character has been to Dresden?\" while the needle says the character \"lives next to the Semper Opera House.\" The model must know that the opera house is in Dresden (p. 3).\n- The authors argue that attention is good at finding repeated text. Without such cues, longer contexts overwhelm it, and that causes the drop (p. 1; p. 3; p. 7).\n- Their ablation supports this. Llama 3.3 70B, a closely related model, scores 98.5 at 32K when the question repeats the needle's keyword (\"Direct\"). Without the overlap it scores 56.2 (one-hop) or 25.9 (two-hop). They say the Direct result is \"consistent with prior findings in RULER\" (Table 6 and text, p. 8).\n\n**2. Different pass marks.** RULER uses one fixed 85.6% bar for all models (p. 6). NoLiMa scales the bar to each model's own short-context score, so a drop counts as a length problem rather than a task-difficulty problem (p. 5). For Llama 3.1 70B the two bars happen to be close (85.6 vs 80.3), so this explains little of the gap. Reason 1 does most of the work.\n\n**3. Different tasks and lengths.** RULER's score is an average over 13 tasks, measured from 4K to 128K (Table 3 caption, p. 7). NoLiMa measures one associative-retrieval task from 250 tokens to 32K (p. 5).\n\n## Inconsistencies in NoLiMa's citation of RULER\n- NoLiMa says RULER gives Llama 3.1 70B an effective length of **32K** (p. 6), but RULER's headline Table 3 says **64K** (p. 7). The only 32K for this model in RULER is in the aggregation-task subset (Table 15, p. 26). NoLiMa may have used a different version of the RULER paper.\n- In the same passage NoLiMa writes \"42.7% vs. 94.3% base score\" (p. 6). Its own Table 3 gives this model 43.2 at 32K and a base score of 94.5. The 42.7 belongs to Llama 3.3 70B (p. 5).\n\nFor comparison, NoLiMa says BABILong gives this model 16K (p. 6, footnote 5).\n\nPage numbers are the PDF page indices; in both papers they match the printed page numbers.",
+ "input": 229811,
+ "cache_write": 27363,
+ "cache_read": 202424,
+ "output": 4995,
+ "thinking": 912,
+ "usd": 0.35938479999999995,
+ "seconds": 71.2,
+ "turns": 12,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -name \"*.pdf\"; which pdftotext",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -iname \"*ruler*\" -o -iname \"*nolima*\"; which pdftotext",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/evaluation/benchmarks; mkdir -p /tmp/rn; pdftotext -layout \"RULER. What's the Real Context Size of Your Long-Context Language Models.pdf\" /tmp/rn/ruler.txt; pdftotext -layout \"NoLiMa. Long-Context Evaluation Beyond Literal Matc",
+  "Bash cd /tmp/rn; pdftotext -f 6 -l 7 -layout ruler.txt 2>/dev/null; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==6||p==7' ruler.txt | grep -n -i -B3 -A3 \"threshold\\|effective\\|Table 3\" | head -80; echo =====NOLIMA; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p<=2' nolima.txt | head -120",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | grep -v \"^p[0-9]*: *$\" | sed -n '1,400p' | grep -i -A2 -B2 \"literal\\|lexical\\|overlap\\|effective length\\|85%\\|16K\\|Llama 3.1 70B\\|attention\" | head -150",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==5||p==6' nolima.txt | sed -n '/4.3. Evaluation/,$p' | cut -c1-200 | head -130",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p>=25&&p<=27' ruler.txt | grep -i -A4 \"^ *Table\\|Llama3.1 (70B)\" | cut -c1-200; echo ====; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==7' ruler.txt | tail -5; echo ====; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | sed -n '/",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' ruler.txt | awk -F: '$1>=\"p24\" && $1<=\"p27\"' | grep -E \"Table 1[1-6]|Llama3.1 \\(70B\\)\" | cut -c1-120; echo; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | grep -n \"4.4.4\\|L ITERAL\\|Literal Match\" | head",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | grep -n -i \"ablation\\|literal match\\|distractor\" | sed -n '1,60p' | cut -c1-220",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | sed -n '485,500p;525,586p' | cut -c1-200",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' ruler.txt | grep -E \"^p(6|7|26): +[0-9]+ *$\""
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash cd /tmp/rn; pdftotext -f 6 -l 7 -layout ruler.txt 2>/dev/null; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==6||p==7' ruler.txt | grep -n -i -B3 -A3 \"threshold\\|effective\\|Table 3\" | head -80; echo =====NOLIMA; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p<=2' nolima.txt | head -120",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | grep -v \"^p[0-9]*: *$\" | sed -n '1,400p' | grep -i -A2 -B2 \"literal\\|lexical\\|overlap\\|effective length\\|85%\\|16K\\|Llama 3.1 70B\\|attention\" | head -150",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==5||p==6' nolima.txt | sed -n '/4.3. Evaluation/,$p' | cut -c1-200 | head -130",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p>=25&&p<=27' ruler.txt | grep -i -A4 \"^ *Table\\|Llama3.1 (70B)\" | cut -c1-200; echo ====; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==7' ruler.txt | tail -5; echo ====; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | sed -n '/",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' ruler.txt | awk -F: '$1>=\"p24\" && $1<=\"p27\"' | grep -E \"Table 1[1-6]|Llama3.1 \\(70B\\)\" | cut -c1-120; echo; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | grep -n \"4.4.4\\|L ITERAL\\|Literal Match\" | head",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | grep -n -i \"ablation\\|literal match\\|distractor\" | sed -n '1,60p' | cut -c1-220",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' nolima.txt | sed -n '485,500p;525,586p' | cut -c1-200",
+  "Bash cd /tmp/rn; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} {print \"p\"p\": \"$0}' ruler.txt | grep -E \"^p(6|7|26): +[0-9]+ *$\""
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.71,
+ "date": "2026-10-25 11:16"
+}
