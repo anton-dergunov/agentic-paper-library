@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R9",
+ "rep": 2,
+ "paper": "sftrl",
+ "form": "img2576",
+ "page": 4,
+ "status": "ok",
+ "answer": "Both values come from the \"RL Model Updates\" heatmap in Figure 2 on page 4.\n\n- **Math–Science cosine similarity:** −3.92e-04 (about −0.000392). This is in the off-diagonal cells where Math and Science meet. (p. 4)\n- **Logic update norm:** ‖ΔW‖ = 8.7e-02 (about 0.087). This is the diagonal Logic cell. (p. 4)\n\nAccording to the figure caption, the off-diagonal cells show cosine similarities and the diagonal cells show the L₂ norm of each task's update. RL updates have near-zero similarity, which the authors read as \"orthogonal and task-specific parameter adjustments.\" (p. 4)",
+ "input": 10469,
+ "cache_write": 4890,
+ "cache_read": 5577,
+ "output": 284,
+ "thinking": 45,
+ "usd": 0.0459234,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:49"
+}

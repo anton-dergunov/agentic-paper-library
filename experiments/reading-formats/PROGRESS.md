@@ -25,6 +25,7 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | B2 unseen papers | E1 in c0, pdf, txt, md on four papers published after the model's training cutoff (June 2026), all with arXiv HTML: PAIR (LinkedIn, arXiv 2610.30941, 22 Oct), SFT Conflicts, RL Coexists (4 Aug, theory and equations), Cross-Model KV Cache Transfer in LLM Families (4 Aug, a closed-form mapping, tables), GenRec at Netflix (10 Aug, industrial tables and plots). Six questions each (two tables, an equation, an appendix or setup detail, a figure-only value, an unanswerable trap), drafted by `draft.py` (one request per paper from the PDF, `results/drafts/`) and checked by hand against the PDF pages and with `inputs.py check`. Plus a txt condition in E4: does the naive text layer have the converter's errors? Chosen 24 Oct: DPO is answered from memory, and memory can hide what a form loses | done 25 Oct |
 | Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); the hand check is still to do |
 | C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
+| C2 small print and equations on unseen papers | E5 on PAIR, SFT Conflicts, KV transfer, GenRec pages chosen by the author for small print (R5–R9), in page, img1255, img2576, md and txt; E6, nine equation-structure questions (Q1–Q9) in pdf, txt, md | done 25 Oct |
 | D | E3 across papers: needs `copies.py` and agent runs in `run.py` (not written yet), and the pages of X3, X5, X6 checked | not started |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
 
@@ -96,16 +97,26 @@ Decisions for the next session, in order (1–3 done 25 Oct, below):
 - **The smallest form that answers is a 1,255 px image of the page**: 2,250 tokens against 3,900–5,100 for the one-page PDF. For a question about one known page, an agent that renders that page to an image pays the least.
 - **Image token counts are not stable.** The same 2,576 px image was counted as about 4,530 tokens in four requests and about 10,110 in two (R3 r1, R4 r2), the request otherwise identical; and its Qwen3-VL requests were never read from the cache, though the 1,255 px image's LitM requests were. Cost per image above the standard cap is therefore uncertain by about 2×; the 1,255 px image (about 2,250) and the one-page PDF did not vary.
 
+### Tier C2: small print and equation structure on the unseen papers (25 Oct 2026, $2.02; window 59% at the end)
+
+Asked because tier C's papers may be in the model's memory and its table's print is clean, and because LaTeX's value on harder equation questions was untested. The author chose the pages.
+
+- **Small print: every form read it** (R5–R7: PAIR Table 2's operations column, SFT Conflicts Table 4's superscripts on the 7B rows, KV transfer Table 4's Ministral 3B→8B shifts): page, 1,255 px image, 2,576 px image, txt and md all correct. With tier C, 6 small-print questions on 4 papers, none lost in any form.
+- **Text inside vector figures is in the text layer and not in the markdown.** R8 (GenRec Figure 3's bar labels: +0.115%, P = 3.1 × 10⁻¹⁰) and R9 (SFT Conflicts Figure 2's heatmap cells: −3.92e-04, 8.7e-02): page, both images and txt 3 of 3; md declined 3 of 3. The first questions in this experiment where the text layer beats the markdown: the converter keeps a figure as a picture file, so the numbers drawn as text inside it are lost to a reader of the markdown.
+- **Equation structure: PDF, TXT and MD all 9 of 9** (Q1–Q9: PAIR's positional attention, normalised fusion and Matryoshka sum; GenRec's verbaliser; SFT Conflicts' KL argmin over P* ∩ Π, the 1/G in the advantage's standard deviation, Lemma 4.3's double sum over Â·Â·⟨δS, δS⟩, the 2 exp(−c t² d) tail bound, g_SFT against g_RL). Read by hand: the TXT answers rebuild each formula as clean LaTeX from a text layer that scatters it over lines and interleaves the other column. The formulas here are all standard forms (softmax attention, a population standard deviation, a KL argmin), so the model may be completing them from what such formulas usually are, not reading them; a formula that breaks convention would tell the two apart. Not run.
+- **So far the markdown's LaTeX has bought no accuracy** over the raw text layer, on 16 equation questions over 7 papers.
+
 ## Generated
 
 <!-- report.py -->
-Requests: 348, $43.09; judge (latest grading of each question) $2.20; last five-hour utilisation seen: 48%.
+Requests: 420, $45.11; judge (latest grading of each question) $2.66; last five-hour utilisation seen: 59%.
 
 ```
 tier A: 38 of 38 first answers
 tier B: 102 of 102 first answers
 tier B2: 102 of 102 first answers
 tier C: 16 of 16 first answers
-reruns: 91; requests so far $43.09
+tier C2: 52 of 52 first answers
+reruns: 111; requests so far $45.11
 ```
 <!-- /report.py -->

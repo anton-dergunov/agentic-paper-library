@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q2",
+ "rep": 1,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "PAIR uses **normalized additive fusion** (Section 4.2, Eqs. 3–4, page 5):\n\n1. **Normalise each embedding first.** The profile embedding e_q and the history embedding e_H are each L2-normalised separately: ẽ_q = e_q / ‖e_q‖₂ and ẽ_H = e_H / ‖e_H‖₂ (Eq. 3, page 5).\n\n2. **Scale the history term with γ.** γ is a learnable scalar that multiplies only the normalised history embedding (γẽ_H). It controls how much behavioural history contributes (page 5).\n\n3. **Add the two terms.** The weighted history term is added to the normalised profile embedding: ẽ_q + γẽ_H (Eq. 4, page 5).\n\n4. **Normalise the sum last.** L2Norm is applied to that sum, giving e_q^final = L2Norm(ẽ_q + γẽ_H) (Eq. 4, page 5).\n\nCandidate embeddings are also L2-normalised before cosine retrieval (page 5). The paper explains why it normalises: adding the raw embeddings directly could cause scale mismatch between the towers. Normalising stops either tower from dominating the final representation because of differences in norm (page 5).\n\nFor context, e_H is the positional-attention weighted sum of the K most recently clicked profiles' precomputed embeddings (Eq. 5, page 5). The resulting e_q^final is what enters the retrieval score s(q, d) = cos(e_q^final, e_d)/τ (Eq. 1, page 4).",
+ "input": 35785,
+ "cache_write": 568,
+ "cache_read": 35215,
+ "output": 547,
+ "thinking": 17,
+ "usd": 0.022535,
+ "seconds": 7.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

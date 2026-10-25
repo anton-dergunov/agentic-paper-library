@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "txt",
+ "qid": "R6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "For the 7B model in Table 4 (page 7), **Naive Parallel-RL (sum)** shows:\n\n- **AIME2025:** 53.1%, a change of **−4.0** against the single-task baseline (Single-Task RL: 57.1%).\n- **GPQA:** 52.5%, a change of **−0.5** against the single-task baseline (Single-Task RL: 53.0%).\n\nThe table caption defines the superscripts as the accuracy change against the corresponding single-task baseline (page 7). Both changes match the gap between the Parallel-RL score and the Single-Task RL score in the same table.",
+ "input": 68843,
+ "cache_write": 593,
+ "cache_read": 68248,
+ "output": 371,
+ "thinking": 169,
+ "usd": 0.0258216,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-25 10:49"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q7",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "**Lemma 4.3 (Gradient Inner Product Decomposition)**\n\n$$\n\\mathcal{I}_{RL}(i,j) = \\mathbb{E}_{x,x'}\\left[\\frac{1}{G^2}\\sum_{k=1}^{G}\\sum_{l=1}^{G} \\hat{A}_{i,k}(x)\\,\\hat{A}_{j,l}(x')\\,\\big\\langle \\delta S_{i,k}(x),\\, \\delta S_{j,l}(x')\\big\\rangle\\right]\n$$\n\n(Eq. 7, p. 5)\n\n**Components**\n\n- **Normalising factor:** $1/G^2$, where G is the number of group-wise rollouts per input (p. 5).\n- **Sums:** A double sum, with k running from 1 to G over task i's rollouts and l running from 1 to G over task j's rollouts. The whole expression sits inside an expectation over x and x′ (p. 5). The appendix proof takes x ~ D_i and x′ ~ D_j (p. 15).\n- **Multipliers:** Each pair (k, l) contributes the product of two standardized advantages, $\\hat{A}_{i,k}(x)$ for task i and $\\hat{A}_{j,l}(x')$ for task j (p. 5).\n- **Inner product being multiplied:** $\\langle \\delta S_{i,k}(x), \\delta S_{j,l}(x')\\rangle$, the inner product of residual score functions, not of the raw score functions (p. 5).\n\n**Definitions used (p. 5)**\n\n- Score function: $S_{i,k}(x) = \\nabla_\\theta \\log \\pi_\\theta(y_k|x)$\n- Mean score: $\\bar{S}_i(x) = \\frac{1}{G}\\sum_{k=1}^{G} S_{i,k}(x)$\n- Residual score: $\\delta S_{i,k}(x) = S_{i,k}(x) - \\bar{S}_i(x)$\n- Standardized advantage: $\\hat{A}_{i,k}(x) = (r_{i,k} - \\mu_{r_i}(x))/\\sigma_{r_i}(x)$\n\n**Where it comes from**\n\nThe starting point is the raw form (Eq. 6, p. 5): the expected inner product of the two gradients $\\frac{1}{G}\\sum_k \\hat{A}_{i,k}S_{i,k}(x)$ and $\\frac{1}{G}\\sum_l \\hat{A}_{j,l}S_{j,l}(x')$.\n\nThe proof (Appendix C.1, p. 15) substitutes $S_{i,k} = \\bar{S}_i + \\delta S_{i,k}$. The term $\\bar{S}_i\\sum_k \\hat{A}_{i,k}$ then vanishes because of the zero-sum property of GRPO advantages, $\\sum_{k=1}^G \\hat{A}_{i,k}(x) = 0$ (Eq. 4, p. 5). Only the residual terms remain.\n\nThe paper interprets this as the advantage function removing the mean gradient direction, which leaves only intra-group residuals to interact (p. 5).",
+ "input": 122960,
+ "cache_write": 576,
+ "cache_read": 122382,
+ "output": 1212,
+ "thinking": 158,
+ "usd": 0.0533324,
+ "seconds": 21.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}

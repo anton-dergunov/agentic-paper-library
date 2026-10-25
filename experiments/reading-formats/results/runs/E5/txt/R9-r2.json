@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "txt",
+ "qid": "R9",
+ "rep": 2,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "In the RL heatmap of **Figure 2 (page 4)**:\n\n- **Cosine similarity between Math and Science updates: −3.92e-04** (the off-diagonal cells). (p. 4)\n- **L2 norm of the Logic update: 8.7e-02** (the diagonal cell). (p. 4)\n\nOn page 4, the off-diagonal cells show pairwise cosine similarity and the diagonal cells show the L2 norm of each task's update vector. The paper reports an average RL update L2 norm of about 3×10⁻² (p. 3). The four RL diagonal values (2.0e-02, 1.1e-02, 8.7e-02, 1.1e-02) average to about 3.2×10⁻², which agrees with that figure.",
+ "input": 68814,
+ "cache_write": 0,
+ "cache_read": 68812,
+ "output": 462,
+ "thinking": 212,
+ "usd": 0.0230104,
+ "seconds": 5.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:49"
+}

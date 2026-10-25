@@ -1,0 +1,24 @@
+{
+ "key": "ee4d0e6866fae2e9",
+ "usd": 0.024752,
+ "grades": {
+  "E6/txt/Q5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/md/Q5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/pdf/Q5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

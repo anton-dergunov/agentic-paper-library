@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R9",
+ "rep": 3,
+ "paper": "sftrl",
+ "form": "img2576",
+ "page": 4,
+ "status": "ok",
+ "answer": "In the RL Model Updates heatmap (Figure 2, right panel, page 4):\n\n- **Math–Science cosine similarity:** **−3.92e-04** (page 4). It's near zero, which fits the caption's point that RL updates are \"orthogonal and task-specific\" (page 4).\n- **Norm of the Logic update:** **‖ΔW‖ = 8.7e-02** (page 4). This is the diagonal entry for Logic, and the diagonal shows the L₂ norm of each task's update (page 4).",
+ "input": 10469,
+ "cache_write": 0,
+ "cache_read": 10467,
+ "output": 229,
+ "thinking": 55,
+ "usd": 0.0066814000000000005,
+ "seconds": 3.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:50"
+}

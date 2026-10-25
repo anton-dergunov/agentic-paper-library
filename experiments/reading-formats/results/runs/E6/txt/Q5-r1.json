@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "All of this is on **page 4** of the document, in Proposition 4.1 (Convergence to KL-Minimal Solution, attributed to Shenfeld et al., 2025).\n\n**Set the minimisation is taken over:** P* ∩ Π. This is the intersection of the optimal policies with the feasible policies.\n- Π ⊆ Δ(𝒴) is \"a convex family of feasible policies.\"\n- 𝒴 is \"a finite set of outputs.\"\n\n**What is minimised:** D_KL(π ‖ π₀). The candidate policy π is the first argument, and the initial policy π₀ is the second. The full statement is:\n\n  π_updated = arg min_{π ∈ P* ∩ Π} D_KL(π ‖ π₀)  (Eq. 2)\n\nThe paper puts it in words: the procedure \"selects the optimal policy closest in KL-divergence to the initialization π₀.\" Later on the same page, it keeps this argument order when it says RL \"implicitly minimizes D_KL(π* ‖ π₀).\"\n\n**How the set of optimal policies is defined:** P* = {q : E_q[R] = 1}. Here R : 𝒴 → {0, 1} is a binary reward function. P* is therefore the set of policies whose expected reward is exactly 1, meaning they put all their probability on outputs with reward 1.\n\nThe proposition says policy gradient converges to this solution \"under suitable regularity conditions.\" The document does not say what those conditions are.",
+ "input": 68820,
+ "cache_write": 570,
+ "cache_read": 68248,
+ "output": 694,
+ "thinking": 206,
+ "usd": 0.032097600000000004,
+ "seconds": 8.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:50"
+}

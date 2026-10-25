@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "# PAIR's History Attention (Section 4.3, Equation 5, p. 5)\n\n## Attention weight\n\n$$\\alpha_{i}=\\frac{\\exp\\!\\left(\\mathbf{w}^{T}(\\mathbf{e}_{h_{i}}+\\mathrm{PE}(i))\\right)}{\\sum_{j=1}^{K}\\exp\\!\\left(\\mathbf{w}^{T}(\\mathbf{e}_{h_{j}}+\\mathrm{PE}(j))\\right)}$$\n\n## History embedding\n\n$$\\mathbf{e}_{\\mathcal{H}}=\\sum_{i=1}^{K}\\alpha_{i}\\mathbf{e}_{h_{i}}$$\n\n## Terms (p. 5)\n\n- **Inputs:** $\\mathcal{H}_{q}=\\{h_{1},\\ldots,h_{K}\\}$ are the $K$ most recently clicked profiles. Each one has a precomputed embedding $\\mathbf{e}_{h_{i}}=f_{\\theta}(x_{h_{i}})$ from the same encoder.\n- **$\\mathrm{PE}(i)$:** a learned positional encoding for position $i$. The most recent click is $i=1$.\n- **$\\mathbf{w}$:** a learnable attention vector.\n- Both $\\mathrm{PE}$ and $\\mathbf{w}$ are trained end-to-end with the PAIR objective.\n\n## Where the positional encoding enters\n\nThe positional encoding appears only in the attention logits. It is added to each history embedding before the dot product with $\\mathbf{w}$, so $\\mathrm{PE}(i)$ affects how much weight each click gets. The weighted sum that forms $\\mathbf{e}_{\\mathcal{H}}$ uses the original $\\mathbf{e}_{h_{i}}$, without $\\mathrm{PE}$ (Eq. 5, p. 5). The paper's reason is that recent clicks often better reflect current user intent (p. 5).\n\n## Related points\n\n- **Query-agnostic:** the attention does not use the query profile. It learns a global weighting over the history window based on recency and item importance. This lets the history vector be refreshed without running the query profile tower (pp. 5, 7).\n- **Cost:** with $K=10$, updating $\\mathbf{e}_{\\mathcal{H}}$ takes $O(Kd)$ vector operations and no LLM re-inference (p. 5; Table 2, p. 7).\n- **Fusion with the profile:** $\\mathbf{e}_{\\mathcal{H}}$ is L2-normalized and combined with the normalized profile embedding:\n  $$\\mathbf{e}_{q}^{\\mathrm{final}}=\\mathrm{L2Norm}(\\tilde{\\mathbf{e}}_{q}+\\gamma\\tilde{\\mathbf{e}}_{\\mathcal{H}})$$\n  Here $\\gamma$ is a learnable scalar (Eqs. 3–4, p. 5).\n- **Results:** this positional-attention variant (P-ATT) reached the best MAR@100 of 0.450. Plain attention without positional encoding scored 0.431 (Table 2, p. 7).",
+ "input": 23262,
+ "cache_write": 574,
+ "cache_read": 22686,
+ "output": 1187,
+ "thinking": 103,
+ "usd": 0.0328772,
+ "seconds": 10.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

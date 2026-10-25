@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q8",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "The paper states the bound on **page 5**, in Section 4.2 under \"Mechanism of Policy Source\":\n\n**P(|⟨δS_i, δS_j⟩| ≥ t) ≤ 2 exp(−c t² d)**\n\n**Dependence on dimension:** The paper says the probability that the inner product deviates from zero \"decays exponentially with the dimension d\" (p. 5). Because d is the dimension of the LLM's parameter space ℝ^d, which is very large, two tasks' residual score vectors are very likely to be nearly orthogonal.\n\n**Setup and justification (p. 5):**\n- δS_i and δS_j are the residual score functions for tasks i and j. Each residual is a rollout's score function minus its group mean, as defined in Lemma 4.3 on p. 5.\n- The paper argues that the data distributions D_i and D_j are independent. So the residuals, which come from independent sampling, are \"statistically independent zero-mean vectors.\"\n- It attributes the bound to the Concentration of Measure phenomenon and cites Vershynin (2018). It says this phenomenon \"dictates that the independent, zero-mean and sparse vectors are approximately orthogonal with high probability.\"\n- It contrasts this with SFT. SFT is off-policy and needs dense, high-magnitude updates that overlap across tasks, which produces a large interference term ⟨S_i*(x), S_j*(x′)⟩.\n\n**What the document does not provide:** The paper does not define the constant c or the threshold t. It also does not prove this tail bound; it only cites it. The proofs in Appendix C (pp. 15–17) cover Lemma 4.3 and Theorem 4.5, not this inequality.",
+ "input": 68809,
+ "cache_write": 559,
+ "cache_read": 68248,
+ "output": 724,
+ "thinking": 156,
+ "usd": 0.0326096,
+ "seconds": 9.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:51"
+}

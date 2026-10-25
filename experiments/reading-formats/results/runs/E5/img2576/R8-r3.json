@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R8",
+ "rep": 3,
+ "paper": "genrec",
+ "form": "img2576",
+ "page": 6,
+ "status": "ok",
+ "answer": "On the **short-term homepage engagement metric**, GenRec shows an **average treatment effect of +0.115%** relative to the production model, with a **p-value of 3.1 × 10⁻¹⁰**. The figure marks this as **significant**. (Figure 3, left panel)\n\nThe production model is the reference, so its effect is 0. The A/B test used about 10% of Netflix traffic for 4 weeks. (Section 5.1 and Figure 3)\n\n**Page number:** The page has no printed page number; only the running header \"Li et al.\" appears. All of this comes from the single page you provided, which contains Sections 4.7–5.2 and Figure 3.",
+ "input": 4884,
+ "cache_write": 0,
+ "cache_read": 4882,
+ "output": 325,
+ "thinking": 109,
+ "usd": 0.0074844,
+ "seconds": 4.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "The document doesn't give either specific value. Figure 2 contains the heatmap, but only as an image. The text and caption describe it in summary terms and don't list individual cells such as Math–Science similarity or the Logic norm (p. 3).\n\nThe closest information the document does provide:\n\n- **Cosine similarity between RL tasks:** The pairwise cosine similarity of ΔW across RL tasks is \"negligible, averaging around 10⁻⁵\" (p. 3). The caption says RL updates show \"near-zero similarity\" (p. 3).\n- **Norm of RL updates:** The average L₂ norm of ΔW is \"approximately 3×10⁻²\" for RL, compared with 7.4 for SFT (p. 3). The diagonal of the heatmap shows the L₂ norm of each task's update (p. 3), but the Logic value isn't given in the text.\n\nFor the exact Math–Science and Logic values, you would need to read them from the Figure 2 image itself.",
+ "input": 89369,
+ "cache_write": 564,
+ "cache_read": 88803,
+ "output": 417,
+ "thinking": 98,
+ "usd": 0.030620600000000005,
+ "seconds": 15.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:49"
+}

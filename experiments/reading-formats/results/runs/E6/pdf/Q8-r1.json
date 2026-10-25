@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q8",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "The paper states this tail bound on **page 5** (Section 4.2, \"Mechanism of Policy Source\"):\n\n**P(|⟨δS_i, δS_j⟩| ≥ t) ≤ 2 exp(−c t² d)**\n\n**Dependence on dimension:** The probability that the inner product deviates from zero by at least t **decays exponentially with the parameter dimension d**. So in the very high-dimensional parameter space of an LLM (ℝ^d), the residual score vectors from two different tasks are approximately orthogonal with high probability (p. 5).\n\n**Conditions the paper gives (p. 5):**\n- δS_i and δS_j are the residual score functions (a rollout's score minus the group-mean score, defined in Lemma 4.3).\n- Because the task data distributions D_i and D_j are independent, these residuals come from independent sampling, so they are treated as statistically independent, zero-mean vectors.\n- The vectors are also described as small and sparse.\n- The paper attributes the bound to the Concentration of Measure phenomenon and cites Vershynin (2018).\n\n**What the paper does not provide:** It does not define the constant c, does not prove this bound, and does not test it numerically. It is used as a qualitative argument. The related results the paper does derive formally are different bounds:\n- The expected-interference bound |I_RL(i, j)| ≤ V_i · V_j (Theorem 4.5, p. 6; proof in Appendix C.2, pp. 16–17).\n- A cosine-similarity bound in Appendix C.4 (pp. 18–21).",
+ "input": 122944,
+ "cache_write": 560,
+ "cache_read": 122382,
+ "output": 671,
+ "thinking": 146,
+ "usd": 0.0423844,
+ "seconds": 8.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-25 10:51"
+}

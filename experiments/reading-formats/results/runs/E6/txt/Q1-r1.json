@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "PAIR computes the weights with Equation 5, in Section 4.3 (page 5). Each of the K most recently clicked profiles hᵢ has a precomputed embedding e_{hᵢ} = f_θ(x_{hᵢ}), made by the same encoder used for profiles (page 5).\n\n**Attention weight**\n\n$$\\alpha_i = \\frac{\\exp\\!\\big(\\mathbf{w}^T(\\mathbf{e}_{h_i} + \\mathrm{PE}(i))\\big)}{\\sum_{j=1}^{K}\\exp\\!\\big(\\mathbf{w}^T(\\mathbf{e}_{h_j} + \\mathrm{PE}(j))\\big)}$$\n\n**History embedding**\n\n$$\\mathbf{e}_{\\mathcal{H}} = \\sum_{i=1}^{K} \\alpha_i\\, \\mathbf{e}_{h_i}$$\n\n(page 5)\n\n**Where the positional encoding enters**\n\nPE(i) is added to the click embedding e_{hᵢ} only inside the attention score w^T(e_{hᵢ} + PE(i)), before the softmax. The weighted sum that produces e_H uses the plain embeddings e_{hᵢ}, without PE. So position changes how much each click counts, but it is not added to the history vector itself. This follows from the form of Equation 5 (page 5).\n\n**Details from the document**\n\n- PE(i) is a learned positional encoding, and the most recent click is position i = 1 (page 5).\n- w is a learnable attention vector. PE and w are trained end-to-end with the PAIR objective (page 5).\n- The attention does not depend on the query. It learns one global weighting for recency and item importance, so the history vector can be refreshed without the query profile tower (pages 5 and 7).\n- K = 10, and updating e_H costs O(Kd) vector operations with no LLM re-inference (page 5).\n- Table 2 lists P-ATT's operations as \"Positional encoding + dot product + softmax + weighted sum.\" It reaches MAR@100 of 0.450, compared with 0.431 for attention without positional encoding (page 7).\n- e_H is then L2-normalized and combined with the normalized profile embedding: e_q^final = L2Norm(ẽ_q + γ·ẽ_H), where γ is a learnable scalar (Equations 3–4, page 5).\n\nThe equation is garbled in the extracted text, but the structure above can be recovered from it and agrees with the surrounding description.",
+ "input": 23591,
+ "cache_write": 574,
+ "cache_read": 23015,
+ "output": 1338,
+ "thinking": 506,
+ "usd": 0.035963,
+ "seconds": 15.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

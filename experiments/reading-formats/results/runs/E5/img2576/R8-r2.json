@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img2576",
+ "qid": "R8",
+ "rep": 2,
+ "paper": "genrec",
+ "form": "img2576",
+ "page": 6,
+ "status": "ok",
+ "answer": "On the **short-term homepage engagement metric**, GenRec shows an **average treatment effect of +0.115%** relative to the production model, with a **p-value of 3.1 × 10⁻¹⁰**, which Figure 3 marks as statistically significant. The production model serves as the reference at 0.\n\n**Page number:** The provided page has no printed page number. It shows only the running header \"Li et al.\" Every fact here comes from that single page, in Figure 3 (\"Online metrics of GenRec vs. production model\") and Section 5.1.",
+ "input": 4884,
+ "cache_write": 0,
+ "cache_read": 4882,
+ "output": 290,
+ "thinking": 114,
+ "usd": 0.0067843999999999995,
+ "seconds": 4.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "Proposition 4.1 is restated from Shenfeld et al. (2025) on **p. 4**. It says that, under suitable regularity conditions, policy gradient converges to\n\n$$\\pi^{updated}=\\arg\\min_{\\pi\\in\\mathcal{P}^{*}\\cap\\Pi} D_{KL}(\\pi\\,\\|\\,\\pi_{0})$$\n\n- **Set minimised over:** $\\mathcal{P}^{*}\\cap\\Pi$. This is the intersection of the optimal policies with the feasible policies. $\\Pi\\subseteq\\Delta(\\mathcal{Y})$ is a convex family of feasible policies over a finite output set $\\mathcal{Y}$ (p. 4).\n- **What is minimised:** the KL divergence $D_{KL}(\\pi\\,\\|\\,\\pi_{0})$. The first argument is the candidate policy $\\pi$, and the second is the initial policy $\\pi_0$. The paper describes the result as selecting \"the optimal policy closest in KL-divergence to the initialization $\\pi_{0}$\" (p. 4).\n- **Set of optimal policies:** $\\mathcal{P}^{*}=\\{q:\\mathbb{E}_{q}[R]=1\\}$. Here $R:\\mathcal{Y}\\to\\{0,1\\}$ is a binary reward function (p. 4). So $\\mathcal{P}^{*}$ contains the policies whose expected reward is 1.",
+ "input": 89375,
+ "cache_write": 570,
+ "cache_read": 88803,
+ "output": 667,
+ "thinking": 179,
+ "usd": 0.0356686,
+ "seconds": 7.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:50"
+}

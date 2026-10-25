@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "The standardised GRPO advantage is defined in **Definition 4.2 (GRPO Gradient)** on p. 5.\n\n**Setup (p. 5):** For an input $x$ from task $i$, the model generates $G$ group-wise rollouts $\\{y_k\\}_{k=1}^{G}$. The reward for the $k$-th sample is $r_{i,k}(x)$.\n\n**Group mean (p. 5):**\n$$\\mu_{r_i}(x) = \\frac{1}{G}\\sum_{k=1}^{G} r_{i,k}(x)$$\n\n**Group standard deviation (p. 5):**\n$$\\sigma_{r_i}(x) = \\sqrt{\\frac{1}{G}\\sum_{k=1}^{G}\\big(r_{i,k}(x) - \\mu_{r_i}(x)\\big)^2}$$\n\nThe normalisation inside the square root is $\\frac{1}{G}$, not $\\frac{1}{G-1}$. This is the population (biased) standard deviation over the $G$ rollouts, not the sample (Bessel-corrected) version.\n\n**Standardised advantage (p. 5):**\n$$\\hat{A}_{i,k}(x) = \\frac{r_{i,k} - \\mu_{r_i}(x)}{\\sigma_{r_i}(x)}$$\n\n**Properties of this definition:**\n- **Zero-sum (Eq. 4, p. 5):** $\\sum_{k=1}^{G}\\hat{A}_{i,k}(x) = 0$. Lemma 4.3 uses this to cancel the mean score direction $\\bar{S}_i(x)$ (p. 5).\n- **Unit mean square (Appendix C.2.2, p. 16):** $\\frac{1}{G}\\sum_{k=1}^{G}\\hat{A}_{i,k}^2 = 1$, so $\\sum_{k=1}^{G}\\hat{A}_{i,k}^2 = G$. This follows from the $\\frac{1}{G}$ normalisation in $\\sigma$, and the proof of the RL bound $|\\mathcal{I}_{\\text{RL}}(i,j)| \\le V_i \\cdot V_j$ depends on it.\n\n**Experiments:** The paper uses $G = 16$ rollouts per prompt (Appendix A.2, p. 13).",
+ "input": 89369,
+ "cache_write": 564,
+ "cache_read": 88803,
+ "output": 872,
+ "thinking": 90,
+ "usd": 0.03972060000000001,
+ "seconds": 7.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}

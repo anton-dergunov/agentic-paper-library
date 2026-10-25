@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R8",
+ "rep": 2,
+ "paper": "genrec",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't report an average treatment effect or p-value for a short-term homepage engagement metric.** It never names a \"homepage engagement\" metric, and it gives no p-values for any online metric.\n\nThe paper says this about the online A/B test:\n\n- **Setup:** It ran on about 10% of Netflix traffic for 4 weeks, on key batch-compute surfaces (p. 6).\n- **Short- and long-term metrics:** Under a low-data, low-signals configuration, the Phase-2 GenRec model showed \"statistically significant improvement over the production baseline on both short-term and long-term online metrics,\" with a pointer to Figure 3 (p. 6).\n- **Only number given:** There was a \"+0.006% relative improvement on our core online metric,\" described as \"statistically meaningful at Netflix scale\" (p. 6). The paper doesn't say whether this core metric is short-term, long-term, or homepage-related.\n\nFigure 3 (\"Online metrics of GenRec vs. production model,\" p. 6) may contain per-metric results. However, it appears only as an image here, and its values aren't in the text, so I can't read effect sizes or p-values from it.",
+ "input": 22173,
+ "cache_write": 0,
+ "cache_read": 22171,
+ "output": 484,
+ "thinking": 104,
+ "usd": 0.014122199999999998,
+ "seconds": 6.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

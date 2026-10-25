@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q8",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "The paper states the bound in the \"Mechanism of Policy Source\" discussion of Section 4.2 (p. 5):\n\n$$\\mathbb{P}\\left(|\\langle\\delta S_{i},\\delta S_{j}\\rangle|\\geq t\\right)\\leq 2\\exp(-ct^{2}d)$$\n\n**How it depends on dimension:** The probability that the inner product deviates from zero by at least *t* decays exponentially with the parameter-space dimension *d* (p. 5). Because LLM parameter spaces are very high-dimensional, the residual score vectors of different tasks are approximately orthogonal with high probability.\n\n**Assumptions behind it (p. 5):**\n- The residuals δS_i and δS_j come from independent sampling processes, because the data distributions 𝒟_i and 𝒟_j of the two tasks are independent.\n- This makes them statistically independent, zero-mean vectors. The paper also describes them as sparse and small.\n- The bound is attributed to the Concentration of Measure phenomenon in ℝ^d, citing Vershynin (2018).\n\n**What the paper leaves out:**\n- It does not define the constant *c* or give a derivation of this bound. It is stated as part of a qualitative argument (p. 5).\n- The formal result is a separate one. Theorem 4.5 bounds the expected gradient interference by |𝓘_RL(i,j)| ≤ V_i·V_j, and that bound does not depend on *d* (p. 6).",
+ "input": 89364,
+ "cache_write": 559,
+ "cache_read": 88803,
+ "output": 824,
+ "thinking": 331,
+ "usd": 0.03872060000000001,
+ "seconds": 9.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}

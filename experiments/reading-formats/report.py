@@ -118,7 +118,9 @@ def main():
             (seen, "E1", run.E1_ALL, "E1: single paper, format only"),
             (unseen, "E1", run.E1_CORE, "E1, tier B2: papers published after the training cutoff"),
             (recs, "E4", ("md-old", "md", "pdf", "txt"), "E4: conversion fixes"),
-            (recs, "E5", ("page", "img1255", "img2576", "md"), "E5: small print")):
+            (seen, "E5", ("page", "img1255", "img2576", "md"), "E5: small print"),
+            (unseen, "E5", ("page", "img1255", "img2576", "md", "txt"), "E5, tier C2: small print on the unseen papers"),
+            (recs, "E6", ("pdf", "txt", "md"), "E6: equation structure")):
         if any(r["exp"] == exp for r in rs):
             parts += ["## " + title, score_summary(rs, grades, exp, conds), scores_grid(rs, grades, exp, conds),
                       "Cost", costs(rs, exp, conds)]

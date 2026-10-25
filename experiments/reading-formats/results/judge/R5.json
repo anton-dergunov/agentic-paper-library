@@ -1,0 +1,36 @@
+{
+ "key": "5b2b3dfa9c11ba8b",
+ "usd": 0.0252,
+ "grades": {
+  "E5/img1255/R5-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img2576/R5-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/txt/R5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/page/R5-r1": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 7."
+  },
+  "E5/md/R5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

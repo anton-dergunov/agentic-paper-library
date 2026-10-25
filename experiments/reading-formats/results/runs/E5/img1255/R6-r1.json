@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img1255",
+ "qid": "R6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "img1255",
+ "page": 7,
+ "status": "ok",
+ "answer": "For **DeepSeek-R1-Distill-Qwen-7B**, **Naive Parallel-RL (sum)** shows these changes against the single-task baseline in Table 4 (page 7):\n\n- **AIME2025:** **−4.0** (accuracy 53.1%)\n- **GPQA:** **−0.5** (accuracy 52.5%)\n\nThese match the 7B Single-Task RL scores in the same table: 57.1% on AIME2025 and 53.0% on GPQA (page 7).",
+ "input": 2417,
+ "cache_write": 2415,
+ "cache_read": 0,
+ "output": 338,
+ "thinking": 169,
+ "usd": 0.026088,
+ "seconds": 6.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-25 10:49"
+}

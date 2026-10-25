@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q4",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "GenRec's verbalizer **V** takes three arguments and produces one text sequence:\n\n**x = V(H, {Mᵢ}ᵢ∈C, τ)** — Equation (1), page 5\n\nThe paper says the verbalizer \"maps the interaction history, the context, and the item metadata into a single text sequence\" (page 5). The arguments are defined in the Problem Setting section (page 3):\n\n1. **H**: the user's interaction history before time *t* (page 3).\n2. **{Mᵢ}ᵢ∈C**: the item metadata. Each item *i* in the catalog *C* has its own metadata Mᵢ, such as title name, genre, synopsis and release date (page 3).\n3. **τ**: the context, drawn from the context space *X*, which covers device, surface, locale, time of day and similar signals (page 3).\n\n**How the item metadata is indexed:** It is indexed by item. The subscript *i* picks out one item's metadata, and the set runs over every item *i* in the catalog *C* (pages 3 and 5). The catalog includes movies, shows, games, live events, podcasts and so on (page 3).\n\nNote: The PDF has no printed page numbers. I counted pages from the start of the document, using the alternating running headers as page breaks.",
+ "input": 23259,
+ "cache_write": 558,
+ "cache_read": 22699,
+ "output": 791,
+ "thinking": 374,
+ "usd": 0.0248318,
+ "seconds": 10.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q4",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "The verbalizer V takes **three arguments** and turns them into one text sequence (Equation 1, page 5):\n\n**x = V(H, {Mᵢ}ᵢ∈C, τ)**\n\n1. **H, the interaction history.** This is the user's interaction history before the request time t (page 3).\n2. **{Mᵢ}ᵢ∈C, the item metadata.** This is the metadata for every item in the catalog (page 5).\n3. **τ, the context.** This is an element of X, the space of contexts such as device, surface, locale and time of day (page 3).\n\n**How the item metadata is indexed:** Each item i in the catalog C has its own metadata Mᵢ, such as title name, genre, synopsis and release date (page 3). The verbalizer receives the whole set {Mᵢ}, with i running over every item in C (page 5). C is the full catalog of items, including movies, shows, games, live events and podcasts (page 3).\n\nThe paper describes this step as mapping \"the interaction history, the context, and the item metadata into a single text sequence\" (page 5). Note that the order in the formula (history, metadata, context) differs from the order in that sentence. The resulting x is then encoded by the LLM into a pooled representation h used for catalog-aware scoring (page 5).",
+ "input": 35151,
+ "cache_write": 559,
+ "cache_read": 34590,
+ "output": 532,
+ "thinking": 113,
+ "usd": 0.022038,
+ "seconds": 7.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

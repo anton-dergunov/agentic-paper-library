@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "PAIR's Matryoshka objective is **a plain, unweighted sum of the PAIR loss computed at four prefix dimensions: 200, 256, 512 and 1024.**\n\n**Formulation (page 5)**\n\nThe paper adopts Matryoshka loss and optimizes PAIR jointly across multiple prefix dimensions:\n\n  L = Σ_{d∈D} L_PAIR^(d), where D = {200, 256, 512, 1024} (Equation 6)\n\nHere L_PAIR^(d) is the PAIR loss computed using only the first d embedding dimensions (page 5).\n\n- **Base loss:** L_PAIR is the multi-negative objective in Equation 2 (page 5). It is a softmax over one clicked candidate and K negatives, scored by temperature-scaled cosine similarity (Equation 1, page 4).\n\n**Dimensions (page 5)**\n\n- **200:** included to approximate the storage footprint of the production 171-dimensional embedding.\n- **256, 512 and 1024:** represent progressively higher-quality serving configurations.\n\n**Weighting**\n\nEquation 6 has no weighting coefficients, so each dimension's loss contributes equally, with an implicit weight of 1 (page 5). The paper does not discuss alternative weighting schemes or averaging.\n\n**Purpose**\n\n- At serving time, embeddings can be truncated to the target dimension without extra computation or retraining. One model can therefore serve multiple surfaces (pages 5–6).\n- All Table 3 variants come from a single PAIR model trained with this joint Matryoshka loss (page 8).",
+ "input": 23580,
+ "cache_write": 563,
+ "cache_read": 23015,
+ "output": 1159,
+ "thinking": 626,
+ "usd": 0.032295000000000004,
+ "seconds": 11.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:49"
+}

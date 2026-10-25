@@ -1,0 +1,24 @@
+{
+ "key": "cc068fda63015785",
+ "usd": 0.029628,
+ "grades": {
+  "E6/md/Q6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/txt/Q6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/pdf/Q6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

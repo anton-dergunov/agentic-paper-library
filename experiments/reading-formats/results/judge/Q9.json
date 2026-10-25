@@ -1,0 +1,24 @@
+{
+ "key": "972760bedecf69d1",
+ "usd": 0.030935999999999998,
+ "grades": {
+  "E6/pdf/Q9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/txt/Q9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/md/Q9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "The paper defines the two expected gradients in Eq. (1) (page 4):\n\n- **SFT:** g_SFT = E_{x∼D, y∼π_expert} [ ∇_θ log π_θ(y|x) ]\n- **RL:** g_RL = E_{x∼D, y∼π_θ} [ A(x, y) ∇_θ log π_θ(y|x) ]\n\nHere π_θ is the policy parameterized by θ, and π_expert is the supervision distribution (page 3).\n\n## Where they differ\n\nThe paper names \"two fundamental distinctions\" (page 4):\n\n1. **Policy source (where y is sampled from).**\n   - SFT is *off-policy*: y ∼ π_expert, the fixed expert (ground-truth) distribution.\n   - RL is *on-policy*: y ∼ π_θ, the model's own current policy.\n\n2. **Advantage (or reward) function.**\n   - The RL gradient multiplies the log-likelihood gradient by a scalar weighting term A(x, y).\n   - The SFT gradient has no such weight.\n\nEverything else is the same in both: the input distribution x ∼ D and the score term ∇_θ log π_θ(y|x). The paper later calls this term the score function S (page 5).\n\n## Concrete RL form used in the analysis\n\nFor its analysis the paper uses GRPO (Definition 4.2, page 5). The empirical RL gradient for an input x from task i, with G rollouts, is:\n\ng_i(x) = (1/G) Σ_{k=1}^{G} Â_{i,k}(x) ∇_θ log π_θ(y_k|x)\n\nThe standardized advantage is Â_{i,k}(x) = (r_{i,k} − μ_{r_i}(x)) / σ_{r_i}(x), where μ and σ are the mean and standard deviation of rewards within the group. These advantages sum to zero across the group (Eq. 4, page 5).\n\nSection 4 builds its analysis on these same two differences (page 4):\n- **Advantage weighting** removes the shared mean gradient direction (Lemma 4.3, page 5).\n- **On-policy sampling** keeps the remaining within-group residuals small (pages 5–6).",
+ "input": 68799,
+ "cache_write": 549,
+ "cache_read": 68248,
+ "output": 787,
+ "thinking": 53,
+ "usd": 0.0337896,
+ "seconds": 8.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-25 10:51"
+}

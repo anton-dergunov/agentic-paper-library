@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q2",
+ "rep": 1,
+ "paper": "pair",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "# How PAIR Builds the Final Query Representation\n\nPAIR uses **normalised additive fusion** (Section 4.2, p. 5). There are three steps:\n\n1. **Normalise each embedding separately (Eq. 3, p. 5).** The profile embedding e_q is L2-normalised to ẽ_q = e_q / ‖e_q‖₂. The history embedding e_H is L2-normalised to ẽ_H = e_H / ‖e_H‖₂.\n2. **Scale the history term and add (Eq. 4, p. 5).** The scalar γ multiplies the normalised history embedding ẽ_H. It does not multiply the profile term. The sum is ẽ_q + γ·ẽ_H. γ is a learnable scalar that \"controls the contribution of behavioral history\" (p. 5).\n3. **Normalise the sum last (Eq. 4, p. 5).** The final query representation is e_q^final = L2Norm(ẽ_q + γ·ẽ_H).\n\n## Why this design\n\n- **Avoiding scale mismatch:** Adding the raw embeddings directly could cause a scale mismatch between towers. Normalising first stops either tower from dominating the result because of norm differences (p. 5).\n- **Candidate side:** Candidate embeddings are also L2-normalised before cosine retrieval (p. 5). The retrieval score is cos(e_q^final, e_d)/τ (Eq. 1, p. 4).\n- **Source of e_H:** The history embedding is a positional-attention-weighted sum of precomputed embeddings for the K most recently clicked profiles (Eq. 5, p. 5).\n- **Cheap updates:** The fusion is additive, so profile embeddings can be computed offline. When a user's history changes, only lightweight vector operations are needed, with no need to re-encode the profile through the LLM (p. 5; Figure 1 caption, p. 6).",
+ "input": 23584,
+ "cache_write": 567,
+ "cache_read": 23015,
+ "output": 1023,
+ "thinking": 383,
+ "usd": 0.029607,
+ "seconds": 11.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

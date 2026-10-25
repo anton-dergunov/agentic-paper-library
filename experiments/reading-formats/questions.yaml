@@ -227,6 +227,55 @@ questions:
 - {id: R4, exp: E5, paper: litm, kind: figure, page: 7,
    question: 'In Lost in the Middle''s Figure 7, with 140 pairs, what accuracy does LongChat-13B (16K) reach with the key at the 70th position?',
    gold: 'About 35%.', tolerance: '32–40%'}
+# Tier C2: small print on the unseen papers, chosen by the author 25 Oct. R8 and R9 are
+# printed inside vector figures: in the PDF's text layer, not in the markdown.
+- {id: R5, exp: E5, paper: pair, kind: small-print, page: 7,
+   question: 'In PAIR''s history-aggregation comparison table, what operations does GeM pooling use, and what update cost and operations does P-ATT have?',
+   gold: 'GeM pooling: power mean; P-ATT: update cost O(Kd), positional encoding + dot product + softmax + weighted sum (Table 2).'}
+- {id: R6, exp: E5, paper: sftrl, kind: small-print, page: 7,
+   question: 'In the main results table, for DeepSeek-R1-Distill-Qwen-7B, what accuracy changes against the single-task baseline does Naive Parallel-RL (sum) show on AIME2025 and on GPQA?',
+   gold: '−4.0 on AIME2025 (53.1) and −0.5 on GPQA (52.5) (Table 4, the superscripts).'}
+- {id: R7, exp: E5, paper: kvxfer, kind: small-print, page: 8,
+   question: 'When ridge is replaced by an MLP, what changes in V-concentration and in attention-output cosine does Ministral 3B→8B show, and what is its ridge R²_V?',
+   gold: 'ΔV-conc −0.08, Δcosine +0.07; ridge R²_V 0.59 (Table 4).'}
+- {id: R8, exp: E5, paper: genrec, kind: figure-text, page: 6,
+   question: 'In the online A/B test, what average treatment effect and p-value does GenRec show on the short-term homepage engagement metric?',
+   gold: '+0.115%, P = 3.1 × 10⁻¹⁰ (significant) (Figure 3, left; the prose gives only the long-term +0.006%).'}
+- {id: R9, exp: E5, paper: sftrl, kind: figure-text, page: 4,
+   question: 'In the heatmap of RL model updates, what is the cosine similarity between the Math and Science updates, and what is the norm of the Logic update?',
+   gold: '−3.92e-04 (cosine, Math–Science) and ‖ΔW‖ = 8.7e-02 (Logic) (Figure 2, right).'}
+
+# ---- E6: equation structure (unseen papers; chosen by the author 25 Oct) ----
+# Each answer depends on the layout of a formula: what is inside which sum, fraction,
+# subscript or square root. The PDF's text layer scatters these across lines and columns;
+# the markdown has arXiv's LaTeX.
+- {id: Q1, exp: E6, paper: pair, kind: equation, page: 5,
+   question: 'How does PAIR compute the attention weight α_i over the K recently clicked profiles, and the history embedding from those weights? Write both, and say where the positional encoding enters.',
+   gold: 'α_i = exp(wᵀ(e_{h_i} + PE(i))) / Σ_{j=1..K} exp(wᵀ(e_{h_j} + PE(j))); e_H = Σ_{i=1..K} α_i e_{h_i}. PE(i) is added to the profile embedding inside the dot product with the learnable vector w; i = 1 is the most recent click (Eq. 5).'}
+- {id: Q2, exp: E6, paper: pair, kind: equation, page: 5,
+   question: 'How are the profile and history embeddings combined into the final query representation? Say what is normalised, which term the scalar γ multiplies, and what is applied last.',
+   gold: 'ẽ_q = e_q/‖e_q‖₂ and ẽ_H = e_H/‖e_H‖₂ (each L2-normalised first); e_q^final = L2Norm(ẽ_q + γ ẽ_H): the learnable scalar γ scales only the normalised history embedding, and the sum is L2-normalised again (Eqs. 3–4).'}
+- {id: Q3, exp: E6, paper: pair, kind: equation, page: 5,
+   question: 'How is the Matryoshka objective formed from the PAIR loss: over which dimensions, and how are the per-dimension losses weighted?',
+   gold: 'L = Σ_{d∈D} L_PAIR^(d) with D = {200, 256, 512, 1024}, an unweighted sum; L_PAIR^(d) is the PAIR loss computed on the first d embedding dimensions only (Eq. 6).'}
+- {id: Q4, exp: E6, paper: genrec, kind: equation, page: 5,
+   question: 'What arguments does GenRec''s verbalizer take when it builds the text sequence x, and how is the item metadata indexed?',
+   gold: 'x = V(H, {M_i}_{i∈C}, τ): the interaction history H, the set of item metadata M_i indexed by items i ∈ C, and τ, the context (Eq. 1).'}
+- {id: Q5, exp: E6, paper: sftrl, kind: equation, page: 4,
+   question: 'In Proposition 4.1, over what set is the minimisation taken, what is minimised (with the order of its arguments), and how is the set of optimal policies defined?',
+   gold: 'π^updated = argmin_{π ∈ P* ∩ Π} D_KL(π ‖ π_0): over the optimal policies that are also in the feasible family Π; the KL divergence from π to the initial policy π_0 (π first); P* = {q : E_q[R] = 1}, R: Y → {0, 1} a binary reward (Eq. 2).'}
+- {id: Q6, exp: E6, paper: sftrl, kind: equation, page: 5,
+   question: 'How is the standardised GRPO advantage defined? Give the group mean and the standard deviation, including the normalisation inside the standard deviation.',
+   gold: 'μ_{r_i}(x) = (1/G) Σ_{k=1..G} r_{i,k}(x); σ_{r_i}(x) = sqrt((1/G) Σ_{k=1..G} (r_{i,k}(x) − μ_{r_i}(x))²), normalised by 1/G (not 1/(G−1)); Â_{i,k}(x) = (r_{i,k} − μ_{r_i}(x)) / σ_{r_i}(x) (Definition 4.2).'}
+- {id: Q7, exp: E6, paper: sftrl, kind: equation, page: 5,
+   question: 'Write Lemma 4.3''s decomposition of the RL gradient interference I_RL(i, j): the normalising factor, the sums, and which terms multiply which inner product.',
+   gold: 'I_RL(i,j) = E_{x,x′}[(1/G²) Σ_{k=1..G} Σ_{l=1..G} Â_{i,k}(x) Â_{j,l}(x′) ⟨δS_{i,k}(x), δS_{j,l}(x′)⟩], with δS_{i,k}(x) = S_{i,k}(x) − S̄_i(x) and S̄_i(x) = (1/G) Σ_k S_{i,k}(x): the product of the two advantages weights the inner product of the residual score functions (Eq. 7).'}
+- {id: Q8, exp: E6, paper: sftrl, kind: equation, page: 5,
+   question: 'What tail bound does the paper state for the inner product of two tasks'' residual score vectors, and how does it depend on the dimension?',
+   gold: 'P(|⟨δS_i, δS_j⟩| ≥ t) ≤ 2 exp(−c t² d): it decays exponentially in the dimension d (and in t²) (concentration of measure, citing Vershynin 2018).'}
+- {id: Q9, exp: E6, paper: sftrl, kind: equation, page: 4,
+   question: 'Write g_SFT and g_RL as the paper defines them, and say exactly where they differ.',
+   gold: 'g_SFT = E_{x∼D, y∼π_expert}[∇_θ log π_θ(y|x)]; g_RL = E_{x∼D, y∼π_θ}[A(x,y) ∇_θ log π_θ(y|x)]: y is drawn from the expert in SFT and from the policy itself in RL, and RL weights the score function by the advantage A(x,y) (Eq. 1).'}
 
 # ---- E3: across papers (agent conditions; pages of X3, X5, X6 to be checked first) ----
 - {id: X1, exp: E3, papers: [dpo, ipo, simpo], kind: equations,

@@ -1,0 +1,24 @@
+{
+ "key": "bec1e6606da245fd",
+ "usd": 0.02546,
+ "grades": {
+  "E6/md/Q3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/txt/Q3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/pdf/Q3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

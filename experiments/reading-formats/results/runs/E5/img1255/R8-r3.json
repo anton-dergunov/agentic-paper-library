@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img1255",
+ "qid": "R8",
+ "rep": 3,
+ "paper": "genrec",
+ "form": "img1255",
+ "page": 6,
+ "status": "ok",
+ "answer": "GenRec showed an average treatment effect of **+0.115%** over the production model on the short-term homepage engagement metric, with **P = 3.1 × 10⁻¹⁰**, which the figure marks as statistically significant (Figure 3, left panel).\n\nThe test sent about 10% of Netflix traffic to GenRec for 4 weeks (Section 5.1).\n\nI can't give a page number because none appears on the page; the only header is \"Li et al.\" These facts come from Figure 3 and Section 5.1 on that page.",
+ "input": 2382,
+ "cache_write": 0,
+ "cache_read": 2380,
+ "output": 260,
+ "thinking": 88,
+ "usd": 0.005684,
+ "seconds": 3.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

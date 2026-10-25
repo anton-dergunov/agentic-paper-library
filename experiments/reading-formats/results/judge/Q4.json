@@ -1,0 +1,24 @@
+{
+ "key": "f3a6829a00682dbf",
+ "usd": 0.023568,
+ "grades": {
+  "E6/md/Q4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/txt/Q4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/pdf/Q4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

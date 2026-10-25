@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q7",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "# Lemma 4.3: Decomposition of the RL gradient interference (GRPO)\n\n## Starting point (page 5)\n\nThe raw RL gradient interference term (Eq. 6) is the expected inner product of the two tasks' GRPO gradients:\n\n$$I_{RL}(i,j) := \\mathbb{E}_{x,x'}\\left[\\left\\langle \\frac{1}{G}\\sum_{k=1}^{G}\\hat{A}_{i,k}\\,S_{i,k}(x),\\ \\frac{1}{G}\\sum_{l=1}^{G}\\hat{A}_{j,l}\\,S_{j,l}(x')\\right\\rangle\\right]$$\n\nThe notation is defined as follows (page 5):\n\n- $S_{i,k}(x) = \\nabla_\\theta \\log \\pi_\\theta(y_k \\mid x)$ is the score function of the k-th rollout.\n- $\\hat{A}_{i,k}(x) = (r_{i,k} - \\mu_{r_i}(x))/\\sigma_{r_i}(x)$ is the group-standardized advantage.\n- $G$ is the number of rollouts per input.\n\n## Definitions in the lemma (page 5)\n\n- **Mean score function:** $\\bar{S}_i(x) = \\frac{1}{G}\\sum_{k=1}^{G} S_{i,k}(x)$\n- **Residual score function:** $\\delta S_{i,k}(x) = S_{i,k}(x) - \\bar{S}_i(x)$\n\n## Statement (Eq. 7, page 5)\n\n$$I_{RL}(i,j) = \\mathbb{E}_{x,x'}\\left[\\frac{1}{G^2}\\sum_{k=1}^{G}\\sum_{l=1}^{G}\\hat{A}_{i,k}(x)\\,\\hat{A}_{j,l}(x')\\,\\big\\langle \\delta S_{i,k}(x),\\ \\delta S_{j,l}(x')\\big\\rangle\\right]$$\n\nThe parts of this expression are:\n\n- **Normalising factor:** $1/G^2$, the product of the two $1/G$ factors from each task's gradient.\n- **Sums:** a double sum over $k = 1,\\dots,G$ (task i's rollouts) and $l = 1,\\dots,G$ (task j's rollouts).\n- **What multiplies what:** each pair $(k, l)$ contributes the product of the two scalar advantages, $\\hat{A}_{i,k}(x)\\cdot\\hat{A}_{j,l}(x')$. That product multiplies the inner product of the residual scores, $\\langle \\delta S_{i,k}(x), \\delta S_{j,l}(x')\\rangle$, not the raw scores.\n- **Expectation:** taken over $x \\sim D_i$ and $x' \\sim D_j$ (page 15).\n\n## Why this holds (proof, page 15)\n\n1. Substitute $S_{i,k} = \\bar{S}_i + \\delta S_{i,k}$. This gives\n   $$\\sum_k \\hat{A}_{i,k}(\\bar{S}_i + \\delta S_{i,k}) = \\bar{S}_i \\sum_k \\hat{A}_{i,k} + \\sum_k \\hat{A}_{i,k}\\,\\delta S_{i,k}$$\n2. The first term vanishes because of the zero-sum property of GRPO advantages, $\\sum_{k=1}^{G}\\hat{A}_{i,k}(x) = 0$ (Eq. 4, page 5).\n3. Substituting back gives $\\langle g_i(x), g_j(x')\\rangle = \\frac{1}{G^2}\\sum_{k,l}\\hat{A}_{i,k}\\hat{A}_{j,l}\\langle\\delta S_{i,k},\\delta S_{j,l}\\rangle$. Taking the expectation completes the proof.\n\n## Interpretation (page 5)\n\nThe zero-sum advantage removes the contribution of the mean gradient direction $\\bar{S}_i(x)$. The inner product of score functions is therefore replaced by the inner product of residuals.",
+ "input": 68825,
+ "cache_write": 575,
+ "cache_read": 68248,
+ "output": 1742,
+ "thinking": 372,
+ "usd": 0.0530976,
+ "seconds": 14.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}

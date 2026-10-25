@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "txt",
+ "qid": "R9",
+ "rep": 3,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "In the RL heatmap in Figure 2 (page 4):\n\n- **Math–Science cosine similarity:** **−3.92 × 10⁻⁴** (shown as −3.92e-04). This is a near-zero value. (page 4)\n- **Logic update L2 norm:** **8.7 × 10⁻²** (shown as 8.7e-02 on the diagonal). (page 4)\n\nThe caption says off-diagonal cells show pairwise cosine similarity and diagonal cells show the L2 norm of each task's update vector. It also says the near-zero RL similarities indicate \"orthogonal and task-specific parameter adjustments\" (page 4). The Logic norm is the largest of the four RL norms; Math is 2.0e-02, Science 1.1e-02, and Code 1.1e-02 (page 4). The four norms average to about 3 × 10⁻², which matches the text's reported average RL update norm of \"approximately 3×10⁻²\" (page 3).",
+ "input": 68814,
+ "cache_write": 0,
+ "cache_read": 68812,
+ "output": 456,
+ "thinking": 134,
+ "usd": 0.022890399999999998,
+ "seconds": 15.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:50"
+}

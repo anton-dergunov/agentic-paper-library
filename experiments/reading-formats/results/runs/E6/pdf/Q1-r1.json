@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "## Attention weight and history embedding (Equation 5, page 5)\n\nEach of the K most recently clicked profiles H_q = {h_1, …, h_K} has a precomputed embedding e_{h_i} = f_θ(x_{h_i}), produced by the same encoder (p. 5).\n\n**Attention weight:**\n\n$$\\alpha_i = \\frac{\\exp\\big(\\mathbf{w}^T(\\mathbf{e}_{h_i} + \\mathrm{PE}(i))\\big)}{\\sum_{j=1}^{K} \\exp\\big(\\mathbf{w}^T(\\mathbf{e}_{h_j} + \\mathrm{PE}(j))\\big)}$$\n\n**History embedding:**\n\n$$\\mathbf{e}_{\\mathcal{H}} = \\sum_{i=1}^{K} \\alpha_i \\, \\mathbf{e}_{h_i}$$\n\nThe variables (p. 5):\n- **PE(i)** is a learned positional encoding for position i. The most recent click is i = 1.\n- **w** is a learnable attention vector.\n- Both are trained end-to-end with the PAIR objective.\n\n## Where the positional encoding enters\n\nPE(i) is added to the click embedding **only inside the attention score**, as w^T(e_{h_i} + PE(i)), before the softmax. The weighted sum that forms e_H uses the raw embeddings e_{h_i**}** without PE (Eq. 5, p. 5). So position affects how much each click counts, but it does not change the content of the vectors being averaged. The paper says this is how recency gets encoded, because recent clicks often better reflect current intent (p. 5).\n\n## Related design details\n\n- **Query-agnostic.** The score depends only on the click embedding, its position, and w. It does not use the query profile. This gives a global recency and item-importance weighting, so e_H can be refreshed independently of the query profile tower. The paper notes this is less expressive than query-conditioned attention (pp. 5, 7).\n- **Cost.** With K = 10, updating e_H takes O(Kd) vector operations and no LLM re-inference (p. 5; Table 2, p. 7).\n- **Downstream fusion.** e_H is L2-normalized and added to the normalized profile embedding: e_q^final = L2Norm(ẽ_q + γ ẽ_H), where γ is a learnable scalar (Eqs. 3–4, p. 5).\n- **Results.** This variant (\"P-ATT\") gives MAR@100 of 0.450. Attention without the positional term gives 0.431, and GeM pooling gives 0.447 (Tables 1–2, p. 7).\n\nOne inconsistency: the Figure 1 diagram (p. 6) labels the history aggregation step \"GeM Pooling\" and \"Temporal-Gated Pooling\", while its caption and Section 4.3 describe positional attention.",
+ "input": 35792,
+ "cache_write": 575,
+ "cache_read": 35215,
+ "output": 1168,
+ "thinking": 210,
+ "usd": 0.035011,
+ "seconds": 12.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

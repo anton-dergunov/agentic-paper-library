@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R9",
+ "rep": 3,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "**The document doesn't give these two specific values.** The heatmap is Figure 2 on p. 3, and its individual cell values are only in the image, not in the text.\n\nThe text does describe what the heatmap encodes and reports averages:\n\n- **Layout:** Off-diagonal cells show pairwise cosine similarity between task update vectors (ΔW), and diagonal cells show each update's L₂ norm (Figure 2 caption, p. 3).\n- **Average RL norm:** The average L₂ norm of ΔW is about **3 × 10⁻²** for RL, compared with 7.4 for SFT (Observation 1, p. 3). No per-task norm for Logic is given.\n- **Average RL cosine similarity:** Pairwise cosine similarity between RL tasks averages around **10⁻⁵** (Observation 2, p. 3; also Introduction, p. 1). No value is given for the Math–Science pair specifically.\n- **Pairwise detail (SFT only):** The only pair-level detail in the text concerns SFT. Some SFT updates point in opposite directions, for example Math vs. Code (p. 3).\n\nTo get the exact Math–Science similarity and Logic norm for RL, you would need to read them from the Figure 2 image itself.",
+ "input": 89369,
+ "cache_write": 0,
+ "cache_read": 89367,
+ "output": 506,
+ "thinking": 91,
+ "usd": 0.028001400000000003,
+ "seconds": 8.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.55,
+ "date": "2026-10-25 10:50"
+}

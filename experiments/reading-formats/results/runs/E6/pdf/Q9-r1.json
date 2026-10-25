@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 4,
+ "status": "ok",
+ "answer": "# g_SFT and g_RL in Eq. (1)\n\nThe paper defines the expected gradients as follows (page 4, Eq. 1):\n\n- **g_SFT** = E_{x∼D, y∼π_expert} [ ∇_θ log π_θ(y|x) ]\n- **g_RL** = E_{x∼D, y∼π_θ} [ A(x,y) · ∇_θ log π_θ(y|x) ]\n\nHere π_θ is the policy with parameters θ, and π_expert is the supervision distribution (page 3).\n\n## What is the same\n\nBoth expectations draw the input x from the same data distribution D. Both use the same log-likelihood gradient, ∇_θ log π_θ(y|x) (page 4). The paper later calls this term the \"score function\" (page 5).\n\n## Where they differ\n\nThe paper names exactly two differences (page 4):\n\n1. **Policy source (the y in the expectation):**\n   - In SFT, y ∼ π_expert. This is off-policy: the target response comes from a fixed expert distribution, i.e., the ground truth.\n   - In RL, y ∼ π_θ. This is on-policy: the response is sampled from the model's own current policy.\n\n2. **Advantage (or reward) function:**\n   - g_RL multiplies the score function by a scalar weight, A(x,y).\n   - g_SFT has no such weight.\n\nFor the analysis, the paper uses GRPO as the concrete RL form (page 5, Eq. 3):\n\ng_i(x) = (1/G) Σ_{k=1}^{G} Â_{i,k}(x) ∇_θ log π_θ(y_k|x)\n\nIn this form:\n- G rollouts are sampled per input.\n- The advantage is standardized within each group: Â_{i,k} = (r_{i,k} − μ_{r_i}(x)) / σ_{r_i}(x).\n- As a result, the advantages sum to zero (page 5, Eq. 4).",
+ "input": 122934,
+ "cache_write": 550,
+ "cache_read": 122382,
+ "output": 958,
+ "thinking": 314,
+ "usd": 0.0480444,
+ "seconds": 10.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-25 10:51"
+}

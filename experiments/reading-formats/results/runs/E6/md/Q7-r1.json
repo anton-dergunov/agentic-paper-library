@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q7",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "# Lemma 4.3: Decomposition of the RL Gradient Interference\n\nLemma 4.3 (p. 5) states:\n\n$$\\mathcal{I}_{\\text{RL}}(i,j)=\\mathbb{E}_{x,x'}\\left[\\frac{1}{G^{2}}\\sum_{k=1}^{G}\\sum_{l=1}^{G}\\hat{A}_{i,k}(x)\\,\\hat{A}_{j,l}(x')\\,\\langle\\delta S_{i,k}(x),\\,\\delta S_{j,l}(x')\\rangle\\right]$$\n\n## The pieces\n\n- **Normalising factor:** $\\frac{1}{G^{2}}$. This is the product of the two $\\frac{1}{G}$ averaging factors, one from each task's GRPO gradient estimate (Def. 4.2, Eq. 3; Eq. 6, p. 5).\n- **Sums:** a double sum. The index $k$ runs over task $i$'s $G$ rollouts for input $x$, and $l$ runs over task $j$'s $G$ rollouts for input $x'$ (p. 5).\n- **What multiplies the inner product:** the product of the two standardised advantages, $\\hat{A}_{i,k}(x)\\,\\hat{A}_{j,l}(x')$. Each advantage is $\\hat{A}_{i,k}=(r_{i,k}-\\mu_{r_i}(x))/\\sigma_{r_i}(x)$ (p. 5).\n- **The inner product itself:** it is taken between residual score functions, not raw ones. The terms are:\n  - Score function: $S_{i,k}(x)=\\nabla_\\theta\\log\\pi_\\theta(y_k|x)$\n  - Mean score: $\\bar{S}_i(x)=\\frac{1}{G}\\sum_k S_{i,k}(x)$\n  - Residual: $\\delta S_{i,k}(x)=S_{i,k}(x)-\\bar{S}_i(x)$ (p. 5)\n- **Outer expectation:** taken over $x\\sim\\mathcal{D}_i$ and $x'\\sim\\mathcal{D}_j$ (Appendix C.1, p. 15).\n\n## Why the mean term disappears\n\nThe decomposition relies on the zero-sum property of GRPO advantages, $\\sum_{k=1}^{G}\\hat{A}_{i,k}(x)=0$ (Eq. 4, p. 5).\n\nThe proof (Appendix C.1, p. 15) substitutes $S_{i,k}=\\bar{S}_i+\\delta S_{i,k}$ into the gradient sum:\n\n$$\\sum_k \\hat{A}_{i,k}(\\bar{S}_i+\\delta S_{i,k}) = \\bar{S}_i\\underbrace{\\sum_k\\hat{A}_{i,k}}_{=0}+\\sum_k\\hat{A}_{i,k}\\delta S_{i,k}$$\n\nThe mean direction $\\bar{S}_i$ therefore cancels. Applying the same step to task $j$ and expanding the inner product gives the lemma.\n\nThe paper interprets this as the advantage function acting as a filter. It \"algebraically removes the contribution of the mean gradient direction,\" so interference depends only on intra-group residuals. By contrast, SFT interference depends directly on $\\langle S_i^*(x), S_j^*(x')\\rangle$ (p. 5).",
+ "input": 89380,
+ "cache_write": 575,
+ "cache_read": 88803,
+ "output": 1270,
+ "thinking": 119,
+ "usd": 0.0477686,
+ "seconds": 14.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}

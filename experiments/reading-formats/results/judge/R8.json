@@ -1,0 +1,96 @@
+{
+ "key": "95910fd8db885996",
+ "usd": 0.05786,
+ "grades": {
+  "E5/page/R8-r1": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 6"
+  },
+  "E5/img1255/R8-r3": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/txt/R8-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/txt/R8-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/txt/R8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/page/R8-r3": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 6"
+  },
+  "E5/md/R8-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Could not read Figure 3; values are given there"
+  },
+  "E5/img2576/R8-r2": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/page/R8-r2": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites page 1 instead of page 6"
+  },
+  "E5/img1255/R8-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/md/R8-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Could not read Figure 3; values are given there"
+  },
+  "E5/md/R8-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Could not read Figure 3; values are given there"
+  },
+  "E5/img2576/R8-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img2576/R8-r3": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img1255/R8-r2": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R7",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "md",
+ "page": 8,
+ "status": "ok",
+ "answer": "For **Ministral 3B→8B**, Table 4 (p. 8) reports these changes when ridge is replaced by an MLP (Δ = MLP − ridge, measured on HellaSwag tokens):\n\n- **Ridge R²_V:** 0.59\n- **Change in V-concentration:** −0.08\n- **Change in attention-output cosine:** +0.07\n\nThe same row shows that R²_V falls by 0.09 under the MLP, K-concentration falls by 0.45, and HellaSwag retention drops by 1.5 pp, from 93.3% under ridge (p. 8).\n\nThe authors note that this pair improves on both concentration and cosine but still loses ground on HellaSwag. They conclude that redistributing error is not sufficient on its own. It only changes downstream accuracy where the misplaced error was large enough to bind (p. 8).",
+ "input": 38472,
+ "cache_write": 576,
+ "cache_read": 37894,
+ "output": 423,
+ "thinking": 140,
+ "usd": 0.0206548,
+ "seconds": 5.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-25 10:51"
+}

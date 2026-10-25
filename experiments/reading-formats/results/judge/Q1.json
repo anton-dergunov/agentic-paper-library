@@ -1,0 +1,24 @@
+{
+ "key": "ecc4d260e021b419",
+ "usd": 0.035868000000000004,
+ "grades": {
+  "E6/md/Q1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/pdf/Q1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/txt/Q1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

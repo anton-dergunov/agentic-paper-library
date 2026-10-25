@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q2",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "Profile and history embeddings are combined by **normalized additive fusion** (Section 4.2, p. 5):\n\n1. **Each embedding is normalised first.** The query profile embedding **e**_q and the history embedding **e**_H are each L2-normalised separately: ẽ_q = e_q / ‖e_q‖₂ and ẽ_H = e_H / ‖e_H‖₂ (Eq. 3, p. 5).\n\n2. **γ multiplies the history term.** The two normalised vectors are added, and γ scales only the normalised history embedding: ẽ_q + γ·ẽ_H. γ is a learnable scalar that controls how much behavioural history contributes (Eq. 4, p. 5).\n\n3. **A final L2 normalisation is applied last.** The sum is passed through L2Norm: **e**_q^final = L2Norm(ẽ_q + γ·ẽ_H) (Eq. 4, p. 5).\n\n**Why the normalisation matters:** adding the raw embeddings directly could cause a scale mismatch between towers. Normalising first stops either the profile tower or the history tower from dominating because of differences in norm (p. 5).\n\n**Related details:**\n- Candidate embeddings are also L2-normalised before cosine retrieval (p. 5).\n- The final query vector is scored against candidates as s(q,d) = cos(**e**_q^final, **e**_d)/τ (Eq. 1, p. 4).\n- The history embedding **e**_H is a position-aware, attention-weighted sum of the precomputed embeddings of the K most recently clicked profiles (Eq. 5, p. 5). The paper sets K = 10 (p. 5).",
+ "input": 23255,
+ "cache_write": 567,
+ "cache_read": 22686,
+ "output": 577,
+ "thinking": 16,
+ "usd": 0.0206212,
+ "seconds": 6.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

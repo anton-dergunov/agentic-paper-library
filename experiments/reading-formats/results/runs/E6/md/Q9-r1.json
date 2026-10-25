@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "# g_SFT and g_RL (Eq. 1, Section 4, p. 3)\n\n$$g_{\\text{SFT}}=\\mathbb{E}_{x\\sim\\mathcal{D},\\;y\\sim\\pi_{\\text{expert}}}\\left[\\nabla_{\\theta}\\log\\pi_{\\theta}(y|x)\\right]$$\n\n$$g_{\\text{RL}}=\\mathbb{E}_{x\\sim\\mathcal{D},\\;y\\sim\\pi_{\\theta}}\\left[A(x,y)\\,\\nabla_{\\theta}\\log\\pi_{\\theta}(y|x)\\right]$$\n\nHere π_θ is the policy parameterized by θ, and π_expert is the supervision distribution (p. 3).\n\n## Where they differ\n\nBoth expressions share the same input distribution (x ∼ 𝒟) and the same log-likelihood gradient ∇_θ log π_θ(y|x). The paper names exactly two differences (p. 3):\n\n1. **Policy source (the sampling distribution of y).**\n   - SFT is off-policy: y is drawn from the fixed expert distribution π_expert (the ground truth).\n   - RL is on-policy: y is drawn from the model's current policy π_θ.\n\n2. **Advantage (or reward) function.**\n   - The RL gradient multiplies each log-likelihood gradient by a scalar weight, A(x,y).\n   - The SFT gradient has no such weight.\n\nThe paper's later analysis is built on these two mechanisms:\n- **Advantage:** its zero-sum property removes the mean score direction (pp. 4–5).\n- **On-policy sampling:** it keeps the remaining intra-group residuals small (pp. 4–5).\n\n## GRPO version (Definition 4.2, p. 5)\n\nFor the GRPO case the paper analyzes, it gives an empirical form of the RL gradient. It uses G rollouts per input and a standardized advantage:\n\n$$g_{i}(x)=\\frac{1}{G}\\sum_{k=1}^{G}\\hat{A}_{i,k}(x)\\nabla_{\\theta}\\log\\pi_{\\theta}(y_{k}|x), \\qquad \\hat{A}_{i,k}(x)=\\frac{r_{i,k}-\\mu_{r_{i}}(x)}{\\sigma_{r_{i}}(x)}$$",
+ "input": 89354,
+ "cache_write": 549,
+ "cache_read": 88803,
+ "output": 905,
+ "thinking": 114,
+ "usd": 0.0402606,
+ "seconds": 9.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-25 10:51"
+}

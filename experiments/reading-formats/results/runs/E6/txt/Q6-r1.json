@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "txt",
+ "qid": "Q6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "# Standardised GRPO advantage\n\nThe paper defines it in **Definition 4.2 (GRPO Gradient)** on **page 5**. For an input x from task i, the model generates G rollouts {y_k}, k = 1…G, and r_{i,k}(x) is the reward for the k-th rollout.\n\n**Group mean (p. 5):**\n\n$$\\mu_{r_i}(x) = \\frac{1}{G}\\sum_{k=1}^{G} r_{i,k}(x)$$\n\n**Group standard deviation (p. 5):**\n\n$$\\sigma_{r_i}(x) = \\sqrt{\\frac{1}{G}\\sum_{k=1}^{G}\\big(r_{i,k}(x) - \\mu_{r_i}(x)\\big)^2}$$\n\nThe normalisation inside the square root is **1/G**, not 1/(G−1). This is the population standard deviation, not the sample (Bessel-corrected) one.\n\n**Standardised advantage (p. 5):**\n\n$$\\hat{A}_{i,k}(x) = \\frac{r_{i,k} - \\mu_{r_i}(x)}{\\sigma_{r_i}(x)}$$\n\n## Properties the paper derives from this definition\n\n- **Zero sum (p. 5, Eq. 4):** the advantages sum to zero, Σ_k Â_{i,k}(x) = 0.\n- **Unit mean square (p. 16, Appendix C.2.2):** the paper restates the advantage as Â_{i,k} = (r_{i,k} − mean({r_i})) / std({r_i}). It then notes that by the definition of standardisation, (1/G) Σ Â²_{i,k} = 1, so Σ Â²_{i,k} = G. This identity holds exactly only because the standard deviation uses 1/G, which matches the definition on page 5. The proof of the RL upper bound (Theorem 4.5) relies on it.\n- **Group size in experiments (p. 13, Appendix A.2):** G = 16 rollouts per prompt.\n\nThe paper does not add a small constant (epsilon) to the denominator. It also does not say how a group with zero reward variance (σ = 0) is handled.",
+ "input": 68814,
+ "cache_write": 564,
+ "cache_read": 68248,
+ "output": 953,
+ "thinking": 226,
+ "usd": 0.0372296,
+ "seconds": 10.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}

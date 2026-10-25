@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "txt",
+ "qid": "R9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "In the RL heatmap (Figure 2, right panel, **page 4**):\n\n- **Math vs. Science cosine similarity:** −3.92 × 10⁻⁴ (−3.92e-04).\n- **Logic update L2 norm:** 8.7 × 10⁻² (8.7e-02), shown on the diagonal.\n\nFigure 2 shows pairwise cosine similarity off the diagonal and the L2 norm of each update on the diagonal (page 4). The paper says RL updates show \"near-zero similarity, indicating orthogonal and task-specific parameter adjustments\" (page 4).\n\nThese values match the text. The paper gives an average RL update norm of about 3 × 10⁻² (page 3), and the four diagonal values (2.0e-02, 1.1e-02, 8.7e-02, 1.1e-02) average to about 0.032. It also gives a typical cross-task RL cosine similarity of around 10⁻⁵ (page 3). The Math–Science value of about 10⁻⁴ is one of the larger RL pairs, but it is still far below SFT's magnitude of about 0.95 or more for the same pair, as shown in the SFT heatmap on page 4.",
+ "input": 68814,
+ "cache_write": 564,
+ "cache_read": 68248,
+ "output": 534,
+ "thinking": 137,
+ "usd": 0.028849600000000003,
+ "seconds": 8.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-25 10:49"
+}

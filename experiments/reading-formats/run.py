@@ -9,6 +9,7 @@ Tiers, in priority order (see PROGRESS.md):
   B  E1 on SimPO, GPT-1, Lost in the Middle, InstructGPT in c0, pdf, txt, md; E4
   B2 E1 in c0, pdf, txt, md on four papers published after the model's training cutoff; E4 in txt
   C  E5 (E1 in html beyond DPO was dropped at checkpoint 1)
+  C2 E5 on the unseen papers, with txt; E6, equation structure, in pdf, txt, md
 
 A tier runs group by group (a paper, for E1). The conditions of a group run in parallel,
 each asking its questions one after another so that the document is read from the cache
@@ -255,6 +256,17 @@ def groups(tier):
         conds = ("page", "img1255", "img2576", "md")
         for paper in ("qwen3vl", "litm"):
             out.append(("E5 " + paper, {c: [job("E5", c, i, form=c) for i in qids("E5", paper)] for c in conds}, conds))
+    elif tier == "C2":
+        # A paper's E5 and E6 groups run one after the other, so that E6 reads the whole
+        # paper's txt and md from the cache E5 wrote.
+        small = ("page", "img1255", "img2576", "md", "txt")
+        for paper in UNSEEN:
+            if qids("E5", paper):
+                out.append(("E5 " + paper, {c: [job("E5", c, i, form=c) for i in qids("E5", paper)] for c in small},
+                            small))
+            if qids("E6", paper):
+                out.append(("E6 " + paper, {c: [job("E6", c, i) for i in qids("E6", paper)] for c in ("pdf", "txt", "md")},
+                            ("pdf", "txt", "md")))
     return out
 
 
@@ -308,7 +320,7 @@ def run_tier(tier):
 
 
 def status():
-    for tier in ("A", "B", "B2", "C"):
+    for tier in ("A", "B", "B2", "C", "C2"):
         done = total = 0
         for name, conditions, _ in groups(tier):
             for jobs in conditions.values():

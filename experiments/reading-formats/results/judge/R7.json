@@ -1,0 +1,36 @@
+{
+ "key": "6d95b9a2edee0700",
+ "usd": 0.030419999999999996,
+ "grades": {
+  "E5/img1255/R7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/img2576/R7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/md/R7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/txt/R7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E5/page/R7-r1": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites document page 1 as the PDF page, not page 8."
+  }
+ }
+}

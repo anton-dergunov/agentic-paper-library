@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "page",
+ "qid": "R8",
+ "rep": 3,
+ "paper": "genrec",
+ "form": "page",
+ "page": 6,
+ "status": "ok",
+ "answer": "In the online A/B test, GenRec showed an **average treatment effect of +0.115%** on the short-term homepage engagement metric, compared with the production model. The **p-value was 3.1 × 10⁻¹⁰**, which the paper labels statistically significant (Figure 3, page 1).\n\nFor context, the test used about 10% of Netflix traffic for 4 weeks (page 1).",
+ "input": 4287,
+ "cache_write": 0,
+ "cache_read": 4285,
+ "output": 204,
+ "thinking": 75,
+ "usd": 0.004945000000000001,
+ "seconds": 2.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.59,
+ "date": "2026-10-25 10:52"
+}

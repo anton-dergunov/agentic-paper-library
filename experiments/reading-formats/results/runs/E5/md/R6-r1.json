@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "md",
+ "qid": "R6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "For **DeepSeek-R1-Distill-Qwen-7B**, Naive Parallel-RL (sum) drops slightly below the single-task RL baseline on both benchmarks (Table 4, p. 6):\n\n| Benchmark | Naive Parallel-RL (sum) | Single-Task RL | Change |\n|---|---|---|---|\n| AIME2025 | 53.1 | 57.1 | **−4.0** |\n| GPQA | 52.5 | 53.0 | **−0.5** |\n\nTable 4's caption says the superscripts are accuracy changes relative to the \"corresponding single-task baseline\" (p. 6). The changes above match the gap between the two columns.",
+ "input": 89398,
+ "cache_write": 593,
+ "cache_read": 88803,
+ "output": 479,
+ "thinking": 250,
+ "usd": 0.0320926,
+ "seconds": 13.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-25 10:49"
+}

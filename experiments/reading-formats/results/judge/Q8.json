@@ -1,0 +1,24 @@
+{
+ "key": "ca7fca8e02ad80ba",
+ "usd": 0.024988,
+ "grades": {
+  "E6/pdf/Q8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/md/Q8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E6/txt/Q8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

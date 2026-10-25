@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "The Matryoshka objective is a **plain sum of the PAIR loss computed at four prefix dimensions: 200, 256, 512, and 1024** (p. 5).\n\n**Formulation (Eq. 6, p. 5)**\n\nL = Σ_{d ∈ D} L_PAIR^(d), where D = {200, 256, 512, 1024}\n\n- L_PAIR^(d) is the PAIR loss computed using only the first d embedding dimensions (p. 5).\n- The PAIR loss is a multi-negative objective. It takes the log-softmax of the clicked candidate's score against K negatives (Eq. 2, p. 5). Each score is cosine similarity divided by a temperature τ (Eq. 1, p. 4), and τ = 0.02 in all experiments (p. 6).\n\n**Weighting**\n\nThe per-dimension losses are added with no weighting coefficients, so each prefix contributes equally (Eq. 6, p. 5). The paper does not discuss or tune alternative weightings.\n\n**Why these dimensions**\n\n- **200:** approximates the storage footprint of the production 171-dimensional Holistic embedding (p. 5).\n- **256, 512, 1024:** progressively higher-quality serving configurations (p. 5).\n\n**Result**\n\nOne model is trained, and at serving time its embeddings can be truncated to the target dimension without retraining (pp. 5–6). Truncated versions score as follows on MAR@100 (Table 3, p. 8):\n\n| Dimensions | MAR@100 |\n|---|---|\n| 200 | 0.421 |\n| 256 | 0.432 |\n| 512 | 0.444 |\n| 1024 | 0.450 |",
+ "input": 35781,
+ "cache_write": 564,
+ "cache_read": 35215,
+ "output": 742,
+ "thinking": 182,
+ "usd": 0.026403000000000003,
+ "seconds": 8.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

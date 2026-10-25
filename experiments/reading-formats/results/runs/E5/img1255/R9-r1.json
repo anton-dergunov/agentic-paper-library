@@ -1,0 +1,22 @@
+{
+ "exp": "E5",
+ "cond": "img1255",
+ "qid": "R9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "img1255",
+ "page": 4,
+ "status": "ok",
+ "answer": "In the RL Model Updates heatmap (Figure 2, right panel):\n\n- **Math–Science cosine similarity:** −3.92e-04 (page 4)\n- **Logic update norm (‖ΔW‖):** 8.7e-02 (page 4)\n\nDiagonal cells show the L₂ norm of each task's update. Off-diagonal cells show the pairwise cosine similarity between tasks. The near-zero similarity between Math and Science supports the caption's statement that RL updates are nearly orthogonal and task-specific (page 4).",
+ "input": 2388,
+ "cache_write": 2386,
+ "cache_read": 0,
+ "output": 232,
+ "thinking": 50,
+ "usd": 0.023736,
+ "seconds": 3.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-25 10:49"
+}

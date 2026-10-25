@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "md",
+ "qid": "Q3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "The Matryoshka objective is an **unweighted sum** of the PAIR loss computed at four prefix dimensions (p. 5).\n\n**Dimensions.** PAIR is optimized jointly over the prefix dimensions $\\mathcal{D} = \\{200, 256, 512, 1024\\}$ (p. 5). The paper gives a reason for each choice (p. 5):\n- **200** approximates the storage footprint of the production 171-dimensional embedding (Holistic-171).\n- **256, 512, and 1024** are progressively higher-quality serving configurations.\n\n**How the per-dimension losses are combined.** The objective is\n\n$$\\mathcal{L}=\\sum_{d\\in\\mathcal{D}}\\mathcal{L}_{\\text{PAIR}}^{(d)},$$\n\nwhere $\\mathcal{L}_{\\text{PAIR}}^{(d)}$ is the PAIR multi-negative loss computed using only the first $d$ embedding dimensions (p. 5). That per-dimension loss is the softmax over cosine scores with temperature $\\tau$, from Equations 1–2 (p. 4).\n\n**Weighting.** The formula has no weighting coefficients, so each dimension's loss contributes equally. The document does not mention any explicit or tuned weights.\n\n**Use at serving time.** Embeddings can be truncated to the target dimension without extra computation or retraining (p. 5). One model then serves several surfaces, from 200 dims for candidate pre-filtering (MAR@100 0.421) to 1024 dims for Premium Browsemaps (MAR@100 0.450) (p. 8).",
+ "input": 23251,
+ "cache_write": 563,
+ "cache_read": 22686,
+ "output": 665,
+ "thinking": 125,
+ "usd": 0.0223492,
+ "seconds": 7.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-25 10:48"
+}

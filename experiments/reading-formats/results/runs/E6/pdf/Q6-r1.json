@@ -1,0 +1,22 @@
+{
+ "exp": "E6",
+ "cond": "pdf",
+ "qid": "Q6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "The standardised advantage is defined in **Definition 4.2 (GRPO Gradient)** on **page 5**.\n\n**Setup:** For an input x from task i, the model generates G group-wise rollouts {y_k}, k = 1…G. Let r_{i,k}(x) be the reward for the k-th sample (p. 5).\n\n**Group mean:**\n\n  μ_{r_i}(x) = (1/G) Σ_{k=1}^{G} r_{i,k}(x)\n\n**Group standard deviation:**\n\n  σ_{r_i}(x) = √[ (1/G) Σ_{k=1}^{G} ( r_{i,k}(x) − μ_{r_i}(x) )² ]\n\nThe normalisation inside the square root is **1/G**, so this is the population standard deviation, not the 1/(G−1) sample version (p. 5).\n\n**Standardised advantage:**\n\n  Â_{i,k}(x) = ( r_{i,k}(x) − μ_{r_i}(x) ) / σ_{r_i}(x)\n\n(p. 5)\n\n**Properties the paper derives from this definition:**\n- **Zero-sum:** Σ_{k=1}^{G} Â_{i,k}(x) = 0 (Eq. 4, p. 5).\n- **Unit mean square:** (1/G) Σ_{k=1}^{G} Â²_{i,k} = 1, so Σ_{k=1}^{G} Â²_{i,k} = G (p. 16). This follows because σ uses the 1/G normalisation. The proof of the RL interference upper bound relies on it (pp. 16–17).\n\nIn the experiments, G = 16 rollouts per prompt (p. 13).",
+ "input": 122949,
+ "cache_write": 565,
+ "cache_read": 122382,
+ "output": 623,
+ "thinking": 60,
+ "usd": 0.0414644,
+ "seconds": 7.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 10:50"
+}
