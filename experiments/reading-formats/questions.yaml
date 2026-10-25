@@ -205,6 +205,28 @@ questions:
    question: 'What NDCG@10 does GenRec achieve offline compared with the production ranker?',
    gold: 'Not reported: the paper does not use NDCG; it reports offline ranking quality as relative MRR (e.g. about +1.6% relative MRR over the production baseline with about 40x fewer Phase-2 labelled examples).'}
 
+# Aggregation over many papers (25 Oct, at the author's suggestion). The gold lists come
+# from a search of every paper's markdown for the benchmark in a table or beside a number,
+# surveys dropped, then sorted by reading the matching lines (not the papers): `items` must
+# be named for a full answer, `either` may be named or not. report.py scores recall on
+# `items` by the regular expressions given; the judge grades the rest.
+- {id: X12, exp: E3, papers: [], kind: aggregation,
+   question: 'Which papers in the library report AlpacaEval (1.0 or 2.0) win rates for a model or method of their own? List them all, with the page where each reports it.',
+   gold: 'The 26 papers in items; a list that names most of them and nothing that reports no such result is correct; one that misses many is partial. Acceptable either way: Arena-Hard and BenchBuilder, Length-Controlled AlpacaEval, tinyBenchmarks, Inverse Constitutional AI, HelpSteer2, Qwen2.5-Omni (a spoken AlpacaEval in VoiceBench).',
+   items: {Mixture-of-Agents: 'mixture.of.agents|\bMoA\b', Null Models (Cheating Automatic LLM Benchmarks): 'null model|cheating automatic', Preference Leakage: 'preference leakage',
+           OLMo 2: 'olmo 2|olmo-2', OLMo: '\bOLMo\b(?! ?[23])|accelerating the science', Olmo 3: 'olmo 3|olmo-3', DeepSeek-V2: 'deepseek-v2', DeepSeek-V3: 'deepseek-v3', DeepSeek-R1: 'deepseek-r1',
+           AgentInstruct: 'agentinstruct|orca-3', Nemotron-4 340B: 'nemotron-4', UltraFeedback: 'ultrafeedback', WildFeedback: 'wildfeedback', WizardLM: 'wizardlm|evol-instruct',
+           Tulu 3: 't(u|ü)lu 3', KTO: '\bKTO\b', ORPO: '\bORPO\b', RLHF Workflow: 'rlhf workflow', Self-Rewarding Language Models: 'self-rewarding', SimPO: '\bSimPO\b',
+           Unpacking DPO and PPO: 'unpacking dpo', DataComp-LM: 'datacomp|\bDCLM\b', Thinking LLMs: 'thinking llms|thought preference', Privacy-Preserving Instructions: 'privacy-preserving instructions',
+           Safety Alignment Should Be Made More Than Just a Few Tokens Deep: 'few tokens deep', GRIT: 'generative representational|\bGRIT\b'}}
+- {id: X13, exp: E3, papers: [], kind: aggregation,
+   question: 'Which papers in the library evaluate a memory system or model on the LoCoMo benchmark? List them all, with the page where each reports its LoCoMo results.',
+   gold: 'The 16 papers in items; a list that names most of them and nothing that does not evaluate on LoCoMo is correct; one that misses many is partial. Acceptable either way: MemGuard, Beyond Recall, A-TMA, AgentMemBench. Not LoCoMo results: papers that only list it among benchmarks (HaluMem, Know Me Respond to Me, Toward Multi-Session Personalized Conversation, the surveys).',
+   items: {LoCoMo itself (Evaluating Very Long-Term Conversational Memory): 'evaluating very long-term|maharana', A-MEM: 'a-mem\b|agentic memory for llm', Mem0: '\bmem0\b', Memory-R1: 'memory-r1',
+           LightMem: 'lightmem', Memanto: 'memanto', Memory OS of AI Agent: 'memory ?os of ai|memoryos', MemOS (Are We Ready For An Agent-Native Memory System): 'are we ready|\bmemos\b',
+           Belief Memory: 'belief memory', Choosing How to Remember: 'choosing how to remember', MemMA: '\bmemma\b', O-Mem: 'o-mem\b', SeCom (On Memory Construction and Retrieval): 'secom|on memory construction',
+           Remember the Decision (rate-distortion): 'remember the decision|rate-distortion', SAGE: '\bSAGE\b|novelty gate', User as Code: 'user as code'}}
+
 # ---- E4: conversion fixes (old markdown, new markdown, PDF) ----
 - {id: F1, exp: E4, paper: musique, kind: table, page: 11,
    question: 'What answer and support scores does the C-only artifact model get on MuSiQue-Ans?',

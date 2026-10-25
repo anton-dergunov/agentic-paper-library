@@ -293,14 +293,14 @@ Cost
 
 Sessions
 
-| Q | condition | r | turns | tool calls | input tokens | $ | s | opened a PDF | calls outside the copy |
-|---|---|---|---|---|---|---|---|---|---|
-| X3 | x-att | 1 |  | 0 | 139,109 | 1.16 | 23 |  |  |
-| X3 | x-lib | 1 | 6 | 5 | 140,965 | 0.33 | 47 |  |  |
-| X3 | x-pdf | 1 | 12 | 11 | 229,811 | 0.36 | 71 | yes | 8 |
-| X3 | x-txt | 1 | 6 | 5 | 86,074 | 0.21 | 48 |  |  |
-| X4 | x-pdf | 1 | 5 | 4 | 86,230 | 0.22 | 132 | yes |  |
-| X4 | x-txt | 1 | 8 | 7 | 124,164 | 0.20 | 58 |  |  |
+| Q | condition | r | turns | tool calls | input tokens | $ | s | files: paper md | files: note | files: review | files: index | files: catalog | files: pdf | files: txt | opened a PDF | calls outside the copy | recall |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| X3 | x-att | 1 |  | 0 | 139,109 | 1.16 | 23 |  |  |  |  |  |  |  |  |  |  |
+| X3 | x-lib | 1 | 6 | 5 | 140,965 | 0.33 | 47 | 1 | 2 |  |  |  |  |  |  |  |  |
+| X3 | x-pdf | 1 | 12 | 11 | 229,811 | 0.36 | 71 |  |  |  |  |  | 2 | 2 | yes | 8 |  |
+| X3 | x-txt | 1 | 6 | 5 | 86,074 | 0.21 | 48 |  |  |  |  |  |  | 2 |  |  |  |
+| X4 | x-pdf | 1 | 5 | 4 | 86,230 | 0.22 | 132 |  |  |  |  |  | 4 |  | yes |  |  |
+| X4 | x-txt | 1 | 8 | 7 | 124,164 | 0.20 | 58 |  |  |  |  |  |  | 3 |  |  |  |
 
 ## E0: token cost and page resolution
 

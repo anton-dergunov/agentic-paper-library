@@ -2,7 +2,7 @@
 """Ask the test set's questions in each condition, one `claude -p` request per question.
 
     PAPER_LIBRARY=<library> uv run python run.py status
-    PAPER_LIBRARY=<library> uv run python run.py <tier>... [--budget USD] [--stop-at 0.8]
+    PAPER_LIBRARY=<library> uv run python run.py <tier>... [--budget USD] [--stop-at 0.8] [--no-reruns]
 
 Tiers, in priority order (see PROGRESS.md):
   A  E0 extras on DPO, and E1 on DPO in all five conditions (the pilot)
@@ -92,6 +92,7 @@ class Guard:
 
 
 GUARD = Guard(None, 0.8)
+NO_RERUNS = False  # --no-reruns: first answers only; run again without it to add the reruns
 
 
 def request(system, content, model=MODEL, stream_path=None):
@@ -421,7 +422,7 @@ def run_tier(tier):
         exp = name.split()[0]
         asked = sorted({j["qid"] for jobs in conditions.values() for j in jobs if j["qid"] in Q})
         judge.judge(asked)
-        if not rerun_conds:
+        if not rerun_conds or NO_RERUNS:
             continue
         differ = disagreements(asked, rerun_conds, exp)
         if differ:
@@ -459,6 +460,10 @@ def main():
         stop_at = float(args.pop(args.index("--stop-at") + 1))
         args.remove("--stop-at")
     GUARD.budget, GUARD.stop_at = budget, stop_at
+    global NO_RERUNS
+    if "--no-reruns" in args:
+        NO_RERUNS = True
+        args.remove("--no-reruns")
     try:
         for tier in args:
             run_tier(tier)

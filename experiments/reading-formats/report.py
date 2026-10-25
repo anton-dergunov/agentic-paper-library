@@ -9,6 +9,8 @@ share.
 """
 
 import collections
+import fnmatch
+import functools
 import json
 import re
 
@@ -96,15 +98,90 @@ def costs(recs, exp, conds):
                   "$", "mean s"], rows)
 
 
+FILE = re.compile(r"[\"']([^\"']+\.(?:md|pdf|txt))[\"']|([^\s\"'|;&<>()=]+\.(?:md|pdf|txt))\b")
+KINDS = ("paper md", "note", "review", "index", "catalog", "pdf", "txt")
+
+
+@functools.lru_cache(maxsize=None)
+def copy_files(cond):
+    copy = run.inputs.OUT / "copies" / ("lib-asis" if run.AGENT_COPIES.get(cond) == "lib" else run.AGENT_COPIES.get(cond, ""))
+    return tuple(str(f.relative_to(copy)) for f in copy.rglob("*") if f.is_file()) if cond in run.AGENT_COPIES else ()
+
+
+def expand(name, cond):
+    """A name with a wildcard (notes/RULER*.md) as the copy's files it matches, by its last
+    folder and file name; a plain name as itself."""
+    if "*" not in name and "?" not in name:
+        return {name}
+    if re.fullmatch(r"\*+\.\w+", name.rsplit("/", 1)[-1]):
+        return set()  # find -name "*.pdf": a listing of the tree, not a file named
+    parts = name.rsplit("/", 2)
+    tail, folder = parts[-1], (parts[-2] if len(parts) > 1 and "*" not in parts[-2] else "")
+    return {f for f in copy_files(cond)
+            if fnmatch.fnmatch(f.rsplit("/", 1)[-1], tail) and (not folder or "/%s/" % folder in "/" + f)}
+
+
+def files_named(stream, cond):
+    """The distinct files a session's tool calls name (a Read's path, or a path or wildcard
+    in a shell command or a Grep), by kind. A file seen only in a tool's output, reached
+    through a shell variable, or covered by a bare "*.pdf" listing or a search of the whole
+    tree, is not counted."""
+    found = set()
+    if not stream.exists():
+        return {}
+    for line in stream.read_text().splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if event.get("type") != "assistant":
+            continue
+        for part in event["message"].get("content", []):
+            if part.get("type") == "tool_use":
+                given = part.get("input") or {}
+                text = " ".join(str(given.get(k) or "") for k in ("file_path", "command", "path", "glob"))
+                for a, b in FILE.findall(text):
+                    if "$" not in (a or b):
+                        found |= expand(a or b, cond)
+    kinds = collections.Counter()
+    for path in {f.rsplit("/", 1)[-1]: f for f in found}.values():
+        if path.endswith(".pdf"):
+            kinds["pdf"] += 1
+        elif path.endswith(".txt"):
+            kinds["txt"] += 1
+        elif "notes/" in path:
+            kinds["note"] += 1
+        elif "reviews/" in path:
+            kinds["review"] += 1
+        elif "catalog/" in path:
+            kinds["catalog"] += 1
+        elif path.endswith("README.md") or path.endswith("AGENTS.md") or path.endswith("CLAUDE.md"):
+            kinds["index"] += 1
+        else:
+            kinds["paper md"] += 1
+    return kinds
+
+
+def recall(r):
+    """For a question with `items`: the share of them the answer names."""
+    items = run.Q[r["qid"]].get("items")
+    if not items:
+        return ""
+    named = sum(bool(re.search(rx, r["answer"] or "", re.I)) for rx in items.values())
+    return "%d/%d" % (named, len(items))
+
+
 def sessions(recs):
     """Tier D: one row per session or request, with what an agent did."""
     rows = []
     for r in sorted((r for r in recs if r["exp"] == "E3"), key=lambda r: (r["qid"], r["cond"], r["rep"])):
+        kinds = files_named(run.STREAMS / "E3" / r["cond"] / ("%s-r%d.jsonl" % (r["qid"], r["rep"])), r["cond"])
         rows.append([r["qid"], r["cond"], r["rep"], r.get("turns") or "", len(r.get("calls") or []),
-                     "{:,}".format(r["input"]), "%.2f" % (r["usd"] or 0), "%.0f" % r["seconds"],
-                     "yes" if r.get("opened_pdf") else "", len(r.get("outside") or []) or ""])
-    return table(["Q", "condition", "r", "turns", "tool calls", "input tokens", "$", "s", "opened a PDF",
-                  "calls outside the copy"], rows)
+                     "{:,}".format(r["input"]), "%.2f" % (r["usd"] or 0), "%.0f" % r["seconds"]]
+                    + [kinds.get(k) or "" for k in KINDS]
+                    + ["yes" if r.get("opened_pdf") else "", len(r.get("outside") or []) or "", recall(r)])
+    return table(["Q", "condition", "r", "turns", "tool calls", "input tokens", "$", "s"]
+                 + ["files: " + k for k in KINDS] + ["opened a PDF", "calls outside the copy", "recall"], rows)
 
 
 def e0(recs):

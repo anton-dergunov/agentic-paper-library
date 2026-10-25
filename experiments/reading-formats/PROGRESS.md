@@ -26,7 +26,7 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); the hand check is still to do |
 | C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
 | C2 small print and equations on unseen papers | E5 on PAIR, SFT Conflicts, KV transfer, GenRec pages chosen by the author for small print (R5–R9), in page, img1255, img2576, md and txt; E6, nine equation-structure questions (Q1–Q9) in pdf, txt, md | done 25 Oct |
-| D | E3 across papers (X1–X11) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | code, copies and golds ready 25 Oct; X3 piloted in all four conditions and X4 in x-pdf and x-txt (6 of 42 first answers, all correct); the rest to run: see "Tier D: run plan" |
+| D | E3 across papers (X1–X13) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | code, copies and golds ready 25 Oct; X3 piloted in all four conditions and X4 in x-pdf and x-txt (6 of 48 first answers, all correct); the rest to run: see "Tier D: run plan" |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
 
 How a tier runs: group by group (a paper); the conditions of a group in parallel, each asking its questions in turn so that the document is read from the cache; then the group is judged, and every question whose answers differ between conditions (closed book aside) is asked twice more in each condition while the cache is warm (one hour on the subscription) and judged again. Only differences that hold in two of three runs count.
@@ -141,16 +141,20 @@ Sessions: `claude -p` with `--tools Read,Grep,Glob,Bash`, `--setting-sources pro
 
 **Review-mined questions (X7–X11), added 25 Oct at the author's suggestion.** The other questions were written by a model reading the PDF and checked by looking at page images, which favours what is visible on a page. The library's reviews were written by agents reading the markdown and notes, so questions taken from their surprising findings come by the other route, and they are cross-paper by nature: how much training data is correct (Self-Instruct, s1, OpenThoughts), whether a sliding window costs quality (Mistral 7B, Gemma 3, Phi-4, GLM-5; Gemma 3's evidence is in figures only), Mem0 against Zep's memory size and delay, Memory-R1's 152 training questions and small LongMemEval gain, OLMo 2's learning-rate result. Their golds were checked against the PDFs. **The reviews cite three of these ten papers one page early** (Self-Instruct's Table 2 is on p. 5, cited p. 4; Memory-R1's Tables 1 and 5 on pp. 6 and 18, cited 5 and 17; OLMo 2's Table 8 on p. 19, cited 18): a citation problem in the library itself, to check (is it the markdown's page markers or the review's writer?) before the write-up.
 
+**Aggregation over many papers (X12, X13), added 25 Oct at the author's suggestion.** Which papers report AlpacaEval win rates of their own (26 papers), and which evaluate on LoCoMo (16). The gold lists come from a search of every paper's markdown for the benchmark in a table or beside a number, surveys dropped, sorted by reading the matching lines rather than the papers; the borderline ones are listed as acceptable either way. The lists may still hold a paper that only cites the benchmark, or miss one that reports it only in a figure: check any paper an answer names outside the list before counting it wrong. `report.py` scores **recall** (the share of the list an answer names, by the patterns in `items`); the judge grades the rest. These are where an index, the catalog or a review should beat grep over 2,275 text files, if anything does.
+
+**What the report shows per session** (`Sessions` table): turns, tool calls, tokens, cost, and **the files the session named, by kind**: paper markdown, notes, reviews, indexes, catalog, PDFs, text layers. Counted from the event stream: a Read's path, a path in a shell command or Grep, wildcards resolved against the copy (`notes/RULER*.md`), but not a bare `*.pdf` listing, a search of the whole tree, or files seen only in a tool's output. For the X3 pilot: x-lib named 2 papers and 1 note, x-txt 2 text files, x-pdf 2 PDFs and the 2 text files it made from them.
+
 **Golds** checked 25 Oct: RULER's Table 3 is on p. 7, not p. 6 (fixed); X4 checked against the preference-learning folder (SimPO and ORPO only; KTO and DPO keep a reference model); X5 gained LongLLMLingua's document reordering (§4.2, p. 4) beside the review's three "Repairing the reader" papers; X1, X2, X6 pages match.
 
-**Cost.** Agent sessions cost $0.20–0.36 in the pilots, the enumeration question included; x-att $1.16 for two papers, and with InstructGPT and DPO, or X8's four technical reports, 250K tokens or more (it may record `too_long`). The 36 first answers left: about $10–15; with reruns of disagreements (two more runs in every condition): $15–25, half to two-thirds of a window. Every session is capped at $5. With the hand check and the write-up, the experiment needs about one more window.
+**Cost.** Agent sessions cost $0.20–0.36 in the pilots, the enumeration question included; the two aggregation questions will cost more, perhaps $1–3 a session. x-att cost $1.16 for two papers; with InstructGPT and DPO, or X8's four technical reports, it is 250K tokens or more (it may record `too_long`). The 42 first answers left: about $20–30; reruns of disagreements (two more runs in every condition) could add as much again. So: run the first answers with `--budget 30`, look, and rerun only where the result depends on it. With the hand check and the write-up, the experiment needs one to one and a half more windows. Every session is capped at $5.
 
 **How to run it** (from this directory):
 
 ```bash
-PAPER_LIBRARY=~/papers uv run python run.py status                   # tier D: 6 of 42 first answers
+PAPER_LIBRARY=~/papers uv run python run.py status                   # tier D: 6 of 48 first answers
 PAPER_LIBRARY=~/papers uv run python copies.py                       # only if ~/.cache/.../copies is gone
-PAPER_LIBRARY=~/papers uv run python run.py D --budget 20 --stop-at 0.9
+PAPER_LIBRARY=~/papers uv run python run.py D --budget 30 --stop-at 0.9 --no-reruns   # first answers; then decide on reruns
 PAPER_LIBRARY=~/papers uv run python report.py                       # "E3: across papers" in results/summary.md
 ```
 
@@ -169,7 +173,7 @@ tier B: 102 of 102 first answers
 tier B2: 102 of 102 first answers
 tier C: 16 of 16 first answers
 tier C2: 55 of 55 first answers
-tier D: 6 of 42 first answers
+tier D: 6 of 48 first answers
 reruns: 111; requests so far $47.77
 ```
 <!-- /report.py -->
