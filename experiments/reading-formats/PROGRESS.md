@@ -27,7 +27,10 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
 | C2 small print and equations on unseen papers | E5 on PAIR, SFT Conflicts, KV transfer, GenRec pages chosen by the author for small print (R5–R9), in page, img1255, img2576, md and txt; E6, nine equation-structure questions (Q1–Q9) in pdf, txt, md | done 25 Oct |
 | D | E3 across papers (X1–X13) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | first answers done 25 Oct (48 of 48); X5 and X8 rerun twice in x-lib, x-pdf, x-txt; X8's reruns not yet graded (`judge.py X8`): see "Tier D, E3: across papers" |
-| E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
+| E | E2 single paper as an agent (CC-LIB, CC-PDF) | replaced 25 Oct by tier F |
+| F | figure questions to an agent with text layers and PDFs, with and without a one-line hint | planned 25 Oct; next to run (see "Tiers F–H") |
+| G | text-layer weak spots: broken and flawed text layers, in c0, txt, md and the tier F agent | planned; on the author's go-ahead |
+| H | notes written from the text layer against the existing notes from markdown, on four recent papers | planned; on the author's go-ahead |
 
 How a tier runs: group by group (a paper); the conditions of a group in parallel, each asking its questions in turn so that the document is read from the cache; then the group is judged, and every question whose answers differ between conditions (closed book aside) is asked twice more in each condition while the cache is warm (one hour on the subscription) and judged again. Only differences that hold in two of three runs count.
 
@@ -136,7 +139,28 @@ The first run stopped after one answer on the previous window's limit; the secon
 
 **What this decides.** By the run plan's rule, x-lib ≈ x-txt across papers: the library's structure is not what answers questions, on these 13. The case for the library rests on what this tier does not measure: notes and reviews as the reader's own record, citations, and the conversion's figure-free text being about the size of the text layer. It is not cheaper per question for an agent (x-txt is cheaper), and the one thing the PDF does better (figures, tiers A–C2) no agent condition used. E2 as planned (single paper as an agent) would add little; its cheaper variant, the four figure questions in x-lib and x-pdf, asks the one question left: does an agent open a figure or render a page when the text does not have the value?
 
-**Next session**: `judge.py X8` (about $0.09) and `report.py`; then decide the figure-question variant of E2 with the author, and write the experiment up (`README.md` in the format of `experiments/README.md`, the decision in `docs/design.md`).
+**Next session**: `judge.py X8` (about $0.09) and `report.py`; then tier F (below), and G and H on the author's go-ahead; then write the experiment up (`README.md` in the format of `experiments/README.md`, the decision in `docs/design.md`).
+
+## Tiers F–H: does the markdown still earn its place? (planned 25 Oct 2026 with the author, to run in a fresh window)
+
+Tier D left the markdown with no measured advantage over the text layer: equal on 51 single-paper and 13 cross-paper questions, worse on figure text (R8, R9) and on converter errors (E4), coarser for page citations. The text layer plus the PDF, opened when the text lacks something, is the candidate replacement; it would also drop the conversion step, its tickets and most of the library's storage. Three things the measurements do not yet cover decide it. E2 as planned is replaced by tier F.
+
+**F (core, run first): figures with the PDF at hand.** Does an agent with text layers and PDFs open a page when the value is drawn, not written?
+- Copy `copies/txtpdf`: the x-txt copy plus each paper's PDF beside its text file (APFS clones). Two variants of its `CLAUDE.md`: **f-plain** says only what the files are ("each paper as `.pdf` and as `.txt`, the PDF's text layer with `[page N]` at each page"); **f-hint** adds one line: "a value drawn in a figure is not in the text: read that page of the PDF". f-plain tests whether Claude Code does it unprompted.
+- Questions: the 8 figure-only questions of E1 (D5, G5, L2, L3, K5, M5, N5, P5), R4 (a plot value) and R8, R9 (text inside vector figures, which the text layer has: a control), each reworded to name its paper. 11 questions × 2 variants.
+- Record, besides the grade: whether the session looked at a page (`Read` of the PDF with `pages`, or a rendered image), which page, cost and time. Rerun disagreements twice.
+- Cost: about $0.3–0.6 a session, $8–12 with reruns, a quarter of a window.
+
+**G (on the author's go-ahead): where the text layer is weak.** The papers with issue records `pdf-broken-text-layer` (LSTM: a PostScript conversion with dropped ligatures and garbled equations; The Anatomy of a Large-Scale Hypertextual Web Search Engine: an OCR layer) and `pdf-text-layer-errors` (candidates: Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs, July 2025, the most recent; Elucidating the Design Space of Diffusion-Based Generative Models, dense mathematics; DiskANN; GPT-2; Performance MIDI-to-score conversion, 3.9% unmapped glyphs). Two questions each (about 14), drafted by `draft.py` from the PDF and aimed at the passages the issue records name, checked by hand. No paper this broken is recent, so closed book is a condition, to see what memory supplies.
+- Conditions: c0; **txt** (the text layer alone, one request: the worst case, an agent that never thinks of the PDF); **md** (the library's markdown, one request); **f-plain** (the tier F copy, an agent: the realistic case).
+- Cost: drafting $3–5, runs $5–8.
+
+**H (on the author's go-ahead): writing notes from the text layer.** Four papers published after the training cutoff, with notes written from the markdown (whatever converter and prompt version made them): SOAP, Muon, and Beyond (mathematics); Scaling and Stabilizing Large-Scale Embedding-Based Retrieval (industrial tables); A-TMA (memory benchmark tables); When the Judge Changes, So Does the Measurement (statistics). Not the E1 papers, whose questions an author of the note could know.
+- New notes from the text layer with `guide/reading-prompt.md`, its two lines about the markdown changed to describe the text layer (`[page N]` on each page; `## Conversion` lists what the text layer broke).
+- Comparison, blind: a judge with the PDF attached gets both notes in random order and lists for each its wrong statements (checked against the PDF), wrong pages, wrong numbers, garbled equations, and what one has that the other lacks; then the differences read by hand. A note written from markdown also carries the prompt and model version of its time, a confound to state; regenerating the four markdown notes with the current prompt removes it for $2–4 more, if the first comparison is close.
+- Cost: four notes $2–4, four comparisons $3–5.
+
+**Then decide.** If F shows the agent opens pages for figures (with or without the hint), G shows txt+PDF at least equal to md where the text layer is weak, and H shows notes from the text layer no worse, the text layer with page markers becomes the agent's copy, and markdown is made only where the text layer is broken. Otherwise, the tier that fails says what markdown is kept for.
 
 ## Tier D: run plan (written 25 Oct 2026, to run in a fresh session and window)
 
