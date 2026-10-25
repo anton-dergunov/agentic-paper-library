@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "P5",
+ "rep": 1,
+ "paper": "pair",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't say.** I only have the extracted text of the paper, not the Figure 1 image, so the labels inside the diagram aren't available to me. The text also never uses the terms \"visited-profile embeddings\" or \"aggregated user embedding.\"\n\nThe document has no printed page numbers, so the page numbers below are counted from the page breaks, with the title page as page 1.\n\n**History embedding**\n- The Figure 1 caption says the history tower \"aggregates recent interaction embeddings using positional attention to capture short-term behavioral intent\" (p. 6).\n- Section 4.3 describes this mechanism. It is a position-aware attention weighting with a learned positional encoding and a learnable attention vector, followed by a weighted sum of the K precomputed clicked-profile embeddings (Eq. 5, p. 5).\n- In the experiments, this is called \"P-ATT.\" It is compared against max, mean, GeM and plain attention pooling, and P-ATT scores highest (MAR@100 of 0.450) (Table 2, p. 7).\n\n**User / query embedding**\n- The text names no pooling operation for the user's own profile embedding. It says only that the query profile tower encodes the serialized profile text as e_q = f_θ(x_q), sharing an encoder with the document tower (p. 5).\n- The final query representation is not described as pooled. It is formed by \"normalized additive fusion\": the profile and history embeddings are each L2-normalized, added with a learnable weight γ on the history part, and normalized again (Eqs. 3–4, p. 5; Figure 1 caption, p. 6).\n\nIf the figure itself labels these components differently, I can't confirm that from this text. You would need to check the figure image directly.",
+ "input": 23596,
+ "cache_write": 579,
+ "cache_read": 23015,
+ "output": 1011,
+ "thinking": 450,
+ "usd": 0.029463,
+ "seconds": 11.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.2,
+ "date": "2026-10-25 10:01"
+}

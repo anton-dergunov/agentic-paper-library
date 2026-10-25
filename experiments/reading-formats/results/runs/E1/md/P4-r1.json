@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P4",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "The offline test set contains **11.8K query-level instances** involving **93K unique member profiles** (p. 6).\n\nFor context, from the same section (p. 6):\n- Each test instance has one clicked candidate as the positive and three negatives, drawn from non-clicked impressions and randomly sampled members.\n- The data is split by time, so all training interactions come before the test window.\n- The training set is much larger: 209K query-level instances involving 4.4M unique member profiles.",
+ "input": 23240,
+ "cache_write": 552,
+ "cache_read": 22686,
+ "output": 151,
+ "thinking": 0,
+ "usd": 0.011981200000000001,
+ "seconds": 2.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

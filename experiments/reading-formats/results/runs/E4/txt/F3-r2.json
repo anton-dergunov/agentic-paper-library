@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F3",
+ "rep": 2,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 3,
+ "status": "ok",
+ "answer": "**Eq. 5, the combined fine-tuning objective (page 3):**\n\n$$L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda \\cdot L_1(\\mathcal{C})$$\n\n**The terms:**\n\n- **L₂(C)** is the supervised objective (Eq. 4, page 3). It is the sum over labeled examples (x, y) in dataset C of log P(y | x₁, …, xₘ). That probability is computed as softmax(hₗᵐ W_y), where hₗᵐ is the final transformer block's activation and W_y is an added linear output layer (Eq. 3, page 3).\n- **L₁(C)** is the language modeling objective (Eq. 1, page 3), used here as an auxiliary objective on the labeled data. It is the sum over i of log P(uᵢ | uᵢ₋ₖ, …, uᵢ₋₁; Θ), where k is the context window size.\n- **λ** is the weight on the auxiliary objective (page 3). It was set to 0.5 in the experiments (page 5).\n\n**Why the auxiliary LM term is included (page 3):** the authors found it helped learning by (a) improving generalization of the supervised model and (b) accelerating convergence. The ablation in Table 5 suggests larger datasets benefit from it but smaller ones do not (page 8).",
+ "input": 16602,
+ "cache_write": 0,
+ "cache_read": 16600,
+ "output": 551,
+ "thinking": 96,
+ "usd": 0.014347999999999998,
+ "seconds": 7.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.39,
+ "date": "2026-10-25 10:09"
+}

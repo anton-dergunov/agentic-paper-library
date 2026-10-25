@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "K6",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document does not report HumanEval pass@1 retention for Qwen3 14B→32B or any other pair.** HumanEval is not among the benchmarks the paper evaluates.\n\nThe paper evaluates these benchmarks:\n\n- **Main benchmarks:** ARC-Challenge, HellaSwag, WinoGrande, MMLU 5-shot, GSM8K 8-shot with chain-of-thought, and WikiText-2 perplexity. CoQA is used for multi-turn handoff (p. 6; Table 11, p. 16).\n- **Generation benchmark:** GSM8K is the only one in Table 11 (p. 16).\n- **Held-out benchmarks:** PIQA, BoolQ and ARC-Easy (Table 18, p. 21).\n- **Calibration-domain sweep:** ARC-Easy, PIQA and BoolQ alongside the main benchmarks (Table 9, p. 16).\n\nThe closest available results for Qwen3 14B→32B with ridge at k=8 are:\n\n- **Average retention across the five main benchmarks:** 97.6%. Per benchmark, it is 101.0% on ARC-C, 97.6% on HellaSwag, 98.5% on WinoGrande, 95.0% on MMLU and 95.6% on GSM8K (Table 1, p. 6).\n- **Held-out retention:** 98.0% on PIQA, 101.9% on BoolQ and 99.8% on ARC-Easy (Table 18, p. 21).\n\nCalibration used one code-related dataset: CodeAlpaca was tested as an alternative calibration corpus (Tables 8–9, pp. 15–16). That was not a code-generation evaluation, so it says nothing about HumanEval performance.",
+ "input": 28295,
+ "cache_write": 559,
+ "cache_read": 27734,
+ "output": 705,
+ "thinking": 119,
+ "usd": 0.0241268,
+ "seconds": 6.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "N5",
+ "rep": 3,
+ "paper": "genrec",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give this number.** The text never states a normalized MRR value for the ~10B backbone at 5x Phase-2 data.\n\nThe relevant results are in Figure 4, \"Phase-2 data scaling for the ∼10B model\" (p. 6). That figure is an image in the source, and its data points aren't written out anywhere in the text.\n\nWhat the text does say about this experiment (all p. 6):\n- Phase-2 data was varied from 1x to 20x the smallest data configuration, with other variables held fixed.\n- The study ran on two backbones, one around 1B parameters and one around 10B.\n- For both sizes, offline MRR \"improves monotonically\" as Phase-2 data increases.\n- The ~1B model has lower absolute MRR than the ~10B model but scales in a similar way.\n\nSo the paper only supports saying that the ~10B model's MRR at 5x is higher than at smaller data sizes and lower than at larger ones. It doesn't say whether 5x was one of the data sizes plotted.",
+ "input": 22178,
+ "cache_write": 0,
+ "cache_read": 22176,
+ "output": 429,
+ "thinking": 97,
+ "usd": 0.0130232,
+ "seconds": 5.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.37,
+ "date": "2026-10-25 10:08"
+}

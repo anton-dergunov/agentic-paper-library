@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "K4",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "txt",
+ "page": 17,
+ "status": "ok",
+ "answer": "The MLP mapper baseline is trained with:\n\n- **Optimizer:** Adam\n- **Learning rate:** 10⁻³\n- **Epochs:** 20\n- **Batch size:** 4,096\n\nIt is trained with an MSE loss (p. 17, Appendix E, \"MLP baseline optimization\").\n\nFor context, Section 4.4 describes the MLP as a per-(target layer, head, K|V) mapper with two 1,024-unit ReLU hidden layers, trained with Adam on the same MSE loss as ridge. It defers the full settings to Appendix E (p. 7). Appendix E gives the architecture as Linear(dₛ, 1024) → ReLU → Linear(1024, 1024) → ReLU → Linear(1024, dₕᵗ) (p. 17).",
+ "input": 28295,
+ "cache_write": 559,
+ "cache_read": 27734,
+ "output": 306,
+ "thinking": 40,
+ "usd": 0.016146800000000003,
+ "seconds": 4.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P5",
+ "rep": 2,
+ "paper": "pair",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't show the diagram's labels, so I can't say which pooling operations it names.** Figure 1 is included only as an image reference with no visible content, and the text never uses the terms \"aggregated history embedding,\" \"aggregated user embedding,\" or \"visited-profile embeddings.\"\n\nThe caption and text describe these two steps, though not necessarily in the diagram's wording:\n\n- **History embedding:** The history tower \"aggregates recent interaction embeddings using positional attention\" (Figure 1 caption, p. 5). Section 4.3 gives the formula: an attention-weighted sum of the K most recently clicked profile embeddings, with weights from a learned positional encoding and a learnable attention vector (Eq. 5, p. 5). This is the \"P-ATT\" variant (p. 7).\n- **Final user (query) representation:** This is not described as pooling. It is \"normalized additive fusion\": the L2-normalized profile embedding plus γ times the L2-normalized history embedding, then L2-normalized again (Eqs. 3–4, p. 5; Figure 1 caption, p. 5).\n\nMax, mean, GeM, and plain attention pooling appear only as ablation alternatives for history aggregation (Tables 1–2, p. 7), not as the deployed design. If the diagram shows a different label, such as \"mean pooling\" or \"GeM pooling,\" I can't confirm it from this text.",
+ "input": 23267,
+ "cache_write": 0,
+ "cache_read": 23265,
+ "output": 646,
+ "thinking": 187,
+ "usd": 0.017581,
+ "seconds": 8.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.2,
+ "date": "2026-10-25 10:02"
+}

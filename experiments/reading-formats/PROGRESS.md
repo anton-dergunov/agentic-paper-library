@@ -21,10 +21,10 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | Tier | What | Status |
 |---|---|---|
 | A pilot | E0 extras on DPO; E1 on DPO in all five conditions (c0, pdf, txt, html, md) | done 24 Oct |
-| B core | E1 on SimPO, GPT-1, Lost in the Middle, InstructGPT in c0, pdf, txt, md; E4 | done but InstructGPT: I1, I2 asked, not judged; I3–I5 to ask (`run.py B` resumes it, about $3 as its caches have expired) |
-| B2 unseen papers | E1 (c0, pdf, txt, md, and html where arXiv has it) on papers after the model's training cutoff (June 2026): arXiv 2610.30941 (22 Oct 2026, to be added to the library first) and PersonaMem-v3 (June 2026, borderline; C0 shows whether it is known). About five questions each, of the same kinds as the test set (table, equation, appendix, figure only, unanswerable), drafted by one model request from the PDF and checked against the PDF pages with `inputs.py check`; added to `questions.yaml` as E1 papers. Cost about $3–4. Added 24 Oct at the author's suggestion: DPO is answered from memory, and memory can hide what a form loses | not started |
-| Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | |
-| C | E5 (small print); E1 html on SimPO, LitM, InstructGPT | not started |
+| B core | E1 on SimPO, GPT-1, Lost in the Middle, InstructGPT in c0, pdf, txt, md; E4 | done 25 Oct |
+| B2 unseen papers | E1 in c0, pdf, txt, md on four papers published after the model's training cutoff (June 2026), all with arXiv HTML: PAIR (LinkedIn, arXiv 2610.30941, 22 Oct), SFT Conflicts, RL Coexists (4 Aug, theory and equations), Cross-Model KV Cache Transfer in LLM Families (4 Aug, a closed-form mapping, tables), GenRec at Netflix (10 Aug, industrial tables and plots). Six questions each (two tables, an equation, an appendix or setup detail, a figure-only value, an unanswerable trap), drafted by `draft.py` (one request per paper from the PDF, `results/drafts/`) and checked by hand against the PDF pages and with `inputs.py check`. Plus a txt condition in E4: does the naive text layer have the converter's errors? Chosen 24 Oct: DPO is answered from memory, and memory can hide what a form loses | done 25 Oct |
+| Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); the hand check is still to do |
+| C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | not started |
 | D | E3 across papers: needs `copies.py` and agent runs in `run.py` (not written yet), and the pages of X3, X5, X6 checked | not started |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | not started |
 
@@ -71,23 +71,34 @@ How a tier runs: group by group (a paper); the conditions of a group in parallel
 - **Cost**: the markdown is 55–57% of the PDF's tokens and about the same as the text layer; HTML is 2.5× the PDF. With the cache, a further question on a paper already read costs $0.02–0.05 in any form.
 - **Memory**: closed book is right on 15.5 of 22, DPO almost wholly. Hence tier B2 (papers after the training cutoff).
 
-Decisions for the next session, in order:
+Decisions for the next session, in order (1 and 2 done 25 Oct, below):
 1. Finish tier B (InstructGPT): `run.py B`.
 2. Tier B2, the papers the model cannot know: this tests the figure and table results without memory to fall back on.
-3. Tier C: run E5 (the resolution question is cheap, and it says whether small print comes from the text layer or the image). Drop E1 html beyond DPO unless the author wants the number for the blog: HTML costs 2.5× the PDF and cannot cite pages.
+3. Tier C: run E5 (the resolution question is cheap, and it says whether small print comes from the text layer or the image). E1 html beyond DPO is dropped (agreed with the author 24 Oct): HTML costs 2.5× the PDF and cannot cite pages.
 4. Tier D (E3, across papers) is now the main open question: single-paper accuracy is settled as "PDF ≥ MD = TXT, the gap being figures".
 5. Tier E (E2) only if E3 leaves the single-paper agent case open; one cheaper variant is to ask only the four figure questions in CC-LIB, to see whether an agent in the library opens the figure.
 6. The hand check of disagreements (the plan's grading step) before any of this is written up.
 
+### Tier B finished, and tier B2 (25 Oct 2026; InstructGPT $2.93, drafting $2.21, B2 $8.63; the five-hour window at 41% at the end, this session's own work included)
+
+- **InstructGPT: all four conditions 5 of 5**, closed book included: it is answered from memory, like DPO. Its PDF fits (174K tokens of input, $1.41 for the first question, $0.04–0.05 for each further one from the cache); markdown 83K, text layer 73K.
+- **On the four unseen papers the result holds without memory: PDF 24 of 24, TXT 20, MD 20, closed book 2** (the two traps it declined; it knows none of the four papers, and on PAIR it answered the equation question for an older paper of the same name, from memory and wrong). TXT and MD lose exactly the four figure questions, decline them in 3 of 3 runs and never guess; the PDF answers all four in 3 of 3. Tables (8), equations (4), appendix and setup details (4) and traps (4) are level across PDF, TXT and MD. With DPO, SimPO, GPT-1, LitM and InstructGPT that makes 51 single-paper questions with one pattern: the forms differ only where a value is drawn, not written.
+- **The figure questions include a diagram label, not only plot values.** PAIR has no plot, so P5 asks for the pooling labels of its architecture diagram; "Temporal-Gated Pooling" exists only in the picture. The PDF answer read it and also noticed that the diagram disagrees with the caption and Section 4.3 (positional attention, not GeM pooling, for the history). The text forms quoted the caption and declined.
+- **Axis ticks in the text layer do not tempt a guess.** pdftotext keeps a vector plot's tick labels (SFT Conflicts' 83.0–88.0, GenRec's 1.00–1.16); the TXT answers named the axis range and declined.
+- **E4 in txt: the naive text layer has none of the converter's errors.** `pdftotext -layout` got F1–F6 right, in 3 of 3 runs where rerun, including Qwen3-VL Table 2 (F4–F6), which both markdown versions broke. The converter's errors are its own, not the PDF's: the text layer is the baseline a conversion must not fall below.
+- **Tokens, unseen papers**: MD is 63–73% of the PDF (GenRec 22K of 35K, PAIR 23K of 36K, KV transfer 38K of 60K, SFT Conflicts 89K of 123K), more than the 55–57% of the older papers; TXT is 47–66%, well below MD on the two papers with many equations and tables (KV transfer 28K, SFT Conflicts 69K). Where MD's extra tokens go on these papers is worth a look before the write-up.
+- **How B2's questions were made**: `draft.py` wrote six per paper from the PDF ($0.32–1.03 each, `results/drafts/`); each value was checked against the PDF page by eye and with `inputs.py check`, the comparison claims (K2, M2) against their tables, and the traps for absence. Changed from the drafts: M5 asked the peak of a curve, which sits on the 86.0 grid line printed in the text layer, so it asks two points off the grid lines instead; P5 is a diagram label (above); GenRec's only table repeats its cells in the prose, so N1 and N2 test reading, not table structure; P4 and N4 are setup details, the papers having no appendix.
+
 ## Generated
 
 <!-- report.py -->
-Requests: 178, $30.03; judge (latest grading of each question) $1.11; last five-hour utilisation seen: 86%.
+Requests: 324, $41.58; judge (latest grading of each question) $2.09; last five-hour utilisation seen: 41%.
 
 ```
 tier A: 38 of 38 first answers
-tier B: 90 of 102 first answers
-tier C: 0 of 32 first answers
-reruns: 51; requests so far $30.03
+tier B: 102 of 102 first answers
+tier B2: 102 of 102 first answers
+tier C: 0 of 16 first answers
+reruns: 83; requests so far $41.58
 ```
 <!-- /report.py -->

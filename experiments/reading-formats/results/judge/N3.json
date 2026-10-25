@@ -1,0 +1,30 @@
+{
+ "key": "61fc1a6f930ecbd8",
+ "usd": 0.030307999999999998,
+ "grades": {
+  "E1/txt/N3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/N3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/N3-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Declined; did not have the paper available."
+  },
+  "E1/md/N3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

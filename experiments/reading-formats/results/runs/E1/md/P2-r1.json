@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P2",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 8,
+ "status": "ok",
+ "answer": "At **512 dimensions**, the Matryoshka-trained PAIR model reaches a **MAR@100 of 0.444**. Its **relative retrieval latency is 0.65×** that of the full 1024-dimensional embedding (Table 3, p. 8).\n\nFor context, from the same table (p. 8):\n- The 512-dimensional version needs 0.50× the storage of the 1024-dimensional embedding.\n- The paper lists its intended use as \"Standard retrieval.\"\n- The full 1024-dimensional embedding reaches MAR@100 of 0.450 (1.00× latency) and is the one used for Premium Browsemaps.\n- The paper says relative latency is \"based on dimension-dependent retrieval cost and fixed serving overhead.\"\n- All dimensions come from a single model trained with a joint Matryoshka loss, not from separately trained models.",
+ "input": 23277,
+ "cache_write": 589,
+ "cache_read": 22686,
+ "output": 343,
+ "thinking": 58,
+ "usd": 0.0161172,
+ "seconds": 5.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.18,
+ "date": "2026-10-25 10:01"
+}

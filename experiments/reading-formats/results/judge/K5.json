@@ -1,0 +1,66 @@
+{
+ "key": "03edfd6a77fb2d08",
+ "usd": 0.052143999999999996,
+ "grades": {
+  "E1/txt/K5-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says value not given; Figure 4 shows about 0.90."
+  },
+  "E1/pdf/K5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/K5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says value not given; Figure 4 shows about 0.90."
+  },
+  "E1/pdf/K5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/K5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says value not given; Figure 4 shows about 0.90."
+  },
+  "E1/pdf/K5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/K5-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says value not given; Figure 4 shows about 0.90."
+  },
+  "E1/c0/K5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No document access; gives no value."
+  },
+  "E1/md/K5-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says value not given; Figure 4 shows about 0.90."
+  },
+  "E1/txt/K5-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says value not given; Figure 4 shows about 0.90."
+  }
+ }
+}

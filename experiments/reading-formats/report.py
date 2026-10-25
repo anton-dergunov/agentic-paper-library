@@ -112,12 +112,16 @@ def main():
         len(recs), spent, judged, "%.0f%%" % (100 * window[-1]) if window else "?"),
         "Marks: C correct, P partial, W wrong, D declined, TL too long for the context, `!` confidently wrong; "
         "several marks are r1 r2 r3."]
-    for exp, conds, title in (("E1", run.E1_ALL, "E1: single paper, format only"),
-                              ("E4", ("md-old", "md", "pdf"), "E4: conversion fixes"),
-                              ("E5", ("page", "img1255", "img2576", "md"), "E5: small print")):
-        if any(r["exp"] == exp for r in recs):
-            parts += ["## " + title, score_summary(recs, grades, exp, conds), scores_grid(recs, grades, exp, conds),
-                      "Cost", costs(recs, exp, conds)]
+    seen = [r for r in recs if r["paper"] not in run.UNSEEN]
+    unseen = [r for r in recs if r["paper"] in run.UNSEEN]
+    for rs, exp, conds, title in (
+            (seen, "E1", run.E1_ALL, "E1: single paper, format only"),
+            (unseen, "E1", run.E1_CORE, "E1, tier B2: papers published after the training cutoff"),
+            (recs, "E4", ("md-old", "md", "pdf", "txt"), "E4: conversion fixes"),
+            (recs, "E5", ("page", "img1255", "img2576", "md"), "E5: small print")):
+        if any(r["exp"] == exp for r in rs):
+            parts += ["## " + title, score_summary(rs, grades, exp, conds), scores_grid(rs, grades, exp, conds),
+                      "Cost", costs(rs, exp, conds)]
     if any(r["exp"] == "E0" for r in recs):
         parts += ["## E0: token cost and page resolution", e0(recs)]
     notes = [(run_id(r), grades[run_id(r)]["note"]) for r in recs

@@ -1,0 +1,66 @@
+{
+ "key": "7d0c0ed31aa668f1",
+ "usd": 0.048552000000000005,
+ "grades": {
+  "E1/pdf/M5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/M5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no numbers."
+  },
+  "E1/md/M5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no numbers."
+  },
+  "E1/md/M5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no numbers."
+  },
+  "E1/c0/M5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No document available; no values given."
+  },
+  "E1/txt/M5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no numbers."
+  },
+  "E1/md/M5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no numbers."
+  },
+  "E1/txt/M5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says values not given; gives no numbers."
+  },
+  "E1/pdf/M5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/M5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

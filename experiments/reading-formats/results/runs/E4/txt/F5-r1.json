@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F5",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "txt",
+ "page": 15,
+ "status": "ok",
+ "answer": "In Table 2, **GPT-5 (high)** scores **78.4** on MMMU-Pro (page 15).\n\nThe result is marked with an asterisk, so the authors took it from GPT-5's technical report rather than running it themselves (page 15).\n\nFor comparison, from the same table:\n- GPT-5 (minimal): 62.7\n- Qwen3-VL-235B-A22B: 69.3 (thinking) and 68.1 (instruct)\n- Gemini 2.5 Pro: 68.8 (thinking) and 71.2 (budget-128)\n\nGPT-5 (high) has the highest MMMU-Pro score of all the models in Table 2 (page 15).",
+ "input": 69732,
+ "cache_write": 541,
+ "cache_read": 69189,
+ "output": 266,
+ "thinking": 42,
+ "usd": 0.023493800000000002,
+ "seconds": 3.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-25 10:10"
+}

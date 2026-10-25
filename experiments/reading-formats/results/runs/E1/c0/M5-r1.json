@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "M5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "c0",
+ "page": 23,
+ "status": "ok",
+ "answer": "I don't know these numbers. I can't place a rollout-temperature ablation with a \"naive Parallel-RL\" model and a \"math\" model at τ = 0.8 and τ = 0.75 with enough confidence to quote MATH500 accuracies, and guessing would likely give you wrong figures.\n\nThere's also no paper available to me here; the working directory is empty. If you share the PDF, arXiv ID, or the table text, I can pull out the two values.",
+ "input": 805,
+ "cache_write": 803,
+ "cache_read": 0,
+ "output": 277,
+ "thinking": 130,
+ "usd": 0.011972,
+ "seconds": 4.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

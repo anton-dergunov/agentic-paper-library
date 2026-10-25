@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N4",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "The online A/B test used **about 10% of Netflix traffic** and ran for **4 weeks** (page 6).\n\nOther details about the test:\n\n- **Surfaces tested:** It focused on key batch-compute surfaces (page 6).\n- **Configuration:** The GenRec model ran in a low-data, low-signals configuration (page 6).\n- **Results:** GenRec showed statistically significant improvements over the production baseline on both short-term and long-term online metrics (page 6).\n  - Short-term homepage engagement metric: +0.115% (P = 3.1 × 10⁻¹⁰), shown in Figure 3 (page 6).\n  - Core long-term online metric: +0.006% relative (P = 0.025), which the authors describe as statistically meaningful at Netflix scale (page 6).",
+ "input": 35146,
+ "cache_write": 554,
+ "cache_read": 34590,
+ "output": 325,
+ "thinking": 59,
+ "usd": 0.017858,
+ "seconds": 4.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-25 10:07"
+}

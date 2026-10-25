@@ -1,0 +1,19 @@
+# Drafted from the PDF by claude-opus-5-5, $0.53; not yet checked
+- {id: K1, exp: E1, paper: kvxfer, kind: table, page: 18,
+   question: 'With the ridge mapper at its selected k, what MMLU accuracy and what GSM8K accuracy does Llama 3.1 8B→70B transfer achieve?',
+   gold: 'MMLU 57.78 and GSM8K 14.78 (Table 13).'}
+- {id: K2, exp: E1, paper: kvxfer, kind: table, page: 21,
+   question: 'Among the six matched-KV pairs, which pair has the highest BoolQ retention on the benchmarks never used to select k, and what is that retention?',
+   gold: 'Qwen3 14B→32B, at 101.9% BoolQ retention (Table 18).'}
+- {id: K3, exp: E1, paper: kvxfer, kind: equation, page: 5,
+   question: 'What is the closed-form solution the mapper uses for each per-head weight matrix, and what do its terms denote?',
+   gold: 'W* = (XᵀX + λI)⁻¹XᵀY. X is the N×(k·n_kv^s·d_h^s) design matrix of concatenated source KV features from the top-k source layers over N calibration tokens. Y is the N×d_h^t matrix of target keys or values; keys are RoPE-stripped. λ = 0.01 is the ridge (Tikhonov) penalty and I is the identity. X and Y are centered first, and the bias is recovered as b = Ȳ − X̄W* (Eq. 4).'}
+- {id: K4, exp: E1, paper: kvxfer, kind: appendix, page: 17,
+   question: 'What optimizer, learning rate, number of epochs and batch size are used to train the nonlinear MLP mapper baseline?',
+   gold: 'Adam, learning rate 1e-3, 20 epochs, batch size 4,096, with MSE loss (Appendix E run information table).'}
+- {id: K5, exp: E1, paper: kvxfer, kind: figure, page: 9,
+   question: 'In the Qwen3 14B↔32B multi-turn CoQA handoff evaluation, what word-level F1 does the 32B model reach standalone at turn depth 10?',
+   gold: 'About 0.90, roughly 0.903 (Figure 4, top solid blue line at turn 10).', tolerance: '±0.01 (0.89–0.91)'}
+- {id: K6, exp: E1, paper: kvxfer, kind: unanswerable, answerable: false, page: 6,
+   question: 'What HumanEval pass@1 retention does the ridge mapper achieve for Qwen3 14B→32B transfer?',
+   gold: 'Not reported: the paper has no code-generation benchmark such as HumanEval. It reports ARC-Challenge, HellaSwag, WinoGrande, MMLU, GSM8K and WikiText-2 perplexity, plus held-out PIQA, BoolQ and ARC-Easy and multi-turn CoQA. For Qwen3 14B→32B, average retention over the five accuracy benchmarks is 97.6%.'}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "I4",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "txt",
+ "page": 11,
+ "status": "ok",
+ "answer": "When compared directly, outputs from the 175B InstructGPT model are preferred:\n\n- **to 175B GPT-3 outputs 85 ± 3% of the time**, and\n- **to few-shot 175B GPT-3 outputs 71 ± 4% of the time.**\n\nThese figures appear in the introduction (page 3) and again in the Results on the API distribution section (page 11).\n\nOn page 11, the paper also notes that the results do not change significantly when evaluated on prompts submitted to GPT-3 models on the API. However, the PPO-ptx models perform slightly worse at larger model sizes in that setting.",
+ "input": 72602,
+ "cache_write": 558,
+ "cache_read": 72042,
+ "output": 252,
+ "thinking": 52,
+ "usd": 0.023920399999999998,
+ "seconds": 5.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-25 09:57"
+}

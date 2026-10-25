@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "M4",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 13,
+ "status": "ok",
+ "answer": "According to Appendix A.2 (Training Details, p. 13):\n\n- **Learning rate:** Fixed at 3 × 10⁻⁶ for RL (p. 13).\n- **Rollouts per prompt:** G = 16 rollouts were generated per prompt for group-based relative reward estimation (p. 13).\n- **KL penalty:** None. The authors disabled the KL divergence penalty in the loss function for their analysis (p. 13).\n\nOther details from the same section:\n- GRPO was run with the VeRL framework (p. 13).\n- Sampling temperature was 0.6 and top-p was 0.95, following the official DeepSeek configuration (p. 13).\n- Maximum output length was 8K tokens (p. 13).\n\nThe adaptation phase of Adapted Parallel-RL also uses G = 16 rollouts per prompt (p. 26).",
+ "input": 89359,
+ "cache_write": 554,
+ "cache_read": 88803,
+ "output": 366,
+ "thinking": 79,
+ "usd": 0.0295206,
+ "seconds": 4.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

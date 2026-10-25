@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "K5",
+ "rep": 3,
+ "paper": "kvxfer",
+ "form": "pdf",
+ "page": 9,
+ "status": "ok",
+ "answer": "The 32B model reaches a word-level F1 of **about 0.90** at turn depth 10 standalone. The paper does not give this number in text or a table, so I read it from the plot. In Figure 4 (page 9), the solid blue \"32B standalone\" line ends just above the 0.90 gridline at turn 10. That makes it the highest point on the chart. Treat the value as approximate, roughly 0.90–0.905.\n\nThe text supports this trend. It says that from turn 1 to turn 10, \"the mapper holding steady while the 32B ceiling rises.\" It also says the small-to-large gap widens by 1.7 pp over that span (page 8). The evaluation used 100 CoQA conversations of about 15 turns each across five domains, scored with F1 against the ground truth (page 8).",
+ "input": 60133,
+ "cache_write": 0,
+ "cache_read": 60131,
+ "output": 483,
+ "thinking": 224,
+ "usd": 0.0216942,
+ "seconds": 12.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-25 10:06"
+}

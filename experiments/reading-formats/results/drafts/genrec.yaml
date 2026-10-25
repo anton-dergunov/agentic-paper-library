@@ -1,0 +1,23 @@
+# Drafted from the PDF by claude-opus-5-5, $0.32; not yet checked
+- {id: N1, exp: E1, paper: genrec, kind: table, page: 7,
+   question: 'Compared with using an off-the-shelf open-source LLM as the base model, how much does Phase-1 foundation training improve offline MRR?',
+   gold: 'About +10-20% in offline MRR (Table 1).',
+   note: 'Table 1 is the paper''s only table. Its cells are also stated in the prose of Section 5.3, so no unrepeated cell exists.'}
+- {id: N2, exp: E1, paper: genrec, kind: table, page: 7,
+   question: 'Which training phase contributes the larger gain in offline MRR, and what is the size of that gain relative to a freshly trained Phase-1 model?',
+   gold: 'Phase 2, with +35-50% in offline MRR compared to a freshly trained Phase 1. The gain grows over time (Table 1).',
+   note: 'There is no second table, so this is a cross-row comparison within Table 1. These values are also repeated in Section 5.3.'}
+- {id: N3, exp: E1, paper: genrec, kind: equation, page: 5,
+   question: 'What is GenRec''s overall Phase-2 training loss, and what constraints apply to its weights?',
+   gold: 'L = α·L_ranking + β·L_language + γ·L_miscellaneous, subject to α + β + γ = 1 and α, β, γ ≥ 0. L_ranking is the catalog-aware ranking cross-entropy loss, L_language is the language-modeling loss over verbalized inputs and outputs, and L_miscellaneous covers other objectives where applicable. α, β and γ are tunable hyperparameters (Section 4.4).'}
+- {id: N4, exp: E1, paper: genrec, kind: appendix, page: 6,
+   question: 'How much Netflix traffic was allocated to the online A/B test of GenRec, and for how long did it run?',
+   gold: 'About 10% of Netflix traffic, for 4 weeks (Section 5.1).',
+   note: 'The paper has no appendix. This setup detail appears only in the body (Section 5.1), not in the abstract or introduction.'}
+- {id: N5, exp: E1, paper: genrec, kind: figure, page: 7,
+   question: 'For the ~10B backbone, what is the normalized offline ranking metric when Phase-2 training data is 5x the smallest configuration?',
+   gold: 'About 1.11 (Figure 4).',
+   tolerance: '±0.01 (1.10-1.12)'}
+- {id: N6, exp: E1, paper: genrec, kind: unanswerable, answerable: false, page: 6,
+   question: 'What NDCG@10 does GenRec achieve offline compared with the production ranker?',
+   gold: 'Not reported: the paper does not use NDCG. It reports offline ranking quality only as relative MRR, for example a lift of about +1.6% relative MRR over the production baseline with about 40x fewer Phase-2 labeled examples.'}

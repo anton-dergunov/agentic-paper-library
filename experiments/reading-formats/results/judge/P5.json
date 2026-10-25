@@ -1,0 +1,66 @@
+{
+ "key": "a17d5dcbf26573c7",
+ "usd": 0.060212,
+ "grades": {
+  "E1/pdf/P5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/P5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says diagram labels unavailable."
+  },
+  "E1/md/P5-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says diagram labels unavailable."
+  },
+  "E1/pdf/P5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/P5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/P5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says figure image not available."
+  },
+  "E1/c0/P5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No document received."
+  },
+  "E1/txt/P5-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says diagram labels unavailable."
+  },
+  "E1/md/P5-r3": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says diagram labels unavailable."
+  },
+  "E1/txt/P5-r2": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says diagram labels unavailable."
+  }
+ }
+}

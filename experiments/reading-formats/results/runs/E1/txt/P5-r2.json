@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "P5",
+ "rep": 2,
+ "paper": "pair",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't include the diagram's labels.** Only the caption of Figure 1 is in the text, so I can't say which pooling operations the diagram names for the \"aggregated history embedding\" or the \"aggregated user embedding.\" Neither of those terms appears in the document.\n\nWhat the caption and the text do say:\n\n- **History aggregation:** The caption says the history tower \"aggregates recent interaction embeddings using positional attention to capture short-term behavioral intent\" (p. 6). Section 4.3 defines this positional attention (P-ATT) as softmax weights over the 𝐾 most recently clicked profile embeddings plus a learned positional encoding (Eq. 5, p. 5). Table 2 calls it \"Positional encoding + dot product + softmax + weighted sum\" (p. 7).\n- **Final user/query representation:** The caption says static profile identity and dynamic intent are combined \"through normalized additive fusion\" (p. 6). Eq. 3–4 describe this as L2-normalizing the profile and history embeddings, adding them with a learnable weight 𝛾, and L2-normalizing the result (p. 5). This is described as fusion, not pooling.\n- The document never says what pooling the LLM encoder uses to produce the query or candidate profile embeddings.",
+ "input": 23596,
+ "cache_write": 0,
+ "cache_read": 23594,
+ "output": 914,
+ "thinking": 494,
+ "usd": 0.0230068,
+ "seconds": 10.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.2,
+ "date": "2026-10-25 10:02"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "K2",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "txt",
+ "page": 21,
+ "status": "ok",
+ "answer": "**Qwen3 14B→32B** has the highest BoolQ retention among the held-out benchmarks, at **101.9%** (Table 18, p. 21).\n\nA value above 100% means the mapped-KV transfer scored slightly higher on BoolQ than the 32B target's own standalone accuracy. Retention is defined as transfer accuracy divided by target standalone accuracy on the same benchmark (p. 21; definition also on p. 6).\n\nThe next highest are Qwen3 8B→32B at 99.9% and Llama 3.1 8B→70B at 96.2% (p. 21).\n\nThe selected k values are fixed for this evaluation. The paper says \"Neither the fit nor k is changed, so this measures the reported configuration out of sample\" (p. 21). BoolQ is one of the three held-out benchmarks never used to select k, along with PIQA and ARC-Easy (p. 21).",
+ "input": 28302,
+ "cache_write": 566,
+ "cache_read": 27734,
+ "output": 406,
+ "thinking": 108,
+ "usd": 0.0182028,
+ "seconds": 4.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-25 10:05"
+}

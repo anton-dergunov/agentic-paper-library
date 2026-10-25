@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N3",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "**GenRec's overall Phase-2 training loss** is a weighted, multi-objective loss (page 5):\n\nL = α · L_ranking + β · L_language + γ · L_miscellaneous\n\n**Constraints on the weights** (page 5):\n- α + β + γ = 1\n- α, β, γ ≥ 0\n\nThe weights α, β and γ are tunable hyperparameters that can be set through offline experiments (page 5).\n\n**What each term covers:**\n- **L_ranking** is the main objective. It is a catalog-aware ranking objective that trains the model to give higher scores to items linked to high-value engagements. Positive labels come from high-quality engaged events, such as high-duration plays or strong explicit feedback. Denoising logic and thresholds vary by content type. These labels feed a cross-entropy loss over the item catalog or candidate set (page 5).\n- **L_language** is a language modeling objective over the verbalized inputs and outputs. It helps preserve the backbone's general language understanding and text generation, and it supports recommendation steering through prompts (page 5).\n- **L_miscellaneous** covers \"other objectives where applicable.\" The document does not say what these are (page 5).\n\n**Two related points:**\n- The ranking loss is also reward-weighted. Each training example gets a scalar weight derived from multiple reward models, and that example's ranking loss is scaled by it. High-value engagements are weighted up and low-value or undesirable behaviors are weighted down (page 5).\n- At inference time, only the ranking task is used to produce the ranking (page 5).",
+ "input": 35143,
+ "cache_write": 551,
+ "cache_read": 34590,
+ "output": 524,
+ "thinking": 10,
+ "usd": 0.021814,
+ "seconds": 7.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.35,
+ "date": "2026-10-25 10:07"
+}

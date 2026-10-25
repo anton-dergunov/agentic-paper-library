@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "I3",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "pdf",
+ "page": 40,
+ "status": "ok",
+ "answer": "For the 175B SFT model, the paper uses a **learning rate of 5.03e-6, a batch size of 8, and 16 epochs**.\n\n**Learning rate and batch size**\n- The 175B model uses a learning rate of 5.03e-6 and a batch size of 8. (The 1.3B and 6B models instead use 9.65e-6 and 32.) (p. 40)\n- The schedule is cosine decay down to 10% of the original learning rate, with no warmup. (p. 40)\n- The learning rate was chosen by a geometric search over 5 values for the 175B model. (p. 40)\n\n**Epochs**\n- The SFT models were trained for 16 epochs with residual dropout of 0.2. (p. 8, p. 40)\n- The number of epochs was also tuned by geometric search. (p. 40)\n- The SFT models overfit on validation loss after 1 epoch. However, training longer still improved RM score and human preference ratings. (p. 8)\n- Final models were selected by RM score, which the authors found predicts human preference better than validation loss. (p. 8, p. 41)\n\n**Related but different model**\nThe models used to initialize RLHF (PPO) are trained differently from the SFT baseline. The 175B initialization model is trained for 2 epochs with a learning rate of 2.45e-6 and a batch size of 8, mixing in 10% pretraining data. (p. 42)",
+ "input": 174198,
+ "cache_write": 174196,
+ "cache_read": 0,
+ "output": 624,
+ "thinking": 163,
+ "usd": 1.406056,
+ "seconds": 12.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.01,
+ "date": "2026-10-25 09:57"
+}

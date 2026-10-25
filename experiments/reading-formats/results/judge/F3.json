@@ -1,8 +1,14 @@
 {
- "key": "50793d297873da59",
- "usd": 0.062208,
+ "key": "742aa67db343a6ed",
+ "usd": 0.073712,
  "grades": {
-  "E4/pdf/F3-r2": {
+  "E4/txt/F3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md/F3-r3": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
@@ -14,19 +20,25 @@
    "confident_wrong": false,
    "note": ""
   },
-  "E4/md-old/F3-r3": {
-   "score": "declined",
-   "page_ok": true,
-   "confident_wrong": false,
-   "note": "Says equation missing; only hedged inference of form."
-  },
-  "E4/md/F3-r3": {
+  "E4/pdf/F3-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
    "note": ""
   },
-  "E4/pdf/F3-r1": {
+  "E4/pdf/F3-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/txt/F3-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/pdf/F3-r2": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
@@ -36,9 +48,15 @@
    "score": "declined",
    "page_ok": true,
    "confident_wrong": false,
-   "note": "Says equation missing; gives no combined form."
+   "note": "Says Eq. 5 is blank in the conversion; gives no formula."
   },
-  "E4/pdf/F3-r3": {
+  "E4/md-old/F3-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says equation missing; only infers likely form L2 + λ·L1."
+  },
+  "E4/txt/F3-r3": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
@@ -54,7 +72,7 @@
    "score": "declined",
    "page_ok": true,
    "confident_wrong": false,
-   "note": "Says equation missing; form given only as inference."
+   "note": "Says equation missing; only infers L2 plus λ-weighted L1."
   }
  }
 }

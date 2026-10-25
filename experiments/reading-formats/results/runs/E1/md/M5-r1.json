@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "M5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 23,
+ "status": "ok",
+ "answer": "**The document doesn't report either number.** The specific accuracies appear only in Figure 5, which is an image, and the surrounding text gives trends rather than values.\n\nWhat the text does say about the rollout-temperature ablation (Appendix D.2, p. 23):\n\n- **Range tested:** τ from 0.4 to 0.8. Only the Math model's rollout temperature was varied, and the other tasks were held constant. The analysis used LoRA on a data subset.\n- **Math model:** Its performance improves as τ increases from 0.4 to 0.8.\n- **Intra-group variance:** −log V consistently decreases as τ rises. This means intra-group variance, and therefore the interference upper bound, increases.\n- **Naive Parallel-RL on MATH500:** Accuracy first rises and then falls as τ grows. The peak is around τ ≈ 0.65. So at τ = 0.8 accuracy has dropped below that peak, but the exact value isn't given.",
+ "input": 89383,
+ "cache_write": 578,
+ "cache_read": 88803,
+ "output": 380,
+ "thinking": 61,
+ "usd": 0.0299926,
+ "seconds": 5.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

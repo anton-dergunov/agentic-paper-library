@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N6",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't report NDCG@10.** The only offline ranking metric it gives is Mean Reciprocal Rank (MRR).\n\nWhat it says about offline performance against the production ranker:\n\n- **Overall lift:** GenRec achieves about a +1.6% relative lift in MRR over the production baseline. It does this with about 40× fewer Phase-2 labeled training examples and fewer input signals (p. 6).\n- **Further scaling:** Offline metrics keep improving as training data and input signals are scaled up (p. 6).\n- **Data scaling:** For the ~10B model, normalized offline MRR rises steadily from 1.00 at 1x data to about 1.16 at 20x (Figure 4, p. 7).\n- **Phase contributions:** These are measured against other reference points, not the production ranker (p. 7, Table 1).\n  - Phase 1 improves offline MRR by about 10–20% compared with using an off-the-shelf model as the base.\n  - Phase 2 adds roughly 35–50% on the Phase-1 training cutoff date. This rises to about 80% after two weeks.",
+ "input": 35139,
+ "cache_write": 547,
+ "cache_read": 34590,
+ "output": 399,
+ "thinking": 31,
+ "usd": 0.019282,
+ "seconds": 7.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-25 10:07"
+}

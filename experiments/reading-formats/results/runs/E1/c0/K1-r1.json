@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "K1",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "c0",
+ "page": 18,
+ "status": "ok",
+ "answer": "I don't know these numbers, and I'd rather not guess.\n\nThere are several papers on transferring representations, activations, or steering vectors between model sizes (such as Llama 3.1 8B → 70B) using linear or ridge mappers. Without the specific paper, I can't reliably recall which k was selected or the MMLU and GSM8K accuracies it reported. Any figures I gave would likely be made up.\n\nThe working directory here (`reading-formats/empty`) also doesn't contain any paper text I could check.\n\nIf you share the paper's title, arXiv ID, or the relevant table or section, I can find the selected k and the MMLU and GSM8K results for the 8B→70B ridge transfer.",
+ "input": 801,
+ "cache_write": 799,
+ "cache_read": 0,
+ "output": 329,
+ "thinking": 103,
+ "usd": 0.012979999999999998,
+ "seconds": 5.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.29,
+ "date": "2026-10-25 10:05"
+}

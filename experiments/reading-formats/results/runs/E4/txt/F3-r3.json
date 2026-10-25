@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F3",
+ "rep": 3,
+ "paper": "gpt1",
+ "form": "txt",
+ "page": 3,
+ "status": "ok",
+ "answer": "# Fine-tuning objective (Eq. 5)\n\n$$L_3(\\mathcal{C}) = L_2(\\mathcal{C}) + \\lambda \\cdot L_1(\\mathcal{C})$$\n\n(page 3)\n\n**The terms**\n\n- **$L_2(\\mathcal{C})$** is the supervised objective over the labeled dataset $\\mathcal{C}$ (Eq. 4, page 3):\n  $$L_2(\\mathcal{C}) = \\sum_{(x,y)} \\log P(y \\mid x_1, \\ldots, x_m)$$\n  Here $P(y \\mid x_1, \\ldots, x_m) = \\text{softmax}(h_l^m W_y)$ (Eq. 3, page 3). $h_l^m$ is the final transformer block's activation, and $W_y$ is the added linear output layer.\n\n- **$L_1(\\mathcal{C})$** is the language modeling objective applied as an auxiliary objective. It is defined in Eq. 1 (page 3):\n  $$L_1(\\mathcal{U}) = \\sum_i \\log P(u_i \\mid u_{i-k}, \\ldots, u_{i-1}; \\Theta)$$\n  $k$ is the context window size.\n\n- **$\\lambda$** is the weight on the auxiliary objective (page 3). It was set to 0.5 in the experiments (page 5).\n\n**Why the auxiliary term is included**\n\nThe authors found that adding language modeling as an auxiliary objective during fine-tuning helped in two ways (page 3):\n- It improved the generalization of the supervised model.\n- It sped up convergence.\n\nThe only extra parameters needed during fine-tuning are $W_y$ and the embeddings for delimiter tokens (page 3).",
+ "input": 16602,
+ "cache_write": 0,
+ "cache_read": 16600,
+ "output": 699,
+ "thinking": 118,
+ "usd": 0.017307999999999997,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.39,
+ "date": "2026-10-25 10:09"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N2",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "**Phase 2 (post-training) contributes the larger gain.** It improves offline ranking metrics (MRR) by roughly **35–50%** compared with a freshly trained Phase-1 model. This is measured on the Phase-1 training cutoff date, when the Phase-1 model is at its freshest (p. 7, Section 5.3 and Table 1).\n\nThat gain grows over time. Two weeks later, the improvement rises to roughly **80%**. The authors attribute this to two things: the strength of task-specific adaptation, and the Phase-1 backbone going stale because it is updated less often (p. 7).\n\nFor comparison, using the Phase-1 foundation LLM as the base model improves offline ranking metrics by about **10–20%**. That figure is measured against an off-the-shelf (OSS) LLM backbone (p. 7, Section 5.3 and Table 1).\n\nThe two figures use different baselines. Phase 1 is compared with an OSS model, and Phase 2 is compared with a fresh Phase-1 model. Still, these are the figures the paper itself reports for each phase's contribution (p. 7).",
+ "input": 35158,
+ "cache_write": 566,
+ "cache_read": 34590,
+ "output": 518,
+ "thinking": 149,
+ "usd": 0.021814000000000004,
+ "seconds": 6.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.35,
+ "date": "2026-10-25 10:06"
+}

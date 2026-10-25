@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "K6",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The paper does not report HumanEval results.** It contains no HumanEval pass@1 retention for Qwen3 14B→32B or for any other pair.\n\nThese are the benchmarks the paper does evaluate:\n- **Main benchmarks:** ARC-Challenge, HellaSwag, WinoGrande, MMLU 5-shot, GSM8K 8-shot, and WikiText-2 perplexity (p. 6; Table 11, p. 16).\n- **Multi-turn handoff:** CoQA (p. 8).\n- **Held-out benchmarks:** PIQA and BoolQ (Table 18, p. 21; also in Table 9, p. 16).\n- **Further benchmark:** ARC-Easy (Table 9, p. 16; Table 18, p. 21).\n\nThe only code-related item is CodeAlpaca, which is used as an alternative calibration domain, not as an evaluation benchmark (Table 8, p. 15; Table 9, p. 16).\n\nFor Qwen3 14B→32B (k=8), the ridge mapper's reported retention is:\n- **Main benchmarks (Table 1, p. 6):**\n  - ARC-C: 101.0%\n  - HellaSwag: 97.6%\n  - WinoGrande: 98.5%\n  - MMLU: 95.0%\n  - GSM8K: 95.6%\n  - Average: 97.6%\n- **Held-out benchmarks (Table 18, p. 21):**\n  - PIQA: 98.0%\n  - BoolQ: 101.9%\n  - ARC-Easy: 99.8%\n\nGSM8K is the closest thing to a generation task in the paper. It is classified as a \"Generation\" benchmark (Table 11, p. 16).",
+ "input": 60116,
+ "cache_write": 560,
+ "cache_read": 59554,
+ "output": 668,
+ "thinking": 90,
+ "usd": 0.029758800000000002,
+ "seconds": 7.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

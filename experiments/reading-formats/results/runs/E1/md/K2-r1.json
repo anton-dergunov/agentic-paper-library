@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "K2",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "md",
+ "page": 21,
+ "status": "ok",
+ "answer": "The pair with the highest BoolQ retention is **Qwen3 14B→32B, at 101.9%** (Table 18, p. 21).\n\nThe other pairs' BoolQ retention, from the same table (p. 21):\n\n- Qwen3 8B→32B: 99.9%\n- Llama 3.1 8B→70B: 96.2%\n- Ministral 3 3B→8B: 95.1%\n- Ministral 3 3B→14B: 57.4%\n- Ministral 3 8B→14B: 44.4%\n\nPIQA, BoolQ and ARC-Easy were never used to select k. For each pair, the fit and k were left unchanged, so these numbers measure the reported configuration out of sample (p. 21). Retention is measured against the target's standalone accuracy on the same benchmark, which is why a value above 100% is possible (Table 18, p. 21).",
+ "input": 38462,
+ "cache_write": 566,
+ "cache_read": 37894,
+ "output": 330,
+ "thinking": 43,
+ "usd": 0.0187148,
+ "seconds": 4.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-25 10:05"
+}

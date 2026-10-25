@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "P5",
+ "rep": 3,
+ "paper": "pair",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't contain the labels inside the architecture diagram.** Figure 1 (page 6) is included only as its caption, so I can't tell you what the diagram itself says about \"aggregated history embedding\" or \"aggregated user embedding.\"\n\nHere is what the caption and body text say about these components:\n\n- **History embedding:** The caption says the history tower \"aggregates recent interaction embeddings using positional attention to capture short-term behavioral intent\" (page 6). Section 4.3 describes this positional attention (P-ATT). Each of the K most recently clicked profiles has a precomputed embedding. A learned positional encoding is added, the result is scored with a learnable vector **w** and passed through a softmax, and the weighted sum gives the history embedding **e_H** (Eq. 5, page 5). The attention is query-agnostic (page 5), and K = 10 (page 5).\n- **Final query/user representation:** The caption says the final query representation \"combines static profile identity and dynamic intent through normalized additive fusion\" (page 6). Per Eqs. 3–4, the profile embedding and history embedding are each L2-normalized, combined as ẽ_q + γ·ẽ_H with a learnable γ, and L2-normalized again (page 5). This is described as additive fusion, not as a pooling operation.\n- **Profile embedding:** The text doesn't name a pooling method (such as mean or last-token pooling) for the profile or document towers. It says only that they share encoder parameters, with e_q = f_θ(x_q) and e_d = f_θ(x_d) (page 5).\n\nMax, mean, GeM and plain attention pooling appear only as ablation alternatives for history aggregation (Table 2, page 7). The text doesn't link any of them to the diagram.",
+ "input": 23596,
+ "cache_write": 0,
+ "cache_read": 23594,
+ "output": 1038,
+ "thinking": 456,
+ "usd": 0.025486800000000004,
+ "seconds": 11.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.21,
+ "date": "2026-10-25 10:02"
+}

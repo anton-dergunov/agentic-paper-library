@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "M1",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "**Adapted Parallel-RL reaches 59.0% on AIME2025, and Single-Task RL reaches 57.1%.** That is a gain of +1.9 points for Adapted Parallel-RL (Table 4, page 7).\n\nThe table also reports:\n- The 7B base model scores 49.2% on AIME2025 (page 7).\n- Overall, the 7B Adapted Parallel-RL model retains 102.4% of Single-Task RL performance on average (page 7).\n- Adapted Parallel-RL works by summing the task updates and then doing a quick adaptation on 5% of the original training-set size (page 8).",
+ "input": 122983,
+ "cache_write": 122981,
+ "cache_read": 0,
+ "output": 262,
+ "thinking": 53,
+ "usd": 0.989096,
+ "seconds": 6.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.21,
+ "date": "2026-10-25 10:03"
+}

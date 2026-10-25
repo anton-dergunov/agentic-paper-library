@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M5",
+ "rep": 3,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 23,
+ "status": "ok",
+ "answer": "**The document doesn't give these values.** Figure 5 on page 23 shows the temperature ablation, but the extracted text has no per-point data labels. It only includes the axis ranges: accuracy on MATH500 from 83.0% to 88.0%, and sampling temperature from 0.4 to 0.8. Any specific number I gave for τ = 0.8 or τ = 0.75 would be a guess from the plot. The text also doesn't say whether τ = 0.75 was one of the tested temperatures.\n\nThe paper describes the trends in words (page 23):\n\n- **Math Model:** its performance \"improves as τ increases from 0.4 to 0.8.\" At the same time, −log V \"consistently decreases,\" which means intra-group variance rises.\n- **Naive Parallel-RL:** it shows \"a non-monotonic trend: accuracy first increases and then degrades as τ grows.\" At high temperatures, \"excessive inter-task interference degrades the merged model.\"\n- **Best point:** Parallel-RL performs best \"around τ ≈ 0.65,\" described as the \"sweet spot.\"\n\nSo at τ = 0.8, the merged model should be past its peak and declining, while the Math Model should be near its highest. The exact accuracies would have to be read off the original figure image.",
+ "input": 68828,
+ "cache_write": 0,
+ "cache_read": 68826,
+ "output": 576,
+ "thinking": 163,
+ "usd": 0.025293200000000002,
+ "seconds": 8.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.28,
+ "date": "2026-10-25 10:04"
+}

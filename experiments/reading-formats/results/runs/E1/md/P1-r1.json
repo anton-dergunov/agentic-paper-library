@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "On the Premium user retrieval benchmark, LinkedIn's production **Holistic-171** embedding gets:\n\n- **ACC: 0.794**\n- **MAR@25: 0.169**\n\n(Table 1, p. 7)\n\nIts MAR@100 is 0.288 (Table 1, p. 7; also p. 1).\n\nACC is measured over 4 candidates (1 positive and 3 negatives), where random chance is 0.25. MAR@k is measured over a fixed pool of 100 candidates (p. 6–7). For comparison, the best PAIR variant (P-ATT history) scores 0.967 ACC and 0.265 MAR@25 (Table 1, p. 7).",
+ "input": 23253,
+ "cache_write": 23251,
+ "cache_read": 0,
+ "output": 289,
+ "thinking": 59,
+ "usd": 0.191796,
+ "seconds": 4.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.17,
+ "date": "2026-10-25 10:01"
+}

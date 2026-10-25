@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "P3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 5,
+ "status": "ok",
+ "answer": "# PAIR Training Objective for One Query\n\n## Core loss (Eq. 2, p. 5)\n\n$$\\mathcal{L}_{\\text{PAIR}} = -\\log \\frac{\\exp(s(q,d^+))}{\\exp(s(q,d^+)) + \\sum_{i=1}^{K}\\exp(s(q,d_i^-))}$$\n\nThis loss is minimized when the clicked candidate scores higher than all of the negatives (p. 5).\n\n- **q**: the query user (p. 4).\n- **d⁺**: the one clicked candidate, treated as the preferred item (p. 4). It comes from a member's click on a recommended candidate in the Premium Browsemaps production logs (p. 4).\n- **d⁻ᵢ, i = 1…K**: the negative candidates (p. 4). There are two kinds (p. 4):\n  - **Hard negatives**: candidates shown in the same session but not clicked. These are used first.\n  - **Easy negatives**: members sampled at random from the active Premium pool, outside the shown set. They fill any remaining slots.\n  \n  The positive-to-negative ratio is 1:3, so each instance has three negatives (pp. 4, 6).\n\nThe equation has the same form as standard multi-negative contrastive learning (p. 5). The authors say the difference is in what the negatives mean. The shown-but-unclicked negatives were chosen by the deployed retriever, so they are realistic alternatives the system would actually consider, not arbitrary or ANN-mined negatives (p. 5). PAIR does not model a reference policy or use a token-level probability ratio, so it is not a direct embedding version of DPO (p. 4).\n\n## Score function (Eq. 1, p. 4)\n\n$$s(q,d) = \\cos(\\mathbf{e}_q^{\\text{final}}, \\mathbf{e}_d)/\\tau$$\n\n- **e_q^final**: the final query representation, defined below (p. 4).\n- **e_d**: the candidate's embedding (p. 4). It is produced by the document tower, e_d = f_θ(x_d), which shares parameters with the query profile tower (p. 5). Candidate embeddings are L2-normalized (p. 5).\n- **τ**: the temperature (p. 4). It is set to 0.02 in all experiments (p. 6).\n\n## How e_q^final is built (Eqs. 3–5, p. 5)\n\n$$\\tilde{\\mathbf{e}}_q = \\frac{\\mathbf{e}_q}{\\|\\mathbf{e}_q\\|_2},\\quad \\tilde{\\mathbf{e}}_{\\mathcal{H}} = \\frac{\\mathbf{e}_{\\mathcal{H}}}{\\|\\mathbf{e}_{\\mathcal{H}}\\|_2},\\quad \\mathbf{e}_q^{\\text{final}} = \\text{L2Norm}(\\tilde{\\mathbf{e}}_q + \\gamma\\tilde{\\mathbf{e}}_{\\mathcal{H}})$$\n\n- **e_q = f_θ(x_q)**: the embedding of the query user's serialized profile text (p. 5).\n- **e_H**: the history (intent) vector (p. 5).\n- **γ**: a learnable scalar that controls how much the history contributes (p. 5).\n- Both vectors are normalized before they are added, so neither tower dominates because of norm differences (p. 5).\n\nThe history vector is a weighted sum over recent clicks:\n\n$$\\alpha_i = \\frac{\\exp(\\mathbf{w}^T(\\mathbf{e}_{h_i} + \\text{PE}(i)))}{\\sum_{j}\\exp(\\mathbf{w}^T(\\mathbf{e}_{h_j} + \\text{PE}(j)))},\\qquad \\mathbf{e}_{\\mathcal{H}} = \\sum_i \\alpha_i \\mathbf{e}_{h_i}$$\n\n- **e_hᵢ**: precomputed embeddings of the most recently clicked profiles (p. 5).\n- **PE(i)**: a learned positional encoding, where i = 1 is the most recent click (p. 5).\n- **w**: a learnable attention vector (p. 5).\n- PE and w are trained end-to-end with the PAIR objective (p. 5).\n- The attention does not depend on the query (p. 5).\n\n**Note on notation:** the paper uses **K** for two different things. In Eq. 2 it is the number of negatives, which is 3 per instance in the training data (pp. 4, 6). In Eq. 5 it is the size of the history window, set to K = 10 (p. 5).\n\n## Full objective with Matryoshka (Eq. 6, p. 5)\n\n$$\\mathcal{L} = \\sum_{d \\in \\{200,\\,256,\\,512,\\,1024\\}} \\mathcal{L}^{(d)}_{\\text{PAIR}}$$\n\nEach term **L⁽ᵈ⁾_PAIR** is the PAIR loss computed using only the first *d* embedding dimensions (p. 5). Training this way lets a single model serve embeddings cut to any of these sizes (p. 5). The 200-dimension prefix roughly matches the storage of the 171-dimension production embedding (p. 5).",
+ "input": 35759,
+ "cache_write": 542,
+ "cache_read": 35215,
+ "output": 2020,
+ "thinking": 267,
+ "usd": 0.05178700000000001,
+ "seconds": 18.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

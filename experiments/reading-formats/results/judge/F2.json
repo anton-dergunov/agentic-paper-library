@@ -1,8 +1,14 @@
 {
- "key": "261089d672c15916",
- "usd": 0.020148,
+ "key": "6bdfa2997d35dbf5",
+ "usd": 0.023880000000000002,
  "grades": {
-  "E4/pdf/F2-r1": {
+  "E4/txt/F2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md/F2-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
@@ -12,9 +18,9 @@
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
-   "note": ""
+   "note": "Hedged, but the inferred 99.3% matches the gold."
   },
-  "E4/md/F2-r1": {
+  "E4/pdf/F2-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,

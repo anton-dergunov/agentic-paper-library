@@ -1,0 +1,30 @@
+{
+ "key": "177135efac65e4b5",
+ "usd": 0.022952,
+ "grades": {
+  "E1/c0/M1-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says it cannot give the numbers without the paper."
+  },
+  "E1/pdf/M1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/M1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/M1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

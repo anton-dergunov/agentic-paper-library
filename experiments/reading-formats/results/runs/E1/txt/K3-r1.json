@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "K3",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "# Closed-form solution for each per-head weight matrix\n\nThe mapper fits each per-head weight matrix with a closed-form ridge regression solve (Eq. 4, p. 5):\n\n**W\\* = (X⊤X + λI)⁻¹ X⊤Y**\n\n## What the terms denote\n\n- **X** is the design matrix, X ∈ ℝ^(N × (k·n_kv^s·d_h^s)) (p. 4).\n  - It stacks N calibration tokens.\n  - Each row concatenates the source key (or value) features from the k selected source layers (p. 4).\n  - Per Eq. 5, this is the concatenation of all key heads from each of the top-k source layers. The value input is built the same way from value heads (p. 5).\n- **Y** is the response matrix, Y ∈ ℝ^(N × d_h^t) (p. 4). It holds the target's keys or values for that target layer and head.\n  - For keys, Y is built by stripping the target's RoPE from its ground-truth keys, so W_K is fit entirely in position-free space (p. 5).\n  - Values carry no positional encoding and are mapped directly (p. 5).\n- **N** is the number of calibration tokens, about 128K per target head (p. 5). They come from 500 FineWeb-Edu sequences of length 1024, subsampled at stride 4.\n- **λ** is the ridge (Tikhonov) regularization strength, set to 0.01 (p. 4).\n  - The paper uses ridge rather than plain OLS for numerical conditioning.\n  - The feature dimension can reach tens of thousands at large k. The selected source layers are also correlated, so X⊤X is near-singular (pp. 4–5).\n  - The λ term \"stabilizes the inverse with negligible fit bias\" (p. 5).\n- **I** is not explicitly defined in the document. From standard ridge notation, it is the identity matrix that λ scales.\n- **W\\*** fills the role of W_K^(l,h) or W_V^(l,h) in Eq. 3 (p. 4). Its shape is (k·n_kv^s·d_h^s) × d_h^t. Here n_kv^s is the source KV head count, d_h^s the source head dimension, and d_h^t the target head dimension (p. 4).\n\n## Bias term\n\nX and Y are centered before solving, so W\\* estimates only the slope (p. 5). The bias in Eq. 3 is then recovered as:\n\n**b = Ȳ − X̄W\\***\n\nX̄ and Ȳ are not explicitly defined. From the centering step, they are the means of X and Y.\n\n## How it is applied\n\nThe solved weights produce the target cache as K̂_t^(l,h) = X_K^l W_K^(l,h) + b_K^(l,h), and analogously for V (Eq. 3, p. 4).\n\nThe solve is repeated independently for all L_t × n_kv^t target heads, with separate K and V regressions and no shared parameters (p. 4, Fig. 3 caption). Forming X⊤X is computed once per target layer and shared across that layer's heads (p. 5).",
+ "input": 28290,
+ "cache_write": 554,
+ "cache_read": 27734,
+ "output": 1517,
+ "thinking": 490,
+ "usd": 0.0403268,
+ "seconds": 15.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

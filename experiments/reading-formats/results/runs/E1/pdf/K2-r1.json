@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "K2",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "pdf",
+ "page": 21,
+ "status": "ok",
+ "answer": "**Qwen3 14B→32B** has the highest BoolQ retention among the six pairs, at **101.9%** (Table 18, page 21).\n\nTable 18 reports retention on three benchmarks (PIQA, BoolQ, ARC-Easy) that \"played no part in selection\" of k. The mapper fit and k were left unchanged, so these results measure the reported configuration out of sample (page 21). Retention is measured against the target's standalone accuracy on the same benchmark (page 21).\n\nBoolQ retention for all six pairs (page 21):\n\n| Pair | BoolQ retention |\n|---|---|\n| Qwen3 14B→32B | **101.9%** |\n| Qwen3 8B→32B | 99.9% |\n| Llama 3.1 8B→70B | 96.2% |\n| Ministral 3 3B→8B | 95.1% |\n| Ministral 3 3B→14B | 57.4% |\n| Ministral 3 8B→14B | 44.4% |\n\nA value above 100% means the transferred cache scored slightly higher on BoolQ than the 32B target running its own prefill.",
+ "input": 60123,
+ "cache_write": 567,
+ "cache_read": 59554,
+ "output": 402,
+ "thinking": 34,
+ "usd": 0.024494799999999997,
+ "seconds": 5.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-25 10:05"
+}

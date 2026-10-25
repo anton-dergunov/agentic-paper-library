@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "K1",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "md",
+ "page": 18,
+ "status": "ok",
+ "answer": "With the ridge mapper at its selected **k = 20**, the Llama 3.1 8B→70B transfer achieves:\n\n- **MMLU: 57.78% accuracy**, against 78.84% for the 70B target running its own prefill (Table 13, p. 17). Table 1 reports this as **73.3% retention** (p. 6).\n- **GSM8K: 14.78% accuracy**, against 81.12% for the 70B standalone (Table 13, p. 17). Table 1 reports this as **18.2% retention** (p. 6).\n\nThe transferred result is also below the 8B source model's own standalone scores of 64.97% on MMLU and 56.10% on GSM8K (Table 13, p. 17). The k = 20 setting is confirmed in Table 12 (p. 17).\n\nBoth benchmarks are well below this pair's 72.8% average retention (Table 1, p. 6). GSM8K was never used to choose k, so it is a held-out result (p. 6; Appendix H, p. 20).",
+ "input": 38470,
+ "cache_write": 38468,
+ "cache_read": 0,
+ "output": 434,
+ "thinking": 100,
+ "usd": 0.316432,
+ "seconds": 7.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.29,
+ "date": "2026-10-25 10:05"
+}

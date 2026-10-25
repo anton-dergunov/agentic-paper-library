@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "# PAIR training objective for one query\n\n## 1. Per-query loss (Eq. 2, p. 4)\n\n$$\\mathcal{L}_{\\text{PAIR}}=-\\log\\frac{\\exp(s(q,d^{+}))}{\\exp(s(q,d^{+}))+\\sum_{i=1}^{K}\\exp(s(q,d_{i}^{-}))}$$\n\n- **$q$**: the query user (p. 4).\n- **$d^{+}$**: the one clicked candidate. It is treated as the preferred item (p. 4).\n- **$d_i^{-}$, $i=1..K$**: the negative candidates (p. 4).\n  - Each session uses a 1:3 positive-to-negative ratio (p. 4).\n  - *Hard* negatives come first. These are candidates shown in the same session but not clicked.\n  - If fewer than three are available, the rest are *easy* negatives sampled at random from the active Premium member pool (p. 4). Each training instance has one positive and three negatives (p. 6).\n- **Numerator vs. denominator**: The loss is the negative log of the softmax probability given to the clicked candidate. Minimizing it pushes $s(q,d^+)$ above every $s(q,d_i^-)$. This matches the goal $s(q,d^{+})>s(q,d^{-})$ (p. 3).\n- The paper says this has the same form as multi-negative contrastive learning. What differs is the meaning of the supervision. The negatives come from what the deployed retriever actually showed, so PAIR learns preferences within the serving policy's exposure distribution. It is not a direct DPO instantiation and uses no reference policy (p. 4).\n\n## 2. The score (Eq. 1, p. 4)\n\n$$s(q,d)=\\cos(\\mathbf{e}_{q}^{\\mathrm{final}},\\mathbf{e}_{d})/\\tau$$\n\n- **$\\mathbf{e}_d$**: the candidate embedding, $f_\\theta(x_d)$, taken from the document tower (p. 5).\n- **$\\tau$**: the temperature, set to 0.02 in all experiments (p. 6).\n\n## 3. The final query representation (Eqs. 3–4, p. 5)\n\n$$\\mathbf{e}_{q}^{\\mathrm{final}}=\\mathrm{L2Norm}\\left(\\frac{\\mathbf{e}_{q}}{\\|\\mathbf{e}_{q}\\|_{2}}+\\gamma\\frac{\\mathbf{e}_{\\mathcal{H}}}{\\|\\mathbf{e}_{\\mathcal{H}}\\|_{2}}\\right)$$\n\n- **$\\mathbf{e}_q=f_\\theta(x_q)$**: the query user's profile embedding. It shares encoder parameters with the document tower (p. 5).\n- **$\\mathbf{e}_{\\mathcal{H}}$**: the history (intent) embedding.\n- **$\\gamma$**: a learnable scalar that controls how much history contributes.\n- Normalizing both terms keeps either tower from dominating because of norm differences (p. 5).\n\n## 4. The history embedding (Eq. 5, p. 5)\n\n$$\\alpha_{i}=\\frac{\\exp(\\mathbf{w}^{T}(\\mathbf{e}_{h_{i}}+\\mathrm{PE}(i)))}{\\sum_{j}\\exp(\\mathbf{w}^{T}(\\mathbf{e}_{h_{j}}+\\mathrm{PE}(j)))},\\quad\\mathbf{e}_{\\mathcal{H}}=\\sum_{i}\\alpha_{i}\\mathbf{e}_{h_{i}}$$\n\n- **$\\mathbf{e}_{h_i}$**: precomputed embeddings of the most recently clicked profiles.\n- **$\\mathrm{PE}(i)$**: a learned positional encoding, where $i=1$ is the most recent click.\n- **$\\mathbf{w}$**: a learnable, query-agnostic attention vector.\n- Both $\\mathrm{PE}$ and $\\mathbf{w}$ are trained end to end with the PAIR loss (p. 5).\n- The history window is set to 10 (p. 5).\n- Note on notation: the paper uses $K$ for both the number of negatives in Eq. 2 and the history window size. These are different quantities.\n\n## 5. Full objective with Matryoshka (Eq. 6, p. 5)\n\n$$\\mathcal{L}=\\sum_{d\\in\\{200,256,512,1024\\}}\\mathcal{L}_{\\text{PAIR}}^{(d)}$$\n\nHere $\\mathcal{L}_{\\text{PAIR}}^{(d)}$ is the same loss, computed using only the first $d$ embedding dimensions. Training on all four prefixes lets the embeddings be truncated at serving time without retraining (p. 5).",
+ "input": 23229,
+ "cache_write": 541,
+ "cache_read": 22686,
+ "output": 1823,
+ "thinking": 177,
+ "usd": 0.0453332,
+ "seconds": 17.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

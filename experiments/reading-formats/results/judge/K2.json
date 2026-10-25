@@ -1,0 +1,30 @@
+{
+ "key": "fb19f7245b75437f",
+ "usd": 0.021972000000000002,
+ "grades": {
+  "E1/pdf/K2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/K2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/K2-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No paper available; declined to answer."
+  },
+  "E1/txt/K2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

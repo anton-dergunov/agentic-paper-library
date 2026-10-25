@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M4",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 13,
+ "status": "ok",
+ "answer": "Here are the GRPO training settings, from Appendix A.2 (\"Training Details,\" p. 13):\n\n- **Learning rate:** fixed at **3 × 10⁻⁶**.\n- **Rollouts per prompt:** **G = 16** rollouts per prompt, used for group-based relative reward estimation.\n- **KL penalty:** **No.** The authors disabled the KL divergence penalty in the loss function for their analysis.\n\nOther RL settings on the same page (p. 13):\n- RL training used the VeRL framework with the GRPO algorithm.\n- Following the official DeepSeek configuration, sampling temperature was 0.6 and top-p was 0.95.\n- Maximum output length was 8K tokens.\n\nTwo related points:\n- The paper notes that RL's Razor shows on-policy RL tends toward KL-minimal solutions even without an explicit KL penalty term (p. 4).\n- The Pass@k discussion confirms that the adaptation phase of Adapted Parallel-RL also uses G = 16 rollouts per prompt (p. 27).",
+ "input": 68804,
+ "cache_write": 554,
+ "cache_read": 68248,
+ "output": 444,
+ "thinking": 89,
+ "usd": 0.026969600000000003,
+ "seconds": 8.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

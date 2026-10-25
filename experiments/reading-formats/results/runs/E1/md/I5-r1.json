@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "I5",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "md",
+ "page": 17,
+ "status": "ok",
+ "answer": "**The paper doesn't report GPU-hours for PPO training of the 175B model.**\n\nThe closest figure it gives is in **petaflops/s-days**: training the 175B PPO-ptx model required **60 petaflops/s-days**. For comparison, the 175B SFT model required 4.9 petaflops/s-days, and GPT-3 pretraining required 3,640 petaflops/s-days (p. 17).\n\nTwo things to keep in mind about this number:\n\n- **It is for PPO-ptx**, the variant that mixes in pretraining gradients. No separate compute figure is given for the plain PPO model (p. 17). Appendix E.11 says the pretraining mix doubles training time compared with the same run without it, but that comparison was made in ablations on the 1.3B model (p. 58).\n- **It can't be converted to GPU-hours from the paper alone.** The paper doesn't say what hardware was used, how many GPUs, or what throughput they achieved, so any conversion would rely on outside assumptions.\n\nThe paper does describe the 175B PPO training setup (p. 42):\n- 256k episodes over about 31k unique prompts\n- batch size of 512 and minibatch size of 64\n- a 6B reward model and value function\n- pretraining examples at 8 times the number of RL episodes",
+ "input": 82980,
+ "cache_write": 540,
+ "cache_read": 82438,
+ "output": 534,
+ "thinking": 109,
+ "usd": 0.0314956,
+ "seconds": 7.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-25 09:57"
+}

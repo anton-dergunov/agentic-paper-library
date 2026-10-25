@@ -1,0 +1,20 @@
+# Drafted from the PDF by claude-opus-5-5, $0.33; not yet checked
+- {id: P1, exp: E1, paper: pair, kind: table, page: 7,
+   question: 'What ACC and MAR@25 does LinkedIn''s production Holistic-171 embedding get on the Premium user retrieval benchmark?',
+   gold: 'ACC 0.794 and MAR@25 0.169 (Table 1).'}
+- {id: P2, exp: E1, paper: pair, kind: table, page: 8,
+   question: 'When the Matryoshka-trained PAIR model is truncated to 512 dimensions, what MAR@100 does it reach, and what is its relative retrieval latency compared with the full 1024-dimensional embedding?',
+   gold: 'MAR@100 0.444, at a relative latency of 0.65x (and relative storage 0.50x) (Table 3).'}
+- {id: P3, exp: E1, paper: pair, kind: equation, page: 5,
+   question: 'Write out the PAIR training objective for one query, and say what each term means.',
+   gold: 'L_PAIR = -log[ exp(s(q,d+)) / ( exp(s(q,d+)) + sum_{i=1..K} exp(s(q,d_i-)) ) ]. Here s(q,d) = cos(e_q^final, e_d)/tau, with e_q^final the fused query representation (profile plus history), e_d the candidate embedding and tau the temperature. d+ is the clicked candidate, and d_i- are the K negatives: exposed-but-unclicked candidates plus random members (Eq. 2, with Eq. 1).'}
+- {id: P4, exp: E1, paper: pair, kind: appendix, page: 6,
+   question: 'How large is the offline test set used to evaluate PAIR, in query-level instances and unique member profiles?',
+   gold: '11.8K query-level instances involving 93K unique member profiles (Section 5.1, Data). The paper has no appendix, so this detail is taken from the experimental setup section instead.'}
+- {id: P5, exp: E1, paper: pair, kind: figure, page: 6,
+   question: 'In the architecture diagram, what pooling operation is labeled as producing the aggregated history embedding from the visited-profile embeddings, and what pooling produces the aggregated user embedding?',
+   gold: 'About: GeM Pooling for the aggregated history embedding, and Temporal-Gated Pooling for the aggregated user embedding (Figure 1, Step 1). The paper has no quantitative plot, so this item uses labels that appear only inside the diagram.',
+   tolerance: 'Both labels must be named. Exact names are expected, though minor wording variants such as "generalized-mean pooling" or "temporal gating" are acceptable.'}
+- {id: P6, exp: E1, paper: pair, kind: unanswerable, answerable: false, page: 5,
+   question: 'What MAR@100 does PAIR reach when fine-tuned from a larger encoder such as Qwen3-Embedding-4B or 8B?',
+   gold: 'Not reported: the paper evaluates only the 0.6B encoder. It states qualitatively that larger models add substantial GPU cost without proportional retrieval-quality gains, but gives no numbers for them. The reported result is MAR@100 0.450 for the 0.6B PAIR with P-ATT history.'}

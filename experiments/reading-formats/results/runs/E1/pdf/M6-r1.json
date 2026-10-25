@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "M6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document does not report HumanEval results.** No experiment in the paper evaluates on HumanEval.\n\n- **Code benchmark used:** The only code benchmark is LiveCodeBench (p. 2, p. 13).\n- **Chen et al. (2021):** This paper (HumanEval's source) is cited only for the unbiased pass@k estimator (p. 26).\n- **Pass@k analysis:** It covers Naive Parallel-RL, not Adapted Parallel-RL. It uses AIME2025, GPQA Diamond, Knights & Knaves and LiveCodeBench (p. 26).\n\nThe closest available figures are Adapted Parallel-RL's LiveCodeBench accuracies with DeepSeek-R1-Distill-Qwen-1.5B:\n\n- **Full-parameter GRPO:** 22.5% (+0.9 over single-task RL) (Table 4, p. 7)\n- **LoRA GRPO:** 17.3% (Table 6, p. 24)\n- **Full-parameter PPO:** 19.5% (Table 6, p. 24)\n\nThese are LiveCodeBench accuracies, not HumanEval pass@1, and shouldn't be used as a substitute.",
+ "input": 122940,
+ "cache_write": 556,
+ "cache_read": 122382,
+ "output": 576,
+ "thinking": 171,
+ "usd": 0.040452400000000006,
+ "seconds": 9.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.28,
+ "date": "2026-10-25 10:04"
+}

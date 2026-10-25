@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "P1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "On the Premium user retrieval benchmark, **Holistic-171 gets an ACC of 0.794 and a MAR@25 of 0.169** (Table 1, page 7).\n\n- **ACC** checks whether the clicked candidate gets the highest score among four candidates: one positive and three negatives. Random guessing scores 0.25 (page 7).\n- **MAR@25** measures how often clicked candidates rank in the top 25 of a fixed pool of 100 candidates. All models use the same pool (page 7).\n\n**Comparison with PAIR** (Table 1, page 7):\n\n| Model | ACC | MAR@25 |\n|---|---|---|\n| Holistic-171 | 0.794 | 0.169 |\n| Off-the-shelf 0.6B embedding | 0.771 | 0.100 |\n| PAIR with P-ATT history | 0.967 | 0.265 |\n\nThe authors note that ACC is close to saturation because it uses only four candidates. They therefore treat MAR@k as the more informative metric (page 7).",
+ "input": 35783,
+ "cache_write": 35781,
+ "cache_read": 0,
+ "output": 458,
+ "thinking": 114,
+ "usd": 0.295416,
+ "seconds": 6.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.17,
+ "date": "2026-10-25 10:01"
+}

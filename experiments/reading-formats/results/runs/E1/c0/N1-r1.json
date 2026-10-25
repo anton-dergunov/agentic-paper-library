@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "N1",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "I can't answer that reliably. You haven't said which paper or report this is from, and the working directory (`.../reading-formats/empty`) has no document in it.\n\n\"Phase-1 foundation training\" vs. an off-the-shelf open-source LLM base, measured by offline MRR, sounds like an industrial recommendation or retrieval paper, possibly one of LinkedIn's LLM-based ranking or recommendation reports. I don't remember a specific MRR figure for that comparison, and I'd rather not guess a number.\n\nIf you share the paper (PDF, link, or the relevant table or section), I can find the exact figure and say whether it's an absolute or relative improvement.",
+ "input": 791,
+ "cache_write": 789,
+ "cache_read": 0,
+ "output": 408,
+ "thinking": 189,
+ "usd": 0.01448,
+ "seconds": 8.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-25 10:06"
+}

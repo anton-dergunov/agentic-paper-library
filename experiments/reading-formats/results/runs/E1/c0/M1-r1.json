@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "M1",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "I don't know these numbers. I can't place the paper or table that compares \"Adapted Parallel-RL\" with \"Single-Task RL\" under full-parameter GRPO on DeepSeek-R1-Distill-Qwen-7B. Any AIME2025 accuracies I gave would be guesses.\n\nFor reference, the base DeepSeek-R1-Distill-Qwen-7B is commonly reported in roughly the high-30s to ~40% range on AIME2025 (avg@k). But that's the base model, not either of the RL variants you asked about.\n\nIf you share the paper (a PDF, an arXiv ID or the relevant table), I can pull out the exact figures and compare the two methods.",
+ "input": 825,
+ "cache_write": 823,
+ "cache_read": 0,
+ "output": 379,
+ "thinking": 152,
+ "usd": 0.014172,
+ "seconds": 5.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.21,
+ "date": "2026-10-25 10:03"
+}

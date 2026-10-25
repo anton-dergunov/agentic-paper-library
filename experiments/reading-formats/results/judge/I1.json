@@ -1,0 +1,30 @@
+{
+ "key": "9a4bad37c45a5f2a",
+ "usd": 0.024508,
+ "grades": {
+  "E1/txt/I1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/I1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/I1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/I1-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Answered from memory; cites Table 6 but no page"
+  }
+ }
+}

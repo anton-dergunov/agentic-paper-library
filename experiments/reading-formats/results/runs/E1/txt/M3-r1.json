@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M3",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "# Upper Bounds on Cross-Task Gradient Interference\n\nThe bounds appear in **Theorem 4.5**, which relies on **Assumption 4.4** (both on p. 6).\n\n## The bounds\n\nFor two distinct tasks *i* and *j*:\n\n1. **SFT (norm-limited):** |I_SFT(i, j)| ≤ M_i · M_j (p. 6)\n2. **RL / GRPO (variance-limited):** |I_RL(i, j)| ≤ V_i · V_j (p. 6)\n\nThe interference terms are expected inner products of gradients across the two tasks (p. 5):\n\n- **SFT:** I_SFT(i, j) is the expected inner product of the expert score functions S\\*_i(x) = ∇θ log πθ(y\\*_i | x) (Eq. 5).\n- **RL:** I_RL(i, j) is the expected inner product of the advantage-weighted GRPO gradients (Eqs. 6–7).\n\n## What the constants represent\n\n- **M_i (SFT):** M_i² bounds the expected squared L2 norm of the expert score function, E_{x∼D_i}‖S\\*_i(x)‖² ≤ M_i². The paper calls this \"the average energy of the updates.\" So the SFT bound depends on the absolute gradient magnitude (p. 6).\n\n- **V_i (RL):** V_i² bounds the expected intra-group variance of the residual score function, averaged over the G rollouts: E[(1/G) Σ_k ‖δS_{i,k}(x)‖²] ≤ V_i² (p. 6).\n  - The residual is δS_{i,k}(x) = S_{i,k}(x) − S̄_i(x), where S̄_i(x) is the mean score function across the rollouts for the same input (Lemma 4.3, p. 5).\n  - In other words, V_i measures how much the model's rollouts for a single input differ from one another (p. 6).\n\n## Why RL's bound depends on variance\n\nThe zero-sum property of the standardized GRPO advantages (Σ_k Â_{i,k} = 0) cancels the mean score direction S̄_i, leaving only the residuals (p. 5, proof on p. 15). The proof also uses the fact that standardization gives Σ_k Â²_{i,k} = G (pp. 16–17).\n\nThe paper argues that V_i is small for two reasons (p. 6):\n\n- RL is on-policy, so variation within a group of rollouts is limited.\n- δS keeps shrinking as training converges.\n\n## Empirical support\n\nMeasurements match the bounds (Table 3, p. 6):\n\n| Quantity | SFT | RL |\n|---|---|---|\n| ‖S‖₂ | ~7.1 | — |\n| ‖δS‖₂ | — | ~10⁻² |\n\n## Extension beyond GRPO\n\nThe same bound, |I_PPO(i, j)| ≤ V_i · V_j, is shown for PPO with batch-level advantage normalization. In that case δS measures deviation across the whole batch rather than within a group of rollouts (p. 18).",
+ "input": 68816,
+ "cache_write": 566,
+ "cache_read": 68248,
+ "output": 1404,
+ "thinking": 378,
+ "usd": 0.0462656,
+ "seconds": 15.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.26,
+ "date": "2026-10-25 10:03"
+}

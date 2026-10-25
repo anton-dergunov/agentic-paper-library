@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M2",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 25,
+ "status": "ok",
+ "answer": "**Removing the Science update causes the largest drop: MMLU accuracy falls by 13.3 points** (page 25, Table 7).\n\nIn the 1.5B PPO setting, the full Naive Parallel-RL model scores 48.9 on MMLU. Without the Science update (∆W_Science), it scores 35.6 (page 25, Table 7).\n\nFor comparison, removing each of the other updates hurts its own task less (page 25, Table 7):\n- **Math:** MATH500 drops 2.0 (84.8 → 82.8)\n- **Logic:** KK drops 6.0 (36.0 → 30.0)\n- **Code:** LCB drops 4.0 (16.5 → 12.5)\n\nRemoving the Science update also slightly improves the other tasks, by +3.5 on average (page 25, Table 7). The authors say this pattern shows that each RL task update mainly affects its own task and has little effect on the others (page 25).",
+ "input": 68827,
+ "cache_write": 577,
+ "cache_read": 68248,
+ "output": 385,
+ "thinking": 75,
+ "usd": 0.0259736,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.26,
+ "date": "2026-10-25 10:03"
+}

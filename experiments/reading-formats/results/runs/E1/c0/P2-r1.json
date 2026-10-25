@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "P2",
+ "rep": 1,
+ "paper": "pair",
+ "form": "c0",
+ "page": 8,
+ "status": "ok",
+ "answer": "I don't know these numbers, and I'd rather not guess. I don't recognize a specific result for a \"Matryoshka-trained PAIR model\" reporting MAR@100 at 512 dimensions alongside relative retrieval latency against a 1024-dimensional baseline. Any figures I gave would likely be made up.\n\nSome general context that may help:\n- **Matryoshka Representation Learning** (Kusupati et al., 2022) trains embeddings so that leading prefixes (e.g., the first 512 of 1024 dimensions) stay useful on their own. Truncated embeddings typically lose only a little retrieval quality.\n- **Latency** for brute-force vector search scales roughly with dimensionality. Halving from 1024 to 512 dimensions often gives roughly 2× faster similarity computation, or about 0.5× relative latency. The real ratio depends on the index type, hardware, and overheads, so the paper's reported number could differ.\n\nThe current working directory appears to be empty, so I don't have the paper available. If you share it as a PDF, text, or link, I can find the exact MAR@100 and latency figures in it.",
+ "input": 816,
+ "cache_write": 814,
+ "cache_read": 0,
+ "output": 531,
+ "thinking": 161,
+ "usd": 0.017140000000000002,
+ "seconds": 9.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.18,
+ "date": "2026-10-25 10:01"
+}

@@ -1,0 +1,30 @@
+{
+ "key": "43568ffdfad54f40",
+ "usd": 0.06898,
+ "grades": {
+  "E1/md/P3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/P3-r1": {
+   "score": "wrong",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Describes a different PAIR paper (passage retrieval), not this objective."
+  },
+  "E1/pdf/P3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/P3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

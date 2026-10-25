@@ -1,0 +1,30 @@
+{
+ "key": "1232258bb8b108b3",
+ "usd": 0.026284000000000002,
+ "grades": {
+  "E1/txt/N6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/N6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/N6-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Had no document; does not say the paper uses MRR instead."
+  },
+  "E1/pdf/N6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

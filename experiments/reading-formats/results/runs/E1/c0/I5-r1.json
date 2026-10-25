@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "I5",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "c0",
+ "page": 17,
+ "status": "ok",
+ "answer": "I don't have a paper or file to check (the working directory is empty), so this answer is from memory, and I'm assuming you mean the **InstructGPT** paper (Ouyang et al., 2022, *\"Training language models to follow instructions with human feedback\"*).\n\nAs far as I recall, that paper **doesn't report GPU-hours**. It reports compute in **petaflop/s-days**:\n\n- **175B PPO-ptx model:** about **60 petaflop/s-days**\n- **175B SFT model:** about **4.9 petaflop/s-days**\n- **GPT-3 pretraining, for comparison:** about **3,640 petaflop/s-days**\n\nThe authors use these numbers to argue that RLHF fine-tuning costs very little compared with pretraining.\n\nConverting this to GPU-hours would require assumptions about the hardware and its utilization, which the paper doesn't give in that form. Any GPU-hour figure would be my estimate, not the paper's number.\n\nIf you meant a different paper, or you have the PDF, share it or point me to the file and I can look up the exact figure.",
+ "input": 767,
+ "cache_write": 765,
+ "cache_read": 0,
+ "output": 582,
+ "thinking": 228,
+ "usd": 0.017768,
+ "seconds": 7.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.07,
+ "date": "2026-10-25 09:57"
+}

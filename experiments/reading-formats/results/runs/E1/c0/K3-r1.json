@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "K3",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "c0",
+ "page": 5,
+ "status": "ok",
+ "answer": "I can't answer this for certain because I don't know which paper or codebase you mean. The working directory (`.../reading-formats/empty`) has no files, and your question doesn't name the work, so I can't tell which \"mapper\" you're asking about.\n\nIf the mapper fits a linear map per attention head by regularized least squares, which is the most common setup, the closed form is the ridge regression solution:\n\n$$\nW_h = \\left(X_h^\\top X_h + \\lambda I\\right)^{-1} X_h^\\top Y_h\n$$\n\n- **$W_h$**: the learned weight matrix for head $h$, mapping source features to target features.\n- **$X_h$**: the input (source) activations for head $h$, stacked over $N$ samples (an $N \\times d_{\\text{in}}$ matrix).\n- **$Y_h$**: the target activations for the same samples (an $N \\times d_{\\text{out}}$ matrix).\n- **$X_h^\\top X_h$**: the (uncentered) covariance of the inputs.\n- **$X_h^\\top Y_h$**: the cross-covariance between inputs and targets.\n- **$\\lambda I$**: the ridge (Tikhonov) regularization term. It keeps the matrix invertible and shrinks the weights. With $\\lambda = 0$ you get ordinary least squares, i.e. the pseudoinverse solution $W_h = X_h^{+} Y_h$.\n\nThis is a guess at the general form, not a statement of what your source uses. Variants differ in centering, an added bias term, orthogonality constraints (which give a Procrustes solution via SVD instead), or the choice of $\\lambda$.\n\nTo get an exact answer, paste the relevant section, give the paper title or link, or put the file in the working directory, and I'll tell you precisely what that mapper uses.",
+ "input": 781,
+ "cache_write": 779,
+ "cache_read": 0,
+ "output": 809,
+ "thinking": 216,
+ "usd": 0.022420000000000002,
+ "seconds": 10.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-25 10:05"
+}

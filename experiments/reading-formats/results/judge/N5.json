@@ -1,0 +1,66 @@
+{
+ "key": "90670a9089579475",
+ "usd": 0.049451999999999996,
+ "grades": {
+  "E1/txt/N5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the value is not readable from the text; gives no number."
+  },
+  "E1/pdf/N5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/N5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the document does not give the value."
+  },
+  "E1/pdf/N5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/N5-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No document available; no answer given."
+  },
+  "E1/md/N5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the number is not in the text."
+  },
+  "E1/pdf/N5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/N5-r1": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Says the figure is an image; no value given."
+  },
+  "E1/txt/N5-r3": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives the axis range only; no value."
+  },
+  "E1/txt/N5-r2": {
+   "score": "declined",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Gives the axis range only; no value."
+  }
+ }
+}

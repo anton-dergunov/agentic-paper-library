@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "N1",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "Phase-1 foundation training improves offline ranking metrics by **roughly 10–20%** compared with using an off-the-shelf LLM as the backbone (p. 7, Section 5.3). Table 1 states the same figure under the column \"Offline ranking metrics (MRR)\": \"+ 10-20% compared to using an OSS model as base\" (p. 7).\n\nThe authors credit this gain to the personalization and content-understanding capabilities that GenRec inherits from the Phase-1 foundational model (p. 7).\n\nThe paper gives the gain only as a 10–20% range. It does not give exact MRR values or say whether the percentage is relative or absolute.",
+ "input": 22179,
+ "cache_write": 22177,
+ "cache_read": 0,
+ "output": 289,
+ "thinking": 73,
+ "usd": 0.18320399999999998,
+ "seconds": 5.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-25 10:06"
+}

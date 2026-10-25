@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "K5",
+ "rep": 2,
+ "paper": "kvxfer",
+ "form": "md",
+ "page": 9,
+ "status": "ok",
+ "answer": "**The document does not give this number.** The 32B standalone F1 at turn 10 appears only as a plotted line in Figure 4, and the text does not state its value.\n\nThe document does say the following about this evaluation:\n\n- **Setup:** It uses Qwen3 14B↔32B on CoQA, with 100 conversations of about 15 turns each across five domains. Each turn's answer is scored with F1 against the ground truth (p. 8).\n- **Drift:** Drift at a turn is the F1 gap between the target's standalone accuracy and the mapper's accuracy at that turn (p. 8).\n- **Small-to-large result:** The gap widens by 1.7 pp from turn 1 to turn 10. The mapper holds steady while \"the 32B ceiling rises\" (p. 8). This tells you the 32B standalone F1 goes up across turns, but not what value it reaches at turn 10.\n- **Figure 4:** It shows CoQA F1 across ten turns, with solid lines for the target's standalone accuracy (p. 8). Its plotted values are not given in the text.\n\nThe paper also says only \"F1,\" not specifically \"word-level F1\" (p. 8).",
+ "input": 38472,
+ "cache_write": 0,
+ "cache_read": 38470,
+ "output": 501,
+ "thinking": 118,
+ "usd": 0.017722,
+ "seconds": 7.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-25 10:06"
+}

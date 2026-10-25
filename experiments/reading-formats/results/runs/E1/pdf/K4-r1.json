@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "K4",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "pdf",
+ "page": 17,
+ "status": "ok",
+ "answer": "The nonlinear MLP mapper baseline is trained with these settings:\n\n- **Optimizer:** Adam (p. 7, p. 17)\n- **Learning rate:** 10⁻³ (p. 17)\n- **Epochs:** 20 (p. 17)\n- **Batch size:** 4,096 (p. 17)\n\nIt uses MSE loss, the same loss as the ridge mapper (p. 7, p. 17). One MLP is trained for each target layer, head, and K or V. Each has two 1,024-unit ReLU hidden layers: Linear(d_s, 1024) → ReLU → Linear(1024, 1024) → ReLU → Linear(1024, d_h^t) (p. 7, p. 17).",
+ "input": 60116,
+ "cache_write": 560,
+ "cache_read": 59554,
+ "output": 332,
+ "thinking": 89,
+ "usd": 0.023038799999999998,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

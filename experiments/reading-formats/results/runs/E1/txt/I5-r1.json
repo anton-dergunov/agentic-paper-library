@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "I5",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "txt",
+ "page": 17,
+ "status": "ok",
+ "answer": "**The document does not report GPU-hours for PPO training of the 175B model.** It gives compute in petaflop/s-days instead:\n\n- **Training the 175B PPO-ptx model required 60 petaflops/s-days** (page 17, Section 5.1). Note that this figure is for the PPO-ptx variant (PPO with pretraining mix), not the plain PPO model.\n- For comparison, training the 175B SFT model required 4.9 petaflops/s-days, and training GPT-3 required 3,640 petaflops/s-days (page 17).\n\nThe paper also gives some RLHF training details, but none of them can be turned into GPU-hours:\n\n- All RL models were trained for 256k episodes, covering about 31k unique prompts, with a batch size of 512 and a minibatch size of 64 (page 42, Appendix C.4).\n- Adding the pretraining mix roughly doubles training time compared with training without it (page 58, Appendix E.11).\n\nThe document does not say what GPU type was used, how many GPUs, or how long training took in wall-clock time.",
+ "input": 72584,
+ "cache_write": 540,
+ "cache_read": 72042,
+ "output": 471,
+ "thinking": 122,
+ "usd": 0.0281564,
+ "seconds": 24.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-25 09:57"
+}

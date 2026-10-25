@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F1",
+ "rep": 2,
+ "paper": "musique",
+ "form": "txt",
+ "page": 11,
+ "status": "ok",
+ "answer": "**On the validation set, the C-only model scores 3.4 answer F1 and 0.0 support F1 on MuSiQue-Ans** (Table 4, p. 11). On the test set, it scores 3.7 answer F1 and 0.0 support F1 (Table 5, p. 11). The paper says Table 5 uses test-set numbers and all other results use the validation set (p. 10).\n\n**What the model is:** It takes only the context C, with no question, and predicts the answer and supporting paragraphs. It is an End2End Longformer-Large model given an empty question (p. 10).\n\n**Comparison with other datasets:** On HotpotQA and 2WikiMultihopQA, the C-only model identifies supporting paragraphs well without the question (67.6 and 92.0 support F1), but it fails on MuSiQue-Ans (p. 11).\n\n**Effect of distractor setup (Table 7, p. 12):**\n- The standard setup (20 paragraphs with positive distractors) gives 3.4 answer and 0.0 support.\n- With 10 paragraphs and positive distractors, support rises only to 34.6 (answer 5.5). This supports the paper's claim that support stays low even with 10 paragraphs, as HotpotQA uses (footnote 9, p. 11).\n- With 20 paragraphs drawn from full Wikipedia, support would have reached 66.4 (answer 12.4) (p. 12).\n\nThe document has no printed page numbers, so I counted pages from the start of the paper.",
+ "input": 28477,
+ "cache_write": 0,
+ "cache_read": 28475,
+ "output": 1256,
+ "thinking": 758,
+ "usd": 0.030823000000000003,
+ "seconds": 15.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.38,
+ "date": "2026-10-25 10:09"
+}

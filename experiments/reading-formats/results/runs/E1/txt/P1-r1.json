@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "P1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "On the Premium user retrieval benchmark, Holistic-171 gets an **ACC of 0.794** and a **MAR@25 of 0.169** (Table 1, page 7).\n\n- **ACC** checks whether the clicked candidate gets the highest score among 4 candidates (1 positive and 3 negatives). Random chance would score 0.25 (page 7).\n- **MAR@k** checks whether clicked candidates rank in the top k of a fixed pool of 100 candidates. All models use the same pool (page 7).\n- Holistic-171 is LinkedIn's production general-purpose member embedding. It has 171 dimensions and is trained on several LinkedIn engagement objectives using profile and behavioral signals (page 7).\n\n**Context:** Holistic-171 beats the off-the-shelf 0.6B embedding (ACC 0.771, MAR@25 0.100). It scores well below the best PAIR model with P-ATT history (ACC 0.967, MAR@25 0.265) (Table 1, page 7).",
+ "input": 23582,
+ "cache_write": 23580,
+ "cache_read": 0,
+ "output": 562,
+ "thinking": 220,
+ "usd": 0.199888,
+ "seconds": 6.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.17,
+ "date": "2026-10-25 10:01"
+}

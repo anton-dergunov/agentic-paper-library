@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "M5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 23,
+ "status": "ok",
+ "answer": "In the rollout-temperature ablation (Figure 5), the **naive Parallel-RL model reaches about 84.6% on MATH500 at τ = 0.8**, and the **math model reaches about 87.2% at τ = 0.75** (p. 23).\n\nThese are estimates from the plot. The figure has no data labels and the text gives no exact values, so the readings could be off by roughly ±0.1–0.2 points.\n\n- **Naive Parallel-RL at τ = 0.8:** This is the last point on its curve. It is lower than the curve's peak of about 86.0% near τ ≈ 0.65, which the paper calls the \"sweet spot\" (p. 23).\n- **Math model at τ = 0.75:** This is the highest point on its curve, with a slight drop to about 87.0% at τ = 0.8 (p. 23).\n\nThe paper says the math model's accuracy improves as τ rises from 0.4 to 0.8. Meanwhile, the Parallel-RL accuracy \"first increases and then degrades\" because more exploration increases variance within each group of rollouts, which in turn increases interference between tasks (p. 23). The ablation used LoRA on a subset of the data because of resource constraints (p. 23).",
+ "input": 122963,
+ "cache_write": 579,
+ "cache_read": 122382,
+ "output": 675,
+ "thinking": 272,
+ "usd": 0.0426164,
+ "seconds": 8.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

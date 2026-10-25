@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "P5",
+ "rep": 2,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "In Figure 1 (page 6), **\"GeM Pooling\"** produces the aggregated history embedding from the visited-profile embeddings, and **\"Temporal-Gated Pooling\"** produces the aggregated user embedding (Step 1 of the diagram).\n\nThe diagram's labels don't match the rest of the paper:\n\n- **Figure caption (page 6):** It says the history tower aggregates recent interaction embeddings \"using positional attention,\" not GeM pooling.\n- **Method text (Sections 4.2–4.3, page 5):** The history embedding is computed with position-aware attention (Eq. 5). The final query representation comes from normalized additive fusion of the profile and history embeddings (Eqs. 3–4). The term \"temporal-gated pooling\" doesn't appear anywhere in the text.\n- **Experiments (Tables 1–2, page 7):** GeM pooling is one of the history aggregation methods compared. It scored a MAR@100 of 0.447, just behind P-ATT (positional attention) at 0.450. P-ATT is the variant deployed in the online A/B test (page 8).\n\nThe diagram may show an earlier or alternative configuration, but the document doesn't explain the difference.",
+ "input": 35797,
+ "cache_write": 0,
+ "cache_read": 35795,
+ "output": 529,
+ "thinking": 130,
+ "usd": 0.017747,
+ "seconds": 6.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.2,
+ "date": "2026-10-25 10:02"
+}

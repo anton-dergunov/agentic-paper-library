@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "I4",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "pdf",
+ "page": 11,
+ "status": "ok",
+ "answer": "Outputs from the 175B InstructGPT model are preferred to 175B GPT-3 outputs **85 ± 3%** of the time. Against few-shot 175B GPT-3, they are preferred **71 ± 4%** of the time. The paper states these numbers on page 3 (Introduction) and again on page 11 (Section 4.1).\n\nContext:\n- Labelers rated the models on the test set, which uses prompts from held-out customers who are not in the training data (page 2).\n- \"Few-shot GPT-3\" means GPT-3 given a few-shot prefix to \"prompt\" it into following instructions (page 9).\n- Unless stated otherwise, \"InstructGPT\" means the PPO-ptx models (page 9).",
+ "input": 174210,
+ "cache_write": 559,
+ "cache_read": 173649,
+ "output": 240,
+ "thinking": 0,
+ "usd": 0.0440098,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-25 09:57"
+}

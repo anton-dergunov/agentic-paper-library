@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "P1",
+ "rep": 1,
+ "paper": "pair",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "I don't know these numbers, and I won't guess, because any figures I gave for ACC or MAR@25 would likely be made up.\n\nI'm not confident a \"Holistic-171\" embedding or a \"Premium user retrieval benchmark\" from LinkedIn is something I've seen. It may be in a paper or internal report I didn't encounter, or the name may differ slightly from what I'd recognize.\n\nIf you have the paper (a PDF, arXiv link, or the text of the results table), share it and I'll pull out the exact ACC and MAR@25 values and explain how they compare with the baselines.",
+ "input": 792,
+ "cache_write": 790,
+ "cache_read": 0,
+ "output": 361,
+ "thinking": 169,
+ "usd": 0.013548000000000001,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.16,
+ "date": "2026-10-25 10:01"
+}

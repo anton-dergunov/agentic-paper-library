@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "I4",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "c0",
+ "page": 11,
+ "status": "ok",
+ "answer": "From the InstructGPT paper (Ouyang et al., 2022, \"Training language models to follow instructions with human feedback\"), human labelers preferred **175B InstructGPT** outputs:\n\n- **85 ± 3%** of the time over **175B GPT-3**\n- **71 ± 4%** of the time over **few-shot GPT-3**\n\nThese figures come from evaluations on prompts submitted to the OpenAI API. The paper also reports that outputs from the much smaller **1.3B InstructGPT** were preferred over those from **175B GPT-3**, even though it has over 100× fewer parameters.",
+ "input": 785,
+ "cache_write": 783,
+ "cache_read": 0,
+ "output": 315,
+ "thinking": 115,
+ "usd": 0.012572,
+ "seconds": 4.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.07,
+ "date": "2026-10-25 09:57"
+}

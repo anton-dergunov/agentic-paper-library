@@ -1,0 +1,30 @@
+{
+ "key": "d20c3be21ecbde2d",
+ "usd": 0.0264,
+ "grades": {
+  "E1/txt/M4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/M4-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No document found; gives DeepSeekMath values instead, which contradict gold."
+  },
+  "E1/pdf/M4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/M4-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

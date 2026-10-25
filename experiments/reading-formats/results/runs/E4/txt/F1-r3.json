@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F1",
+ "rep": 3,
+ "paper": "musique",
+ "form": "txt",
+ "page": 11,
+ "status": "ok",
+ "answer": "On MuSiQue-Ans, the C-only artifact model gets **3.4 answer F1 and 0.0 support F1** on the validation set, and **3.7 answer F1 and 0.0 support F1** on the test set.\n\n**Page numbers:** The document has no printed page numbers. I counted pages from the start of the paper, so the references below are estimates.\n\n**Validation set (Table 4, p. 11)**\n- The C-only model scores 3.4 answer F1 and 0.0 support F1 on MuSiQue-Ans.\n- The same model does much better on the comparison datasets:\n  - HotpotQA-20K: 18.4 answer F1 and 67.6 support F1.\n  - 2WikiMultihopQA-20K: 50.1 answer F1 and 92.0 support F1.\n- The authors note that support identification on those two datasets \"can be done to a surprisingly high degree (67.6 and 92.0 F1) even without the question (C-only model), but fails on MuSiQue-Ans\" (p. 11).\n- Tables 6 and 7 (p. 11–12) repeat the 3.4 and 0.0 figures for the final dataset, which uses 20 positive-distractor paragraphs.\n\n**Test set (Table 5, p. 11)**\n- On MuSiQue-Ans, the C-only model scores 3.7 answer F1 and 0.0 support F1.\n- On MuSiQue-Full, it scores 1.6 An+Sf and 1.1 Sp+Sf.\n- Table 5 uses test-set numbers, while the other results are on the validation set (p. 10).\n\n**What the C-only model is (p. 10)**\nIt is an artifact-based model that sees only the context and not the question. It is built as an End2End Longformer-Large model with an empty question.",
+ "input": 28477,
+ "cache_write": 0,
+ "cache_read": 28475,
+ "output": 1064,
+ "thinking": 473,
+ "usd": 0.026983,
+ "seconds": 10.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.38,
+ "date": "2026-10-25 10:09"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "P4",
+ "rep": 1,
+ "paper": "pair",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "The offline test set has **11.8K query-level instances involving 93K unique member profiles** (page 6, Section 5.1).\n\nEach instance has one clicked candidate as the positive and three negatives. The negatives come from non-clicked impressions and randomly sampled members (page 6). The split is time-based: all training interactions occur before the test window, so future user behavior does not leak into training (page 6).\n\nFor comparison, the training set has 209K query-level instances involving 4.4M unique member profiles across queries, candidates, and history users (page 6).\n\nThe MAR@k metrics are not scored over these 4-candidate instances. They use a fixed pool of 100 candidates built from logged candidates and sampled negatives (page 7, Section 5.1 and Table 1).",
+ "input": 23569,
+ "cache_write": 552,
+ "cache_read": 23015,
+ "output": 437,
+ "thinking": 190,
+ "usd": 0.017766999999999998,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

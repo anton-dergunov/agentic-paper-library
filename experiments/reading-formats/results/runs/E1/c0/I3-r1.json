@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "I3",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "c0",
+ "page": 40,
+ "status": "ok",
+ "answer": "Assuming you mean the **InstructGPT paper** (Ouyang et al., 2022, \"Training language models to follow instructions with human feedback\"), the 175B SFT model used, per Appendix C.1:\n\n- **Learning rate:** 5.03e-6, with a cosine schedule decaying to 10% of the initial value and no warmup.\n- **Batch size:** 8.\n- **Epochs:** 16, the same as the smaller models.\n\nOther details from the same section:\n\n- Residual dropout was 0.2.\n- The 1.3B and 6B SFT models used a learning rate of 9.65e-6 and a batch size of 32.\n- Learning rates came from a geometric search: 5 values for 175B and 7 for the smaller models.\n- The number of epochs was also tuned. The final models were chosen by reward model score rather than validation loss.\n\nThis is from memory, since I don't have the paper in your working directory. If you meant a different paper, tell me which one or point me to the file and I'll check.",
+ "input": 773,
+ "cache_write": 771,
+ "cache_read": 0,
+ "output": 592,
+ "thinking": 267,
+ "usd": 0.018015999999999997,
+ "seconds": 6.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.01,
+ "date": "2026-10-25 09:57"
+}

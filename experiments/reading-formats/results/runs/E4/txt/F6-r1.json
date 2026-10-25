@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F6",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "txt",
+ "page": 15,
+ "status": "ok",
+ "answer": "Qwen3-VL-235B-A22B (instruct) scores **89.3 on MMBench-EN** (Table 2, page 15).\n\nThe text on page 13 says the same: in the non-reasoning comparison, Qwen3-VL-235B-A22B-Instruct gets the highest MMBench scores, with 89.3/88.9. That is 89.3 for MMBench-EN and 88.9 for MMBench-CN.\n\nThe thinking variant scores slightly lower on MMBench-EN, at 88.8 (Table 2, page 15).",
+ "input": 69742,
+ "cache_write": 551,
+ "cache_read": 69189,
+ "output": 492,
+ "thinking": 309,
+ "usd": 0.0280938,
+ "seconds": 7.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-25 10:10"
+}

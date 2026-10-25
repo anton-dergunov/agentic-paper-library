@@ -1,24 +1,30 @@
 {
- "key": "d99a6033db8259b7",
- "usd": 0.023912000000000003,
+ "key": "1ad367b5000bd614",
+ "usd": 0.025312,
  "grades": {
-  "E4/md/F6-r1": {
+  "E4/txt/F6-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
-   "note": "Correct value, though hedged because the table conversion was garbled."
+   "note": ""
   },
   "E4/md-old/F6-r1": {
    "score": "correct",
    "page_ok": false,
    "confident_wrong": false,
-   "note": "Hedged 89.3 cited only from p.13 prose; wrongly says the table is absent."
+   "note": "Hedged inference; cites only page 13 and says the table is missing."
   },
   "E4/pdf/F6-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
    "note": ""
+  },
+  "E4/md/F6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Hedged because the table conversion was garbled, but value matches."
   }
  }
 }

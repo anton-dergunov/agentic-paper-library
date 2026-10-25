@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "N5",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give that value.** The data points in Figure 4 (\"Phase-2 data scaling for the ∼10B model\") aren't in the extracted text, so I can't tell you the plotted value at 5x.\n\nWhat the document does show:\n\n- **Axis setup (Figure 4, p. 7):** The y-axis (\"Normalized Offline Metric\") runs from 1.00 to 1.16. The x-axis (\"Training Data Size (log scale)\") has ticks at 1x, 2x, 5x, 10x and 20x.\n- **Overall trend (p. 6):** For both the ∼1B and ∼10B models, offline MRR \"improves monotonically as we increase the amount of Phase-2 data.\" The data ranges from 1x to 20x the smallest configuration.\n\nSo the 5x value should sit somewhere between 1.00 and 1.16, above the 1x and 2x points and below the 10x and 20x points. The exact number isn't stated. To get it, you'd need to read it off the original figure image.",
+ "input": 23264,
+ "cache_write": 563,
+ "cache_read": 22699,
+ "output": 641,
+ "thinking": 309,
+ "usd": 0.0218718,
+ "seconds": 8.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-25 10:07"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "N5",
+ "rep": 2,
+ "paper": "genrec",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't give that number.** Figure 4 plots it, but the text I have contains only the chart's axis labels, not the data values.\n\nWhat the document does contain:\n\n- **Figure 4 (page 7)** is titled \"Phase-2 data scaling for the ∼10B model.\" Its x-axis is \"Training Data Size (log scale),\" with ticks at 1x, 2x, 5x, 10x and 20x. Its y-axis is \"Normalized Offline Metric,\" with ticks from 1.00 to 1.16. The value at 5x isn't included in the text.\n- **Section 5.2 (page 6)** says that for both the ∼1B and ∼10B models, offline MRR \"improves monotonically\" as Phase-2 data increases from 1x to 20x the smallest configuration.\n\nSo the value at 5x should lie between the 2x and 10x values, but neither of those is given either. You would need to read it off the original figure.",
+ "input": 23264,
+ "cache_write": 0,
+ "cache_read": 23262,
+ "output": 734,
+ "thinking": 432,
+ "usd": 0.019340399999999997,
+ "seconds": 9.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.37,
+ "date": "2026-10-25 10:08"
+}

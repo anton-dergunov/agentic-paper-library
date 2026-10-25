@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "I3",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "txt",
+ "page": 40,
+ "status": "ok",
+ "answer": "For the 175B SFT model, the paper uses a **learning rate of 5.03e-6**, a **batch size of 8**, and **16 epochs** (Appendix C.1, p. 40).\n\n**Other SFT training details:**\n- Residual dropout is 0.2 (p. 40; also p. 8).\n- The learning rate follows a cosine schedule down to 10% of the original value, with no warmup (p. 40).\n- The learning rate was chosen by a geometric search over 5 values for 175B. The number of epochs was also tuned with geometric search (p. 40).\n- All models use the Adam optimizer with β1 = 0.9 and β2 = 0.95 (p. 40).\n- The final checkpoint was chosen by reward model score on the validation set, not by validation loss (pp. 8, 41).\n- The SFT models overfit on validation loss after 1 epoch. Training longer still improved RM score and human preference ratings (p. 8).\n\n**A different 175B model with similar settings:** The supervised model used to initialize RLHF is not the same as the SFT baseline (Appendix C.3, p. 42). For 175B it was trained for **2 epochs** with a peak learning rate of **2.45e-6** and a batch size of **8**, and it mixes in 10% pretraining data.",
+ "input": 72590,
+ "cache_write": 72588,
+ "cache_read": 0,
+ "output": 590,
+ "thinking": 164,
+ "usd": 0.592512,
+ "seconds": 11.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.01,
+ "date": "2026-10-25 09:57"
+}

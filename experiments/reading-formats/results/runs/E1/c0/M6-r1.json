@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "M6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "I don't know this number. \"Adapted Parallel-RL\" sounds like a baseline from a specific paper on parallel reasoning or RL for LLMs, likely with a 1.5B model such as DeepSeek-R1-Distill-Qwen-1.5B or Qwen2.5-1.5B. I can't recall a reliable HumanEval pass@1 figure for it, and I'd rather not guess.\n\nIf you share the paper's title or arXiv ID, or paste its results table, I can find the value and help interpret it against the other baselines.",
+ "input": 782,
+ "cache_write": 780,
+ "cache_read": 0,
+ "output": 275,
+ "thinking": 97,
+ "usd": 0.011748000000000001,
+ "seconds": 4.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

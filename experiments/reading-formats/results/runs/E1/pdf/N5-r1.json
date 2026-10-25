@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N5",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "**About 1.11 (approximate, read from the chart).**\n\n- **Page 7, Figure 4** (\"Phase-2 data scaling for the ∼10B model\") plots the normalized offline metric against training data sizes of 1x, 2x, 5x, 10x and 20x. The 5x point sits just above the 1.10 gridline, at roughly 1.11. The paper gives no exact number, so this is an estimate from the plot.\n- **Page 7, Figure 4:** for context, the metric is 1.00 at 1x and rises to about 1.16 at 20x.\n- **Page 6, Section 5.2:** the offline ranking metric in this study is MRR. The data sizes range from 1x to 20x of the smallest configuration, and MRR improves monotonically as Phase-2 data increases.\n\nSo 5x the smallest data size gives roughly an 11% relative improvement in normalized MRR over the 1x configuration for the ∼10B model.",
+ "input": 35156,
+ "cache_write": 564,
+ "cache_read": 34590,
+ "output": 461,
+ "thinking": 147,
+ "usd": 0.020658000000000003,
+ "seconds": 5.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-25 10:07"
+}

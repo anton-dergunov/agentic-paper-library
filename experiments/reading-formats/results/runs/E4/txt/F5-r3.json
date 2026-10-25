@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F5",
+ "rep": 3,
+ "paper": "qwen3vl",
+ "form": "txt",
+ "page": 15,
+ "status": "ok",
+ "answer": "GPT-5 (high) scores **78.4** on MMMU-Pro (Table 2, page 15). The asterisk on this value means it was taken from GPT-5's own technical report, not measured by the Qwen team (page 15).\n\nFor context, in the same table:\n- GPT-5 (minimal) scores 62.7∗.\n- Qwen3-VL-235B-A22B scores 69.3 (thinking) and 68.1 (instruct) (page 15).\n\nThe smaller GPT-5 models in high mode score lower: GPT-5 mini (high) gets 67.3 (Table 3, page 16), and GPT-5 nano (high) gets 57.2 (Table 4, page 18).",
+ "input": 69732,
+ "cache_write": 0,
+ "cache_read": 69730,
+ "output": 321,
+ "thinking": 91,
+ "usd": 0.020374,
+ "seconds": 5.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-25 10:11"
+}

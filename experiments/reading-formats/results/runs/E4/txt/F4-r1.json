@@ -1,0 +1,22 @@
+{
+ "exp": "E4",
+ "cond": "txt",
+ "qid": "F4",
+ "rep": 1,
+ "paper": "qwen3vl",
+ "form": "txt",
+ "page": 15,
+ "status": "ok",
+ "answer": "On MathVision (Table 2, page 15), **Qwen3-VL-235B-A22B (thinking) scores 74.6** and **Gemini 2.5 Pro (thinking) scores 73.3**, so Qwen3-VL leads by 1.3 points. The asterisk on Gemini's 73.3 means the value comes from Gemini's own technical report rather than the Qwen team's evaluation (page 15).\n\nThe non-thinking variants in the same table are Qwen3-VL-235B-A22B Instruct at 66.5 and Gemini 2.5 Pro (budget-128) at 66.0 (page 15).\n\nOn the separate MathVision-Wildphoto variant, the thinking scores are 63.8 for Qwen3-VL and 63.2 for Gemini 2.5 Pro (page 15).\n\nThe report also says Qwen3-VL-235B-A22B-Thinking achieves state-of-the-art results on MathVision (page 14).",
+ "input": 69758,
+ "cache_write": 69756,
+ "cache_read": 0,
+ "output": 440,
+ "thinking": 120,
+ "usd": 0.566856,
+ "seconds": 10.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.4,
+ "date": "2026-10-25 10:10"
+}

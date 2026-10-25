@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M6",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document doesn't report any HumanEval results**, so it can't answer this question.\n\nThe only code benchmark used is LiveCodeBench (p. 2, p. 13). HumanEval's source paper (Chen et al., 2021) is cited only for the unbiased pass@k estimator (p. 26), not as an evaluation benchmark.\n\nThe closest available data is Adapted Parallel-RL's LiveCodeBench accuracy on the 1.5B model. These are reported as accuracy (%), not explicitly as pass@1:\n\n| 1.5B setting | Adapted Parallel-RL on LiveCodeBench | Single-Task RL |\n|---|---|---|\n| Full-parameter GRPO (Table 4, p. 7) | 22.5% | 21.6% |\n| LoRA GRPO (Table 6, p. 24) | 17.3% | 17.8% |\n| Full-parameter PPO (Table 6, p. 24) | 19.5% | 20.3% |\n\nThe paper's pass@k analysis (pp. 26–27, Figure 7) covers only Naive Parallel-RL, not Adapted Parallel-RL. It is also shown only as curves, with no numeric pass@1 values.",
+ "input": 68805,
+ "cache_write": 555,
+ "cache_read": 68248,
+ "output": 665,
+ "thinking": 262,
+ "usd": 0.0313976,
+ "seconds": 7.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.28,
+ "date": "2026-10-25 10:03"
+}

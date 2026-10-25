@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "M2",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 25,
+ "status": "ok",
+ "answer": "**Removing the Science update causes the largest own-task drop: MMLU falls by 13.3 points** (page 25, Table 7).\n\nIn the 1.5B PPO block of Table 7, the full Naive Parallel-RL model scores 48.9 on MMLU (Science). Without the Science update (∆W_Science), MMLU drops to 35.6, a change of −13.3. The other removals cause smaller drops on their own tasks:\n\n| Removed update | Own-task benchmark | Change |\n|---|---|---|\n| Math | MATH500 (84.8 → 82.8) | −2.0 |\n| **Science** | **MMLU (48.9 → 35.6)** | **−13.3** |\n| Logic | KK (36.0 → 30.0) | −6.0 |\n| Code | LCB (16.5 → 12.5) | −4.0 |\n\nWithout the Science update, the other tasks actually improve, with an average change of +3.5 (∆Others). MATH500 rises by 1.0, KK by 8.0 and LCB by 1.6 (page 25, Table 7).",
+ "input": 122962,
+ "cache_write": 578,
+ "cache_read": 122382,
+ "output": 443,
+ "thinking": 85,
+ "usd": 0.0379684,
+ "seconds": 13.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.26,
+ "date": "2026-10-25 10:03"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "P3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "c0",
+ "page": 5,
+ "status": "ok",
+ "answer": "# PAIR training objective for one query\n\nPAIR is from Ren et al., *\"PAIR: Leveraging Passage-Centric Similarity Relation for Improving Dense Passage Retrieval\"*, Findings of ACL 2021. This is written from memory, not checked against the paper.\n\n## Setup\n\nFor a query $q$, take one positive passage $p^+$ and one or more negative passages $p^-$. Each text is encoded into a vector, and similarity is the inner product:\n\n$$\ns(q, p) = E_Q(q)^\\top E_P(p), \\qquad s(p^+, p^-) = E_P(p^+)^\\top E_P(p^-)\n$$\n\n## Objective\n\n$$\n\\mathcal{L} = (1-\\alpha)\\,\\mathcal{L}_Q + \\alpha\\,\\mathcal{L}_P\n$$\n\n**Query-centric loss** (the standard dense-retrieval contrastive loss):\n\n$$\n\\mathcal{L}_Q = -\\log \\frac{\\exp\\big(s(q,p^+)\\big)}{\\exp\\big(s(q,p^+)\\big) + \\sum_{p^-}\\exp\\big(s(q,p^-)\\big)}\n$$\n\n**Passage-centric loss** (PAIR's addition), with $p^+$ as the anchor:\n\n$$\n\\mathcal{L}_P = -\\log \\frac{\\exp\\big(s(p^+,q)\\big)}{\\exp\\big(s(p^+,q)\\big) + \\sum_{p^-}\\exp\\big(s(p^+,p^-)\\big)}\n$$\n\n## What each term means\n\n| Term | Meaning |\n|---|---|\n| $q$ | The query. |\n| $p^+$ | A passage that answers $q$. |\n| $p^-$ | Negative passages: in-batch negatives and/or hard negatives from a retriever. |\n| $E_Q, E_P$ | Query and passage encoders, both BERT/ERNIE-style dual encoders. PAIR shares parameters between them so that query–passage and passage–passage similarities live in one embedding space. |\n| $s(q,p^+)$ | Similarity between the query and the positive passage. Both losses try to make it large. |\n| $s(q,p^-)$ | Similarity between the query and a negative. $\\mathcal{L}_Q$ pushes it down. |\n| $s(p^+,p^-)$ | Similarity between the positive and a negative passage. $\\mathcal{L}_P$ pushes it down relative to $s(p^+,q)$. |\n| $\\mathcal{L}_Q$ | Query-centric relation: from the query's view, $p^+$ should rank above every $p^-$, i.e. $s(q,p^+) > s(q,p^-)$. |\n| $\\mathcal{L}_P$ | Passage-centric relation: from the positive passage's view, the query should be closer than any negative passage, i.e. $s(p^+,q) > s(p^+,p^-)$. This stops negatives from sitting near $p^+$ in embedding space, even when they score low against $q$. |\n| $\\alpha \\in [0,1]$ | Weight that trades off the two losses. $\\alpha = 0$ gives plain DPR-style training. |\n\n## Why the extra term helps\n\n$\\mathcal{L}_Q$ alone only enforces the ordering around the query. A negative can still lie very close to $p^+$, and a slightly different query would then confuse the two. $\\mathcal{L}_P$ adds a constraint around the positive passage, which gives a better-structured embedding space.\n\n## Training procedure\n\nIn the paper, the loss is used in two stages:\n\n1. **Pre-training** on pseudo-labeled data. A cross-encoder labels the positives and negatives (a form of knowledge distillation).\n2. **Fine-tuning** on labeled data.\n\nI don't remember the exact $\\alpha$ used in each stage, so check the paper for those hyperparameters.",
+ "input": 768,
+ "cache_write": 766,
+ "cache_read": 0,
+ "output": 1957,
+ "thinking": 653,
+ "usd": 0.045276000000000004,
+ "seconds": 19.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

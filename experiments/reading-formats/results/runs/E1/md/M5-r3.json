@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "M5",
+ "rep": 3,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 23,
+ "status": "ok",
+ "answer": "**The document does not give either number.** The specific MATH500 accuracies for the naive Parallel-RL model at τ = 0.8 and the math model at τ = 0.75 would only appear in Figure 5, which is an image, and the text never states them (p. 23).\n\nThe text does describe the ablation's trends:\n\n- **Setup:** The rollout temperature for Math Model training was varied over τ ∈ [0.4, 0.8], with other tasks held constant. The authors measured Naive Parallel-RL accuracy on MATH500 and the negative log intra-group variance (−log V). This was run with LoRA on a data subset because of resource constraints (p. 23).\n- **Math model:** Its performance improves as τ increases from 0.4 to 0.8 (p. 23).\n- **Naive Parallel-RL:** Its accuracy follows a non-monotonic trend, rising and then falling as τ grows. It peaks around τ ≈ 0.65, so at τ = 0.8 it is below that peak (p. 23).\n- **Interpretation:** −log V decreases steadily as τ rises, meaning intra-group variance and the interference upper bound increase. This explains why the merged model degrades at high temperatures (p. 23).",
+ "input": 89383,
+ "cache_write": 0,
+ "cache_read": 89381,
+ "output": 521,
+ "thinking": 116,
+ "usd": 0.0283042,
+ "seconds": 6.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.28,
+ "date": "2026-10-25 10:04"
+}

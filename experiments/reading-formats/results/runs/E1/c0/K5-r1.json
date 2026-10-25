@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "K5",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "c0",
+ "page": 9,
+ "status": "ok",
+ "answer": "I don't know this number. I don't have a reliable memory of a Qwen3 14B↔32B multi-turn CoQA handoff evaluation that reports a standalone 32B word-level F1 at turn depth 10, so any figure I gave would be a guess.\n\nYour working directory (`reading-formats/empty`) is empty, so there's no paper here for me to check. If you share the PDF, arXiv link, or the relevant table or figure, I can find the exact value and its context, such as how \"standalone\" is defined and whether F1 is averaged per turn or cumulatively.",
+ "input": 803,
+ "cache_write": 801,
+ "cache_read": 0,
+ "output": 234,
+ "thinking": 48,
+ "usd": 0.011096,
+ "seconds": 4.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

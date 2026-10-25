@@ -1,14 +1,14 @@
 {
- "key": "ce7fb0a1f4b9ffb5",
- "usd": 0.056232000000000004,
+ "key": "1c3079cc87dd1974",
+ "usd": 0.072588,
  "grades": {
-  "E4/pdf/F1-r2": {
+  "E4/pdf/F1-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
    "note": ""
   },
-  "E4/md/F1-r2": {
+  "E4/pdf/F1-r2": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
@@ -18,19 +18,13 @@
    "score": "wrong",
    "page_ok": true,
    "confident_wrong": true,
-   "note": "States 53.4/50.0; gold is 3.4/0.0."
+   "note": "Gives 53.4/50.0 instead of 3.4/0.0"
   },
-  "E4/md-old/F1-r1": {
-   "score": "wrong",
+  "E4/txt/F1-r2": {
+   "score": "correct",
    "page_ok": true,
-   "confident_wrong": true,
-   "note": "States 53.4/50.0; gold is 3.4/0.0."
-  },
-  "E4/md-old/F1-r3": {
-   "score": "wrong",
-   "page_ok": true,
-   "confident_wrong": true,
-   "note": "States 53.4/50.0; gold is 3.4/0.0."
+   "confident_wrong": false,
+   "note": ""
   },
   "E4/pdf/F1-r3": {
    "score": "correct",
@@ -38,7 +32,31 @@
    "confident_wrong": false,
    "note": ""
   },
-  "E4/pdf/F1-r1": {
+  "E4/md-old/F1-r3": {
+   "score": "wrong",
+   "page_ok": true,
+   "confident_wrong": true,
+   "note": "Gives 53.4/50.0 instead of 3.4/0.0"
+  },
+  "E4/txt/F1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/txt/F1-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E4/md-old/F1-r1": {
+   "score": "wrong",
+   "page_ok": true,
+   "confident_wrong": true,
+   "note": "Gives 53.4/50.0 instead of 3.4/0.0"
+  },
+  "E4/md/F1-r2": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,

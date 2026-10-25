@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "M5",
+ "rep": 2,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 23,
+ "status": "ok",
+ "answer": "**The document doesn't give either number.** The accuracies are plotted in Figure 5, which is an image with no data values in the text.\n\nThe text around the ablation (Appendix D.2, p. 23) only describes the trends:\n\n- **Range:** Temperature varied over τ ∈ [0.4, 0.8], changed only for the Math Model's training, with the other tasks fixed.\n- **Math Model:** Performance improves as τ rises from 0.4 to 0.8. No values are given for any τ, including 0.75.\n- **Naive Parallel-RL on MATH500:** Accuracy rises and then falls as τ grows, peaking around τ ≈ 0.65. No value is given for τ = 0.8. It is only described as degrading at high temperatures because of greater cross-task interference.\n- **Setup:** The analysis used LoRA on a subset of the data because of limited resources, so its numbers wouldn't match the main tables (e.g., Table 4) anyway.\n\nTo get the exact values, you'd need to read them from the Figure 5 image or check the authors' code repository.",
+ "input": 89383,
+ "cache_write": 0,
+ "cache_read": 89381,
+ "output": 451,
+ "thinking": 98,
+ "usd": 0.026904200000000003,
+ "seconds": 5.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.28,
+ "date": "2026-10-25 10:04"
+}

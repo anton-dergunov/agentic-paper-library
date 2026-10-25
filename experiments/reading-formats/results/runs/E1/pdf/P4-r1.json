@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "P4",
+ "rep": 1,
+ "paper": "pair",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "The offline test set has **about 11.8K query-level instances**, involving **93K unique member profiles** (page 6).\n\n- **Composition:** Each instance has one clicked candidate as the positive and three negatives. The negatives are drawn from non-clicked impressions and from randomly sampled members (page 6).\n- **Split:** The split is by time, so all training interactions happen before the test window. This prevents leakage from future user behavior (page 6).\n- **Training set, for comparison:** 209K query-level instances involving 4.4M unique member profiles across queries, candidates, and history users (page 6).\n- **Evaluation pools:** ACC is computed over the 4 candidates in each instance. MAR@k uses a fixed pool of 100 candidates built from logged candidates and sampled negatives, and the same pool is used for every model (page 7).",
+ "input": 35770,
+ "cache_write": 553,
+ "cache_read": 35215,
+ "output": 348,
+ "thinking": 73,
+ "usd": 0.018435,
+ "seconds": 6.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

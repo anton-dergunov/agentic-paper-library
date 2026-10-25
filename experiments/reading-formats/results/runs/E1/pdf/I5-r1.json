@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "I5",
+ "rep": 1,
+ "paper": "instructgpt",
+ "form": "pdf",
+ "page": 17,
+ "status": "ok",
+ "answer": "**The paper doesn't report GPU-hours for PPO training of the 175B model, or for any model.**\n\nThe closest figure is training compute in petaflop/s-days, on page 17:\n\n- **175B PPO-ptx model:** 60 petaflops/s-days\n- **175B SFT model:** 4.9 petaflops/s-days\n- **GPT-3 pretraining:** 3,640 petaflops/s-days, for comparison\n\nThe paper uses these numbers to argue that \"the cost of increasing model alignment is modest relative to pretraining\" (p. 17). Note that the 60 petaflops/s-days figure is for PPO-ptx (PPO with pretraining gradients mixed in), not plain PPO.\n\nYou can't convert this to GPU-hours from the paper alone. It doesn't say what hardware was used, how many GPUs, or how efficiently they ran.\n\nThe paper does give some related training details:\n\n- All RL models were trained for 256k episodes, covering about 31k unique prompts (p. 42).\n- Batch size was 512, with a minibatch size of 64 (p. 42).\n- For PPO-ptx, they used 8 times as many pretraining examples as RL training episodes (p. 42). This roughly doubles training time compared with training without the pretraining mix (p. 58).",
+ "input": 174192,
+ "cache_write": 541,
+ "cache_read": 173649,
+ "output": 534,
+ "thinking": 110,
+ "usd": 0.04974579999999999,
+ "seconds": 10.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.08,
+ "date": "2026-10-25 09:57"
+}

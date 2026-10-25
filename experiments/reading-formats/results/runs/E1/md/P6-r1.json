@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P6",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "**The paper doesn't give this number.** It reports MAR@100 only for models fine-tuned from the 0.6B encoder. It contains no results for Qwen3-Embedding-4B, 8B, or any other larger encoder.\n\nWhat the paper does say about model size:\n\n- **Why they chose 0.6B (p. 5):** The authors chose a 0.6B-parameter encoder \"to balance retrieval quality and batch inference throughput.\" They say larger models \"introduce substantially higher GPU cost without proportional retrieval-quality gains.\" They give no figures, tables, or model names to support this.\n- **Best result (p. 7, Table 1):** PAIR fine-tuned from the 0.6B encoder with P-ATT history reaches **MAR@100 of 0.450**. The two-tower version without history reaches **0.436**.\n- **Scale versus supervision (p. 2, Introduction):** The authors conclude that \"task-specific preference supervision matters more than model scale for this retrieval task.\" This is based on comparing PAIR with the untuned 0.6B baseline (0.192) and the production Holistic-171 embedding (0.288), not on testing larger encoders.\n\nThe paper is also inconsistent about the base encoder. Page 5 names it as **Qwen3-Embedding-0.6B**. Page 6 calls it \"an internally trained 0.6B-parameter embedding model based on the Qwen architecture.\"",
+ "input": 23255,
+ "cache_write": 567,
+ "cache_read": 22686,
+ "output": 608,
+ "thinking": 141,
+ "usd": 0.021241200000000002,
+ "seconds": 7.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}

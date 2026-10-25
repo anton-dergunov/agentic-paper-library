@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "K3",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "# Closed-form solution for each per-head weight matrix\n\nThe mapper solves ridge regression in closed form (Eq. 4, p. 4):\n\n$$\\mathbf{W}^{*}=(\\mathbf{X}^{\\top}\\mathbf{X}+\\lambda\\mathbf{I})^{-1}\\mathbf{X}^{\\top}\\mathbf{Y}$$\n\n## What the terms denote\n\n- **$\\mathbf{X}$** is the design matrix, in $\\mathbb{R}^{N\\times(k\\,n_{\\text{kv}}^{s}\\,d_{h}^{s})}$. It is built by stacking $N$ calibration tokens (p. 4). Each row holds the source features concatenated from the top-$k$ selected source layers, across all source KV heads (Eq. 5, p. 5).\n  - $k$ is the number of selected source layers.\n  - $n_{\\text{kv}}^{s}$ is the source KV head count.\n  - $d_{h}^{s}$ is the source per-head dimension.\n- **$\\mathbf{Y}$** is the response matrix, in $\\mathbb{R}^{N\\times d_{h}^{t}}$. It holds the target's keys or values for the given head, where $d_{h}^{t}$ is the target head dimension (p. 4). For keys, $\\mathbf{Y}$ is built by stripping the target's RoPE from its ground-truth keys. This means $\\mathbf{W}_K$ is fit entirely in a position-free space (p. 5).\n- **$\\lambda$** is the ridge (Tikhonov) regularization strength, set to $\\lambda = 0.01$ (p. 4).\n- **$\\mathbf{I}$** is the identity matrix that the regularizer adds to $\\mathbf{X}^{\\top}\\mathbf{X}$ (p. 4).\n\n## Additional details\n\n**Why ridge instead of plain OLS.** The authors use ridge for numerical conditioning (p. 4). The feature dimension can reach tens of thousands at large $k$. The top-$k$ source layers are also correlated by construction. Together these make $\\mathbf{X}^{\\top}\\mathbf{X}$ near-singular. The Tikhonov term stabilizes the inverse with negligible fit bias.\n\n**Centering and bias.** $\\mathbf{X}$ and $\\mathbf{Y}$ are centered before solving, so $\\mathbf{W}^{*}$ estimates only the slope (p. 4). The bias is then recovered as $\\mathbf{b}=\\bar{\\mathbf{Y}}-\\bar{\\mathbf{X}}\\mathbf{W}^{*}$.\n\n**Scope of each solve.** A separate solve is done for every target (layer, head), and separately for K and V. There are $L_t \\times n_{\\text{kv}}^t$ target heads, and no parameters are shared across heads or between K and V (p. 4, Figure 3).\n\n**Calibration data.** The fit uses 500 FineWeb-Edu sequences of length 1,024 (p. 4). These are subsampled at stride 4, giving $N \\approx 128$K tokens per target head.\n\n**Cost.** Forming $\\mathbf{X}^{\\top}\\mathbf{X}$ costs $\\mathcal{O}(Nd_s^2)$ and dominates fitting time (p. 4). It is computed once per target layer and shared across that layer's heads.",
+ "input": 38450,
+ "cache_write": 554,
+ "cache_read": 37894,
+ "output": 1411,
+ "thinking": 271,
+ "usd": 0.0402388,
+ "seconds": 13.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "K5",
+ "rep": 2,
+ "paper": "kvxfer",
+ "form": "pdf",
+ "page": 9,
+ "status": "ok",
+ "answer": "At turn depth 10, the 32B standalone model reaches a word-level F1 of **about 0.90**, just above the 0.90 gridline (Figure 4, page 9). This is my reading of the plot. The paper does not state the exact number in text or in a table.\n\n- **Figure 4 (page 9):** The solid dark-blue \"32B standalone\" line rises steadily across turns. It starts around 0.885 at turn 1 and ends slightly above 0.90 at turn 10.\n- **Setup (page 8):** The evaluation used 100 CoQA conversations of about 15 turns each, across five domains. Each turn's answer was scored with F1 against the ground truth.\n- **Small-to-large gap (page 8):** The gap widens by 1.7 pp from turn 1 to turn 10. The mapper's score stays steady while \"the 32B ceiling rises,\" which matches the upward slope of the 32B line in the figure.",
+ "input": 60133,
+ "cache_write": 0,
+ "cache_read": 60131,
+ "output": 479,
+ "thinking": 173,
+ "usd": 0.0216142,
+ "seconds": 6.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-25 10:06"
+}

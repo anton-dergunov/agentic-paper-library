@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "N6",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The paper does not report NDCG@10.** Its only offline ranking metric is Mean Reciprocal Rank (MRR).\n\nWhat it says about GenRec's offline performance against the production ranker:\n\n- **MRR lift:** GenRec achieves about **+1.6% relative MRR** over the production baseline, using about **40× fewer Phase-2 labeled training examples** and fewer input signals (p. 6).\n- **Further scaling:** Offline metrics keep improving as training data and input signals are scaled up (p. 6).\n- **Baseline:** The production model is \"a mature discriminative model tuned over many years\" (p. 6).\n\nThe paper reports only relative MRR changes, not absolute scores.",
+ "input": 22161,
+ "cache_write": 546,
+ "cache_read": 21613,
+ "output": 297,
+ "thinking": 65,
+ "usd": 0.014638600000000002,
+ "seconds": 5.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-25 10:07"
+}

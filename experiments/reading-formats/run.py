@@ -7,7 +7,8 @@
 Tiers, in priority order (see PROGRESS.md):
   A  E0 extras on DPO, and E1 on DPO in all five conditions (the pilot)
   B  E1 on SimPO, GPT-1, Lost in the Middle, InstructGPT in c0, pdf, txt, md; E4
-  C  E5; E1 in html for the three other papers with arXiv HTML
+  B2 E1 in c0, pdf, txt, md on four papers published after the model's training cutoff; E4 in txt
+  C  E5 (E1 in html beyond DPO was dropped at checkpoint 1)
 
 A tier runs group by group (a paper, for E1). The conditions of a group run in parallel,
 each asking its questions one after another so that the document is read from the cache
@@ -207,6 +208,8 @@ def ask(j):
 
 E1_ALL = ("c0", "pdf", "txt", "html", "md")
 E1_CORE = ("c0", "pdf", "txt", "md")
+UNSEEN = ("pair", "sftrl", "kvxfer", "genrec")  # tier B2: published after June 2026
+E4_PAPERS = ("musique", "toolformer", "gpt1", "qwen3vl")
 
 
 def qids(exp, paper):
@@ -228,25 +231,30 @@ def e0_jobs():
 def groups(tier):
     """[(name, {condition: [jobs]}, rerun conditions)] of a tier, in order."""
     out = []
+    e1 = lambda paper: ("E1 " + paper, {c: [job("E1", c, i) for i in qids("E1", paper)] for c in E1_CORE},
+                        E1_CORE[1:])
     if tier == "A":
         out.append(("E0 dpo", {"e0": e0_jobs()}, ()))
         out.append(("E1 dpo", {c: [job("E1", c, i) for i in qids("E1", "dpo")] for c in E1_ALL}, E1_ALL[1:]))
     elif tier == "B":
         # The pilot found DPO answered from memory; the less famous SimPO and the E4 fixes
         # tell the most per dollar, InstructGPT (200K-token PDF) the least.
-        e1 = lambda paper: ("E1 " + paper, {c: [job("E1", c, i) for i in qids("E1", paper)] for c in E1_CORE},
-                            E1_CORE[1:])
         out.append(e1("simpo"))
-        for paper in ("musique", "toolformer", "gpt1", "qwen3vl"):
+        for paper in E4_PAPERS:
             conds = ("md-old", "md", "pdf")
             out.append(("E4 " + paper, {c: [job("E4", c, i) for i in qids("E4", paper)] for c in conds}, conds))
         out += [e1(paper) for paper in ("gpt1", "litm", "instructgpt")]
+    elif tier == "B2":
+        out += [e1(paper) for paper in UNSEEN]
+        # Does the naive text layer carry the errors the converter had? The other conditions
+        # were asked in tier B; they count in the disagreements, and are not asked again.
+        for paper in E4_PAPERS:
+            out.append(("E4 txt " + paper, {"txt": [job("E4", "txt", i) for i in qids("E4", paper)]},
+                        ("md-old", "md", "pdf", "txt")))
     elif tier == "C":
         conds = ("page", "img1255", "img2576", "md")
         for paper in ("qwen3vl", "litm"):
             out.append(("E5 " + paper, {c: [job("E5", c, i, form=c) for i in qids("E5", paper)] for c in conds}, conds))
-        for paper in ("simpo", "litm", "instructgpt"):
-            out.append(("E1 html " + paper, {"html": [job("E1", "html", i) for i in qids("E1", paper)]}, ()))
     return out
 
 
@@ -294,13 +302,13 @@ def run_tier(tier):
         if differ:
             print("  rerunning where conditions disagree: %s" % ", ".join(differ), flush=True)
             reruns = {c: [dict(j, rep=r) for j in conditions[c] if j["qid"] in differ for r in (2, 3)]
-                      for c in rerun_conds}
+                      for c in rerun_conds if c in conditions}
             run_group(reruns)
             judge.judge(differ)
 
 
 def status():
-    for tier in "ABC":
+    for tier in ("A", "B", "B2", "C"):
         done = total = 0
         for name, conditions, _ in groups(tier):
             for jobs in conditions.values():

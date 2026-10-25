@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M1",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "On the AIME2025 benchmark, **Adapted Parallel-RL reaches 59.0%** and **Single-Task RL reaches 57.1%** (Table 4, page 7).\n\n- The superscript on the Adapted Parallel-RL result (+1.9) confirms it is 1.9 points above the single-task baseline (page 7).\n- Table 4 labels this setting \"Baselines (Full Parameter GRPO)\" for DeepSeek-R1-Distill-Qwen-7B (page 7). Section 5.2 says the 1.5B and 7B models were trained with full parameters and GRPO (page 7).\n- For context, the 7B Base Model scores 49.2% on AIME2025 (page 7). AIME2025 is reported as avg@16, the average accuracy over 16 test runs (page 13).",
+ "input": 68848,
+ "cache_write": 68846,
+ "cache_read": 0,
+ "output": 352,
+ "thinking": 79,
+ "usd": 0.5578160000000001,
+ "seconds": 5.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.21,
+ "date": "2026-10-25 10:03"
+}

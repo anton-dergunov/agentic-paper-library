@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "M3",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "pdf",
+ "page": 6,
+ "status": "ok",
+ "answer": "## Upper bounds (Theorem 4.5, p. 6)\n\n- **SFT (norm-limited):** |I_SFT(i, j)| ≤ M_i · M_j (p. 6)\n- **RL / GRPO (variance-limited):** |I_RL(i, j)| ≤ V_i · V_j (p. 6)\n\nHere I(i, j) is the \"gradient interference term,\" the expected inner product between the gradients of two different tasks i and j (p. 5).\n- For SFT, I_SFT(i, j) = E[⟨S*_i(x), S*_j(x′)⟩], where S* is the expert score function ∇θ log πθ(y*|x) on the target response y* (p. 5).\n- For GRPO, I_RL is the inner product of the advantage-weighted group gradients (p. 5).\n\n## What the constants represent (Assumption 4.4, p. 6)\n\n**M_i (SFT):** a bound on the expected squared L2 norm of the expert score function, E_x∼D_i[‖S*_i(x)‖²₂] ≤ M_i². The paper says this \"characterizes the average energy of the updates\" (p. 6). In other words, it measures the absolute magnitude of the SFT gradient, and the paper notes this magnitude is large (p. 6).\n\n**V_i (RL):** a bound on the expected intra-group variance of the residual score function, averaged over the G rollouts: E_x∼D_i[(1/G) Σ_k ‖δS_i,k(x)‖²₂] ≤ V_i² (p. 6).\n- The residual is δS_i,k(x) = S_i,k(x) − S̄_i(x), where S̄_i(x) is the mean score function over the G rollouts for input x (p. 5).\n- So V_i is the variance within the group of rollouts the model generates for the same input (p. 6).\n- The paper argues this is small because RL is on-policy, and that δS keeps decaying as training converges (p. 6).\n\n## Why RL depends only on the residual\n\nGRPO's standardized advantages sum to zero (p. 5). This removes the mean score direction S̄_i from the gradient inner product (Lemma 4.3, p. 5; proof p. 15). The paper calls the advantage function a filter that removes the dense mean gradient and leaves only the intra-group residuals (p. 5).\n\nThe RL proof also uses the fact that the standardized advantages satisfy Σ Â²_i,k = G (p. 16). This gives Term_i ≤ G·V_i and therefore |I_RL| ≤ V_i·V_j (p. 17).\n\n## Empirical magnitudes (Table 3, p. 6)\n\n| Quantity | SFT | RL |\n|---|---|---|\n| ‖S‖₂ | ~7.1 | ~10⁻¹ |\n| ‖δS‖₂ | — | ~10⁻² |\n\n## Extension to PPO\n\nThe paper states the same bound, |I_PPO(i, j)| ≤ V_i·V_j, holds for PPO with batch-level advantage normalization (p. 18). In that case δS is the deviation from the batch mean score rather than the per-prompt group mean, which the paper says makes PPO \"more perturbative\" than GRPO (p. 18).",
+ "input": 122951,
+ "cache_write": 567,
+ "cache_read": 122382,
+ "output": 1167,
+ "thinking": 85,
+ "usd": 0.0523604,
+ "seconds": 13.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

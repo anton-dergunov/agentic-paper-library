@@ -1,0 +1,20 @@
+# Drafted from the PDF by claude-opus-5-5, $1.03; not yet checked
+- {id: M1, exp: E1, paper: sftrl, kind: table, page: 7,
+   question: 'With full-parameter GRPO on DeepSeek-R1-Distill-Qwen-7B, what AIME2025 accuracy does Adapted Parallel-RL reach, and what does Single-Task RL reach on the same benchmark?',
+   gold: 'Adapted Parallel-RL gets 59.0 on AIME2025, against 57.1 for Single-Task RL (+1.9) (Table 4).'}
+- {id: M2, exp: E1, paper: sftrl, kind: table, page: 25,
+   question: 'In the 1.5B full-parameter PPO setting, which task update, when removed from the naive Parallel-RL merge, causes the largest drop on its own task, and what is that drop?',
+   gold: 'Removing the Science update: MMLU falls from 48.9 to 35.6, a drop of -13.3 (Table 7).'}
+- {id: M3, exp: E1, paper: sftrl, kind: equation, page: 6,
+   question: 'State the paper''s upper bounds on cross-task gradient interference for SFT and for GRPO-style RL, and say what the bounding constants represent.',
+   gold: '|I_SFT(i,j)| <= M_i * M_j (norm-limited), where M_i^2 bounds the expected squared L2 norm of the expert score function E||S*_i(x)||^2. |I_RL(i,j)| <= V_i * V_j (variance-limited), where V_i^2 bounds the expected intra-group variance of the residual score dS_{i,k} = S_{i,k} - mean S_i averaged over the G rollouts (Theorem 4.5).'}
+- {id: M4, exp: E1, paper: sftrl, kind: appendix, page: 13,
+   question: 'What learning rate and how many rollouts per prompt were used for GRPO training, and was a KL penalty used?',
+   gold: 'Learning rate 3e-6, G = 16 rollouts per prompt, and the KL divergence penalty was disabled (Appendix A.2).'}
+- {id: M5, exp: E1, paper: sftrl, kind: figure, page: 23,
+   question: 'When the rollout temperature for math-model training is varied, what MATH500 accuracy does the naive Parallel-RL merged model reach at its best temperature?',
+   gold: 'About 86.0% at the sweet spot of tau about 0.65 (Figure 5).', tolerance: '+/- 0.3 percentage points'}
+- {id: M6, exp: E1, paper: sftrl, kind: unanswerable, answerable: false, page: 7,
+   question: 'What pass@1 does Adapted Parallel-RL achieve on HumanEval with the 1.5B model?',
+   gold: 'Not reported: code is evaluated only on LiveCodeBench, where Adapted Parallel-RL (1.5B, full-parameter GRPO) scores 22.5.'}
+

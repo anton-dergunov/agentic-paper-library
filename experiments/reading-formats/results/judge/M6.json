@@ -1,0 +1,30 @@
+{
+ "key": "e9f9e387bf2538a5",
+ "usd": 0.027796,
+ "grades": {
+  "E1/c0/M6-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Declines without consulting the paper; doesn't point to the LiveCodeBench result."
+  },
+  "E1/txt/M6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/M6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/pdf/M6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

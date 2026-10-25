@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "N3",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "md",
+ "page": 5,
+ "status": "ok",
+ "answer": "GenRec's Phase-2 training uses a **multi-objective loss** that combines a recommendation ranking objective, a language modeling objective, and other objectives where applicable (p. 5):\n\n$$\\mathcal{L}=\\alpha\\cdot\\mathcal{L}_{\\text{ranking}}+\\beta\\cdot\\mathcal{L}_{\\text{language}}+\\gamma\\cdot\\mathcal{L}_{\\text{miscellaneous}}$$\n\n**Constraints on the weights (p. 5):**\n- α + β + γ = 1\n- α, β, γ ≥ 0\n\nThe weights are tunable hyperparameters, set through offline experiments (p. 5).\n\n**The components (p. 5):**\n- **𝓛_ranking:** This is the primary objective, and it is catalog-aware. Positive labels are high-quality engagements, such as high-duration plays or strong explicit feedback. Denoising logic and thresholds vary by content type. A cross-entropy loss is applied over the item catalog or candidate set.\n- **𝓛_language:** This is a language modeling loss over the verbalized inputs and outputs, such as predicted titles and other text fields. It preserves the backbone's language understanding and generation, which matters for modeling natural-language user histories and for steering recommendations via prompts.\n- **𝓛_miscellaneous:** The paper only describes this as \"other objectives where applicable.\" It does not say what they are.\n\n**Additional context:**\n- The ranking loss is also **reward-weighted**. Each training example gets a scalar weight derived from several reward models, and its ranking loss is scaled by that weight. High-value engagements are weighted up and undesirable ones are weighted down (p. 5).\n- Both objectives are optimized jointly during training, but only the ranking task is used at inference (p. 5).",
+ "input": 22165,
+ "cache_write": 550,
+ "cache_read": 21613,
+ "output": 627,
+ "thinking": 25,
+ "usd": 0.0212706,
+ "seconds": 7.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.35,
+ "date": "2026-10-25 10:07"
+}

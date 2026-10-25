@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N5",
+ "rep": 2,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "For the ~10B model at **5x** Phase-2 training data, the normalized offline metric is **about 1.11** (page 7, Figure 4).\n\nThat value is relative to the smallest (1x) data configuration, which is set to 1.00. So 5x data gives roughly an 11% gain over the smallest setup.\n\nThe paper gives no exact figure, so this is read from the plot. The 5x point sits just above the 1.10 gridline. The neighbouring points are about 1.05 at 2x and about 1.135 at 10x.\n\nThe text on page 6 identifies the metric as MRR. It says data sizes range from 1x to 20x the smallest configuration and that MRR \"improves monotonically\" as Phase-2 data increases.",
+ "input": 35156,
+ "cache_write": 0,
+ "cache_read": 35154,
+ "output": 352,
+ "thinking": 114,
+ "usd": 0.014078799999999999,
+ "seconds": 5.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.37,
+ "date": "2026-10-25 10:08"
+}

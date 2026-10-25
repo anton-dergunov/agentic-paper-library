@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "K2",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "c0",
+ "page": 21,
+ "status": "ok",
+ "answer": "I don't know the answer. It depends on a specific paper or results table that I don't have, and the working directory (`reading-formats/empty`) has no paper in it. I don't recognize the \"six matched-KV pairs\" setup or its held-out BoolQ retention numbers well enough to give a pair or a figure, and I'd rather not guess.\n\nIf you paste the relevant table or section, or give me the path to the paper (PDF, text, or LaTeX), I can find which pair has the highest BoolQ retention on the held-out benchmarks and report the value.",
+ "input": 793,
+ "cache_write": 791,
+ "cache_read": 0,
+ "output": 286,
+ "thinking": 108,
+ "usd": 0.012056,
+ "seconds": 4.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-25 10:05"
+}

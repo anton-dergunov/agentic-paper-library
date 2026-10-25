@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "M2",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "c0",
+ "page": 25,
+ "status": "ok",
+ "answer": "I can't answer this reliably. I don't recognize the paper with a \"1.5B full-parameter PPO\" setting and a naive \"Parallel-RL\" merge with per-task leave-one-out ablations, so I don't know which task's removal causes the largest drop or how big it is. Your working directory (`.../reading-formats/empty`) has no paper in it either.\n\nIf you share the paper (a PDF path, arXiv ID, or the relevant table), I can find the leave-one-out ablation for the 1.5B full-parameter PPO merge and tell you which task's removal hurts its own score the most, and by how much.",
+ "input": 804,
+ "cache_write": 802,
+ "cache_read": 0,
+ "output": 277,
+ "thinking": 78,
+ "usd": 0.011963999999999999,
+ "seconds": 4.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.26,
+ "date": "2026-10-25 10:03"
+}

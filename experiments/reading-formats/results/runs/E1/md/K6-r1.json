@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "K6",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document does not report HumanEval results.** HumanEval does not appear anywhere in the paper, so there is no pass@1 retention figure for Qwen3 14B→32B or any other pair.\n\n**What the paper evaluates**\n\n- **Main benchmarks:** ARC-Challenge, HellaSwag, WinoGrande, MMLU 5-shot, GSM8K 8-shot with chain-of-thought, and WikiText-2 perplexity (p. 6; Table 11, p. 16).\n- **Multi-turn:** CoQA (p. 6, p. 8).\n- **Held-out benchmarks:** PIQA, BoolQ and ARC-Easy (p. 21).\n- **Calibration-domain sweep:** also adds ARC-Easy, PIQA and BoolQ (p. 15).\n\nThe only code-related item is CodeAlpaca, which is used as an alternative *calibration* corpus, not as an evaluation benchmark. On Qwen3 14B→32B it lowers HellaSwag by 5.24 pp compared with FineWeb-Edu calibration (Table 8, p. 15).\n\n**Reported retention for Qwen3 14B→32B (ridge, k=8)**\n\n| Benchmark | Retention | Source |\n|---|---|---|\n| GSM8K (the only generation benchmark) | 95.6% | Table 1, p. 6 |\n| ARC-C | 101.0% | Table 1, p. 6 |\n| HellaSwag | 97.6% | Table 1, p. 6 |\n| WinoGrande | 98.5% | Table 1, p. 6 |\n| MMLU | 95.0% | Table 1, p. 6 |\n| Average | 97.6% (96.3% floor-normalized) | Table 1, p. 6 |\n| PIQA (held out) | 98.0% | Table 18, p. 21 |\n| BoolQ (held out) | 101.9% | Table 18, p. 21 |\n| ARC-Easy (held out) | 99.8% | Table 18, p. 21 |\n\nCode-generation performance such as HellaEval would need to be measured separately; the paper gives no basis for estimating it.",
+ "input": 38455,
+ "cache_write": 559,
+ "cache_read": 37894,
+ "output": 913,
+ "thinking": 189,
+ "usd": 0.0303188,
+ "seconds": 11.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-25 10:05"
+}

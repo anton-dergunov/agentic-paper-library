@@ -1,0 +1,30 @@
+{
+ "key": "5c5c6b8bb050dcc4",
+ "usd": 0.040856,
+ "grades": {
+  "E1/pdf/K6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/K6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/md/K6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Minor typo 'HellaEval'; otherwise matches gold."
+  },
+  "E1/c0/K6-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Declines without the paper; does not name the reported benchmarks."
+  }
+ }
+}

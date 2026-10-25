@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "P6",
+ "rep": 1,
+ "paper": "pair",
+ "form": "c0",
+ "page": 5,
+ "status": "ok",
+ "answer": "I don't know. I have no reliable record of PAIR results fine-tuned from Qwen3-Embedding-4B or 8B, so I can't give you a MAR@100 figure without making one up.\n\nIt may be that the paper only reports results for a smaller backbone, such as Qwen3-Embedding-0.6B, and lists scaling to larger encoders as future work or a limitation. I can't confirm that from memory either.\n\nTo find out, check:\n- **The results tables and ablations** for any backbone-size comparison.\n- **The limitations or future work section**, where untested larger backbones are often mentioned.\n- **The appendix or the project's GitHub page**, which sometimes has extra checkpoints or results.\n\nIf you share the PDF or the relevant section, I can find the number or confirm that the paper doesn't report it.",
+ "input": 794,
+ "cache_write": 792,
+ "cache_read": 0,
+ "output": 421,
+ "thinking": 157,
+ "usd": 0.014764,
+ "seconds": 5.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.2,
+ "date": "2026-10-25 10:01"
+}

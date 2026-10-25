@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "M3",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "# Upper bounds on cross-task gradient interference\n\nTheorem 4.5 (p. 6) gives these bounds for two distinct tasks *i* and *j*:\n\n- **SFT (norm-limited):** |𝓘_SFT(i,j)| ≤ M_i · M_j (p. 6)\n- **RL / GRPO (variance-limited):** |𝓘_RL(i,j)| ≤ V_i · V_j (p. 6)\n\n## What is being bounded\n\nThe interference term is the expected inner product of the two tasks' gradient directions (p. 5).\n\n- **SFT:** it is 𝓘_SFT(i,j) = E[⟨S*_i(x), S*_j(x′)⟩]. Here S*_i(x) = ∇_θ log π_θ(y*_i | x) is the \"expert score function\" for the target response (p. 5).\n- **RL:** the GRPO advantages sum to zero, so the interference reduces to an advantage-weighted inner product of residual score functions (Lemma 4.3, p. 5). The residual is δS_{i,k}(x) = S_{i,k}(x) − S̄_i(x), which is each rollout's score minus the mean score of its group (p. 5).\n\n## What the constants represent (Assumption 4.4, p. 6)\n\n- **M_i (SFT):** M_i² bounds the expected squared L2 norm of the expert score function, E[‖S*_i(x)‖²] ≤ M_i². The paper describes this as \"the average energy of the updates\" (p. 6). It measures the *absolute magnitude* of the gradient.\n- **V_i (RL):** V_i² bounds the expected intra-group variance of the residual score functions, averaged over the G rollouts: E[(1/G) Σ_k ‖δS_{i,k}(x)‖²] ≤ V_i² (p. 6). It measures how much the G rollouts for the same input differ from each other.\n\n## Interpretation\n\n- **SFT:** the bound depends on the absolute norm of the score function, which the paper argues is large (p. 6).\n- **RL:** the bound depends only on the residuals δS, which reflect variation within a group of rollouts.\n  - The paper argues this variation is small because RL is on-policy, and that δS keeps shrinking as training converges (p. 6).\n  - The zero-sum advantage removes the shared mean direction S̄ (pp. 5–6).\n  - The RL proof also relies on standardized advantages satisfying Σ_k Â²_{i,k} = G (p. 16).\n\n## Supporting details\n\n- **Proofs:** the SFT bound uses Jensen's and Cauchy–Schwarz inequalities and the independence of the two tasks' data (p. 15). The RL proof is on pp. 16.\n- **Empirical values:** ‖S‖₂ ≈ 7.1 for SFT, compared with ‖δS‖₂ ≈ 10⁻² for RL (Table 3, p. 6).\n- **Extension to PPO:** the same form of bound, |𝓘_PPO(i,j)| ≤ V_i · V_j, holds for PPO with batch-level advantage normalization. In that case δS is the deviation across the whole batch rather than within one prompt's group (p. 17).",
+ "input": 89371,
+ "cache_write": 566,
+ "cache_read": 88803,
+ "output": 1353,
+ "thinking": 267,
+ "usd": 0.0493566,
+ "seconds": 17.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

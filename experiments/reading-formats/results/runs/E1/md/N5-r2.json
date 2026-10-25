@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "N5",
+ "rep": 2,
+ "paper": "genrec",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "**The document does not give this value.** The specific number for the ~10B model at 5x data is not in the text.\n\nWhat the paper does say about Phase-2 data scaling (p. 6):\n\n- GenRec was trained on datasets ranging from **1x to 20x** the smallest data configuration, for a ~1B model and a ~10B model.\n- For both sizes, offline MRR **improves monotonically** as Phase-2 data increases.\n- The ~10B model has higher absolute MRR than the ~1B model, and both show a similar scaling pattern.\n\nThe data-scaling results for the ~10B model are in **Figure 4** (p. 6), titled \"Phase-2 data scaling for the ~10B model.\" That figure is included only as an image, so its data points, including any value at 5x, can't be read from the text.\n\nThe phrase \"normalized offline ranking metric (MRR)\" appears only in the caption of **Figure 5** (p. 7). That figure plots MRR against the number of user engagement events in the prompt, not against the amount of Phase-2 training data, so it doesn't answer your question either.",
+ "input": 22178,
+ "cache_write": 0,
+ "cache_read": 22176,
+ "output": 499,
+ "thinking": 147,
+ "usd": 0.014423199999999999,
+ "seconds": 6.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-25 10:08"
+}

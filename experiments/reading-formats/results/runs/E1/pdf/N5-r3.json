@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "pdf",
+ "qid": "N5",
+ "rep": 3,
+ "paper": "genrec",
+ "form": "pdf",
+ "page": 7,
+ "status": "ok",
+ "answer": "**About 1.11**, read from Figure 4. The paper doesn't state this number exactly; it only appears as a point on the chart (page 7).\n\n- **Value:** Figure 4 (\"Phase-2 data scaling for the ∼10B model\") plots the normalized offline metric against training data size from 1x to 20x on a log scale. The 5x point sits just under the 1.11 gridline, so roughly 1.11. That means about 11% higher than the 1x configuration, which is normalized to 1.00 (page 7).\n- **Rest of the curve:** about 1.05 at 2x, about 1.135 at 10x and about 1.16 at 20x (page 7).\n- **Metric:** The metric is MRR (Mean Reciprocal Rank), and it improves steadily as Phase-2 data increases, for both the ∼1B and ∼10B models (page 6).",
+ "input": 35156,
+ "cache_write": 0,
+ "cache_read": 35154,
+ "output": 402,
+ "thinking": 115,
+ "usd": 0.0150788,
+ "seconds": 5.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.37,
+ "date": "2026-10-25 10:08"
+}

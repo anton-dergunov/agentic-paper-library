@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "c0",
+ "qid": "M4",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "c0",
+ "page": 13,
+ "status": "ok",
+ "answer": "**I can't tell which paper or project you mean.** No paper or document is attached, and the working directory (`reading-formats/empty`) has nothing in it. Please share the paper (PDF, link, or title) or point me to the file, and I'll find the exact values.\n\nIf you mean the paper that introduced GRPO, **DeepSeekMath** (Shao et al., 2024), the reported setup was:\n\n- **Learning rate:** 1e-6\n- **Rollouts per prompt:** 64 outputs per question\n- **KL penalty:** yes, with coefficient β = 0.04. It is added directly to the loss as a per-token KL estimate against the reference model, not folded into the reward.\n\nMany later GRPO papers change these settings. Some drop the KL term entirely (DAPO, for example) or use much smaller group sizes, such as 8 or 16. So the answer depends on which paper you're reading.",
+ "input": 781,
+ "cache_write": 779,
+ "cache_read": 0,
+ "output": 567,
+ "thinking": 273,
+ "usd": 0.01758,
+ "seconds": 7.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

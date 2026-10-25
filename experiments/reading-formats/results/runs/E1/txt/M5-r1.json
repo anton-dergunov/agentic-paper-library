@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "txt",
+ "qid": "M5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "txt",
+ "page": 23,
+ "status": "ok",
+ "answer": "**The document doesn't give these values.** The rollout-temperature ablation is shown only as a plot (Figure 5, page 23). The extracted text includes the axis labels but not the plotted data, so I can't read off the MATH500 accuracy for Naive Parallel-RL at τ = 0.8 or for the Math Model at τ = 0.75. The document also doesn't say whether τ = 0.75 was one of the temperatures tested.\n\nHere is what the document does say about this ablation, all on page 23:\n\n- **Range tested:** Rollout temperature was varied over τ ∈ [0.4, 0.8] for Math Model training, with the other tasks kept constant. Because of resource constraints, the runs used LoRA on a data subset.\n- **Accuracy axis:** The MATH500 accuracy axis in Figure 5 runs from about 83.0% to 88.0%.\n- **Math Model trend:** Its performance improves as τ increases from 0.4 to 0.8.\n- **Naive Parallel-RL trend:** Its accuracy is non-monotonic. It first rises and then falls as τ grows, peaking around τ ≈ 0.65, which the paper calls the \"sweet spot.\" At high temperatures, inter-task interference degrades the merged model, so its accuracy at τ = 0.8 is below that peak. The exact figure isn't given.\n- **Variance:** The negative log-variance (−log V) decreases steadily as τ rises, meaning intra-group variance and the interference upper bound increase.\n\nTo get the exact numbers, you would need to read them from the Figure 5 graphic itself or find a table of the underlying data, which this document doesn't include.",
+ "input": 68828,
+ "cache_write": 578,
+ "cache_read": 68248,
+ "output": 764,
+ "thinking": 213,
+ "usd": 0.0335616,
+ "seconds": 11.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.27,
+ "date": "2026-10-25 10:03"
+}

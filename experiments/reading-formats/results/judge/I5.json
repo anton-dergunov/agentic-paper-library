@@ -1,0 +1,30 @@
+{
+ "key": "ebb0f0d572ca7882",
+ "usd": 0.028484000000000002,
+ "grades": {
+  "E1/pdf/I5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/txt/I5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E1/c0/I5-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "From memory, no page cited; values match gold."
+  },
+  "E1/md/I5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

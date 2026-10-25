@@ -1,0 +1,22 @@
+{
+ "exp": "E1",
+ "cond": "md",
+ "qid": "P5",
+ "rep": 1,
+ "paper": "pair",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "**The document doesn't contain the diagram's labels.** Figure 1 appears only as an image reference, so I can't see what pooling operations it names. What the text does say about these two steps is below.\n\n**Aggregated history embedding:**\n- The Figure 1 caption says the history tower \"aggregates recent interaction embeddings using positional attention\" (p. 5).\n- Section 4.3 defines this as a position-aware attention weighting (P-ATT) over the K most recently clicked profiles. Each profile's weight comes from a learned positional encoding plus a learnable attention vector, followed by a softmax and a weighted sum. K is set to 10 (p. 5).\n- Max, mean, GeM and plain attention pooling were tested only as alternatives in the ablation. P-ATT scored best on MAR@100 at 0.450, with GeM close behind at 0.447 (p. 7).\n\n**Aggregated user embedding:**\n- The text does not describe this step as pooling. The caption says the final query representation \"combines static profile identity and dynamic intent through normalized additive fusion\" (p. 5).\n- Equations 3–4 define this fusion. The profile and history embeddings are each L2-normalized, the history embedding is scaled by a learnable scalar γ, the two are summed, and the result is L2-normalized again (p. 5).\n- The text never says how the profile embedding itself is pooled from the encoder's token outputs. It only names the base encoder: Qwen3-Embedding-0.6B on p. 5, described on p. 6 as an internally trained 0.6B model based on the Qwen architecture.\n\nIf the figure's labels say something different, such as \"mean pooling\" or \"last-token pooling,\" that would only be visible in the image.",
+ "input": 23267,
+ "cache_write": 579,
+ "cache_read": 22686,
+ "output": 704,
+ "thinking": 138,
+ "usd": 0.0232572,
+ "seconds": 8.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-25 10:01"
+}
