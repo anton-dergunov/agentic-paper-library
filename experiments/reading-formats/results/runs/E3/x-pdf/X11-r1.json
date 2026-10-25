@@ -1,0 +1,35 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X11",
+ "rep": 1,
+ "paper": [
+  "olmo2"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "OLMo 2 finds that the peak learning rate matters less than expected. Raising it lowers the loss early in pretraining, but that advantage goes away once the learning rate is annealed to zero. Source: *2 OLMo 2 Furious* (`llm/foundation-models/2 OLMo 2 Furious.pdf`), Section 4.1 \"Learning rate annealing\". The page numbers below are the printed ones, which match the PDF pages.\n\n**Setup**\n- The baseline, taken from Llama 3 (Grattafiori et al., 2024), warms up linearly to a peak of 3·10⁻⁴ over 2,000 steps, then follows a cosine decay planned over 5T tokens (p. 18).\n- For the 7B model, they stopped the cosine schedule at 4T tokens and replaced its tail with a linear decay to zero during mid-training. The 13B model used a higher peak learning rate from the start and ran to 5T tokens before mid-training (p. 18).\n- They tried four other peaks: 6, 9, 12 and 30 ·10⁻⁴ (p. 18).\n\n**Findings**\n1. **The highest rate was unstable.** At 30·10⁻⁴, loss spiked during warm-up and never fully recovered, so they dropped that run early. The other rates trained normally (p. 18).\n2. **Higher rates lead early, lower rates win later.** By training loss alone, higher learning rates are always better at first, as long as they avoid loss spikes, but the lowest rate eventually overtakes them. Between 3·10⁻⁴ and 6·10⁻⁴ the crossover comes well after 200B tokens, so a shorter hyperparameter experiment \"might come to the wrong conclusion\" (p. 18, Fig. 11).\n3. **Annealing cancels the difference.** They took each run at 300B tokens and decayed the learning rate to zero over 50B tokens, and also over 100B tokens for the three higher rates. A higher rate does make the annealing step more effective, but \"by exactly the amount that the pretraining is worse.\" All variants end with about the same training loss, with the lowest rate slightly behind (pp. 18–19).\n4. **Downstream scores barely differ.** On 9 OLMES multiple-choice tasks, average scores differ by less than two points across all variants, and most are within half a point of each other (Table 8, p. 19). For example, runs annealed over 50B tokens score 62.5, 63.9, 64.1 and 63.6 for peaks 3, 6, 9 and 12·10⁻⁴.\n5. **The result holds for longer runs.** They compared 3·10⁻⁴ (the baseline) with 6·10⁻⁴ (the best training loss, by a slim margin) after 1T and 2T tokens and found \"virtually no difference\" in loss or OLMES scores (p. 19).\n6. **The same holds when annealing on high-quality data.** After 2T tokens, each rate was decayed over 100B high-quality tokens. OLMES scores ended within 0.1 points (73.8 vs. 73.9). The exception was GSM8K, a math benchmark that is not part of OLMES: the higher rate scored 2.8 points better. The mid-training mix targets math, and the authors say more study is needed before treating this as a dependable result (p. 19).\n\n**Interpretation and limits**\n- The authors say this contradicts common beliefs such as \"higher learning rates are always better\" and \"area under the learning curve matters\" (p. 19).\n- It extends Wortsman et al. (2023), who found that small models are largely insensitive to the learning rate when trained to the end of a cosine schedule, and that QK-norm and z-loss strengthen this effect; OLMo 2 uses both. OLMo 2 shows this still holds at much larger token and parameter scales and with its modified schedule (p. 19).\n- **Limitation:** because of cost, they did not test the full range of learning rates. A wider sweep would be needed to find the edges of the \"plateau\" they appear to be training in (p. 19).\n\nA separate, unrelated finding concerns post-training: OLMo 2 needed much higher SFT and DPO learning rates than the Llama 3.1 / Tülu 3 recipe (p. 29).",
+ "input": 63185,
+ "cache_write": 13496,
+ "cache_read": 49679,
+ "output": 1973,
+ "thinking": 33,
+ "usd": 0.1574038,
+ "seconds": 28.1,
+ "turns": 5,
+ "calls": [
+  "Glob **/*.pdf",
+  "Glob **/*OLMo*.pdf",
+  "Bash cd /tmp && pdftotext -layout \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models/2 OLMo 2 Furious.pdf\" olmo2.txt && python3 -c \"\nt=open('olmo2.txt').read().split('\\f')\nimport re\nfor i,p in enumerate(t):\n  if re.search(r'(?i)peak (learning rate|LR)|learning rate',",
+  "Bash cd /tmp && python3 -c \"\nt=open('olmo2.txt').read().split('\\f')\nfor i in [17,18,28,29]: print('=====PAGE',i+1); print(t[i])\n\""
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash cd /tmp && python3 -c \"\nt=open('olmo2.txt').read().split('\\f')\nfor i in [17,18,28,29]: print('=====PAGE',i+1); print(t[i])\n\""
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.66,
+ "date": "2026-10-25 15:15"
+}

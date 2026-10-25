@@ -1,0 +1,30 @@
+{
+ "key": "4d91d231a83276ac",
+ "usd": 0.045288,
+ "grades": {
+  "E3/x-att/X2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-txt/X2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

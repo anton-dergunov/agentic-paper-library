@@ -1,0 +1,26 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X7",
+ "rep": 1,
+ "paper": [
+  "selfinstruct",
+  "s1",
+  "openthoughts"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "Fewer than two-thirds of the examples in these datasets are judged correct, and filtering out the wrong answers did not improve the models. The three papers measure this in different ways, so the numbers are not directly comparable.\n\n| Paper | What was measured | Result |\n|---|---|---|\n| **Self-Instruct** (GPT-3-generated data) | One author hand-labeled 200 random instructions, one instance each | **54%** had all fields valid |\n| **s1** (answers distilled from Gemini) | Claude grading of the final 1,000 examples against reference solutions | **53.6%** correct in s1K; **63.0%** in the follow-up s1K-1.1 |\n| **OpenThoughts** | Effect on downstream scores of keeping only answers a GPT verifier accepts | Lower than no filtering in every domain |\n\n**Self-Instruct (Doc 1)**\n- The 200 instructions were sampled at random and one instance per instruction was checked (p. 4).\n- Results by field (Table 2, p. 5):\n  - Valid task: 92%\n  - Appropriate input: 79%\n  - Correct and acceptable output: 58%\n  - All fields valid: **54%**\n- The authors note that even the wrong generations are mostly in the right format or partly correct, so they still help training (p. 4).\n\n**s1 (Doc 2)**\n- Grading was done by comparing each answer to the reference solution (p. 3).\n- The final 1,000 examples were graded with Claude 3.7 (p. 19).\n- The incorrect generations are kept on purpose, because the authors care about \"capturing the reasoning process rather than entirely correct solutions\" (p. 3).\n\n**OpenThoughts (Doc 3)**\n- The paper does not report what share of its answers are correct, so I can't give that figure.\n- In the GPT verification test, GPT-4o-mini judged whether each answer was correct (pp. 59, 62).\n- Average scores, verified vs. unfiltered:\n  - Math: 40.0 vs. 41.9; random filtering scored 41.6 (Table 7, p. 9; Table 45, p. 71)\n  - Code: 40.7 vs. 42.2 (Table 44, p. 71)\n  - Science: 35.6 vs. 38.3, the lowest of all science strategies (Table 46, p. 71)\n- No answer-filtering method beat simply using all answers, so the final pipeline skips this step (p. 9; p. 71).\n- Related results:\n  - Filtering code by LLM-generated unit tests did not help (Table 18, p. 31).\n  - Verification of the earlier OpenThoughts-114K set hurt the 7B model but helped the 32B model (Table 15, p. 30).",
+ "input": 429643,
+ "cache_write": 429641,
+ "cache_read": 0,
+ "output": 1353,
+ "thinking": 450,
+ "usd": 3.464196,
+ "seconds": 25.0,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.13,
+ "date": "2026-10-25 14:52"
+}

@@ -1,0 +1,42 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X7",
+ "rep": 1,
+ "paper": [
+  "selfinstruct",
+  "s1",
+  "openthoughts"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "Roughly half the distilled or generated training data in these papers is fully correct, and OpenThoughts finds that filtering out wrong answers doesn't help.\n\n**Self-Instruct: 54% of examples have all fields valid**\n- The method: one of the authors labeled 200 randomly sampled generated instructions, with one instance each, as correct or not on instruction, input and output (p. 4).\n- The results, from Table 2 (p. 5):\n  - 92% of instructions describe a valid task.\n  - 79% of inputs are appropriate for their instruction.\n  - 58% of outputs are a correct and acceptable response.\n  - **54% of examples have all three fields valid.**\n\n**s1: 53.6% of distilled answers are correct**\n- The grader judges **53.6% of the s1K distilled answers correct**, and 63.0% in the follow-up s1K-1.1 (p. 3).\n- The authors keep the wrong answers on purpose. They say they \"focus on capturing the reasoning process rather than entirely correct solutions\" (p. 3).\n- Grading compares each answer to the reference solution using Claude 3.5. The correctness count for the final 1,000 samples used Claude 3.7 (p. 19).\n\n**OpenThoughts: filtering with a GPT verifier makes results worse**\n- The method: GPT-4o-mini is asked whether each answer correctly solves its question (p. 59). In the ablation, 63,200 answers are generated, each filter is applied, and 31,600 question–answer pairs are sampled from what's left (p. 9).\n- For math data, GPT verification averages **40.0**. That is below no filtering (41.9) and even below random filtering (41.6) (Table 7, p. 9).\n- It also scores below no filtering for the other domains (Tables 44–46, p. 71):\n  - Code: 40.7 vs. 42.2.\n  - Science: 35.6 vs. 38.3. Here it is the worst of all the strategies tested.\n- The conclusion: no filtering strategy beat using all the answers, so OpenThoughts drops answer filtering from its pipeline (p. 9). The final OpenThoughts3 dataset uses no verification at all (p. 30).\n- An earlier check on the original OpenThoughts-114K found that verification may hurt at 7B but help at 32B (Table 15, p. 30).",
+ "input": 170773,
+ "cache_write": 15694,
+ "cache_read": 155057,
+ "output": 2806,
+ "thinking": 77,
+ "usd": 0.21277140000000003,
+ "seconds": 51.4,
+ "turns": 12,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | grep -i -E \"instruct|s1|thought\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; f(){ awk -v p=\"$2\" '/^\\[page [0-9]+\\]/{pg=$0} tolower($0)~p{print pg\": \"$0}' \"$1\"; }; f \"Self-Instruct. Aligning Language Models with Self-Generated Instructions.txt\" \"valid\"; echo ----; f \"s1. Simple test-t",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; grep -n -B12 -A3 \"All fields are valid\" Self-Instruct*.txt | cut -c1-200; grep -n \"^\\[page 5\\]\" Self-Instruct*.txt",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; awk '/^\\[page [0-9]+\\]/{pg=$0} tolower($0)~/correct/{print pg\": \"substr($0,1,250)}' \"s1. Simple test-time scaling.txt\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; grep -n -B4 -A3 \"deems 53.6%\" s1*.txt | cut -c140-400; echo ----; awk '/^\\[page [0-9]+\\]/{pg=$0} /GPT|[Vv]erif/{print pg\": \"substr($0,1,260)}' \"OpenThoughts. Data Recipes for Reasoning Models.txt\" | head -60",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; f=\"OpenThoughts. Data Recipes for Reasoning Models.txt\"; awk '/^\\[page 9\\]/{p=1} /^\\[page 10\\]/{p=0} p' \"$f\" | grep -n -i -B3 -A12 \"Verification or removing\\|GPT Verification\" | cut -c1-260",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; f=\"OpenThoughts. Data Recipes for Reasoning Models.txt\"; awk '/^\\[page 9\\]/{p=1} /^\\[page 10\\]/{p=0} p' \"$f\" | sed -n '1,8p;46,56p' | cut -c1-200; grep -n \"Takeaway\" \"$f\" | head -20; grep -n -i \"gpt verifica",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; f=\"OpenThoughts. Data Recipes for Reasoning Models.txt\"; awk '/^\\[page [0-9]+\\]/{pg=$0} NR==3420||NR==3421||(NR>=4070&&NR<=4115){print NR\" \"pg\": \"substr($0,1,200)}' \"$f\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; sed -n 400,428p Self-Instruct*.txt | cut -c1-135; sed -n 443,450p Self-Instruct*.txt | cut -c1-135",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; awk '/^\\[page [0-9]+\\]/{pg=$0} /200 instructions|randomly sample 200|Quality|noisy|noise/{print pg\": \"substr($0,1,280)}' Self-Instruct*.txt",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/data; grep -n -A14 \"3.3     Quality\" Self-Instruct*.txt | cut -c55-200"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-25 14:59"
+}

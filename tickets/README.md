@@ -62,6 +62,7 @@ Papers and key-content counts from the library `papers` on 2026-10-25.
 | [A model's reading of a PDF equation does not parse](pdf-equation-unparsable.md) | `engine` `reconvert` | open | 2 |  | engine: small; reaches the PDF papers with their next reconversion |
 | [Web articles that lose parts of the page](web-conversion.md) | `engine` `reconvert` | open | 1 |  | unknown until its sub-causes are found |
 | [OpenCV is held at 4.12](ocr-opencv-pin.md) | `engine` | open |  |  | engine: small, once a release qualifies |
+| [A page marker gives a section's first page, so a table or figure deeper in the section is cited early](page-markers-within-sections.md) | `engine` `reconvert` | open |  |  | engine: medium (place captions, perhaps paragraphs, on PDF pages in page-map.py); measure the tokens and the citations on real papers; reconvert the library |
 | [Tables that are images are read by OCR without saying so](pdf-table-image-ocr.md) | `engine` `reconvert` | open |  |  | engine: small; reconvert the papers with such tables |
 
 ## Won't fix

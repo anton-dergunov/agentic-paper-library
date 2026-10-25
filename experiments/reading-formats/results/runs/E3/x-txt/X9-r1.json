@@ -1,0 +1,35 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X9",
+ "rep": 1,
+ "paper": [
+  "mem0"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "These numbers come from the Mem0 paper (*Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory*), Section 4.5, **page 14**. The Zep paper in this folder doesn't evaluate on LoCoMo, so it gives no comparable figures. Everything below is Mem0's measurement of Zep, not something Zep reports about itself.\n\n**Average tokens stored per conversation (p. 14)**\n\n| System | Memory store size | Compared with the raw conversation |\n|---|---|---|\n| Mem0 (base) | ~7k tokens | about ¼ of it |\n| Mem0 with graph memory | ~14k tokens, roughly double the base version because it adds nodes and relationships | about half of it |\n| Zep | over 600k tokens | over 20× larger |\n| Raw conversation, no memory layer | ~26k tokens | — |\n\n- The paper says Zep's graph is large because Zep stores \"a full abstractive summary at every node while also storing facts on the connecting edges,\" which causes \"extensive redundancy across the graph\" (p. 14).\n- The paper says the raw context is \"20 times less relative to Zep's graph\" (p. 14). The 26k-token full-context figure also appears on p. 13.\n- In this text copy the superscript \"g\" that marks the graph variant is lost. So the line reads \"Mem0 roughly doubles the footprint to 14k tokens,\" but it refers to the graph variant (p. 14).\n\n**How soon Zep's new memories can be retrieved (p. 14)**\n\n- When the authors searched Zep right after adding memories, the searches \"often failed to answer our queries correctly.\"\n- Running the same searches again \"after a delay of several hours yielded considerably better results.\"\n- The authors think this is because Zep builds its graph with \"multiple asynchronous LLM calls and extensive background processing,\" which they say makes it \"impractical for real-time applications.\"\n- For comparison, Mem0 says its graph construction \"completes in under a minute even in worst-case scenarios,\" so new memories can be used right away.\n\nThese are the authors' own observations; the paper doesn't give an exact delay for Zep.",
+ "input": 62287,
+ "cache_write": 9382,
+ "cache_read": 52893,
+ "output": 1715,
+ "thinking": 132,
+ "usd": 0.11998260000000001,
+ "seconds": 25.9,
+ "turns": 7,
+ "calls": [
+  "Grep tokens per conversation|memory footprint|average.*tokens|k tokens|hours",
+  "Grep Zep.*tokens|tokens.*Zep",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/memory/agent/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.txt [690+60]",
+  "Grep \\[page \\d+\\]",
+  "Grep Zep",
+  "Grep LoCoMo|asynchron|latency"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.51,
+ "date": "2026-10-25 15:00"
+}

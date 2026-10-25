@@ -1,0 +1,25 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X6",
+ "rep": 1,
+ "paper": [
+  "instructgpt",
+  "dpo"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "# KL-regularised RL objectives in InstructGPT and DPO\n\nPage references below give the paper first (\"IGPT\" = InstructGPT, \"DPO\" = DPO paper), then the page.\n\n## InstructGPT's objective\n\nInstructGPT fine-tunes the SFT model with PPO and maximises (Eq. 2, IGPT p. 9):\n\n$$\n\\text{objective}(\\phi)=\\mathbb{E}_{(x,y)\\sim D_{\\pi_\\phi^{RL}}}\\Big[r_\\theta(x,y)-\\beta\\log\\frac{\\pi_\\phi^{RL}(y\\mid x)}{\\pi^{SFT}(y\\mid x)}\\Big]+\\gamma\\,\\mathbb{E}_{x\\sim D_{\\text{pretrain}}}\\big[\\log\\pi_\\phi^{RL}(x)\\big]\n$$\n\n- $r_\\theta$ is a learned reward model. It is a 6B RM trained on ranked comparisons (IGPT p. 8).\n- $\\pi^{SFT}$ is the supervised model.\n- $\\beta$ is the KL reward coefficient.\n- $\\gamma$ is the pretraining-loss coefficient (IGPT p. 9).\n- The KL penalty is applied per token against the SFT model, \"to mitigate over-optimization of the reward model\" (IGPT p. 9).\n- With $\\gamma = 0$ the models are called \"PPO\". With $\\gamma > 0$ they are \"PPO-ptx\", and \"InstructGPT\" refers to PPO-ptx by default (IGPT p. 9).\n- In practice $\\beta = 0.02$ and $\\gamma = 27.8$ (IGPT p. 42).\n\n## DPO's starting objective\n\nDPO writes the standard RLHF fine-tuning objective as (Eq. 3, DPO p. 3):\n\n$$\n\\max_{\\pi_\\theta}\\ \\mathbb{E}_{x\\sim\\mathcal{D},\\,y\\sim\\pi_\\theta(y\\mid x)}\\big[r_\\phi(x,y)\\big]-\\beta\\,\\mathbb{D}_{KL}\\big[\\pi_\\theta(y\\mid x)\\,\\|\\,\\pi_{ref}(y\\mid x)\\big]\n$$\n\n- $\\pi_{ref}$ is normally the initial SFT model (DPO p. 4).\n- DPO notes the standard approach, citing InstructGPT among others, turns this into the reward $r_\\phi - \\beta(\\log\\pi_\\theta - \\log\\pi_{ref})$ and maximises it with PPO (DPO p. 4).\n\nDPO then solves the objective in closed form instead of running RL:\n\n1. The optimal policy is $\\pi_r(y\\mid x)=\\frac{1}{Z(x)}\\pi_{ref}(y\\mid x)\\exp\\big(\\tfrac{1}{\\beta}r(x,y)\\big)$ (Eq. 4, DPO p. 4).\n2. Rearranging gives $r = \\beta\\log\\frac{\\pi_r}{\\pi_{ref}} + \\beta\\log Z(x)$ (Eq. 5, DPO p. 4).\n3. Substituting this into Bradley–Terry cancels $Z(x)$. The result is a binary cross-entropy loss on preference pairs (Eq. 7, DPO p. 4):\n\n$$\n\\mathcal{L}_{DPO}=-\\mathbb{E}\\Big[\\log\\sigma\\Big(\\beta\\log\\tfrac{\\pi_\\theta(y_w\\mid x)}{\\pi_{ref}(y_w\\mid x)}-\\beta\\log\\tfrac{\\pi_\\theta(y_l\\mid x)}{\\pi_{ref}(y_l\\mid x)}\\Big)\\Big]\n$$\n\n## How they differ\n\n1. **Pretraining term.** InstructGPT adds a $\\gamma$-weighted log-likelihood term on pretraining data (IGPT p. 9).\n   - This term exists to reduce regressions on public NLP datasets. Simply raising $\\beta$ did not fix those regressions (IGPT p. 53).\n   - DPO's Eq. 3 has no such term. It therefore corresponds to InstructGPT's \"PPO\" variant ($\\gamma = 0$), not to PPO-ptx.\n2. **Way of writing the KL term.** The two are mathematically the same quantity, written differently.\n   - InstructGPT writes the KL as the expected log-ratio under policy samples, applied per token (IGPT p. 9).\n   - DPO writes an explicit KL divergence. Its reported sequence-level KL is the sum of the per-timestep KLs (DPO p. 8, footnote 3).\n3. **Reference policy.**\n   - InstructGPT uses $\\pi^{SFT}$. That SFT model was itself trained with a 10% pretraining mix (IGPT p. 42).\n   - DPO uses $\\pi_{ref} = \\pi^{SFT}$ when available. Otherwise it uses a model fine-tuned on the preferred completions (DPO p. 5).\n4. **Reward.**\n   - InstructGPT uses an explicit, separately trained RM. Its value function is initialised from that RM (IGPT p. 9).\n   - DPO's reward is implicit: $\\hat r_\\theta = \\beta\\log\\frac{\\pi_\\theta}{\\pi_{ref}}$ (DPO p. 5).\n5. **Optimisation.**\n   - InstructGPT runs PPO with on-policy sampling in a bandit environment (IGPT p. 9).\n   - DPO optimises the same KL-constrained objective with a classification loss. It needs no sampling during training and no RL (DPO pp. 1, 4).\n6. **Prompts used.**\n   - InstructGPT's PPO stage samples from a separate set of about 31k unlabeled API prompts (IGPT p. 7).\n   - DPO trains only on the offline preference dataset. The DPO authors note it \"does not use the additional unlabeled … prompts that PPO uses\" (DPO p. 9).\n7. **Preference model and $\\beta$ values.**\n   - InstructGPT turns rankings of K = 4–9 responses into all $\\binom{K}{2}$ pairs for RM training (IGPT p. 8).\n   - DPO is derived under Bradley–Terry, with a Plackett–Luce extension for rankings (DPO pp. 16–17).\n   - InstructGPT uses $\\beta = 0.02$ (IGPT p. 42). DPO uses $\\beta = 0.1$ by default and $0.5$ for TL;DR (DPO p. 20).",
+ "input": 253454,
+ "cache_write": 253452,
+ "cache_read": 0,
+ "output": 3541,
+ "thinking": 1302,
+ "usd": 2.098444,
+ "seconds": 52.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.06,
+ "date": "2026-10-25 14:51"
+}

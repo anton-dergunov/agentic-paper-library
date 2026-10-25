@@ -1,0 +1,36 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X8",
+ "rep": 3,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "The four reports disagree, mostly because they measure different things. On short-context perplexity, Gemma 3 finds that sliding windows cost almost nothing. On long-context retrieval, GLM-5 finds a real cost, and a severe one if the window layers are placed naively. Mistral 7B uses a sliding window but never tests its effect on quality. Phi-4 drops the window but doesn't say why.\n\n**Mistral 7B: uses it, never measures the quality cost**\n- Every layer uses a 4,096-token sliding window. Because layers are stacked, the last layer can in theory reach about 131K tokens back (p. 2).\n- The benefits it reports are about efficiency. Special kernels give a 2x speedup over plain attention at 16K tokens. A fixed-size cache uses 8x less memory on 32K-token sequences \"without impacting the model quality\" (p. 2).\n- That \"no quality impact\" claim is about the cache (it overwrites tokens the window can no longer see anyway). It isn't a test of a sliding window against full attention. The report includes no such comparison.\n\n**Gemma 3: little or no loss on perplexity**\n- Five sliding-window layers of 1,024 tokens for every full-attention layer. This cuts the memory that grows with long context (p. 1).\n- Changing that ratio from 1:1 (Gemma 2) to 7:1 has \"minimal\" effect on validation perplexity (p. 6, Fig. 3).\n- The window \"can be reduced significantly without impacting perplexity.\" The ablation covers 512 to 4,096 tokens, and perplexity moves by about ±0.02 or less (p. 7, Fig. 4).\n- Memory: full attention everywhere adds about 60% memory overhead at 32K context. A 1,024-token window brings that under 15% (p. 7, Fig. 5).\n- Caveats: these are small 2B text-only models, and the only measure is perplexity. No long-context retrieval task is tested. Separately, the models handle 128K context \"but rapidly degrade as we continue to scale\" (p. 7).\n\n**Phi-4: drops it, gives no evidence**\n- Phi-4 uses \"full attention over the 4K context length, rather than a 2K sliding window used in phi-3-medium\" (p. 7). That is the only mention. The report gives no reason and no ablation.\n\n**GLM-5: a clear cost on long-context tasks**\n- Tested on GLM-9B with half the layers using a 4,096-token window (p. 6–7).\n- With no extra training, alternating window and full layers collapses on the RULER long-context benchmark. The score falls from 93.67 to 54.02 at 8K and from 75.28 to 6.51 at 128K. Choosing which layers get the window by search does much better (53.95 at 128K) (p. 7, Table 4).\n- After continued training on 190B tokens, the alternating layout still loses 30.35 points on RULER at 128K and 26.50 on RepoQA. The authors call this \"catastrophic degradation\" (p. 7, Table 5).\n- The searched layout narrows the gap but doesn't close it: −5.69 on RULER and −14.66 on RepoQA at 128K (p. 7, Table 5).\n- The authors attribute the loss to \"unavoidable information loss\" from cheaper attention methods, \"even when half of the layers retain full attention.\" By contrast, they call the sparse attention method GLM-5 actually uses (DSA) \"lossless by construction\" (p. 7). They also say it picks tokens by content, unlike fixed patterns such as sliding windows (p. 5).\n\n**Overall:** a sliding window costs little on short-context perplexity, as long as some layers keep full attention (Gemma 3). On long-context tasks the cost can be large, and it depends heavily on which layers get the window (GLM-5). Neither Mistral 7B nor Phi-4 gives evidence either way.",
+ "input": 64722,
+ "cache_write": 13025,
+ "cache_read": 51687,
+ "output": 2410,
+ "thinking": 280,
+ "usd": 0.16277740000000002,
+ "seconds": 38.4,
+ "turns": 5,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | grep -i -E \"mistral|gemma|phi|glm\"; grep -l -i \"sliding\" -r . | head -50",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models; for f in \"Mistral 7B.txt\" \"Gemma 3 Technical Report.txt\" \"Phi-4 Technical Report.txt\" \"GLM-5. from Vibe Coding to Agentic Engineering.txt\"; do echo \"=== $f\"; awk '/^\\[page [0-9]+\\]/{p=$0} tolower($0)~/sliding",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models; sed -n 60,135p \"Mistral 7B.txt\"; echo ====; sed -n 10,35p \"Gemma 3 Technical Report.txt\"; sed -n 360,460p \"Gemma 3 Technical Report.txt\"; echo ====; sed -n 380,395p \"Phi-4 Technical Report.txt\"; echo ===; sed",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models; sed -n 10,35p \"Gemma 3 Technical Report.txt\"; sed -n 360,460p \"Gemma 3 Technical Report.txt\"; echo XXX; sed -n 375,395p \"Phi-4 Technical Report.txt\"; echo XXX; sed -n 295,400p \"GLM-5. from Vibe Coding to Agen"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.81,
+ "date": "2026-10-25 15:25"
+}

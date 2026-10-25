@@ -1,0 +1,40 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X8",
+ "rep": 2,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "It depends on how the window is used. When sliding-window layers are mixed with global layers in a design trained that way, the reports find little or no quality loss. When an existing full-attention model is converted to sliding windows, GLM-5 measures large losses on long-context tasks. Only Gemma 3 and GLM-5 actually measure the effect; Mistral 7B and Phi-4 just state a design choice.\n\n**Mistral 7B: uses it, never compares it to full attention**\n- Every token attends to at most W = 4096 tokens from the previous layer. Because layers stack, information can still travel about k × W tokens, giving a theoretical span of roughly 131K tokens at the last layer (p. 2).\n- They report a 2x speed-up over vanilla attention at 16K sequence length (p. 2).\n- Their cache holds only the last W tokens. They say this cuts cache memory 8x at 32K tokens \"without impacting the model quality\" (p. 2). That claim is about the cache, and the paper gives no test of the window itself against full attention.\n\n**Gemma 3: finds almost no cost, measured by perplexity**\n- Five local sliding-window layers per global layer, with the local window cut to 1024 tokens. Only the global layers see the long context (pp. 1–2).\n- Ratios from 1:1 (Gemma 2) up to 7:1 have \"minimal\" effect on validation perplexity (p. 6, Fig. 3).\n- \"The sliding window can be reduced significantly without impacting perplexity\" (p. 7, Fig. 4; window sizes 512–4096 tested).\n- The gain is memory. With a 32K context, KV-cache overhead falls from about 60% with global-only attention to under 15% with 1:3 and a 1024 window (p. 7, Fig. 5).\n- Caveat: these tests use perplexity on text-only models, not downstream long-context tasks (pp. 6–7).\n\n**Phi-4: drops the window, gives no reason**\n- Phi-4 uses \"full attention over the 4K context length, rather than a 2K sliding window used in phi-3-medium\" (p. 7). The report includes no ablation of this change.\n\n**GLM-5: finds a large cost on long-context tasks**\n- They convert GLM-9B, a full-attention model, with half of its layers using sliding windows (4096-token window).\n- **Without retraining** (RULER, Table 4, p. 7):\n\n  | Context | Full attention | Fixed alternating | Searched layer choice |\n  |---|---|---|---|\n  | 8K | 93.67 | 54.02 | — |\n  | 128K | 75.28 | 6.51 | 53.95 |\n\n  Choosing which layers get the window by search does much better than a fixed alternating pattern (pp. 6–7).\n- **After 190B tokens of continued training** (Table 5, p. 7): the fixed alternating pattern still loses 30.35 points on RULER at 128K and 26.50 on RepoQA at 128K. The authors call this \"catastrophic degradation.\" The searched pattern narrows the losses to 5.69 and 14.66 points.\n- The authors say every efficient-attention variant leaves an \"inherent accuracy gap\" on fine-grained retrieval, \"even when half of the layers retain full attention\" (p. 7).\n- This is why GLM-5 uses DSA, a sparse attention that picks tokens by content instead of a fixed window (p. 5). They describe it as lossless by construction (p. 7).\n\n**Why the findings differ**\n- Gemma 3 builds the windows into a model trained that way and judges it by perplexity, and sees almost no cost (pp. 6–7).\n- GLM-5 converts a model trained with full attention and tests retrieval at long contexts, and sees large costs, worst with a fixed pattern (p. 7).\n- So these reports suggest sliding windows are close to free on average language modelling. The cost shows up on long-range retrieval, especially when the window is added to an existing model.",
+ "input": 64658,
+ "cache_write": 12233,
+ "cache_read": 52415,
+ "output": 2704,
+ "thinking": 165,
+ "usd": 0.16246700000000003,
+ "seconds": 41.4,
+ "turns": 7,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | grep -i -E \"mistral|gemma|phi|glm\"; ",
+  "Bash cd llm/foundation-models; for f in \"Mistral 7B.txt\" \"Gemma 3 Technical Report.txt\" \"Phi-4 Technical Report.txt\" \"GLM-5. from Vibe Coding to Agentic Engineering.txt\"; do echo \"=== $f\"; awk '/^\\[page [0-9]+\\]/{p=$0} tolower($0)~/sliding|local attention|local:global|local layers|swa\\b|window/{print p\":",
+  "Bash grep -n -E \"^\\[page (2|3|4)\\]\" \"Mistral 7B.txt\"; sed -n '/^\\[page 2\\]/,/^\\[page 4\\]/p' \"Mistral 7B.txt\" | head -90",
+  "Bash sed -n '/^\\[page 6\\]/,/^\\[page 8\\]/p' \"Gemma 3 Technical Report.txt\" | grep -n -i -E -A12 \"Local:Global attention layers|Sliding window size|kv cache|perplexity\" | head -120; sed -n '/^\\[page 1\\]/,/^\\[page 3\\]/p' \"Gemma 3 Technical Report.txt\" | grep -i -B3 -A6 \"local\" | head -60",
+  "Bash grep -n -B8 -A4 \"sliding window used\" \"Phi-4 Technical Report.txt\"; sed -n '/^\\[page 6\\]/,/^\\[page 8\\]/p' \"GLM-5. from Vibe Coding to Agentic Engineering.txt\" | sed -n '/128K-token context window/,/Extended context/p'; grep -n -B3 -A5 \"fixed patterns (like sliding\" \"GLM-5. from Vibe Coding to Agenti",
+  "Bash awk '/^\\[page [0-9]+\\]/{p=$0} NR==256{print p}' \"GLM-5. from Vibe Coding to Agentic Engineering.txt\"; grep -n -i -E \"sliding|window|full attention\" \"Phi-4 Technical Report.txt\" | head"
+ ],
+ "opened_pdf": false,
+ "outside": [
+  "Bash cd llm/foundation-models; for f in \"Mistral 7B.txt\" \"Gemma 3 Technical Report.txt\" \"Phi-4 Technical Report.txt\" \"GLM-5. from Vibe Coding to Agentic Engineering.txt\"; do echo \"=== $f\"; awk '/^\\[page [0-9]+\\]/{p=$0} tolower($0)~/sliding|local attention|local:global|local layers|swa\\b|window/{print p\":"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.8,
+ "date": "2026-10-25 15:24"
+}

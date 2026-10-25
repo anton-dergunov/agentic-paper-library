@@ -1,0 +1,30 @@
+{
+ "key": "439f622217118b66",
+ "usd": 0.086812,
+ "grades": {
+  "E3/x-txt/X8-r1": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Omits Mistral beating Llama 2 13B; RULER 44.93 only given as delta."
+  },
+  "E3/x-pdf/X8-r1": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Omits Mistral beating Llama 2 13B and the retrofit-versus-trained-in explanation."
+  },
+  "E3/x-att/X8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

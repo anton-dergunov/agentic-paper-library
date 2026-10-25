@@ -1,0 +1,24 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X11",
+ "rep": 1,
+ "paper": [
+  "olmo2"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "OLMo 2's main finding is that the peak learning rate barely matters once the learning rate is annealed. A higher rate looks better during pretraining, but the advantage disappears after the learning rate is decayed to zero.\n\n**Setup**\n- The baseline for the 7B model warms up to a peak of 3·10⁻⁴ over 2000 steps, then follows a cosine decay over 5T tokens (p. 18).\n- They also tried 6·10⁻⁴, 9·10⁻⁴, 12·10⁻⁴ and 30·10⁻⁴, i.e. 2×, 3×, 4× and 10× the baseline. The text also mentions 30× (p. 18).\n- 30·10⁻⁴ had loss spikes during warm-up that did not fully recover, so it was dropped quickly (p. 18).\n\n**Pretraining loss**\n- Judged only by training loss, higher learning rates do better early on, as long as they avoid spikes. The lowest rate eventually overtakes the others (p. 18, Figure 11).\n- When comparing 3·10⁻⁴ and 6·10⁻⁴, the cross-over point is well past 200B tokens. The authors warn that a shorter experiment could reach the wrong conclusion (p. 18).\n\n**After annealing**\n- They took each variant at 300B tokens and decayed the learning rate to zero over 50B tokens. The three higher rates were also decayed over 100B tokens (p. 18).\n- A higher learning rate does make mid-training more effective, \"but it does so by exactly the amount that the pretraining is worse\" (p. 19).\n- All variants end with the same training loss, with the lowest setting lagging slightly (p. 19).\n\n**Longer runs and downstream tasks (Table 8, p. 19)**\n- Repeating the comparison of 3·10⁻⁴ and 6·10⁻⁴ after 1T and 2T tokens showed virtually no difference in training loss or on nine OLMES tasks (p. 19).\n- Average OLMES scores vary by less than two points across all variants, and most are within half a point of each other (p. 19).\n- After 2T tokens plus 100B high-quality tokens, OLMES scores were 73.8 vs. 73.9, within 0.1 points (p. 19).\n- One possible exception: on GSM8K, which is not part of OLMES, the higher rate was 2.8 points better. The authors say more study is needed before treating this as a dependable result (p. 19).\n\n**Interpretation and limits**\n- This contradicts folk wisdom such as \"higher learning rates are always better\" and \"area under the learning curve matters\" (p. 19).\n- It extends Wortsman et al. (2023), who found smaller models largely insensitive to learning rate. QK-norm and z-loss strengthen that effect, and OLMo 2 uses both. The authors say the effect holds at much larger token and parameter scales and with their modified schedule (p. 19).\n- The main limitation is that cost prevented a full sweep. A wider sweep would be needed to find the edges of the plateau they seem to be training in (p. 19).\n\n**Post-training**\n- In a separate finding, OLMo 2 needed significantly higher learning rates for SFT and DPO than the Llama 3.1 recipe in Tülu 3 (p. 29). For DPO, average performance rose with learning rate across the range tested (Figure 12, p. 27).",
+ "input": 175390,
+ "cache_write": 175388,
+ "cache_read": 0,
+ "output": 1212,
+ "thinking": 82,
+ "usd": 1.427352,
+ "seconds": 16.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-25 14:53"
+}

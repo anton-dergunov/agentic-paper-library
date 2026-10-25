@@ -1,0 +1,33 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X10",
+ "rep": 1,
+ "paper": [
+  "memoryr1"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "I'm answering from **Memory-R1** (`llm/memory/agent/Memory-R1. Enhancing Large Language Model Agents….pdf`).\n\n**1. Training questions: 152**\n- The abstract says Memory-R1 beats strong baselines \"with only 152 training QA pairs\" (p. 1, repeated on p. 2 and p. 8).\n- The 152 come from LoCoMo. The adversarial subset is left out and the rest is split 1:1:8 into train, validation and test, giving 152/81/1307 questions (p. 5).\n\n**2. Against Mem0 on LLaMA-3.1-8B-Instruct (LoCoMo, Table 1, p. 6)**\n\n| Method | F1 | BLEU-1 | LLM-as-Judge |\n|---|---|---|---|\n| Mem0 | 30.41 | 22.22 | 45.68 |\n| Memory-R1-PPO | 41.05 | 32.91 | 57.54 |\n| Memory-R1-GRPO | **45.02** | **37.51** | **62.74** |\n\n- GRPO is ahead of Mem0 by about 14.6 F1, 15.3 BLEU-1 and 17.1 Judge points. I worked these differences out from the table; the paper doesn't state them.\n- The paper's own headline compares against MemoryOS, its strongest baseline, not Mem0. GRPO improves on MemoryOS by 28.5% F1, 34.0% BLEU-1 and 30.2% Judge in relative terms (p. 6).\n\n**3. Gain on LongMemEval**\nThe paper gives no single gain number for LongMemEval. It says the model was trained only on LoCoMo and tested on LongMemEval with no extra training (zero-shot transfer), and that Memory-R1-GRPO beats every baseline on both backbones (p. 7, p. 17). The gains below are my own calculations from the tables.\n\nTable 5, p. 18, overall scores:\n- **LLaMA-3.1-8B:** GRPO scores 45.20 F1, 39.30 BLEU-1 and 55.40 Judge.\n  - Against Mem0 (31.41 / 21.69 / 41.20), that is about +13.8 F1, +17.6 BLEU-1 and +14.2 Judge.\n  - Against the best baseline, Memory-SFT (43.89 / 36.72 / 54.80), the gain is small: +1.3 F1, +2.6 BLEU-1 and +0.6 Judge.\n- **Qwen-2.5-7B:** GRPO scores 46.70 F1, 41.10 BLEU-1 and 57.80 Judge.\n  - Against the best baseline on each metric, that is +3.5 F1 (Memory-SFT 43.16), +4.5 BLEU-1 (A-Mem 36.58) and +3.0 Judge (A-Mem and Memory-SFT, both 54.80).\n  - Against Mem0 (38.44 / 34.53 / 46.80), it is about +8.3 F1, +6.6 BLEU-1 and +11.0 Judge.\n\nTable 4, p. 18, compared with the untrained base model on LLaMA-3.1-8B:\n- Overall scores rise from 31.3/25.0/44.2 to 45.2/39.3/55.4 (F1/BLEU-1/Judge).\n- The largest jump is on multi-session questions, where Judge goes from 33.1 to 57.9. The paper also says gains are biggest in multi-session settings (p. 17).\n\nSo the answer to \"how large is the LongMemEval gain\" depends on what you compare against:\n- **Against Mem0:** large, about 14 points on LLaMA.\n- **Against the best baseline:** modest, about 1–4 points.",
+ "input": 75563,
+ "cache_write": 16583,
+ "cache_read": 58970,
+ "output": 2577,
+ "thinking": 435,
+ "usd": 0.196038,
+ "seconds": 46.6,
+ "turns": 5,
+ "calls": [
+  "Glob **/*.pdf",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/memory/agent\" && f=\"Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement.pdf\"; pdfinfo \"$f\" | grep Pages; for p in $(seq 1 30); do t=$(pdftotext -f $p -l $p -layout \"$f\" - 2>/dev/nu",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/memory/agent\" && f=\"Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement.pdf\"; pdftotext -f 1 -l 1 -layout \"$f\" - | sed -n 35,60p; echo ----P6; pdftotext -f 6 -l 6 -layout \"$f\" - | ",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/memory/agent\" && f=\"Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement.pdf\"; pdftotext -f 5 -l 5 -layout \"$f\" - | sed -n 48,60p; echo ---P7; pdftotext -f 7 -l 7 -layout \"$f\" - | s"
+ ],
+ "opened_pdf": true,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.66,
+ "date": "2026-10-25 15:14"
+}

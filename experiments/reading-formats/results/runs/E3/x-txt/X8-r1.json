@@ -1,0 +1,41 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X8",
+ "rep": 1,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "The four reports disagree because they test different things. Gemma 3 measured short-context perplexity and found almost no cost. GLM-5 measured long-context retrieval and found a large cost. Mistral 7B claims no loss but reports no ablation. Phi-4 dropped its predecessor's sliding window without saying why.\n\n## Mistral 7B: says there is no cost, but shows no test\n- Each layer looks back only W tokens, but stacked layers carry information further. With W = 4096, the last layer can in theory reach about 131K tokens (p. 2).\n- It was about 2x faster than standard attention at 16K tokens (p. 2). The paper says SWA handles long sequences \"at a reduced computational cost\" (p. 1).\n- The cache has a fixed size of W. At 32K tokens this cuts cache memory 8x \"without impacting the model quality\" (p. 2). No experiment backs this up: there is no comparison of SWA against full attention.\n\n## Gemma 3: almost no cost in perplexity\n- Gemma 3 uses 5 local sliding-window layers for each global layer. Local layers see only 1024 tokens, so only the global layers handle long context (pp. 1–2). The aim is to keep the memory cache from growing too large at long context (p. 1).\n- **Local-to-global ratio:** changing the ratio from 1:1 (Gemma 2) to 5:1 (Gemma 3) had \"minimal impact on perplexity.\" The effect stays small even at 7 local layers per global one (p. 6, Fig. 3).\n- **Window size:** \"The sliding window can be reduced significantly without impacting perplexity,\" tested from 512 to 4096 tokens (p. 7, Fig. 4).\n- **Memory:** with global attention only, the cache adds 60% memory overhead. With a 1:3 ratio and a 1024-token window, it adds under 15% (p. 7, Fig. 5).\n- These are small 2B text-only models, and the only measure is validation perplexity (pp. 6–7). There is no long-context retrieval test.\n\n## Phi-4: switched back to full attention, without explaining why\n- Phi-4 uses \"full attention over the 4K context length, rather than a 2K sliding window used in phi-3-medium\" (p. 7). The report gives no ablation or reason for the change.\n\n## GLM-5: large cost on long-context tasks, unless the layers are chosen carefully\n- The test model is GLM-9B, which has full attention in all 40 layers and a 128K context (p. 6). Half the layers were switched to SWA with a 4096-token window. The SWA layers were placed in one of two ways (pp. 6–7):\n  - \"Interleave\": SWA and full attention simply alternate.\n  - \"Pattern\": a search picks which layers to convert.\n- **With no retraining** (RULER benchmark, Table 4, p. 7):\n  - Full attention: 95.2 at 4K, 75.3 at 128K.\n  - Interleave: 94.9 at 4K, but it falls apart beyond that (54.0 at 8K, 6.5 at 128K).\n  - Pattern: holds up much better (92.5 at 8K, 54.0 at 128K).\n- **After retraining on 190B tokens at 64K context** (Table 5, p. 7):\n  - The interleaved model still loses a lot at 128K: −30.35 on RULER, −26.50 on RepoQA, −13.84 on HELMET-ICL, −6.56 on MRCR.\n  - The searched pattern loses less: −5.69 on RULER, −14.66 on RepoQA, −2.76 on HELMET-ICL, −1.81 on MRCR.\n- The authors call the interleaved result \"catastrophic degradation on long-context tasks.\" Even with half the layers keeping full attention, all the efficient-attention variants they tested leave \"an inherent accuracy gap on fine-grained retrieval tasks\" (p. 7).\n- They chose DeepSeek Sparse Attention instead. It picks tokens by content \"unlike fixed patterns (like sliding windows)\" (p. 5). It matched the full-attention model's long-context scores and fine-tuning loss (pp. 5–6), and they call it \"lossless by construction\" (p. 7).\n\n## Bottom line\nA sliding window costs little on average language-modelling quality, as Gemma 3's perplexity tests show. It does cost on tasks that need exact retrieval from far back in a long context, as GLM-5's tests show. The cost depends on how many layers keep full attention and which ones they are. Gemma's 1024-token window alongside periodic global layers looked free by perplexity, but Gemma 3 was never measured on long-context retrieval in these tests. The best evidence of a real cost comes from GLM-5, which converted an already-trained full-attention model to SWA.",
+ "input": 180035,
+ "cache_write": 32804,
+ "cache_read": 147217,
+ "output": 3501,
+ "thinking": 260,
+ "usd": 0.36195140000000003,
+ "seconds": 56.9,
+ "turns": 8,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | head -100; grep -il \"sliding\" -r . ",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models; for f in \"Mistral 7B.txt\" \"Gemma 3 Technical Report.txt\" \"Phi-4 Technical Report.txt\" \"GLM-5. from Vibe Coding to Agentic Engineering.txt\"; do echo \"=== $f\"; grep -n -i -E \"sliding|SWA|local attention|local l",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models\"; p(){ awk -v a=$2 -v b=$3 '/^\\[page [0-9]+\\]/{pg=$0} NR>=a&&NR<=b{ if(NR==a) print \"<<\"pg\">>\"; print NR\": \"$0}' \"$1\"; }; p \"Mistral 7B.txt\" 15 135; echo ======; p \"Gemma 3 Technical Report.txt\" 10 135; p \"Ge",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models\"; p(){ awk -v a=$2 -v b=$3 '/^\\[page [0-9]+\\]/{pg=$0} NR>=a&&NR<=b{ if(NR==a) print \"<<\"pg\">>\"; print NR\": \"$0}' \"$1\"; }; p \"Phi-4 Technical Report.txt\" 380 395; echo =====; p \"GLM-5. from Vibe Coding to Agen",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models\"; p(){ awk -v a=$2 -v b=$3 '/^\\[page [0-9]+\\]/{pg=$0} NR>=a&&NR<=b{ if(NR==a) print \"<<\"pg\">>\"; print NR\": \"$0}' \"$1\"; }; p \"Gemma 3 Technical Report.txt\" 10 135; echo \"-----\"; p \"Gemma 3 Technical Report.txt",
+  "Read /Users/anton/.claude/projects/-Users-anton--cache-papers-experiments-reading-formats-copies-txt/956472c0-5ba1-4582-8c3b-a5045bef7627/tool-results/bq1t2n19w.txt",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models\"; sed -n 300,372p \"Gemma 3 Technical Report.txt\" | grep -n -i -E \"local|global|perplex|minimal|ratio\" ; grep -n \"^\\[page\" \"Gemma 3 Technical Report.txt\" | sed -n 5,7p"
+ ],
+ "opened_pdf": false,
+ "outside": [
+  "Read /Users/anton/.claude/projects/-Users-anton--cache-papers-experiments-reading-formats-copies-txt/956472c0-5ba1-4582-8c3b-a5045bef7627/tool-results/bq1t2n19w.txt"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.5,
+ "date": "2026-10-25 15:00"
+}

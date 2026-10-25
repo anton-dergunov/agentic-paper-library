@@ -1,0 +1,35 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X2",
+ "rep": 1,
+ "paper": [
+  "dpo",
+  "orpo",
+  "simpo"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "Only two of the three papers report such a number. The DPO paper has no AlpacaEval 2 result for Mistral-7B.\n\n**DPO** (*Direct Preference Optimization: Your Language Model is Secretly a Reward Model*): No score. I searched the paper for \"AlpacaEval\", \"Alpaca\" and \"Mistral\". The only hit is a reference-list entry for the trlx library, \"LLaMa (Alpaca)\". So the paper does not evaluate on AlpacaEval or train Mistral. The nearest figures are what SimPO reports for DPO as a baseline it ran itself (Table 4, p. 6): 15.1% LC / 12.5% WR on Mistral-Base and 26.8% LC / 24.9% WR on Mistral-Instruct. These are SimPO's numbers, not DPO's own.\n\n**ORPO** (*Monolithic Preference Optimization without Reference Model*), Table 1, p. 6:\n- **Mistral-ORPO-α (7B): 11.33%** (±0.97), trained on UltraFeedback with λ = 0.1 (p. 6).\n- **Mistral-ORPO-β (7B): 12.20%** (±0.98), trained on the cleaned UltraFeedback (p. 6). This is the headline 12.20% on p. 1 and p. 10.\n- These are AlpacaEval 2.0 win rates. The paper doesn't call them length-controlled, so they can't be compared directly with SimPO's LC numbers.\n\n**SimPO** (*Simple Preference Optimization with a Reference-Free Reward*), Table 4, p. 6:\n- **Mistral-Base (7B):** 21.5% LC win rate, 20.8% raw win rate.\n- **Mistral-Instruct (7B):** 32.1% LC win rate, 34.8% raw win rate.\n- SimPO reports both the length-controlled (LC) and the raw win rate (WR) for AlpacaEval 2 (p. 5).\n\nSimPO also re-ran ORPO as a baseline and got 14.7% LC / 12.2% WR (Base) and 24.5% LC / 24.9% WR (Instruct) (Table 4, p. 6). It started ORPO from the same SFT checkpoint as the other methods, not from the base model, so its setup differs from the ORPO paper's (footnote 8, p. 6).",
+ "input": 85015,
+ "cache_write": 18368,
+ "cache_read": 66637,
+ "output": 1751,
+ "thinking": 123,
+ "usd": 0.1953314,
+ "seconds": 38.7,
+ "turns": 5,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | head -100; grep -lis \"alpacaeval\" -r .",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -iname \"*direct preference*\" -o -iname \"*DPO*\"; for f in llm/post-training/preference-learning/ORPO*.txt llm/post-training/preference-learning/SimPO*.txt; do echo \"== $f\"; grep -n -i -E \"alpacaeval|\\[page\" \"$f\" | grep -i -B",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning; sed -n 376,440p SimPO*.txt; echo =====; sed -n 340,445p ORPO*.txt; echo ====; grep -n -i -E \"alpaca|mistral\" \"Direct Preference Optimization. Your Language Model is Secretly a Reward Model.txt",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning; sed -n 340,445p ORPO*.txt; echo; echo DPO; grep -n -i -E \"alpaca|mistral\" \"Direct Preference Optimization. Your Language Model is Secretly a Reward Model.txt\" | head"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-25 14:55"
+}

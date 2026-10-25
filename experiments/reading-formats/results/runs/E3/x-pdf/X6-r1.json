@@ -1,0 +1,41 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X6",
+ "rep": 1,
+ "paper": [
+  "instructgpt",
+  "dpo"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "## InstructGPT (Ouyang et al., *Training language models to follow instructions with human feedback*)\n\n**Objective (Eq. 2, p. 9):**\n\n$$\n\\text{objective}(\\phi)=\\mathbb{E}_{(x,y)\\sim D_{\\pi_\\phi^{RL}}}\\Big[r_\\theta(x,y)-\\beta\\log\\frac{\\pi_\\phi^{RL}(y\\mid x)}{\\pi^{SFT}(y\\mid x)}\\Big]+\\gamma\\,\\mathbb{E}_{x\\sim D_{\\text{pretrain}}}\\big[\\log\\pi_\\phi^{RL}(x)\\big]\n$$\n\n- $\\pi_\\phi^{RL}$ is the policy being trained. $\\pi^{SFT}$ is the supervised model, and $D_{\\text{pretrain}}$ is the pretraining distribution (p. 9).\n- $\\beta$ sets the strength of the KL penalty and $\\gamma$ the strength of the pretraining gradients. With $\\gamma = 0$ the model is called \"PPO\"; with $\\gamma > 0$ it is \"PPO-ptx\", which is what the paper calls InstructGPT (p. 9).\n- The objective is optimised with PPO in a bandit setting. A random prompt is shown, the reward model scores the response, and the episode ends. The KL penalty is applied per token against the SFT model \"to mitigate over-optimization of the reward model\" (p. 9).\n- They used $\\beta = 0.02$ and $\\gamma = 27.8$ (p. 42).\n- The $\\gamma$ term was added to fix performance drops on public NLP datasets (p. 9). Raising the KL coefficient alone does not fix those drops, even at $\\beta = 2.0$, which is 100× the default (pp. 15, 53). Setting $\\beta$ to 0 or to 2 both gave poor human ratings (p. 56).\n\n## DPO (Rafailov et al., *Direct Preference Optimization*)\n\n**Starting RL objective (Eq. 3, pp. 3–4):**\n\n$$\n\\max_{\\pi_\\theta}\\ \\mathbb{E}_{x\\sim D,\\,y\\sim\\pi_\\theta(y\\mid x)}\\big[r_\\phi(x,y)\\big]-\\beta\\,\\mathbb{D}_{KL}\\big[\\pi_\\theta(y\\mid x)\\,\\|\\,\\pi_{\\text{ref}}(y\\mid x)\\big]\n$$\n\n- $\\pi_{\\text{ref}}$ is the initial SFT model. The constraint keeps the policy close to the data on which the reward model is accurate, keeps generations diverse and prevents collapse onto a single high-reward answer (p. 4).\n- The paper notes that standard practice optimises this with PPO, using the reward $r_\\phi - \\beta(\\log\\pi_\\theta - \\log\\pi_{\\text{ref}})$ (p. 4).\n\n**How DPO turns this into a supervised loss:**\n1. The optimal policy has a closed form: $\\pi_r(y\\mid x)=\\frac{1}{Z(x)}\\pi_{\\text{ref}}(y\\mid x)\\exp\\!\\big(\\tfrac{1}{\\beta}r(x,y)\\big)$ (Eq. 4, p. 4).\n2. Rearranging gives the reward in terms of the policy: $r(x,y)=\\beta\\log\\frac{\\pi_r(y\\mid x)}{\\pi_{\\text{ref}}(y\\mid x)}+\\beta\\log Z(x)$ (Eq. 5, p. 4).\n3. Substituting this into the Bradley–Terry preference model cancels $Z(x)$, because only differences between rewards matter (p. 4). This gives the loss (Eq. 7, p. 4):\n\n$$\n\\mathcal{L}_{DPO}=-\\mathbb{E}_{(x,y_w,y_l)\\sim D}\\Big[\\log\\sigma\\Big(\\beta\\log\\frac{\\pi_\\theta(y_w\\mid x)}{\\pi_{\\text{ref}}(y_w\\mid x)}-\\beta\\log\\frac{\\pi_\\theta(y_l\\mid x)}{\\pi_{\\text{ref}}(y_l\\mid x)}\\Big)\\Big]\n$$\n\n## How they differ\n\n| | InstructGPT | DPO |\n|---|---|---|\n| KL-regularised core | Expected RM reward minus $\\beta\\cdot$ log-ratio to $\\pi^{SFT}$ (p. 9) | The same form, written as an explicit $\\mathbb{D}_{KL}$ to $\\pi_{\\text{ref}}$ (pp. 3–4) |\n| Extra terms | Adds a pretraining log-likelihood term $\\gamma\\,\\mathbb{E}[\\log\\pi(x)]$ (p. 9) | None. Eq. 3 is pure reward plus KL (p. 3) |\n| Reward model | Separate trained RM $r_\\theta$. The value function is initialised from it (p. 9) | No explicit RM. The implicit reward is $\\hat r_\\theta=\\beta\\log\\frac{\\pi_\\theta}{\\pi_{\\text{ref}}}$, so the policy itself acts as the reward model (pp. 4–5) |\n| Optimiser | PPO on fresh samples from the policy (p. 9) | One binary cross-entropy loss on a fixed preference dataset, with no RL loop (pp. 2, 4–5) |\n| Role of $\\beta$ | Weight on the per-token KL penalty (p. 9) | Sets the KL strength and also scales the logits in the loss. Each example's gradient is weighted by how badly the implicit reward misorders the pair (p. 5) |\n\nDPO says it optimises the same objective as PPO-based RLHF, and does so more efficiently. On their sentiment task, its reward/KL trade-off \"strictly dominates PPO\" (pp. 8–9). Even so, InstructGPT's actual objective is not exactly DPO's Eq. 3, because of the $\\gamma$ pretraining term. Only the plain \"PPO\" variant with $\\gamma = 0$ matches it.\n\nOne thing to watch when comparing the papers: they swap the subscripts. InstructGPT writes the reward as $r_\\theta$ and the policy as $\\pi_\\phi$ (p. 9). DPO writes the reward as $r_\\phi$ and the policy as $\\pi_\\theta$ (p. 3).\n\nThe page numbers are the PDF pages. For the parts I checked (pp. 3–5 and 9), they match the numbers printed on the pages.",
+ "input": 107029,
+ "cache_write": 16864,
+ "cache_read": 90151,
+ "output": 4277,
+ "thinking": 373,
+ "usd": 0.2385382,
+ "seconds": 44.9,
+ "turns": 7,
+ "calls": [
+  "Bash find . -name \"*.pdf\" | head -50; which pdftotext",
+  "Bash find . -iname \"*.pdf\" | grep -iE \"instruction|direct preference|human feedback\"",
+  "Bash cd llm/post-training/preference-learning; mkdir -p /tmp/rf; pdftotext -layout \"Training language models to follow instructions with human feedback.pdf\" /tmp/rf/igpt.txt; pdftotext -layout \"Direct Preference Optimization. Your Language Model is Secretly a Reward Model.pdf\" /tmp/rf/dpo.txt; cd /tmp/rf",
+  "Bash cd /tmp/rf; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==9' igpt.txt | sed -n '/Reward modeling/,/PPO-ptx models/p'; echo =====; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==3||p==4' dpo.txt | sed -n '/RL Fine-Tuning Phase/,/Your Language Model Is Secretly/p'; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==4' ",
+  "Bash cd /tmp/rf; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==9' igpt.txt | sed -n '/Reward modeling/,/PPO-ptx models/p'; echo \"-----\"; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==3||p==4' dpo.txt | sed -n '/RL Fine-Tuning Phase/,/Deriving the DPO/p'; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==4' dpo.txt | sed",
+  "Bash cd /tmp/rf; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==8||p==9' igpt.txt | grep -n \"\" | sed -n '/[Rr]einforcement learning (RL)/,/InstructGPT refers/p'; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==9' igpt.txt | tail -3; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==42' igpt.txt | grep -n -B3 -A3 \"β = 0.02\""
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash cd llm/post-training/preference-learning; mkdir -p /tmp/rf; pdftotext -layout \"Training language models to follow instructions with human feedback.pdf\" /tmp/rf/igpt.txt; pdftotext -layout \"Direct Preference Optimization. Your Language Model is Secretly a Reward Model.pdf\" /tmp/rf/dpo.txt; cd /tmp/rf",
+  "Bash cd /tmp/rf; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==9' igpt.txt | sed -n '/Reward modeling/,/PPO-ptx models/p'; echo =====; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==3||p==4' dpo.txt | sed -n '/RL Fine-Tuning Phase/,/Your Language Model Is Secretly/p'; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==4' ",
+  "Bash cd /tmp/rf; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==9' igpt.txt | sed -n '/Reward modeling/,/PPO-ptx models/p'; echo \"-----\"; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==3||p==4' dpo.txt | sed -n '/RL Fine-Tuning Phase/,/Deriving the DPO/p'; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==4' dpo.txt | sed",
+  "Bash cd /tmp/rf; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==8||p==9' igpt.txt | grep -n \"\" | sed -n '/[Rr]einforcement learning (RL)/,/InstructGPT refers/p'; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==9' igpt.txt | tail -3; awk 'BEGIN{p=1} /\\f/{p+=gsub(/\\f/,\"\")} p==42' igpt.txt | grep -n -B3 -A3 \"β = 0.02\""
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.63,
+ "date": "2026-10-25 15:11"
+}

@@ -1,0 +1,33 @@
+{
+ "exp": "E3",
+ "cond": "x-lib",
+ "qid": "X11",
+ "rep": 1,
+ "paper": [
+  "olmo2"
+ ],
+ "form": "x-lib",
+ "page": null,
+ "status": "ok",
+ "answer": "Their main finding is that the peak learning rate barely matters once the rate is annealed to zero. A higher rate gives lower training loss early on. But after the decay to zero, all the rates they tried end up about the same. The source is the OLMo 2 report (`library/llm/foundation-models/2 OLMo 2 Furious.md`), §4.1.\n\n**The setup** ([p. 18, §4.1](http://pdf.invalid/llm/foundation-models/2%20OLMo%202%20Furious.pdf?dest=subsection.4.1&page=18))\n- **Baseline:** the 7B starts from Llama 3's schedule: warm up to a peak of 3·10⁻⁴ over 2,000 steps, then a cosine decay planned for 5T tokens. They cut that decay off at 4T tokens and switch to mid-training. The 13B used a higher peak from the start and ran to 5T tokens (p. 18).\n- **The sweep:** they tried 2×, 3×, 4×, 10× and 30× the baseline. The 30× rate (3·10⁻³) had loss spikes during warm-up that never fully recovered, so they dropped it quickly (p. 18). (The text lists the 30× value as 30·10⁻⁴, which is 10× the baseline; it is a slip in the paper.)\n\n**What they found**\n1. **Before annealing, higher rates win early but get overtaken.** As long as it avoids spikes, a higher rate has lower training loss at first, but the lowest rate eventually overtakes the others. For 3·10⁻⁴ against 6·10⁻⁴, the crossover is \"well past 200B tokens\", so a short hyperparameter run could pick the wrong rate (p. 18, Figure 11).\n2. **Annealing cancels the difference.** They took each run's checkpoint at 300B tokens and decayed the rate to zero over 50B tokens; the three higher rates were also decayed over 100B tokens. A higher rate does make the anneal more effective, \"but it does so by exactly the amount that the pretraining is worse\". All runs end at the same training loss, with the lowest rate slightly behind (p. 18).\n3. **The result holds for longer runs.** They repeated it for 3·10⁻⁴ and 6·10⁻⁴ after 1T and 2T tokens and found \"virtually no difference\" in training loss or in scores on nine OLMES tasks (p. 19).\n   - [Table 8, p. 19](http://pdf.invalid/llm/foundation-models/2%20OLMo%202%20Furious.pdf?dest=table.8&page=19): after 300B tokens plus a 50B anneal, the averages are 62.5 / 63.9 / 64.1 / 63.6 for 3, 6, 9 and 12·10⁻⁴. With a 100B anneal, the three higher rates score 64.6 / 64.5 / 64.2.\n   - All scores are within two points of each other, and most within half a point (p. 19).\n   - Table 8 only shows the 2T rows, not the 1T ones.\n4. **Annealing on higher-quality data gives the same picture, with one possible exception.** After 2T tokens, each rate was decayed over 100B math-heavy, higher-quality tokens. OLMES scores were 73.8 against 73.9. On GSM8K, which is not part of OLMES, the higher rate was 2.8 points better. The authors say more study is needed before treating that as a dependable result (p. 19).\n\n**How they read it** (p. 19)\n- They say this contradicts folk wisdom such as \"higher learning rates are always better\" and \"area under the learning curve matters\".\n- It extends Wortsman et al. (2023), who found smaller models largely insensitive to the learning rate when trained to the end of a cosine schedule, and found that QK-norm and z-loss strengthen that. OLMo 2 uses both.\n- OLMo 2 shows this still holds at much larger token and parameter counts, and with its truncated schedule followed by a linear decay.\n\n**Limitation** (p. 19): because of cost, they did not sweep the full range of rates, so the edges of the flat region are unknown.\n\nThe agent note for this paper (`notes/2 OLMo 2 Furious.md`) says Table 8 is on p. 18, but the PDF puts it on p. 19, so the note's page is wrong. I haven't changed the note.",
+ "input": 108516,
+ "cache_write": 23558,
+ "cache_read": 84948,
+ "output": 2755,
+ "thinking": 449,
+ "usd": 0.2605936,
+ "seconds": 41.3,
+ "turns": 5,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; ls; find . -iname \"*olmo*\" | head; ",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; cat \"notes/2 OLMo 2 Furious.md\"; f=\"library/llm/foundation-models/2 OLMo 2 Furious.md\"; head -15 \"$f\"; grep -n -i \"learning rate\\|^#\" \"$f\" | head -120",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; f=\"library/llm/foundation-models/2 OLMo 2 Furious.md\"; sed -n 1476,1500p \"$f\"; which paperlib && paperlib issues look \"$f\" \"This finding contradicts machine learning folk wisdoms\" 2>&1 | head -30; paperlib issues look \"$f\" \"F",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; f=\"library/llm/foundation-models/2 OLMo 2 Furious.md\"; for s in \"Figure 11 shows different runs\" \"One of the motivations for this line\" \"shows that the result is consistent for longer\" \"Average scores vary by less than two po"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.61,
+ "date": "2026-10-25 15:06"
+}

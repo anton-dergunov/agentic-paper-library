@@ -1,0 +1,24 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X9",
+ "rep": 1,
+ "paper": [
+  "mem0"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "**Memory footprint per conversation**\n\n| System | Average tokens per conversation |\n|---|---|\n| Mem0 | about 7k (p. 14) |\n| Mem0g (graph variant) | about 14k, roughly double Mem0, because it adds graph nodes and relationships (p. 14) |\n| Raw conversation | about 26k (p. 14; also p. 6 and p. 8) |\n| Zep | more than 600k (p. 14) |\n\n- **Mem0** stores about 7k tokens because it encodes dialogue turns as natural-language memories (p. 14). That is roughly a quarter of the raw conversation.\n- **Zep** uses more than 600k tokens, about 20 times the raw conversation (p. 14). The authors attribute this to Zep caching a full abstractive summary at every node and also storing facts on the connecting edges. This creates heavy redundancy, with identical knowledge fragments repeated across nodes (p. 14).\n\n**How soon Zep's new memories can be retrieved**\n\nThe paper gives no exact time. It reports that:\n- Retrieval attempts made immediately after adding memories to Zep often failed to answer queries correctly (p. 14).\n- Running the same searches again after a delay of several hours gave considerably better results (p. 14).\n\nThe authors think this delay comes from Zep's graph construction using multiple asynchronous LLM calls and extensive background processing. They conclude this makes Zep impractical for real-time applications (p. 14). By contrast, Mem0's graph construction finishes in under a minute even in worst-case scenarios, so new memories can be used immediately (p. 14).",
+ "input": 61442,
+ "cache_write": 61440,
+ "cache_read": 0,
+ "output": 731,
+ "thinking": 195,
+ "usd": 0.506148,
+ "seconds": 9.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.29,
+ "date": "2026-10-25 14:52"
+}

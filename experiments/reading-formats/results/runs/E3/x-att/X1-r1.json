@@ -1,0 +1,26 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X1",
+ "rep": 1,
+ "paper": [
+  "dpo",
+  "ipo",
+  "simpo"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "# DPO, IPO and SimPO losses compared\n\nAll three losses train a policy directly on preference triples (x, y_w, y_l) without a separate RL step. They differ in three ways:\n\n- **The implicit reward:** whether it uses a log-ratio against a reference model or a length-normalized log-probability.\n- **The loss shape:** log-sigmoid classification versus squared regression.\n- **How the policy is held near a reference.**\n\n## 1. DPO (Rafailov et al.)\n\n$$\n\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta;\\pi_{\\text{ref}}) = -\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log\\sigma\\left(\\beta\\log\\frac{\\pi_\\theta(y_w|x)}{\\pi_{\\text{ref}}(y_w|x)} - \\beta\\log\\frac{\\pi_\\theta(y_l|x)}{\\pi_{\\text{ref}}(y_l|x)}\\right)\\right]\n$$\n(DPO paper, Eq. 7, p. 4)\n\n- **Implicit reward:** r̂_θ(x,y) = β log πθ(y|x)/πref(y|x) (DPO paper, p. 5).\n- **Origin:** It comes from substituting the closed-form optimal policy of the KL-constrained RLHF objective into the Bradley-Terry model. The partition function then cancels (DPO paper, p. 4).\n- **Gradient behavior:** The gradient raises the likelihood of y_w and lowers that of y_l. Each example is weighted by σ(r̂(y_l) − r̂(y_w)), so examples the implicit reward orders wrongly get more weight (DPO paper, p. 5).\n\n## 2. IPO (Azar et al.)\n\nIPO is the ΨPO objective with Ψ set to the identity (IPO paper, p. 5). Define:\n\n$$\nh_\\pi(y_w,y_l,x) = \\log\\frac{\\pi(y_w|x)\\,\\pi_{\\text{ref}}(y_l|x)}{\\pi(y_l|x)\\,\\pi_{\\text{ref}}(y_w|x)}\n$$\n\nThe sampled loss is:\n\n$$\n\\mathcal{L}_{\\text{IPO}} = \\mathbb{E}_{(y_w,y_l,x)\\sim\\mathcal{D}}\\left[\\left(h_\\pi(y_w,y_l,x) - \\frac{\\tau^{-1}}{2}\\right)^2\\right]\n$$\n(IPO paper, Eq. 17 and Algorithm 1, p. 7; Table 3 of the SimPO paper writes the target as 1/(2τ), p. 5)\n\n- **Loss shape:** It is a squared regression, not a log-sigmoid. It regresses the gap between the policy's log-likelihood ratio and the reference's log-likelihood ratio onto a fixed target τ⁻¹/2 (IPO paper, p. 7).\n- **Avoids the Bradley-Terry assumption:** It does not assume pairwise preferences can be replaced by pointwise rewards (IPO paper, pp. 2, 8–9).\n- **Fixes DPO's overfitting:**\n  - The IPO paper argues that DPO's unbounded Ψ (the logit) causes overfitting. When preferences are deterministic, the Bradley-Terry reward gap goes to infinity and DPO drives π(y_l) → 0 regardless of the regularization strength (IPO paper, pp. 4–5).\n  - IPO's bounded target keeps the solution regularized toward π_ref (IPO paper, p. 7).\n  - The IPO paper uses τ where the DPO paper uses β (IPO paper, Eq. 4, p. 3).\n\n## 3. SimPO (Meng et al.)\n\n$$\n\\mathcal{L}_{\\text{SimPO}}(\\pi_\\theta) = -\\mathbb{E}_{(x,y_w,y_l)\\sim\\mathcal{D}}\\left[\\log\\sigma\\left(\\frac{\\beta}{|y_w|}\\log\\pi_\\theta(y_w|x) - \\frac{\\beta}{|y_l|}\\log\\pi_\\theta(y_l|x) - \\gamma\\right)\\right]\n$$\n(SimPO paper, Eq. 6, p. 4)\n\n- **No reference model:** The reward is the length-normalized average log-probability, r = (β/|y|) log πθ(y|x) (SimPO paper, Eq. 4, p. 3).\n  - The motivation is that DPO's reward does not match the average log-likelihood that guides generation. With DPO, only about 50% of training triples satisfy the likelihood ranking (SimPO paper, p. 3).\n  - Dropping the reference model also saves compute: about 20% less run time and about 10% less GPU memory (SimPO paper, p. 10).\n- **Length normalization:** Without it, the model develops a bias toward longer, lower-quality outputs (SimPO paper, pp. 3, 7–8).\n- **Target reward margin γ > 0:** This is added inside the Bradley-Terry sigmoid so the winning reward must exceed the losing reward by at least γ (SimPO paper, Eq. 5, p. 4).\n  - The SimPO authors note that IPO also has a margin-like target (SimPO paper, p. 4).\n  - They also show that DPO contains an implicit, instance-wise margin, γ_ref = β log πref(y_w|x) − β log πref(y_l|x) (SimPO paper, p. 30).\n- **No KL regularization:** The authors instead rely on a small learning rate, diverse data, and LLM robustness. They report empirically low KL divergence (SimPO paper, p. 4). They caution that reward hacking is possible in principle (SimPO paper, p. 10).\n\n## Summary\n\n| | DPO | IPO | SimPO |\n|---|---|---|---|\n| Reward / statistic | β·log(πθ/πref) | log-ratio gap h_π vs. πref | (β/\\|y\\|)·log πθ |\n| Loss form | −log σ(Δ) | (h_π − τ⁻¹/2)² | −log σ(Δ − γ) |\n| Reference model | Yes | Yes | No |\n| Length normalization | No | No | Yes |\n| Margin | Implicit (γ_ref) | Fixed target τ⁻¹/2 | Explicit γ |\n\n**Empirical comparison:** In the SimPO paper's experiments, SimPO beat both DPO and IPO on AlpacaEval 2 and Arena-Hard across all four settings (SimPO paper, Table 4, p. 6). The IPO paper itself compares IPO with DPO only on small bandit examples (IPO paper, pp. 7–8).",
+ "input": 214771,
+ "cache_write": 214769,
+ "cache_read": 0,
+ "output": 3212,
+ "thinking": 914,
+ "usd": 1.7824,
+ "seconds": 31.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.93,
+ "date": "2026-10-25 14:45"
+}

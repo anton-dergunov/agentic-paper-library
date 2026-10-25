@@ -1,0 +1,32 @@
+{
+ "exp": "E3",
+ "cond": "x-lib",
+ "qid": "X9",
+ "rep": 1,
+ "paper": [
+  "mem0"
+ ],
+ "form": "x-lib",
+ "page": null,
+ "status": "ok",
+ "answer": "All of these numbers come from the Mem0 paper, which measured them on Zep as its competitor. The Zep paper doesn't test on LoCoMo or report how long ingestion takes.\n\n**Tokens stored per LoCoMo conversation** ([Mem0, p. 14, §4.5](http://pdf.invalid/llm/memory/agent/Mem0.%20Building%20Production-Ready%20AI%20Agents%20with%20Scalable%20Long-Term%20Memory.pdf?dest=subsection.4.5&page=14)):\n\n| What is stored | Average tokens per conversation | Compared with the raw conversation |\n|---|---|---|\n| Raw conversation (whole context) | about 26k | — |\n| Mem0 (facts in plain language) | about 7k | about 0.27× |\n| Mem0^g (Mem0 with graph memory: nodes and relations) | about 14k | about 0.54× |\n| Zep (its memory graph) | more than 600k | over 20× larger |\n\n- The paper says Mem0^g \"roughly doubles\" Mem0's footprint because it adds graph nodes and relations (p. 14).\n- It blames Zep's size on redundancy: Zep keeps a full summary at every node and also stores facts on the edges between nodes, so the same facts appear in several places (p. 14).\n- The paper calls the raw conversation \"20 times less\" than Zep's graph (p. 14). 600k ÷ 26k is about 23, so \"more than 20×\" is the accurate reading.\n- The 26k figure matches the dataset description: 10 conversations of about 600 dialogue turns and 26,000 tokens each on average ([p. 6, §3.1](http://pdf.invalid/llm/memory/agent/Mem0.%20Building%20Production-Ready%20AI%20Agents%20with%20Scalable%20Long-Term%20Memory.pdf?dest=subsection.3.1&page=6)).\n\n**How soon Zep's new memories can be retrieved** (p. 14): the paper gives no measured delay.\n- Searches run right after adding memories to Zep \"often failed to answer our queries correctly\".\n- Running the same searches \"after a delay of several hours\" gave \"considerably better results\".\n- The authors guess the cause is Zep building its graph with many asynchronous LLM calls and background processing. They call that \"impractical for real-time applications\".\n- By contrast, they say Mem0's graph construction finishes \"in under a minute even in worst-case scenarios\", so new memories can be used right away.\n\n**Caveats:**\n- These are claims by the Mem0 vendor about a competitor. They aren't independently confirmed, and the delay is an observation, not a measurement.\n- The Zep paper reports a different number: the context it sends to the model at answer time. That is about 1.6k tokens per question on LongMemEval, against about 115k for the full conversation ([Zep, p. 7, Table 2](http://pdf.invalid/llm/memory/agent/Zep.%20A%20Temporal%20Knowledge%20Graph%20Architecture%20for%20Agent%20Memory.pdf?dest=table.2&page=7)). That figure is what gets retrieved for one question, not the size of the whole memory store, so it doesn't contradict the 600k.\n\nNothing was changed, so there's no commit to suggest.",
+ "input": 73660,
+ "cache_write": 19809,
+ "cache_read": 53843,
+ "output": 2003,
+ "thinking": 237,
+ "usd": 0.20933260000000004,
+ "seconds": 25.2,
+ "turns": 4,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; ls; find . -iname \"*mem0*\" -o -iname \"*zep*\" | grep -v images",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; cat \"notes/Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory.md\" \"notes/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md\"; f=\"library/llm/memory/agent/Mem0. Building Production-Ready AI ",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/memory/agent; f=\"Zep. A Temporal Knowledge Graph Architecture for Agent Memory.md\"; grep -n -i -E \"locomo|asynchron|real-time|ingest|latenc\" \"$f\" | cut -c1-400"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.6,
+ "date": "2026-10-25 15:04"
+}

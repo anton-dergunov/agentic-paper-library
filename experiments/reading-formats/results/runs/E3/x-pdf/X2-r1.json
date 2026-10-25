@@ -1,0 +1,37 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X2",
+ "rep": 1,
+ "paper": [
+  "dpo",
+  "orpo",
+  "simpo"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "Only ORPO and SimPO report an AlpacaEval 2 score for their own method on Mistral-7B. The DPO paper doesn't report one.\n\n**DPO** (*Direct Preference Optimization*, Rafailov et al.): no score. Its 27 pages never mention Mistral or AlpacaEval. The only text match for \"Alpaca\" is a bibliography entry for the trlx library. The paper is older than both Mistral-7B and AlpacaEval 2.\n\n**ORPO** (Hong et al.): Mistral-7B fine-tuned on UltraFeedback with ORPO, in Table 1 on p. 6.\n- Mistral-ORPO-α (7B): **11.33%** (std. error 0.97)\n- Mistral-ORPO-β (7B): **12.20%** (std. error 0.98)\n\nThese are raw win rates against GPT-4, judged by GPT-4-turbo (p. 5). They aren't length-controlled. The same numbers appear in the abstract and Figure 1 (p. 1), in the conclusion (pp. 9–10), and in the text on p. 6, which says α beats Zephyr-β by 0.34 points on AlpacaEval 2.0.\n\n**SimPO** (Meng et al.): two Mistral-7B setups in Table 4 on p. 6.\n\n| Setting | LC win rate | Raw win rate |\n|---|---|---|\n| Mistral-Base (7B) | **21.5%** | 20.8% |\n| Mistral-Instruct (7B) | **32.1%** | 34.8% |\n\nLC means length-controlled, and the setup is described on pp. 4–5.\n\nSimPO's Table 4 (p. 6) also re-runs DPO and ORPO as baselines in the same setups:\n- DPO: 15.1 LC / 12.5 raw on Mistral-Base, and 26.8 / 24.9 on Mistral-Instruct.\n- ORPO: 14.7 / 12.2 on Mistral-Base, and 24.5 / 24.9 on Mistral-Instruct.\n\nThese are SimPO's reproductions, not numbers the DPO or ORPO authors published.\n\nDon't compare ORPO's ~12% directly with SimPO's numbers. ORPO reports raw win rate, while SimPO's headline figure is length-controlled. The base models and training data also differ.",
+ "input": 111199,
+ "cache_write": 16396,
+ "cache_read": 94789,
+ "output": 2279,
+ "thinking": 226,
+ "usd": 0.19576179999999999,
+ "seconds": 33.5,
+ "turns": 7,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -type f | head -50; which pdftotext",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -type f -iname \"*.pdf\" | grep -iE \"direct preference|ORPO|SimPO|odds ratio|reference-free\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/post-training/preference-learning; for f in \"Direct Preference\"*.pdf ORPO*.pdf SimPO*.pdf; do n=$(pdfinfo \"$f\" | awk '/^Pages/{print $2}'); echo \"=== $f ($n pages)\"; for p in $(seq 1 $n); do t=$(pdftotext -layout -f $p -l $p \"$",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/post-training/preference-learning; pdftotext -layout -f 6 -l 6 SimPO*.pdf - | head -45; echo ======; pdftotext -layout -f 6 -l 6 ORPO*.pdf - | head -25",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/post-training/preference-learning; pdftotext -layout -f 5 -l 5 ORPO*.pdf - | grep -iA4 \"AlpacaEval2.0 , we used\"; pdftotext \"Direct Preference\"*.pdf - | grep -ciE \"mistral|alpaca\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/post-training/preference-learning; pdftotext \"Direct Preference\"*.pdf - | grep -iE \"mistral|alpaca\""
+ ],
+ "opened_pdf": true,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.57,
+ "date": "2026-10-25 15:02"
+}

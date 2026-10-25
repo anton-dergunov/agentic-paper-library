@@ -1,0 +1,40 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X1",
+ "rep": 1,
+ "paper": [
+  "dpo",
+  "ipo",
+  "simpo"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "All three losses train on preference triples (x, y_w, y_l): a prompt, the preferred (\"winning\") response and the dispreferred (\"losing\") one. They differ in three ways: how they score a response (the \"implicit reward\"), whether they need a frozen reference model π_ref, and how they turn the gap between the two scores into a loss.\n\nPage numbers are the PDF pages. The DPO and SimPO PDFs print matching page numbers; the IPO PDF prints none.\n\n## 1. DPO (Rafailov et al., *Direct Preference Optimization*)\n\n$$\\mathcal{L}_{\\text{DPO}}(\\pi_\\theta;\\pi_{\\text{ref}}) = -\\mathbb{E}_{(x,y_w,y_l)\\sim D}\\left[\\log\\sigma\\left(\\beta\\log\\frac{\\pi_\\theta(y_w|x)}{\\pi_{\\text{ref}}(y_w|x)} - \\beta\\log\\frac{\\pi_\\theta(y_l|x)}{\\pi_{\\text{ref}}(y_l|x)}\\right)\\right]$$\n\n- **Where it comes from:** the authors rewrite the human-preference probability in terms of the optimal policy instead of a reward model. Fitting that by maximum likelihood gives Eq. 7 above, which amounts to fitting a reparametrized Bradley-Terry model (DPO pp. 4–5).\n- **Implicit reward:** r̂_θ(x,y) = β log π_θ(y|x)/π_ref(y|x). The gradient weights each example by σ(r̂_θ(x,y_l) − r̂_θ(x,y_w)), so pairs the model currently ranks wrongly get more weight. Without this weighting the model can degenerate (DPO p. 5).\n- **Reference model:** π_ref is normally the SFT model (DPO p. 5).\n\n## 2. IPO (Azar et al., *A General Theoretical Paradigm to Understand Learning from Human Preferences*)\n\nThe paper defines a general objective, ΨPO: maximize E[Ψ(p*(y ≻ y′))] − τ·D_KL(π‖π_ref) (Eq. 6, p. 3).\n\n- **DPO as a special case:** with Ψ(q) = log(q/(1−q)) and Bradley-Terry preferences, ΨPO has the same optimal policy as RLHF and DPO (Proposition 1, p. 4).\n- **The problem with DPO:** this Ψ is unbounded. If a preference is deterministic (p = 1), the rewards must diverge and π(y′) goes to 0 whatever τ is. The KL regularization effectively stops working, and DPO overfits, especially on small samples where empirical preferences are often exactly 0 or 1 (p. 4).\n- **IPO's fix:** set Ψ to the identity, which is bounded (p. 5). Define\n\n$$h_\\pi(y_w,y_l,x) = \\log\\frac{\\pi(y_w|x)\\,\\pi_{\\text{ref}}(y_l|x)}{\\pi(y_l|x)\\,\\pi_{\\text{ref}}(y_w|x)}$$\n\nThe sampled IPO loss (Eq. 17 and Algorithm 1, p. 7) is then\n\n$$\\mathcal{L}_{\\text{IPO}} = \\mathbb{E}_{(y_w,y_l,x)\\sim D}\\left[\\left(h_\\pi(y_w,y_l,x) - \\frac{\\tau^{-1}}{2}\\right)^2\\right]$$\n\n- **How it differs from DPO:** IPO is a squared regression, not a log-sigmoid classification. It pushes the gap between the policy's and the reference's log-likelihood ratios toward a fixed target of 1/(2τ), instead of pushing it toward infinity. So, unlike DPO, it always keeps the solution near π_ref (p. 7).\n- **Worked example:** with two actions and a deterministic preference, DPO converges to a deterministic policy for any τ. IPO's optimum is π*(y₁) = σ(0.5τ⁻¹), which tends to the uniform π_ref as τ → ∞ (p. 7).\n\n## 3. SimPO (Meng et al., *SimPO: Simple Preference Optimization with a Reference-Free Reward*)\n\n$$\\mathcal{L}_{\\text{SimPO}}(\\pi_\\theta) = -\\mathbb{E}_{(x,y_w,y_l)\\sim D}\\left[\\log\\sigma\\left(\\frac{\\beta}{|y_w|}\\log\\pi_\\theta(y_w|x) - \\frac{\\beta}{|y_l|}\\log\\pi_\\theta(y_l|x) - \\gamma\\right)\\right]$$\n\nThis is Eq. 6 (p. 4). It keeps DPO's log-sigmoid form but makes two changes:\n\n- **No reference model; a length-normalized reward.** The reward is r_SimPO(x,y) = (β/|y|) log π_θ(y|x), the average token log-probability scaled by β (Eq. 4, p. 3). Two reasons are given:\n  - DPO's reward needs π_ref, which costs extra memory and compute.\n  - DPO's reward doesn't match the likelihood that guides generation. Only about 50% of training triples had the DPO-preferred response also more likely under the model (p. 3).\n- **Why normalize by length:** a summed log-probability reward is biased toward longer outputs. Removing the normalization gives longer but lower-quality text (p. 3).\n- **A target reward margin γ > 0** in the Bradley-Terry term: p(y_w ≻ y_l) = σ(r_w − r_l − γ) (Eq. 5, p. 4). The authors note that IPO also has a target-margin-like term, but say its full objective works less well than SimPO (p. 4).\n- **No explicit KL term.** The authors report KL from the reference stays low in practice because of a small learning rate, diverse preference data and LLMs' robustness (p. 4).\n- **SimPO's view of DPO:** expanding DPO's loss shows it already contains an implicit per-example margin, γ_ref, built from π_ref's log-probabilities. That may be why adding γ or length normalization to DPO didn't help consistently (p. 30).\n\n## Side by side\n\n| | DPO | IPO | SimPO |\n|---|---|---|---|\n| Loss form | −log σ(·) | squared error (·)² | −log σ(·) |\n| Score per response | β log π_θ/π_ref (summed over tokens) | log π/π_ref (summed over tokens) | (β/\\|y\\|) log π_θ (averaged over tokens) |\n| Needs π_ref | yes | yes | no |\n| Margin / target | none explicit; implicit per-example margin from π_ref (SimPO p. 30) | regress to 1/(2τ) | fixed γ, plus length normalization |\n| Regularization | KL via β, but it weakens with deterministic preferences (IPO p. 4) | KL stays effective because Ψ is bounded (IPO pp. 5, 7) | none explicit (SimPO p. 4) |\n\nSimPO's comparison table (p. 5) writes the IPO loss in the same notation: (log π_θ(y_w)/π_ref(y_w) − log π_θ(y_l)/π_ref(y_l) − 1/(2τ))².",
+ "input": 182222,
+ "cache_write": 30017,
+ "cache_read": 152189,
+ "output": 4604,
+ "thinking": 517,
+ "usd": 0.36271780000000003,
+ "seconds": 56.1,
+ "turns": 8,
+ "calls": [
+  "Bash find . -name \"*.pdf\" | head -100; which pdftotext",
+  "Bash find . -name \"*.pdf\" | grep -iE \"prefer|DPO|SimPO|IPO|reward|RLHF|human feedback|align\" ",
+  "Bash mkdir -p /tmp/po && cd \"llm/post-training/preference-learning\" && for f in \"Direct Preference Optimization. Your Language Model is Secretly a Reward Model\" \"A General Theoretical Paradigm to Understand Learning from Human Preferences\" \"SimPO. Simple Preference Optimization with a Reference-Free Rewa",
+  "Bash cd /tmp/po; P=\"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/post-training/preference-learning\"; echo \"=== DPO p4\"; pdftotext -layout -f 4 -l 4 \"$P/Direct Preference Optimization. Your Language Model is Secretly a Reward Model.pdf\" - | sed -n '1,200p' | grep -n -B12 -A12 \"(7)",
+  "Bash P=\"llm/post-training/preference-learning/A General Theoretical Paradigm to Understand Learning from Human Preferences.pdf\"; for p in 4 5 7; do echo \"=== IPO p$p\"; pdftotext -f $p -l $p \"$P\" - ; done | cut -c1-200",
+  "Bash P=\"llm/post-training/preference-learning/SimPO. Simple Preference Optimization with a Reference-Free Reward.pdf\"; for p in 3 4 30; do echo \"=== SimPO p$p\"; pdftotext -f $p -l $p \"$P\" - ; done | cut -c1-200 | grep -v '^\\s*$'",
+  "Bash P=\"llm/post-training/preference-learning/SimPO. Simple Preference Optimization with a Reference-Free Reward.pdf\"; pdftotext -layout -f 5 -l 5 \"$P\" - | grep -n -B3 -A3 \"IPO\""
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash mkdir -p /tmp/po && cd \"llm/post-training/preference-learning\" && for f in \"Direct Preference Optimization. Your Language Model is Secretly a Reward Model\" \"A General Theoretical Paradigm to Understand Learning from Human Preferences\" \"SimPO. Simple Preference Optimization with a Reference-Free Rewa"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.56,
+ "date": "2026-10-25 15:02"
+}

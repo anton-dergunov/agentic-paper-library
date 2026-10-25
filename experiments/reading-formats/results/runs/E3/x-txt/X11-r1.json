@@ -1,0 +1,32 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X11",
+ "rep": 1,
+ "paper": [
+  "olmo2"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "OLMo 2 found that across a wide range of peak learning rates, the final result after the learning rate is annealed is almost the same. A higher peak rate gives lower loss early in pretraining, but the annealing phase evens it out. All of this is from **\"2 OLMo 2 Furious\"** (`llm/foundation-models/2 OLMo 2 Furious.txt`), Section 4.1, \"Learning rate annealing.\"\n\n**Setup (p. 18)**\n- The baseline comes from Grattafiori et al. (2024). For the 7B model, the learning rate warms up linearly to a peak of 3·10⁻⁴ over 2000 steps, then follows a cosine decay planned for 5T tokens. They cut the schedule at 4T tokens and switch to mid-training.\n- They tried higher peaks of 6, 9, 12 and 30 ·10⁻⁴, i.e. multiples of the 3·10⁻⁴ baseline.\n\n**Effect during pretraining (p. 18, Figure 11)**\n- 30·10⁻⁴ became unstable during warm-up: it had several loss spikes that never fully recovered, so they dropped it quickly.\n- The other rates trained normally. Higher rates always had better training loss early on, as long as they avoided spikes. Over time, though, the lowest rate caught up and overtook them.\n- Between 3·10⁻⁴ and 6·10⁻⁴, the lower rate only overtook the higher one well past 200B tokens. The authors warn that a shorter hyperparameter experiment \"might come to the wrong conclusion.\"\n\n**Effect after annealing (pp. 18–19)**\n- They wanted to test the idea that a higher rate's worse pretraining loss is made up for when the rate decays to zero. They took each variant at 300B tokens and decayed its rate to zero over 50B tokens. The three higher rates were also decayed over 100B tokens, for seven runs in total (p. 18).\n- The higher rate does make mid-training more effective, \"but it does so by exactly the amount that the pretraining is worse.\" All four variants end at the same training loss, with the lowest rate slightly behind (p. 19).\n- Decaying linearly to zero over 50B or 100B tokens gave the same training loss (p. 18, Figure 11 caption).\n\n**Longer runs and downstream scores (p. 19, Table 8)**\n- They repeated the test with 3·10⁻⁴ (the baseline) and 6·10⁻⁴ (best training loss, by a slim margin) after 1T and 2T tokens. They found \"virtually no difference\" in training loss or on nine OLMES tasks.\n- Across all variants in Table 8, average OLMES scores vary by less than 2 points, and most are within half a point of each other. Examples: 62.5 to 64.6 for the 300B-token runs, and 73.8 vs 73.9 for the 2T-token runs.\n- When annealed over 100B high-quality tokens, the two rates scored within 0.1 points on OLMES. The one exception: on GSM8K, the higher rate was 2.8 points better, which the authors say needs more study before it can be relied on.\n\n**Conclusions and limitations (p. 19)**\n- The authors say this contradicts folk wisdom such as \"higher learning rates are always better\" and \"area under the learning curve matters.\"\n- It extends Wortsman et al. (2023), who found that small models are largely insensitive to the learning rate when trained to the end of a cosine schedule, and that QK-norm and z-loss strengthen this. OLMo 2 uses both, and finds the effect still holds at much larger token and parameter scales and with its modified schedule.\n- The main limitation, due to cost: they did not test the full range of learning rates. A wider sweep would be needed to find where this \"plateau\" ends.\n\nOne related detail: the 13B model used a higher peak learning rate from the start, so it was trained to 5T tokens before mid-training (p. 18).",
+ "input": 35558,
+ "cache_write": 6185,
+ "cache_read": 29365,
+ "output": 1766,
+ "thinking": 54,
+ "usd": 0.090705,
+ "seconds": 23.1,
+ "turns": 4,
+ "calls": [
+  "Grep OLMo 2",
+  "Grep (?i)peak learning rate|learning rate.{0,40}(vary|varied|sweep)|higher learning rate|lower learning rate",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/foundation-models\"; grep -n \"^\\[page\" \"2 OLMo 2 Furious.txt\" | awk -F: '$1<1220' | tail -4; sed -n 1085,1210p \"2 OLMo 2 Furious.txt\""
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.54,
+ "date": "2026-10-25 15:01"
+}

@@ -64,8 +64,10 @@ def judge_one(qid):
     q = run.Q[qid]
     names = sorted(found)
     random.Random(qid).shuffle(names)
+    # An aggregation question's gold names its list only by reference; the judge needs the names.
+    gold = q["gold"] + ("\nThe items: %s." % "; ".join(q["items"]) if q.get("items") else "")
     prompt = PROMPT.format(
-        question=q["question"], gold=q["gold"],
+        question=q["question"], gold=gold,
         tolerance="\nTolerance: " + q["tolerance"] if q.get("tolerance") else "",
         page="\nGold page (of the PDF): %s" % q["page"] if q.get("page") else "",
         unanswerable=UNANSWERABLE if q.get("answerable") is False else "",

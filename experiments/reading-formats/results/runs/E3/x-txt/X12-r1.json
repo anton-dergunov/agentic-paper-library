@@ -1,0 +1,36 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X12",
+ "rep": 1,
+ "paper": [],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "I found **34 papers** that report AlpacaEval win rates for their own model or method. To get there, I searched all 91 papers that mention AlpacaEval or AlpacaFarm and kept only those that score something they built themselves. Many papers mention AlpacaEval only in their references, related work or a survey table, and I dropped those.\n\n**Foundation models and technical reports**\n1. **Mixture-of-Agents**: their MoA reaches 65.8% LC win rate on AlpacaEval 2.0, against GPT-4o's 57.5% (p. 1–2).\n2. **DeepSeek-V2**: the Chat model gets a 38.9 LC win rate on AlpacaEval 2.0 (p. 5); results table on p. 19.\n3. **DeepSeek-V3**: AlpacaEval 2.0 LC win rate in Table 7 (p. 33).\n4. **DeepSeek-R1**: AlpacaEval 2.0 LC win rate of 87.6 (p. 9); more tables on p. 41 and p. 56.\n5. **OLMo**: AlpacaEval scores for the adapted OLMo models (p. 8, p. 21).\n6. **2 OLMo 2 Furious**: AlpacaEval 2 (AE2) in the post-training results tables (p. 11, p. 28).\n7. **Olmo 3**: AlpacaEval 2 LC (p. 7, p. 38–39, p. 54–55).\n8. **Tülu 3**: AlpacaEval 2 LC % win (p. 6, p. 8–10).\n9. **Nemotron-4 340B**: AlpacaEval 2.0 LC (p. 14).\n10. **DataComp-LM**: the instruction-tuned DCLM model gets an AlpacaEval 2.0 LC win rate of 16.6 (p. 10); Table 26 on p. 72.\n\n**Post-training data**\n11. **AgentInstruct**: Orca-3 scores 24.80 on AlpacaEval, a 45% gain (p. 16; claim on p. 1, 3).\n12. **HelpSteer2**: AlpacaEval 2.0 LC for their aligned models (p. 10–11).\n13. **Magpie**: AlpacaEval 2 LC and win rate (p. 8–9; more on p. 18, 24–26).\n14. **Self-Alignment with Instruction Backtranslation (Humpback)**: AlpacaEval win rate against text-davinci-003, Table 3 (p. 6).\n15. **UltraFeedback**: win rate against text-davinci-003 on AlpacaEval (p. 5–6).\n16. **WildFeedback**: AlpacaEval 2 rises from 24.3% to 42.6% (p. 8).\n17. **WizardLM**: AlpacaEval column in the results tables (p. 7, p. 9, p. 22).\n\n**Preference learning and RLHF**\n18. **SimPO**: AlpacaEval 2 LC win rates, up to 6.4 points over DPO (p. 1–2).\n19. **ORPO**: 12.20% on AlpacaEval 2.0 (p. 1); AlpacaEval 1.0 and 2.0 results (p. 5).\n20. **KTO**: AlpacaEval (LC) in the table on p. 6; AlpacaEval 2 on p. 18.\n21. **Self-Rewarding Language Models**: AlpacaEval 2.0 leaderboard results, Table 1 (p. 6).\n22. **RLHF Workflow**: LC AlpacaEval-2 (p. 12); 37.2 LC / 45.4 raw win rate (p. 13).\n23. **Unpacking DPO and PPO**: AlpacaEval 1 and 2; PPO beats DPO on AlpacaEval 2 by 3.4 points on average (p. 6).\n24. **Generative Representational Instruction Tuning (GRIT)**: AlpacaEval jumps by more than 10 points with KTO (p. 7); ablations on p. 9–11.\n\n**Other**\n25. **Thinking LLMs (TPO)**: AlpacaEval LC win rates, Table 1 (p. 5) and Table 2 (p. 6).\n26. **Checklists Are Better Than Reward Models (RLCF)**: AlpacaEval results (p. 7).\n27. **Generalizing Verifiable Instruction Following**: their model scores 31.6 on AlpacaEval 2 (p. 20).\n28. **Preference Leakage**: AlpacaEval 2.0 results for their trained student models, Table 1 (p. 5).\n29. **Cheating Automatic LLM Benchmarks**: their \"null model\" gets an 86.5% LC win rate on AlpacaEval 2.0 (p. 1–2). Here the \"method\" is an adversarial cheat, not a real model.\n30. **Privacy-Preserving Instructions**: AlpacaEval results for their SFT models (p. 8; Appendix D.6, p. 23).\n31. **Safety Alignment Should Be Made More Than Just a Few Tokens Deep**: AlpacaEval 1.0 win rate (no length control) for their augmented model (p. 7, p. 16).\n32. **FollowBench**: reports overall response quality using AlpacaEval (p. 8). My keyword search only showed this one line, so I haven't confirmed the scores are for their own model.\n\n**Borderline**\n33. **Length-Controlled AlpacaEval**: their contribution is the length-controlled metric itself. They show its win rates for leaderboard models and for gaming tests, e.g. 3.7 → 25.9 → 12.2 (p. 7).\n34. **tinyBenchmarks**: estimates AlpacaEval 2.0 performance of existing models from fewer examples (p. 6–7). It reports no new model.\n\n**Excluded, though they look close**\n- **AlpacaFarm-style GPT-4 win rates, not AlpacaEval:** Back to Basics (p. 11), Personalized Soups (p. 6), Personalized Language Modeling from Personalized Human Feedback (p. 8), Preference Fine-Tuning … Suboptimal, On-Policy Data (p. 11, 27) and A Survey of LLMs (p. 88).\n- **Towards Spec Learning:** uses the length-control method on its own datasets, not on the AlpacaEval benchmark (p. 17).\n- **Qwen2.5-Omni:** reports a VoiceBench \"AlpacaEval\" score, not a win rate (p. 10).\n- **Uses AlpacaEval data, but reports no win rates for a model of its own:** URIAL (\"Unlocking Spell\"), RewardBench, Inverse Constitutional AI, Trust or Escalate and AxBench.",
+ "input": 169844,
+ "cache_write": 44311,
+ "cache_read": 125521,
+ "output": 5879,
+ "thinking": 2213,
+ "usd": 0.4972202,
+ "seconds": 78.3,
+ "turns": 6,
+ "calls": [
+  "Grep AlpacaEval|Alpaca Eval|AlpacaFarm",
+  "Bash mkdir -p /tmp/ae && cat > /tmp/ae/s.py <<'EOF'\nimport re,sys,glob\nfor f in sorted(glob.glob('**/*.txt',recursive=True)):\n    page=0;hits=[]\n    for line in open(f,errors='ignore'):\n        m=re.match(r'\\[page (\\d+)\\]',line.strip())\n        if m: page=int(m.group(1));continue\n        if re.search(r'a",
+  "Read /Users/anton/.claude/projects/-Users-anton--cache-papers-experiments-reading-formats-copies-txt/185e4b4e-905b-49ce-aa16-b730277996d9/tool-results/bet6n8qx4.txt",
+  "Bash python3 -I /tmp/ae/s.py 100 | awk '/^## /{p=0} /^## .*(Spec Learning|Unlocking Spell|LoRA Learns|Reward Model Ensembles|Suboptimal|Back to Basics|A Survey of Large Language Models|Style Outweighs|Qwen2.5-Omni|Magpie|Self-Alignment|tinyBench|Length-Controlled|Generalizing Verifiable|Olmo 3|Instructio",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; grep -n -B2 -A3 \"AlpacaEval 2 (31.6)\" llm/evaluation/benchmarks/Generalizing*; grep -n -B3 -A3 \"AlpacaEval (which\" llm/post-training/fine-tuning/LoRA*; grep -n -B3 -A4 \"Alpacafarm framework\" llm/post-training/preference-learning/B"
+ ],
+ "opened_pdf": false,
+ "outside": [
+  "Bash mkdir -p /tmp/ae && cat > /tmp/ae/s.py <<'EOF'\nimport re,sys,glob\nfor f in sorted(glob.glob('**/*.txt',recursive=True)):\n    page=0;hits=[]\n    for line in open(f,errors='ignore'):\n        m=re.match(r'\\[page (\\d+)\\]',line.strip())\n        if m: page=int(m.group(1));continue\n        if re.search(r'a",
+  "Read /Users/anton/.claude/projects/-Users-anton--cache-papers-experiments-reading-formats-copies-txt/185e4b4e-905b-49ce-aa16-b730277996d9/tool-results/bet6n8qx4.txt",
+  "Bash python3 -I /tmp/ae/s.py 100 | awk '/^## /{p=0} /^## .*(Spec Learning|Unlocking Spell|LoRA Learns|Reward Model Ensembles|Suboptimal|Back to Basics|A Survey of Large Language Models|Style Outweighs|Qwen2.5-Omni|Magpie|Self-Alignment|tinyBench|Length-Controlled|Generalizing Verifiable|Olmo 3|Instructio"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.13,
+ "date": "2026-10-25 14:51"
+}

@@ -1,0 +1,26 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X2",
+ "rep": 1,
+ "paper": [
+  "dpo",
+  "orpo",
+  "simpo"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "The three papers do not report comparable numbers: **the DPO paper reports none**, and ORPO and SimPO use different setups.\n\n| Paper | Mistral-7B model / setting | AlpacaEval 2 result for its own method |\n|---|---|---|\n| **DPO** | — | Not reported |\n| **ORPO** | Mistral-ORPO-α | 11.33% (p. 6, Table 1) |\n| | Mistral-ORPO-β | 12.20% (p. 6, Table 1) |\n| **SimPO** | Mistral-Base | LC 21.5%, raw win rate 20.8% (p. 6, Table 4) |\n| | Mistral-Instruct | LC 32.1%, raw win rate 34.8% (p. 6, Table 4) |\n\n**DPO:** The paper uses no Mistral models and no AlpacaEval. Its experiments cover sentiment generation (GPT-2-large), TL;DR summarization (GPT-J) and Anthropic-HH dialogue (Pythia-2.8B), with GPT-4 win rates against reference or chosen responses (pp. 7–9). It notes it tested \"models up to 6B parameters\" (p. 10).\n\n**ORPO:**\n- Mistral-ORPO-α was trained on UltraFeedback with λ = 0.1 (p. 6).\n- Mistral-ORPO-β uses the same configuration on a cleaned version of UltraFeedback (p. 6).\n- The paper calls this \"AlpacaEval2.0,\" judged by GPT-4-turbo against GPT-4's responses (p. 5). It does not say whether the number is length-controlled.\n\n**SimPO:**\n- **Base setting:** Mistral-7B-v0.1 is first fine-tuned on UltraChat-200k, then trained on UltraFeedback (p. 4).\n- **Instruct setting:** Mistral-7B-Instruct-v0.2 is trained on regenerated UltraFeedback pairs (p. 4).\n- GPT-4 Turbo is both the baseline and the judge (p. 5, Table 2).\n- Table 10 lists the Mistral-Base length-controlled score as 21.4% rather than 21.5% (p. 25).\n\n**Why they aren't directly comparable:** the base models, training data and judge setups differ between the papers.\n\n**Related numbers from SimPO's own reruns:** on Mistral-Base, the SimPO paper reports DPO at 15.1% LC / 12.5% raw and ORPO at 14.7% LC / 12.2% raw (p. 6, Table 4). These come from SimPO's experiments, not from the DPO or ORPO papers.",
+ "input": 238982,
+ "cache_write": 238980,
+ "cache_read": 0,
+ "output": 1673,
+ "thinking": 782,
+ "usd": 1.945308,
+ "seconds": 18.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.01,
+ "date": "2026-10-25 14:50"
+}

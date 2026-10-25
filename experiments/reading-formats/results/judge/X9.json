@@ -1,0 +1,30 @@
+{
+ "key": "30d7861d98044841",
+ "usd": 0.039847999999999995,
+ "grades": {
+  "E3/x-att/X9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-txt/X9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

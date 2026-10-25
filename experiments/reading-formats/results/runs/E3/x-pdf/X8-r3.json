@@ -1,0 +1,43 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X8",
+ "rep": 3,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "**Short answer:** the cost depends on what you measure. On perplexity it's close to zero, but on long-context retrieval it can be large. Only Gemma 3 and GLM-5 actually test it. Mistral 7B only says there is no cost, and Phi-4 drops the sliding window without giving a reason. For all four PDFs the printed page numbers match the PDF page numbers.\n\n### Mistral 7B: says there is no cost, but doesn't test it\n- Every layer uses a sliding window of W = 4096 (p. 2, Table 1). The window moves information forward W tokens per layer, so after k layers a token can reach k×W tokens back, about 131K in theory (p. 2).\n- On 16K sequences it gives a 2× speedup over vanilla attention (p. 2). The rolling buffer cache it allows \"reduces the cache memory usage by 8x, without impacting the model quality\" on 32k-token sequences (p. 2).\n- The paper says SWA and GQA \"collectively contribute to the enhanced performance and efficiency\" (p. 1). However, the results only compare Mistral against Llama models (p. 3). There is no comparison with a full-attention version of Mistral, so the \"no quality impact\" claim is never tested.\n\n### Gemma 3: almost no change in perplexity\n- It uses 5 local layers for every global layer, with a 1024-token window on the local layers, to keep the KV cache small at 128K context (p. 1, p. 2).\n- **Ratio ablation:** going from 1:1 up to 7:1 local:global has \"minimal impact on perplexity\" (p. 6, Fig. 3).\n- **Window ablation:** \"The sliding window can be reduced significantly without impacting perplexity,\" tested from 512 to 4096 tokens on 2B models (p. 7, Fig. 4).\n- **Memory saved:** with global-only attention, the KV cache adds 60% memory overhead. With 1:3 and sw=1024 that drops below 15%, at 32k context (p. 7, Fig. 5).\n- **Limits:** these ablations measure validation perplexity only, on text-only models (pp. 6–7). There is no long-context retrieval test of the sliding window itself.\n\n### Phi-4: drops the sliding window, no reason given\n- Phi-4 uses \"full attention over the 4K context length, rather than a 2K sliding window used in phi-3-medium\" (p. 7). The report gives no ablation or explanation, so it says nothing about the quality cost.\n\n### GLM-5: large losses on long-context tasks, depending on which layers\n- They converted GLM-9B so that half its layers use SWA (4096-token window, 1:1 ratio) and tested it on RULER (p. 6, p. 7 Table 4).\n- **No retraining (Table 4, p. 7):** fixed alternating SWA collapses as context grows. RULER drops from 95.19 to 94.87 at 4K, 92.01 to 25.89 at 16K, and 75.28 to 6.51 at 128K. Choosing which layers get SWA by search keeps much more: 88.92 at 16K and 53.95 at 128K.\n- **After 190B tokens of continued training at 64K (Table 5, p. 7):** alternating SWA still loses 30.35 points on RULER at 128K and 26.50 on RepoQA at 128K. The searched layout cuts the RULER loss to 5.69 at 128K. The authors call alternating SWA a \"catastrophic degradation on long-context tasks\" (p. 7).\n- Even the best efficient-attention variants leave a gap on fine-grained retrieval (up to 5.69 on RULER@128K and 7.33 on RepoQA@128K), \"even when half of the layers retain full attention\" (p. 7). For this reason GLM-5 uses DeepSeek Sparse Attention instead, which picks tokens by content rather than a fixed window (p. 5). They report it matches the full-attention model (pp. 6–7).\n\n### Overall\nGemma 3 shows that on average next-token loss, a short window with a few global layers costs almost nothing (pp. 6–7). GLM-5 shows the cost appears in long-context retrieval, where a fixed alternating layout can wipe out performance at long lengths. Choosing carefully which layers keep full attention reduces the loss but doesn't remove it (p. 7). Mistral's \"no impact\" claim (p. 2) is asserted, not measured. Phi-4 gives no evidence either way (p. 7).",
+ "input": 212237,
+ "cache_write": 27455,
+ "cache_read": 184762,
+ "output": 4279,
+ "thinking": 630,
+ "usd": 0.3422524,
+ "seconds": 66.3,
+ "turns": 10,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -type f | head -100; which pdftotext",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -type f -iname \"*.pdf\" | grep -iE \"mistral|gemma|phi-4|phi4|glm\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; mkdir -p /tmp/swa; for f in \"Phi-4 Technical Report\" \"GLM-5. from Vibe Coding to Agentic Engineering\" \"Mistral 7B\" \"Gemma 3 Technical Report\"; do n=$(pdfinfo \"$f.pdf\" | awk '/^Pages/{print $2}'); out=\"/tmp/sw",
+  "Bash cd /tmp/swa; for f in Phi-4 Mistral Gemma; do echo \"##### $f\"; awk '/^=== PAGE/{p=$3} {print p\": \"$0}' $f.txt | grep -iE -C3 \"sliding|local.attention|SWA|window\" ; done",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; for f in \"Phi-4 Technical Report\" \"Mistral 7B\" \"Gemma 3 Technical Report\" \"GLM-5. from Vibe Coding to Agentic Engineering\"; do n=$(pdfinfo \"$f.pdf\" 2>/dev/null | awk '/^Pages/{print $2}'); for p in $(seq 1 $n",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; f=\"GLM-5. from Vibe Coding to Agentic Engineering.pdf\"; for p in 5 6 7; do echo \"=== PDF PAGE $p\"; pdftotext -q -f $p -l $p \"$f\" -; done",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; f=\"Gemma 3 Technical Report.pdf\"; for p in 1 2 6 7; do echo \"=== PDF PAGE $p\"; pdftotext -q -f $p -l $p \"$f\" - | grep -v '^\\s*$' | head -c 6000; done",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; f=\"Mistral 7B.pdf\"; for p in 2 3; do echo \"=== PDF PAGE $p\"; pdftotext -q -f $p -l $p \"$f\" - | grep -v '^\\s*$'; done; grep -n -iE \"SWA|sliding|window\" <(pdftotext -q -f 4 -l 9 \"$f\" -); echo \"=== PHI p7\"; pdft",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; pdftotext -q -f 7 -l 7 \"Phi-4 Technical Report.pdf\" - | grep -v '^\\s*$' | tail -2"
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash cd /tmp/swa; for f in Phi-4 Mistral Gemma; do echo \"##### $f\"; awk '/^=== PAGE/{p=$3} {print p\": \"$0}' $f.txt | grep -iE -C3 \"sliding|local.attention|SWA|window\" ; done"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.85,
+ "date": "2026-10-25 15:33"
+}

@@ -1,0 +1,37 @@
+{
+ "exp": "E3",
+ "cond": "x-txt",
+ "qid": "X6",
+ "rep": 1,
+ "paper": [
+  "instructgpt",
+  "dpo"
+ ],
+ "form": "x-txt",
+ "page": null,
+ "status": "ok",
+ "answer": "Both papers start from the same KL-regularised objective. InstructGPT adds a pretraining term and optimises with PPO. DPO keeps the objective as it is but solves it in closed form, so it needs neither a reward model nor RL.\n\n## InstructGPT (Ouyang et al.)\n\n**Objective (Eq. 2, p. 9):**\n\n$$\n\\text{objective}(\\phi) = \\mathbb{E}_{(x,y)\\sim D_{\\pi_\\phi^{RL}}}\\Big[r_\\theta(x,y) - \\beta \\log \\frac{\\pi_\\phi^{RL}(y\\mid x)}{\\pi^{SFT}(y\\mid x)}\\Big] + \\gamma\\, \\mathbb{E}_{x\\sim D_{\\text{pretrain}}}\\big[\\log \\pi_\\phi^{RL}(x)\\big]\n$$\n\n- **Terms:** π^RL is the policy being learned, π^SFT is the supervised fine-tuned model, and D_pretrain is the pretraining distribution. β sets the strength of the KL penalty and γ the strength of the pretraining gradients (p. 9).\n- **How it is applied:** the KL penalty against the SFT model is added at every token, \"to mitigate over-optimization of the reward model.\" The objective is maximised with PPO in a bandit environment, where the reward model scores each response and the episode then ends. The value function is initialised from the reward model (p. 9).\n- **PPO vs. PPO-ptx:** the \"PPO\" models set γ = 0. The models called InstructGPT are the \"PPO-ptx\" models, which mix in pretraining gradients to fix performance regressions on public NLP datasets (p. 9).\n- **Settings:** β = 0.02 and γ = 27.8. There are 8× as many pretraining examples as RL episodes, and the PPO and pretraining gradients are computed and accumulated in consecutive steps (p. 42).\n- **Why the γ term exists:** mixing in pretraining updates works better than raising the KL coefficient. Raising β cuts validation reward and never fully recovers DROP or SQuAD (p. 15). Even β = 2.0, 100× the default, does not fix the regressions (p. 53).\n\n## DPO (Rafailov et al.)\n\n**Starting objective (Eq. 3, p. 3):**\n\n$$\n\\max_{\\pi_\\theta}\\; \\mathbb{E}_{x\\sim D,\\, y\\sim\\pi_\\theta(y\\mid x)}\\big[r_\\phi(x,y)\\big] - \\beta\\, \\mathbb{D}_{KL}\\big[\\pi_\\theta(y\\mid x)\\,\\|\\,\\pi_{\\text{ref}}(y\\mid x)\\big]\n$$\n\n- **Terms:** π_ref is the initial SFT model, and β controls how far the policy can move from it (p. 4).\n- **Why the KL term matters:** it keeps the policy where the reward model is accurate, maintains diversity and prevents mode collapse (p. 4).\n- **How RLHF normally optimises it:** the objective is not differentiable, so the standard method builds r = r_φ − β(log π_θ − log π_ref) and maximises it with PPO (p. 4).\n\n**DPO's derivation (pp. 4–5):**\n\n1. **Closed-form optimum:** the objective's optimal policy is π_r(y|x) = (1/Z(x)) · π_ref(y|x) · exp(r(x,y)/β). Here Z(x) is a partition function that is expensive to estimate (Eq. 4, p. 4).\n2. **Rearrange for the reward:** r(x,y) = β log [π_r(y|x)/π_ref(y|x)] + β log Z(x) (Eq. 5, p. 4).\n3. **Substitute into Bradley–Terry:** that model depends only on reward differences, so Z(x) cancels (p. 4).\n4. **Result: a maximum-likelihood loss on the policy itself (Eq. 7, p. 4):**\n\n$$\n\\mathcal{L}_{DPO} = -\\mathbb{E}_{(x,y_w,y_l)\\sim D}\\Big[\\log\\sigma\\Big(\\beta\\log\\frac{\\pi_\\theta(y_w\\mid x)}{\\pi_{\\text{ref}}(y_w\\mid x)} - \\beta\\log\\frac{\\pi_\\theta(y_l\\mid x)}{\\pi_{\\text{ref}}(y_l\\mid x)}\\Big)\\Big]\n$$\n\n## How they differ\n\n| | InstructGPT | DPO |\n|---|---|---|\n| **Objective** | Reward − β·KL, **plus** γ·pretraining log-likelihood (p. 9) | Reward − β·KL only (p. 3) |\n| **Reward model** | Explicit reward model r_θ is trained, then optimised against (p. 9) | No standalone reward model. The policy defines an implicit reward r̂ = β log(π_θ/π_ref) (pp. 4–5) |\n| **Optimiser** | PPO with a value function and on-policy rollouts (pp. 9, 42) | No RL loop: a classification-style loss on a fixed offline preference dataset (pp. 4–5) |\n| **KL handling** | Per-token penalty folded into the reward at sampling time (p. 9) | Built into the loss through the closed-form optimum. β scales the log-ratios and the per-example weight in the gradient (pp. 4–5) |\n| **Reference model** | π^SFT (p. 9) | π_ref = π^SFT when available; otherwise it is made by maximum likelihood on the preferred completions (p. 5) |\n| **Drift / regressions** | Fixed by the γ pretraining term, since the KL term alone fails (pp. 15, 53) | No extra term. KL is the only regulariser |\n\nDPO's own comparison: \"DPO and PPO optimize the same objective, but DPO is notably more efficient.\" On the sentiment task its reward-versus-KL tradeoff strictly dominates PPO's, including PPO given the ground-truth reward (pp. 8–9). That holds for the shared objective (Eq. 3), which is the same as InstructGPT's PPO models (γ = 0). DPO has no counterpart to the PPO-ptx pretraining term.",
+ "input": 103392,
+ "cache_write": 17184,
+ "cache_read": 86194,
+ "output": 3751,
+ "thinking": 129,
+ "usd": 0.2297868,
+ "seconds": 44.7,
+ "turns": 8,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -name \"*.txt\" | head -50",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txt; find . -iname \"*instruction*\" -o -iname \"*direct preference*\"",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning\"; f=\"Training language models to follow instructions with human feedback.txt\"; grep -n \"\\[page\\|objective\\|PPO-ptx\\|KL\\|pretrain\\|gamma\\|γ\\|β\" \"$f\" | grep -n \"\" | sed -n '1,400p' | grep -v \"^\\",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning\"; f=\"Training language models to follow instructions with human feedback.txt\"; sed -n '481,525p' \"$f\"; grep -n \"\\[page\" \"$f\" | awk -F: '$1>2380 && $1<2440 || ($1>900&&$1<920) || ($1>2970&&$1<3",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning\"; f=\"Direct Preference Optimization. Your Language Model is Secretly a Reward Model.txt\"; grep -n \"\\[page\\|KL\\|Eq\\.\\|PPO\\|partition\\|Z(x)\" \"$f\" | head -70",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning\"; f=\"Direct Preference Optimization. Your Language Model is Secretly a Reward Model.txt\"; sed -n '170,275p' \"$f\"; f2=\"Training language models to follow instructions with human feedback.txt\"; ",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txt/llm/post-training/preference-learning\"; f2=\"Training language models to follow instructions with human feedback.txt\"; grep -n \"\\[page\" \"$f2\" | awk -F: '$1>850 && $1<960'; sed -n '908,917p' \"$f2\"; f=\"Direct Preference Optimization."
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.46,
+ "date": "2026-10-25 14:58"
+}

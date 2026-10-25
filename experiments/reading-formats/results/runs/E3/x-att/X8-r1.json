@@ -1,0 +1,27 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X8",
+ "rep": 1,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "# Does sliding window attention hurt model quality? What the four reports say\n\n**Short answer:** It depends on how you measure. At short context lengths, or when measured by perplexity, the reports find little or no loss. On long-context retrieval tasks, GLM-5's ablation finds a real and sometimes large loss. None of the reports compares the same model with and without a sliding window on long-context tasks except GLM-5.\n\nPage numbers below refer to each paper's own pages.\n\n## Mistral 7B: claims no loss, but shows no direct comparison\n- **Setup:** Each layer attends to the previous W tokens. Stacking layers lets information travel up to W × k tokens. With W = 4096, the theoretical attention span is about 131K tokens (p. 2). The training context length is 8192 (Table 1, p. 2).\n- **Speed:** For a 16K sequence with W = 4096, the window gives a 2x speedup over standard attention (p. 2).\n- **Memory:** A rolling buffer cache cuts cache memory use by 8x on a 32k-token sequence, \"without impacting the model quality\" (p. 2).\n- **Caveat:** The paper gives no numbers comparing the model with and without the window. The quality claim rests on its overall benchmark results, such as beating Llama 2 13B on all metrics (pp. 1, 3–4).\n\n## Gemma 3: little cost on perplexity\n- **Setup:** Five local layers for every global layer. Local layers attend over only 1024 tokens, and only global layers see the full context (pp. 1–2).\n- **Local-to-global ratio:** Changing the ratio from 1:1 to 7:1 has minimal effect on perplexity (Fig. 3, p. 6).\n- **Window size:** The window \"can be reduced significantly without impacting perplexity.\" Sizes from 512 to 4096 were tested (Fig. 4, p. 7).\n- **Memory:** With global attention only, the KV cache adds about 60% memory overhead. With a 1:3 ratio and a 1024-token window, that drops below 15% (p. 7).\n- **Caveats:**\n  - These ablations use text-only models, mostly at 2B scale, and measure only perplexity (pp. 6–7). They are not long-context retrieval tests.\n  - The models generalize to 128K tokens but \"rapidly degrade\" beyond that (p. 7). The report does not attribute this to the window.\n\n## Phi-4: switched away from a sliding window, but didn't test the effect\n- **The change:** Phi-4 uses full attention over its 4K context instead of the 2K sliding window used in phi-3-medium (p. 7).\n- **Caveat:** The report never measures this change on its own. Phi-4's improvements over phi-3-medium (Table 2, p. 8) mix in data and training changes, so they can't be credited to the attention change.\n\n## GLM-5: the clearest evidence of a cost\nThe ablation converts GLM-9B, a full-attention model, to use a 1:1 mix of full and 4096-token window layers.\n\n**Without any extra training** (Table 4, p. 7), on the RULER benchmark:\n\n| Context length | Full attention | Alternating window layers | Searched layer pattern |\n|---|---|---|---|\n| 4K | 95.19 | 94.87 | 95.78 |\n| 128K | 75.28 | 6.51 | 53.95 |\n\nBoth window variants keep almost all of their quality at 4K but collapse at long context.\n\n**After 190B tokens of continued training** (Table 5, p. 7), points lost at 128K:\n- Alternating window layers: −30.35 on RULER and −26.50 on RepoQA.\n- Searched layer pattern: −5.69 on RULER and −14.66 on RepoQA.\n\n**Conclusion:** The authors say all of these efficient-attention methods \"incur an inherent accuracy gap on fine-grained retrieval tasks\" because of unavoidable information loss, \"even when half of the layers retain full attention\" (p. 7). They chose DeepSeek Sparse Attention (DSA) instead, which they describe as lossless by construction (pp. 5–7).\n\n## Putting it together\n- **Little cost:** short contexts and perplexity-style measures (Gemma 3; GLM-5 at 4K).\n- **Real cost:** long-context retrieval at 64K–128K (GLM-5).\n- **No measurement:** Mistral asserts no quality loss without a direct comparison, and Phi-4 doesn't test its change.\n\n**Possible reason Gemma 3 and GLM-5 disagree (my inference, not stated in the papers):** Gemma 3 was trained with its window pattern from the start, while GLM-5 converted an already-trained full-attention model. They also used different metrics: perplexity for Gemma 3, retrieval benchmarks for GLM-5. No report tests whether either factor explains the gap.",
+ "input": 315291,
+ "cache_write": 315289,
+ "cache_read": 0,
+ "output": 2701,
+ "thinking": 1074,
+ "usd": 2.57634,
+ "seconds": 37.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.22,
+ "date": "2026-10-25 14:52"
+}

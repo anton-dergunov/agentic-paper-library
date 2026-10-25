@@ -1,14 +1,20 @@
 {
- "key": "73056976e3dc46ab",
- "usd": 0.028564000000000003,
+ "key": "363aa682d56621ba",
+ "usd": 0.045888,
  "grades": {
-  "E3/x-pdf/X4-r1": {
+  "E3/x-txt/X4-r1": {
    "score": "correct",
    "page_ok": null,
    "confident_wrong": false,
    "note": ""
   },
-  "E3/x-txt/X4-r1": {
+  "E3/x-lib/X4-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X4-r1": {
    "score": "correct",
    "page_ok": null,
    "confident_wrong": false,

@@ -1,0 +1,30 @@
+{
+ "key": "008b6a1aedb6e3ba",
+ "usd": 0.060492,
+ "grades": {
+  "E3/x-txt/X7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-att/X7-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "s1 53.6% figure not tied directly to p. 3"
+  }
+ }
+}

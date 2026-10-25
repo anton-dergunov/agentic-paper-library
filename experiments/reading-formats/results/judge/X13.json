@@ -1,0 +1,24 @@
+{
+ "key": "6a7e53b550209a5d",
+ "usd": 0.109284,
+ "grades": {
+  "E3/x-pdf/X13-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Names all 20 plus acceptable extras; says 30 papers but lists 26."
+  },
+  "E3/x-lib/X13-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Names all 20 plus acceptable extras."
+  },
+  "E3/x-txt/X13-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Names all 20; Control-Plane counted among 28 despite having no results."
+  }
+ }
+}

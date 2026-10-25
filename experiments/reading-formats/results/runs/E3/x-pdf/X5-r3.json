@@ -1,0 +1,42 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X5",
+ "rep": 3,
+ "paper": [],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "I found **three papers that each propose a remedy**. A fourth paper, the original *Lost in the Middle*, tests one possible fix and reports that it doesn't work. Page numbers below are PDF page numbers.\n\n## 1. *Found in the Middle: Calibrating Positional Attention Bias…* (`llm/context/`)\n**What it changes: the model's attention while it runs. No retraining is needed.**\n- **Diagnosis:** documents near the start and end of the input get more attention, and this U-shape stays even when the documents are shuffled. So the bias doesn't depend on content (p. 4). The paper attributes lost-in-the-middle to \"the dominating force of positional bias\" (p. 4).\n- **Model:** attention on a document is treated as relevance plus a position term, `Attn = rel(doc) + bias(k) + ε` (p. 5). Subtracting the attention a dummy document gets at the same position cancels the position term. The paper calls the result \"calibrated attention\" and the whole mechanism \"found-in-the-middle\" (p. 6).\n- **Intervention:** attention on each document's tokens is rescaled so a document's total is proportional to `Softmax(rel, t)`. The total amount of attention stays the same (p. 6).\n- **Results:**\n  - When the answer document is in the middle, the method gains 6–15 points on NaturalQuestions and SynthWiki, tested with Vicuna-7B-16k and Tulu-2-7B (p. 7).\n  - It also improves results when applied on top of document reordering (p. 8).\n  - The authors argue that reordering-style workarounds \"do not fundamentally improve\" the model's ability to use long contexts (p. 8).\n\n## 2. *Make Your LLM Fully Utilize the Context* (`llm/context/`)\n**What it changes: the training data. The paper calls its method IN2 (information-intensive) training.**\n- **Diagnosis:** the bias is learned from ordinary training data. In pretraining, the next token depends mostly on nearby tokens, and in fine-tuning the system message usually sits at the start. Together these teach the model that important information is at the beginning and end (p. 2).\n- **Fix:** a synthetic long-context question-answering dataset built for fine-tuning (pp. 2–3):\n  - Contexts of 4K–32K tokens are built from short segments of about 128 tokens.\n  - The segments the answer needs are placed at random positions.\n  - Text comes from C4, and GPT-4-Turbo writes the question-answer pairs.\n  - There are two question types: questions about one specific segment, and multi-hop questions that combine two or more segments (pp. 3–4).\n- **Result:** applying this to Mistral-7B gives FILM-7B. Its retrieval accuracy stays steady across all positions, while the base model loses accuracy in the middle (p. 8). NarrativeQA rises from 23.5 to 26.9 F1, and MMLU is essentially unchanged (59.3 → 59.2) (p. 2).\n\n## 3. *LongLLMLingua: … Prompt Compression* (`llm/context/`)\n**What it changes: the prompt, by compressing it and reordering documents.**\n- It names position bias (\"lost in the middle\") as one of three problems with long contexts, along with cost and noise (p. 1).\n- **Fix:** after a first, question-aware compression pass, each document has a relevance score. The documents are then reordered by that score, because models perform best when the relevant information comes at the beginning (Sec. 4.2, p. 4). The paper lists this as one of its contributions: \"a document reordering strategy to minimize position bias\" (p. 1).\n- It reports that reordering helps on every task type tested, even timeline-ordering tasks, and \"can effectively alleviate the 'lost in the middle' issue\" (p. 14).\n\n## Tested but not effective: *Lost in the Middle* (Liu et al.)\n- The paper tries **query-aware contextualization**, which places the question both before and after the documents (p. 8).\n- On key-value retrieval, accuracy becomes near-perfect, up from a worst case of 45.6% (p. 8).\n- On multi-document question answering, it barely changes the position effect. Results improve slightly when the answer is first and get slightly worse otherwise (p. 8).\n\n## Not remedies\n*Retrieval meets Long Context LLMs* only confirms the effect in Llama2-70B and calls it \"an open research topic\" (pp. 7, 9). The other matches I searched (surveys, benchmarks such as HELMET and NoLiMa, memory papers) cite the phenomenon but don't propose a fix.\n\n**In short:**\n- Found in the Middle fixes attention at inference time.\n- IN2/FILM fixes it with fine-tuning data.\n- LongLLMLingua works around it by moving the important documents to the start of the prompt.",
+ "input": 266405,
+ "cache_write": 37387,
+ "cache_read": 228996,
+ "output": 5333,
+ "thinking": 899,
+ "usd": 0.45164319999999997,
+ "seconds": 238.0,
+ "turns": 13,
+ "calls": [
+  "Bash find . -type f | head -100 && which pdftotext",
+  "Bash find . -type f -name '*.pdf' | wc -l; find . -type d | grep -v '^\\.$'",
+  "Bash mkdir -p /tmp/lim_txt && cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf && find llm nlp search-and-ranking -name '*.pdf' -print0 | while IFS= read -r -d '' f; do o=\"/tmp/lim_txt/$(echo \"$f\" | tr '/' '__').txt\"; [ -f \"$o\" ] || pdftotext -q \"$f\" \"$o\"; done; grep -lic \"lost in the",
+  "Bash cd /tmp/lim_txt && for f in *.txt; do n=$(grep -oiE 'lost[ -]in[ -]the[ -]middle' \"$f\" | wc -l); [ $n -gt 0 ] && echo \"$n $f\"; done | sort -rn | head -50",
+  "Bash find . -iname '*middle*' -o -iname '*position*bias*' -o -iname '*positional*' | head; cd /tmp/lim_txt && grep -liE 'position(al)? bias|middle of (the )?(input|context)' *.txt | head -40",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && for f in \"Found in the Middle\"*.pdf \"Make Your LLM\"*.pdf \"LongLLMLingua\"*.pdf \"Lost in the Middle\"*.pdf \"Retrieval meets Long\"*.pdf; do echo \"=== $f\"; pdftotext -q \"$f\" - | awk 'BEGIN{p=1} {n=split($0,a,\"\\f\"); for(",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && pdftotext -q -f 4 -l 7 \"Found in the Middle\"*.pdf - | head -400",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && pdftotext -q -f 8 -l 8 \"Found in the Middle\"*.pdf - | head -60; echo =====IN2; pdftotext -q -f 2 -l 4 \"Make Your LLM\"*.pdf - | head -250",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && pdftotext -q -f 8 -l 9 \"Make Your LLM\"*.pdf - | head -120; echo =====LLL; pdftotext -q -f 1 -l 1 \"LongLLMLingua\"*.pdf - | sed -n '1,80p'; echo ---p4; pdftotext -q -f 4 -l 5 \"LongLLMLingua\"*.pdf - | grep -n -i -B12 ",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && pdftotext -q -f 2 -l 4 \"Make Your LLM\"*.pdf - | grep -v '^\\s*$' | sed -n '1,200p'",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && echo \"--- LLL p1\"; pdftotext -q -f 1 -l 2 \"LongLLMLingua\"*.pdf - | grep -v '^\\s*$' | sed -n '1,70p'; echo \"--- LLL p4-5\"; pdftotext -q -f 4 -l 5 \"LongLLMLingua\"*.pdf - | grep -n -i -B15 -A10 'reorder'; echo \"--- Li",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/context\" && pdftotext -q -f 5 -l 5 \"LongLLMLingua\"*.pdf - | grep -v '^\\s*$' | sed -n '1,25p'; echo \"--- LLL p7\"; pdftotext -q -f 7 -l 7 \"LongLLMLingua\"*.pdf - | grep -i -B3 -A3 'reorder\\|21.4\\|lost' | head -50; echo \"--- LiM p"
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash cd /tmp/lim_txt && for f in *.txt; do n=$(grep -oiE 'lost[ -]in[ -]the[ -]middle' \"$f\" | wc -l); [ $n -gt 0 ] && echo \"$n $f\"; done | sort -rn | head -50",
+  "Bash find . -iname '*middle*' -o -iname '*position*bias*' -o -iname '*positional*' | head; cd /tmp/lim_txt && grep -liE 'position(al)? bias|middle of (the )?(input|context)' *.txt | head -40"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.84,
+ "date": "2026-10-25 15:31"
+}

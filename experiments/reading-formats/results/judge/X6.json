@@ -1,0 +1,30 @@
+{
+ "key": "b59abaae1baeef48",
+ "usd": 0.098512,
+ "grades": {
+  "E3/x-pdf/X6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-att/X6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Does not state γ = 27.8, which the question does not require."
+  },
+  "E3/x-txt/X6-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

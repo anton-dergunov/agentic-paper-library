@@ -1,0 +1,37 @@
+{
+ "exp": "E3",
+ "cond": "x-lib",
+ "qid": "X2",
+ "rep": 1,
+ "paper": [
+  "dpo",
+  "orpo",
+  "simpo"
+ ],
+ "form": "x-lib",
+ "page": null,
+ "status": "ok",
+ "answer": "Only two of the three papers report this number. The DPO paper reports no AlpacaEval or Mistral results at all, so it has no number to give.\n\n| Paper | Its own method on Mistral-7B | AlpacaEval 2 | Where |\n|---|---|---|---|\n| **DPO** (Rafailov et al.) | — | Not reported. The paper never mentions AlpacaEval or Mistral. | — |\n| **ORPO** (Hong et al.) | Mistral-ORPO-α (trained on UltraFeedback) | 11.33% (SE 0.97) | [ORPO, p. 5, Table 1](http://pdf.invalid/llm/post-training/preference-learning/ORPO.%20Monolithic%20Preference%20Optimization%20without%20Reference%20Model.pdf?dest=table.1&page=5) |\n| | Mistral-ORPO-β (trained on cleaned UltraFeedback) | 12.20% (SE 0.98) | same table |\n| **SimPO** (Meng et al.) | SimPO, Mistral-Base | 21.5 LC / 20.8 WR | [SimPO, p. 6, Table 4](http://pdf.invalid/llm/post-training/preference-learning/SimPO.%20Simple%20Preference%20Optimization%20with%20a%20Reference-Free%20Reward.pdf?dest=table.4&page=6) |\n| | SimPO, Mistral-Instruct | 32.1 LC / 34.8 WR | same table |\n\n**These numbers can't be compared directly:**\n- **Different metrics.** ORPO reports only one AlpacaEval 2.0 win rate, with its standard error (p. 5, Table 1). SimPO reports two: a length-controlled (LC) win rate and a raw win rate (WR) (p. 6, Table 4). ORPO's 12.20% sits next to SimPO's raw WR column, not its LC column.\n- **Different setups.** ORPO trains Mistral 7B in a single stage on UltraFeedback (p. 5). SimPO's \"Base\" setting first fine-tunes on UltraChat and then on preferences. Its \"Instruct\" setting starts from Mistral-7B-Instruct-v0.2 (p. 4).\n\n**Where a DPO number on Mistral comes from:** in this folder, only from SimPO's own reruns of DPO. These scored 15.1 LC / 12.5 WR on Mistral-Base and 26.8 LC / 24.9 WR on Mistral-Instruct (p. 6, Table 4). SimPO also reran ORPO and got 14.7 / 12.2 on Base and 24.5 / 24.9 on Instruct (same table). These are SimPO's runs, not figures DPO or ORPO published.\n\nI read the numbers from the papers' markdown tables, which are converted from arXiv's HTML, and checked them against each paper's note. I didn't open the PDFs.",
+ "input": 162959,
+ "cache_write": 28049,
+ "cache_read": 134896,
+ "output": 3138,
+ "thinking": 619,
+ "usd": 0.3141872,
+ "seconds": 35.9,
+ "turns": 7,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; ls; find . -iname \"*Direct Preference*\" -o -iname \"*ORPO*\" -o -iname \"*SimPO*\" | grep -v images",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/preference-learning\"; for f in Direct*Secretly*.md ORPO*.md SimPO*.md; do echo \"=== $f\"; head -12 \"$f\" | grep -E \"source|arxiv\"; grep -n -iE \"alpacaeval|mistral|^#\" \"$f\" | head -80; done",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/preference-learning\"; grep -c -iE \"alpacaeval|mistral\" Direct*Secretly*.md; for f in ORPO*.md SimPO*.md; do echo \"=== $f\"; head -12 \"$f\" | grep -E \"source\"; grep -n -iE \"alpacaeval|mistral\" \"$f\" | cu",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/preference-learning\"; f=\"SimPO. Simple Preference Optimization with a Reference-Free Reward.md\"; grep -n \"(p\\. [0-9]*)\" \"$f\" | head -30; sed -n 176,200p \"$f\"; awk 'NR>=200 && NR<=495' \"$f\" | grep -n ",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/preference-learning\"; f=\"SimPO. Simple Preference Optimization with a Reference-Free Reward.md\"; sed -n 335,342p \"$f\"; grep -n -A6 \">DPO\" \"$f\" | sed -n 1,20p; grep -n \"(p\\. [0-9]*)\" ORPO*.md | head -",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/preference-learning\"; sed -n 247,258p \"SimPO. Simple Preference Optimization with a Reference-Free Reward.md\" | tr '\\n' ' '"
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-25 14:59"
+}

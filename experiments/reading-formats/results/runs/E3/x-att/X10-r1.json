@@ -1,0 +1,24 @@
+{
+ "exp": "E3",
+ "cond": "x-att",
+ "qid": "X10",
+ "rep": 1,
+ "paper": [
+  "memoryr1"
+ ],
+ "form": "pdfs",
+ "page": null,
+ "status": "ok",
+ "answer": "**Training questions:** Memory-R1 is trained on **152 QA pairs** from LoCoMo, a 1:1:8 train/validation/test split of 152/81/1,307 questions (p. 1, p. 5). It is trained only on LoCoMo and tested zero-shot on MSC and LongMemEval (p. 5).\n\n**Against Mem0 on LLaMA-3.1-8B (LoCoMo, overall scores, Table 1, p. 6):**\n\n| Method | F1 | BLEU-1 | LLM-as-a-Judge |\n|---|---|---|---|\n| Mem0 | 30.41 | 22.22 | 45.68 |\n| Memory-R1-PPO | 41.05 | 32.91 | 57.54 |\n| Memory-R1-GRPO | **45.02** | **37.51** | **62.74** |\n\nThe paper's improvement percentages are inconsistent:\n- The introduction says Memory-R1-GRPO improves on Mem0 by 28% F1, 34% BLEU-1 and 30% Judge (p. 2).\n- The results section gives nearly the same figures (28.5%, 34.0%, 30.2%) but says they are relative to **MemoryOS**, not Mem0 (p. 6).\n\nThe table supports the MemoryOS version. MemoryOS scores 35.04 / 27.99 / 48.20, and the gaps to GRPO work out to about 28.5%, 34.0% and 30.2% (p. 6).\n\nComputed from the table, GRPO's gain over Mem0 is actually larger, about **+48% F1, +69% BLEU-1 and +37% Judge**. This is my own calculation, not a figure stated in the paper.\n\n**Gain on LongMemEval (zero-shot, overall F1 / BLEU-1 / Judge):**\nThe paper gives no single headline number for this, so here are the main comparisons.\n\n- **Over the untuned base model** (Table 4, p. 18):\n  - LLaMA-3.1-8B: 31.3 / 25.0 / 44.2 → 45.2 / 39.3 / 55.4 with GRPO, about +14 / +14 / +11 points.\n  - Qwen-2.5-7B: 35.5 / 28.3 / 53.2 → 46.7 / 41.1 / 57.8 with GRPO, about +11 / +13 / +5 points.\n- **Over Mem0** (Table 5, p. 18):\n  - LLaMA: 31.41 / 21.69 / 41.20 vs. GRPO 45.20 / 39.30 / 55.40.\n  - Qwen: 38.44 / 34.53 / 46.80 vs. GRPO 46.70 / 41.10 / 57.80.\n- **Over the strongest baseline** (Table 5, p. 18), the margin is much smaller. On LLaMA, Memory-SFT scores 43.89 / 36.72 / 54.80, so GRPO leads by only about +1.3 F1 and +0.6 Judge.\n\nThe paper says GRPO beats all baselines on both backbones (p. 17). Table 5 shows two exceptions for the PPO variant:\n- On LLaMA, PPO's F1 (43.60) is slightly below Memory-SFT's.\n- On Qwen, PPO's Judge score (47.40) is well below A-Mem's and Memory-SFT's (54.80) (p. 18).",
+ "input": 63033,
+ "cache_write": 63031,
+ "cache_read": 0,
+ "output": 2137,
+ "thinking": 997,
+ "usd": 0.546996,
+ "seconds": 21.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-25 14:53"
+}

@@ -1,0 +1,42 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X8",
+ "rep": 1,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "**Short answer:** the reports disagree, because they test different things. Gemma 3 finds almost no quality cost when it measures perplexity. GLM-5 finds a large cost on long-context tasks when the windowed layers are placed naively, and a much smaller one when they are chosen carefully. Mistral 7B uses sliding windows but never measures their effect on quality. Phi-4 drops the sliding window and does not say why. Page numbers below are the PDF pages; for GLM-5 and Gemma 3 they match the printed page numbers.\n\n### Mistral 7B: adopts it, gives no quality ablation\n- Each token attends to at most W = 4096 tokens in the previous layer. Because layers stack, tokens outside the window still affect the prediction, giving a theoretical attention span of about 131K tokens (p. 2).\n- The stated benefits are cost: about 2x speed over vanilla attention at 16K sequence length (p. 2), and a fixed-size rolling-buffer cache (p. 2).\n- The report only claims, in general terms, that the attention mechanisms \"contribute to the enhanced performance and efficiency\" (p. 1). It contains no experiment isolating the window's effect on quality.\n\n### Gemma 3: little to no cost in perplexity\n- Gemma 3 uses 5 local sliding-window layers for every global layer (p. 2), with a 1024-token window in its architecture (p. 7, Fig. 6).\n- Changing the local:global ratio has \"minimal impact on perplexity\", even at 7:1 (p. 6, Fig. 3).\n- \"The sliding window can be reduced significantly without impacting perplexity,\" tested from 512 to 4096 tokens (pp. 6–7, Fig. 4).\n- The gain is memory: KV-cache overhead falls from 60% with global-only attention to under 15% with a 1:3 ratio and sw=1024, at a 32K context (p. 7, Fig. 5).\n- Caveats: these ablations use 2B/9B text-only models and validation perplexity (pp. 6–7). They are not long-context task benchmarks.\n\n### Phi-4: drops it, no reason given\n- Phi-4 uses \"full attention over the 4K context length, rather than a 2K sliding window used in phi-3-medium\" (p. 7). There is no ablation or explanation, so the report doesn't show whether the window hurt quality.\n\n### GLM-5: large long-context cost unless layers are chosen well\n- On a GLM-9B base with a 128K context, the authors convert half the layers to SWA (1:1 ratio, 4096-token window) (pp. 6–7).\n- **Without retraining** (RULER, Table 4, p. 7):\n  - With a fixed alternating pattern, scores collapse at long lengths: 54.02 against 93.67 for full attention at the second length tested, and 6.51 against 75.28 at 128K.\n  - With layers picked by beam search, scores stay much closer: 92.54 and 53.95 at those lengths.\n- **After continued training** (Table 5, p. 7):\n  - With the alternating pattern, RULER@128K drops by 30.35 points, which the authors call \"catastrophic degradation\" on long-context tasks.\n  - With search-based layer selection, the drop on the same benchmark is 5.69 points. Drops on the other benchmarks are 1.81, 2.76 and 14.66 at 128K.\n- GLM-5 itself uses DeepSeek Sparse Attention instead, which picks tokens based on content \"unlike fixed patterns (like sliding windows)\" (p. 5).\n\n### Overall\nMeasured by short-context perplexity, sliding windows cost almost nothing, even with small windows and high local ratios (Gemma 3, pp. 6–7). Measured by long-context retrieval and reasoning, they can cost a lot, depending heavily on which layers are windowed (GLM-5, p. 7). None of these papers runs both kinds of test on the same model, so the difference may come from the evaluation rather than the method.",
+ "input": 176315,
+ "cache_write": 20592,
+ "cache_read": 155705,
+ "output": 4111,
+ "thinking": 577,
+ "usd": 0.278169,
+ "seconds": 66.8,
+ "turns": 9,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -name \"*.pdf\" | head -100; which pdftotext",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -iname \"*.pdf\" | grep -iE \"mistral|gemma|phi-4|phi4|glm\"",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; mkdir -p /tmp/swa; for f in \"Phi-4 Technical Report\" \"GLM-5. from Vibe Coding to Agentic Engineering\" \"Mistral 7B\" \"Gemma 3 Technical Report\"; do pdftotext -layout \"$f.pdf\" \"/tmp/swa/$f.txt\"; echo \"=== $f\"; p",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; pdftotext -f 2 -l 2 \"Gemma 3 Technical Report.pdf\" - | grep -iA8 \"5:1 interleav\"; echo ======; pdftotext -f 6 -l 7 \"Gemma 3 Technical Report.pdf\" - | grep -iB3 -A12 \"Local:Global attention\\|Sliding window siz",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; pdftotext -f 2 -l 2 \"Gemma 3 Technical Report.pdf\" - | grep -A10 \"attention (Beltagy\"; echo \"#####\"; pdftotext -f 6 -l 7 \"Gemma 3 Technical Report.pdf\" - | sed -n '/Local:Global attention layers/,/Enabling lo",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; pdftotext -f 2 -l 3 -layout \"Gemma 3 Technical Report.pdf\" - | grep -iE \"1024 tokens|span of|sliding window self|global self-attention\" ; echo ###; pdftotext \"Mistral 7B.pdf\" - | grep -icE \"ablat\"; for p in 6",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models; pdftotext -f 2 -l 2 \"Gemma 3 Technical Report.pdf\" /tmp/swa/g2.txt; grep -n -A6 \"attention (Beltagy\" /tmp/swa/g2.txt; grep -n \"1024\" /tmp/swa/g2.txt; pdftotext \"Mistral 7B.pdf\" /tmp/swa/m.txt; grep -ic ablat ",
+  "Bash grep -n -iE \"local layer|1024|every global\" /tmp/swa/g2.txt; grep -n -i ablat /tmp/swa/m.txt"
+ ],
+ "opened_pdf": true,
+ "outside": [
+  "Bash grep -n -iE \"local layer|1024|every global\" /tmp/swa/g2.txt; grep -n -i ablat /tmp/swa/m.txt"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.65,
+ "date": "2026-10-25 15:13"
+}

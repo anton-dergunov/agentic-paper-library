@@ -1,0 +1,30 @@
+{
+ "key": "72a111bca5b57fe0",
+ "usd": 0.08244,
+ "grades": {
+  "E3/x-txt/X10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Uses Memory-SFT 54.8 as baseline; disputes gold's A-Mem 54.2 comparison"
+  },
+  "E3/x-att/X10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Compares 55.4 to Memory-SFT 54.8, not A-Mem 54.2"
+  },
+  "E3/x-pdf/X10-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Compares 55.4 to Memory-SFT 54.8, not A-Mem 54.2"
+  }
+ }
+}

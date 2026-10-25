@@ -1,0 +1,60 @@
+{
+ "key": "b48a94f9db09d8e9",
+ "usd": 0.194888,
+ "grades": {
+  "E3/x-pdf/X5-r3": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Misses STRING (position-index reuse) from Why Does Effective Context Fall Short."
+  },
+  "E3/x-lib/X5-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X5-r1": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Misses STRING position-index remedy."
+  },
+  "E3/x-txt/X5-r1": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Misses STRING position-index remedy."
+  },
+  "E3/x-txt/X5-r3": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Misses STRING position-index remedy."
+  },
+  "E3/x-lib/X5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-pdf/X5-r2": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Misses STRING position-index remedy."
+  },
+  "E3/x-lib/X5-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-txt/X5-r2": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Misses STRING position-index remedy."
+  }
+ }
+}

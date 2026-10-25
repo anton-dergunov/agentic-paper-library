@@ -1,0 +1,38 @@
+{
+ "exp": "E3",
+ "cond": "x-lib",
+ "qid": "X7",
+ "rep": 1,
+ "paper": [
+  "selfinstruct",
+  "s1",
+  "openthoughts"
+ ],
+ "form": "x-lib",
+ "page": null,
+ "status": "ok",
+ "answer": "Roughly half the training data is correct in both Self-Instruct and s1, and both papers keep the wrong examples on purpose. OpenThoughts finds that filtering answers with a GPT verifier makes the trained model slightly worse, not better.\n\n| Paper | What was measured | Share correct |\n|---|---|---|\n| Self-Instruct | Generated examples with instruction, input and output all valid | **54%** |\n| s1 | Distilled answers in s1K judged correct | **53.6%** (63.0% in s1K-1.1) |\n| OpenThoughts | Effect of GPT-4o-mini answer verification | No share given; it lowers scores, 40.0 vs 41.6 for random filtering |\n\n**Self-Instruct.** One author labelled 200 generated instructions, one instance each ([p. 4, §3.3](http://pdf.invalid/llm/post-training/data/Self-Instruct.%20Aligning%20Language%20Models%20with%20Self-Generated%20Instructions.pdf?dest=subsection.3.3&page=4)). The results are in [p. 4, Table 2](http://pdf.invalid/llm/post-training/data/Self-Instruct.%20Aligning%20Language%20Models%20with%20Self-Generated%20Instructions.pdf?dest=table.2&page=4):\n- the instruction describes a valid task: 92%;\n- the input fits the instruction: 79%;\n- the output is correct: 58%;\n- **all three fields valid: 54%.**\n\nThe authors argue that most of the wrong examples are still in the right format or partly correct, so they still help training (p. 4). Better data does help, though: regenerating every output with InstructGPT-003 improves the model by 10% in human evaluation ([p. 8, Figure 7](http://pdf.invalid/llm/post-training/data/Self-Instruct.%20Aligning%20Language%20Models%20with%20Self-Generated%20Instructions.pdf?dest=figure.7&page=8)).\n\n**s1.** The paper keeps incorrect distilled answers on purpose, because it cares about the reasoning process more than about fully correct solutions. Its grader judges **53.6% of s1K correct**, and 63.0% of the follow-up s1K-1.1, whose traces were regenerated with DeepSeek R1 ([p. 3, §2.2](http://pdf.invalid/llm/post-training/data/s1.%20Simple%20test-time%20scaling.pdf?dest=subsection.2.2&page=3); [p. 16, App. A](http://pdf.invalid/llm/post-training/data/s1.%20Simple%20test-time%20scaling.pdf?dest=appendix.A&page=16)). An LLM compares each answer with the reference solution. Claude 3.7 graded the final 1,000 samples; Claude 3.5 did the grading used to select them ([p. 19, §C.3](http://pdf.invalid/llm/post-training/data/s1.%20Simple%20test-time%20scaling.pdf?dest=subsection.C.3&page=19)).\n\n**OpenThoughts.** It reports no share of correct answers. It tests whether removing answers judged wrong improves the trained model:\n- **Setup:** 63,200 math answers are generated, each filter is applied, and 31,600 pairs are sampled from what remains. \"GPT Verification\" asks GPT-4o-mini whether each answer is correct ([p. 9, §4.5](http://pdf.invalid/llm/post-training/data/OpenThoughts.%20Data%20Recipes%20for%20Reasoning%20Models.pdf?dest=subsection.4.5&page=9); prompt on p. 59, §R.4.1).\n- **Result:** GPT verification scores **40.0** on average, below random filtering at 41.6 and no filtering at 41.9. Its math average drops to 61.4, against 64.8 and 65.6. Only science is higher: 48.3 against 46.7 and 46.4 ([p. 9, Table 7](http://pdf.invalid/llm/post-training/data/OpenThoughts.%20Data%20Recipes%20for%20Reasoning%20Models.pdf?dest=table.7&page=9)).\n- **Conclusion:** no filter beat using all answers, so OpenThoughts3 does no answer filtering at all (p. 9; p. 30).\n- **Earlier datasets:** in the older OpenThoughts-114K, verification raised the 32B model's average from 62.1 to 64.5. It lowered the 7B model's from 45.0 to 41.9 ([p. 30, Table 15](http://pdf.invalid/llm/post-training/data/OpenThoughts.%20Data%20Recipes%20for%20Reasoning%20Models.pdf?dest=table.15&page=30)).\n\n**Overall:** about half of each training set was correct, and that was enough. OpenThoughts adds that a correctness filter doesn't pay for the data it throws away, at least for 7B models trained on math. One caveat: Self-Instruct's 54% rests on 200 examples labelled by a single author.\n\nThese numbers come from the library's markdown copies (all converted from arXiv HTML) and agree with the papers' notes. I did not check them against the PDFs. Nothing changed, so there is no commit.",
+ "input": 155864,
+ "cache_write": 33578,
+ "cache_read": 122274,
+ "output": 3694,
+ "thinking": 417,
+ "usd": 0.3670068,
+ "seconds": 58.1,
+ "turns": 8,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; ls library; find library -iname \"*self-instruct*\" -o -iname \"s1*\" -o -iname \"*openthoughts*\" | grep -v images",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/data; for f in Self-Instruct*.md s1*.md OpenThoughts*.md; do echo \"=== $f\"; head -12 \"$f\" | grep -E \"source|title\"; done; grep -n -iE \"valid|^#+ \" Self-Instruct*.md | head -60",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; ls notes | grep -iE \"self-instruct|^s1|openthoughts\"; paperlib info \"Self-Instruct Aligning\" 2>&1 | tail -15; paperlib info \"s1 Simple test-time scaling\" 2>&1 | tail -15; paperlib info \"OpenThoughts Data Recipes\" 2>&1 | tail ",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis; f=\"library/llm/post-training/data/Self-Instruct. Aligning Language Models with Self-Generated Instructions.md\"; sed -n 115,126p \"$f\"; sed -n 218,224p \"$f\"; cd library/llm/post-training/data; grep -n -iE \"correct|grad|^#+ \" \"s",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/data; grep -n -iE \"verif|^#+ \" \"OpenThoughts. Data Recipes for Reasoning Models.md\" | head -120",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/data; sed -n 531,550p \"OpenThoughts. Data Recipes for Reasoning Models.md\"; sed -n 62,70p \"OpenThoughts. Data Recipes for Reasoning Models.md\"; grep -n -A8 \"^## Appendix A s1.1\" \"s1. Simple test-time ",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/lib-asis/library/llm/post-training/data; sed -n 1143,1150p \"OpenThoughts. Data Recipes for Reasoning Models.md\""
+ ],
+ "opened_pdf": false,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.58,
+ "date": "2026-10-25 15:03"
+}

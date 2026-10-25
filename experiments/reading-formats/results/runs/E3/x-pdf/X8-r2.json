@@ -1,0 +1,38 @@
+{
+ "exp": "E3",
+ "cond": "x-pdf",
+ "qid": "X8",
+ "rep": 2,
+ "paper": [
+  "mistral",
+  "gemma3",
+  "phi4",
+  "glm5"
+ ],
+ "form": "x-pdf",
+ "page": null,
+ "status": "ok",
+ "answer": "The four reports disagree. It depends on what you measure and how the window is added. Gemma 3 measured perplexity and found almost no cost. GLM-5 tested long-context retrieval and found the cost can be large. Mistral 7B uses a window but never tests what it costs. Phi-4 dropped its window but doesn't say why. Page numbers below are the PDF page numbers, which match the numbers printed on the pages.\n\n## Mistral 7B: uses it, but doesn't test its cost\n- Every layer uses a 4,096-token sliding window (p. 2, Table 1). Each token sees at most W tokens of the layer below. Because layers stack, information can still travel about k × W tokens after k layers, which gives a theoretical span of about 131K tokens (p. 2).\n- The gains it reports are about efficiency. At 16K sequence length the attention runs about 2x faster than a vanilla baseline (p. 2). A fixed-size \"rolling buffer\" cache cuts cache memory by 8x at 32K tokens, \"without impacting the model quality\" (p. 2).\n- There is no ablation against full attention. The quality evidence is indirect: Mistral 7B beats Llama 2 13B on every benchmark tested (pp. 3–4, Table 2). That shows the window didn't stop the model from being strong, not that it was free.\n\n## Gemma 3: minimal cost, measured by perplexity\n- Gemma 3 has 5 local sliding-window layers for every global layer, and the local window is only 1,024 tokens (pp. 1–2). The goal was to cut KV-cache memory at long context (p. 1).\n- **Local-to-global ratio:** going from 1:1 (Gemma 2's setting) up to 7:1 has \"minimal impact on perplexity\" (p. 6, Fig. 3).\n- **Window size:** the window \"can be reduced significantly without impacting perplexity\" across sizes from 512 to 4,096 (p. 7, Fig. 4). The caption and the legend of Fig. 4 describe the ratios tested differently, but either way the effect is small.\n- **Memory:** with full attention, the KV cache adds about 60% memory overhead at 32K context. With a 1:3 ratio and a 1,024-token window that falls below 15% (p. 7, Fig. 5).\n- **Caveats:** these ablations use 2B and 9B text-only models and only measure validation perplexity (pp. 6–7). They don't test long-context retrieval. The paper also says the models generalise to 128K context \"but rapidly degrade as we continue to scale\" (p. 7).\n\n## Phi-4: switched back to full attention\n- Phi-4 uses \"full attention over the 4K context length, rather than a 2K sliding window used in phi-3-medium\" (p. 7). The report gives no reason for the change and no comparison.\n\n## GLM-5: the cost depends on where the window goes, and can be large\n- The ablations take GLM-9B (40 layers, full attention, 128K context) and turn half of its layers into 4,096-token window layers (pp. 6–7).\n- **Without retraining (RULER benchmark, Table 4, p. 7):**\n  - Alternating window and full layers barely matters at 4K (95.19 → 94.87). It collapses at longer lengths: 54.02 at 8K and 6.51 at 128K, against 75.28 for full attention.\n  - A layer pattern chosen by search keeps most of the score (53.95 at 128K, 82.52 at 32K). The search was run only at 16K, yet the pattern still worked at other lengths (pp. 6–7).\n- **After 190B tokens of continued training at 64K (Table 5, p. 7):**\n  - The alternating layout is still \"catastrophic\": −30.35 on RULER@128K and −26.50 on RepoQA@128K.\n  - The searched pattern narrows the gap to −5.69 on RULER@128K, but still loses −14.66 on RepoQA@128K.\n- **Conclusion:** the authors say all these efficient-attention variants keep \"an inherent accuracy gap on fine-grained retrieval tasks,\" even with half the layers on full attention (p. 7). For that reason GLM-5 uses DeepSeek Sparse Attention, which picks tokens by content \"unlike fixed patterns (like sliding windows)\" (p. 5). They call it lossless by design (p. 7).\n\n## Overall\nOn perplexity and short-context benchmarks, a sliding window costs little, and Gemma 3 shows you can push it hard (5:1 ratio, 1,024-token window) for big memory savings (pp. 6–7). On long-context retrieval the cost is real. GLM-5 shows that a naive alternating layout breaks retrieval past the window, and even a well-chosen layout plus retraining leaves a gap of several points (p. 7). Mistral's \"no quality impact\" statement is about its cache design and isn't backed by an ablation (p. 2). Phi-4's move back to full attention is a design choice with no reason given (p. 7).",
+ "input": 105210,
+ "cache_write": 25882,
+ "cache_read": 79316,
+ "output": 3177,
+ "thinking": 255,
+ "usd": 0.2865072,
+ "seconds": 44.4,
+ "turns": 7,
+ "calls": [
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -name \"*.pdf\" | head -100; which pdftotext",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/pdf; find . -name \"*.pdf\" | grep -iE \"mistral|gemma|phi-4|phi 4|glm\"",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models\"; mkdir -p /tmp/swa; for f in \"Phi-4 Technical Report\" \"GLM-5. from Vibe Coding to Agentic Engineering\" \"Mistral 7B\" \"Gemma 3 Technical Report\"; do n=$(pdfinfo \"$f.pdf\" | awk '/Pages/{print $2}'); for p in $(",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models\"; for p in 1 2 3 4; do echo \"=== Mistral p$p\"; pdftotext -f $p -l $p \"Mistral 7B.pdf\" -; done; echo \"=== Phi p7\"; pdftotext -f 7 -l 7 \"Phi-4 Technical Report.pdf\" - | head -60",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models\"; for p in 1 2 6 7; do echo \"=== Gemma p$p\"; pdftotext -f $p -l $p \"Gemma 3 Technical Report.pdf\" -; done",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/pdf/llm/foundation-models\"; for p in 5 6 7; do echo \"=== GLM p$p\"; pdftotext -f $p -l $p \"GLM-5. from Vibe Coding to Agentic Engineering.pdf\" -; done"
+ ],
+ "opened_pdf": true,
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.84,
+ "date": "2026-10-25 15:32"
+}
