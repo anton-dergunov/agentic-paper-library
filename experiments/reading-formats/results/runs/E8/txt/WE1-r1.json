@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WE1",
+ "rep": 1,
+ "paper": "edm",
+ "form": "txt",
+ "page": 3,
+ "status": "ok",
+ "answer": "**Noise schedule:** In the paper's framework, the VP model uses\n\nσ(t) = √( e^{½ β_d t² + β_min t} − 1 )\n\nThis appears in the \"Schedule\" row of Table 1 (p. 3). It is derived in Appendix C.1.1 as Eq. 163 (p. 30), by substituting the VP SDE's drift and diffusion coefficients into the general formula for σ(t).\n\n**Parameter values:** Table 1 gives β_d = 19.9 and β_min = 0.1 (p. 3). These come from Song et al.'s choices:\n- β_d is defined as β_max − β_min (p. 30).\n- Song et al. set β_min = 0.1 and β_max = 20 (p. 30).\n- So β_d = 20 − 0.1 = 19.9.",
+ "input": 65753,
+ "cache_write": 65751,
+ "cache_read": 0,
+ "output": 543,
+ "thinking": 272,
+ "usd": 0.536876,
+ "seconds": 6.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-26 01:18"
+}

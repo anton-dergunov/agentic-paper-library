@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WE1",
+ "rep": 1,
+ "paper": "edm",
+ "form": "c0",
+ "page": 3,
+ "status": "ok",
+ "answer": "In EDM (Karras et al., 2022), Table 1 gives the original VP model's schedule as:\n\n**σ(t) = √( e^{½ β_d t² + β_min t} − 1 )**\n\nwith **β_d = 19.9** and **β_min = 0.1**.\n\nThese match the original continuous VP-SDE of Song et al., where β(t) runs linearly from 0.1 to 20, so β_d = 20 − 0.1.\n\nThe same table pairs this σ(t) with:\n\n- **Scaling:** s(t) = 1/√(e^{½ β_d t² + β_min t}), equivalently s(t) = 1/√(σ(t)² + 1).\n- **Time running from 1 down to ε_s:** ε_s = 10⁻³.",
+ "input": 825,
+ "cache_write": 823,
+ "cache_read": 0,
+ "output": 375,
+ "thinking": 125,
+ "usd": 0.014092,
+ "seconds": 4.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-26 01:18"
+}

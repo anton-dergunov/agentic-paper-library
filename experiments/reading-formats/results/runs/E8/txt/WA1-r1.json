@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WA1",
+ "rep": 1,
+ "paper": "anatomy",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "**PR(A) = (1 − d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn))**\n\n- **T1…Tn** are the pages that point to page A, which the paper calls \"citations.\" (p. 109)\n- **d** is a damping factor that can be set between 0 and 1. The authors usually set it to 0.85. (p. 109)\n- **C(T)** is the number of links going out of page T. So each linking page's PageRank is divided by its number of outgoing links. (p. 110)\n\n**Why it's built this way:** PageRank extends simple citation counting in two ways. It does not count links from all pages equally, and it normalizes by the number of links on a page. (p. 109)\n\n**Other properties the paper states:**\n- The PageRanks form a probability distribution over Web pages, so all pages' PageRanks sum to one. (p. 110)\n- PR(A) can be computed with a simple iterative algorithm. It corresponds to the principal eigenvector of the normalized link matrix of the Web. (p. 110)\n- PageRank for 26 million pages can be computed in a few hours on a medium-size workstation. (p. 110)\n\n**Intuitive interpretation:** A \"random surfer\" starts on a random page and keeps clicking links, never hitting \"back.\" Eventually the surfer gets bored and jumps to another random page. PageRank is the probability that the surfer visits a page. The paper describes d as the probability that, at each page, the surfer gets bored and requests another random page. (p. 110)\n\nA page can therefore have a high PageRank in two ways. Many pages can point to it, or a few pages with high PageRank can point to it. (p. 110)",
+ "input": 15995,
+ "cache_write": 15993,
+ "cache_read": 0,
+ "output": 755,
+ "thinking": 203,
+ "usd": 0.143052,
+ "seconds": 7.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-26 01:16"
+}

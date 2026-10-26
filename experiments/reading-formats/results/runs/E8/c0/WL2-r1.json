@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WL2",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "c0",
+ "page": 24,
+ "status": "ok",
+ "answer": "In the 1997 paper's experiments section, unless an experiment says otherwise, the functions are centered (scaled and shifted) logistic sigmoids:\n\n- **g** squashes the memory cell's input, net_c:\n\n  g(x) = 4 / (1 + e^(−x)) − 2, with range **[−2, 2]**\n\n- **h** scales the memory cell's internal state s_c before it is gated by the output gate:\n\n  h(x) = 2 / (1 + e^(−x)) − 1, with range **[−1, 1]**\n\nFor comparison, the gate activation **f** (for the input and output gates) is the standard logistic sigmoid:\n\nf(x) = 1 / (1 + e^(−x)), with range **[0, 1]**\n\nThese are the paper's defaults. A few individual experiments may state variations, so check the specific experiment's setup if you need exact details for one task.",
+ "input": 799,
+ "cache_write": 797,
+ "cache_read": 0,
+ "output": 674,
+ "thinking": 387,
+ "usd": 0.019864,
+ "seconds": 8.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-26 01:15"
+}

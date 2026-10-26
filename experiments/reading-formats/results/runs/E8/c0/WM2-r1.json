@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WM2",
+ "rep": 1,
+ "paper": "midi",
+ "form": "c0",
+ "page": 5,
+ "status": "ok",
+ "answer": "I don't reliably remember those numbers, so I won't guess them.\n\nThe paper is Liu, Kong, Morfi and Benetos, ISMIR 2022. It has an ablation table comparing the beat-tracking model trained with each augmentation method left out (tempo change, pitch shift, extra notes, missing notes) against the model trained with all of them. I can't recall the exact precision, recall and F-score values from that table with confidence.\n\nTo get the figures, check that ablation table in the paper (it's on arXiv and in the ISMIR 2022 proceedings). If you give me the PDF or text, I can pull out the exact values.",
+ "input": 830,
+ "cache_write": 828,
+ "cache_read": 0,
+ "output": 376,
+ "thinking": 171,
+ "usd": 0.014152,
+ "seconds": 5.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.52,
+ "date": "2026-10-26 01:21"
+}

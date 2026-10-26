@@ -1,0 +1,32 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WM2",
+ "rep": 1,
+ "paper": "midi",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "In Table 3 of the paper (note-level F-measure ablation results, page 5), the in-note beat model's scores are:\n\n- **Extra-note augmentation omitted:** precision 91.2, recall 94.3, F-score 91.3 (p. 5)\n- **All augmentation methods used:** F-score 92.2, with precision 92.9 and recall 93.7 (p. 5)\n\nSo leaving out the extra-note augmentation lowers the F-score by 0.9 points. The authors conclude that all four augmentation methods help, and that tempo change helps most (p. 6).\n\nThe extra-note row has exactly the same numbers (91.2 / 94.3 / 91.3) as the \"Use all features\" row in the input-feature half of the same table (p. 5). That could be a coincidence or a copy error in the paper. The PDF text gives no way to tell which.",
+ "input": 35865,
+ "cache_write": 6583,
+ "cache_read": 29274,
+ "output": 755,
+ "thinking": 68,
+ "usd": 0.0736508,
+ "seconds": 15.6,
+ "turns": 4,
+ "calls": [
+  "Grep Performance MIDI-to-score",
+  "Grep (?i)augmentation|extra note|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/vision-and-multimodal/speech-and-audio/Performance MIDI-to-score conversion by neural beat tracking.txt [305+110]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-26 01:21"
+}

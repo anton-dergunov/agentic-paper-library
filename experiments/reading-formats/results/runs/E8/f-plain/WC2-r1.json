@@ -1,0 +1,35 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WC2",
+ "rep": 1,
+ "paper": "coldstart",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "Meta-adaptation is most stable when the learning rate α is between **3e−5 and 5e−4**, i.e. α ∈ [3×10⁻⁵, 5×10⁻⁴] (**page 3**, Section 4.5 \"Ablation Study\", \"Learning Rate\" item).\n\n- **What α is:** the paper defines α as the inner-loop learning rate in its meta-learning optimization procedure (**page 2**).\n- **Above the range:** the paper says higher learning rates destabilize gradient flow across tasks (**page 3**).\n\nThe formula in that sentence is badly typeset in the paper itself. Both the PDF and its text layer show leftover LaTeX next to the formula (`\\alphaα`, `\\ in [3e^{-5}, 5e^{-4}]`). The range still reads clearly as 3e−5 to 5e−4 in all three places it appears.",
+ "input": 34441,
+ "cache_write": 5367,
+ "cache_read": 29066,
+ "output": 961,
+ "thinking": 65,
+ "usd": 0.0680012,
+ "seconds": 12.9,
+ "turns": 5,
+ "calls": [
+  "Grep Meta-Learning for Cold-Start",
+  "Grep α|alpha|learning rate|stab|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.txt [180+20]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.pdf [pages 3]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.pdf [pages 3]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.4,
+ "date": "2026-10-26 01:18"
+}

@@ -1,0 +1,55 @@
+{
+ "order": [
+  "md",
+  "txt"
+ ],
+ "verdict": "txt",
+ "why": "Both are numerically accurate. B adds per-release accuracies, the uncorrected p = 0.032 step and the judge-above-human κ observation. A misattributes the bias framing to MT-Bench and wrongly says per-model accuracies are undisclosed. B's only error is a mild one: the Fig. 4 sign artifact.",
+ "notes": {
+  "md": {
+   "wrong": [
+    {
+     "claim": "MT-Bench/Chatbot Arena paper is cited as the source of the position/verbosity bias framing",
+     "pdf": "[23] is cited among LLM-judge evaluators and as the Arena data source. Bias work is cited as [5,16,17,20].",
+     "page": 2
+    },
+    {
+     "claim": "Per-model accuracies beyond Table 3 are not disclosed",
+     "pdf": "Fig. 2 gives LLMBar accuracies for every Qwen3 size and MiniMax release (0.647, 0.678, 0.829, 0.839, 0.832, 0.832).",
+     "page": 4
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Qwen3 Arena 1.7B→32B change (0.625→0.688)",
+    "Points out that the paper omits parse rates and parseable N even though its own audit standard (Table 4) requires them",
+    "Notes that the paper does not spell out which tests make up the 18 adjacent tests",
+    "Itemized recommendation list from Table 4",
+    "Uncited related work on juries (Replacing Judges with Juries) linked to the heterogeneous-jury finding"
+   ]
+  },
+  "txt": {
+   "wrong": [
+    {
+     "claim": "Fig. 4 prints 'Pearson r = 0.957' and 'slope = 0.49', presented as an inconsistency in the paper",
+     "pdf": "The rendered Fig. 4 shows r = −0.957 and slope = −0.49, so the missing minus is an extraction artifact, not a paper inconsistency.",
+     "page": 4
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Fig. 2 LLMBar accuracies for Qwen3 14B/32B and for each MiniMax release",
+    "Qwen3 14B→32B on PandaLM has uncorrected p = 0.032, which does not survive Holm correction",
+    "Best judge on Judge's Verdict exceeds the human κ (0.620 vs 0.562) despite the 'closer to ceiling' wording",
+    "Flags 'rival scaling effects' as an overclaim given that fallback rates cannot be audited",
+    "Wilson CI given for the GLM-5.1 LLMBar result"
+   ]
+  }
+ },
+ "usd": 0.30080399999999996,
+ "model": "claude-opus-5-5"
+}

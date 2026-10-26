@@ -31,6 +31,19 @@ papers:
   sftrl: llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.md
   kvxfer: ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.md
   genrec: recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.md
+  # Tier G: text layers the library's issue records call broken or flawed
+  lstm: deep-learning/architectures/Long Short-Term Memory.md
+  anatomy: search-and-ranking/search-systems/The Anatomy of a Large-Scale Hypertextual Web Search Engine.md
+  coldstart: llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.md
+  edm: generative-models/diffusion/Elucidating the Design Space of Diffusion-Based Generative Models.md
+  diskann: search-and-ranking/dense-retrieval/DiskANN. Fast Accurate Billion-point Nearest Neighbor Search on a Single Node.md
+  gpt2: llm/foundation-models/Language Models are Unsupervised Multitask Learners.md
+  midi: vision-and-multimodal/speech-and-audio/Performance MIDI-to-score conversion by neural beat tracking.md
+  # Tier H: notes from the text layer against notes from the markdown (after the training cutoff)
+  soap: deep-learning/optimizers-and-schedules/SOAP, Muon, and Beyond. Pushing LLM Pretraining Scales.md
+  ebr: search-and-ranking/dense-retrieval/Scaling and Stabilizing Large-Scale Embedding-Based Retrieval.md
+  atma: llm/memory/agent/A-TMA. Decoupling State-Aware Memory Failures in Long-Term Agent Memory.md
+  judgeshift: llm/evaluation/methods/When the Judge Changes, So Does the Measurement. Auditing LLM-as-Judge Reliability.md
 
 # E4: the markdown before a fix, as a git revision of the library.
 old_revs:
@@ -394,3 +407,53 @@ questions:
    question: 'In "PAIR: Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn": write out the PAIR training objective for one query, and say what each term means.'}
 - {id: AN4, exp: E7, source: N4,
    question: 'In "GenRec: An LLM-Backed Recommendation Ranker at Netflix": how much Netflix traffic was allocated to the online A/B test of GenRec, and for how long did it run?'}
+
+# ---- E8: where the text layer is weak (tier G, 26 Oct) ----
+# Aimed at the passages the library's issue records name (draft.py --weak, results/drafts/),
+# each gold checked against the page image on 26 Oct. `text_layer` says what pdftotext
+# prints there: broken (the value or formula is lost or wrong), or clean (the record
+# describes the converter's error, not the text layer's: a control). WA2's drafted crawler
+# question was clean in the text layer and was replaced by Table 1, which the OCR layer
+# misreads.
+- {id: WL1, exp: E8, paper: lstm, kind: equation, page: 4, text_layer: broken,
+   question: 'In "Long Short-Term Memory" (Hochreiter and Schmidhuber): in the analysis of vanishing error with logistic sigmoid units, where does |f′(net) w| take its maximal values when the presynaptic activation y is constant and non-zero, and below what absolute weight is it less than 1.0?',
+   gold: 'w_{l_m l_{m−1}} = (1 / y^{l_{m−1}}) · coth(½ net_{l_m}); f′ is at most 0.25; the product is below 1.0 for |w| < 4.0 (p. 4).'}
+- {id: WL2, exp: E8, paper: lstm, kind: equation, page: 24, text_layer: broken,
+   question: 'In "Long Short-Term Memory" (Hochreiter and Schmidhuber): what are the formulas and ranges of the functions h and g used in the experiments?',
+   gold: 'h(x) = 2 / (1 + exp(−x)) − 1, range [−1, 1] (Eq. 4); g(x) = 4 / (1 + exp(−x)) − 2, range [−2, 2] (Eq. 5) (p. 24).'}
+- {id: WA1, exp: E8, paper: anatomy, kind: equation, page: 4, text_layer: broken,
+   question: 'In "The Anatomy of a Large-Scale Hypertextual Web Search Engine": how is the PageRank of a page A defined in terms of the pages T1…Tn that link to it?',
+   gold: 'PR(A) = (1 − d) + d (PR(T1)/C(T1) + … + PR(Tn)/C(Tn)), with d the damping factor (usually 0.85) and C(T) the number of links going out of T (p. 4).'}
+- {id: WA2, exp: E8, paper: anatomy, kind: table, page: 9, text_layer: broken,
+   question: 'In "The Anatomy of a Large-Scale Hypertextual Web Search Engine": what were the total size of the fetched pages, the size of the compressed repository, and the size of the lexicon?',
+   gold: '147.8 GB of fetched pages, a 53.5 GB compressed repository, a 293 MB lexicon (Table 1, p. 9).'}
+- {id: WC1, exp: E8, paper: coldstart, kind: equation, page: 2, text_layer: broken,
+   question: 'In "Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs": write the inner-loop update and the outer-loop meta-objective, and say which data split each uses.',
+   gold: 'Inner loop: θ_i′ = θ − α ∇_θ L_{T_i}(f_θ; D_i^support), a gradient step on the support set with inner-loop learning rate α; outer loop: min_θ Σ_i L_{T_i}(f_{θ_i′}; D_i^query), the adapted prompts evaluated on the query sets (Section 3.2, p. 2).'}
+- {id: WC2, exp: E8, paper: coldstart, kind: number, page: 3, text_layer: broken,
+   question: 'In "Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs": over what range of learning rate α is meta-adaptation most stable?',
+   gold: 'α ∈ [3e−5, 5e−4]; higher rates destabilise gradient flow across tasks (p. 3).'}
+- {id: WE1, exp: E8, paper: edm, kind: table, page: 3, text_layer: clean,
+   question: 'In "Elucidating the Design Space of Diffusion-Based Generative Models" (EDM): when the original VP model is expressed in the paper''s common framework, what is its noise schedule σ(t), and what values of β_d and β_min does it use?',
+   gold: 'σ(t) = sqrt(e^{½ β_d t² + β_min t} − 1), β_d = 19.9, β_min = 0.1 (Table 1, p. 3).'}
+- {id: WE2, exp: E8, paper: edm, kind: pseudocode, page: 7, text_layer: broken,
+   question: 'In "Elucidating the Design Space of Diffusion-Based Generative Models" (EDM): in the stochastic sampler, how is γ_i defined, and under what condition is the second-order correction applied?',
+   gold: 'γ_i = min(S_churn/N, √2 − 1) if t_i ∈ [S_tmin, S_tmax], otherwise 0; the second-order correction is applied if t_{i+1} ≠ 0 (Algorithm 2, p. 7).'}
+- {id: WD1, exp: E8, paper: diskann, kind: pseudocode, page: 4, text_layer: clean,
+   question: 'In "DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node": in the robust pruning procedure, after the closest remaining candidate p* is added as an out-neighbour of p, what condition removes another candidate p′ from the candidate set?',
+   gold: 'p′ is removed if α · d(p*, p′) ≤ d(p, p′) (Algorithm 2, RobustPrune, p. 4).'}
+- {id: WD2, exp: E8, paper: diskann, kind: setup, page: 8, text_layer: clean,
+   question: 'In "DiskANN: Fast Accurate Billion-point Nearest Neighbor Search on a Single Node": what machine is used to build the one-shot in-memory index for the billion-point datasets, and how much RAM does it have?',
+   gold: 'M64-32ms, a virtual machine with dual Xeon E7-8890v3s (32 vCPUs) and 1792 GB of DDR3 RAM (p. 8).'}
+- {id: WG1, exp: E8, paper: gpt2, kind: table, page: 7, text_layer: broken,
+   question: 'In "Language Models are Unsupervised Multitask Learners" (GPT-2): of the 30 Natural Questions answers GPT-2 is most confident about, how many are incorrect, and which are they?',
+   gold: '8: A (blood type in Sweden), California, parthenogenesis, Montana, Peter Dinklage, Janet Yellen, Michael Jordan, Arnold Schwarzenegger (Table 5, p. 7).'}
+- {id: WG2, exp: E8, paper: gpt2, kind: number, page: 8, text_layer: broken,
+   question: 'In "Language Models are Unsupervised Multitask Learners" (GPT-2): in the analysis of overlap between WebText and the test sets, what upper bound on the false-positive rate were the Bloom filters built for?',
+   gold: '1/10^8 (p. 8); a check on 1M generated strings found zero false positives.'}
+- {id: WM1, exp: E8, paper: midi, kind: table, page: 6, text_layer: clean,
+   question: 'In "Performance MIDI-to-score conversion by neural beat tracking": what beat and downbeat F-measures does the proposed model reach when it is trained to output tempo as well as beats and downbeats?',
+   gold: 'f_b 86.2, f_db 69.8 (Table 4, p. 6; the row is printed "Proposed (d, db, t)", probably meaning (b, db, t)).'}
+- {id: WM2, exp: E8, paper: midi, kind: table, page: 5, text_layer: clean,
+   question: 'In "Performance MIDI-to-score conversion by neural beat tracking": in the data-augmentation ablation, what precision, recall and F-score does the in-note beat model get with the extra-note augmentation omitted, and what F-score with all augmentation methods?',
+   gold: 'Extra note omitted: p 91.2, r 94.3, f 91.3; all methods: f 92.2 (Table 3, p. 5; the omitted row repeats the "Use all features" row exactly, as printed).'}

@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WL2",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "txt",
+ "page": 24,
+ "status": "ok",
+ "answer": "# The functions h and g in LSTM experiments\n\nThe formulas are given in Appendix A.1 (**page 24**):\n\n- **h** has range [−1, 1]:\n  h(x) = 2 / (1 + exp(−x)) − 1  (equation 4)\n- **g** has range [−2, 2]:\n  g(x) = 4 / (1 + exp(−x)) − 2  (equation 5)\n\nThe extracted text drops the minus signs (it shows \"exp( x)\" and a bare \"1\" or \"2\"). I restored them based on the ranges the paper states, which only work with the minus signs in place.\n\nFor comparison, the gate units use the standard logistic sigmoid f(x) = 1 / (1 + exp(−x)), with range [0, 1] (equation 3, **page 24**).\n\n## Role of each function\n- g squashes the memory cell's net input, net_cj, before it is added to the internal state (**page 7**).\n- h scales the memory cell output computed from the internal state, so y_cj = y_outj · h(s_cj) (**page 7**).\n\n## Where these settings are used\nThe experiment descriptions confirm the ranges h in [−1, 1] and g in [−2, 2]:\n- Experiment 1 (**page 12**)\n- Task 2c (**page 14**)\n- Experiment 3 (**page 16**)\n- Experiment 4 (**page 18**)\n- Experiment 6 (**page 20**)\n\n**Exception, Experiments 2a and 2b:** g is the logistic sigmoid and h is the identity function, h(x) = x (**page 13**). Table 10 (**page 21**) also lists \"id\" for h and \"g1\" for g in these tasks.\n\n## A note on Table 10\nThe caption of Table 10 (**page 21**) contradicts the appendix and the experiment text. It describes \"h1\" as a logistic sigmoid in [−2, 2], \"g1\" as a sigmoid in [0, 1], and \"g2\" as a sigmoid in [−1, 1]. The h and g ranges appear swapped there. The appendix formulas (**page 24**) and the repeated statements in the experiment sections support h in [−1, 1] and g in [−2, 2].",
+ "input": 43064,
+ "cache_write": 572,
+ "cache_read": 42490,
+ "output": 1268,
+ "thinking": 548,
+ "usd": 0.038442000000000004,
+ "seconds": 11.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.32,
+ "date": "2026-10-26 01:15"
+}

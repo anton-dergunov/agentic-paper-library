@@ -1,0 +1,7 @@
+# Drafted from the PDF by claude-opus-5-5, $0.25; not yet checked
+- {id: WM1, exp: E8, paper: midi, kind: table, page: 6,
+   question: 'When the proposed beat tracker is trained to output tempo in addition to beats and downbeats, what beat-level F-scores does it reach for beats and for downbeats, and how is that model labelled?',
+   gold: 'Beat f = 86.2 and downbeat f = 69.8 (Table 4). The row is printed as "Proposed (d, db, t)", which is probably a typo for (b, db, t), since the caption defines only b, db and t.', passage: 'Table 4 row label "(d, db, t)" vs (b, db, t); the issue record says p. 5, but the table is on p. 6'}
+- {id: WM2, exp: E8, paper: midi, kind: table, page: 5,
+   question: 'In the ablation on data augmentation, what note-level precision, recall and F-score does the in-note beat model get when the extra-note (note introduction) augmentation is left out, and how does that compare with using all augmentation methods?',
+   gold: 'p = 91.2, r = 94.3, f = 91.3, against f = 92.2 with all methods (Table 3). These values are exactly the same as the "Use all features" row of the input-feature ablation, so the row may have been copied by mistake in the paper as printed.', passage: 'Table 3 "Extra note" row duplicates "Use all features" row'}

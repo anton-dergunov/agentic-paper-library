@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WM1",
+ "rep": 1,
+ "paper": "midi",
+ "form": "md",
+ "page": 6,
+ "status": "ok",
+ "answer": "When trained to output **tempo as well as beats and downbeats**, the proposed model reaches a **beat F-measure of 86.2** and a **downbeat F-measure of 69.8**. These are beat-level F-scores from Table 4, which sits on p. 5 and is discussed in Section 3.3.3 on p. 6. They are the best results in that table.\n\n| Model (output data) | Beat f | Downbeat f |\n|---|---|---|\n| Baseline (beat, downbeat) | 66.9 | 57.6 |\n| Proposed (beat, downbeat) | 85.7 | 63.3 |\n| Proposed (beat, downbeat, tempo) | **86.2** | **69.8** |\n\n- **Effect of adding tempo:** it raises beat F from 85.7 to 86.2 and downbeat F from 63.3 to 69.8. The authors say this \"suggests a benefit of joint learning\" (p. 6).\n- **Metric:** the beat-level F-measure follows the standard beat and downbeat tracking benchmark, with a ±70 ms tolerance (p. 4).\n- **Row label:** the table labels this row \"Proposed (d, db, t)\". The caption defines only b (beat), db (downbeat) and t (tempo), so \"d\" is probably a typo for \"b\".\n- **Scope:** Table 4 reports only F-scores. The document gives no precision or recall for this comparison.",
+ "input": 17074,
+ "cache_write": 17072,
+ "cache_read": 0,
+ "output": 809,
+ "thinking": 341,
+ "usd": 0.152764,
+ "seconds": 9.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.52,
+ "date": "2026-10-26 01:21"
+}

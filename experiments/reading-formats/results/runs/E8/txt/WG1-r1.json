@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WG1",
+ "rep": 1,
+ "paper": "gpt2",
+ "form": "txt",
+ "page": 7,
+ "status": "ok",
+ "answer": "**8 of the 30 answers are incorrect**, so 22 are correct. These are listed in Table 5 on page 7.\n\n| Question | GPT-2's answer | Probability |\n|---|---|---|\n| What is the most common blood type in sweden? | A | 70.6% |\n| Largest state in the us by land mass? | California | 59.2% |\n| Green algae is an example of which type of reproduction? | parthenogenesis | 56.5% |\n| What us state forms the western boundary of montana? | Montana | 52.3% |\n| Who plays ser davos in game of thrones? | Peter Dinklage | 52.1% |\n| Who appoints the chair of the federal reserve system? | Janet Yellen | 51.5% |\n| Who won the most mvp awards in the nba? | Michael Jordan | 50.2% |\n| Who played john connor in the original terminator? | Arnold Schwarzenegger | 45.2% |\n\nThe table lists GPT-2's 30 most confident answers on the Natural Questions development set, sorted by the probability GPT-2 assigned to each. According to the caption, none of the questions appear in WebText (p. 7). The text notes that GPT-2's probabilities are well calibrated, and that GPT-2 has 63.1% accuracy on the 1% of questions it is most confident about (p. 7).\n\n**Caveats:**\n- In the text you provided, the \"Correct\" column shows \"3\" and \"7\" instead of check and cross marks. This is likely a text-extraction artifact. I read \"3\" as correct and \"7\" as incorrect. That reading fits the answers themselves, such as \"Montana\" being given as the western boundary of Montana.\n- The text has no printed page numbers. I counted pages from the repeated running headers, so \"page 7\" is an inferred number.",
+ "input": 38032,
+ "cache_write": 38030,
+ "cache_read": 0,
+ "output": 1015,
+ "thinking": 427,
+ "usd": 0.324548,
+ "seconds": 10.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.48,
+ "date": "2026-10-26 01:20"
+}

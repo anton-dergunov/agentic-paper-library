@@ -1,0 +1,33 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WM1",
+ "rep": 1,
+ "paper": "midi",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "When the proposed model is trained to output tempo as well as beats and downbeats, it reaches a **beat F-measure (f_b) of 86.2** and a **downbeat F-measure (f_db) of 69.8** (Table 4, page 6).\n\nFor comparison, from the same table (page 6):\n- **Proposed model, beats and downbeats only:** f_b 85.7, f_db 63.3. Adding tempo raises beat F by 0.5 points and downbeat F by 6.5 points.\n- **Baseline (an audio beat tracker retrained on pianoroll input, beats and downbeats):** f_b 66.9, f_db 57.6.\n\nThe authors say that adding tempo to the output \"can be further improved, which suggests a benefit of joint learning\" (page 6).\n\nOne small oddity: Table 4 labels this row \"Proposed (d, db, t)\". The key gives \"b: beat, db: downbeat, t: tempo\" and the text describes it as \"adding tempo to the output data\" (page 6). So the \"d\" looks like a typo for \"b\".",
+ "input": 37945,
+ "cache_write": 8047,
+ "cache_read": 29890,
+ "output": 856,
+ "thinking": 0,
+ "usd": 0.087506,
+ "seconds": 15.3,
+ "turns": 5,
+ "calls": [
+  "Grep Performance MIDI-to-score",
+  "Grep tempo|\\[page",
+  "Bash wc -l \"vision-and-multimodal/speech-and-audio/Performance MIDI-to-score conversion by neural beat tracking.txt\"",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/vision-and-multimodal/speech-and-audio/Performance MIDI-to-score conversion by neural beat tracking.txt [315+135]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-26 01:21"
+}

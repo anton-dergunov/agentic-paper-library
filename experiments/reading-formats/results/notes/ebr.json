@@ -1,0 +1,50 @@
+{
+ "order": [
+  "txt",
+  "md"
+ ],
+ "verdict": "md",
+ "why": "Both are accurate on numbers. B adds sharper critical insights: data refresh dominates the gains, the cold-start regression claim is contradicted by Table 2, and NDCG comes from the human review. These outweigh its Fig. 1 page error and the 'four steps' slip.",
+ "notes": {
+  "txt": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "The warm-start explanation (legacy boundaries plus distillation regularization) is presented as speculative, with no ablation",
+    "Ablation gap: the cross-encoder's effect is never separated from the PT/token-overlap rules",
+    "Absolute metric values are never reported",
+    "Cross-encoder input format: query concatenated with title, PT, brand, color and gender, using separator tokens",
+    "Undisclosed details: ANN index type and embedding dimension"
+   ]
+  },
+  "md": {
+   "wrong": [
+    {
+     "claim": "Hybrid offline mining in 'four steps'",
+     "pdf": "The pipeline has three steps (ANN top-K, cross-encoder filter, PT/token-overlap split). Same-PT attribute mismatches are motivating examples, not a step.",
+     "page": 3
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [
+    {
+     "item": "Fig. 1 (hybrid offline mining flowchart)",
+     "cited": 2,
+     "correct": 4
+    }
+   ],
+   "garbled": [],
+   "only_here": [
+    "Most of the offline gain comes from data refresh (+2.67 of +4.00 recall), not from the proposed components",
+    "The paper's claim that cold-start fine-tuning 'consistently' regresses is contradicted by its own cold GTE-base row, which beats the baseline",
+    "The headline NDCG figures come from the human review on changed queries, not from the A/B test",
+    "Concrete cross-batch scale (local 72 to global 576) is used to rebut the 'order of magnitude' claim",
+    "Warm-start is framed as inverse distillation (small teacher, larger student)"
+   ]
+  }
+ },
+ "usd": 0.288328,
+ "model": "claude-opus-5-5"
+}

@@ -1,0 +1,66 @@
+{
+ "key": "d7020e02b47c1a22",
+ "usd": 0.051643999999999995,
+ "grades": {
+  "E8/txt/WA2-r3": {
+   "score": "wrong",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Fetched pages given as 117.8 GB; gold is 147.8 GB."
+  },
+  "E8/f-plain/WA2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WA2-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WA2-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WA2-r1": {
+   "score": "wrong",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Fetched pages given as 117.8 GB; gold is 147.8 GB."
+  },
+  "E8/c0/WA2-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/f-plain/WA2-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WA2-r2": {
+   "score": "wrong",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Main fetched-pages value is 117.8 GB; 147.8 GB only offered as possibility."
+  },
+  "E8/f-plain/WA2-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WA2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

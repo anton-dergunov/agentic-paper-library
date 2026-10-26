@@ -1,0 +1,50 @@
+{
+ "order": [
+  "md",
+  "txt"
+ ],
+ "verdict": "txt",
+ "why": "B's numbers and page citations check out against the PDF. A wrongly calls SeCom the strongest non-overlay baseline, when A-Mem is higher. A also says overhead is unreported, but Appendix A.8 reports latency figures.",
+ "notes": {
+  "md": {
+   "wrong": [
+    {
+     "claim": "SeCom is the best non-overlay baseline on LTP (QA Acc 0.655), repeated in Related as 'strongest non-overlay on LTP QA Acc'",
+     "pdf": "A-Mem without the overlay is higher on QA Acc (0.787), evidence support (0.916) and Judge (0.700)",
+     "page": 11
+    },
+    {
+     "claim": "Latency, cost and LLM-call overhead are not reported",
+     "pdf": "Appendix A.8 reports overhead: Sentry about 50 ms per pair, GRPO Judge about 8 s per escalated pair, 23.2% of pairs escalated (about 2 s average), and a controller call over at most 10 candidates capped at 320 tokens",
+     "page": 19
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "SeCom LTP figures (QA Acc 0.655, evidence support 0.864, Judge 0.564)",
+    "Single run with no seeds or variance reported",
+    "Bank-role gains are partly definitional because base hosts score 0.000 by construction",
+    "Older hand-written state-reranking bonuses were removed as brittle",
+    "Abstract and intro highlight F1 gains while judged-accuracy losses go unmentioned"
+   ]
+  },
+  "txt": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "A-Mem+A-TMA average rank 1.79 vs 2.36",
+    "Mem0 LTP Acc 0.188 and AriadneMem 0.453",
+    "Every non-overlay host except A-Mem scores bank role 0.000",
+    "AriadneMem has the best average BLEU-1 (0.1943)",
+    "Controller model is not stated in the main text",
+    "LoCoMo sample0 Graphiti pair results appear only in the Fig. 2 plot"
+   ]
+  }
+ },
+ "usd": 0.649292,
+ "model": "claude-opus-5-5"
+}

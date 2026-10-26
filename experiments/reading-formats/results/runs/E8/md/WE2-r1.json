@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WE2",
+ "rep": 1,
+ "paper": "edm",
+ "form": "md",
+ "page": 7,
+ "status": "ok",
+ "answer": "# γ_i and the second-order correction in EDM's stochastic sampler (Algorithm 2)\n\nThis document marks pages only at the start of each section, so the page numbers below are where the relevant section begins.\n\n## How γ_i is defined\n\nAlgorithm 2 (Section 4, p. 6) defines γ_i piecewise:\n\n- **γ_i = min(S_churn / N, √2 − 1)** if t_i ∈ [S_tmin, S_tmax]\n- **γ_i = 0** otherwise\n\nγ_i sets how much fresh noise is added at step i. The sample is raised to a higher noise level, t̂_i = t_i + γ_i t_i (line 5). Then noise with standard deviation √(t̂_i² − t_i²), scaled by S_noise, is added to get x̂_i (p. 6).\n\nThe text explains each part of the definition (Section 4, \"Practical considerations,\" p. 6):\n\n- **The [S_tmin, S_tmax] window.** Stochasticity is enabled only in this range of noise levels. This counters the drift toward oversaturated colors at very low and very high noise levels.\n- **S_churn / N.** Inside the window, S_churn controls the overall amount of stochasticity.\n- **The √2 − 1 clamp.** It ensures γ_i \"never introduce[s] more new noise than what is already present in the image.\" My own arithmetic, not stated in the paper: γ_i ≤ √2 − 1 means t̂_i² − t_i² ≤ t_i².\n\nThe tuned values of S_churn, S_tmin, S_tmax and S_noise were found by grid search and are listed in Table 5 (Appendix E.2, p. 43).\n\n## When the second-order correction is applied\n\nThe correction is applied **only when the next noise level t_{i+1} is non-zero**. On the final step down to t_N = 0, the sampler uses the plain Euler step from line 8 (p. 6).\n\nWhen it is applied, the correction is:\n\n- d′_i ← (x_{i+1} − D_θ(x_{i+1}; t_{i+1})) / t_{i+1} (line 10)\n- x_{i+1} ← x̂_i + (t_{i+1} − t̂_i)(½ d_i + ½ d′_i) (line 11)\n\n**A note on the extracted text.** Line 9 of Algorithm 2 reads \"if t_{i+1} = 0 then.\" This is almost certainly a lost \"≠\" symbol from the PDF conversion; the document warns that symbols may be misread. Three points in the paper support reading it as ≠:\n\n- The matching line in Algorithm 1 is annotated \"Apply 2nd order correction unless σ goes to zero\" (Section 3, p. 4).\n- The text says \"stepping to σ = 0 would result in a division by zero, so we revert to Euler's method in this case\" (Section 3, p. 4). Line 10 divides by t_{i+1}, so it cannot run when t_{i+1} = 0.\n- Algorithm 3 has the same garbled \"= 0\" test, followed by an \"else … Euler step\" branch. Appendix D.2 (p. 40) describes this as a \"fallback to Euler step.\"\n\nCheck the PDF if you need to quote the exact symbol.",
+ "input": 85558,
+ "cache_write": 585,
+ "cache_read": 84971,
+ "output": 2010,
+ "thinking": 939,
+ "usd": 0.0618822,
+ "seconds": 18.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.44,
+ "date": "2026-10-26 01:18"
+}

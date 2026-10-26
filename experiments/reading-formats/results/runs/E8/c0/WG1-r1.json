@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WG1",
+ "rep": 1,
+ "paper": "gpt2",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "In Table 5 of the GPT-2 paper, which lists the 30 most confident answers on the Natural Questions development set, **8 of the 30 are marked incorrect**, so 22 are correct. The 8 incorrect ones are:\n\n1. **What is the most common blood type in Sweden?** GPT-2 answered \"A\".\n2. **Largest state in the US by land mass?** GPT-2 answered \"California\". The correct answer is Alaska.\n3. **Green algae is an example of which type of reproduction?** GPT-2 answered \"parthenogenesis\".\n4. **What US state forms the western boundary of Montana?** GPT-2 answered \"Montana\". The correct answer is Idaho.\n5. **Who plays Ser Davos in Game of Thrones?** GPT-2 answered \"Peter Dinklage\". The correct answer is Liam Cunningham.\n6. **Who appoints the chair of the Federal Reserve System?** GPT-2 answered \"Janet Yellen\". The correct answer is the President.\n7. **Who won the most MVP awards in the NBA?** GPT-2 answered \"Michael Jordan\". The correct answer is Kareem Abdul-Jabbar.\n8. **Who played John Connor in the original Terminator?** GPT-2 answered \"Arnold Schwarzenegger\".\n\nThis list comes from memory, not from the paper itself. Please check Table 5 before you cite exact wording or the probability values.",
+ "input": 812,
+ "cache_write": 810,
+ "cache_read": 0,
+ "output": 2364,
+ "thinking": 1887,
+ "usd": 0.053768,
+ "seconds": 24.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.47,
+ "date": "2026-10-26 01:20"
+}

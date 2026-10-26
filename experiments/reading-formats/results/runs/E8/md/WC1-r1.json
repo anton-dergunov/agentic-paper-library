@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WC1",
+ "rep": 1,
+ "paper": "coldstart",
+ "form": "md",
+ "page": 2,
+ "status": "ok",
+ "answer": "# Inner and outer loops in \"Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs\"\n\nThe paper uses MAML with two nested loops. Section 3.2 states them as follows (p. 2).\n\n## Inner loop: task-specific prompt update (uses the **support** set)\n\n$$\\theta_i' = \\theta - \\alpha \\nabla_{\\theta} \\mathcal{L}_{T_i}\\big(f_{\\theta};\\, D_i^{support}\\big)$$\n\n- θ is the shared soft-prompt initialization. It has prompt length × LLM embedding dimension (p. 2, §3.1).\n- α is the inner-loop learning rate (p. 2, §3.2).\n- f_θ is the LLM conditioned on prompt θ (p. 2, §3.2).\n- The LLM stays frozen. Gradients are computed only with respect to the soft prompt P, which is prepended to the input as [P; X] (p. 2, §3.3).\n- At test time, the K ∈ {1, 3, 5} support interactions are \"used solely for prompt adaptation\" (p. 2, §4.1).\n\n## Outer loop: meta-objective across tasks (uses the **query** set)\n\n$$\\min_{\\theta} \\sum_i \\mathcal{L}_{T_i}\\big(f_{\\theta_i'};\\, D_i^{query}\\big)$$\n\n- The goal is to optimize θ across many sampled user tasks so that performance after adaptation on $D_{query}$ is maximized (p. 1, Introduction).\n- The adapted user is then evaluated on \"a different set of queries of unseen interactions of the same user\" (p. 2, §4.1).\n\n## Data splits\n\nEach user is treated as a task $T_i \\sim p(T)$ (p. 1). Each task has a support set $D_i^{support}$ and a query set $D_i^{query}$ (p. 2, §3.1). Tasks are sampled episodically, with 1–5 interactions in the support set and 1–5 in the query set (p. 2, §3.4).\n\n## Caveats on the equations\n\nThese equations were read from the page image by a model, so check them against the PDF before quoting.\n\n- **Query superscript:** The converted outer-loop formula shows a garbled superscript, \"$D_i^{\\varphi^{uery}}$\". I have written it as $D_i^{query}$ (p. 2).\n- **Adapted prompt symbol:** The converted text writes the adapted prompt in the outer loop as $\\theta_i$, not $\\theta_i'$ (p. 2). The Introduction version uses $\\theta_i$ in the same way (p. 1). Since the inner loop produces $\\theta_i'$, the outer loop should be evaluating that adapted prompt, so I wrote $\\theta_i'$.\n- **Missing details:** The document gives the outer loop only as a minimization objective. It does not give an explicit outer-loop update rule or a meta learning rate.",
+ "input": 13056,
+ "cache_write": 13054,
+ "cache_read": 0,
+ "output": 1416,
+ "thinking": 437,
+ "usd": 0.13276,
+ "seconds": 14.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.38,
+ "date": "2026-10-26 01:17"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WL1",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "**Where it's maximal:** If y_{l_{m−1}} is constant and non-zero, |f′_{l_m}(net_{l_m}) w_{l_m l_{m−1}}| takes on maximal values where\n\nw_{l_m l_{m−1}} = (1 / y_{l_{m−1}}) · coth(½ net_{l_m}) (p. 4)\n\nThe extracted text renders this equation in garbled form (\"ylm1 1 coth( 12 netlm )\"). This is my reading of it.\n\n**Weight threshold:** The quantity is less than 1.0 when |w_{l_m l_{m−1}}| < 4.0, for example when the absolute maximal weight value w_max is below 4.0 (p. 4).\n\n**Related points on the same page (p. 4):**\n- The maximal value of f′ for the logistic sigmoid is 0.25.\n- The quantity goes to zero as |w_{l_m l_{m−1}}| → ∞.\n- So with logistic sigmoid units, error flow tends to vanish while weights have absolute values below 4.0, especially early in training.\n- Larger initial weights don't help, because the relevant derivative goes to zero \"faster\" than the absolute weight can grow.",
+ "input": 43114,
+ "cache_write": 43112,
+ "cache_read": 0,
+ "output": 615,
+ "thinking": 210,
+ "usd": 0.35720399999999997,
+ "seconds": 7.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.3,
+ "date": "2026-10-26 01:15"
+}

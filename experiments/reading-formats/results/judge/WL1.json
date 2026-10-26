@@ -1,0 +1,30 @@
+{
+ "key": "7ce93d26108c047d",
+ "usd": 0.030452,
+ "grades": {
+  "E8/md/WL1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WL1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/c0/WL1-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/f-plain/WL1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

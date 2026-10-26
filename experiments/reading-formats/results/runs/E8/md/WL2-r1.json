@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WL2",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "md",
+ "page": 24,
+ "status": "ok",
+ "answer": "# The functions h and g in LSTM\n\n## Formulas (Appendix A.1, p. 24)\n\n- **h**, which scales the memory cell's output computed from its internal state, has range **[−1, 1]**:\n\n  h(x) = 2 / (1 + exp(−x)) − 1  (equation 4)\n\n- **g**, which squashes the memory cell's net input, has range **[−2, 2]**:\n\n  g(x) = 4 / (1 + exp(−x)) − 2  (equation 5)\n\nBoth are scaled versions of the logistic sigmoid f(x) = 1 / (1 + exp(−x)) (equation 3, p. 24). The roles of g and h are defined on p. 7.\n\nThe note at the top of your copy says equations were read from page images and may contain errors. The PDF's own text layer gives the same formulas, so they are probably correct. You may still want to check the PDF before quoting them.\n\n## How the experiments use them\n\nMost experiments use these ranges:\n\n- Experiment 1: h in [−1, 1] and g in [−2, 2]. All other sigmoids are logistic in [0, 1] (p. 12).\n- Experiment 2c (p. 14), Experiment 3a (p. 16), Experiment 4 (p. 18) and Experiment 6 (p. 20) use the same ranges.\n\nExperiments 2a and 2b are exceptions. There, **g is the logistic sigmoid and h is the identity function, h(x) = x** (p. 14). The summary table lists \"id\" and \"g1\" for these tasks.\n\n## Inconsistency in the Table 10 caption\n\nThe caption of Table 10 (around pp. 21–22; the page is hard to pin down from this conversion) gives different ranges:\n\n- \"h1\" is described as a logistic sigmoid in [−2, 2].\n- \"g1\" is described as in [0, 1] and \"g2\" as in [−1, 1].\n\nThese ranges disagree with the appendix formulas and the experiment descriptions. The caption may have mislabeled the ranges, or the text conversion may have garbled it. The document itself does not resolve the discrepancy.",
+ "input": 45126,
+ "cache_write": 572,
+ "cache_read": 44552,
+ "output": 1628,
+ "thinking": 937,
+ "usd": 0.04605440000000001,
+ "seconds": 18.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-26 01:15"
+}

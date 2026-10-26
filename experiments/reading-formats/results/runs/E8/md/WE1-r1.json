@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WE1",
+ "rep": 1,
+ "paper": "edm",
+ "form": "md",
+ "page": 3,
+ "status": "ok",
+ "answer": "For VP, the paper gives **σ(t) = √(e^(½β_d t² + β_min t) − 1)** with **β_d = 19.9** and **β_min = 0.1**.\n\n**Noise schedule σ(t)**\n- This formula is the \"Schedule σ(t)\" entry in the VP column of Table 1, which sits in Section 2 (the section starts on p. 2).\n- Appendix C.1.1 (from p. 29) derives it as Eq. 163, by putting the VP SDE's f(t) and g(t) into the general σ(t) expression (Eq. 12).\n- The derivation defines α(t) = ½β_d t² + β_min t (the integral of β(t)), and the schedule is σ(t) = √(e^α(t) − e^α(0)) = √(e^α(t) − 1).\n\n**Parameters**\n- Table 1's \"Parameters\" row for VP lists β_d = 19.9 and β_min = 0.1. The same row also gives ε_s = 10⁻³, ε_t = 10⁻⁵ and M = 1000 (Section 2, from p. 2).\n- β_d is defined as β_max − β_min (Appendix C.1.1, from p. 29).\n- Song et al. set β_min = 0.1 and β_max = 20, so β_d = 20 − 0.1 = 19.9 (Appendix C.1.1, from p. 29).\n\nFor context, the VP model also uses the scaling s(t) = 1/√(e^(½β_d t² + β_min t)). The paper notes this is equivalent to s(t) = 1/√(σ(t)² + 1) (Eq. 170, Appendix C.1.1, from p. 29).\n\nA note on page numbers: the converted text only labels the page where each section starts, so I've cited those pages. The exact PDF page of Table 1 and of the β_max = 20 sentence may be a page later. The equations were also reconstructed from page images, so check the formula against the PDF before quoting it.",
+ "input": 85571,
+ "cache_write": 85569,
+ "cache_read": 0,
+ "output": 1087,
+ "thinking": 433,
+ "usd": 0.7063,
+ "seconds": 13.3,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.41,
+ "date": "2026-10-26 01:18"
+}

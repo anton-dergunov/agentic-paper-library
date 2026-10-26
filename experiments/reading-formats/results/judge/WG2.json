@@ -1,0 +1,30 @@
+{
+ "key": "3cbc4d39073adc40",
+ "usd": 0.023635999999999997,
+ "grades": {
+  "E8/txt/WG2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Hedged, but gives 1/10^8 as the most plausible reading."
+  },
+  "E8/c0/WG2-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/f-plain/WG2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WG2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Hedged, but gives 1/10^8 as the likely value."
+  }
+ }
+}

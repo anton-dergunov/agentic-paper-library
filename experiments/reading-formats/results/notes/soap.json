@@ -1,0 +1,68 @@
+{
+ "order": [
+  "txt",
+  "md"
+ ],
+ "verdict": "txt",
+ "why": "A has accurate page citations and more substantive critical points: SOAP is never tested at 72B or 100M, Algorithm 1 omits the 0.2 factor, and the FP32/BF16 conflict. It wrongly says appendices are missing. B has two bad page cites and fewer insights.",
+ "notes": {
+  "txt": {
+   "wrong": [
+    {
+     "claim": "Appendix A.3, which supports Eq. 4's conditioning claim, is 'not in this text'",
+     "pdf": "Appendix A.3 is printed in the PDF and derives κ(S_KL) = √κ(S_Shampoo) (Eq. 13)",
+     "page": 28
+    },
+    {
+     "claim": "MXFP8 results are in Appendix B, 'which is not in this text'",
+     "pdf": "Appendix B and Table 7 (BF16 vs MXFP8, plus Lion) are printed in the PDF",
+     "page": 29
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Algorithm 1 scales only by √max(in,out) and omits the ≈0.2 RMS factor stated in the text",
+    "Optimizer step is said to be 'always FP32', yet Newton–Schulz is said to run in BF16",
+    "The 621M model used in the instability study is not among the models listed in Sec. 5.1",
+    "SOAP is never run on the 72B model or at 100M-token batches, so the abstract's SOAP claims overreach",
+    "Table 3 does not say whether its max LRs belong to AdamW or to each optimizer",
+    "Ramp-up parameters S and N are never given numerically",
+    "The layer-wise optimizer lacks TP support for SOAP (stated limitation)",
+    "Training loss is claimed to correlate with validation loss, but validation loss is never shown",
+    "Full Nano-V3 Math Avg numbers and the 72B Commonsense Avg comparison",
+    "Muon 3× is below Muon 2× on Nano-V3 Math Avg as well"
+   ]
+  },
+  "md": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [
+    {
+     "item": "Layer-wise distributed optimizer (round-robin, allgather-V)",
+     "cited": "p. 16",
+     "correct": "p. 18–19"
+    },
+    {
+     "item": "Fig. 8 '24M tokens'",
+     "cited": "p. 14",
+     "correct": "p. 18"
+    }
+   ],
+   "garbled": [],
+   "only_here": [
+    "MoE auxiliary-loss coefficient is 1×10⁻⁴",
+    "AdamW 1× also wins GSM8k CoT on the 72B model and MBPP+ on Nano-V3",
+    "MMLU-Pro and HumanEval comparison numbers",
+    "Inconsistency: p.13 says the current-gradient fix 'was present with SOAP', while p.11 says the reference SOAP omits it",
+    "Confound: Figs. 1–2 compare large-batch Muon with ramp-up against 1× AdamW",
+    "On the 621M model the oscillations eventually damp out",
+    "No seeds or error bars; no wall-clock or memory cost reported for per-step QR",
+    "Descriptions of how the duplicated and distributed TP modes work"
+   ]
+  }
+ },
+ "usd": 0.866876,
+ "model": "claude-opus-5-5"
+}

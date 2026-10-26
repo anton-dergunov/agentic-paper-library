@@ -1,0 +1,30 @@
+{
+ "key": "b8af610d9de23286",
+ "usd": 0.036444000000000004,
+ "grades": {
+  "E8/f-plain/WG1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WG1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WG1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/c0/WG1-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "No page cited; answered from memory"
+  }
+ }
+}

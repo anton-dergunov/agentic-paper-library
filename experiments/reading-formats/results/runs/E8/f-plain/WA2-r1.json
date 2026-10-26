@@ -1,0 +1,35 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WA2",
+ "rep": 1,
+ "paper": "anatomy",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "In Brin and Page, \"The Anatomy of a Large-Scale Hypertextual Web Search Engine\", the figures are in Table 1, \"Statistics\", on **page 9** (journal page 115):\n\n| Statistic | Size |\n|---|---|\n| Total size of fetched pages | **147.8 GB** |\n| Compressed repository | **53.5 GB** |\n| Lexicon | **293 MB** |\n\nThese values come from the PDF page image. The text layer gets this table wrong: it shows \"117.8 GB\", \"5.33 GB\" and \"203 MB\". The table's own totals back up the PDF values. The total with the repository (108.7 GB) minus the total without it (55.2 GB) leaves 53.5 GB, and a lexicon of about 0.3 GB is what makes the 55.2 GB total add up (page 9).\n\nThe same table says 24 million web pages were fetched (page 9). The text on page 8 describes the crawl as \"the 26 million pages (including errors)\".",
+ "input": 50092,
+ "cache_write": 7775,
+ "cache_read": 42307,
+ "output": 1370,
+ "thinking": 356,
+ "usd": 0.09810139999999999,
+ "seconds": 24.4,
+ "turns": 5,
+ "calls": [
+  "Grep Total Size of Fetched Pages|Compressed Repository|Size of the Lexicon|Lexicon",
+  "Grep Fetched Pages|Compressed Repository|Lexicon\\s+\\d|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/search-and-ranking/search-systems/The Anatomy of a Large-Scale Hypertextual Web Search Engine.txt [366+90]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/search-and-ranking/search-systems/The Anatomy of a Large-Scale Hypertextual Web Search Engine.pdf [pages 9]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/search-and-ranking/search-systems/The Anatomy of a Large-Scale Hypertextual Web Search Engine.pdf [pages 9]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.36,
+ "date": "2026-10-26 01:16"
+}

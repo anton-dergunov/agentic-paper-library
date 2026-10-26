@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WE2",
+ "rep": 1,
+ "paper": "edm",
+ "form": "c0",
+ "page": 7,
+ "status": "ok",
+ "answer": "In EDM's stochastic sampler (Algorithm 2 in Karras et al., 2022), γ_i controls how much noise is added at step i, and the second-order (Heun) correction is applied whenever the next noise level is nonzero.\n\n## Definition of γ_i\n\n$$\n\\gamma_i =\n\\begin{cases}\n\\min\\!\\left(\\dfrac{S_\\text{churn}}{N},\\ \\sqrt{2}-1\\right) & \\text{if } t_i \\in [S_\\text{tmin}, S_\\text{tmax}] \\\\[4pt]\n0 & \\text{otherwise}\n\\end{cases}\n$$\n\n- **S_churn** sets the overall amount of stochasticity.\n- **N** is the number of sampling steps.\n- **The √2 − 1 cap** limits the step so the added noise never exceeds the noise already in the image. The new noise level is at most √2·t_i, so the added variance is at most t_i².\n- **[S_tmin, S_tmax]** is the range of noise levels where noise is added. Outside it, γ_i = 0 and the step is deterministic.\n\nγ_i is then used to raise the noise level and add fresh noise:\n\n- t̂_i = t_i + γ_i t_i\n- ε_i ~ N(0, S_noise² I)\n- x̂_i = x_i + √(t̂_i² − t_i²) · ε_i\n\n## Euler step and second-order correction\n\nFirst, an Euler step from t̂_i to t_{i+1}:\n\n- d_i = (x̂_i − D_θ(x̂_i; t̂_i)) / t̂_i\n- x_{i+1} = x̂_i + (t_{i+1} − t̂_i) d_i\n\nThe correction is applied **only if t_{i+1} ≠ 0**:\n\n- d′_i = (x_{i+1} − D_θ(x_{i+1}; t_{i+1})) / t_{i+1}\n- x_{i+1} = x̂_i + (t_{i+1} − t̂_i)(½ d_i + ½ d′_i)\n\nThe final step to t_N = 0 skips the correction because d′ would require dividing by zero. That last step is therefore a plain Euler step.",
+ "input": 812,
+ "cache_write": 810,
+ "cache_read": 0,
+ "output": 1050,
+ "thinking": 327,
+ "usd": 0.027488,
+ "seconds": 8.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.44,
+ "date": "2026-10-26 01:18"
+}

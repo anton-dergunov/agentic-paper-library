@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WC2",
+ "rep": 1,
+ "paper": "coldstart",
+ "form": "c0",
+ "page": 3,
+ "status": "ok",
+ "answer": "I'm not familiar with a paper titled \"Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs,\" so I can't tell you what learning-rate range it reports as most stable. I'd rather not guess a specific α range and risk giving you a wrong figure. Your working directory (`.../reading-formats/empty`) also appears to be empty, so there's no copy of the paper here for me to check.\n\nTo find the answer:\n- Look in the **hyperparameter sensitivity or ablation section**. It's often a figure plotting performance or variance against α, typically on a log scale.\n- Check the **appendix on implementation details**. MAML-style papers usually list the inner-loop (α) and outer-loop (β) learning rates there.\n- Make sure you're looking at the **inner-loop** α. In meta-learning papers, α usually means the inner-loop rate, and β the meta (outer) rate.\n\nIf you share the PDF or paste the relevant section, I can find the stated range and explain what drives the instability outside it.",
+ "input": 802,
+ "cache_write": 800,
+ "cache_read": 0,
+ "output": 381,
+ "thinking": 42,
+ "usd": 0.014028,
+ "seconds": 6.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.39,
+ "date": "2026-10-26 01:17"
+}

@@ -1,0 +1,30 @@
+{
+ "key": "9fda8c6b08d6d01e",
+ "usd": 0.022984,
+ "grades": {
+  "E8/md/WD2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Reconstructs machine name from garbled text, hedged but correct"
+  },
+  "E8/f-plain/WD2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WD2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/c0/WD2-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "From memory, no page cited; omits CPU details"
+  }
+ }
+}

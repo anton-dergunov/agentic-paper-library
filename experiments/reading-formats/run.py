@@ -14,6 +14,8 @@ Tiers, in priority order (see PROGRESS.md):
      (copies.py builds them), and the papers' PDFs attached to one request
   F  E7 figures with the PDF at hand: Claude Code sessions in a copy holding each paper's
      PDF beside its text layer, with and without a one-line hint to read a figure's page
+  G  E8 where the text layer is weak: questions aimed at the passages of seven papers whose
+     text layer is broken or flawed, in c0, txt, md and the f-plain agent
   canary  six of tier F's questions in f-plain again, as condition f-plain@<claude --version>:
      does this Claude Code release still open a page when the value is drawn, and only then?
 
@@ -337,6 +339,7 @@ E1_ALL = ("c0", "pdf", "txt", "html", "md")
 E1_CORE = ("c0", "pdf", "txt", "md")
 UNSEEN = ("pair", "sftrl", "kvxfer", "genrec")  # tier B2: published after June 2026
 E4_PAPERS = ("musique", "toolformer", "gpt1", "qwen3vl")
+WEAK = ("lstm", "anatomy", "coldstart", "edm", "diskann", "gpt2", "midi")  # tier G
 
 
 def qids(exp, paper):
@@ -405,6 +408,12 @@ def groups(tier):
         figures = [q["id"] for q in inputs.QUESTIONS if q["exp"] == "E7"]
         conditions = {c: [job("E7", c, i) for i in figures] for c in ("f-plain", "f-hint")}
         out.append(("E7 figures with the PDF at hand", conditions, tuple(conditions)))
+    elif tier == "G":
+        # c0, txt and md as one request each, the questions in turn so that the paper is read
+        # from the cache; f-plain is tier F's agent, with the PDF beside the text layer.
+        conds = ("c0", "txt", "md", "f-plain")
+        for paper in WEAK:
+            out.append(("E8 " + paper, {c: [job("E8", c, i) for i in qids("E8", paper)] for c in conds}, conds[1:]))
     elif tier == "canary":
         cond = "f-plain@" + CLI_VERSION.split()[0]
         out.append(("E7 canary", {cond: [job("E7", cond, i, form="f-plain") for i in CANARY]}, ()))
@@ -461,7 +470,7 @@ def run_tier(tier):
 
 
 def status():
-    for tier in ("A", "B", "B2", "C", "C2", "D", "F"):
+    for tier in ("A", "B", "B2", "C", "C2", "D", "F", "G"):
         done = total = 0
         for name, conditions, _ in groups(tier):
             for jobs in conditions.values():

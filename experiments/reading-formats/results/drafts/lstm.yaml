@@ -1,0 +1,9 @@
+# Drafted from the PDF by claude-opus-5-5, $0.76; not yet checked
+- {id: WL1, exp: E8, paper: lstm, kind: equation, page: 4,
+   question: 'In the vanishing-error analysis with logistic sigmoid units and a constant, non-zero presynaptic activation y, at what weight value does |f''(net) w| reach its maximum?',
+   gold: 'w = (1 / y^{l_{m-1}}) · coth(½ · net_{l_m}); the maximum of f'' is 0.25, and the product stays below 1.0 whenever |w| < 4.0.',
+   passage: 'broken equation fragments (coth expression, sec. 3.1)'}
+- {id: WL2, exp: E8, paper: lstm, kind: equation, page: 24,
+   question: 'What exact formula is used for the squashing function g applied to the memory cell net input in the experiments, and what is its output range?',
+   gold: 'g(x) = 4 / (1 + exp(−x)) − 2, with range [−2, 2] (Eq. 5). Note: the printed Table 10 caption appears to contradict this, since it describes "h1" as a sigmoid in [−2,2] and "g2" as a sigmoid in [−1,1], which looks swapped relative to the text.',
+   passage: 'appendix A.1 activation formulas, minus signs dropped in text layer'}

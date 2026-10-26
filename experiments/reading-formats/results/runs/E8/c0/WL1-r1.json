@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WL1",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "c0",
+ "page": 4,
+ "status": "ok",
+ "answer": "In Section 3.1, Hochreiter and Schmidhuber note that the logistic sigmoid's derivative f′ is at most 0.25. When the presynaptic activation y^{l_{m−1}} is constant and non-zero:\n\n- **Where the maximum is:** |f′_{l_m}(net_{l_m}) · w_{l_m l_{m−1}}| reaches its maximal values where\n\n  w_{l_m l_{m−1}} = (1 / y^{l_{m−1}}) · coth(½ · net_{l_m}).\n\n- **Large weights:** the quantity goes to zero as |w_{l_m l_{m−1}}| → ∞.\n\n- **The 1.0 threshold:** it is less than 1.0 whenever |w_{l_m l_{m−1}}| < 4.0, for example when the absolute maximal weight w_max is below 4.0. In that case the error flow vanishes.\n\nThe maximum location follows from setting d/dw [f′(wy)·w] = 0. This gives 1 + net·(1 − 2f) = 0. Since 2f − 1 = tanh(net/2), it follows that net = coth(net/2), so w = (1/y)·coth(net/2).\n\nThe 4.0 bound comes from f′ ≤ 0.25: the product |f′·w| cannot reach 1 while |w| < 4.",
+ "input": 849,
+ "cache_write": 847,
+ "cache_read": 0,
+ "output": 840,
+ "thinking": 391,
+ "usd": 0.023584000000000004,
+ "seconds": 13.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.3,
+ "date": "2026-10-26 01:15"
+}

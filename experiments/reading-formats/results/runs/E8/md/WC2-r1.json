@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WC2",
+ "rep": 1,
+ "paper": "coldstart",
+ "form": "md",
+ "page": 3,
+ "status": "ok",
+ "answer": "Meta-adaptation is most stable with a learning rate **α between 3e-5 and 5e-4**. Higher learning rates destabilize gradient flow across tasks. (p. 3, Section 4.5 Ablation Study, \"Learning Rate (α)\")\n\nThe conversion note warns that equations were reconstructed from the page image and may have a symbol wrong. This one is also garbled: the range appears three times in the same line with LaTeX fragments mixed in. All three copies give the same bounds, so the range is probably correct, but check the PDF before quoting the exact exponents.",
+ "input": 13047,
+ "cache_write": 575,
+ "cache_read": 12470,
+ "output": 300,
+ "thinking": 110,
+ "usd": 0.013101999999999999,
+ "seconds": 4.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.39,
+ "date": "2026-10-26 01:18"
+}

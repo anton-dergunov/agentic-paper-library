@@ -1,0 +1,7 @@
+# Drafted from the PDF by claude-opus-5-5, $0.29; not yet checked
+- {id: WD1, exp: E8, paper: diskann, kind: pseudocode, page: 4,
+   question: 'In the robust pruning procedure, after the closest remaining candidate p* is added as an out-neighbor of p, what exact condition causes another candidate p'' to be removed from the candidate set?',
+   gold: 'p'' is removed if α · d(p*, p'') ≤ d(p, p'') (Algorithm 2, RobustPrune).', passage: 'garbled Algorithm 2 RobustPrune pseudocode'}
+- {id: WD2, exp: E8, paper: diskann, kind: text, page: 8,
+   question: 'What is the name of the machine used to build the one-shot in-memory Vamana index over the full billion-point SIFT1B dataset, and how much RAM does it have?',
+   gold: 'M64-32ms, a virtual machine with 1792GB DDR3 RAM (32 vCPUs).', passage: 'garbled build-machine name'}

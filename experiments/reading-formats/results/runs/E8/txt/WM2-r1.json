@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WM2",
+ "rep": 1,
+ "paper": "midi",
+ "form": "txt",
+ "page": 5,
+ "status": "ok",
+ "answer": "With the **extra-note augmentation omitted**, the in-note beat model gets **precision 91.2, recall 94.3 and F-score 91.3**. With **all augmentation methods**, it gets an **F-score of 92.2** (precision 92.9, recall 93.7). (Table 3, p. 5)\n\nThese are note-level F-measure results from Table 3, the ablation study table. (p. 5)\n\n**Notes:**\n- The extra-note row has exactly the same numbers (91.2 / 94.3 / 91.3) as the \"Use all features\" row in the input-feature half of the same table. The paper does not explain this. (p. 5)\n- \"Extra note\" in Table 3 seems to be the method called \"Note introduction\" in Section 3.1.3. That method adds new notes 12 semitones above or below 0–100% of existing notes. (p. 4)\n- The document has no printed page numbers, so I counted pages from the start of the text.",
+ "input": 17379,
+ "cache_write": 603,
+ "cache_read": 16774,
+ "output": 616,
+ "thinking": 309,
+ "usd": 0.0205068,
+ "seconds": 8.7,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.53,
+ "date": "2026-10-26 01:21"
+}

@@ -1,0 +1,38 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WL2",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "Appendix A.1 of the paper gives the formulas on **page 24**. The fractions are garbled in the text layer, so I checked them against the PDF page.\n\n- **h**, range [−1, 1]: h(x) = 2 / (1 + exp(−x)) − 1 (Eq. 4, p. 24)\n- **g**, range [−2, 2]: g(x) = 4 / (1 + exp(−x)) − 2 (Eq. 5, p. 24)\n\nBoth are scaled and shifted versions of the gates' logistic sigmoid, f(x) = 1 / (1 + exp(−x)), which has range [0, 1] (Eq. 3, p. 24).\n\n**Where they are used:** in the main experiments, every sigmoid is logistic with range [0, 1], except h in [−1, 1] and g in [−2, 2]. The paper says this for Experiment 1 (p. 12), Experiment 3 (p. 14), the adding problem (p. 16) and the multiplication problem (p. 18).\n\n**One exception:** in Experiment 2, LSTM uses the plain logistic sigmoid for g and the identity for h, h(x) = x for all x (p. 13). The paper also notes that choosing h(x) = x can cause problems with internal-state drift (p. 9).",
+ "input": 75899,
+ "cache_write": 10866,
+ "cache_read": 65021,
+ "output": 1424,
+ "thinking": 122,
+ "usd": 0.1284602,
+ "seconds": 24.3,
+ "turns": 8,
+ "calls": [
+  "Glob **/*.txt",
+  "Glob **/Long Short-Term Memory*.txt",
+  "Grep (\\[page \\d+\\]|logistic sigmoid|range \\[|\\bh\\(x\\)|\\bg\\(x\\)|centered)",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/deep-learning/architectures/Long Short-Term Memory.txt [1268+20]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/deep-learning/architectures/Long Short-Term Memory.pdf [pages 24]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/deep-learning/architectures/Long Short-Term Memory.txt [645+6]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/deep-learning/architectures/Long Short-Term Memory.txt [700+12]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/deep-learning/architectures/Long Short-Term Memory.pdf [pages 24]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-26 01:15"
+}

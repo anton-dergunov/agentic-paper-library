@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WC2",
+ "rep": 1,
+ "paper": "coldstart",
+ "form": "txt",
+ "page": 3,
+ "status": "ok",
+ "answer": "According to the ablation study (Section 4.5, page 3), **meta-adaptation is most stable with a learning rate α between 3×10⁻⁵ and 5×10⁻⁴** (α ∈ [3e‑5, 5e‑4]). The paper also notes that **higher learning rates destabilize gradient flow across tasks** (page 3).\n\nThe text extraction garbles this passage: the range is repeated with LaTeX remnants such as \"α\\alphaα\" and \"[3^{−5}, 5^{−4}]\". The bounds 3e‑5 and 5e‑4 can still be read consistently from the repeated fragments (page 3).",
+ "input": 13312,
+ "cache_write": 575,
+ "cache_read": 12735,
+ "output": 289,
+ "thinking": 75,
+ "usd": 0.012935,
+ "seconds": 4.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.39,
+ "date": "2026-10-26 01:18"
+}

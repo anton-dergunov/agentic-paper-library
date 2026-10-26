@@ -1,0 +1,30 @@
+{
+ "key": "4600e7c6abc56b9f",
+ "usd": 0.038552,
+ "grades": {
+  "E8/txt/WA1-r1": {
+   "score": "correct",
+   "page_ok": false,
+   "confident_wrong": false,
+   "note": "Cites journal pages 109–110 rather than PDF page 4."
+  },
+  "E8/md/WA1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/f-plain/WA1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/c0/WA1-r1": {
+   "score": "correct",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

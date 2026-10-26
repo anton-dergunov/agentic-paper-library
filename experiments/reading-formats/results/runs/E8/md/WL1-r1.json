@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WL1",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "**Where the maximum is:** If the presynaptic activation y^{l_{m−1}} is constant and non-zero, then |f′_{l_m}(net_{l_m}) w_{l_m l_{m−1}}| reaches its maximal values at\n\n  w_{l_m l_{m−1}} = (1 / y^{l_{m−1}}) · coth(½ · net_{l_m}) (page 4)\n\n**Weight threshold:** The quantity is less than 1.0 whenever |w_{l_m l_{m−1}}| < 4.0. For example, this holds if the largest absolute weight w_max is below 4.0 (page 4).\n\n**Context from the same passage (page 4):**\n- For the logistic sigmoid, the maximal value of f′ is 0.25.\n- The quantity goes to zero as |w| → ∞.\n- So with logistic sigmoids, error flow tends to vanish while weights stay below 4.0 in absolute value, especially early in training.\n- Larger initial weights do not help. As |w| grows, the derivative goes to zero \"faster\" than the weight can grow.\n\nThe document says its symbols were reconstructed from a damaged text layer and may contain errors. You should check the formula against the original PDF before quoting it.",
+ "input": 45176,
+ "cache_write": 45174,
+ "cache_read": 0,
+ "output": 736,
+ "thinking": 326,
+ "usd": 0.37612,
+ "seconds": 9.4,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.31,
+ "date": "2026-10-26 01:15"
+}

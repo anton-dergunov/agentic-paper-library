@@ -1,0 +1,9 @@
+# Drafted from the PDF by claude-opus-5-5, $0.04; not yet checked
+- {id: WE1, exp: E8, paper: edm, kind: table, page: 3,
+   question: 'When the authors recast the original VP (variance preserving) model in their common framework, what numerical values do they list for β_d and β_min in its noise schedule?',
+   gold: 'β_d = 19.9 and β_min = 0.1, used in σ(t) = sqrt(e^{½β_d t² + β_min t} − 1); ε_s = 10^-3 and M = 1000 are listed alongside.',
+   passage: 'Table 1 VP column parameters/schedule garbled'}
+- {id: WE2, exp: E8, paper: edm, kind: pseudocode, page: 7,
+   question: 'In the stochastic sampler, how is the per-step churn factor γ_i defined, and under what condition does the sampler apply the second-order correction?',
+   gold: 'γ_i = min(S_churn/N, √2 − 1) if t_i ∈ [S_tmin, S_tmax], otherwise 0. The second-order correction is applied only if t_{i+1} ≠ 0 (printed as ≠, not "= 0").',
+   passage: 'Alg. 2 γ_i definition scrambled and line 9 ≠ read as ='}

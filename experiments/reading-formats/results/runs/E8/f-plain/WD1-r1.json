@@ -1,0 +1,33 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WD1",
+ "rep": 1,
+ "paper": "diskann",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "A candidate p′ is removed from the candidate set V when\n\n**α · d(p\\*, p′) ≤ d(p, p′)**\n\nIn words: p′ is dropped if p\\*, the neighbour just added, is closer to p′ than p is, by at least a factor of α. That is, α times the distance from p\\* to p′ is no more than the distance from p to p′ (Algorithm 2, RobustPrune, p. 4).\n\nHow the procedure runs (Algorithm 2, p. 4):\n- It first merges p's existing out-neighbours into the candidate set, removes p itself, and clears p's out-neighbours.\n- While candidates remain, it picks the one closest to p, called p\\*, and adds it as an out-neighbour of p.\n- If p now has R out-neighbours (R is the degree bound), it stops.\n- Otherwise it checks every remaining candidate p′ with the condition above and removes those that meet it.\n\nHere α ≥ 1 is the \"distance threshold\" input (p. 4). The paper explains that choosing α > 1 makes the distance to the query shrink by a factor of α at every node along the search path. Without it, the distance only has to decrease, as in the SNG property. This keeps the graph's diameter small and cuts down sequential disk reads (Section 2.2, p. 4).",
+ "input": 46335,
+ "cache_write": 5771,
+ "cache_read": 40554,
+ "output": 947,
+ "thinking": 0,
+ "usd": 0.07325880000000001,
+ "seconds": 22.6,
+ "turns": 5,
+ "calls": [
+  "Grep RobustPrune|α · d|alpha",
+  "Glob **/DiskANN*.txt",
+  "Grep RobustPrune|\\[page|p\\*|p′",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/search-and-ranking/dense-retrieval/DiskANN. Fast Accurate Billion-point Nearest Neighbor Search on a Single Node.txt [178+45]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.47,
+ "date": "2026-10-26 01:19"
+}

@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WA1",
+ "rep": 1,
+ "paper": "anatomy",
+ "form": "c0",
+ "page": 4,
+ "status": "ok",
+ "answer": "In Brin and Page's 1998 paper (Section 2.1.1), the PageRank of page A is defined as:\n\n$$PR(A) = (1 - d) + d\\left(\\frac{PR(T_1)}{C(T_1)} + \\cdots + \\frac{PR(T_n)}{C(T_n)}\\right)$$\n\nwhere:\n\n- **T1…Tn** are the pages that link to A (its citations).\n- **PR(Ti)** is the PageRank of page Ti.\n- **C(Ti)** is the number of links going out of page Ti. Each page splits its PageRank evenly among the pages it links to.\n- **d** is a damping factor between 0 and 1. The paper says it is usually set to 0.85.\n\n**Interpretation (the \"random surfer\" model):** Imagine a user who starts on a random page and keeps clicking links, never pressing \"back.\" Sometimes the user gets bored and jumps to a new random page instead. PageRank is the probability that this surfer is visiting a given page. The damping factor *d* is the probability of continuing to follow links at each step, so *1 − d* is the probability of jumping to a random page.\n\n**Computation:** The definition is recursive, since a page's rank depends on the ranks of the pages linking to it. It is computed iteratively and corresponds to the principal eigenvector of the normalized link matrix. The paper notes that PageRank for 26 million pages could be computed in a few hours on a medium-sized workstation.\n\n**A known quirk:** The paper says the PageRanks form a probability distribution summing to one. With the formula as written, however, they actually sum to N, the number of pages. A version that sums to one uses *(1 − d)/N* as the first term.",
+ "input": 807,
+ "cache_write": 805,
+ "cache_read": 0,
+ "output": 694,
+ "thinking": 138,
+ "usd": 0.020328,
+ "seconds": 9.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.34,
+ "date": "2026-10-26 01:16"
+}

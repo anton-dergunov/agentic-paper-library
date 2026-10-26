@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WD1",
+ "rep": 1,
+ "paper": "diskann",
+ "form": "md",
+ "page": 4,
+ "status": "ok",
+ "answer": "In RobustPrune (Algorithm 2), after p\\* is added to N_out(p), the procedure checks every remaining candidate p′ in 𝒱. **A candidate p′ is removed from 𝒱 if α · d(p\\*, p′) ≤ d(p, p′).** (p. 4)\n\nIn other words, p′ is dropped when the new neighbour p\\* is closer to p′ than p is, by at least a factor of α.\n\n**Related details:**\n- **Degree check first:** Before any removals, the loop breaks if |N_out(p)| = R, so p never gets more than R out-neighbours. (p. 4)\n- **What α is:** α ≥ 1 is a distance threshold. Setting α > 1 is meant to make the distance to the query shrink by a multiplicative factor at every node on the search path, which keeps the graph's diameter small. (p. 4)\n- **Comparison with the SNG rule:** The sparse neighbourhood graph rule removes p′ when d(p, p′) > d(p\\*, p′). (p. 3) HNSW and NSG implicitly use α = 1. (p. 5)\n\n**A caveat on the source:** The document's header says equations and pseudocode were read from the page image by a model and \"can be wrong in a symbol or an index.\" The algorithm text is also partly garbled. You should check the inequality against the original PDF before quoting it.",
+ "input": 20251,
+ "cache_write": 20249,
+ "cache_read": 0,
+ "output": 781,
+ "thinking": 328,
+ "usd": 0.17762,
+ "seconds": 10.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.45,
+ "date": "2026-10-26 01:19"
+}

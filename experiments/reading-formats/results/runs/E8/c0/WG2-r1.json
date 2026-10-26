@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WG2",
+ "rep": 1,
+ "paper": "gpt2",
+ "form": "c0",
+ "page": 8,
+ "status": "ok",
+ "answer": "The Bloom filters were built so that the false-positive rate was **upper bounded by 1/10⁸**.\n\nThey held 8-grams from the WebText training set. Before the 8-grams were added, the text was normalized to lower-cased alphanumeric words separated by single spaces. The authors also checked the low false-positive rate empirically: they generated 1 million random strings, and the filter flagged none of them.",
+ "input": 817,
+ "cache_write": 815,
+ "cache_read": 0,
+ "output": 311,
+ "thinking": 180,
+ "usd": 0.012748,
+ "seconds": 4.9,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.5,
+ "date": "2026-10-26 01:20"
+}

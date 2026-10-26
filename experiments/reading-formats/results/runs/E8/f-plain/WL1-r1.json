@@ -1,0 +1,33 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WL1",
+ "rep": 1,
+ "paper": "lstm",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "Everything below is from page 4 of *Long Short-Term Memory* (Hochreiter & Schmidhuber), in the \"Intuitive explanation of equation (2)\" passage.\n\n- **Where it is largest:** With logistic sigmoid units, f′ can be at most 0.25. If the presynaptic activation y^{l_{m−1}} is constant and non-zero, then |f′_{l_m}(net_{l_m}) w_{l_m l_{m−1}}| is largest where\n\n  **w_{l_m l_{m−1}} = (1 / y^{l_{m−1}}) · coth(½ net_{l_m})**\n\n- **When it is below 1.0:** The quantity goes to zero as |w_{l_m l_{m−1}}| → ∞. It is **less than 1.0 when |w_{l_m l_{m−1}}| < 4.0**, for example when the largest absolute weight w_max is below 4.0.\n\n- **What the authors conclude:** With ordinary logistic sigmoid units, the error flow tends to vanish as long as the weights are below 4.0 in absolute value, especially early in training. Larger initial weights don't fix this, because the derivative shrinks toward zero faster than the weight grows. A higher learning rate doesn't fix it either, because it doesn't change the ratio of long-range to short-range error flow.\n\nThe PDF's text layer garbles this formula, so I rebuilt it from the subscripts and superscripts. The PDF itself on page 4 shows the exact typeset form.",
+ "input": 45873,
+ "cache_write": 5309,
+ "cache_read": 40554,
+ "output": 1025,
+ "thinking": 34,
+ "usd": 0.0711228,
+ "seconds": 16.7,
+ "turns": 5,
+ "calls": [
+  "Grep maximal values|4\\.0",
+  "Glob **/*Long Short*.txt",
+  "Grep maximal|coth|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/deep-learning/architectures/Long Short-Term Memory.txt [175+30]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.33,
+ "date": "2026-10-26 01:15"
+}

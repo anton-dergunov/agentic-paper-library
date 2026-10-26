@@ -1,0 +1,10 @@
+# Drafted from the PDF by claude-opus-5-5, $0.29; not yet checked
+- {id: WA1, exp: E8, paper: anatomy, kind: equation, page: 4,
+   question: 'How is the PageRank of a page A defined in terms of the pages T1...Tn that link to it, the damping factor d, and the out-link counts C(·)?',
+   gold: 'PR(A) = (1 − d) + d·(PR(T1)/C(T1) + ... + PR(Tn)/C(Tn)), with d usually 0.85. Note that the printed page looks inconsistent: it says the PageRanks sum to one, but with an undivided (1 − d) term they would sum to N.',
+   passage: 'p.4 garbled OCR of the PageRank equation (fraction layout broken)'}
+- {id: WA2, exp: E8, paper: anatomy, kind: number, page: 7,
+   question: 'At peak speed, how many Web pages per second could the distributed crawling system fetch, with how many crawlers, and roughly how many connections does each crawler keep open?',
+   gold: 'Over 100 pages per second using four crawlers, with roughly 300 open connections per crawler. Note that the same paragraph says they typically ran about 3 crawlers, so the printed page looks inconsistent.',
+   passage: 'p.7 crawling section with the garbled heading ("Crmvling the Web") and interleaved/duplicated text'}
+

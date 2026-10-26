@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Draft tier B2's questions: one request per paper, from its PDF.
+"""Draft questions: one request per paper, from its PDF.
 
-    PAPER_LIBRARY=<library> uv run python draft.py <paper> <id prefix> [...]
+    PAPER_LIBRARY=<library> uv run python draft.py <paper> <id prefix> [...]           # tier B2: six kinds
+    PAPER_LIBRARY=<library> uv run python draft.py --weak <paper> <id prefix> [...]    # tier G: at the issue records
 
 Writes results/drafts/<paper>.yaml, which is checked by hand against the PDF (and with
 `inputs.py check`) before its questions are copied into questions.yaml.
@@ -37,14 +38,33 @@ Reply with a YAML list in exactly this form, nothing else:
    question: '...',
    gold: 'Not reported: ...'}}
 """
+# Tier G: the issue records say where the PDF's text layer misled the converter; the
+# questions are aimed at those passages, so that a reader of the text layer meets them too.
+PROMPT_WEAK = """The library's issue records say that this paper's PDF text layer is broken or flawed in these places:
+
+{issues}
+
+Write two questions about this paper whose answers depend on what is printed in those places, to test whether a model given the paper as its text layer, a markdown conversion, or the PDF can still answer them. Prefer the passages a reader would actually ask about (an equation, a table cell, a key definition or number) over cosmetic ones (a footnote number, a heading). Each needs one short, checkable gold answer taken from the paper as printed (read the page image, not the text), with its PDF page. If the printed page itself seems wrong, say so in the gold.
+
+Ask each question without naming its table, figure or page, as a reader would. Reply with a YAML list in exactly this form, nothing else:
+- {{id: {prefix}1, exp: E8, paper: {paper}, kind: equation, page: 4,
+   question: '...',
+   gold: '... (Eq. 3).', passage: 'which issue record it aims at, in a few words'}}
+"""
 
 
-def draft(paper, prefix):
+def issues(paper):
+    record = inputs.LIBRARY_ROOT / "issues" / (inputs.md_path(paper).stem + ".yaml")
+    return record.read_text()
+
+
+def draft(paper, prefix, weak=False):
     target = DRAFTS / ("%s.yaml" % paper)
     if target.exists():
         return
-    result, _ = run.request(SYSTEM, [run.document(inputs.pdf(paper)),
-                                     {"type": "text", "text": PROMPT.format(prefix=prefix, paper=paper)}])
+    prompt = (PROMPT_WEAK.format(issues=issues(paper), prefix=prefix, paper=paper) if weak
+              else PROMPT.format(prefix=prefix, paper=paper))
+    result, _ = run.request(SYSTEM, [run.document(inputs.pdf(paper)), {"type": "text", "text": prompt}])
     reply = (result.get("result") or "").strip()
     if reply.startswith("```"):
         reply = reply.split("\n", 1)[1].rsplit("```", 1)[0]
@@ -56,5 +76,7 @@ def draft(paper, prefix):
 
 if __name__ == "__main__":
     args = sys.argv[1:]
+    weak = "--weak" in args
+    args = [a for a in args if a != "--weak"]
     for paper, prefix in zip(args[::2], args[1::2]):
-        draft(paper, prefix)
+        draft(paper, prefix, weak)

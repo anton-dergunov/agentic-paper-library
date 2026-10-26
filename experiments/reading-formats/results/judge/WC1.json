@@ -1,0 +1,30 @@
+{
+ "key": "bc67d0d0b505403e",
+ "usd": 0.04604,
+ "grades": {
+  "E8/c0/WC1-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says it doesn't know the paper; generic MAML reconstruction matches the gold but is unsourced."
+  },
+  "E8/txt/WC1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WC1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/f-plain/WC1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WC1",
+ "rep": 1,
+ "paper": "coldstart",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "The paper writes the two loops formally in Section 3.2 on page 2. The text layer loses most of the math symbols, so I read the equations from the PDF page images.\n\n**Inner loop (task-specific prompt update)**, p. 2:\n\n  θᵢ′ = θ − α ∇_θ L_{Tᵢ}(f_θ ; Dᵢ^support)\n\n- θ ∈ ℝ^{l×d} is the soft-prompt initialization. Here l is the prompt length and d is the LLM's embedding dimension (p. 2).\n- α is the inner-loop learning rate. f_θ is the LLM conditioned on the prompt θ (p. 2).\n- **Data split: the support set Dᵢ^support** of user task Tᵢ.\n\n**Outer loop (meta-objective across tasks)**, p. 2:\n\n  min_θ Σᵢ L_{Tᵢ}(f_{θᵢ′} ; Dᵢ^query)\n\n- The loss uses the adapted prompt θᵢ′ and is summed over the sampled user tasks. The minimization is over the shared initialization θ (p. 2).\n- **Data split: the query set Dᵢ^query** of each task.\n\n**How the splits are defined:**\n- Each user is one task Tᵢ ~ p(T). Their interactions Dᵢ = {(x_k, y_k)}_{k=1}^K are divided into a support set and a query set. The goal is a θ that, after a few updates on Dᵢ^support, gives low loss on Dᵢ^query (pp. 1–2).\n- During episodic training, each user has 1–5 interactions in the support set and 1–5 in the query set (p. 2, §3.4).\n- At test time, each user has a support set of K ∈ {1, 3, 5} interactions (p. 3). Most experiments use K = 5 (p. 3).\n- Gradients only update the soft prompt P, which is placed in front of the input as [P; X]. The LLM itself stays frozen (p. 2, §3.3).\n\nThe introduction gives a shorter version on p. 1: θᵢ′ = θ − α∇_θ L_{Tᵢ}(θ) and min_θ Σᵢ L_{Tᵢ}(θᵢ′). It leaves the splits out of the formulas, but the surrounding text says adaptation uses D_support and the aim is the best performance on D_query.\n\nThe paper also uses Reptile, a first-order alternative to MAML. Reptile follows the same episodic structure and avoids second-order gradients, but sometimes loses some accuracy (p. 2, §3.5).",
+ "input": 52724,
+ "cache_write": 10182,
+ "cache_read": 42532,
+ "output": 1591,
+ "thinking": 91,
+ "usd": 0.1218224,
+ "seconds": 20.9,
+ "turns": 5,
+ "calls": [
+  "Grep Cold-Start Personalization",
+  "Grep inner|outer|\\[page|support|query|meta-objective",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.txt [30+110]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.pdf [pages 1-2]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/personalization/methods/Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs.pdf [pages 1-2]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.39,
+ "date": "2026-10-26 01:18"
+}

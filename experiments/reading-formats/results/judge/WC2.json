@@ -1,0 +1,30 @@
+{
+ "key": "a8f55e333c49302e",
+ "usd": 0.021556,
+ "grades": {
+  "E8/c0/WC2-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Says it doesn't know the paper; gives no range."
+  },
+  "E8/f-plain/WC2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WC2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WC2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

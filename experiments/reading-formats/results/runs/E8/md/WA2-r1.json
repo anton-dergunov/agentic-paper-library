@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "md",
+ "qid": "WA2",
+ "rep": 1,
+ "paper": "anatomy",
+ "form": "md",
+ "page": 9,
+ "status": "ok",
+ "answer": "From Table 1 (\"Statistics\") on **page 9**:\n\n| Item | Size |\n|---|---|\n| Total size of fetched pages | 147.8 GB |\n| Compressed repository | 53.5 GB |\n| Lexicon | 293 MB |\n\nThe values are internally consistent: the 53.5 GB repository plus the 55.2 GB \"Total without repository\" equals the 108.7 GB \"Total with repository\" (p. 9).\n\nThese values came from a hand-edited version of the table. A note in the file says Table 1 was retyped from the PDF page because the scan's text layer had garbled the numbers.",
+ "input": 15212,
+ "cache_write": 582,
+ "cache_read": 14628,
+ "output": 327,
+ "thinking": 126,
+ "usd": 0.0141296,
+ "seconds": 4.5,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.35,
+ "date": "2026-10-26 01:16"
+}

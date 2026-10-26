@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WD1",
+ "rep": 1,
+ "paper": "diskann",
+ "form": "txt",
+ "page": 4,
+ "status": "ok",
+ "answer": "In RobustPrune (Algorithm 2), once p* is added to N_out(p), a candidate p′ is removed from the candidate set V if:\n\n**α · d(p*, p′) ≤ d(p, p′)** (page 4)\n\nIn words, p′ is pruned when it is closer to p* by at least a factor of α than it is to p. Here α ≥ 1 is the distance threshold (page 4).\n\nSome context from the same page:\n- The loop repeatedly picks p* = arg min over p′ ∈ V of d(p, p′), the closest remaining candidate to p, and adds it to N_out(p) (page 4).\n- Before the pruning step, the procedure stops if |N_out(p)| = R, the degree bound (page 4).\n- Using α > 1 means the distance to the query shrinks by a multiplicative factor of α at each node on the search path. With the SNG property it only decreases (page 4). The SNG rule is the α = 1 case, which removes p′ when d(p, p′) > d(p*, p′) (page 3).",
+ "input": 17461,
+ "cache_write": 17459,
+ "cache_read": 0,
+ "output": 466,
+ "thinking": 125,
+ "usd": 0.149,
+ "seconds": 6.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.45,
+ "date": "2026-10-26 01:19"
+}

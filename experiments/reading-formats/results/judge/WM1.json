@@ -1,0 +1,30 @@
+{
+ "key": "7082ff5c95ad8395",
+ "usd": 0.025476,
+ "grades": {
+  "E8/txt/WM1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/md/WM1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/f-plain/WM1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/c0/WM1-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Does not provide the values."
+  }
+ }
+}

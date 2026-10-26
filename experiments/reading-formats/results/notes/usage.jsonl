@@ -1,0 +1,8 @@
+{"input": 29573, "output": 6653, "usd": 0.369636, "paper": "soap", "form": "md", "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 28081, "output": 7479, "usd": 0.37422, "paper": "soap", "form": "txt", "step": "note", "left_out": "11 pages", "model": "claude-opus-5-5"}
+{"input": 16603, "output": 4207, "usd": 0.21695599999999998, "paper": "ebr", "form": "md", "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 19929, "output": 5062, "usd": 0.260664, "paper": "ebr", "form": "txt", "step": "note", "left_out": "1 pages", "model": "claude-opus-5-5"}
+{"input": 29840, "output": 5657, "usd": 0.351852, "paper": "atma", "form": "md", "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 24629, "output": 6493, "usd": 0.326884, "paper": "atma", "form": "txt", "step": "note", "left_out": "9 pages", "model": "claude-opus-5-5"}
+{"input": 18116, "output": 5487, "usd": 0.25466, "paper": "judgeshift", "form": "md", "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 24142, "output": 5818, "usd": 0.309488, "paper": "judgeshift", "form": "txt", "step": "note", "left_out": "nothing", "model": "claude-opus-5-5"}

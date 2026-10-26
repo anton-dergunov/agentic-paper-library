@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WM1",
+ "rep": 1,
+ "paper": "midi",
+ "form": "c0",
+ "page": 6,
+ "status": "ok",
+ "answer": "I can't reliably recall those numbers. I know the paper: Liu, Kong, Morfi and Benetos, ISMIR 2022. It uses a convolutional-recurrent network to track beats and downbeats in performance MIDI, then builds a quantised score from them. But I can't confidently remember whether it reports a variant trained to also output tempo, or what beat and downbeat F-measures that variant reached. Any figures I gave could easily be wrong.\n\nTo get the exact values, check the results tables and ablation discussion in the ISMIR 2022 proceedings version or the arXiv preprint. If you share the PDF or the relevant table, I can help you read and interpret it.",
+ "input": 812,
+ "cache_write": 810,
+ "cache_read": 0,
+ "output": 445,
+ "thinking": 224,
+ "usd": 0.015387999999999999,
+ "seconds": 7.6,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.52,
+ "date": "2026-10-26 01:21"
+}

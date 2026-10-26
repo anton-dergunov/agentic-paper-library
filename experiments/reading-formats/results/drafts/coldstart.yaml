@@ -1,0 +1,9 @@
+# Drafted from the PDF by claude-opus-5-5, $0.18; not yet checked
+- {id: WC1, exp: E8, paper: coldstart, kind: equation, page: 2,
+   question: 'In the meta-learning framework, what update rule produces the task-adapted prompt θ_i′ for a user task, and on which data split is the loss evaluated?',
+   gold: 'θ_i′ = θ − α ∇_θ L_{T_i}(f_θ; D_i^support): one gradient step on the support-set loss with inner-loop learning rate α. The outer loop then minimizes Σ_i L_{T_i}(f_{θ_i′}; D_i^query); the printed superscript for "query" is itself malformed.',
+   passage: 'garbled inner/outer loop MAML equations'}
+- {id: WC2, exp: E8, paper: coldstart, kind: table-cell, page: 3,
+   question: 'Over what range of inner-loop learning rate α is meta-adaptation reported to be most stable?',
+   gold: 'α ∈ [3e−5, 5e−4]. Higher rates destabilize gradient flow. The printed page repeats this range with leftover LaTeX source ("\alpha \in [3e^{-5}, 5e^{-4}]").',
+   passage: 'unreadable learning-rate range in ablation'}

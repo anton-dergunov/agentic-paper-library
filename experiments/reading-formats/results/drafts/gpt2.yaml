@@ -1,0 +1,9 @@
+# Drafted from the PDF by claude-opus-5-5, $0.61; not yet checked
+- {id: WG1, exp: E8, paper: gpt2, kind: table, page: 7,
+   question: 'Of the 30 Natural Questions answers that GPT-2 was most confident about, how many are marked as incorrect?',
+   gold: '8 incorrect, 22 correct. The incorrect answers are A (blood type in Sweden), California, parthenogenesis, Montana, Peter Dinklage, Janet Yellen, Michael Jordan and Arnold Schwarzenegger (Table 5, p. 7; the issue record says pp. 6–7, but the table is printed on p. 7).',
+   passage: 'Table 5 Correct column tick/cross rendered as 3/7'}
+- {id: WG2, exp: E8, paper: gpt2, kind: equation, page: 8,
+   question: 'In the 8-gram overlap analysis, what upper bound were the Bloom filters built to keep the false positive rate below?',
+   gold: '1/10^8, i.e. 10^-8. A check on 1M generated strings found zero false positives (Sec. 4, p. 8).',
+   passage: 'Bloom-filter bound printed as "1 10 8"'}

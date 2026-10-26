@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "c0",
+ "qid": "WD2",
+ "rep": 1,
+ "paper": "diskann",
+ "form": "c0",
+ "page": 8,
+ "status": "ok",
+ "answer": "From memory, the one-shot in-memory Vamana index over the full billion-point dataset was built on an **Azure M64-32ms virtual machine with about 1792 GB (~1.75 TB) of RAM**. Building that single large index needed far more memory than the 64 GB workstation used for most of the other experiments.\n\nI can't check the paper right now, so treat the exact VM name and RAM figure as likely but unverified. You can confirm them in the experimental setup or billion-scale evaluation section.",
+ "input": 821,
+ "cache_write": 819,
+ "cache_read": 0,
+ "output": 591,
+ "thinking": 428,
+ "usd": 0.01838,
+ "seconds": 7.8,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.47,
+ "date": "2026-10-26 01:19"
+}

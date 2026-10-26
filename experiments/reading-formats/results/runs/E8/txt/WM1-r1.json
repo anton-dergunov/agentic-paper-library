@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WM1",
+ "rep": 1,
+ "paper": "midi",
+ "form": "txt",
+ "page": 6,
+ "status": "ok",
+ "answer": "When trained to output **tempo along with beats and downbeats**, the proposed model reaches a **beat F-measure (f_b) of 86.2** and a **downbeat F-measure (f_db) of 69.8** (Table 4, page 6).\n\nThe document has no printed page numbers, so page numbers here are counted from the start of the text.\n\n**Comparison** (beat-level F-measures, Table 4, page 6):\n\n| Model (output data) | f_b | f_db |\n|---|---|---|\n| Baseline (b, db) | 66.9 | 57.6 |\n| Proposed (b, db) | 85.7 | 63.3 |\n| Proposed (with tempo) | **86.2** | **69.8** |\n\nThe authors say adding tempo to the outputs improves performance further, which \"suggests a benefit of joint learning\" (page 6). The largest gain is in downbeats, which rise from 63.3 to 69.8.\n\nThe table labels this row \"Proposed (d, db, t).\" The caption defines only \"b: beat, db: downbeat, t: tempo,\" so \"d\" is probably a typo for \"b\" (page 6).",
+ "input": 17361,
+ "cache_write": 17359,
+ "cache_read": 0,
+ "output": 661,
+ "thinking": 296,
+ "usd": 0.15209999999999999,
+ "seconds": 8.1,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.52,
+ "date": "2026-10-26 01:21"
+}

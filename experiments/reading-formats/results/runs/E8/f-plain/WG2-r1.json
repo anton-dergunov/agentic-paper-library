@@ -1,0 +1,38 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WG2",
+ "rep": 1,
+ "paper": "gpt2",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "The Bloom filters were built so that the false-positive rate is at most **1/10⁸** (one in 100 million) (p. 8, Section 4 \"Generalization vs Memorization\").\n\nThe text layer prints this as \"1018\", which looks like 10¹⁸. The PDF page shows it's actually the fraction 1 over 10⁸, flattened when the text was extracted (p. 8).\n\nContext from the same passage (p. 8):\n- The filters held the 8-grams of the WebText training set. Strings were first normalized to lower-case alphanumeric words separated by single spaces, to improve recall.\n- The authors checked the low false-positive rate by generating 1M strings. The filter matched none of them.\n- They used the filters to measure what share of each test set's 8-grams also appear in WebText training (Table 6, p. 8).",
+ "input": 87433,
+ "cache_write": 10344,
+ "cache_read": 77073,
+ "output": 1354,
+ "thinking": 99,
+ "usd": 0.12531060000000002,
+ "seconds": 41.0,
+ "turns": 8,
+ "calls": [
+  "Grep Bloom",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain; f=$(ls */*Unsupervised\\ Multitask*.txt); echo \"$f\"; grep -n -i \"bloom\\|false positive\\|\\[page\" \"$f\" | head -80",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain; grep -ril \"unsupervised multitask learners\" --include=*.txt . | head; grep -ril \"WebText\" --include=*.txt . | xargs grep -il bloom",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain; grep -ril \"WebText\" --include='*.txt' . | xargs grep -il bloom",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain; grep -ril \"WebText\" --include='*.txt' . -Z | xargs -0 grep -il bloom",
+  "Bash cd /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/foundation-models; grep -n -i \"bloom\\|false positive\\|\\[page\" \"Language Models are Unsupervised Multitask Learners.txt\"",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/foundation-models/Language Models are Unsupervised Multitask Learners.pdf [pages 8]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/foundation-models/Language Models are Unsupervised Multitask Learners.pdf [pages 8]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.51,
+ "date": "2026-10-26 01:21"
+}

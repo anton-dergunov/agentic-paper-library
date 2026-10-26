@@ -1,0 +1,30 @@
+{
+ "key": "12d46bdcbd1b5f20",
+ "usd": 0.024352,
+ "grades": {
+  "E8/md/WM2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/txt/WM2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E8/c0/WM2-r1": {
+   "score": "declined",
+   "page_ok": null,
+   "confident_wrong": false,
+   "note": "Declined to give values without the paper."
+  },
+  "E8/f-plain/WM2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

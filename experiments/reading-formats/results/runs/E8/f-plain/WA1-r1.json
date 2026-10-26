@@ -1,0 +1,31 @@
+{
+ "exp": "E8",
+ "cond": "f-plain",
+ "qid": "WA1",
+ "rep": 1,
+ "paper": "anatomy",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "The paper defines PageRank in Section 2.1.1, \"Description of PageRank calculation\". The definition starts at the bottom of page 3 and the formula is on page 4.\n\n**Setup (page 3):** Page A is linked to by pages T1…Tn, which the paper calls \"citations\". The parameter d is a damping factor that can be set between 0 and 1, and the authors usually set it to 0.85.\n\n**Definition (page 4):** C(A) is the number of links going out of page A. The PageRank of A is:\n\n  **PR(A) = (1 − d) + d · ( PR(T1)/C(T1) + … + PR(Tn)/C(Tn) )**\n\nSo each page that links to A passes on its own PageRank divided by its number of outgoing links. That sum is scaled by d, and (1 − d) is added.\n\n**What the paper says follows from this:**\n- **Not all links count equally (page 3).** PageRank builds on counting citations or backlinks, but it weights links instead of counting them all the same, and it normalizes by the number of links on the linking page.\n- **It is a probability distribution (page 4).** The PageRanks form a probability distribution over web pages, so all pages' PageRanks sum to one.\n- **How it is computed (page 4).** A simple iterative algorithm calculates it, and the result corresponds to the principal eigenvector of the web's normalized link matrix. PageRank for 26 million pages can be computed in a few hours on a medium-size workstation.\n- **Random-surfer reading (page 4).** A \"random surfer\" keeps clicking links, never presses \"back\", and eventually gets bored and jumps to a random page. A page's PageRank is the probability that this surfer visits it, and d is described as the probability at each page that the surfer gets bored and asks for another random page.\n- **Why a page ranks high (page 4).** A page can have a high PageRank if many pages point to it, or if a few pages with high PageRank point to it.\n\nThe text file here was produced by OCR and garbles the formula (for example \"TI\" for T1 and \"(I -d)\" for (1 − d)). The version above is my reading of it, and it agrees with the symbol definitions around it.\n\nThe paper's own wording on two points doesn't quite fit its formula:\n- With the (1 − d) term as printed, the values sum to the number of pages, not to one. They only sum to one if (1 − d) is divided by the number of pages.\n- In this formula d is the weight on following links, so the chance of jumping to a random page is really 1 − d, not d as the random-surfer description says.",
+ "input": 28006,
+ "cache_write": 5776,
+ "cache_read": 22224,
+ "output": 1220,
+ "thinking": 51,
+ "usd": 0.0750768,
+ "seconds": 18.2,
+ "turns": 3,
+ "calls": [
+  "Grep PR\\(T1\\)|damping|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/search-and-ranking/search-systems/The Anatomy of a Large-Scale Hypertextual Web Search Engine.txt [140+60]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.35,
+ "date": "2026-10-26 01:16"
+}

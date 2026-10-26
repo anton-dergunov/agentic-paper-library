@@ -1,0 +1,22 @@
+{
+ "exp": "E8",
+ "cond": "txt",
+ "qid": "WD2",
+ "rep": 1,
+ "paper": "diskann",
+ "form": "txt",
+ "page": 8,
+ "status": "ok",
+ "answer": "The one-shot in-memory index for the billion-point datasets was built on the **M64-32ms** machine (page 8). It is a virtual machine with dual Xeon E7-8890v3 processors (32 vCPUs) and **1792GB of DDR3 RAM** (page 8).\n\nFor the SIFT1B bigann dataset, building the one-shot index on M64-32ms took about 2 days. Peak memory use was about 1100GB (page 8).",
+ "input": 17443,
+ "cache_write": 594,
+ "cache_read": 16847,
+ "output": 239,
+ "thinking": 89,
+ "usd": 0.012909400000000001,
+ "seconds": 4.2,
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.47,
+ "date": "2026-10-26 01:19"
+}

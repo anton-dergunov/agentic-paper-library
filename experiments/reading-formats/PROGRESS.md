@@ -13,6 +13,7 @@ PAPER_LIBRARY=~/papers uv run python run.py canary --budget 3  # on each new `cl
 PAPER_LIBRARY=~/papers uv run python run.py <tier> --budget 20  # a tier; stops by itself at 80% of the five-hour window
 PAPER_LIBRARY=~/papers uv run python judge.py               # grade anything not yet graded (run.py does this per group)
 PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md and the block below
+PAPER_LIBRARY=~/papers uv run python notes.py write|compare  # tier H: notes from markdown and from the text layer, compared blind
 ```
 
 `--stop-at 0.9` moves the utilisation at which a run stops; the default 0.8 leaves room for the session that started it. A new session: "Continue the reading-formats experiment from `experiments/reading-formats/PROGRESS.md`."
@@ -30,8 +31,8 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | D | E3 across papers (X1–X13) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | done 25 Oct (48 of 48 first answers; X5 and X8 rerun twice in x-lib, x-pdf, x-txt, graded 26 Oct): see "Tier D, E3: across papers" |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | replaced 25 Oct by tier F |
 | F | E7: figure questions to an agent with text layers and PDFs, with and without a one-line hint | done 26 Oct (30 of 30, no disagreements, so no reruns); canary first run on 2.1.301: see "Tier F" |
-| G | text-layer weak spots: broken and flawed text layers, in c0, txt, md and the tier F agent | planned; on the author's go-ahead |
-| H | notes written from the text layer against the existing notes from markdown, on four recent papers | planned; on the author's go-ahead |
+| G | E8: text-layer weak spots: broken and flawed text layers, in c0, txt, md and the tier F agent | done 26 Oct: see "Tier G" |
+| H | notes written from the text layer against notes from markdown, on four recent papers | done 26 Oct: see "Tier H" |
 
 How a tier runs: group by group (a paper); the conditions of a group in parallel, each asking its questions in turn so that the document is read from the cache; then the group is judged, and every question whose answers differ between conditions (closed book aside) is asked twice more in each condition while the cache is warm (one hour on the subscription) and judged again. Only differences that hold in two of three runs count.
 
@@ -153,7 +154,33 @@ Copies `txtpdf-plain` and `txtpdf-hint` (`copies.py txtpdf`): the x-txt copy wit
 
 **What this decides.** F's condition holds: an agent with the text layer and the PDF reads the text first and opens the page when a value is drawn, unprompted, in 9 of 9, and does not otherwise. With tiers A–D, text layer plus PDF now matches or beats the markdown on every question type measured: tables, equations, setup and appendix details, traps, cross-paper questions, figure text and drawn values. G (broken text layers) and H (notes from the text layer) are what is left before the decision. Both wait for the author's go-ahead.
 
-**Next session**: tiers G and H on the author's go-ahead (drafting and runs about $8–13 for G, $5–9 for H); then write the experiment up (`README.md` in the format of `experiments/README.md`, the decision in `docs/design.md`).
+### Tier G, E8: where the text layer is weak (26 Oct 2026; drafting $2.42, runs $6.08, judge $0.46; window 19% to 53%, with tier H's notes written alongside and this session's own work)
+
+Seven papers whose issue records say the text layer is broken or flawed (LSTM, a PostScript conversion; The Anatomy of a Large-Scale Hypertextual Web Search Engine, an OCR layer; the cold-start meta-learning paper, EDM, DiskANN, GPT-2, the MIDI-to-score paper). Two questions each, drafted by `draft.py --weak` from the PDF and the issue record. Each gold was checked against the page image, and each passage against what `pdftotext` prints there.
+
+- **What the text layer prints at the recorded passages.** 9 of 14 are broken: LSTM drops every minus sign and fraction bar ("h(x) = 2 / 1+exp( x) 1", "ylm1 1 coth( 12 netlm )"); the OCR layer mangles the PageRank formula and Table 1 (147.8 GB → "117.8 GB", 53.5 → "5.33", 293 MB → "203 MB"); the cold-start paper's math letters come out as "�"; EDM's ≠ is "6="; GPT-2's ✓/✗ are "3"/"7" and its 1/10⁸ is "1018". The other 5 (DiskANN's RobustPrune and machine name, EDM's VP parameters, both MIDI tables) are clean. Those records describe the converter's errors, not the text layer's: `pdf-text-layer-errors` overstates how often the text layer itself is wrong. The search-engine paper's drafted crawler question was clean in the text layer and was replaced by Table 1.
+- **Scores: md 14, f-plain 14, txt 13, closed book 10 of 14.** The one loss is txt on the OCR table (WA2), wrong in 3 of 3 runs. Each time it recognised the scan's errors and repaired what the table's arithmetic allows (53.5 GB from the two totals, 293 MB from the sum), but 147.8 GB printed as 117.8 GB is a plausible number nothing contradicts. It gave that with "cannot be checked", so it is hedged, not confidently wrong. The markdown has the table right.
+- **The text layer is read through its damage.** Everywhere else, txt alone rebuilt what the text layer broke and said so: LSTM's minus signs "restored from the ranges the paper states", "1018" read as 1/10⁸ because a rate cannot exceed 1, GPT-2's 7s counted as the crosses, the cold-start paper's "[3� − 5,5� − 4]" as [3e−5, 5e−4]. That makes 17 broken or garbled passages (with tier C2's Q10) on which the model reads through the text layer's damage, and one it cannot: a wrong digit that leaves a plausible number. That is the same failure as E4's padding digit in the markdown (F1).
+- **The agent opens the page when the text looks broken.** f-plain looked at the page for 5 of the 9 broken passages (WA2 in 3 of 3 runs, the cold-start equations and α range, the Bloom bound, LSTM's h and g) and for none of the 5 clean ones. On WA2 it saw "5.33 GB" and "203 MB" in the grep, opened page 9 and read all three values ("the text layer gets this table wrong"). Where it did not open the page (PageRank, LSTM's coth, EDM's γ_i, GPT-2's ticks) it rebuilt the content and was right. It cost $0.04–0.16 a session, about what txt or md cost as one request.
+- **Closed book knows the old famous papers**: LSTM, PageRank, Table 1's 147.8 GB, EDM, DiskANN, GPT-2's eight crosses. It declined the cold-start and MIDI papers. Closed-book correct answers on these papers say nothing about a form. The 2025 cold-start paper is the clean case: there txt, md and f-plain are all correct and closed book declines.
+
+**What this decides.** The order of preference for the broken papers (above) holds at its first step. With the PDF beside the text layer, the agent reads the page when the text looks wrong, so no marker and no transcription are needed for these seven. The case left open is the one no reader of the text layer alone can catch: a wrong digit that looks plausible (WA2, as F1 in the markdown). Only a reader that opens the page catches it, and f-plain did here only because the neighbouring cells were visibly garbled.
+
+### Tier H: notes from the text layer (26 Oct 2026; eight notes $2.46, four comparisons $2.11)
+
+`notes.py`. Four papers published after the training cutoff: SOAP, Muon, and Beyond; Scaling and Stabilizing Large-Scale Embedding-Based Retrieval; A-TMA; When the Judge Changes, So Does the Measurement. **Departure from the plan:** both notes of a paper were written now, with today's `guide/reading-prompt.md` and the same model (Opus 5.5). One was written from the markdown's reading view, the other from the text layer with `[page N]` markers. The text layer was cut at the reference list like the reading view (on a two-column page, after the page the heading is on), and the prompt's four lines about the markdown were changed to describe it (`TXT_PROMPT`). The library's own notes, written 7–20 Oct under older prompts, were not used. That removes the prompt-version confound from the start, instead of after a first comparison. The notes stay in the cache because they quote the papers; the comparisons are in `results/notes/`.
+
+- **The blind comparison preferred the text-layer note for 3 of 4 papers** (SOAP, A-TMA, the judge-reliability paper; the retrieval paper's markdown note won, for sharper critique). The judge had the PDF, the two notes in a shuffled order, and the `## Conversion` sections left out. It counted 3 wrong statements and no wrong pages in the text-layer notes; 5 wrong statements and 3 wrong pages in the markdown notes; no wrong numbers and no garbled equations in either.
+- **Read by hand, every listed error traces to its input, apart from a few slips by the markdown reader.**
+  - Markdown note: the 3 wrong pages (SOAP pp. 16 and 14 for 18–19 and 18; the retrieval paper's Fig. 1 cited p. 2 for p. 4) come from the page-per-heading markers (ticket `page-markers-within-sections`). "Per-model accuracies beyond Table 3 are not disclosed" is wrong because they are printed inside Fig. 2, a vector figure (ticket `figure-text-lost`). "Overhead is not reported" is wrong because Appendix A.8 was cut from the reading view; the note said "not reported" for "not in this view". The remaining three are reading slips: MT-Bench named as the source of the bias framing, "four steps" for three, and SeCom called the strongest non-overlay baseline when A-Mem scores 0.787 to SeCom's 0.655.
+  - Text-layer note: two "errors" say SOAP's Appendices A.3 and B are "not in this text", which is true of what it was given. The third reports Fig. 4's "r = 0.957, slope = 0.49" beside the prose's −0.957 as a possible inconsistency, adding "the minus may have been lost from the figure's text": it was (`pdftotext` drops the minus in the figure).
+- **What each note has that the other lacks** is about even (the judge's counts: 26 points against 23). Neither format systematically misses a kind of content, except figure text, which only the text layer has: Fig. 2's accuracies in the judge-reliability paper, and the remark that a Graphiti result in A-TMA is only in a plot. The text-layer notes are 0–20% longer (1,070–1,445 words against 1,002–1,202) and cost the same ($0.26–0.37 against $0.22–0.37, input 20K–28K tokens against 17K–30K).
+- **The conversion lists differ in kind**: the text-layer notes report split equations, interleaved figure labels and merged pseudocode lines, all marked recoverable, none key content. The markdown notes report split aligned equations once and the coarse page markers once.
+- **Caveat**: one note per form per paper, so a single difference may be the reader's variance rather than the format's. Two more notes per form ($2.50) would separate them. The systematic effects (exact pages, figure text, and figure text's lost minus signs) do not depend on that.
+
+**What this decides.** H's condition holds: notes from the text layer are no worse than notes from the markdown, and they cite pages better. With F (the agent opens a page for drawn values, 9 of 9, and not otherwise) and G (txt plus PDF equal to the markdown where the text layer is weak), all three conditions of "Then decide" are met. The text layer with page markers, with the PDF beside it, can become the agent's copy; the markdown buys nothing measured here. The one thing found that neither the text layer nor the markdown catches is a wrong digit that looks plausible (F1 in the old markdown, WA2 in an OCR layer). That is caught only by a reader who opens the page.
+
+**Next session**: write the experiment up (`README.md` in the format of `experiments/README.md`; the decision in `docs/design.md`, which is the author's to take: what replacing the markdown means for the converters, tickets, `paperlib read` and the extension); optionally the second notes per form for H's variance (`README.md` in the format of `experiments/README.md`, the decision in `docs/design.md`).
 
 ## Tiers F–H: does the markdown still earn its place? (planned 25 Oct 2026 with the author, to run in a fresh window)
 
@@ -228,7 +255,7 @@ It runs the four conditions in parallel (about 40–90 minutes), each condition'
 ## Generated
 
 <!-- report.py -->
-Requests: 519, $83.11; judge (latest grading of each question) $4.26; last five-hour utilisation seen: 19%.
+Requests: 581, $89.19; judge (latest grading of each question) $4.72; last five-hour utilisation seen: 53%.
 
 ```
 tier A: 38 of 38 first answers
@@ -238,7 +265,8 @@ tier C: 16 of 16 first answers
 tier C2: 55 of 55 first answers
 tier D: 48 of 48 first answers
 tier F: 30 of 30 first answers
+tier G: 56 of 56 first answers
 canary: f-plain@2.1.301
-reruns: 123; requests so far $83.11
+reruns: 129; requests so far $89.19
 ```
 <!-- /report.py -->

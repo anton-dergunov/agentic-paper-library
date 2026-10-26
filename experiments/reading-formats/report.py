@@ -56,19 +56,20 @@ def scores_grid(recs, grades, exp, conds):
     rows = []
     for qid in [q["id"] for q in run.inputs.QUESTIONS if q["id"] in cells]:
         q = run.Q[qid]
-        rows.append([qid, q["kind"]] + [" ".join(cells[qid].get(c, {}).get(n, "") for n in sorted(cells[qid].get(c, {})))
+        kind = q["kind"] + (", text layer %s" % q["text_layer"] if q.get("text_layer") else "")
+        rows.append([qid, kind] + [" ".join(cells[qid].get(c, {}).get(n, "") for n in sorted(cells[qid].get(c, {})))
                                        or "" for c in conds])
     return table(["Q", "kind"] + list(conds), rows)
 
 
-def score_summary(recs, grades, exp, conds):
+def score_summary(recs, grades, exp, conds, key="kind"):
     by = collections.defaultdict(list)
     for r in recs:
         if r["exp"] == exp and r["cond"] in conds and r["rep"] == 1:
             score = grades.get(run_id(r), {}).get("score")
             if score:
                 by[("all", r["cond"])].append(score)
-                by[(run.Q[r["qid"]]["kind"], r["cond"])].append(score)
+                by[(run.Q[r["qid"]][key], r["cond"])].append(score)
     kinds = sorted({k for k, _ in by}, key=lambda k: (k != "all", k))
     rows = []
     for kind in kinds:
@@ -77,7 +78,7 @@ def score_summary(recs, grades, exp, conds):
             s = by.get((kind, c), [])
             row.append("%.1f / %d" % (sum(VALUE[x] for x in s), len(s)) if s else "")
         rows.append(row)
-    return table(["kind (score / n)"] + list(conds), rows)
+    return table(["%s (score / n)" % key.replace("_", " ")] + list(conds), rows)
 
 
 def costs(recs, exp, conds):
@@ -195,17 +196,18 @@ def sessions(recs, exp="E3"):
     """Tiers D and F: one row per session or request, with what an agent did."""
     kinds_shown = KINDS if exp == "E3" else ("pdf", "txt")
     rows = []
-    for r in sorted((r for r in recs if r["exp"] == exp), key=lambda r: (r["qid"], r["cond"], r["rep"])):
+    for r in sorted((r for r in recs if r["exp"] == exp and r["cond"] in run.AGENT_COPIES),
+                    key=lambda r: (r["qid"], r["cond"], r["rep"])):
         kinds = files_named(run.STREAMS / exp / r["cond"] / ("%s-r%d.jsonl" % (r["qid"], r["rep"])), r["cond"])
         row = [r["qid"], r["cond"], r["rep"], r.get("turns") or "", len(r.get("calls") or []),
                "{:,}".format(r["input"]), "%.2f" % (r["usd"] or 0), "%.0f" % r["seconds"]]
         row += [kinds.get(k) or "" for k in kinds_shown]
-        row += [pages_seen(r)] if exp == "E7" else ["yes" if r.get("opened_pdf") else ""]
+        row += [pages_seen(r)] if exp != "E3" else ["yes" if r.get("opened_pdf") else ""]
         row += [len(r.get("outside") or []) or ""] + ([recall(r)] if exp == "E3" else [])
         rows.append(row)
     return table(["Q", "condition", "r", "turns", "tool calls", "input tokens", "$", "s"]
                  + ["files: " + k for k in kinds_shown]
-                 + (["pages looked at"] if exp == "E7" else ["opened a PDF"])
+                 + (["pages looked at"] if exp != "E3" else ["opened a PDF"])
                  + ["calls outside the copy"] + (["recall"] if exp == "E3" else []), rows)
 
 
@@ -259,6 +261,11 @@ def main():
         conds = ("f-plain", "f-hint")
         parts += ["## E7, tier F: figures with the PDF at hand", score_summary(recs, grades, "E7", conds),
                   scores_grid(recs, grades, "E7", conds), "Sessions", sessions(recs, "E7")]
+    if any(r["exp"] == "E8" for r in recs):
+        conds = ("c0", "txt", "md", "f-plain")
+        parts += ["## E8, tier G: where the text layer is weak", score_summary(recs, grades, "E8", conds, "text_layer"),
+                  score_summary(recs, grades, "E8", conds), scores_grid(recs, grades, "E8", conds),
+                  "Cost", costs(recs, "E8", conds), "Sessions (f-plain)", sessions(recs, "E8")]
     canary = sorted({r["cond"] for r in recs if r["cond"].startswith("f-plain@")})
     if canary:
         parts += ["### Canary: f-plain on each Claude Code release",
