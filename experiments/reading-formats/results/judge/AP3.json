@@ -1,0 +1,18 @@
+{
+ "key": "e626298e9af57da9",
+ "usd": 0.035312,
+ "grades": {
+  "E7/f-hint/AP3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AP3-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

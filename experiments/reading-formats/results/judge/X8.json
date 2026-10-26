@@ -1,18 +1,12 @@
 {
- "key": "439f622217118b66",
- "usd": 0.086812,
+ "key": "9ed6688dc9a2a65a",
+ "usd": 0.21298,
  "grades": {
-  "E3/x-txt/X8-r1": {
+  "E3/x-txt/X8-r2": {
    "score": "partial",
    "page_ok": true,
    "confident_wrong": false,
-   "note": "Omits Mistral beating Llama 2 13B; RULER 44.93 only given as delta."
-  },
-  "E3/x-pdf/X8-r1": {
-   "score": "partial",
-   "page_ok": true,
-   "confident_wrong": false,
-   "note": "Omits Mistral beating Llama 2 13B and the retrofit-versus-trained-in explanation."
+   "note": "Omits Mistral 7B beating Llama 2 13B."
   },
   "E3/x-att/X8-r1": {
    "score": "correct",
@@ -20,11 +14,53 @@
    "confident_wrong": false,
    "note": ""
   },
+  "E3/x-pdf/X8-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Retrofit-vs-trained-in distinction only implied, not stated explicitly."
+  },
+  "E3/x-txt/X8-r1": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Omits Mistral 7B beating Llama 2 13B."
+  },
+  "E3/x-pdf/X8-r3": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Omits Mistral beating Llama 2 13B and the retrofit-vs-trained-in point."
+  },
+  "E3/x-pdf/X8-r1": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Omits Mistral beating Llama 2 13B and the retrofit-vs-trained-in point."
+  },
   "E3/x-lib/X8-r1": {
    "score": "correct",
    "page_ok": true,
    "confident_wrong": false,
    "note": ""
+  },
+  "E3/x-lib/X8-r2": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-lib/X8-r3": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E3/x-txt/X8-r3": {
+   "score": "partial",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": "Omits Mistral beating Llama 2 13B and the retrofit-vs-trained-in point."
   }
  }
 }

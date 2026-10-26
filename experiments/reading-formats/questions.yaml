@@ -357,3 +357,40 @@ questions:
 - {id: X11, exp: E3, papers: [olmo2], kind: appendix,
    question: 'What does OLMo 2 find when it varies the peak learning rate?',
    gold: 'Almost no difference: four variants end at the same training loss, the lowest lagging slightly; repeated for 1T and 2T tokens with 3·10⁻⁴ and 6·10⁻⁴, virtually no difference in training loss or on nine OLMES tasks (Table 8, p. 19).'}
+
+# ---- E7: figures with the PDF at hand (tier F, 26 Oct) ----
+# An agent in a copy holding each paper's PDF and its text layer. The question names its
+# paper; `source` is the question it rewords, whose paper, page, gold and tolerance it
+# takes. AD5–AR4: values drawn in a figure only; AR8, AR9: text inside vector figures, which
+# the text layer has (a control); AK1–AN4: answered by the text, to count pages opened when
+# they were not needed.
+- {id: AD5, exp: E7, source: D5,
+   question: 'In "Direct Preference Optimization: Your Language Model is Secretly a Reward Model": in the TL;DR win-rate plot, what are PPO''s and DPO''s win rates at sampling temperature 1.0?'}
+- {id: AG5, exp: E7, source: G5,
+   question: 'In "Improving Language Understanding by Generative Pre-Training" (GPT-1): what RACE dev accuracy is reached with 0 layers transferred and with all 12?'}
+- {id: AL2, exp: E7, source: L2,
+   question: 'In "Lost in the Middle: How Language Models Use Long Contexts": in the key-value task with 300 pairs, what accuracy does GPT-3.5-Turbo (16K) reach when the key is at the 200th position?'}
+- {id: AL3, exp: E7, source: L3,
+   question: 'In "Lost in the Middle: How Language Models Use Long Contexts": with 50 retrieved documents, what are Contriever''s recall and GPT-3.5-Turbo (16K)''s accuracy in the open-domain experiment?'}
+- {id: AK5, exp: E7, source: K5,
+   question: 'In "Cross-Model KV Cache Transfer in LLM Families: A Closed-Form Linear Mapping for Prefill Reuse": in the Qwen3 14B↔32B multi-turn CoQA handoff evaluation, what word-level F1 does the 32B model reach standalone at turn depth 10?'}
+- {id: AM5, exp: E7, source: M5,
+   question: 'In "SFT Conflicts, RL Coexists: A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs": in the rollout-temperature ablation, what MATH500 accuracy does the naive Parallel-RL model reach at τ = 0.8, and the math model at τ = 0.75?'}
+- {id: AN5, exp: E7, source: N5,
+   question: 'In "GenRec: An LLM-Backed Recommendation Ranker at Netflix": for the ~10B backbone, what is the normalized offline ranking metric when Phase-2 training data is 5x the smallest configuration?'}
+- {id: AP5, exp: E7, source: P5,
+   question: 'In "PAIR: Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn": in the architecture diagram, what pooling operation is labelled as producing the aggregated history embedding from the visited-profile embeddings, and what pooling produces the aggregated user embedding?'}
+- {id: AR4, exp: E7, source: R4,
+   question: 'In "Lost in the Middle: How Language Models Use Long Contexts": in Figure 7, with 140 pairs, what accuracy does LongChat-13B (16K) reach with the key at the 70th position?'}
+- {id: AR8, exp: E7, source: R8,
+   question: 'In "GenRec: An LLM-Backed Recommendation Ranker at Netflix": in the online A/B test, what average treatment effect and p-value does GenRec show on the short-term homepage engagement metric?'}
+- {id: AR9, exp: E7, source: R9,
+   question: 'In "SFT Conflicts, RL Coexists: A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs": in the heatmap of RL model updates, what is the cosine similarity between the Math and Science updates, and what is the norm of the Logic update?'}
+- {id: AK1, exp: E7, source: K1,
+   question: 'In "Cross-Model KV Cache Transfer in LLM Families: A Closed-Form Linear Mapping for Prefill Reuse": with the ridge mapper at its selected k, what MMLU accuracy and what GSM8K accuracy does Llama 3.1 8B→70B transfer achieve?'}
+- {id: AM2, exp: E7, source: M2,
+   question: 'In "SFT Conflicts, RL Coexists: A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs": in the 1.5B full-parameter PPO setting, which task update, when removed from the naive Parallel-RL merge, causes the largest drop on its own task, and what is that drop?'}
+- {id: AP3, exp: E7, source: P3,
+   question: 'In "PAIR: Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn": write out the PAIR training objective for one query, and say what each term means.'}
+- {id: AN4, exp: E7, source: N4,
+   question: 'In "GenRec: An LLM-Backed Recommendation Ranker at Netflix": how much Netflix traffic was allocated to the online A/B test of GenRec, and for how long did it run?'}

@@ -1,0 +1,41 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AL3",
+ "rep": 1,
+ "paper": "litm",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "With 50 retrieved documents, Contriever's recall is about **89%** and GPT-3.5-Turbo (16K)'s accuracy is about **60%**. The paper doesn't print these numbers anywhere. They appear only as points in Figure 11 (page 10), so I read them off the rendered figure, and they could be off by about ±0.5 points.\n\n- **Setup (page 9):** This is the open-domain QA case study on NaturalQuestions-Open, keeping only questions whose long answer is a paragraph. Contriever, fine-tuned on MS-MARCO, retrieves the top-k Wikipedia documents, and they are placed in the prompt. The paper measures retriever recall, and reader accuracy as whether any annotated answer appears in the model's output, for different values of k.\n- **Contriever recall at k = 50 (page 10, Figure 11):** about 89%, the highest point of the orange \"contriever recall\" curve, just under the 90 gridline.\n- **GPT-3.5-Turbo (16K) accuracy at k = 50 (page 10, Figure 11):** about 60% (roughly 59.7). This is the gpt-3.5-turbo-16k-0613 curve, which is essentially flat after its peak of about 60% at k = 40.\n- **What the paper concludes (page 10):** The gap of roughly 30 points shows that the models stop improving long before recall does. Going beyond 20 retrieved documents raises reader accuracy only slightly (about 1.5% for GPT-3.5-Turbo, about 1% for Claude-1.3), even though recall keeps rising.",
+ "input": 77137,
+ "cache_write": 9771,
+ "cache_read": 67352,
+ "output": 1619,
+ "thinking": 181,
+ "usd": 0.1240744,
+ "seconds": 27.6,
+ "turns": 7,
+ "calls": [
+  "Grep Lost in the Middle",
+  "Grep open-domain|recall|\\[page|50 documents|50 retrieved",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/context/Lost in the Middle. How Language Models Use Long Contexts.txt [535+70]",
+  "Grep (?i)contriever|Table",
+  "Bash mkdir -p /tmp/litm && cd /tmp/litm && pdftoppm -f 10 -l 10 -r 300 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/context/Lost in the Middle. How Language Models Use Long Contexts.pdf\" p && python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/litm/p-10.png'); w",
+  "Read /tmp/litm/fig.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/litm/fig.png"
+ ],
+ "renders": [
+  "Bash mkdir -p /tmp/litm && cd /tmp/litm && pdftoppm -f 10 -l 10 -r 300 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/context/Lost in the Middle. How Language Models Use Long Contexts.pdf\" p && python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/litm/p-10.png'); w"
+ ],
+ "outside": [
+  "Read /tmp/litm/fig.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.11,
+ "date": "2026-10-26 00:57"
+}

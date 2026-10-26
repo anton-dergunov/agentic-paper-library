@@ -1,0 +1,36 @@
+{
+ "exp": "E7",
+ "cond": "f-plain@2.1.301",
+ "qid": "AP5",
+ "rep": 1,
+ "paper": "pair",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "In Figure 1, Step 1, on page 6:\n\n- **Aggregated history embedding:** the arrow from the \"Visited Profiles Embeddings\" up to the \"Aggregated History Embedding\" is labelled **\"GeM Pooling\"**.\n- **Aggregated user embedding:** the step that combines the history embedding with the user-profile embedding into the \"Aggregated User Embedding\" is labelled **\"Temporal-Gated Pooling\"**.\n\nThese labels are only in the figure graphic, not in the PDF's text layer. I read them from the rendered image of page 6.\n\nThe rest of the paper describes these steps differently:\n\n- **History aggregation:** The Figure 1 caption says the history tower combines recent interaction embeddings \"using positional attention\" (P-ATT), not GeM (p. 6). In the history-aggregation comparison, P-ATT gets the best MAR@100 (0.450), with GeM pooling close behind (0.447) (pp. 7–8, Tables 1–2).\n- **Combining profile and history:** Section 4.2 describes this as \"normalized additive fusion\": both embeddings are normalised to unit length and added, with a learnable scalar γ setting how much the history counts (Eqs. 3–4, p. 5). The text never uses the term \"temporal-gated pooling.\"",
+ "input": 67424,
+ "cache_write": 9018,
+ "cache_read": 58394,
+ "output": 1328,
+ "thinking": 118,
+ "usd": 0.1104308,
+ "seconds": 31.4,
+ "turns": 6,
+ "calls": [
+  "Glob **/*PAIR*",
+  "Grep (?i)pool|\\[page|Figure",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.txt [290+95]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.pdf [pages 6]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.txt [386+60]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.pdf [pages 6]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-26 01:04"
+}

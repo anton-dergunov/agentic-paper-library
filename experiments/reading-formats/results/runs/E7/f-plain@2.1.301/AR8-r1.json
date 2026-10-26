@@ -1,0 +1,33 @@
+{
+ "exp": "E7",
+ "cond": "f-plain@2.1.301",
+ "qid": "AR8",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "In the online A/B test, GenRec raised the short-term homepage engagement metric by an average of **+0.115%** over the production model, with **P = 3.1 × 10⁻¹⁰**. The paper marks this as statistically significant (Figure 3, p. 6).\n\nSupporting details:\n- **Test setup:** GenRec was compared against a mature production ranker, using about 10% of Netflix traffic for 4 weeks, on key batch-compute surfaces (pp. 6).\n- **Long-term metric, for comparison:** The same figure shows +0.006% on the long-term core metric, with P = 0.025, also significant (p. 6). The text calls this +0.006% a relative improvement and says it is meaningful at Netflix scale (p. 6).\n\nI took these numbers from the PDF's text layer, where the figure's labels are scrambled. The pairing still looks clear: the +0.115% value and its p-value line up under the short-term homepage engagement label and its larger axis (0–0.20%). The +0.006% value goes with the long-term metric, which the body text confirms.",
+ "input": 47669,
+ "cache_write": 4351,
+ "cache_read": 43308,
+ "output": 1076,
+ "thinking": 112,
+ "usd": 0.0650296,
+ "seconds": 14.2,
+ "turns": 5,
+ "calls": [
+  "Grep GenRec",
+  "Grep A/B|p-value|p =|p=|\\[page|treatment effect|short-term",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.txt [389+80]",
+  "Grep ^\\s*2\\s|footnote|relative"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-26 01:05"
+}

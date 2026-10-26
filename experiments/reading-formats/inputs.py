@@ -28,7 +28,9 @@ from paperlib import CACHE_DIR, LIBRARY_DIR, LIBRARY_ROOT, pdf_path_for, read_pa
 OUT = CACHE_DIR / "experiments" / "reading-formats"
 SPEC = yaml.safe_load((HERE / "questions.yaml").read_text())
 PAPERS, OLD_REVS = SPEC["papers"], SPEC["old_revs"]
-QUESTIONS = SPEC["questions"]
+# A question with `source` rewords another (tier F names its paper) and takes the rest from it.
+_SOURCES = {q["id"]: q for q in SPEC["questions"]}
+QUESTIONS = [{**_SOURCES[q["source"]], **q} if q.get("source") else q for q in SPEC["questions"]]
 
 
 def md_path(paper):
@@ -147,7 +149,7 @@ def numbers(text):
 def check():
     """Every number of a gold answer on its PDF page or the next (pdftotext)."""
     for q in QUESTIONS:
-        if "paper" not in q or "page" not in q or q.get("answerable") is False:
+        if "paper" not in q or "page" not in q or q.get("answerable") is False or q.get("source"):
             continue
         pages = {p for p in (q["page"], q["page"] + 1, q["page"] - 1) if p > 0}
         text = "".join(page_text(q["paper"], p) for p in pages).replace(",", "")

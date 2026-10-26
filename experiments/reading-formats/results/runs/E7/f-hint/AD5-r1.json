@@ -1,0 +1,41 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AD5",
+ "rep": 1,
+ "paper": "dpo",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "At sampling temperature 1.0, DPO's win rate is about 0.39 (39%) and PPO's is about 0.07 (7%). Both are against the human-written reference summaries, judged by GPT-4. Neither number is in the text, so I read them off the plot in Figure 2 (right) on page 7 of the PDF. They are estimates to about ±0.01.\n\n- **DPO: about 0.39.** Its curve falls from about 0.62 at low temperatures to roughly 0.38–0.39 at 1.0, below the 0.5 line.\n- **PPO: about 0.07.** It drops sharply from about 0.57 at temperature 0 to roughly 0.07 at 1.0, close to the GPT-J baseline (about 0.06).\n\nThe caption on page 7 matches this: \"DPO exceeds PPO's best-case performance on summarization, while being more robust to changes in the sampling temperature.\"",
+ "input": 57033,
+ "cache_write": 8003,
+ "cache_read": 49018,
+ "output": 1058,
+ "thinking": 79,
+ "usd": 0.0950356,
+ "seconds": 24.2,
+ "turns": 6,
+ "calls": [
+  "Grep TL;DR summarization win rates|Sampling temperature",
+  "Bash cd \"llm/post-training/preference-learning/\"; f=\"Direct Preference Optimization. Your Language Model is Secretly a Reward Model\"; grep -n \"^\\[page\" \"$f.txt\" | head -12; sed -n 390,430p \"$f.txt\"",
+  "Bash cd /tmp && mkdir -p dpo7 && pdftoppm -f 7 -l 7 -r 200 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/preference-learning/Direct Preference Optimization. Your Language Model is Secretly a Reward Model.pdf\" dpo7/p && ls dpo7",
+  "Bash cd /tmp/dpo7 && python3 -c \"\nfrom PIL import Image\nim=Image.open('p-07.png'); w,h=im.size; print(w,h)\nim.crop((w//2,int(h*0.08),w,int(h*0.36))).resize((1400,int(1400*(h*0.28)/(w/2)))).save('crop.png')\"",
+  "Read /tmp/dpo7/crop.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/dpo7/crop.png"
+ ],
+ "renders": [
+  "Bash cd /tmp && mkdir -p dpo7 && pdftoppm -f 7 -l 7 -r 200 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/preference-learning/Direct Preference Optimization. Your Language Model is Secretly a Reward Model.pdf\" dpo7/p && ls dpo7"
+ ],
+ "outside": [
+  "Bash cd /tmp/dpo7 && python3 -c \"\nfrom PIL import Image\nim=Image.open('p-07.png'); w,h=im.size; print(w,h)\nim.crop((w//2,int(h*0.08),w,int(h*0.36))).resize((1400,int(1400*(h*0.28)/(w/2)))).save('crop.png')\"",
+  "Read /tmp/dpo7/crop.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.09,
+ "date": "2026-10-26 00:56"
+}

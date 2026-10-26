@@ -1,0 +1,24 @@
+{
+ "key": "a6bbc8aae7c122b6",
+ "usd": 0.023152,
+ "grades": {
+  "E7/f-hint/AP5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain@2.1.301/AP5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AP5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

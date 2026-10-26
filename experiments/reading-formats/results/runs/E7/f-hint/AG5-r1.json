@@ -1,0 +1,43 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AG5",
+ "rep": 1,
+ "paper": "gpt1",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "On page 7, Figure 2 (left) shows RACE dev accuracy going from about **40% with 0 layers transferred** to about **59% with 12 layers**.\n\nThe text doesn't give these numbers, so I read them off the plotted line in the PDF (page 7). They are estimates to within about ±1 point:\n\n| Layers transferred | RACE dev accuracy (read off the plot) |\n|---|---|\n| 0 | ≈ 39–40% |\n| 12 | ≈ 59% |\n\nThe x-axis actually runs to 13, and the line ends there at about 60%. The paper doesn't say why there's a point past 12. So if \"all 12\" means full transfer, it is probably that last point, at about 60%.\n\nThe paper's own comment on this plot (page 7) is that \"transferring embeddings improves performance and that each transformer layer provides further benefits up to 9% for full transfer on MultiNLI.\" It gives no RACE numbers for this experiment in the text.",
+ "input": 73144,
+ "cache_write": 8157,
+ "cache_read": 64973,
+ "output": 1616,
+ "thinking": 309,
+ "usd": 0.11062659999999999,
+ "seconds": 27.0,
+ "turns": 8,
+ "calls": [
+  "Grep layers transferred|Figure 2",
+  "Glob **/Improving Language Understanding*",
+  "Grep \\[page|layers|Figure 2",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/foundation-models/Improving Language Understanding by Generative Pre-Training.txt [353+47]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/foundation-models/Improving Language Understanding by Generative Pre-Training.pdf [pages 7]",
+  "Bash cd /tmp && mkdir -p gptcrop && pdftoppm -f 7 -l 7 -r 300 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/foundation-models/Improving Language Understanding by Generative Pre-Training.pdf\" gptcrop/p && python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/gptcrop",
+  "Read /tmp/gptcrop/c.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/foundation-models/Improving Language Understanding by Generative Pre-Training.pdf [pages 7]",
+  "Read /tmp/gptcrop/c.png"
+ ],
+ "renders": [
+  "Bash cd /tmp && mkdir -p gptcrop && pdftoppm -f 7 -l 7 -r 300 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/foundation-models/Improving Language Understanding by Generative Pre-Training.pdf\" gptcrop/p && python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/gptcrop"
+ ],
+ "outside": [
+  "Read /tmp/gptcrop/c.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.1,
+ "date": "2026-10-26 00:56"
+}

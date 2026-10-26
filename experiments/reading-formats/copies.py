@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build the copies that tier D's agent sessions run in, in the cache (paper text is never
-committed).
+"""Build the copies that the agent sessions of tiers D and F run in, in the cache (paper
+text is never committed).
 
-    PAPER_LIBRARY=<library> uv run python copies.py [lib] [pdf] [txt]     # all three by default
+    PAPER_LIBRARY=<library> uv run python copies.py [lib] [pdf] [txt] [txtpdf]     # all by default
 
 - lib: the library as an agent finds it: the guide, catalog/, notes/, reviews/ and the
   paper markdown without figures or PDFs (review-usefulness/copies.py, condition "asis").
@@ -11,6 +11,9 @@ committed).
 - txt: each PDF's text layer (`pdftotext -layout`) under the same tree, with a line
   "[page N]" where each page starts, and a one-line CLAUDE.md: the cheap pipeline an agent
   could build for itself, page numbers included.
+- txtpdf (tier F): the txt copy with each PDF beside its text file, twice: txtpdf-plain,
+  whose CLAUDE.md says only what the files are, and txtpdf-hint, whose CLAUDE.md adds that a
+  value drawn in a figure is read from the PDF's page. Built from the txt copy.
 
 Each copy is made read-only, so that a session cannot write to it through the shell. An
 existing copy is rebuilt.
@@ -32,7 +35,11 @@ CLAUDE_MD = {
     "pdf": "Papers are PDFs under the topic folders; answer with page citations.\n",
     "txt": ("Papers are the text layers of their PDFs, one .txt file each under the topic folders; a line "
             "\"[page N]\" marks where page N starts. Answer with page citations.\n"),
+    "txtpdf-plain": ("Each paper is here as its PDF (.pdf) and as the PDF's text layer (.txt, same name) under the "
+                     "topic folders; in the text layer a line \"[page N]\" marks where page N starts. Answer with "
+                     "page citations.\n"),
 }
+CLAUDE_MD["txtpdf-hint"] = CLAUDE_MD["txtpdf-plain"] + "A value drawn in a figure is not in the text: read that page of the PDF.\n"
 
 
 def path(name):
@@ -98,6 +105,20 @@ def build_txt():
     print("txt: %s, %d text layers, %d with pdftotext errors" % (copy, len(jobs), failed))
 
 
+def build_txtpdf():
+    for variant in ("txtpdf-plain", "txtpdf-hint"):
+        copy = path(variant)
+        fresh(copy)
+        copy.rmdir()
+        subprocess.run(["cp", "-cR", str(path("txt")), str(copy)], check=True)  # clones on APFS
+        lock(copy, False)
+        for source in pdfs():
+            subprocess.run(["cp", "-c", str(source), str(copy / source.relative_to(PDF_ROOT))], check=True)
+        (copy / "CLAUDE.md").write_text(CLAUDE_MD[variant])
+        lock(copy, True)
+        print("%s: %s, %d PDFs beside their text layers" % (variant, copy, len(pdfs())))
+
+
 if __name__ == "__main__":
-    for name in sys.argv[1:] or ["lib", "pdf", "txt"]:
-        {"lib": build_lib, "pdf": build_pdf, "txt": build_txt}[name]()
+    for name in sys.argv[1:] or ["lib", "pdf", "txt", "txtpdf"]:
+        {"lib": build_lib, "pdf": build_pdf, "txt": build_txt, "txtpdf": build_txtpdf}[name]()

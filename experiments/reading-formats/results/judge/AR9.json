@@ -1,0 +1,18 @@
+{
+ "key": "45a59c943ebb2d27",
+ "usd": 0.017716,
+ "grades": {
+  "E7/f-hint/AR9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AR9-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

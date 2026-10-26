@@ -1,0 +1,24 @@
+{
+ "key": "bc95036f794aac20",
+ "usd": 0.020764,
+ "grades": {
+  "E7/f-hint/AR8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AR8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain@2.1.301/AR8-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

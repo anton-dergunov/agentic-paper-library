@@ -1,0 +1,35 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AN5",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "At 5x the smallest Phase-2 training data, the ~10B backbone scores a normalized offline metric (MRR) of about **1.11**. That is roughly 11% higher than the 1x configuration, which sits at 1.00 (Figure 4, p. 7).\n\nThe paper doesn't print this number. The text layer only has the axis ticks, so I read the value off the plot in the PDF. The 5x point lies just under the 1.11 level, between the 1.10 and 1.12 gridlines.\n\nBackground:\n- **The study:** GenRec was trained on Phase-2 datasets from 1x to 20x the smallest configuration, using two backbones of about 1B and about 10B parameters (p. 6).\n- **The trend:** MRR improves steadily as Phase-2 data grows (p. 6). In the figure, the ~10B curve goes from 1.00 at 1x to about 1.05 at 2x, about 1.11 at 5x, about 1.14 at 10x and about 1.16 at 20x (p. 7).",
+ "input": 49610,
+ "cache_write": 7571,
+ "cache_read": 42029,
+ "output": 985,
+ "thinking": 81,
+ "usd": 0.0887138,
+ "seconds": 18.7,
+ "turns": 5,
+ "calls": [
+  "Glob **/*GenRec*",
+  "Grep Phase.?2|5x|5×|\\[page|10B",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.txt [440+55]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.pdf [pages 7]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.pdf [pages 7]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.12,
+ "date": "2026-10-26 00:57"
+}

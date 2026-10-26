@@ -1,0 +1,40 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AR9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "The answer is in Figure 2 (right panel, \"RL Model Updates\") on **page 4**. I checked the text layer against the rendered PDF page, and they agree.\n\n- **Cosine similarity between the Math and Science updates: −3.92e-04** (about −0.0004). It appears in both the Math/Science and Science/Math cells. This is essentially zero, so the two updates are nearly orthogonal. (page 4)\n- **Norm of the Logic update: ‖ΔW‖ = 8.7e-02** (about 0.087), on the diagonal. It is the largest of the four RL update norms; the others are Math 2.0e-02, Science 1.1e-02 and Code 1.1e-02. (page 4)\n\nThe figure caption says the diagonal holds the L2 norm of each task's parameter update and the off-diagonal cells hold pairwise cosine similarities. It also says the RL updates \"show near-zero similarity, indicating orthogonal and task-specific parameter adjustments.\" The SFT updates are different: their similarities are about ±0.95–0.97 and their norms are about 6.5–8.9. (page 4)",
+ "input": 58608,
+ "cache_write": 8027,
+ "cache_read": 50569,
+ "output": 1302,
+ "thinking": 160,
+ "usd": 0.1004178,
+ "seconds": 27.8,
+ "turns": 6,
+ "calls": [
+  "Grep SFT Conflicts",
+  "Grep heatmap|\\[page|cosine",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.txt [258+40]",
+  "Bash cd /tmp && mkdir -p sftpg && pdftoppm -f 4 -l 4 -r 150 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.pdf\" sftpg/p && ls sftpg",
+  "Read /tmp/sftpg/p-04.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/sftpg/p-04.png"
+ ],
+ "renders": [
+  "Bash cd /tmp && mkdir -p sftpg && pdftoppm -f 4 -l 4 -r 150 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.pdf\" sftpg/p && ls sftpg"
+ ],
+ "outside": [
+  "Read /tmp/sftpg/p-04.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.15,
+ "date": "2026-10-26 01:00"
+}

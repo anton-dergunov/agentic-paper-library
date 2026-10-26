@@ -1,0 +1,18 @@
+{
+ "key": "e3814bcddc2ea2da",
+ "usd": 0.01758,
+ "grades": {
+  "E7/f-hint/AM5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AM5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

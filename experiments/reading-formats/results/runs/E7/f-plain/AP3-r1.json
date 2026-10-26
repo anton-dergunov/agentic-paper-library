@@ -1,0 +1,32 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AP3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "## The PAIR training objective for one query\n\nFor one query user, the paper's training example has three parts (p. 4):\n- the query user *q*;\n- one candidate *d⁺* that the user clicked;\n- *K* negative candidates {*d*ᵢ⁻}, for *i* = 1 to *K*.\n\n**The score (Eq. 1, p. 4):**\n\n  s(q, d) = cos(e_q^final, e_d) / τ\n\n**The loss (Eq. 2, p. 5):**\n\n  L_PAIR = − log [ exp(s(q, d⁺)) / ( exp(s(q, d⁺)) + Σᵢ₌₁ᴷ exp(s(q, dᵢ⁻)) ) ]\n\n**Matryoshka form actually optimised (Eq. 6, p. 5):** the same loss is computed on several prefixes of the embedding and summed:\n\n  L = Σ_{d ∈ D} L_PAIR^(d), with D = {200, 256, 512, 1024}\n\n## What each term means\n\n**Score terms**\n- **e_d** is the candidate's embedding. The document tower produces it from the candidate's profile text, e_d = f_θ(x_d), and it is L2-normalised (pp. 4–5).\n- **e_q^final** is the final query embedding (Eqs. 3–4, p. 5). It is built in three steps:\n  1. The profile embedding e_q = f_θ(x_q) and the click-history vector e_H are each L2-normalised.\n  2. They are added as ẽ_q + γ·ẽ_H, where γ is a learnable scalar that sets how much the behavioural history counts.\n  3. The sum is L2-normalised again.\n- **e_H** is the click-history vector (Eq. 5, p. 5). It is an attention-weighted sum of the embeddings of the 10 most recently clicked profiles. The weights come from a learnable vector w and learned positional encodings, both trained end-to-end with the PAIR objective.\n- **τ** is a temperature parameter (p. 4).\n\n**Loss terms**\n- **The numerator, exp(s(q, d⁺)),** is the score of the clicked candidate, which the user preferred (p. 5).\n- **The denominator** adds that same term to the negatives' terms. The loss therefore pushes the clicked candidate's score above the scores of all *K* negatives (p. 5).\n- **The negatives d⁻** are of two kinds (p. 5):\n  - candidates that were shown but not clicked, which the paper calls \"exposure-conditioned negatives\";\n  - randomly sampled candidates, which cover more of the member space.\n- **L_PAIR^(d)** is the PAIR loss using only the first *d* embedding dimensions (p. 5). One model can then serve at different sizes by truncating the embedding. The 200-dimensional prefix is there to roughly match the storage of the production 171-dimensional embedding.\n\n## How the paper frames it\n- **Same form, different supervision.** Mathematically, Eq. 2 is ordinary multi-negative contrastive learning. What makes it PAIR is where the negatives come from. The shown-but-not-clicked candidates were picked by the retrieval system already in production, so they are realistic alternatives, not arbitrary or nearest-neighbour negatives. The model learns to rank within what the live system actually shows (p. 5).\n- **Not DPO.** The objective is inspired by relative preference learning but is not Direct Preference Optimization (DPO). It has no reference policy and no token-level probability ratio (p. 4).\n- **Known limitation.** Preferences are only observed among candidates that were shown, so PAIR inherits selection bias from the historical retriever (p. 5).\n\nThe paper uses *K* for two different counts: the number of negatives (p. 4) and the length of the click history, which is set to 10 (pp. 4–5).",
+ "input": 37112,
+ "cache_write": 7576,
+ "cache_read": 29528,
+ "output": 1805,
+ "thinking": 62,
+ "usd": 0.1026456,
+ "seconds": 22.3,
+ "turns": 4,
+ "calls": [
+  "Grep PAIR: Preference-Aligned",
+  "Grep \\[page \\d+\\]|objective|loss|L_|ℒ",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.txt [225+110]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.15,
+ "date": "2026-10-26 01:00"
+}

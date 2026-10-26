@@ -171,17 +171,56 @@ def recall(r):
     return "%d/%d" % (named, len(items))
 
 
-def sessions(recs):
-    """Tier D: one row per session or request, with what an agent did."""
+def pages_seen(r):
+    """Tier F: the pages a session rendered ("rendered p. 7") and the pictures it looked at:
+    a PDF's pages ("p. 7"), a whole PDF, or a number of images."""
+    seen = []
+    for call in r.get("renders") or []:
+        first, last = re.search(r"-f\s*(\d+)", call), re.search(r"-l\s*(\d+)", call)
+        span = first.group(1) + ("–" + last.group(1) if last and last.group(1) != first.group(1) else "") if first else "?"
+        seen.append("rendered p. " + span)
+    images = 0
+    for call in r.get("page_views") or []:
+        pages = re.search(r"\[pages ([^\]]+)\]", call)
+        if pages:
+            seen.append("p. " + pages.group(1))
+        elif re.search(r"(?i)\.pdf\b", call):
+            seen.append("whole PDF")
+        else:
+            images += 1
+    return ", ".join(seen + (["%d image%s" % (images, "s" * (images > 1))] if images else []))
+
+
+def sessions(recs, exp="E3"):
+    """Tiers D and F: one row per session or request, with what an agent did."""
+    kinds_shown = KINDS if exp == "E3" else ("pdf", "txt")
     rows = []
-    for r in sorted((r for r in recs if r["exp"] == "E3"), key=lambda r: (r["qid"], r["cond"], r["rep"])):
-        kinds = files_named(run.STREAMS / "E3" / r["cond"] / ("%s-r%d.jsonl" % (r["qid"], r["rep"])), r["cond"])
-        rows.append([r["qid"], r["cond"], r["rep"], r.get("turns") or "", len(r.get("calls") or []),
-                     "{:,}".format(r["input"]), "%.2f" % (r["usd"] or 0), "%.0f" % r["seconds"]]
-                    + [kinds.get(k) or "" for k in KINDS]
-                    + ["yes" if r.get("opened_pdf") else "", len(r.get("outside") or []) or "", recall(r)])
+    for r in sorted((r for r in recs if r["exp"] == exp), key=lambda r: (r["qid"], r["cond"], r["rep"])):
+        kinds = files_named(run.STREAMS / exp / r["cond"] / ("%s-r%d.jsonl" % (r["qid"], r["rep"])), r["cond"])
+        row = [r["qid"], r["cond"], r["rep"], r.get("turns") or "", len(r.get("calls") or []),
+               "{:,}".format(r["input"]), "%.2f" % (r["usd"] or 0), "%.0f" % r["seconds"]]
+        row += [kinds.get(k) or "" for k in kinds_shown]
+        row += [pages_seen(r)] if exp == "E7" else ["yes" if r.get("opened_pdf") else ""]
+        row += [len(r.get("outside") or []) or ""] + ([recall(r)] if exp == "E3" else [])
+        rows.append(row)
     return table(["Q", "condition", "r", "turns", "tool calls", "input tokens", "$", "s"]
-                 + ["files: " + k for k in KINDS] + ["opened a PDF", "calls outside the copy", "recall"], rows)
+                 + ["files: " + k for k in kinds_shown]
+                 + (["pages looked at"] if exp == "E7" else ["opened a PDF"])
+                 + ["calls outside the copy"] + (["recall"] if exp == "E3" else []), rows)
+
+
+def canary_table(recs, grades, conds):
+    by = {(r["qid"], r["cond"]): r for r in recs if r["exp"] == "E7" and r["rep"] == 1}
+    rows = []
+    for qid in run.CANARY:
+        row = [qid, run.Q[qid]["kind"]]
+        for c in conds:
+            r = by.get((qid, c))
+            row.append("%s; %s; $%.2f" % (LETTER[grades.get(run_id(r), {}).get("score")], pages_seen(r) or "no page",
+                                          r["usd"] or 0) if r else "")
+        rows.append(row)
+    clis = {c: next((r["cli"].split()[0] for (q, cc), r in by.items() if cc == c), "?") for c in conds}
+    return table(["Q", "kind"] + ["%s (%s)" % (c, clis[c]) if c == "f-plain" else c for c in conds], rows)
 
 
 def e0(recs):
@@ -216,6 +255,15 @@ def main():
         conds = ("x-lib", "x-pdf", "x-txt", "x-att")
         parts += ["## E3: across papers", score_summary(recs, grades, "E3", conds),
                   scores_grid(recs, grades, "E3", conds), "Sessions", sessions(recs)]
+    if any(r["exp"] == "E7" for r in recs):
+        conds = ("f-plain", "f-hint")
+        parts += ["## E7, tier F: figures with the PDF at hand", score_summary(recs, grades, "E7", conds),
+                  scores_grid(recs, grades, "E7", conds), "Sessions", sessions(recs, "E7")]
+    canary = sorted({r["cond"] for r in recs if r["cond"].startswith("f-plain@")})
+    if canary:
+        parts += ["### Canary: f-plain on each Claude Code release",
+                  "Score, pages looked at and cost of each canary question; the first column is tier F's run.",
+                  canary_table(recs, grades, ["f-plain"] + canary)]
     if any(r["exp"] == "E0" for r in recs):
         parts += ["## E0: token cost and page resolution", e0(recs)]
     notes = [(run_id(r), grades[run_id(r)]["note"]) for r in recs

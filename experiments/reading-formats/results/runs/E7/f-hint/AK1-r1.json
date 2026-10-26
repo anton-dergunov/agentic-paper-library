@@ -1,0 +1,33 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AK1",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "With the ridge mapper at its selected k (k = 20), Llama 3.1 8B→70B transfer reaches **57.78% on MMLU** and **14.78% on GSM8K** (Table 13, p. 18).\n\n| | MMLU (5-shot) | GSM8K (8-shot CoT) |\n|---|---|---|\n| 8B→70B transfer, k=20 | **57.78** | **14.78** |\n| 70B standalone (target) | 78.84 | 81.12 |\n| 8B standalone (source) | 64.97 | 56.10 |\n| Retention vs. 70B (Table 1, p. 6) | 73.3% | 18.2% |\n\n- **Setup:** Table 1 (p. 6) gives the selected k for this pair as 20, using the ridge mapper in content space. Table 13 (p. 18) is the full version of Table 1 and lists raw accuracies. The benchmark settings (MMLU 5-shot, GSM8K 8-shot with chain-of-thought) are stated on p. 6.\n- **Retention:** The percentages match the raw numbers: 57.78/78.84 ≈ 73.3% and 14.78/81.12 ≈ 18.2%.\n- **What it means:** Transfer scores below the 8B model running alone on both benchmarks. GSM8K drops the most.\n- **How k was chosen:** k was picked using ARC-C, HellaSwag, WinoGrande and MMLU. GSM8K was left out of that choice (p. 6). So the GSM8K number did not influence the selection. The paper says including a benchmark in the selection raises its own reported accuracy by at most 2.49 pp (p. 6).",
+ "input": 39929,
+ "cache_write": 7773,
+ "cache_read": 32148,
+ "output": 1256,
+ "thinking": 52,
+ "usd": 0.0937656,
+ "seconds": 21.4,
+ "turns": 5,
+ "calls": [
+  "Grep Cross-Model KV Cache Transfer",
+  "Grep MMLU|GSM8K|\\[page|selected k|k ?=|k\\*",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.txt [284+20]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.txt [908+30]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.16,
+ "date": "2026-10-26 01:00"
+}

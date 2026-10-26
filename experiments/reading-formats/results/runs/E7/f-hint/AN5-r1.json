@@ -1,0 +1,39 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AN5",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "For the ~10B backbone, the normalized offline ranking metric at 5x Phase-2 training data is about **1.11**. That is roughly an 11% gain over the smallest (1x) configuration, which is normalized to 1.00.\n\n- **Where the value comes from:** The number appears only as a plotted point in Figure 4 (\"Phase-2 data scaling for the ∼10B model\") on page 7. It isn't written anywhere in the text, so I read it off the rendered figure. The 5x point sits just above the 1.10 gridline, at about 1.109. Treat it as approximately 1.11, not an exact figure.\n- **Neighbouring points for context (page 7):** about 1.05 at 2x, 1.135 at 10x and 1.16 at 20x.\n- **What the setup is (page 6):** GenRec was trained with Phase-2 data ranging from 1x to 20x the smallest configuration, with other variables held fixed. The metric is MRR (Mean Reciprocal Rank), and it improves monotonically as Phase-2 data grows.",
+ "input": 61411,
+ "cache_write": 11764,
+ "cache_read": 49637,
+ "output": 983,
+ "thinking": 102,
+ "usd": 0.1237394,
+ "seconds": 15.7,
+ "turns": 6,
+ "calls": [
+  "Grep Phase-2|Phase 2",
+  "Bash cd recommender-systems/industrial-systems; grep -n \"\\[page\" \"GenRec. An LLM-Backed Recommendation Ranker at Netflix.txt\"; sed -n 440,495p \"GenRec. An LLM-Backed Recommendation Ranker at Netflix.txt\"",
+  "Bash cd /tmp && mkdir -p genrec_p7 && pdftoppm -f 7 -l 7 -r 200 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.pdf\" genrec_p7/p && ls genrec_p7",
+  "Read /tmp/genrec_p7/p-7.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/genrec_p7/p-7.png"
+ ],
+ "renders": [
+  "Bash cd /tmp && mkdir -p genrec_p7 && pdftoppm -f 7 -l 7 -r 200 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.pdf\" genrec_p7/p && ls genrec_p7"
+ ],
+ "outside": [
+  "Read /tmp/genrec_p7/p-7.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.13,
+ "date": "2026-10-26 00:58"
+}

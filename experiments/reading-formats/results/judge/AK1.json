@@ -1,0 +1,24 @@
+{
+ "key": "0e498b8ebb4f5935",
+ "usd": 0.022276,
+ "grades": {
+  "E7/f-hint/AK1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AK1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain@2.1.301/AK1-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

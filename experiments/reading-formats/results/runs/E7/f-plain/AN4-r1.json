@@ -1,0 +1,33 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AN4",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "The paper says the online A/B test of GenRec used about **10% of Netflix traffic** and ran for **4 weeks** (page 6).\n\nThe full sentence, which runs across a column break in the text layer, reads: \"We allocated approximately 10% of Netflix traffic for 4 weeks\" (page 6). The test was large-scale, ran on key batch-compute surfaces, and compared GenRec against the current production ranker (page 6).\n\nOn the outcome: in a low-data, low-signals setup, the Phase-2 GenRec model gave statistically significant gains over the production baseline on both short-term and long-term online metrics. That includes a +0.006% relative improvement on Netflix's core online metric, which the authors say is meaningful at Netflix scale (page 6, Figure 3).",
+ "input": 44345,
+ "cache_write": 4976,
+ "cache_read": 39359,
+ "output": 896,
+ "thinking": 37,
+ "usd": 0.0656398,
+ "seconds": 12.9,
+ "turns": 5,
+ "calls": [
+  "Grep GenRec",
+  "Grep (?i)traffic|A/B|weeks|days|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.txt [418+20]",
+  "Grep (?i)%|percent"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.16,
+ "date": "2026-10-26 01:00"
+}

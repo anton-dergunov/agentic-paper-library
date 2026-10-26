@@ -12,6 +12,10 @@ Tiers, in priority order (see PROGRESS.md):
   C2 E5 on the unseen papers, with txt; E6, equation structure, in pdf, txt, md
   D  E3 across papers: Claude Code sessions in the library, PDF and text-layer copies
      (copies.py builds them), and the papers' PDFs attached to one request
+  F  E7 figures with the PDF at hand: Claude Code sessions in a copy holding each paper's
+     PDF beside its text layer, with and without a one-line hint to read a figure's page
+  canary  six of tier F's questions in f-plain again, as condition f-plain@<claude --version>:
+     does this Claude Code release still open a page when the value is drawn, and only then?
 
 A tier runs group by group (a paper, for E1). The conditions of a group run in parallel,
 each asking its questions one after another so that the document is read from the cache
@@ -50,13 +54,15 @@ SYSTEM_DOC = ("Answer the question using only the document provided. Give the pa
               "If the document does not contain the answer, say so.")
 SYSTEM_C0 = "Answer the question from what you know. If you do not know, say so."
 Q = {q["id"]: q for q in inputs.QUESTIONS}
-# Tier D's agent sessions: the copy each runs in, the tools it has, what the prompt adds.
-AGENT_COPIES = {"x-lib": "lib", "x-pdf": "pdf", "x-txt": "txt"}
+CANARY = ("AD5", "AL2", "AP5", "AK1", "AN4", "AR8")  # three drawn values; two in the text, one in a vector figure's text
+# Agent sessions (tiers D, F): the copy each runs in, the tools it has, what the prompt adds.
+AGENT_COPIES = {"x-lib": "lib", "x-pdf": "pdf", "x-txt": "txt", "f-plain": "txtpdf-plain", "f-hint": "txtpdf-hint"}
 AGENT_TOOLS = "Read,Grep,Glob,Bash"
 AGENT_SUFFIX = "\n\nAnswer from the papers in this folder. Give the page number for every fact you use."
-AGENT_BUDGET = "5"
+AGENT_BUDGET = "5"  # dollars a session may spend before Claude Code stops it
 SHARED_TMP = "/private/tmp"  # /tmp on macOS
-PDF_TOOLS = r"(?i)pdftotext|pdfinfo|pdfimages|pdftoppm|fitz|pymupdf|pypdf|pdfplumber|qpdf"  # dollars a session may spend before Claude Code stops it
+PDF_TOOLS = r"(?i)pdftotext|pdfinfo|pdfimages|pdftoppm|fitz|pymupdf|pypdf|pdfplumber|qpdf"
+RENDER_TOOLS = r"(?i)(pdftoppm|pdftocairo)\s+-|mutool draw|get_pixmap|convert_from_path|sips\s+-s|qlmanage\s+-t"
 CLI_VERSION = subprocess.run(["claude", "--version"], capture_output=True, text=True).stdout.strip()
 
 
@@ -257,6 +263,7 @@ def agent_request(cwd, prompt, stream_path):
                     given = part.get("input") or {}
                     detail = given.get("file_path") or given.get("command") or given.get("pattern") or ""
                     ranged = " [%s+%s]" % (given.get("offset"), given.get("limit")) if "offset" in given or "limit" in given else ""
+                    ranged += " [pages %s]" % given["pages"] if given.get("pages") else ""
                     calls.append("%s %s%s" % (part.get("name"), str(detail)[:300], ranged))
     shutil.rmtree(scratch, ignore_errors=True)
     for name in set(os.listdir(SHARED_TMP)) - before:
@@ -272,6 +279,17 @@ def agent_request(cwd, prompt, stream_path):
             raise Stop(GUARD.reason)
         raise RuntimeError(text[:300])
     return result, rate, calls
+
+
+def page_views(calls):
+    """The calls that put a page's picture before the model: a Read of a PDF (with its pages,
+    or the whole file) or of an image, rendered or not."""
+    return [c for c in calls if c.startswith("Read ") and re.search(r"(?i)\.(pdf|png|jpe?g)\b", c)]
+
+
+def renders(calls):
+    """The shell commands that render a PDF page to an image."""
+    return [c for c in calls if c.startswith("Bash ") and re.search(RENDER_TOOLS, c)]
 
 
 def ask_agent(j, target):
@@ -294,6 +312,7 @@ def ask_agent(j, target):
         "turns": result.get("num_turns"), "calls": calls,
         "opened_pdf": any(c.startswith("Read ") and ".pdf" in c or c.startswith("Bash ") and re.search(PDF_TOOLS, c)
                           for c in calls),
+        "page_views": page_views(calls), "renders": renders(calls),
         "outside": [c for c in calls if any(mark in c for mark in ("~/", "/Users/", "../", "/private/", "/tmp"))
                     and str(copy) not in c],
         "model": MODEL, "cli": CLI_VERSION,
@@ -304,9 +323,10 @@ def ask_agent(j, target):
     tmp = target.with_suffix(".tmp")
     tmp.write_text(json.dumps(record, ensure_ascii=False, indent=1))
     tmp.rename(target)
-    print("  %-3s %-12s %-5s r%d  %3s turns %3d calls  %7d in  $%.3f  %s%s  [window %s]" % (
+    print("  %-3s %-12s %-5s r%d  %3s turns %3d calls  %7d in  $%.3f  %s%s%s  [window %s]" % (
         j["exp"], j["cond"], j["qid"], j["rep"], record["turns"], len(calls), record["input"], record["usd"] or 0,
         record["status"], "  OUTSIDE" if record["outside"] else "",
+        "  %d page views" % len(record["page_views"]) if record["page_views"] else "",
         "%.0f%%" % (100 * record["five_hour"]) if record["five_hour"] is not None else "?"), flush=True)
     return record
 
@@ -378,9 +398,16 @@ def groups(tier):
         # turn within one, so that a condition's later sessions find its copy's files in the
         # operating system's cache. X-ATT asks only the questions with named papers.
         across = [q["id"] for q in inputs.QUESTIONS if q["exp"] == "E3"]
-        conditions = {c: [job("E3", c, i) for i in across] for c in AGENT_COPIES}
+        conditions = {c: [job("E3", c, i) for i in across] for c in ("x-lib", "x-pdf", "x-txt")}
         conditions["x-att"] = [job("E3", "x-att", i, form="pdfs") for i in across if Q[i]["papers"]]
         out.append(("E3 across papers", conditions, tuple(conditions)))
+    elif tier == "F":
+        figures = [q["id"] for q in inputs.QUESTIONS if q["exp"] == "E7"]
+        conditions = {c: [job("E7", c, i) for i in figures] for c in ("f-plain", "f-hint")}
+        out.append(("E7 figures with the PDF at hand", conditions, tuple(conditions)))
+    elif tier == "canary":
+        cond = "f-plain@" + CLI_VERSION.split()[0]
+        out.append(("E7 canary", {cond: [job("E7", cond, i, form="f-plain") for i in CANARY]}, ()))
     return out
 
 
@@ -434,7 +461,7 @@ def run_tier(tier):
 
 
 def status():
-    for tier in ("A", "B", "B2", "C", "C2", "D"):
+    for tier in ("A", "B", "B2", "C", "C2", "D", "F"):
         done = total = 0
         for name, conditions, _ in groups(tier):
             for jobs in conditions.values():
@@ -443,6 +470,7 @@ def status():
                         total += 1
                         done += path_of(j).exists()
         print("tier %s: %d of %d first answers" % (tier, done, total))
+    print("canary: %s" % (", ".join(sorted(p.name for p in (RUNS / "E7").glob("f-plain@*"))) or "not yet run"))
     reruns = len(list(RUNS.glob("*/*/*-r[23].json")))
     spent = sum(json.loads(p.read_text()).get("usd") or 0 for p in RUNS.glob("*/*/*.json"))
     print("reruns: %d; requests so far $%.2f" % (reruns, spent))

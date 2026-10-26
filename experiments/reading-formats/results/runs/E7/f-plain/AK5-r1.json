@@ -1,0 +1,36 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AK5",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "At turn depth 10, the Qwen3‑32B model on its own reaches a word‑level F1 of about **0.90**. The paper gives no exact number, so I read this off the chart: the point sits just above the 0.90 gridline, around 0.90–0.91.\n\n- **Where the value is:** It appears only in Figure 4 on page 9, as the solid \"32B standalone\" line. The text layer and the appendices have no table of per‑turn CoQA values; Table 11 on page 16 says CoQA multi‑turn results are reported separately.\n- **Shape of the curve:** The 32B line rises steadily from about 0.885 at turn 1 to about 0.90 at turn 10 (p. 9).\n- **Consistency check:** Page 8 says the small‑to‑large gap \"widens by 1.7 pp from turn 1 to turn 10, with the mapper holding steady while the 32B ceiling rises.\" The 14B→32B mapper's line ends at about 0.875 at turn 10 (p. 9). That puts the gap at turn 10 around 2.9 pp, which matches a 32B value of about 0.90.\n- **Setup:** The test used Qwen3 14B↔32B on 100 CoQA conversations of about 15 turns each, across five domains. Each turn's answer was scored by F1 against the ground truth (p. 8).",
+ "input": 64580,
+ "cache_write": 9083,
+ "cache_read": 55485,
+ "output": 1508,
+ "thinking": 225,
+ "usd": 0.11396899999999999,
+ "seconds": 24.2,
+ "turns": 6,
+ "calls": [
+  "Grep Cross-Model KV Cache Transfer",
+  "Grep CoQA|\\[page|depth|standalone",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.txt [455+80]",
+  "Grep turn [8+None]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.pdf [pages 9]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.pdf [pages 9]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.11,
+ "date": "2026-10-26 00:57"
+}

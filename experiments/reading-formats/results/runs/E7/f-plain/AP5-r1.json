@@ -1,0 +1,35 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AP5",
+ "rep": 1,
+ "paper": "pair",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "In the Figure 1 architecture diagram (Step 1) on page 6:\n\n- **Aggregated history embedding:** the arrow from the \"Visited Profiles Embeddings\" is labelled **\"GeM Pooling\"**.\n- **Aggregated user embedding:** it is produced by **\"Temporal-Gated Pooling\"**, which combines the user-profile embedding with the aggregated history embedding.\n\nThese labels are only in the figure image. The PDF's text layer doesn't contain them, so I read them from the rendered page 6.\n\nThe paper doesn't fully agree with its own diagram. The Figure 1 caption on page 6 says the history tower aggregates recent interactions \"using positional attention.\" The ablation on page 7 compares max, mean, GeM, attention and positional-attention pooling, and positional attention comes out best, \"followed closely by GeM pooling.\" The text describes the final query embedding as \"normalized additive fusion\" with a learnable weight γ (Eqs. 3–4, page 5), not as temporal-gated pooling.",
+ "input": 50646,
+ "cache_write": 8400,
+ "cache_read": 42236,
+ "output": 1026,
+ "thinking": 94,
+ "usd": 0.09620719999999999,
+ "seconds": 19.9,
+ "turns": 5,
+ "calls": [
+  "Glob **/*PAIR*",
+  "Grep (?i)pool|\\[page|Figure",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.txt [290+90]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.pdf [pages 6]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.pdf [pages 6]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.12,
+ "date": "2026-10-26 00:58"
+}

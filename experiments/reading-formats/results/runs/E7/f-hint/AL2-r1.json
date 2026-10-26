@@ -1,0 +1,45 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AL2",
+ "rep": 1,
+ "paper": "litm",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "GPT-3.5-Turbo (16K) gets about **45–46% accuracy** when the key is at the 200th of 300 positions. That is its lowest point in the 300-pair setting.\n\n- **Where the value comes from:** The number is only drawn in Figure 7 on page 7 (right panel, \"300 Key-Value Pairs (~16K tokens)\"); the text never states it. I read it off the PDF page image. GPT-3.5-Turbo (16K) is the brown dashed line in the legend (\"gpt-3.5-turbo-16k-0613\"). At 200th its point lies just under halfway between the 40 and 50 gridlines. Since this is an estimate from the plot, treat it as roughly 45%, not an exact figure.\n- **The rest of that curve (also estimated from the figure, p. 7):** about 100% at the 1st position, about 98% at 50th, about 95% at 100th and about 70% at 150th. It then climbs back to about 74% at 250th and about 100% at the 300th (last) position. That U-shape is what the paper calls \"lost in the middle.\"\n- **The paper's own description (p. 6):** \"GPT-3.5-Turbo, GPT-3.5-Turbo (16K), and MPT-30B-Instruct have the lowest performance when they must access key-value pairs in the middle of their input context.\" The task setup is on p. 6: 75, 140 and 300 key-value pairs, 500 examples each.\n- **For comparison (p. 7):** Claude-1.3 (100K), the orange line, stays near 99–100% at every position with 300 pairs.",
+ "input": 83166,
+ "cache_write": 11831,
+ "cache_read": 71321,
+ "output": 1747,
+ "thinking": 257,
+ "usd": 0.14390820000000001,
+ "seconds": 38.7,
+ "turns": 10,
+ "calls": [
+  "Grep 300 (Key|key)|Key-Value Pairs",
+  "Bash cd \"llm/context\"; grep -n \"^\\[page\" \"Lost in the Middle. How Language Models Use Long Contexts.txt\" | head -12; sed -n 360,420p \"Lost in the Middle. How Language Models Use Long Contexts.txt\"",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/context\"; grep -n -i \"key-value\" \"Lost in the Middle. How Language Models Use Long Contexts.txt\" | sed -n 1,60p | tail -30; which pdftoppm",
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/context\"; mkdir -p /tmp/lim && pdftoppm -f 7 -l 7 -r 300 -png \"Lost in the Middle. How Language Models Use Long Contexts.pdf\" /tmp/lim/p && python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/lim/p-07.png'); w,h=im",
+  "Read /tmp/lim/c.png",
+  "Bash python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/lim/p-07.png'); w,h=im.size; im.crop((0,int(h*0.2),w,int(h*0.24))).save('/tmp/lim/l.png')\"",
+  "Read /tmp/lim/l.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/lim/c.png",
+  "Read /tmp/lim/l.png"
+ ],
+ "renders": [
+  "Bash cd \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/context\"; mkdir -p /tmp/lim && pdftoppm -f 7 -l 7 -r 300 -png \"Lost in the Middle. How Language Models Use Long Contexts.pdf\" /tmp/lim/p && python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/lim/p-07.png'); w,h=im"
+ ],
+ "outside": [
+  "Read /tmp/lim/c.png",
+  "Bash python3 -c \"\nfrom PIL import Image; im=Image.open('/tmp/lim/p-07.png'); w,h=im.size; im.crop((0,int(h*0.2),w,int(h*0.24))).save('/tmp/lim/l.png')\"",
+  "Read /tmp/lim/l.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.11,
+ "date": "2026-10-26 00:57"
+}

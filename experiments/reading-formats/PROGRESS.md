@@ -9,7 +9,8 @@ All commands run from this directory with `PAPER_LIBRARY=~/papers uv run python 
 ```bash
 cd experiments/reading-formats
 PAPER_LIBRARY=~/papers uv run python run.py status          # what is done
-PAPER_LIBRARY=~/papers uv run python run.py D --budget 20    # the next tier (see "Tier D: run plan"); stops by itself at 80% of the five-hour window
+PAPER_LIBRARY=~/papers uv run python run.py canary --budget 3  # on each new `claude --version`: six tier F questions, about $0.60
+PAPER_LIBRARY=~/papers uv run python run.py <tier> --budget 20  # a tier; stops by itself at 80% of the five-hour window
 PAPER_LIBRARY=~/papers uv run python judge.py               # grade anything not yet graded (run.py does this per group)
 PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md and the block below
 ```
@@ -26,9 +27,9 @@ PAPER_LIBRARY=~/papers uv run python report.py              # results/summary.md
 | Checkpoint 1 | read the disagreements by hand; decide whether C–E still pay | decided 24 Oct (below); hand check done 25 Oct (below) |
 | C | E5 (small print); E1 html beyond DPO dropped 24 Oct, and taken out of `run.py C` | done 25 Oct |
 | C2 small print and equations on unseen papers | E5 on PAIR, SFT Conflicts, KV transfer, GenRec pages chosen by the author for small print (R5–R9), in page, img1255, img2576, md and txt; E6, nine equation-structure questions (Q1–Q9) in pdf, txt, md | done 25 Oct |
-| D | E3 across papers (X1–X13) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | first answers done 25 Oct (48 of 48); X5 and X8 rerun twice in x-lib, x-pdf, x-txt; X8's reruns not yet graded (`judge.py X8`): see "Tier D, E3: across papers" |
+| D | E3 across papers (X1–X13) in four conditions: Claude Code in the library copy (x-lib), in a copy of the PDFs (x-pdf), in a copy of the PDFs' text layers with page markers (x-txt, added 25 Oct at the author's suggestion), and the named papers' PDFs attached to one request (x-att, every question that names its papers) | done 25 Oct (48 of 48 first answers; X5 and X8 rerun twice in x-lib, x-pdf, x-txt, graded 26 Oct): see "Tier D, E3: across papers" |
 | E | E2 single paper as an agent (CC-LIB, CC-PDF) | replaced 25 Oct by tier F |
-| F | figure questions to an agent with text layers and PDFs, with and without a one-line hint | planned 25 Oct; next to run (see "Tiers F–H") |
+| F | E7: figure questions to an agent with text layers and PDFs, with and without a one-line hint | done 26 Oct (30 of 30, no disagreements, so no reruns); canary first run on 2.1.301: see "Tier F" |
 | G | text-layer weak spots: broken and flawed text layers, in c0, txt, md and the tier F agent | planned; on the author's go-ahead |
 | H | notes written from the text layer against the existing notes from markdown, on four recent papers | planned; on the author's go-ahead |
 
@@ -130,7 +131,7 @@ The first run stopped after one answer on the previous window's limit; the secon
 
 - **Every condition answers every cross-paper question that names its papers.** X1–X3, X6, X7, X9–X11 (equations, tables, numbers, an appendix detail, from 1 to 4 papers each): x-lib, x-pdf, x-txt and x-att all correct, including the review-mined X7, X9–X11 and the library-wide enumeration X4.
 - **Aggregation over the whole library (X12, X13): all three agent conditions are correct, and better than the gold.** Each found every paper of the first gold lists and eight more (recall 30 of 30 and 20 of 20 in all three, after the gold was extended), which the gold's search had missed: X12 Magpie, Humpback, Checklists (RLCF), Generalizing Verifiable IF; X13 MIRIX, xMemory, OP-Bench, and ImplexConv, which the gold had wrongly called a mere listing (its Tables 2 and 5 evaluate on LoCoMo). Each was checked in its markdown and added to `items`; FollowBench, Spec Learning, "When Memory Updates…" and MemSyco-Bench were added as acceptable either way. The judge had never seen the item names (the gold said "the papers in items"), so `judge.py` now appends them, and X12/X13 were graded again: correct in all three. Built from grep over a text layer (x-txt, x-pdf after converting all 2,275 PDFs itself) or over markdown (x-lib), an exhaustive list is as good with or without the library.
-- **The only differences are where the gold came from the library's review.** X5 (lost-in-the-middle remedies): x-lib correct 3 of 3, x-pdf and x-txt partial 3 of 3, every time for missing STRING. But STRING's paper never mentions lost-in-the-middle (only in a reference title); the review ("Repairing the reader") groups it with the remedies, x-lib read the review, and the gold copied it. x-pdf and x-txt named Found in the Middle, FILM-7B and LongLLMLingua with what each changes. Hand verdict: all three correct; the difference is the gold's source, not the reading. X8 (sliding windows): x-lib and x-att correct, x-pdf and x-txt partial in r1 for omitting "Mistral 7B beats Llama 2 13B" and the review's "trained-in, not retrofitted" synthesis; both answers instead say, accurately, that Mistral's report has no window ablation. Hand verdict: correct. Reruns r2, r3 asked, not yet graded. The golds of X5 and X8 were left as written, so that the change is not made after seeing the answers; the table shows the judge's grades, this paragraph the hand verdict.
+- **The only differences are where the gold came from the library's review.** X5 (lost-in-the-middle remedies): x-lib correct 3 of 3, x-pdf and x-txt partial 3 of 3, every time for missing STRING. But STRING's paper never mentions lost-in-the-middle (only in a reference title); the review ("Repairing the reader") groups it with the remedies, x-lib read the review, and the gold copied it. x-pdf and x-txt named Found in the Middle, FILM-7B and LongLLMLingua with what each changes. Hand verdict: all three correct; the difference is the gold's source, not the reading. X8 (sliding windows): x-lib and x-att correct, x-pdf and x-txt partial in r1 for omitting "Mistral 7B beats Llama 2 13B" and the review's "trained-in, not retrofitted" synthesis; both answers instead say, accurately, that Mistral's report has no window ablation. Hand verdict: correct. Reruns (graded 26 Oct): x-lib correct 3 of 3, x-pdf partial 2 of 3, x-txt partial 3 of 3, for the same omissions. The golds of X5 and X8 were left as written, so that the change is not made after seeing the answers; the table shows the judge's grades, this paragraph the hand verdict.
 - **Cost per question (first answers): x-txt $0.30, x-pdf $0.36, x-lib $0.42, x-att $1.72** (x-att on its 9 questions only; on those, 4–10× the agent conditions, at 61K–430K tokens a request). The library is the dearest agent condition, not the cheapest: its session starts at 12.4K tokens against 7.4K (the guide, `AGENTS.md`, `CLAUDE.md`), and it reads notes and whole markdown files where x-txt greps the text layer for the line it needs. Mean time: x-txt 58 s, x-lib 76 s, x-pdf 130 s (X12, X13 and X5 4–8 minutes, spent converting PDFs).
 - **x-pdf never looked at a page.** In all 13 sessions it ran `pdftotext` (and `pdfinfo` in 4) and read the text; no `Read` of a PDF. An agent handed PDFs builds the text layer x-txt was given, so x-pdf and x-txt answer alike, x-pdf slower; neither would answer a figure-only question unless the agent chose to render a page.
 - **What x-lib used**: notes in 7 of 13 sessions, a review in X4, X5, X8, an index in X4 and X13, the catalog never. The notes and reviews shortened the path but did not change the answer, except where the gold came from the review.
@@ -139,7 +140,20 @@ The first run stopped after one answer on the previous window's limit; the secon
 
 **What this decides.** By the run plan's rule, x-lib ≈ x-txt across papers: the library's structure is not what answers questions, on these 13. The case for the library rests on what this tier does not measure: notes and reviews as the reader's own record, citations, and the conversion's figure-free text being about the size of the text layer. It is not cheaper per question for an agent (x-txt is cheaper), and the one thing the PDF does better (figures, tiers A–C2) no agent condition used. E2 as planned (single paper as an agent) would add little; its cheaper variant, the four figure questions in x-lib and x-pdf, asks the one question left: does an agent open a figure or render a page when the text does not have the value?
 
-**Next session**: `judge.py X8` (about $0.09) and `report.py`; then tier F (below), and G and H on the author's go-ahead; then write the experiment up (`README.md` in the format of `experiments/README.md`, the decision in `docs/design.md`).
+### Tier F, E7: figures with the PDF at hand (26 Oct 2026, $3.17 of sessions and $0.29 of judging; the canary $0.55 and $0.13; window 7% to 19%, this session's own work included)
+
+Copies `txtpdf-plain` and `txtpdf-hint` (`copies.py txtpdf`): the x-txt copy with each PDF beside its text file. Their `CLAUDE.md` says what the files are; the hint variant adds "A value drawn in a figure is not in the text: read that page of the PDF." Fifteen questions (E7: AD5–AN4, each an E1 or E5 question reworded to name its paper by title), one session each, Claude Code 2.1.301.
+
+- **Every answer correct, in both variants (15 of 15 each).** The nine drawn values (eight plot readings and one diagram label, P5) are all inside their tolerances, including M5's ±0.2. In tiers A–C2 the text forms declined every one of them.
+- **Without the hint, the agent opens a page exactly when it should.** f-plain looked at the page for 9 of 9 drawn values and for 0 of 6 questions the text answers. That includes R8 and R9, whose numbers sit inside vector figures and are in the text layer. Each time it first grepped the text layer, found the caption but not the value, and said so ("the text layer doesn't include the plotted points"). It then opened the page the caption named: 7 times with Claude Code's `Read` of the PDF with `pages`, twice (D5, R4) by rendering with `pdftoppm` at 200 dpi, cropping and enlarging the plot with PIL, and reading the crop. Tier D's x-pdf agent never opened a page because no question needed it, not because it could not.
+- **The hint adds nothing and costs a little.** f-hint also opened 9 of 9 figure pages and none of the four pure text questions. But it opened the page for the R8 and R9 controls too, where the text already had the numbers. It rendered and cropped more often (7 of 9 figures against 2) and took longer on the text questions (22 s against 16 s). The library's guide should not carry the line.
+- **Cost: about $0.10 a session** (f-plain $0.118 on figure questions and $0.093 on the others; 14–39 s; 35K–160K input tokens, mostly Claude Code's own prompt read from the cache). The dearest was R4 in f-plain, $0.19: three crops to find LongChat's grey dashed line in the legend. A single question to an agent with text and PDF costs less than the whole PDF in one request ($0.65 uncached for DPO, tier A).
+- **Hand check**: M5 (both variants), P5, R4 and L2 read in full. Each value is as graded. P5 in f-plain again noticed that Figure 1's labels disagree with its caption. Each answer says it read the value off the plot and calls it approximate.
+- **Canary** (`run.py canary`, condition `f-plain@<version>`): D5, L2, P5 (drawn), K1, N4 (text) and R8 (text in a vector figure), about $0.60 a run. Its first run on 2.1.301 repeats tier F exactly: the same pages opened, none for the three text questions, at the same cost ($0.06–0.12 each). It doubles as a second run of those six questions. Run it again on each new `claude --version`; the report's "Canary" table puts the versions side by side.
+
+**What this decides.** F's condition holds: an agent with the text layer and the PDF reads the text first and opens the page when a value is drawn, unprompted, in 9 of 9, and does not otherwise. With tiers A–D, text layer plus PDF now matches or beats the markdown on every question type measured: tables, equations, setup and appendix details, traps, cross-paper questions, figure text and drawn values. G (broken text layers) and H (notes from the text layer) are what is left before the decision. Both wait for the author's go-ahead.
+
+**Next session**: tiers G and H on the author's go-ahead (drafting and runs about $8–13 for G, $5–9 for H); then write the experiment up (`README.md` in the format of `experiments/README.md`, the decision in `docs/design.md`).
 
 ## Tiers F–H: does the markdown still earn its place? (planned 25 Oct 2026 with the author, to run in a fresh window)
 
@@ -214,7 +228,7 @@ It runs the four conditions in parallel (about 40–90 minutes), each condition'
 ## Generated
 
 <!-- report.py -->
-Requests: 483, $79.39; judge (latest grading of each question) $3.82; last five-hour utilisation seen: 85%.
+Requests: 519, $83.11; judge (latest grading of each question) $4.26; last five-hour utilisation seen: 19%.
 
 ```
 tier A: 38 of 38 first answers
@@ -223,6 +237,8 @@ tier B2: 102 of 102 first answers
 tier C: 16 of 16 first answers
 tier C2: 55 of 55 first answers
 tier D: 48 of 48 first answers
-reruns: 123; requests so far $79.39
+tier F: 30 of 30 first answers
+canary: f-plain@2.1.301
+reruns: 123; requests so far $83.11
 ```
 <!-- /report.py -->

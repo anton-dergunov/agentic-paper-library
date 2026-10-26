@@ -1,0 +1,18 @@
+{
+ "key": "7bb7f5f403518b5c",
+ "usd": 0.016868,
+ "grades": {
+  "E7/f-plain/AN5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-hint/AN5-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

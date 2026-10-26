@@ -1,0 +1,35 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AM5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "Both numbers come from Figure 5 on page 23. They appear only as plotted points, not in the text or a table, so I read them off the chart and they are approximate.\n\n- **Naive Parallel-RL at τ = 0.8:** about **84.6%** on MATH500 (p. 23).\n- **Math model at τ = 0.75:** about **87.2%** on MATH500, its highest point in the sweep (p. 23). At τ = 0.8 it falls back slightly to about 87.0% (p. 23).\n\nFrom the same page:\n- The ablation varies the rollout temperature only for the math model's training, over τ ∈ [0.4, 0.8], and was run with LoRA on a subset of the data (p. 23).\n- Naive Parallel-RL peaks near τ ≈ 0.65, at about 86.0% (p. 23). It then drops as τ rises further, so its 84.6% at τ = 0.8 is about 1.4 points below that peak (p. 23).",
+ "input": 47650,
+ "cache_write": 7012,
+ "cache_read": 40628,
+ "output": 1033,
+ "thinking": 59,
+ "usd": 0.08492159999999999,
+ "seconds": 18.1,
+ "turns": 5,
+ "calls": [
+  "Grep SFT Conflicts, RL Coexists",
+  "Grep temperature|τ|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.txt [1583+66]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.pdf [pages 23]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.pdf [pages 23]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.11,
+ "date": "2026-10-26 00:57"
+}

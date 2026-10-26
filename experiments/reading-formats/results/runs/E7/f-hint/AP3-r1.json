@@ -1,0 +1,33 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AP3",
+ "rep": 1,
+ "paper": "pair",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "## PAIR training objective for one query\n\n**Setup (p. 4).** Each training example has a query user q, one clicked candidate d⁺, and K negative candidates {d₁⁻, …, d_K⁻}.\n\n**Score (Eq. 1, p. 4):**\n\n  s(q, d) = cos(e_q^final, e_d) / τ\n\n**Loss (Eq. 2, p. 5):**\n\n  L_PAIR = − log [ exp(s(q, d⁺)) / ( exp(s(q, d⁺)) + Σ_{i=1}^{K} exp(s(q, d_i⁻)) ) ]\n\n### What each term means\n\n- **q**: the query user, the member viewing recommendations (p. 4).\n- **d⁺**: the positive, a candidate the member clicked in a Premium Browsemaps impression session (pp. 4–5).\n- **d_i⁻, i = 1…K**: the negatives. Most are candidates that were shown but not clicked (\"exposure-conditioned negatives\"). Some are randomly sampled candidates that give broader coverage of the member space (p. 5). The shown-but-unclicked ones matter most. The deployed retriever actually chose them, so they are realistic alternatives, not just nearby points in embedding space (p. 5).\n- **e_d**: the candidate's embedding, e_d = f_θ(x_d), from the document tower (p. 5). The query profile tower uses the same encoder, Qwen3-Embedding-0.6B (p. 5). Candidate embeddings are L2-normalized (p. 5).\n- **e_q^final**: the final query representation (p. 4). It combines the user's profile with their recent behaviour (Eqs. 3–4, p. 5):\n  - ẽ_q = e_q/‖e_q‖₂ is the normalized profile embedding.\n  - ẽ_H = e_H/‖e_H‖₂ is the normalized history embedding.\n  - e_q^final = L2Norm(ẽ_q + γ ẽ_H), where γ is a learnable scalar that sets how much the history counts.\n  - e_H is a weighted sum of the embeddings of the 10 most recent clicked profiles. The weights come from position-aware attention: α_i is a softmax over wᵀ(e_{h_i} + PE(i)), where w is learned and PE(i) is a learned positional encoding (Eq. 5, p. 5). w, PE and γ are all trained with this same loss (p. 5).\n- **cos(·,·)/τ**: cosine similarity divided by a temperature τ (p. 4).\n- **The fraction**: a softmax over the clicked candidate and the K negatives. Minimizing −log of it raises the clicked candidate's score relative to the candidates that were shown and skipped (p. 5).\n\n### How to read it\n\nThe formula is the same as standard multi-negative contrastive learning (InfoNCE) (p. 5). The difference is where the training pairs come from. The model learns which candidates users preferred among those the production system actually showed. The aim is to capture complementary interest, such as a job-seeking engineer who clicks on recruiters, not just profile similarity (pp. 4–5).\n\nThe authors say the idea comes from relative preference learning but is not DPO. There is no reference policy, no token-level probability ratio, and no reference-model forward pass (pp. 4–5). The trade-off is that PAIR inherits selection bias from the retriever that produced the logs (p. 5).\n\n### Full objective used in training\n\nEvery query's loss is also computed at several embedding sizes (Matryoshka loss, Eq. 6, p. 5):\n\n  L = Σ_{d ∈ {200, 256, 512, 1024}} L_PAIR^(d)\n\nHere L_PAIR^(d) is the same loss computed using only the first d embedding dimensions. This lets one model serve truncated embeddings of different sizes without retraining. The 200-dimensional size roughly matches the storage of the 171-dimensional production embedding (p. 5).\n\n**Note:** the paper uses K for two things: the number of negatives in Eq. 2 (p. 4) and the history length, set to K = 10 (p. 5). The text does not say whether the two are equal.\n\nThe equations are reconstructed from the PDF's text layer. Eq. 2's layout was scrambled there, but it reads unambiguously as written above.",
+ "input": 45835,
+ "cache_write": 7771,
+ "cache_read": 38054,
+ "output": 2212,
+ "thinking": 175,
+ "usd": 0.1140588,
+ "seconds": 26.8,
+ "turns": 5,
+ "calls": [
+  "Glob **/*PAIR*",
+  "Grep \\[page \\d+\\]|objective|loss|L_|ℒ",
+  "Grep \\[page \\d+\\]|objective|loss",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/recommender-systems/industrial-systems/PAIR. Preference-Aligned Intent Retrieval for Premium People Recommendation at LinkedIn.txt [225+105]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.16,
+ "date": "2026-10-26 01:01"
+}

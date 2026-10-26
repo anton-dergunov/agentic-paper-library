@@ -1,0 +1,37 @@
+{
+ "exp": "E7",
+ "cond": "f-plain@2.1.301",
+ "qid": "AL2",
+ "rep": 1,
+ "paper": "litm",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "GPT-3.5-Turbo (16K) gets **about 45% accuracy** when the key is at the 200th position of 300. This is the lowest point on its curve. It is an estimate read off a plot: the paper gives no exact figure for it.\n\n- **Where it comes from:** Figure 7, right panel, \"300 Key-Value Pairs (~16K tokens)\" (p. 7). The gpt-3.5-turbo-16k-0613 line starts near 100% at the 1st position. It is about 95% at the 100th position, about 70% at the 150th, and drops to about 45% at the 200th. It then rises to about 73% at the 250th position and back to about 100% at the 300th.\n- **Why it's only an estimate:** The text layer of p. 7 has only the axis labels for this figure. The appendix has full results tables for multi-document QA (pp. 18–19), but the key-value task's appendix table only counts tokens (Table 4, p. 17). So I read the value from the rendered page.\n- **Context:** The paper says that GPT-3.5-Turbo, GPT-3.5-Turbo (16K) and MPT-30B-Instruct do worst when the key-value pair is in the middle of the context (p. 6). In the same panel, Claude-1.3 and Claude-1.3 (100K) stay near 100% (pp. 6–7).\n\nThe same model gets near-perfect accuracy on this setting with query-aware contextualization (the query placed both before and after the data), but that is a different experiment (p. 8).",
+ "input": 70565,
+ "cache_write": 8835,
+ "cache_read": 61718,
+ "output": 1655,
+ "thinking": 238,
+ "usd": 0.11617159999999999,
+ "seconds": 20.2,
+ "turns": 7,
+ "calls": [
+  "Grep 300 Key-Value|300 key-value",
+  "Grep 300 Key-Value|\\[page|16K",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/context/Lost in the Middle. How Language Models Use Long Contexts.txt [360+60]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/context/Lost in the Middle. How Language Models Use Long Contexts.txt [1010+60]",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/context/Lost in the Middle. How Language Models Use Long Contexts.pdf [pages 7]",
+  "Grep key-value [0+None]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/context/Lost in the Middle. How Language Models Use Long Contexts.pdf [pages 7]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.19,
+ "date": "2026-10-26 01:04"
+}

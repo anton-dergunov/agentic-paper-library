@@ -1,0 +1,24 @@
+{
+ "key": "1e705d498651f76e",
+ "usd": 0.026307999999999998,
+ "grades": {
+  "E7/f-plain@2.1.301/AL2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-hint/AL2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  },
+  "E7/f-plain/AL2-r1": {
+   "score": "correct",
+   "page_ok": true,
+   "confident_wrong": false,
+   "note": ""
+  }
+ }
+}

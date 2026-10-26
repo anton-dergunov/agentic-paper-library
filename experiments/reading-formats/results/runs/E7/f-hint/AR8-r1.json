@@ -1,0 +1,40 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AR8",
+ "rep": 1,
+ "paper": "genrec",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "In the online A/B test, GenRec's average treatment effect on the **short-term homepage engagement metric** is **+0.115%** over the production model, with **p = 3.1 × 10⁻¹⁰**. The paper marks this as statistically significant (Figure 3, page 6).\n\nThis number appears only in the Figure 3 bar chart, not in the running text. I checked it against the rendered PDF page to confirm it belongs to the short-term panel and not the long-term one.\n\nContext, all from page 6:\n- **Test setup:** GenRec was tested against a mature production ranker on key batch-compute surfaces, using about 10% of Netflix traffic for 4 weeks. The GenRec model was the Phase-2 version in a low-data, low-signals configuration.\n- **Long-term core metric:** the other panel of Figure 3 shows +0.006% with p = 0.025, also significant. The text calls this \"statistically meaningful at Netflix scale.\"",
+ "input": 62111,
+ "cache_write": 8499,
+ "cache_read": 53600,
+ "output": 1257,
+ "thinking": 253,
+ "usd": 0.10389999999999999,
+ "seconds": 23.7,
+ "turns": 6,
+ "calls": [
+  "Grep GenRec",
+  "Grep A/B|p-value|p =|treatment effect|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.txt [389+110]",
+  "Bash cd /tmp && pdftoppm -f 6 -l 6 -r 110 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.pdf\" genrec6 && ls genrec6*",
+  "Read /tmp/genrec6-6.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/genrec6-6.png"
+ ],
+ "renders": [
+  "Bash cd /tmp && pdftoppm -f 6 -l 6 -r 110 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/recommender-systems/industrial-systems/GenRec. An LLM-Backed Recommendation Ranker at Netflix.pdf\" genrec6 && ls genrec6*"
+ ],
+ "outside": [
+  "Read /tmp/genrec6-6.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.15,
+ "date": "2026-10-26 00:59"
+}

@@ -1,0 +1,40 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AK5",
+ "rep": 1,
+ "paper": "kvxfer",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "The 32B model reaches a word-level F1 of about **0.90 (my reading: ≈0.904)** on its own at turn depth 10. The paper doesn't print this number anywhere. I read it off the \"32B standalone\" line in Figure 4 on page 9, so treat the third decimal as an estimate.\n\n- **Setup (page 8, §4.6):** The test runs Qwen3 14B↔32B on CoQA, using 100 conversations of about 15 turns each across five domains. Each turn's answer is scored with F1 against the ground truth. \"Drift\" is the gap between the target model's standalone F1 and the mapper's F1 at the same turn.\n- **The value (page 9, Figure 4):** The solid dark-blue \"32B standalone\" line rises from about 0.885 at turn 1 to its highest point at turn 10. That point sits just above the 0.90 gridline, at roughly 0.904.\n- **Cross-check (page 8):** The paper says the small-to-large gap \"widens by 1.7 pp from turn 1 to turn 10, with the mapper holding steady while the 32B ceiling rises.\" My readings of the figure match this:\n  - The 14B→32B mapper (k=8) is at about 0.873 at turn 1 and about 0.875 at turn 10.\n  - So the gap grows from about 1.2 pp to about 2.9 pp, which is roughly the stated 1.7 pp.\n\nFor comparison, the 14B model's standalone F1 at turn 10 is about 0.89 (page 9, Figure 4).",
+ "input": 63346,
+ "cache_write": 10195,
+ "cache_read": 53139,
+ "output": 1517,
+ "thinking": 254,
+ "usd": 0.1225758,
+ "seconds": 24.1,
+ "turns": 7,
+ "calls": [
+  "Grep Cross-Model KV Cache Transfer",
+  "Grep CoQA|\\[page|depth|standalone",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.txt [455+50]",
+  "Bash cd /tmp && mkdir -p kvfig && pdftoppm -f 9 -l 9 -r 200 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.pdf\" kvfig/p && ls kvfig",
+  "Read /tmp/kvfig/p-09.png"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /tmp/kvfig/p-09.png"
+ ],
+ "renders": [
+  "Bash cd /tmp && mkdir -p kvfig && pdftoppm -f 9 -l 9 -r 200 -png \"/Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/ml-systems/inference-and-serving/Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse.pdf\" kvfig/p && ls kvfig"
+ ],
+ "outside": [
+  "Read /tmp/kvfig/p-09.png"
+ ],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.12,
+ "date": "2026-10-26 00:58"
+}

@@ -1,0 +1,32 @@
+{
+ "exp": "E7",
+ "cond": "f-plain",
+ "qid": "AR9",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "f-plain",
+ "page": null,
+ "status": "ok",
+ "answer": "In the RL heatmap (Figure 2, right panel, p. 4):\n\n- **Cosine similarity between the Math and Science updates: −3.92e-04.** It is about zero, so the two updates are nearly orthogonal. (p. 4)\n- **L2 norm of the Logic update: 8.7e-02.** The diagonal cells show norms and the off-diagonal cells show pairwise cosine similarities. (p. 4)\n\nThe other values support this reading. The RL diagonal norms are 2.0e-02 (Math), 1.1e-02 (Science), 8.7e-02 (Logic) and 1.1e-02 (Code), which average about 3.2e-02. That matches the paper's statement that the average L2 norm of RL updates is \"approximately 3×10⁻²\", against 7.4 for SFT (p. 3). The paper also notes that the cosine similarity between updates for different RL tasks is negligible (p. 3).\n\nI read these numbers from the PDF's text layer, not from the rendered figure. The matrix is symmetric and the norms average to the figure the paper quotes, so the mapping of numbers to cells looks right.",
+ "input": 40310,
+ "cache_write": 9556,
+ "cache_read": 30746,
+ "output": 1091,
+ "thinking": 245,
+ "usd": 0.1044492,
+ "seconds": 13.6,
+ "turns": 4,
+ "calls": [
+  "Grep SFT Conflicts",
+  "Grep heatmap|cosine|norm|\\[page",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-plain/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.txt [164+170]"
+ ],
+ "opened_pdf": false,
+ "page_views": [],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.14,
+ "date": "2026-10-26 00:59"
+}

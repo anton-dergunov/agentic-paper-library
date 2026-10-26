@@ -1,0 +1,34 @@
+{
+ "exp": "E7",
+ "cond": "f-hint",
+ "qid": "AM5",
+ "rep": 1,
+ "paper": "sftrl",
+ "form": "f-hint",
+ "page": null,
+ "status": "ok",
+ "answer": "These numbers come from Figure 5 on **page 23** (Appendix D.2, \"Exploration-Interference Trade-off\"). They appear only in the plot, not in the text, so I read them off the chart. Treat them as approximate, about ±0.1 points.\n\n- **Naive Parallel-RL at τ = 0.8:** about **84.6%** MATH500 accuracy. That is down from its peak of about 86.0% at τ ≈ 0.65 (page 23).\n- **Math Model at τ = 0.75:** about **87.2%** MATH500 accuracy. This is the Math Model's highest point on the curve; it drops slightly to about 87.0% at τ = 0.8 (page 23).\n\nBackground, also from page 23: the ablation varied the rollout temperature only for the Math Model's training, over τ ∈ [0.4, 0.8], and kept the other tasks fixed. It was run with LoRA on a subset of the data. The text explains the gap between the two curves: the Math Model keeps improving as τ rises, but gradient interference between tasks also grows. As a result, the merged Parallel-RL model peaks at τ ≈ 0.65 and then declines.",
+ "input": 34941,
+ "cache_write": 5051,
+ "cache_read": 29882,
+ "output": 919,
+ "thinking": 85,
+ "usd": 0.0647964,
+ "seconds": 15.8,
+ "turns": 4,
+ "calls": [
+  "Grep SFT Conflicts",
+  "Grep temperature|\\[page|τ",
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.pdf [pages 23]"
+ ],
+ "opened_pdf": true,
+ "page_views": [
+  "Read /Users/anton/.cache/papers/experiments/reading-formats/copies/txtpdf-hint/llm/post-training/rl-for-reasoning/SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs.pdf [pages 23]"
+ ],
+ "renders": [],
+ "outside": [],
+ "model": "claude-opus-5-5",
+ "cli": "2.1.301 (Claude Code)",
+ "five_hour": 0.12,
+ "date": "2026-10-26 00:58"
+}
