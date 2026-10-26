@@ -90,7 +90,7 @@ the library, and give page numbers for anything worth looking up in the PDF.
 @.claude/library-guide.md
 """
 
-GITIGNORE = ["*.pdf", ".DS_Store", ".claude/skills/", "reviews/.work/"]
+GITIGNORE = ["*.pdf", ".DS_Store", ".claude/skills/", ".claude/settings.local.json", "reviews/.work/"]
 
 
 def write_new(path, text):
@@ -182,6 +182,21 @@ def main(argv):
         vscode.parent.mkdir(exist_ok=True)
         vscode.write_text(json.dumps(settings, indent=2) + "\n", encoding="utf-8")
         print(f"  set {', '.join(added)} in .vscode/settings.json")
+
+    # The agent reads a page of a paper's PDF when the text lacks a value. The PDFs are
+    # usually outside the library (a synced folder, reached through the pdf/ link), where
+    # Claude Code would refuse or ask each time (experiments/text-layer-switch): this
+    # machine's settings let it read there.
+    pdf_dir = paperlib.PDF_ROOT.resolve()
+    if not pdf_dir.is_relative_to(root):
+        local = root / ".claude" / "settings.local.json"
+        claude = json.loads(local.read_text()) if local.exists() else {}
+        directories = claude.setdefault("permissions", {}).setdefault("additionalDirectories", [])
+        if str(pdf_dir) not in directories:
+            directories.append(str(pdf_dir))
+            local.parent.mkdir(exist_ok=True)
+            local.write_text(json.dumps(claude, indent=2) + "\n", encoding="utf-8")
+            print(f"  let Claude Code read the PDFs in {pdf_dir} (.claude/settings.local.json)")
 
     gitignore = root / ".gitignore"
     lines = gitignore.read_text().splitlines() if gitignore.exists() else []

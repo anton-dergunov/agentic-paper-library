@@ -67,7 +67,7 @@ Reading the text first and opening a page only when needed is Claude Code's beha
 
 - **poppler** (`pdftotext`, `pdfinfo`): `brew install poppler`, or `apt install poppler-utils`.
 - **Node.js and Google Chrome or Chromium**, for web articles only. Set `chrome:` in `paper-library.yaml` if Chrome isn't found.
-- **Claude Code allowed to read the PDFs.** When `pdf_root` is outside the library (a synced folder, reached through `pdf/`), Claude Code treats a PDF as outside the session's folders: a headless session cannot open its page, and an interactive one asks each time ([`experiments/text-layer-switch`](../experiments/text-layer-switch/README.md#sessions-in-the-library)). Add the folder to the library's `.claude/settings.local.json`, which stays on the machine:
+- **Claude Code allowed to read the PDFs.** When `pdf_root` is outside the library (a synced folder, reached through `pdf/`), Claude Code treats a PDF as outside the session's folders: a headless session cannot open its page, and an interactive one asks each time ([`experiments/text-layer-switch`](../experiments/text-layer-switch/README.md#sessions-in-the-library)). `paperlib init` adds the folder to the library's `.claude/settings.local.json`, which stays on the machine and out of git:
 
   ```json
   { "permissions": { "additionalDirectories": ["/Users/you/Dropbox/Papers"] } }

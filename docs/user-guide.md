@@ -51,12 +51,12 @@ cd ~/papers
 git init
 ```
 
-A library is a folder with `paper-library.yaml` at its root. `init` creates that file, the folders, `AGENTS.md`, the links to the skills, the `pdf/` link and the VS Code settings, then builds the indexes. It creates only what is missing, so run it again after updating the engine or on a new machine.
+A library is a folder with `paper-library.yaml` at its root. `init` creates that file, the folders, `AGENTS.md`, the links to the skills, the `pdf/` link, the VS Code settings and, when the PDFs are outside the library, a Claude Code setting that lets the agent read them (`.claude/settings.local.json`), then builds the indexes. It creates only what is missing, so run it again after updating the engine or on a new machine.
 
 - **`--pdf-root`** is where the original PDFs go. Choose a synced folder (Dropbox, iCloud, Yandex Disk) to read them on a tablet. Without the option they go to `pdfs/` inside the library. PDFs are never committed.
 - **Keep the library itself out of synced folders.** It is a git repository, and those get corrupted there. A private repository on GitHub works well.
 
-Then do these by hand:
+Then do three things by hand:
 
 1. **Say who reads it**, in `AGENTS.md`: your focus and how you like papers explained. It is loaded into every session, so keep it short.
 2. **Declare your topics** in `catalog/topics.yaml`, one line per folder with its scope. Parents are declared too:
@@ -69,7 +69,6 @@ Then do these by hand:
 
    A paper can only be added to a declared folder. The scope is what the model reads when it files a paper, so write what belongs there.
 3. **Optionally set `overview_dir`** in `paper-library.yaml`: a folder for your own note per paper, for example in an Obsidian vault. `/overview` writes there.
-4. **Let Claude Code read the PDFs**, when `--pdf-root` is outside the library: add that folder to `permissions.additionalDirectories` in the library's `.claude/settings.local.json` ([how](text-layer.md#setup)). The agent opens a PDF's page for a value drawn in a figure; without this it cannot, or asks each time.
 
 [Configuration](configuration.md) lists every key.
 
