@@ -15,8 +15,10 @@ The goal is one installed web app, served from the laptop (later the NAS) over T
 - **The session is Claude Code itself, through the Agent SDK** (`claude-agent-sdk`, Python). It runs the same engine as the terminal and the VS Code panel (tools, skills, the library's `AGENTS.md` and guide, permissions) and reports each step as typed, documented messages: reply text as it streams, tool calls and results, thinking, permission requests. A Claude Code update is an SDK version bump.
 - **A terminal in the browser is not the chat.** The point of the VS Code panel is how it shows an answer: tables as tables, tool calls folded away. A terminal draws a table in box characters.
 - **The reader's own subscription.** The SDK on the reader's own Pro/Max plan, for their own use, is individual use and counts against the plan's usage limits. Anthropic has paused a change to how the SDK is billed; check [their support page](https://support.claude.com/en/articles/15036540-use-the-agent-sdk-with-your-claude-plan) before relying on any particular arrangement.
-- **Python, in this repository, under `editors/web/`.** The server imports `scripts/paperlib.py`, so the library is read exactly as the scripts read it, with no third copy beside `editors/vscode/src/library.ts`. Lectern is Python too, and its serving code can be borrowed.
-- **Served only on the tailnet.** The server runs an agent with tools on the reader's machine. It listens on localhost and the Tailscale address, never a public one, and the agent's tools are limited to what reading needs (below).
+- **Python, in its own repository: [carrel](../../../carrel/).** It is an app with its own frontend, deployment and update rhythm, like vscode-pdf-viewer. The server imports `scripts/paperlib.py` from the engine checkout, so the library is read exactly as the scripts read it, with no third copy beside `editors/vscode/src/library.ts`. Lectern is Python too, and its serving code was borrowed.
+- **Who connects: only the reader, through `tailscale serve`.** The server listens on 127.0.0.1 only; `tailscale serve` publishes it over HTTPS on the tailnet and adds the caller's Tailscale login, and the server admits only the reader's (a tagged device carries none). Host and Origin checks stop a web page in the tablet's browser from driving it. No password.
+- **What the agent may do: Claude Code's default tools, bounded by its sandbox, and the reader asked for the rest.** The same tools as the terminal and the panel, which is what the reading-formats experiments measured. Bash runs in Claude Code's sandbox, which writes only in the library, the PDFs, the engine's cache and the note folders, and reaches only listed domains; inside it a command runs without asking. Web search and fetch, `paperlib`, and writing notes run without asking. Anything else, including leaving the sandbox or reaching another host, is put to the reader as Allow / Deny on the tablet. A login protects nothing against prompt injection from a fetched page; the sandbox does.
+- **What runs without asking is widened from use, not guessed.** `carrel tools` tallies the tools carrel's sessions used (Claude Code's transcripts, `entrypoint: sdk-py`) and what the reader was asked and answered.
 
 ## Shape
 
@@ -36,6 +38,7 @@ tablet (installed web app)                         laptop or NAS
 The smallest thing that proves the idea, before any polish.
 
 - A server that serves one page, one PDF from the library's PDF folder, and a WebSocket that starts an SDK session in the library and passes its messages through.
+- Allow / Deny for permission requests, moved here from part 2: without them the agent could not leave the reading rules at all.
 - A page with the PDF on top (PDF.js) and the chat underneath: the reply as rendered markdown with GFM tables, everything else as plain one-line rows.
 - A citation link in the answer moves the PDF to its page instead of opening a new tab. The link format is the one the guide already tells agents to write, and that vscode-pdf-viewer reads (`page=`, `dest=`, in `src/shared/linkFormat.ts`); port that parser rather than inventing a format.
 
@@ -45,7 +48,7 @@ Done when, on the iPad over Tailscale, a question about the open paper gets a st
 
 - Markdown: GFM tables that wrap to the screen, code, maths (KaTeX), links.
 - Tool calls as folded one-line rows ("Read DPO.txt, pages 8–9", "Grep 'win rate' in library/"), opened by a tap. Thinking folded.
-- Permission requests as Allow / Deny buttons, through the SDK's permission callback. By default the agent may read and grep the library and the PDFs, run `paperlib`, and write the notes folder without asking. Anything else asks.
+- Permission requests show Claude Code's own wording and reason (done in part 1, with Allow / Deny).
 - Stop: interrupts the turn.
 - A message type the app does not know is shown as a plain folded row with its type name, so an SDK update never breaks the chat; it only looks plainer until the app learns the new type.
 - Slash commands typed in the box work as in the terminal, and the skills that make sense while reading (`/paper-info`, `/overview`) are also buttons.
@@ -92,8 +95,15 @@ Done when a paper goes from "heard of it" to open and asked about without touchi
 
 - An SDK version bump is the usual update. After one, ask the dozen questions of part 2 again.
 - When a config key, the frontmatter or the layout of the trees changes, the server follows by itself, since it reads the library through `paperlib.py`.
-- Tests: the link parser (one table of cases shared with vscode-pdf-viewer's), the message renderer on recorded SDK streams (a recorded stream per message type), the library listing on `examples/library`. `paperlib test` runs them.
-- Once it is built, add `editors/web/` to the layout table in `AGENTS.md`, and a page in `docs/` for setting it up, beside `docs/vscode.md`.
+- Tests run in carrel (`uv run pytest`, `node --test tests/links.test.mjs`): the link parser (its cases are vscode-pdf-viewer's; one shared table later), the library listing and PDF lookup, admission, permissions, the message serialisation. A recorded SDK stream per message type for the renderer is still to come.
+- Once it is past the prototype, a page in `docs/` for setting it up, beside `docs/vscode.md`.
+
+## Found while building part 1
+
+- **Claude Code asks about the agent's everyday reading commands.** `cd …; f="…"; grep … "$f"` gets "Quoted text in this command can't be checked before it runs", sandbox or not: three asks in one answer. The sandbox is the boundary, so carrel allows a sandboxed Bash command itself and asks only when a command would leave the sandbox.
+- **A connection to an unlisted host comes to the permission callback as its own request** (`SandboxNetworkAccess`, naming the host), so the domain list can grow from the reader's answers.
+- **The SDK bundles its own Claude Code** (0.2.174 ships 2.1.310), not the one on the PATH; the canary is run on that one.
+- **Sessions follow the library's conventions**, including adding Q&A to a paper's note: the first test question wrote seven lines to a note. That is the guide working; git is the undo.
 
 ## Open questions
 
