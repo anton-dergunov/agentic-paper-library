@@ -1,5 +1,7 @@
 # Task: read a paper on a tablet with Claude Code beside it, in one app
 
+**Status:** part 1 is built in its own repository, [carrel](../../../carrel/); the plan continues in [carrel's docs/plan.md](../../../carrel/docs/plan.md), with the reader's feedback from the first sitting. This note keeps the reasoning behind the decisions.
+
 Reading with the agent works well in VS Code: the PDF on one side, Claude Code on the other, and a citation in the answer opens the PDF at its page ([docs/vscode.md](../vscode.md)). It needs a desk. On a tablet the fallback is Remote Control in the Claude app beside a PDF app, and in practice it costs 5–10 minutes before every sitting:
 
 - Split View has to be set up by hand each time, with several taps, and it works differently on the iPad and on the Android e-ink tablet.
