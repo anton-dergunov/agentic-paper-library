@@ -4,8 +4,8 @@
     paperlib [-C <library>] <command> [arguments]
 
 Run it anywhere inside a library (a folder with paper-library.yaml at its
-root), or name the library with -C or PAPER_LIBRARY. The converters, `init`, `test` and
-`setup-equations` work outside one too. `paperlib <command> --help` shows a
+root), or name the library with -C or PAPER_LIBRARY. `filename`, `init`, `test` and
+`install-vscode` work outside one too. `paperlib <command> --help` shows a
 command's own usage where the script has one.
 """
 
@@ -33,28 +33,19 @@ COMMANDS = {
     "skips": ("reading-list-skips.py", True, "record papers struck from a reading list as skipped"),
     "build-index": ("build-index.py", True, "regenerate every README index and the agent guide"),
     "check": ("check-library.py", True, "check the library is consistent; non-zero on any problem"),
-    "move": ("move-paper.sh", True, "move a paper's markdown, figures and PDF: <paper.md> <topic>"),
-    "remove": ("remove-paper.py", True, "take a paper out: its markdown, figures, PDF and note: <paper.md, arxiv id or title words> ... [--reason \"...\"] [--yes]"),
+    "move": ("move-paper.sh", True, "move a paper's text and PDF: <paper.txt> <topic>"),
+    "remove": ("remove-paper.py", True, "take a paper out: its text, PDF and note: <paper.txt, arxiv id or title words> ... [--reason \"...\"] [--yes]"),
     "rename": ("rename-papers.py", True, "rename papers whose filename no longer matches the title"),
-    "reconvert": ("reconvert.py", True, "regenerate paper bodies with the current converter"),
-    "symptoms": ("conversion-symptoms.py", True, "list papers showing known conversion problems"),
-    "issues": ("issues.py", True, "known conversion problems: list [<scope or paper.md> ...] [--kind K] [--counts], add <paper> <kind> \"<what>\" --where ..., look <paper> \"<text>\", close <kind> --state <file>"),
-    "tickets": ("tickets.py", True, "the engine's conversion tickets with the papers each touches [--write]; move <id> <open|fixed|done|wont-fix> [--reason ...]"),
-    "localize-figures": ("localize-figures.py", True, "download figures that still link to arXiv"),
-    "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.md> ... [--limit N] [--redo | --flagged]"),
+    "text": ("text-layer.py", True, "make papers' text layers again from their PDFs: <paper.txt or scope> ... [--dry-run]"),
+    "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.txt> ... [--limit N] [--redo | --flagged]"),
     "reading": ("reading.py", True, "what is left to read, area by area, and its cost: [<scope>]"),
     "reread": ("reading.py", True, "mark notes to be read again: <paper or stem> ... --reason \"...\" | --clear"),
-    "corrections": ("corrections.py", True, "hand corrections, applied again on reconvert: [<scope>] [--stale | --drifted]; capture <paper.md> [--why ...]; retire <paper> <where>"),
-    "read-view": ("read-view.py", True, "a paper's main text for reading, without references or link targets: <paper.md>"),
+    "read-view": ("read-view.py", True, "a paper's main text for reading, without the references: <paper.txt>"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
-    "set-summary": ("paperlib.py", True, "set a paper's summary: <paper.md> <summary>"),
-    "set-type": ("paperlib.py", True, "set a paper's type: <paper.md> <type>"),
+    "set-summary": ("paperlib.py", True, "set a paper's summary: <paper.txt> <summary>"),
+    "set-type": ("paperlib.py", True, "set a paper's type: <paper.txt> <type>"),
     "filename": ("paperlib.py", False, "the filename stem for a title: <title>"),
-    "html-to-markdown": ("html-to-markdown.py", False, "convert an arXiv HTML rendering"),
-    "pdf-to-markdown": ("pdf-to-markdown.py", False, "convert a PDF (docling, plus marker's equation model)"),
-    "page-map": ("page-map.py", False, "add (p. N) to headings from the PDF: <paper.pdf> <paper.md>"),
-    "caption-numbers": ("caption-numbers.py", False, "number tables and figures as the PDF does: <paper.pdf> <paper.md>"),
 }
 # paperlib.py's own subcommands keep their name, as does a command a script serves beside its own.
 PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename", "reread"}
@@ -65,7 +56,6 @@ def usage():
     lines = [__doc__.strip(), "", "Commands:"]
     others = {"init": "set up a library here: config, folders, skills, PDF link",
               "test": "run the engine's tests",
-              "setup-equations": "install marker (its equation model) in its own environment",
               "install-vscode": "build and install the Paper Library extension for VS Code"}
     from paperlib import styled
     lines += [f"  {styled(name, 1)}{' ' * (width - len(name))}{about}"
@@ -104,10 +94,8 @@ def main(argv):
         return init.main(args)
     if name == "test":
         env = script_env()
-        code = run([sys.executable, str(ENGINE / "tests" / "test_conversion.py")], env)
+        code = run([sys.executable, str(ENGINE / "tests" / "test_text_layer.py")], env)
         return code or run([sys.executable, str(ENGINE / "tests" / "test_example_library.py")], env)
-    if name == "setup-equations":
-        return setup_equations()
     if name == "install-vscode":
         return install_vscode()
     if name not in COMMANDS:
@@ -125,20 +113,6 @@ def main(argv):
     if name in PAPERLIB_SUBCOMMANDS:
         cmd.append(name)
     return run(cmd + args, script_env(root))
-
-
-def setup_equations():
-    """marker pins different versions of docling's libraries, so it gets its own venv."""
-    from paperlib import CACHE_DIR
-    venv = CACHE_DIR / "venvs" / "marker"
-    if not shutil.which("uv"):
-        print("setup-equations needs uv: https://docs.astral.sh/uv/", file=sys.stderr)
-        return 1
-    code = run(["uv", "venv", "--python", "3.12", str(venv)]) if not venv.exists() else 0
-    code = code or run(["uv", "pip", "install", "--python", str(venv / "bin" / "python"), "marker-pdf"])
-    if not code and not shutil.which("llama-server"):
-        print("Also install llama.cpp, which serves marker's model (brew install llama.cpp).")
-    return code
 
 
 def install_vscode():

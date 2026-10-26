@@ -1,9 +1,9 @@
 <!doctype html>
 <!--
   Source of assets/pictures/experiments.png. Six rows, each from one write-up under experiments/:
-  pdf-vs-arxiv-html, pdf-converter-bakeoff, table-emphasis (two rows), reading-models and
+  reading-formats (two rows: tiers B and D, and tier F), web-articles, skill-models, reading-models and
   review-usefulness (its second run, of 6 Oct 2026: the sums over the three questions a review
-  covers). The count of 22 is the number of rows in experiments/README.md, which also
+  covers). The count of 10 is the number of rows in experiments/README.md, which also
   gives the size of the author's library. Render with assets/pictures/render.sh experiments.
 -->
 <html lang="en">
@@ -29,27 +29,27 @@
 <div class="frame">
   <div class="head big">
     <h1>Design choices were measured</h1>
-    <span class="sub">Each converter, prompt and choice of model was tested on real papers before it was adopted. Six of the 22 experiments:</span>
+    <span class="sub">Each choice of format, converter, prompt and model was tested on real papers before it was adopted. Six of the 10 experiments:</span>
   </div>
 
   <div class="t">
     <div class="th">Question</div><div class="th">Measured</div><div class="th d">Decision</div>
 
-    <div class="q">Convert from arXiv’s HTML or from the PDF?<span class="exp">(experiments/pdf-vs-arxiv-html)</span></div>
-    <div class="m"><span>The HTML kept <b>35 of 35</b> equations as exact LaTeX. A layout-aware PDF tool kept <b>1</b> and dropped the rest without a trace.</span></div>
-    <div class="d">HTML first; the PDF only when there is no HTML</div>
+    <div class="q">What should the agent read: Markdown, the PDF or its text?<span class="exp">(experiments/reading-formats)</span></div>
+    <div class="m"><span>51 questions on single papers: the PDF <b>51</b>, its text layer <b>43</b>, the converted Markdown <b>43</b>; the eight lost are values drawn in plots. Across papers, the text layers answered as well as the library, at <b>$0.30</b> a question against $0.42.</span></div>
+    <div class="d">The PDF’s text layer, with the PDF beside it</div>
 
-    <div class="q">Which converter for papers that are only a PDF?<span class="exp">(experiments/pdf-converter-bakeoff)</span></div>
-    <div class="m"><span>Four converters on six papers. <code>docling</code> with <code>surya</code> put <b>100%</b> of table numbers in tables and read <b>71%</b> of equations closely; <code>marker</code> alone, 83% and 68%.</span></div>
-    <div class="d"><span><code>docling</code> for layout and tables, <code>surya</code> to read each equation</span></div>
+    <div class="q">Does the agent open the page when the text lacks a value?<span class="exp">(experiments/reading-formats)</span></div>
+    <div class="m"><span>With the PDF beside its text, unprompted: the page opened for <b>9 of 9</b> values drawn in figures and for <b>0 of 6</b> questions the text answers, at about $0.11 a question.</span></div>
+    <div class="d">Rely on it, and check it on each Claude Code release</div>
 
-    <div class="q">Keep bold and underline?<span class="exp">(experiments/table-emphasis)</span></div>
-    <div class="m"><span>They mark a table’s best result. Keeping them restored <b>9,930</b> marks in 91 papers and made the papers <b>0.6%</b> longer.</span></div>
-    <div class="d">Kept: cheap, and the agent needs it</div>
+    <div class="q">Which converter for web articles?<span class="exp">(experiments/web-articles)</span></div>
+    <div class="m"><span>Three converters on three articles. <code>Defuddle</code> kept <b>94–99%</b> of the text, every equation as TeX and the footnotes; Readability printed each formula twice; Trafilatura dropped every heading.</span></div>
+    <div class="d"><span><code>Defuddle</code>, on the page as Chrome renders it</span></div>
 
-    <div class="q">Keep the shading of table cells?<span class="exp">(experiments/table-emphasis)</span></div>
-    <div class="m"><span>Questions answered correctly: <b>11 of 15</b> without it, <b>15 of 15</b> with it. Three of the four gains are stated in the paper’s text anyway.</span></div>
-    <div class="d">Kept only where the caption refers to it</div>
+    <div class="q">Which model files a paper?<span class="exp">(experiments/skill-models)</span></div>
+    <div class="m"><span>60 papers, one request each. A blind judge graded the folder best for <b>57</b> with Opus, <b>53</b> with Sonnet and 49 with Haiku, in about 4 seconds, against 55 seconds for a skill session.</span></div>
+    <div class="d">Sonnet, one request a paper</div>
 
     <div class="q">Which model reads a paper into its note?<span class="exp">(experiments/reading-models)</span></div>
     <div class="m"><span>Five models were tested as the reader on the same six papers. Errors found when their notes were checked against the papers: Opus <b>1</b>, Sonnet 6, Gemini Pro 7, Gemini Flash 9, Haiku <b>35</b>.</span></div>
@@ -60,7 +60,7 @@
     <div class="d">Start from the review, and check the paper before stating a number</div>
   </div>
 
-  <div class="foot"><b>22 experiments</b> are in the repository (<span class="exp" style="font-size: 11px">experiments/</span>), each with its method, scripts and results. Used by the author on a library of about 2,200 papers.</div>
+  <div class="foot"><b>10 experiments</b> are in the repository (<span class="exp" style="font-size: 11px">experiments/</span>), each with its method, scripts and results. Used by the author on a library of about 2,300 papers.</div>
 </div>
 </body>
 </html>

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Take a paper out of the library: its markdown, figures, PDF and note.
+"""Take a paper out of the library: its text, PDF and note.
 
-    ./scripts/remove-paper.py <paper.md | arxiv-id-or-url | title words> ... [--reason "..."] [--yes]
+    ./scripts/remove-paper.py <paper.txt | arxiv-id-or-url | title words> ... [--reason "..."] [--yes]
 
-It first lists what it will delete: the markdown, its images/<Title>-fig* files, the PDF,
-notes/<Title>.md and its conversion problems, issues/<Title>.yaml. It also lists
+It first lists what it will delete: the paper's file (its text layer, or a web article's
+markdown), the PDF and notes/<Title>.md. It also lists
 what it leaves for a person to decide: the reader's own overview note, the reviews that
 link the paper and the other notes that name it. On a terminal it then asks; anywhere else
 it deletes only with --yes.
@@ -18,7 +18,6 @@ check, which fails while a review still links the paper.
 """
 
 import datetime
-import glob
 import re
 import subprocess
 import sys
@@ -26,7 +25,7 @@ from pathlib import Path
 
 from paperlib import (
     LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, SCRIPTS_DIR, append_skipped,
-    find_by_title, issues_path, library_arxiv_ids, load_issues, load_reviews, note_path, paper_index,
+    PAPER_SUFFIXES, find_by_title, library_arxiv_ids, load_reviews, note_path, paper_index, paper_stem,
     pdf_path_for, read_paper, review_links,
 )
 
@@ -38,9 +37,9 @@ def relative(path):
 
 
 def resolve(arg, index):
-    """The library papers `arg` names: a markdown file, an arXiv id or title words."""
+    """The library papers `arg` names: a paper file, an arXiv id or title words."""
     path = Path(arg).expanduser()
-    if path.suffix == ".md" and path.is_file():
+    if path.suffix in PAPER_SUFFIXES and path.is_file():
         path = path.resolve()
         if not path.is_relative_to(LIBRARY_DIR.resolve()) or path.name == "README.md":
             sys.exit(f"error: {arg} is not a paper under {LIBRARY_DIR}")
@@ -61,24 +60,20 @@ def changed_since_added(pdf, meta):
     return datetime.date.fromtimestamp(pdf.stat().st_mtime) > added
 
 
-def plan(md, reviews):
-    """What removing `md` deletes and what it leaves, from the library as it is."""
-    meta = read_paper(md)[0]
-    stem = md.stem
-    pdf, note = pdf_path_for(md), note_path(md)
+def plan(paper, reviews):
+    """What removing `paper` deletes and what it leaves, from the library as it is."""
+    meta = read_paper(paper)[0]
+    stem = paper_stem(paper)
+    pdf, note = pdf_path_for(paper), note_path(paper)
     overview = OVERVIEW_DIR / f"{stem}.md" if OVERVIEW_DIR else None
     linking = [scope for scope, review in reviews.items()
-               if any(resolved.resolve() == md.resolve() for f in review["files"] for _, resolved, _ in review_links(f))]
+               if any(resolved.resolve() == paper.resolve() for f in review["files"] for _, resolved, _ in review_links(f))]
     naming = [n.stem for n in sorted(NOTES_DIR.glob("*.md"))
               if n != note and stem in n.read_text(encoding="utf-8")]
     return {
-        "md": md, "meta": meta,
-        # "-fig" and a number: another paper's title may begin with this one's.
-        "figures": sorted(f for f in (md.parent / "images").glob(glob.escape(stem) + "-fig*")
-                          if re.fullmatch(r"-fig\d+\.\w+", f.name[len(stem):])),
+        "paper": paper, "meta": meta,
         "pdf": pdf if pdf.is_file() else None,
         "note": note if note.is_file() else None,
-        "issues": issues_path(stem) if load_issues(stem) else None,
         "overview": overview if overview and overview.is_file() else None,
         "reviews": {scope: reviews[scope]["main"] for scope in linking},
         "naming": naming,
@@ -86,17 +81,14 @@ def plan(md, reviews):
 
 
 def show(p, reason):
-    figures = f", {len(p['figures'])} figure{'s' * (len(p['figures']) != 1)}" if p["figures"] else ""
-    print(relative(p["md"]))
-    print(f"  delete  the markdown{figures}")
+    print(relative(p["paper"]))
+    print("  delete  " + ("the markdown" if p["paper"].suffix == ".md" else "the text layer"))
     if p["pdf"]:
         changed = " (changed since it was added: it may hold highlights)" \
             if changed_since_added(p["pdf"], p["meta"]) else ""
         print(f"  delete  the PDF: {p['pdf']}{changed}")
     if p["note"]:
         print(f"  delete  the note: {relative(p['note'])}")
-    if p["issues"]:
-        print(f"  delete  its conversion problems: {relative(p['issues'])}")
     if reason:
         print(f"  record  in catalog/skipped.yaml: {reason}")
     if p["overview"]:
@@ -110,19 +102,16 @@ def show(p, reason):
 def skip_entry(p, reason):
     meta = p["meta"]
     year = str(meta.get("published") or "")[:4]
-    entry = dict(title=meta.get("title") or p["md"].stem, arxiv=str(meta.get("arxiv") or "") or None,
+    entry = dict(title=meta.get("title") or paper_stem(p["paper"]), arxiv=str(meta.get("arxiv") or "") or None,
                  url=None if meta.get("arxiv") else meta.get("url"), year=int(year) if year.isdigit() else None,
-                 topic=str(p["md"].parent.relative_to(LIBRARY_DIR)), reason=reason, date=datetime.date.today())
+                 topic=str(p["paper"].parent.relative_to(LIBRARY_DIR)), reason=reason, date=datetime.date.today())
     return {k: v for k, v in entry.items() if v is not None}
 
 
 def remove(p):
-    for path in [p["md"], *p["figures"], p["pdf"], p["note"], p["issues"]]:
+    for path in [p["paper"], p["pdf"], p["note"]]:
         if path:
             path.unlink()
-    images = p["md"].parent / "images"
-    if images.is_dir() and not any(images.iterdir()):
-        images.rmdir()
 
 
 def main(argv):
@@ -150,7 +139,7 @@ def main(argv):
         papers += [path for path in found if path not in papers]
 
     reviews = load_reviews()
-    plans = [plan(md, reviews) for md in papers]
+    plans = [plan(paper, reviews) for paper in papers]
     for p in plans:
         show(p, reason)
     if not yes:

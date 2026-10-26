@@ -2,11 +2,11 @@
 #
 # The library is found the same way as in paperlib.py: $PAPER_LIBRARY, or the
 # nearest folder at or above the working directory with a paper-library.yaml.
-# Its config says where the trees are; LIBRARY_DIR holds the markdown copies
+# Its config says where the trees are; LIBRARY_DIR holds the papers' text
 # (committed) and PDF_ROOT the PDFs (outside git). The two trees mirror each
 # other:
 #
-#   $LIBRARY_DIR/<topic path>/<Title>.md
+#   $LIBRARY_DIR/<topic path>/<Title>.txt   (.md for a web article)
 #   $PDF_ROOT/<topic path>/<Title>.pdf
 #
 # Both can be overridden from the environment, e.g. on a machine where the PDFs

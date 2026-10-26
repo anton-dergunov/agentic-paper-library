@@ -1,0 +1,10 @@
+{
+  "name": "paperlib-web",
+  "private": true,
+  "description": "Converts a web article's rendered page to markdown for paperlib add-web (experiments/web-articles).",
+  "type": "module",
+  "dependencies": {
+    "defuddle": "0.19.5",
+    "jsdom": "24.1.3"
+  }
+}

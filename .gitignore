@@ -3,6 +3,8 @@ __pycache__/
 .venv/
 node_modules/
 *.pdf
+# The text-layer tests' fixture, a small PDF printed for them
+!tests/fixtures/*.pdf
 # The example library's PDFs and generated links (paperlib init recreates them)
 examples/library/pdfs/
 examples/library/pdf

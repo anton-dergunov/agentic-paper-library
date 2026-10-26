@@ -26,7 +26,10 @@ import sys
 import time
 from pathlib import Path
 
-from paperlib import LIBRARY_DIR, LIBRARY_ROOT, SCRIPTS_DIR, library_arxiv_ids, norm_title, paper_files, read_paper, write_paper
+from paperlib import (
+    LIBRARY_DIR, LIBRARY_ROOT, PAPER_SUFFIXES, SCRIPTS_DIR, library_arxiv_ids, norm_title, paper_index, read_paper,
+    write_paper,
+)
 
 COLUMNS = ["number", "arxiv", "url", "title", "year", "folder", "source", "status"]
 DONE = {"added", "in library", "struck"}
@@ -63,16 +66,16 @@ def command(row):
 
 def set_year(stdout, row):
     """A paper added from a PDF has no date; take the year from the list."""
-    lines = [l.strip() for l in stdout.splitlines() if l.strip().endswith(".md")]
+    lines = [l.strip() for l in stdout.splitlines() if l.strip().endswith(PAPER_SUFFIXES)]
     if not lines or not row["year"].isdigit():
         return
-    md = Path(lines[-1])
-    md = md if md.is_absolute() else LIBRARY_ROOT / md
-    if md.exists() and LIBRARY_DIR in md.parents:
-        meta, body = read_paper(md)
+    paper = Path(lines[-1])
+    paper = paper if paper.is_absolute() else LIBRARY_ROOT / paper
+    if paper.exists() and LIBRARY_DIR in paper.parents:
+        meta, body = read_paper(paper)
         if not meta.get("published"):
             meta["published"] = int(row["year"])
-            write_paper(md, meta, body)
+            write_paper(paper, meta, body)
 
 
 def main(argv):
@@ -86,7 +89,7 @@ def main(argv):
     path = Path(argv[0])
     rows = load(path)
     lib_ids = set(library_arxiv_ids())
-    lib_titles = {norm_title(read_paper(md)[0].get("title")) for md in paper_files()}
+    lib_titles = {norm_title(meta.get("title")) for meta in paper_index().values()}
 
     counts = dict.fromkeys(["added", "in library", "needs a PDF", "failed"], 0)
     tried = 0
@@ -107,7 +110,7 @@ def main(argv):
                 row["status"] = "added"
                 if not row["arxiv"]:
                     set_year(result.stdout, row)
-                note = next((l for l in out if "falling back" in l), "")
+                note = next((l for l in out if "unreadable" in l), "")
                 print(f"added   {row['folder']}: {row['title'][:70]}" + (f"  [{note}]" if note else ""),
                       flush=True)
             else:

@@ -23,7 +23,7 @@ library's.
 
 ## Steps
 
-1. **Resolve the paper** with one `find library -iname "*<words>*.md" -not -name README.md`
+1. **Resolve the paper** with one `find library \( -iname "*<words>*.txt" -o -iname "*<words>*.md" \) -not -name README.md`
    (or `paperlib lookup <id>` for an arXiv id). Several matches: ask. None: stop and
    offer `/add-paper`.
 2. **Check two files, nothing else.**
@@ -31,10 +31,11 @@ library's.
      line and ask whether to write `<stem> - overview.md` instead or stop. Don't search
      for other versions or variants of the note.
    - `notes/<stem>.md`: if it exists, read it and reuse it.
-3. **Read the paper once**: the main text, up to the `References` heading. Skip the
-   appendix and the reference list.
+3. **Read the paper once**: `paperlib read-view <paper.txt>` prints the main text, cut at
+   the reference list. Skip the appendix. For a value drawn in a figure, read that page of
+   the PDF.
 4. **Set the type** (table in `format.md`) with
-   `paperlib set-type <paper.md> <type>`. Don't touch any other frontmatter field,
+   `paperlib set-type <paper.txt> <type>`. Don't touch any other frontmatter field,
    in particular `summary`.
 5. **Find links cheaply**: if the folder's `README.md` links a literature review, read the
    paper's line in its paper map and the lines around it. Otherwise, at most two greps over
@@ -55,8 +56,8 @@ library's.
 
    Never mention what already existed or was skipped (the type was already set, the memory
    file already had a digest), the type you chose, or what you did. Add one line only if
-   something is really wrong (for example `source: pdf-text`, so the numbers may be
-   unreliable).
+   something is really wrong (for example `text-layer: broken`, so the note was written
+   from the PDF's pages).
 
 **Out of scope:** rebuilding indexes, `paperlib check`, `git status`, the library's other
 documents, the web, subagents, and the reader's files outside the library and the notes

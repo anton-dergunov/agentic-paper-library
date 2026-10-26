@@ -5,8 +5,7 @@ axes and never recommends: whether to read or add a paper is the reader's call.
     ./scripts/paper-info.py <arxiv-id-or-url | title words> [...] [--json] [--facts] [--again] [--abstract]
 
 A paper in the library is answered from the library alone, with no network: where its
-markdown, note, overview and review are, its summary and its open conversion problems
-(issues/). Title words find library papers,
+text, note, overview and review are, and its summary. Title words find library papers,
 and after them the papers outside it that were looked at before. A paper skipped earlier
 (catalog/skipped.yaml) is answered with the reason.
 
@@ -37,10 +36,9 @@ from urllib.parse import quote
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
-    TYPES, ask_model, describe_issue, fetch, filing_choice, filing_prompts, find_by_title, is_open,
-    load_issues, load_reviews, load_topics, norm_title,
-    note_path, paper_files, paper_index, parse_arxiv_entries, read_paper, review_for, skipped_index,
-    styled,
+    TYPES, ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics,
+    norm_title, note_path, paper_index, paper_stem, parse_arxiv_entries, read_paper, review_for,
+    skipped_index, styled,
 )
 
 API = "https://export.arxiv.org/api/query"
@@ -83,7 +81,7 @@ def named_in(title):
     folders = [str(f) for f in (LIBRARY_DIR, NOTES_DIR, REVIEWS_DIR) if f.is_dir()]
     if not folders or len(norm_title(title)) < 8:
         return []
-    done = subprocess.run(["grep", "-rliF", "--include=*.md", "--", title, *folders],
+    done = subprocess.run(["grep", "-rliF", "--include=*.md", "--include=*.txt", "--", title, *folders],
                           capture_output=True, text=True)
     return sorted(p for p in done.stdout.splitlines() if not p.endswith("/README.md"))
 
@@ -93,7 +91,7 @@ def in_library(path):
     meta = read_paper(path)[0]
     folder = str(path.parent.relative_to(LIBRARY_DIR))
     scope = review_for(folder, load_reviews())
-    overview = OVERVIEW_DIR / f"{path.stem}.md" if OVERVIEW_DIR else None
+    overview = OVERVIEW_DIR / f"{paper_stem(path)}.md" if OVERVIEW_DIR else None
     return {
         "status": "in library", "arxiv": str(meta.get("arxiv") or "") or None, "title": meta.get("title"),
         "published": str(meta.get("published") or "") or None, "folder": folder,
@@ -103,7 +101,7 @@ def in_library(path):
         "review": relative(load_reviews()[scope]["main"]) if scope else None,
         "type": meta.get("type"), "source": meta.get("source"),
         "summary": " ".join(str(meta.get("summary") or "").split()),
-        "issues": [describe_issue(r) for r in load_issues(path) if is_open(r)]}
+        "text_layer": meta.get("text-layer")}
 
 
 def facts(arxiv_id, entry, record):
@@ -145,9 +143,7 @@ def describe(info, topics, model, prompts):
     folder, reason, _ = filing_choice(reply, topics)
     listed = []
     if folder:
-        for path in paper_files(LIBRARY_DIR / folder):
-            if path.parent == LIBRARY_DIR / folder:
-                listed.append((path, read_paper(path)[0]))
+        listed = sorted((path, meta) for path, meta in paper_index().items() if path.parent == LIBRARY_DIR / folder)
     lines = [f"{n}. {meta.get('title')} ({str(meta.get('published') or '')[:4]}): "
              f"{' '.join(str(meta.get('summary') or '').split())}" for n, (_, meta) in enumerate(listed, 1)]
     reply, used2 = ask_model(model, system, the_paper.format(
@@ -184,8 +180,8 @@ def table(info, abstract=False):
         add("arXiv", f"{info['arxiv']}, submitted {info['published']}" if info["arxiv"] else info["published"])
         for name in ("paper", "note", "overview", "review", "type", "summary"):
             add(name.capitalize(), info[name])
-        for i, issue in enumerate(info.get("issues") or []):
-            add("Conversion" if i == 0 else "", issue)
+        if info.get("text_layer") == "broken":
+            add("Text layer", "broken: read its PDF pages")
     elif info["status"] == "skipped":
         add("Status", f"skipped earlier ({info['skipped']['date']}): {info['skipped']['reason']}")
         add("arXiv", f"{info['arxiv']}, submitted {info['published']}")

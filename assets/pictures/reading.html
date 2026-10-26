@@ -3,8 +3,8 @@
   Source of assets/pictures/reading.png, the first picture of the README. A VS Code window drawn after a
   screenshot of examples/library in Solarized Light, with fewer rows and larger text; the chat is
   that session's question and the opening of its answer, shortened. The folders and files in the explorer are those of examples/library; the page is
-  a crop of page 9 of the DPO paper's PDF (arXiv 2305.18290, CC BY 4.0; img/dpo-page9.png); the Markdown lines are the same section in
-  examples/library, one row of the table joined on one line, the others elided. The count of experiments is the number of
+  a crop of page 9 of the DPO paper's PDF (arXiv 2305.18290, CC BY 4.0; img/dpo-page9.png); the text lines are the same section of
+  its text layer in examples/library, with the gap between the columns narrowed and the lines cut at the box's edge. The count of experiments is the number of
   rows in experiments/README.md. Render with assets/pictures/render.sh reading.
 -->
 <html lang="en">
@@ -29,6 +29,7 @@
   .under .box { padding: 8px 12px; }
   .foot { margin-top: 7px; }
   .code { font-size: 11px; line-height: 1.5; }
+  .under .md .code { font-size: 10px; line-height: 1.55; }
   .sk .slash { line-height: 1.25; }
   .sk .grid { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; row-gap: 0; font-size: 11.2px; line-height: 1.24; align-items: baseline; }
 </style>
@@ -37,7 +38,7 @@
 <div class="frame">
   <div class="head big">
     <h1>Read a paper with Claude Code beside it</h1>
-    <span class="sub">You read the PDF. Claude Code reads the same paper as Markdown, answers your questions, and links each answer to the page.</span>
+    <span class="sub">You read the PDF. Claude Code reads its text, opens a page when the text lacks it, and links each answer to the page.</span>
   </div>
 
   <div class="vsc">
@@ -59,7 +60,7 @@
         <div class="r" style="padding-left:31px"><span class="c">›</span>memory</div>
         <div class="r" style="padding-left:31px"><span class="c">⌄</span>post-training</div>
         <div class="r" style="padding-left:40px"><span class="c">⌄</span>preference-learning</div>
-        <div class="r" style="padding-left:60px"><span class="ext md">MD</span>Direct Preference Op…</div>
+        <div class="r" style="padding-left:60px"><span class="ext md">TXT</span>Direct Preference Op…</div>
         <div class="r" style="padding-left:13px"><span class="c">›</span>notes</div>
         <div class="r" style="padding-left:13px"><span class="c">⌄</span>pdfs</div>
         <div class="r" style="padding-left:22px"><span class="c">›</span>deep-learning</div>
@@ -90,11 +91,12 @@
 
   <div class="under">
     <div class="box md">
-      <div class="label">What Claude Code reads: the same section as Markdown</div>
-      <div class="code"><span class="h">### 6.3 Generalization to a new input distribution</span> <span class="pg">(p. 9)</span>
-<span class="dim">&lt;table&gt; … &lt;tr&gt; &lt;th&gt;</span>DPO<span class="dim">&lt;/th&gt; &lt;td&gt;</span>0.36<span class="dim">&lt;/td&gt; &lt;td&gt;</span>0.31<span class="dim">&lt;/td&gt; &lt;/tr&gt; … &lt;/table&gt;</span>
-Table 1: GPT-4 win rates vs. ground truth summaries for …
-To further compare the performance of PPO and DPO under …</div>
+      <div class="label">What Claude Code reads: the PDF's text, page by page</div>
+      <div class="code"><span class="pg">[page 9]</span>
+<span class="h">6.3  Generalization to a new input distribution</span>
+To further compare the performance of PPO and DPO un-   Alg.  Temp 0  Temp 0.25
+der distribution shifts, we evaluate the PPO and DPO    DPO   0.36    0.31
+policies from our Reddit TL;DR summarization …          PPO   0.26    0.23</div>
     </div>
     <div class="box sk">
       <div class="label">Skills, typed in Claude Code</div>
@@ -109,7 +111,7 @@ To further compare the performance of PPO and DPO under …</div>
     </div>
   </div>
 
-  <div class="foot">Design choices were measured in <b>22 experiments</b>, kept in the repository with their scripts and results. <span class="exp">(experiments/)</span></div>
+  <div class="foot">Design choices were measured in <b>10 experiments</b>, kept in the repository with their scripts and results. <span class="exp">(experiments/)</span></div>
 </div>
 </body>
 </html>

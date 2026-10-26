@@ -10,7 +10,7 @@ model: sonnet
    title, `paperlib info "<title words>"` finds it in the library; if it is not there, get
    its arXiv id with `paperlib lookup --title "<title>"` and run `info` on that.
 2. Show the output as a table, unchanged: one row per line, the `Nearest` papers as links
-   to their markdown. Add nothing of your own, and no advice on whether to add, read or
+   to their text. Add nothing of your own, and no advice on whether to add, read or
    skip the paper: that is the reader's decision, and they have reasons you cannot see.
 3. If the reader then asks about the paper itself, answer from the abstract (`paperlib
    info <id> --json` has it) and say that only the abstract was read. For more, they add

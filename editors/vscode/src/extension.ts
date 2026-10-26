@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
     return library;
   };
-  const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(config.libraryDir, '**/*.md'));
+  const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(config.libraryDir, '**/*.{txt,md}'));
   const drop = () => (library = undefined);
   watcher.onDidCreate(drop);
   watcher.onDidDelete(drop);
@@ -64,7 +64,7 @@ interface Recent {
 }
 
 const buttons = {
-  markdown: { iconPath: new vscode.ThemeIcon('markdown'), tooltip: 'Open the markdown' },
+  text: { iconPath: new vscode.ThemeIcon('file-text'), tooltip: 'Open the text' },
   notes: { iconPath: new vscode.ThemeIcon('note'), tooltip: 'Open the notes' },
   reveal: { iconPath: new vscode.ThemeIcon('list-tree'), tooltip: 'Reveal in Explorer' },
 };
@@ -93,7 +93,7 @@ async function openPaper(libraryPromise: Promise<Library>, recent: Recent) {
     label: paper.title,
     description: [paper.topic, paper.year].filter(Boolean).join(' · '),
     detail: paper.summary || undefined,
-    buttons: paper.notesPath ? [buttons.markdown, buttons.notes, buttons.reveal] : [buttons.markdown, buttons.reveal],
+    buttons: paper.notesPath ? [buttons.text, buttons.notes, buttons.reveal] : [buttons.text, buttons.reveal],
     paper,
   });
   const byKey = new Map(library.papers.map((p) => [`${p.topic}/${p.stem}`, p]));
@@ -121,21 +121,21 @@ async function openPaper(libraryPromise: Promise<Library>, recent: Recent) {
     pick.hide();
     const { paper } = selected;
     void recent.add(paper);
-    if (button === buttons.markdown) void open(paper.mdPath);
+    if (button === buttons.text) void open(paper.textPath);
     else if (button === buttons.notes && paper.notesPath) void open(paper.notesPath);
-    else if (button === buttons.reveal) void reveal(paper.mdPath);
+    else if (button === buttons.reveal) void reveal(paper.textPath);
   });
   pick.onDidHide(() => pick.dispose());
 }
 
-/** The PDF, in whichever editor claims *.pdf (the PDF viewer); the markdown when there is no PDF. */
+/** The PDF, in whichever editor claims *.pdf (the PDF viewer); the text when there is no PDF. */
 async function openPdf(paper: Paper, recent: Recent) {
   void recent.add(paper);
   if (existsSync(paper.pdfPath)) {
     await vscode.commands.executeCommand('vscode.open', vscode.Uri.file(paper.pdfPath));
   } else {
-    vscode.window.showWarningMessage(`No PDF for "${paper.title}" at ${paper.pdfPath}; opening the markdown.`);
-    await open(paper.mdPath);
+    vscode.window.showWarningMessage(`No PDF for "${paper.title}" at ${paper.pdfPath}; opening its text.`);
+    await open(paper.textPath);
   }
 }
 
@@ -147,7 +147,7 @@ function reveal(file: string) {
   return vscode.commands.executeCommand('revealInExplorer', vscode.Uri.file(file));
 }
 
-/** The search view, limited to the papers' markdown, filled with the selection. */
+/** The search view, limited to the papers' text, filled with the selection. */
 function searchText(config: LibraryConfig, folder: vscode.WorkspaceFolder) {
   const editor = vscode.window.activeTextEditor;
   const selection = editor && !editor.selection.isEmpty ? editor.document.getText(editor.selection) : '';
@@ -155,7 +155,7 @@ function searchText(config: LibraryConfig, folder: vscode.WorkspaceFolder) {
   const base = rel && !rel.startsWith('..') && !path.isAbsolute(rel) ? `./${rel.split(path.sep).join('/')}` : config.libraryDir;
   return vscode.commands.executeCommand('workbench.action.findInFiles', {
     query: selection.includes('\n') ? '' : selection,
-    filesToInclude: `${base}/**/*.md`,
+    filesToInclude: `${base}/**/*.txt, ${base}/**/*.md`,
     filesToExclude: '**/README.md',
     triggerSearch: !!selection,
   });
@@ -168,11 +168,11 @@ function activeFile(): vscode.Uri | undefined {
   return vscode.window.activeTextEditor?.document.uri;
 }
 
-/** From any file of a paper, the paper's other files. The counterpart (PDF ↔ markdown) comes first. */
+/** From any file of a paper, the paper's other files. The counterpart (PDF ↔ text) comes first. */
 async function revealInLibrary(libraryPromise: Promise<Library>, recent: Recent, uri?: vscode.Uri) {
   const file = uri ?? activeFile();
   if (!file || file.scheme !== 'file') {
-    vscode.window.showInformationMessage('Paper Library: open a paper (its PDF, markdown or notes) first.');
+    vscode.window.showInformationMessage('Paper Library: open a paper (its PDF, text or notes) first.');
     return;
   }
   const library = await libraryPromise;
@@ -184,8 +184,8 @@ async function revealInLibrary(libraryPromise: Promise<Library>, recent: Recent,
   const { paper, kind } = found;
   type Action = vscode.QuickPickItem & { run: () => Thenable<unknown> };
   const pdf: Action = { label: '$(file-pdf) Open the PDF', run: () => openPdf(paper, recent) };
-  const markdown: Action = { label: '$(markdown) Open the markdown', run: () => open(paper.mdPath) };
-  const actions: Action[] = kind === 'pdf' ? [markdown] : kind === 'markdown' ? [pdf] : [pdf, markdown];
+  const textFile: Action = { label: '$(file-text) Open the text', run: () => open(paper.textPath) };
+  const actions: Action[] = kind === 'pdf' ? [textFile] : kind === 'text' ? [pdf] : [pdf, textFile];
   if (paper.notesPath && kind !== 'notes') {
     actions.push({ label: '$(note) Open the notes', run: () => open(paper.notesPath!) });
   }
@@ -195,7 +195,7 @@ async function revealInLibrary(libraryPromise: Promise<Library>, recent: Recent,
       description: paper.topic,
       run: () => vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(library.topicIndex(paper))),
     },
-    { label: '$(list-tree) Reveal in Explorer', run: () => reveal(paper.mdPath) },
+    { label: '$(list-tree) Reveal in Explorer', run: () => reveal(paper.textPath) },
   );
   const action = await vscode.window.showQuickPick(actions, { title: paper.title });
   await action?.run();

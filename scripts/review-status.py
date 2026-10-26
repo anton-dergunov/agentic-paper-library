@@ -5,17 +5,16 @@
     ./scripts/review-status.py <scope>         one scope: its review and the papers it
                                                does not cover, and which papers have
                                                no note yet (still to be read)
-    ./scripts/review-status.py --links <scope> every paper in the scope as a markdown
+    ./scripts/review-status.py --links <scope> every paper in the scope as a relative
                                                link from reviews/<scope>.md, with its
                                                pdf.invalid base, grouped by folder
     ./scripts/review-status.py --fix-links     repair links to papers that moved
 
 A paper is covered when the review's "## Paper map" section links it. A broken
-link whose filename still exists elsewhere in the library (the paper moved, so
-its stem is unchanged) is rewritten by --fix-links; a renamed paper is reported
-for a manual fix. A paper has been read when notes/<stem>.md has a "## Digest".
-For one scope it also counts the open conversion problems in issues/, those that break
-key content and those not yet filed under a ticket.
+link whose stem is still a paper's elsewhere in the library (the paper moved, or
+its file is now a text layer where it was markdown) is rewritten by --fix-links;
+a renamed paper is reported for a manual fix. A paper has been read when
+notes/<stem>.md has a "## Digest".
 """
 
 import os
@@ -24,8 +23,8 @@ from pathlib import Path
 from urllib.parse import quote, urlsplit
 
 from paperlib import (
-    LIBRARY_DIR, LIBRARY_ROOT, PDF_LINK_BASE, REVIEWS_DIR, all_issues, has_digest, is_open,
-    load_reviews, load_topics, note_path, paper_files, read_paper, review_coverage, review_links,
+    LIBRARY_DIR, LIBRARY_ROOT, PDF_LINK_BASE, REVIEWS_DIR, has_digest, load_reviews, load_topics, paper_files,
+    paper_stem, read_paper, review_coverage, review_links,
 )
 
 
@@ -33,13 +32,13 @@ def rel(path):
     return Path(path).relative_to(LIBRARY_ROOT).as_posix()
 
 
-def md_link(paper, from_file):
+def paper_link(paper, from_file):
     return quote(os.path.relpath(paper, Path(from_file).parent))
 
 
 def pdf_link(paper):
-    return PDF_LINK_BASE + quote(
-        paper.relative_to(LIBRARY_DIR).with_suffix(".pdf").as_posix(), safe="/&+")
+    rel = paper.relative_to(LIBRARY_DIR)
+    return PDF_LINK_BASE + quote((rel.parent / (paper_stem(rel) + ".pdf")).as_posix(), safe="/&+")
 
 
 def report(scope, review):
@@ -66,31 +65,19 @@ def scope_report(scope):
         in_scope, listed = review_coverage(reviews[scope])
         # Papers the review covers whose reading was not kept: an update or a question
         # would have to read them again.
-        no_note = sorted(p for p in in_scope & listed if not has_digest(p.stem))
+        no_note = sorted(p for p in in_scope & listed if not has_digest(p))
         if no_note:
             print(f"{scope}: {len(no_note)} covered papers have no note")
             for p in no_note:
                 print(f"  no note: {p.relative_to(LIBRARY_DIR)}")
         papers = sorted(in_scope - listed)
-    remaining = [p for p in papers if not has_digest(p.stem)]
+    remaining = [p for p in papers if not has_digest(p)]
     if scope not in reviews or remaining:
         to_read = "uncovered papers" if scope in reviews else "papers"
         print(f"{scope}: {len(papers)} {to_read}; notes: {len(papers) - len(remaining)} read, "
               f"{len(remaining)} not read")
         for p in remaining:
             print(f"  not read: {p.relative_to(LIBRARY_DIR)}")
-    conversion_report(paper_files(LIBRARY_DIR / scope))
-
-
-def conversion_report(papers):
-    """The conversion problems of the scope: what a fix pass has to deal with."""
-    stems = {p.stem for p in papers}
-    records = [r for recs in all_issues(stems).values() for r in recs if is_open(r)]
-    broken = sum(1 for r in records if r.get("key-content"))
-    new = sum(1 for r in records if r.get("kind") == "new")
-    if records:
-        print(f"conversion: {len(records)} open problems ({broken} break key content, {new} not filed "
-              "under a ticket yet): paperlib issues <scope>; /triage-conversions files them")
 
 
 def links(scope):
@@ -101,14 +88,14 @@ def links(scope):
     for folder, papers in by_folder.items():
         print(f"\n### {folder}\n")
         for p in papers:
-            title = " ".join(str(read_paper(p)[0].get("title") or p.stem).split())
-            print(f"- [{title}]({md_link(p, target)}) · pdf: {pdf_link(p)}")
+            title = " ".join(str(read_paper(p)[0].get("title") or paper_stem(p)).split())
+            print(f"- [{title}]({paper_link(p, target)}) · pdf: {pdf_link(p)}")
 
 
 def fix_links():
     by_stem = {}
     for p in paper_files():
-        by_stem.setdefault(p.stem, []).append(p)
+        by_stem.setdefault(paper_stem(p), []).append(p)
     fixed = unresolved = 0
     for review in load_reviews().values():
         for f in review["files"]:
@@ -117,7 +104,7 @@ def fix_links():
             for target, resolved, ok in review_links(f):
                 if ok:
                     continue
-                candidates = by_stem.get(resolved.stem, [])
+                candidates = by_stem.get(paper_stem(resolved), [])
                 if len(candidates) != 1:
                     print(f"cannot fix in {rel(f)}: {target}")
                     unresolved += 1
@@ -128,7 +115,7 @@ def fix_links():
                     replacement = pdf_link(paper) + (f"?{query}" if query else "")
                 else:
                     anchor = "#" + target.split("#", 1)[1] if "#" in target else ""
-                    replacement = md_link(paper, f) + anchor
+                    replacement = paper_link(paper, f) + anchor
                 new = new.replace(f"]({target})", f"]({replacement})")
                 new = new.replace(f"]: {target}\n", f"]: {replacement}\n")
                 fixed += 1

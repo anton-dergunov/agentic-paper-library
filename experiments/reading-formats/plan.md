@@ -53,7 +53,7 @@ Claude Opus 5.5 through `claude -p`, input tokens above the 2,052 of an empty re
 - **[DocBench](https://arxiv.org/abs/2407.10701)** (2024): 229 documents, 1,102 questions, real upload products. Academic papers: Claude-3 Opus 73.9%, GPT-4 65.7%, humans 83.0%; GPT-4 reading text extracted with PyMuPDF (fitz) 70.0%. Failures: locating a table or figure, reading values off it, long documents, and unanswerable questions (GPT-4 as a product 37.1%, as a pipeline 70.2%).
 - **[OCR Hinders RAG](https://arxiv.org/html/2412.02592v4)** (OHRBench, ICCV 2025): the best parser 31.1 end to end against 36.1 for ground-truth text (about 14% worse); MinerU 30.0, Marker 29.5. Losses sit in tables, formulas and charts (charts 32.9 → about 10 for pipeline parsers). Severe *semantic* noise halves performance; *formatting* noise costs large models about 7%, only on table and formula questions. Page images fed directly to a VLM compete on tables and charts and lose on plain text.
 - **Long contexts degrade**: Lost in the Middle, NoLiMa and RULER (all in the author's library) and Chroma's [context-rot report](https://trychroma.com/research/context-rot): accuracy falls with length and position, and similar-but-wrong passages hurt most.
-- **This engine's own experiments**: stripped LaTeX source answered 47.5 of 48 questions against 48 for the markdown ([`latex-source/`](../../experiments/latex-source/README.md)); dropping table shading cost 4 of 15 dependent questions, three answerable elsewhere ([`table-emphasis/`](../../experiments/table-emphasis/README.md)); reviews and notes did not make answers more accurate than reading the papers ([`review-usefulness/`](../../experiments/review-usefulness/README.md)); one padding-digit bug had changed 256 table values in five papers, and no note had quoted one ([`review-flagged-fixes/`](../../experiments/review-flagged-fixes/README.md)).
+- **This engine's own experiments**: stripped LaTeX source answered 47.5 of 48 questions against 48 for the markdown (`latex-source/`); dropping table shading cost 4 of 15 dependent questions, three answerable elsewhere (`table-emphasis/`); reviews and notes did not make answers more accurate than reading the papers ([`review-usefulness/`](../../experiments/review-usefulness/README.md)); one padding-digit bug had changed 256 table values in five papers, and no note had quoted one (`review-flagged-fixes/`).
 
 ### Who else converts papers to markdown
 
@@ -154,7 +154,7 @@ Four questions (R1–R4) about Qwen3-VL p. 15 (a dense 8-column table) and Lost 
 
 ### Budget and stages
 
-Costs are API-equivalent dollars as `claude -p` reports them; the subscription's five-hour window held about $28 of such work in [`latex-source/`](../../experiments/latex-source/README.md). Estimates assume the cache works as measured.
+Costs are API-equivalent dollars as `claude -p` reports them; the subscription's five-hour window held about $28 of such work in `latex-source/`. Estimates assume the cache works as measured.
 
 | Stage | Experiments | Estimate |
 |---|---|---|

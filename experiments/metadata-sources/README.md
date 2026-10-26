@@ -12,7 +12,7 @@ citations.** Semantic Scholar's title search managed 20 titles in an hour; OpenA
 search was paused and DBLP sat behind a bot check. Publishers' sites refused scripted PDF
 downloads. One run, one day, one network: availability is the finding, and it changes.
 
-**Serves.** [`docs/conversion.md`](../../docs/conversion.md#metadata).
+**Serves.** [`docs/text-layer.md`](../../docs/text-layer.md#metadata).
 
 ## Method
 

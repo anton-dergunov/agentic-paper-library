@@ -1,35 +1,30 @@
 #!/usr/bin/env python3
-"""Add a paper published as a web article (Distill, transformer-circuits.pub, ...).
+"""Add a paper published as a web article (Distill, transformer-circuits.pub, a blog post).
 
     ./scripts/add-web-article.py <url> <topic> [--title "..."] [--authors "A; B"]
                                  [--published YYYY-MM-DD] [--force]
 
 Writes the same pair of files as the other add scripts:
 
-    $PDF_ROOT/<topic>/<Title>.pdf     the page printed by headless Chrome
-    library/<topic>/<Title>.md        the article converted to markdown
-    library/<topic>/images/<Title>-figNN.<ext>
+    $PDF_ROOT/<topic>/<Title>.pdf     the page printed by headless Chrome, for the reader
+    library/<topic>/<Title>.md        the article as markdown, for the agent
 
-1. Chrome renders the page (scripts run, so figures and math are in the DOM)
-   and dumps it; it also prints the page to the PDF for reading.
-2. The article body is kept: <d-article> / <dt-article> (Distill and its
-   descendants), else <article>, <main> or <body>.
-3. Math becomes $...$ / $$...$$: <d-math> holds raw TeX, KaTeX output carries
-   its TeX in an annotation. Citations become [key], footnotes are inlined in
-   parentheses, and navigation, bibliography and scripts are dropped.
-4. Raster images are downloaded as WebP and inline SVG figures saved as files,
-   as in the arXiv conversion. Interactive figures (canvas, widgets) cannot be
-   kept; the markdown says so at the top and links to the original.
+1. Chrome renders the page (scripts run, so the maths and lazily loaded parts are
+   in the DOM) and dumps it.
+2. Defuddle extracts the article and writes it as markdown (web/to-markdown.mjs,
+   chosen in experiments/web-articles): maths as TeX, footnotes as footnotes. No
+   images are kept; the markdown says so at the top and links to the original,
+   where an agent can look at a figure or an interactive part.
+3. Chrome prints the page to the PDF, unless a PDF is there already: the reader's
+   highlights live in it.
 
 The frontmatter says `source: web`. Title, authors and date come from the
-page's metadata when it has them; the options override them.
+page's metadata when it has them; the options override them. With --force, an
+article already in the library is converted again and keeps its frontmatter.
 """
 
-import base64
 import copy
 import datetime
-import html
-import importlib.util
 import json
 import os
 import re
@@ -38,16 +33,13 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from urllib.parse import quote, unquote, urljoin
 
 import lxml.html
-from lxml import etree
 
-from paperlib import (
-    CONFIG, LIBRARY_DIR, PDF_ROOT, fetch, load_topics, render_frontmatter, title_to_filename, to_webp,
-)
+from paperlib import CONFIG, LIBRARY_DIR, PDF_ROOT, load_topics, read_paper, render_frontmatter, title_to_filename
 
 SCRIPTS = Path(__file__).resolve().parent
+WEB = SCRIPTS / "web"
 # Headless Chrome prints the page to PDF and dumps its rendered DOM. Set
 # `chrome:` in paper-library.yaml (or $CHROME) where it is installed elsewhere.
 CHROME = (os.environ.get("CHROME") or CONFIG.get("chrome")
@@ -59,15 +51,6 @@ CHROME = (os.environ.get("CHROME") or CONFIG.get("chrome")
 USER_AGENT = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36")
 BOT_CHECK = re.compile(r"Attention Required! \| Cloudflare|Just a moment\.\.\.|Access denied")
-DROP = ["script", "style", "noscript", "d-bibliography", "d-citation-list", "d-footnote-list",
-        "d-contents", "d-title", "d-byline", "d-front-matter", "dt-byline", "dt-bibliography",
-        "dt-fn-list", "dt-header", "dt-footer", "d-appendix", "dt-appendix", "nav", "canvas"]
-# Blog chrome inside <article>: share buttons and related-post lists (WordPress/Jetpack).
-DROP_CLASSES = ["sharedaddy", "sd-sharing", "jp-relatedposts"]
-
-_spec = importlib.util.spec_from_file_location("h2m", SCRIPTS / "html-to-markdown.py")
-h2m = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(h2m)
 
 
 def chrome(url, *args):
@@ -110,90 +93,24 @@ def front_matter(doc):
     return {}
 
 
-def math_span(tex, display):
-    """MathML carrying the TeX as an annotation, which pandoc turns into $...$."""
-    math = etree.Element("math", {"display": "block" if display else "inline"})
-    semantics = etree.SubElement(math, "semantics")
-    etree.SubElement(semantics, "mrow")
-    annotation = etree.SubElement(semantics, "annotation", {"encoding": "application/x-tex"})
-    annotation.text = tex.strip()
-    return math
-
-
-def replace(el, new):
-    new.tail = el.tail
-    el.getparent().replace(el, new)
-
-
-def medium_body(body):
-    """The story itself from a Medium page, without the page's widgets.
-
-    Medium marks every block of the story (paragraph, heading, list item,
-    caption) with data-selectable-paragraph; claps, follow and share buttons,
-    tags and the newsletter box between sections carry no such mark. The
-    story is rebuilt from the title and the marked blocks, taking whole
-    lists, figures and code blocks around them.
-    """
-    def is_block(el):
-        if el.get("data-testid") == "storyTitle":
-            return True
-        if el.tag in ("ol", "ul", "figure", "pre", "blockquote"):
-            return bool(el.xpath(".//*[@data-selectable-paragraph] | .//img"))
-        return el.get("data-selectable-paragraph") is not None and el.tag not in ("li", "figcaption")
-
-    blocks = []
-    for el in body.iter():
-        if isinstance(el.tag, str) and is_block(el) and not any(a in blocks for a in el.iterancestors()):
-            blocks.append(el)
-    keep = lxml.html.Element("div")
-    for el in blocks:
-        el.tail = None
-        keep.append(el)  # moves it out of the page; blocks are in document order
-    for el in keep.xpath('.//*[contains(concat(" ", @class, " "), " speechify-ignore ")]'):
-        el.drop_tree()  # "Press enter or click to view image in full size"
-    return keep
-
-
-def clean(body, base_url):
-    for tag in DROP:
-        for el in body.xpath(f"//{tag}"):
-            el.drop_tree()
-    for cls in DROP_CLASSES:
-        for el in body.xpath(f'//*[contains(concat(" ", @class, " "), " {cls} ")]'):
-            if el.getparent() is not None:
-                el.drop_tree()
-    # A <div> inside a heading makes pandoc split it into an empty heading and a paragraph.
-    for el in body.xpath("(//h1 | //h2 | //h3 | //h4 | //h5 | //h6)//div"):
-        el.drop_tag()
-    # KaTeX output: the TeX source is in the MathML annotation.
-    for el in body.xpath('//span[contains(concat(" ", @class, " "), " katex-display ")]'
-                         ' | //span[contains(concat(" ", @class, " "), " katex ")]'):
-        if el.getparent() is None:
-            continue
-        tex = el.xpath('.//annotation[@encoding="application/x-tex"]/text()')
-        if tex:
-            display = "katex-display" in el.get("class", "")
-            replace(el, math_span(tex[0], display))
-    for el in body.xpath("//d-math | //dt-math"):
-        if el.getparent() is None:
-            continue
-        inner = el.xpath(".//math")
-        if el.tag == "dt-math" and inner:  # already converted from KaTeX above
-            el.drop_tag()
-            continue
-        replace(el, math_span(el.text_content(), el.get("block") is not None))
-    for el in body.xpath("//d-cite | //dt-cite"):
-        key = el.get("key") or el.get("data-key") or ""
-        cite = etree.Element("span")
-        cite.text = f"[{key.replace(',', ', ')}]" if key else ""
-        replace(el, cite)
-    for el in body.xpath("//d-footnote | //dt-fn"):
-        note = etree.Element("span")
-        note.text = f" ({' '.join(el.text_content().split())})"
-        replace(el, note)
-    for img in body.xpath("//img[@src]"):
-        img.set("src", urljoin(base_url, img.get("src")))
-    return body
+def to_markdown(dom, url):
+    """The rendered page's article as markdown, by Defuddle (installed on first use)."""
+    if not shutil.which("node"):
+        sys.exit("error: add-web needs Node.js (https://nodejs.org) for its converter")
+    if not (WEB / "node_modules").is_dir():
+        subprocess.run(["npm", "ci", "--prefix", str(WEB), "--no-audit", "--no-fund"], check=True,
+                       stdout=subprocess.DEVNULL)
+    with tempfile.NamedTemporaryFile("w", suffix=".html", encoding="utf-8") as page:
+        page.write(dom)
+        page.flush()
+        done = subprocess.run(["node", str(WEB / "to-markdown.mjs"), page.name, url],
+                              capture_output=True, text=True)
+    if done.returncode != 0 or not done.stdout.strip():
+        sys.exit(f"error: the converter failed on {url}: {done.stderr.strip()[-300:]}")
+    for line in done.stderr.splitlines():
+        if line.startswith("warning:"):
+            print(line, file=sys.stderr)
+    return done.stdout
 
 
 def main(argv):
@@ -267,65 +184,10 @@ def main(argv):
         sys.exit(f"skip (exists): {md_path}")
     md_path.parent.mkdir(parents=True, exist_ok=True)
     pdf_path.parent.mkdir(parents=True, exist_ok=True)
-    images_dir = md_path.parent / "images"
-    for old in images_dir.glob(f"{stem}-fig*") if images_dir.exists() else []:
-        old.unlink()  # from an earlier run (--force)
 
-    body = None
-    for tag in ("d-article", "dt-article", "article", "main", "body"):
-        found = doc.xpath(f"//{tag}")
-        if found:
-            body = found[0]
-            break
-    if doc.xpath("//*[@data-selectable-paragraph]"):
-        body = medium_body(body)
-    body = clean(body, url)
-    article = lxml.html.tostring(body, encoding="unicode")
-
-    counter = 0
-
-    def save(ext, data):
-        nonlocal counter
-        counter += 1
-        name = f"{stem}-fig{counter:02d}.{ext}"
-        images_dir.mkdir(parents=True, exist_ok=True)
-        (images_dir / name).write_bytes(data)
-        return f"images/{quote(name)}"
-
-    def save_svg(mime, data):
-        return save("svg", h2m.repair_svg(data.decode("utf-8")).encode("utf-8"))
-
-    article = h2m.extract_svgs(article, save_svg)
-    text = subprocess.run(
-        ["pandoc", "-f", "html", "-t", "gfm-tex_math_gfm+tex_math_dollars", "--wrap=none",
-         "--lua-filter", str(SCRIPTS / "arxiv-html.lua")],
-        input=article, capture_output=True, text=True, check=True,
-    ).stdout
-
-    def local(m):
-        src = m.group(2)
-        if src.startswith("data:image/"):  # inlined, possibly with URL-encoded line breaks
-            try:
-                data = base64.b64decode(re.sub(r"\s", "", unquote(src.split(",", 1)[1])))
-            except (ValueError, IndexError):
-                return m.group(0)
-        elif src.startswith("http"):
-            data = fetch(src)
-        else:
-            return m.group(0)
-        if not data:
-            return m.group(0)
-        try:
-            return m.group(1) + save("webp", to_webp(data)) + m.group(3)
-        except Exception:
-            ext = src.rsplit(".", 1)[-1].lower()
-            return m.group(1) + save(ext if ext in ("png", "jpg", "jpeg", "gif", "svg") else "bin", data) + m.group(3)
-
-    text = re.sub(r'(!\[[^\]]*\]\()([^)\s]+)(\))', local, text)
-    text = re.sub(r'(<img\s[^>]*?src=")([^"]+)(")', local, text)
-
-    note = (f"> **Converted from a web article** ({url}). Interactive figures and widgets "
-            f"did not survive; open the original for them.\n\n")
+    text = to_markdown(dom, url).strip() + "\n"
+    note = (f"> **A web article** ({url}), converted to markdown without its figures and interactive "
+            f"parts; open the original for them.\n\n")
     meta_block = {
         "title": title,
         "authors": [a for a in authors if a] or None,
@@ -337,15 +199,19 @@ def main(argv):
         "added": datetime.date.today(),
     }
     meta_block = {k: v for k, v in meta_block.items() if v is not None}
+    if md_path.exists():  # --force: converted again, its frontmatter kept
+        meta_block = read_paper(md_path)[0] or meta_block
     # The article usually carries its own title as a heading; add one only if not.
-    heading = "" if re.search(rf"^#\s+{re.escape(title)}\s*$", text[:3000], re.M) else f"# {title}\n\n"
+    heading = "" if re.search(r"^#\s+\S", text[:2000], re.M) else f"# {title}\n\n"
     md_path.write_text(render_frontmatter(meta_block) + "\n" + heading + note + text, encoding="utf-8")
 
-    print("Printing PDF ...")
-    chrome(url, f"--print-to-pdf={pdf_path}", "--no-pdf-header-footer")
-    if not pdf_path.exists() or pdf_path.read_bytes()[:5] != b"%PDF-":
-        sys.exit(f"error: Chrome did not print a PDF for {url}")
-    subprocess.run([sys.executable, SCRIPTS / "page-map.py", pdf_path, md_path])
+    if pdf_path.exists():
+        print(f"kept (exists): {pdf_path}")
+    else:
+        print("Printing PDF ...")
+        chrome(url, f"--print-to-pdf={pdf_path}", "--no-pdf-header-footer")
+        if not pdf_path.exists() or pdf_path.read_bytes()[:5] != b"%PDF-":
+            sys.exit(f"error: Chrome did not print a PDF for {url}")
     print(f"Done: {pdf_path}\n      {md_path}")
 
 

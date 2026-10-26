@@ -27,14 +27,10 @@ passed) and `status`. With no mode, pick `write` or `update` by whether
 **The pipeline.** A review is the last of three steps, and each step can run on its own:
 
 ```
-paperlib read <scope>          notes, one request per paper; runs from a terminal too; the
-                               conversion problems found go to issues/
-/literature-review <scope>     the review; reads what is missing, and checks the PDF where
-                               it leans on a part whose key content is broken
+paperlib read <scope>          notes, one request per paper; runs from a terminal too
+/literature-review <scope>     the review; reads what is missing, and checks the PDF's page
+                               where it leans on a value drawn in a figure or garbled text
 ```
-
-Conversion problems are fixed in the engine, apart from this pipeline
-(`/triage-conversions`, `/fix-conversions <tickets>`).
 
 **What it costs.** Reading is most of the work: `paperlib read` sends each paper in one
 request, about 35K tokens, so 100 papers can use up a usage window. It is resumable and
@@ -60,24 +56,18 @@ all of them again on each request.
      many papers are left and when the limit resets, and ask whether to run the same
      command again now or later.
    - A paper that failed for another reason is reported with the error; try it once more
-     alone (`paperlib read <paper.md>`).
+     alone (`paperlib read <paper.txt>`).
 4. **Papers whose results are in the appendix.** A note whose `evidence` line or digest
    says the main numbers are in an appendix was read without them. Read those again:
-   `paperlib read --redo --appendix <paper.md> ...`.
-5. **Report**: how many notes were written, how many papers are left, and the conversion
-   problems recorded (`paperlib review-status <scope>` counts them), naming those with key
-   content broken (`paperlib issues <scope> --key-content`). In `read` mode, stop here.
+   `paperlib read --redo --appendix <paper.txt> ...`.
+5. **Report**: how many notes were written and how many papers are left. In `read` mode,
+   stop here.
 
 ## write
 
 1. **Read** every paper of the scope, as above, until `paperlib review-status <scope>`
    lists none as not read.
-2. **Conversion problems.** `paperlib issues <scope> --key-content` lists the places whose
-   key content is broken. Wherever the review leans on one, read the PDF at that page
-   (`Read` with `pages`, that page only) before stating its numbers, and say in the review
-   that it was checked there. When several of them share a ticket, mention it in the report
-   as worth a `/fix-conversions <id>`; do not fix papers by hand.
-3. **Context.**
+2. **Context.**
    - Read the notes of every paper in scope (`notes/<stem>.md`): these are what the
      review is written from.
    - If `overview_dir` is configured (see `.claude/library-guide.md`), find the reader's own
@@ -85,35 +75,35 @@ all of them again on each request.
      against the stems, and read those.
    - Read the reviews of neighbouring areas, if any exist, for the Connections section:
      their abstract, "Kinds of …" headings and Connections, not the whole file.
-4. **Write** `reviews/<scope>.md` as `format.md` describes, from the notes.
+3. **Write** `reviews/<scope>.md` as `format.md` describes, from the notes.
    - Build the "Kinds of …" taxonomy from the notes' `family` lines and digests: find the
      few questions on which the approaches differ, then group the papers into families by
      their answers.
    - Take each finding's strength from the notes' `evidence` lines.
    - Open a paper again to check any claim the review leans on, and always before
      stating what a result means beyond what its note says: a note gives numbers
-     faithfully, and their interpretation is where reviews go wrong.
+     faithfully, and their interpretation is where reviews go wrong. Where a note says a
+     value is in a figure, or garbled in the text, read that page of the PDF (`Read` with
+     `pages`, that page only) before stating it.
    - Start the paper map from `paperlib review-status --links <scope>`.
    - Collect the disagreements between papers as you write the findings, for "Where the
      papers disagree".
    - Look up the exact page of each cited number in the note; never guess one.
-   - Choose each diagram's type for what it shows, and use a paper's own figure where it
-     explains better (`format.md`, "Diagrams and figures").
+   - Choose each diagram's type for what it shows, and point to a paper's own figure where
+     it explains better (`format.md`, "Diagrams and figures").
    - **Write the "In practice" section last**, when everything else is done: decide which
      one or two topics a practitioner relying on these papers would want recommendations
      on, derive them from the findings, and open with the provenance note (`format.md`,
      "The In practice section"). Skip it if the area has none.
-5. **Check.**
+4. **Check.**
    - `paperlib review-refs <scope>` turns the links into reference-style links.
    - `paperlib review-status <scope>` must show every paper covered and no broken links.
    - Run `paperlib build-index` (the folder indexes now link the review), then
      `paperlib check`, which must pass.
    - Delete `reviews/.work/<scope>/`.
-6. **Report.**
+5. **Report.**
    - A link to the review and three or four lines on what the area looks like.
-   - The conversion problems with key content broken that the review leans on, and the
-     tickets they belong to.
-   - A commit message: the review, the new notes, `issues/`. Never commit.
+   - A commit message: the review and the new notes. Never commit.
    - One line advising to discuss or correct the review in a new session: this one's
      context holds every note, and each later turn pays for it again.
 
@@ -141,8 +131,7 @@ Steps:
    gets what it lacks in this update: missing sections ("Where the papers disagree", "In
    practice"), evidence labels, source links in the comparison tables.
 3. **Read** the uncovered papers: `paperlib read <scope>` reads the ones without a note
-   (steps 3–4 of `read`). Then check conversion problems as in step 2 of `write`, and
-   read the new notes.
+   (steps 3–4 of `read`). Then read the new notes.
 4. **Revise** the review:
    - Place each paper in the map and in its family under "Kinds of …". A new family gets
      its own subsection and a row in the side-by-side table.
@@ -161,13 +150,12 @@ Steps:
    - Fold the lasting points from `## Q&A` into the narrative, and remove them there.
 5. **Log.** Add a line to `## Updates` saying what came in and what changed, and bump
    `updated`.
-6. **Check** as in write, step 5.
+6. **Check** as in write, step 4.
 7. **Report.**
    - A link to the review.
    - **What changed since <previous updated date>**, a few lines for the reader: new kinds of
      approaches, findings overturned or strengthened, and the two or three new papers to
      read first.
-   - The conversion problems with key content broken that the review leans on.
    - A commit message. Never commit.
 
 ## status

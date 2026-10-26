@@ -3,7 +3,9 @@
 `paperlib read` costs about 35K input and 4K output tokens a paper with Opus (91 papers of
 the author's `search-and-ranking`, 2026-10-06). A regression of input tokens on the length of
 each paper's reading view puts about 16K of that in the part of the request that is not the
-paper, and about 19K in the paper (2.7 characters a token). So the fixed part is nearly half
+paper, and about 19K in the paper (2.7 characters a token). Those were markdown readings; a
+text-layer reading view runs about 2.6 characters a token (reading-formats, tier H), so the
+split is to be measured again on the first areas read from text layers. So the fixed part is nearly half
 the input, and it is the same for every paper of an area.
 
 ## 1. Trim the fixed part of the request

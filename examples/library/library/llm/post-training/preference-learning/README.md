@@ -8,4 +8,4 @@ RLHF, reward models, DPO and other preference-optimization methods.
 
 | Paper | Year | arXiv | Summary |
 |---|---|---|---|
-| [Direct Preference Optimization: Your Language Model is Secretly a Reward Model](Direct%20Preference%20Optimization.%20Your%20Language%20Model%20is%20Secretly%20a%20Reward%20Model.md) · [PDF](../../../../pdfs/llm/post-training/preference-learning/Direct%20Preference%20Optimization.%20Your%20Language%20Model%20is%20Secretly%20a%20Reward%20Model.pdf) | 2023 | [2305.18290](https://arxiv.org/abs/2305.18290) | DPO: fine-tunes on preferences directly by reparameterising the reward, with no separate reward model or RL. |
+| [Direct Preference Optimization: Your Language Model is Secretly a Reward Model](Direct%20Preference%20Optimization.%20Your%20Language%20Model%20is%20Secretly%20a%20Reward%20Model.txt) · [PDF](../../../../pdfs/llm/post-training/preference-learning/Direct%20Preference%20Optimization.%20Your%20Language%20Model%20is%20Secretly%20a%20Reward%20Model.pdf) | 2023 | [2305.18290](https://arxiv.org/abs/2305.18290) | DPO: fine-tunes on preferences directly by reparameterising the reward, with no separate reward model or RL. |

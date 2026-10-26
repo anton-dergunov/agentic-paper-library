@@ -42,11 +42,10 @@ list.
    `<number>\t<summary>` lines; then `paperlib apply-summaries <pending.md> <summaries.tsv>`.
    Check the numbers in a few summaries against the abstracts.
 7. **Rebuild and check.** `paperlib build-index`, then `paperlib check`, which
-   must pass. Spot-check two or three conversions, and list the papers that came from PDF
-   text (`source: pdf-text`).
+   must pass. List the papers whose text layer was marked `text-layer: broken`, if any.
 8. **Clean up.** Once every row of a list is `added`, `in library` or `struck`, delete its
    `.md` and `.tsv`: the papers carry their summaries and the skips are in the catalog.
-9. **Report**: counts per area (added, struck, in library, from PDF text), anything left
+9. **Report**: counts per area (added, struck, in library), anything left
    for the reader, and a suggested commit message. Never commit.
 
 Work in one session at a time: two sessions running the same lists overwrite each other's

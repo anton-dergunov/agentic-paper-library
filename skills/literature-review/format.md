@@ -146,8 +146,7 @@ The body has these sections, in this order:
 11. `## Where to start reading`: 5–8 papers in reading order. Each one is a link and a line on
    why it comes at that point ("the clearest statement of the problem", "the system later
    papers compare against"). The reader of the first review called this section very
-   important: choose the order with care, and say when a paper's copy has a conversion
-   problem the reader should know about.
+   important: choose the order with care.
 12. `## Connections`: neighbouring areas, as links to their reviews (`../<scope>.md`) or their
    folders, each with one line on what they share with this one.
 13. `## Updates`: a dated log, one line per version: what it took in and what it changed
@@ -260,12 +259,10 @@ a row of boxes adds nothing; write the list.
 - **Look at it before reporting.** If `mmdc` (mermaid-cli) is installed, render each
   diagram to a PNG in a scratch folder and check that it parses and that every label is
   readable; say so in the report if it could not be rendered.
-- **Figures from the papers** are welcome when a paper's own figure explains a mechanism
-  or shows a result better than a redrawn one. Link the extracted image by a relative path
-  (`../../library/<topic path>/images/<Title>-figNN.<ext>`), and put a caption under it
-  naming the paper and the figure, with a page link: "Figure 3 of [HELMET](…),
-  [p. 7](…)". Open the image to check that it is the figure you mean and is readable
-  on its own. At most a handful per review. `paperlib check` verifies that the file exists.
+- **Figures from the papers:** when a paper's own figure explains a mechanism or shows a
+  result better than a redrawn one, point to it with a page link rather than redrawing it:
+  "see Figure 3 of [HELMET](…), [p. 7](…?dest=figure.3&page=7)". The library keeps no
+  images of figures.
 - **How many:** one in the introduction when the area has an overall structure, then only
   where a family or a finding needs one.
 
@@ -278,7 +275,7 @@ a row of boxes adds nothing; write the list.
   `paperlib review-refs <scope>` when done: it converts every link to a paper or a PDF
   page, names the labels and rebuilds the block. Never edit the block by hand.
   `paperlib review-refs --inline <scope>` turns a review back into inline links.
-- **A paper:** a relative link to its markdown, as `paperlib review-status --links <scope>`
+- **A paper:** a relative link to its text, as `paperlib review-status --links <scope>`
   prints it. The link text is the paper's short name (method or system name, or a few words
   of the title).
 - **A place in a paper:** a `pdf.invalid` link as `.claude/library-guide.md` describes

@@ -20,8 +20,8 @@ import sys
 from pathlib import Path
 
 from paperlib import (
-    append_skipped, fetch, library_arxiv_ids, load_topics, norm_title, paper_files,
-    parse_arxiv_entries, read_paper, skipped_index,
+    append_skipped, fetch, library_arxiv_ids, load_topics, norm_title, paper_index,
+    parse_arxiv_entries, skipped_index,
 )
 
 ARXIV_ID = re.compile(r"\b(\d{4}\.\d{4,5})\b")
@@ -109,7 +109,7 @@ def main(argv):
 
     topics = load_topics()
     lib_ids = set(library_arxiv_ids())
-    lib_titles = {norm_title(read_paper(p)[0].get("title")) for p in paper_files()}
+    lib_titles = {norm_title(meta.get("title")) for meta in paper_index().values()}
     skip_ids, skip_titles = skipped_index()
 
     def known(arxiv, title):

@@ -43,7 +43,7 @@ All tables are in [`results/summary.md`](results/summary.md); every answer is in
 
 - **The forms differ only where a value is drawn.** Tables (15), equations (7), appendix and setup details, a citation, prose and traps: PDF, text layer and markdown all correct. The eight values only in a plot or a diagram label: the PDF 3 of 3 runs on each, the text forms declined 3 of 3 and never guessed.
 - **The LaTeX buys nothing at answer time.** On 17 equation questions, including a fraction no prior gives whose text layer spreads it over three lines with its bar lost, the text layer answered every one the markdown did.
-- **Text inside vector figures** (a p-value on a bar, heatmap cells) is in the text layer and not in the markdown, which keeps a figure as a picture ([ticket `figure-text-lost`](../../tickets/figure-text-lost.md)).
+- **Text inside vector figures** (a p-value on a bar, heatmap cells) is in the text layer and not in the markdown, which keeps a figure as a picture (ticket `figure-text-lost`).
 - **Small print in a dense table is read from a 1,255 px page image** (2,250 tokens), the cheapest form that answers a question about one known page.
 - **HTML** (DPO only) costs 2.5× the PDF and cannot cite pages; dropped after the pilot.
 - **Closed book** answers DPO and InstructGPT from memory, which is why four papers after the training cutoff were added: there it scored 2 of 24, both traps.

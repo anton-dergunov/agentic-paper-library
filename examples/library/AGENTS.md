@@ -8,7 +8,7 @@ such as paths to other places on this machine, in docs/ with a one-line pointer.
 
 ## Reader
 
-An example library for agentic-paper-library: three papers, one through each converter.
+An example library for agentic-paper-library: two arXiv papers and a web article.
 Whoever opens it is the reader.
 
 ## Preferences

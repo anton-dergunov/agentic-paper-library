@@ -6,11 +6,12 @@
 Checks:
 
 - every paper has the required frontmatter fields, with a known `source` (and
-  a known `type`, if it has one);
+  a known `type` and `text-layer`, if it has them); a `.txt` paper is a PDF's
+  text layer (`source: pdf`, a "[page 1]" line after the frontmatter), a `.md`
+  paper a web article (`source: web`), and no paper has both;
 - every file in notes/ is named after a paper in the library;
 - every paper has its PDF at the mirrored path under PDF_ROOT, and every PDF
   there has a paper (README files aside);
-- every relative image link in a paper resolves, and every image is used;
 - no PDF is inside the library's repository;
 - catalog/topics.yaml declares well-formed folder paths whose parents are also
   declared, every declared folder exists, and every paper is in a declared
@@ -18,53 +19,27 @@ Checks:
 - every entry in catalog/skipped.yaml has a title and a reason, names a
   declared topic if it names one, and is not a paper that is in the library;
 - every review in reviews/ names a declared scope, and every local link in it
-  (to a paper, a page in a paper's PDF, another review) resolves;
-- every file in issues/ is named after a paper in the library, and each of
-  its records says what the problem is, names a ticket of the engine's
-  tickets/ (or `new`), and gives a reason if it is wont-fix.
+  (to a paper, a page in a paper's PDF, another review) resolves.
 """
 
 import os
-import re
 import sys
 import unicodedata
 from pathlib import Path
-from urllib.parse import unquote
 
 from paperlib import (
-    HAND_EDITED, ISSUE_SOURCES, ISSUES_DIR, all_corrections, corrections_path, LIBRARY_DIR, NOTES_DIR, PDF_ROOT, LIBRARY_ROOT, REQUIRED, SOURCES,
-    TOPIC_PATH, TYPES, load_issues, load_reviews, load_skipped, load_tickets, load_topics, norm_title,
-    paper_files, pdf_path_for, read_paper, review_links,
+    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_ROOT, REQUIRED, SOURCES, TEXT_LAYER_STATES, TOPIC_PATH, TYPES,
+    load_reviews, load_skipped, load_topics, norm_title, paper_index, paper_stem, pdf_path_for,
+    split_frontmatter, review_links,
 )
 
-# Markdown images, and <img> tags (used inside the HTML tables of complex tables).
-# Alt text may hold an escaped bracket ("Low (8, 12\]").
-IMAGE_LINK = re.compile(r"(?<!\\)!\[(?:\\.|[^\]\\])*\]\(([^)\s]+)\)|<img\s[^>]*?src=\"([^\"]+)\"")
-# Fenced code can show image markup as text (a paper's HTML examples).
-FENCE = re.compile(r"^(`{3,}|~{3,})")
 
-
-def image_links(body):
-    """Image links in a markdown body, outside fenced code blocks."""
-    kept, fence = [], None
-    for line in body.splitlines():
-        m = FENCE.match(line)
-        if fence is None and m:
-            fence = m.group(1)
-        elif fence is not None and m and set(m.group(1)) == set(fence) \
-                and len(m.group(1)) >= len(fence) and not line[len(m.group(1)):].strip():
-            fence = None
-        elif fence is None:
-            kept.append(line)
-    return IMAGE_LINK.findall("\n".join(kept))
-
-
-def check_catalog(papers):
+def check_catalog(index):
     problems = []
     topics = load_topics()
     if not topics:
         # A new library has no topics yet; papers without one are reported below.
-        return ["catalog/topics.yaml is missing or empty"] if papers else []
+        return ["catalog/topics.yaml is missing or empty"] if index else []
     for topic in topics:
         if not TOPIC_PATH.match(topic):
             problems.append(f"catalog/topics.yaml: malformed folder path `{topic}`")
@@ -74,14 +49,13 @@ def check_catalog(papers):
             problems.append(f"declared folder missing (run build-index.py): {topic}")
 
     ids, titles = {}, {}
-    for md in papers:
-        topic = md.parent.relative_to(LIBRARY_DIR).as_posix()
+    for paper, meta in index.items():
+        topic = paper.parent.relative_to(LIBRARY_DIR).as_posix()
         if topic not in topics:
-            problems.append(f"{md.relative_to(LIBRARY_DIR)}: folder `{topic}` is not in catalog/topics.yaml")
-        meta = read_paper(md)[0]
+            problems.append(f"{paper.relative_to(LIBRARY_DIR)}: folder `{topic}` is not in catalog/topics.yaml")
         if meta.get("arxiv"):
-            ids[str(meta["arxiv"])] = md
-        titles[norm_title(meta.get("title"))] = md
+            ids[str(meta["arxiv"])] = paper
+        titles[norm_title(meta.get("title"))] = paper
 
     for i, entry in enumerate(load_skipped()):
         name = f"catalog/skipped.yaml entry {i + 1}"
@@ -90,14 +64,14 @@ def check_catalog(papers):
             continue
         if entry.get("topic") and entry["topic"] not in topics:
             problems.append(f"{name} ({entry['title']}): undeclared topic `{entry['topic']}`")
-        md = ids.get(str(entry.get("arxiv"))) or titles.get(norm_title(entry["title"]))
-        if md:
+        paper = ids.get(str(entry.get("arxiv"))) or titles.get(norm_title(entry["title"]))
+        if paper:
             problems.append(f"{name} ({entry['title']}): skipped but in the library at "
-                            f"{md.relative_to(LIBRARY_DIR)}")
+                            f"{paper.relative_to(LIBRARY_DIR)}")
     return problems
 
 
-def check_reviews(stems):
+def check_reviews():
     problems = []
     topics = load_topics()
     for scope, review in load_reviews().items():
@@ -109,94 +83,72 @@ def check_reviews(stems):
                 if not ok:
                     problems.append(f"{f.relative_to(LIBRARY_ROOT)}: broken link {target} "
                                     "(scripts/review-status.py --fix-links)")
-    tickets = load_tickets()
-    for path in sorted(ISSUES_DIR.glob("*.yaml")) if ISSUES_DIR.is_dir() else []:
-        name = path.relative_to(LIBRARY_ROOT)
-        if path.stem not in stems:
-            problems.append(f"{name}: no paper named `{path.stem}` in the library")
-        for i, record in enumerate(load_issues(path.stem), 1):
-            where = f"{name} record {i}"
-            if not str(record.get("what") or "").strip():
-                problems.append(f"{where}: says no `what`")
-            if record.get("kind") != "new" and record.get("kind") not in tickets:
-                problems.append(f"{where}: kind `{record.get('kind')}` is not a ticket (or `new`)")
-            if record.get("by") and record["by"] not in ISSUE_SOURCES:
-                problems.append(f"{where}: by `{record['by']}` is not one of {sorted(ISSUE_SOURCES)}")
-            if "wont-fix" in record and not str(record["wont-fix"] or "").strip():
-                problems.append(f"{where}: wont-fix needs a reason")
+    return problems
+
+
+def check_paper(paper, meta):
+    """The problems of one paper's file and frontmatter."""
+    rel = paper.relative_to(LIBRARY_DIR)
+    if not meta:
+        return [f"{rel}: no frontmatter"]
+    problems = [f"{rel}: missing or empty `{field}`" for field in REQUIRED if not meta.get(field)]
+    if meta.get("source") and meta["source"] not in SOURCES:
+        problems.append(f"{rel}: unknown source `{meta['source']}`")
+    if meta.get("type") and meta["type"] not in TYPES:
+        problems.append(f"{rel}: unknown type `{meta['type']}`")
+    if meta.get("text-layer") and meta["text-layer"] not in TEXT_LAYER_STATES:
+        problems.append(f"{rel}: unknown text-layer `{meta['text-layer']}`")
+    wanted = "pdf" if paper.suffix == ".txt" else "web"
+    if meta.get("source") in SOURCES and meta["source"] != wanted:
+        problems.append(f"{rel}: a {paper.suffix} paper has `source: {wanted}`, not `{meta['source']}`")
+    if paper.suffix == ".txt":
+        with open(paper, encoding="utf-8") as file:
+            body = split_frontmatter(file.read(65536))[1]
+        if not body.startswith("[page 1]\n"):
+            problems.append(f"{rel}: no text layer after the frontmatter (paperlib text {rel})")
     return problems
 
 
 def main():
     problems = []
-    papers = paper_files()
+    index = paper_index()
+    papers = sorted(index)
     # A PDF tree with no PDFs in it means they are not on this machine (a fresh
-    # clone, a cloud session): the markdown is still checked, the PDFs are not.
+    # clone, a cloud session): the papers' files are still checked, the PDFs are not.
     have_pdfs = PDF_ROOT.exists() and next(PDF_ROOT.rglob("*.pdf"), None) is not None
     if not have_pdfs:
         print(f"check-library: no PDFs under {PDF_ROOT}; PDF checks skipped")
 
-    for md in papers:
-        rel = md.relative_to(LIBRARY_DIR)
-        meta, body = read_paper(md)
-        if not meta:
-            problems.append(f"{rel}: no frontmatter")
-        else:
-            for field in REQUIRED:
-                if not meta.get(field):
-                    problems.append(f"{rel}: missing or empty `{field}`")
-            if meta.get("source") and meta["source"] not in SOURCES:
-                problems.append(f"{rel}: unknown source `{meta['source']}`")
-            if meta.get("type") and meta["type"] not in TYPES:
-                problems.append(f"{rel}: unknown type `{meta['type']}`")
-        if have_pdfs and not pdf_path_for(md).exists():
-            problems.append(f"{rel}: no PDF at {pdf_path_for(md)}")
-        for groups in image_links(body):
-            target = groups[0] or groups[1]
-            if re.match(r"^[a-z]+:", target):
-                continue
-            if not (md.parent / unquote(target)).exists():
-                problems.append(f"{rel}: broken image link {target}")
-
-    referenced = set()
-    for md in papers:
-        for groups in image_links(read_paper(md)[1]):
-            target = groups[0] or groups[1]
-            if not re.match(r"^[a-z]+:", target):
-                referenced.add((md.parent / unquote(target)).resolve())
-    for img in LIBRARY_DIR.rglob("images/*"):
-        if img.resolve() not in referenced:
-            problems.append(f"image not used by any paper: {img.relative_to(LIBRARY_DIR)}")
+    seen = {}
+    for paper in papers:
+        problems += check_paper(paper, index[paper])
+        key = paper.with_suffix("")
+        if key in seen:
+            problems.append(f"{paper.relative_to(LIBRARY_DIR)}: also in the library as {seen[key].name}")
+        seen[key] = paper
+        if have_pdfs and not pdf_path_for(paper).exists():
+            problems.append(f"{paper.relative_to(LIBRARY_DIR)}: no PDF at {pdf_path_for(paper)}")
 
     # A synced folder may store a name decomposed ("й" as two code points).
-    expected = {unicodedata.normalize("NFC", str(pdf_path_for(md))) for md in papers}
+    expected = {unicodedata.normalize("NFC", str(pdf_path_for(p))) for p in papers}
     if PDF_ROOT.exists():
         for pdf in PDF_ROOT.rglob("*.pdf"):
             if unicodedata.normalize("NFC", str(pdf)) not in expected:
                 problems.append(f"PDF without a paper: {pdf.relative_to(PDF_ROOT)}")
 
-    problems += check_catalog(papers)
+    problems += check_catalog(index)
 
-    stems = {md.stem for md in papers}
+    stems = {paper_stem(p) for p in papers}
     for note in sorted(NOTES_DIR.glob("*.md")):
-        if note.name != "README.md" and note.stem not in stems:
+        if note.name != "README.md" and paper_stem(note) not in stems:
             problems.append(f"notes/{note.name}: no paper with this name in the library")
 
-    problems += check_reviews(stems)
-
-    for stem in all_corrections():
-        if stem not in stems:
-            problems.append(f"corrections/{stem}.yaml: no paper with this name in the library")
-    unmigrated = [md for md in papers if HAND_EDITED.search(md.read_text(encoding="utf-8"))
-                  and not corrections_path(md).exists()]
-    for md in unmigrated:
-        print(f"warning: {md.relative_to(LIBRARY_DIR)} is marked hand-edited but has no corrections file, "
-              "so reconvert skips it (paperlib corrections capture)")
+    problems += check_reviews()
 
     # os.walk does not follow symlinks, so the pdf/ link to PDF_ROOT is skipped,
     # and so is PDF_ROOT itself when it is a (git-ignored) folder in the library.
     for folder, dirs, files in os.walk(LIBRARY_ROOT):
-        dirs[:] = [d for d in dirs if d != ".git" and Path(folder, d) != PDF_ROOT]
+        dirs[:] = [d for d in dirs if d not in (".git", "node_modules") and Path(folder, d) != PDF_ROOT]
         for name in files:
             if name.lower().endswith(".pdf"):
                 pdf = Path(folder) / name

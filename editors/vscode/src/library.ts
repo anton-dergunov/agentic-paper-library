@@ -22,16 +22,20 @@ export interface Paper {
   title: string;
   /** Folder under the library, e.g. `llm/memory/agent`. */
   topic: string;
-  /** Filename without extension, shared by the markdown, the PDF and the notes. */
+  /** Filename without extension, shared by the text, the PDF and the notes. */
   stem: string;
   year: string;
   summary: string;
-  mdPath: string;
+  /** The paper's text: its PDF's text layer (`.txt`), or a web article's markdown (`.md`). */
+  textPath: string;
   pdfPath: string;
   notesPath?: string;
 }
 
-export type FileKind = 'markdown' | 'pdf' | 'notes';
+export type FileKind = 'text' | 'pdf' | 'notes';
+
+/** A paper file's extensions, as paperlib.py's PAPER_SUFFIXES. */
+const PAPER_EXTENSIONS = ['.txt', '.md'];
 
 /** Relative paths are taken from the library root and `~` is expanded; environment variables override. */
 export function loadConfig(root: string, env: NodeJS.ProcessEnv = process.env): LibraryConfig {
@@ -58,25 +62,26 @@ export class Library {
 
   constructor(readonly config: LibraryConfig, readonly papers: Paper[]) {
     for (const paper of papers) {
-      this.byKey.set(`${paper.topic}/${paper.stem}`, paper);
-      this.byStem.set(paper.stem, paper);
+      this.byKey.set(nfc(`${paper.topic}/${paper.stem}`), paper);
+      this.byStem.set(nfc(paper.stem), paper);
     }
     const pdfFolders = [config.pdfLink, config.pdfRoot].filter((dir): dir is string => !!dir);
     this.roots = [
       ...withRealPaths(config.notesDir).map((dir): [FileKind, string] => ['notes', dir]),
-      ...withRealPaths(config.libraryDir).map((dir): [FileKind, string] => ['markdown', dir]),
+      ...withRealPaths(config.libraryDir).map((dir): [FileKind, string] => ['text', dir]),
       ...pdfFolders.flatMap(withRealPaths).map((dir): [FileKind, string] => ['pdf', dir]),
     ];
   }
 
-  /** The paper a markdown copy, PDF or notes file belongs to, and which of the three it is. */
+  /** The paper a text, PDF or notes file belongs to, and which of the three it is. */
   paperForFile(file: string): { paper: Paper; kind: FileKind } | undefined {
     const ext = path.extname(file).toLowerCase();
     for (const [kind, dir] of this.roots) {
       const rel = path.relative(dir, file);
       if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) continue;
-      if (ext !== (kind === 'pdf' ? '.pdf' : '.md')) return undefined;
-      const key = rel.slice(0, -ext.length).split(path.sep).join('/');
+      const wanted = kind === 'pdf' ? ['.pdf'] : kind === 'notes' ? ['.md'] : PAPER_EXTENSIONS;
+      if (!wanted.includes(ext)) return undefined;
+      const key = nfc(rel.slice(0, -ext.length).split(path.sep).join('/'));
       const paper = kind === 'notes' ? this.byStem.get(key) : this.byKey.get(key);
       return paper && { paper, kind };
     }
@@ -102,7 +107,8 @@ export async function loadLibrary(config: LibraryConfig): Promise<Library> {
     batch.forEach((file, j) => {
       const meta = metas[j];
       const rel = path.relative(config.libraryDir, file);
-      const stem = path.basename(file, '.md');
+      const ext = path.extname(file);
+      const stem = path.basename(file, ext);
       const topic = path.dirname(rel).split(path.sep).join('/');
       papers.push({
         title: text(meta.title) || stem,
@@ -110,8 +116,8 @@ export async function loadLibrary(config: LibraryConfig): Promise<Library> {
         stem,
         year: text(meta.published).slice(0, 4),
         summary: text(meta.summary),
-        mdPath: file,
-        pdfPath: path.join(pdfDir, rel.slice(0, -'.md'.length) + '.pdf'),
+        textPath: file,
+        pdfPath: path.join(pdfDir, rel.slice(0, -ext.length) + '.pdf'),
         notesPath: notes.has(`${stem}.md`) ? path.join(config.notesDir, `${stem}.md`) : undefined,
       });
     });
@@ -122,15 +128,15 @@ export async function loadLibrary(config: LibraryConfig): Promise<Library> {
   return new Library(config, papers);
 }
 
-/** Every paper's markdown file: not the indexes, nor anything in figure folders or hidden ones. */
+/** Every paper's file (its text, or a web article's markdown): not the indexes, nor anything in hidden folders. */
 async function paperFiles(dir: string): Promise<string[]> {
   const entries = await fs.readdir(dir, { withFileTypes: true }).catch(() => []);
   const nested = await Promise.all(
     entries.map(async (entry) => {
       const full = path.join(dir, entry.name);
       if (entry.name.startsWith('.')) return [];
-      if (entry.isDirectory()) return entry.name === 'images' ? [] : paperFiles(full);
-      return entry.name.endsWith('.md') && entry.name !== 'README.md' ? [full] : [];
+      if (entry.isDirectory()) return paperFiles(full);
+      return PAPER_EXTENSIONS.includes(path.extname(entry.name)) && entry.name !== 'README.md' ? [full] : [];
     }),
   );
   return nested.flat();
@@ -159,6 +165,11 @@ export async function readFrontmatter(file: string): Promise<Record<string, unkn
   } catch {
     return {};
   }
+}
+
+/** A synced folder may hand back a title in another Unicode form ("й" as two code points). */
+function nfc(value: string): string {
+  return value.normalize('NFC');
 }
 
 function text(value: unknown): string {

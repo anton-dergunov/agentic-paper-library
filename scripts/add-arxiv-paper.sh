@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# Fetch an arXiv paper and add it to the library, both as the original PDF and
-# as an agent-readable markdown conversion.
+# Fetch an arXiv paper and add it to the library: the original PDF, and its
+# text layer for the agent to read.
 #
-#   ./scripts/add-arxiv-paper.sh <arxiv-url-or-id> <topic> [--force] [--from-pdf]
+#   ./scripts/add-arxiv-paper.sh <arxiv-url-or-id> <topic> [--force]
 #
 #   ./scripts/add-arxiv-paper.sh https://arxiv.org/abs/2501.13956 llm/memory/agent
 #   ./scripts/add-arxiv-paper.sh 2501.13956v1 llm/memory/agent
@@ -13,38 +13,20 @@
 # cleaned-up title. Writes:
 #
 #   $PDF_ROOT/<topic>/<Title>.pdf
-#   library/<topic>/<Title>.md
-#   library/<topic>/images/<Title>-fig01.<ext>  (if the paper has any)
+#   library/<topic>/<Title>.txt
 #
-# The markdown starts with YAML frontmatter; `summary:` is left empty for
-# whoever files the paper to write. Headings carry the PDF page they start on
-# (scripts/page-map.py for HTML conversions; the PDF converter writes its own).
-#
-# Markdown is converted from arXiv's own HTML rendering (arxiv.org/html/<id>),
-# which comes through far cleaner than PDF text extraction — see
-# docs/conversion.md. The PDF and the HTML are fetched
-# at the same arXiv version. scripts/html-to-markdown.py does the conversion:
-# math as $...$, complex tables as HTML, figures saved to images/ as repaired
-# standalone SVGs. Existing files are left alone unless --force is given, and a
-# paper already in the library under another topic is refused.
-#
-# A small number of papers have no usable HTML rendering on arXiv: PDF-only
-# submissions get a stub page pointing back at the PDF, and a few LaTeXML runs
-# pick the wrong root .tex and render the conference template instead of the
-# paper. The stub case is detected automatically; the wrong-template case is not
-# detectable from the outside, so pass --from-pdf when you spot one. Either way
-# the fallback converts the PDF by layout analysis (scripts/pdf-to-markdown.py):
-# headings, tables and figures are rebuilt around the PDF's text, and each
-# equation is read from its image by a model. That is less exact than the HTML,
-# so the frontmatter says `source: pdf-text` and the markdown carries a note at
-# the top saying what to check in the PDF.
+# The text file starts with YAML frontmatter (`summary:` left empty for whoever
+# files the paper to write), then the PDF's text layer with a line "[page N]"
+# where each page starts (docs/text-layer.md). Existing files are left alone
+# unless --force is given, and a paper already in the library under another
+# topic is refused.
 
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/config.sh"
 
 if [ $# -lt 2 ]; then
-  echo "usage: $0 <arxiv-url-or-id> <topic> [--force] [--from-pdf]" >&2
+  echo "usage: $0 <arxiv-url-or-id> <topic> [--force]" >&2
   exit 1
 fi
 
@@ -54,16 +36,14 @@ shift 2
 validate_topic "$TOPIC"
 
 FORCE=false
-FROM_PDF=false
 while [ $# -gt 0 ]; do
   case "$1" in
     --force)    FORCE=true; shift ;;
-    --from-pdf) FROM_PDF=true; shift ;;
     *) echo "error: unknown argument $1" >&2; exit 1 ;;
   esac
 done
 
-for cmd in curl pandoc python3; do
+for cmd in curl pdftotext python3; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     echo "error: $cmd is required but not found on PATH" >&2
     exit 1
@@ -83,16 +63,15 @@ print(m.group(1), m.group(2) or "")
 ' "$RAW_ID")
 
 # One paper, one place: refuse a paper that is already filed elsewhere.
-EXISTING="$(grep -rlE --include='*.md' "^arxiv: ['\"]?$ID['\"]?$" "$LIBRARY_DIR" 2>/dev/null || true)"
+EXISTING="$(python3 "$SCRIPTS_DIR/paperlib.py" find-arxiv "$ID")"
 if [ -n "$EXISTING" ] && [ "$FORCE" != true ]; then
   echo "error: arXiv:$ID is already in the library: $EXISTING" >&2
   exit 1
 fi
 
 ORIG_DIR="$PDF_ROOT/$TOPIC"
-MD_DIR="$LIBRARY_DIR/$TOPIC"
-IMAGES_DIR="$MD_DIR/images"
-mkdir -p "$ORIG_DIR" "$MD_DIR"
+TXT_DIR="$LIBRARY_DIR/$TOPIC"
+mkdir -p "$ORIG_DIR" "$TXT_DIR"
 
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
@@ -129,8 +108,6 @@ if [ -z "${VERSION:-}" ] || [ -z "${TITLE:-}" ]; then
   exit 1
 fi
 [ -n "${PINNED_VERSION:-}" ] && VERSION="$PINNED_VERSION"
-# The PDF and the HTML are fetched at the same version, so the page numbers
-# written onto the markdown's headings match the PDF being read.
 VID="${ID}v${VERSION}"
 
 FILENAME="$(title_to_filename "$TITLE")"
@@ -139,7 +116,7 @@ echo "Title:    $TITLE (v$VERSION)"
 echo "Filename: $FILENAME"
 
 PDF="$ORIG_DIR/$FILENAME.pdf"
-MD="$MD_DIR/$FILENAME.md"
+TXT="$TXT_DIR/$FILENAME.txt"
 
 is_pdf() { [ "$(head -c 5 "$1" 2>/dev/null)" = "%PDF-" ]; }
 
@@ -147,8 +124,7 @@ if [ -f "$PDF" ] && [ "$FORCE" != true ] && is_pdf "$PDF"; then
   echo "skip (exists): $PDF"
 else
   # A withdrawn version is served as an HTML notice rather than a PDF. Step
-  # back to the latest version that has a PDF (unless one was asked for), and
-  # use that version for the HTML too.
+  # back to the latest version that has a PDF (unless one was asked for).
   echo "Downloading PDF..."
   while :; do
     curl -sL "https://arxiv.org/pdf/$VID" -o "$WORK/paper.pdf"
@@ -166,64 +142,12 @@ else
   done
 fi
 
-if [ -f "$MD" ] && [ "$FORCE" != true ]; then
-  echo "skip (exists): $MD"
+if [ -f "$TXT" ] && [ "$FORCE" != true ]; then
+  echo "skip (exists): $TXT"
 else
-  if [ "$FROM_PDF" = true ]; then
-    SOURCE=pdf
-    echo "Skipping the HTML rendering as asked (--from-pdf)."
-  else
-    echo "Fetching HTML rendering..."
-    # With retries: a throttled request must not send a paper to PDF text.
-    python3 "$SCRIPTS_DIR/paperlib.py" fetch "https://arxiv.org/html/$VID" "$WORK/paper.html"
-
-    SOURCE=html
-    if ! grep -q 'ltx_page_content' "$WORK/paper.html"; then
-      SOURCE=pdf
-      echo "No HTML rendering for arXiv:$ID — falling back to the PDF text layer."
-    fi
-  fi
-fi
-
-if [ "${SOURCE:-}" = html ]; then
-  # Article extraction, pandoc, figure extraction and SVG repair: see the
-  # docstring of html-to-markdown.py for what each step fixes.
-  python3 "$SCRIPTS_DIR/html-to-markdown.py" "$WORK/paper.html" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
-
-  # For submissions uploaded as a PDF rather than as LaTeX source, arXiv still
-  # serves an HTML page — but its body is a one-line "see the PDF" pointer. The
-  # wrapper div is there, so the check above passes; only the length gives it
-  # away. Anything this short is a stub, never a paper.
-  if [ "$(wc -c < "$WORK/body.md")" -lt 4000 ]; then
-    echo "arXiv HTML for $ID is a stub, not a rendering — falling back to the PDF text layer."
-    SOURCE=pdf
-  else
-    {
-      python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" html
-      echo
-      cat "$WORK/body.md"
-    } > "$MD"
-  fi
-fi
-
-if [ "${SOURCE:-}" = pdf ]; then
-  # No HTML: convert the PDF by layout analysis (see pdf-to-markdown.py), which
-  # writes the note on how the paper was converted, and the page markers, itself.
-  python3 "$SCRIPTS_DIR/pdf-to-markdown.py" "$PDF" "$WORK/body.md" "$IMAGES_DIR" "$FILENAME"
-
-  {
-    python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" pdf-text
-    echo
-    cat "$WORK/body.md"
-  } > "$MD"
-fi
-
-if [ "${SOURCE:-}" = html ]; then
-  python3 "$SCRIPTS_DIR/page-map.py" "$PDF" "$MD"
-  python3 "$SCRIPTS_DIR/caption-numbers.py" "$PDF" "$MD"
-  # Pages arXiv's HTML lacks (it stopped partway, or dropped a page of tables): from the PDF.
-  python3 "$SCRIPTS_DIR/missing-pages.py" "$PDF" "$MD"
+  python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-arxiv "$WORK/meta.xml" "$ID" pdf \
+    | python3 "$SCRIPTS_DIR/paperlib.py" text-paper "$TXT" "$PDF"
 fi
 
 echo "Done: $PDF"
-echo "      $MD"
+echo "      $TXT"

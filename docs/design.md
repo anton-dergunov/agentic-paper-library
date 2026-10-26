@@ -8,25 +8,22 @@ discovery. How to use a library is in the [user guide](user-guide.md).
 
 ## The main requirement: few tokens
 
-Besides doing its job (turning papers into something an agent can read, and helping me read
+Besides doing its job (keeping papers where an agent can read them, and helping me read
 them), the library has one requirement above the others: **an agent should answer questions
-about papers with as few tokens as possible**, quickly and without re-deriving or re-converting
-what was done before. The engine exists to save tokens. Work that spends more than it saves
-is the wrong work.
+about papers with as few tokens as possible**, quickly and without re-deriving what was done
+before. The engine exists to save tokens. Work that spends more than it saves is the wrong
+work.
 
-- **The converter is the product; the library's markdown is its output.** A conversion
-  problem is fixed in the engine, so that every paper gets the fix, new ones at once. A hand
-  edit is for a problem that is isolated or that no program could fix.
-- **Don't perfect papers ahead of time.** I will discuss perhaps three papers a day, and most
-  papers in the library never. A flaw in a paper nobody is asking about costs nothing; a
-  session that reads PDFs and edits papers to remove it costs a lot. A single paper is
-  fixed by hand only when a session needs it and the flaw stands in the way of the answer.
-- **Reconversions are cheap, sessions are not.** Reconverting many papers overnight is
-  fine. What wastes tokens is a session redoing work: re-triaging the same problems,
-  re-reading the same PDFs, editing by hand what the converter should do.
-- **Conversion work should converge.** Each problem is recorded once, under the ticket for
-  its cause, so the open tickets can be counted and should shrink over time. When they do
-  not, the process is wrong, not the papers.
+- **Keep the paper as it is, and read only what is needed.** The PDF is the paper; its text
+  layer, with a line `[page N]` at each page, is how an agent greps and reads it, and the
+  agent opens a page of the PDF for what the text lacks. Nothing is converted, so nothing
+  has to be fixed, re-converted or checked against the PDF ahead of time
+  ([experiments/reading-formats](../experiments/reading-formats/README.md)).
+- **Don't do work ahead of time.** I will discuss perhaps three papers a day, and most
+  papers in the library never. A session that reads a paper for nobody's question costs
+  a lot; notes are written once, for the areas I review, and kept.
+- **Sessions are what cost.** What wastes tokens is a session redoing work: re-reading the
+  same papers, re-deriving what a note or a review already says.
 
 ## The finding that shapes everything
 
@@ -55,7 +52,7 @@ the Claude app on iPad or Android.
  iPad                                               host (Mac now, NAS later)
 ┌───────────────────────┬───────────────────┐      ┌──────────────────────────────────────┐
 │ PDF app               │ Claude app        │      │ claude remote-control  (in ~/papers) │
-│  reads + highlights   │  Remote Control ──┼──────┼─▶ reads  library/ markdown           │
+│  reads + highlights   │  Remote Control ──┼──────┼─▶ reads  library/ text, PDF pages    │
 │  the PDF from cloud   │  session          │      │   reads  Obsidian, org, projects     │
 └──────────┬────────────┴───────────────────┘      │   writes Obsidian notes              │
            │                                       │   runs   skills                      │
@@ -76,7 +73,7 @@ the Claude app on iPad or Android.
 | What | Where | Why |
 |---|---|---|
 | PDFs (for me) | Yandex Disk `Papers/<topic path>/<Title>.pdf` | Synced to every tablet and to the NAS (Cloud Sync). Highlights live in the PDF. Not in git. |
-| Markdown (for the agent) | `~/papers/library/<topic path>/<Title>.md` + `images/` | Converted from arXiv HTML, which is measurably better than PDF text for maths and tables ([conversion.md](conversion.md)). Same path as the PDF. |
+| Text (for the agent) | `~/papers/library/<topic path>/<Title>.txt` | The frontmatter, then the PDF's text layer with a line `[page N]` at each page ([text-layer.md](text-layer.md)); a web article is `<Title>.md`. Same path as the PDF. |
 | Indexes | a generated `README.md` per folder | Lets the agent (and me) find papers without reading them all. |
 | Workflow | this repository: `scripts/` behind `paperlib`, `skills/`, `guide/` | Adding, moving and checking papers. Linked into each library (`paperlib init`). |
 | Library config and instructions | `~/papers/paper-library.yaml`, `~/papers/AGENTS.md` | Where this library's PDFs and notes are, and who reads it. |
@@ -87,7 +84,8 @@ the Claude app on iPad or Android.
 
 The library is a private GitHub repo of its own. Git gives history for
 reorganisations and is how a second host such as the NAS gets and returns changes. GitHub's
-10 GB repo limit is far away: 2,200 papers take 2.6 GB on disk and 1.4 GB in `.git`. The repo
+10 GB repo limit is far away: 2,275 papers' text takes about 300 MB on disk; `.git` holds
+1.8 GB, most of it the markdown and figures of before 2026-10-26. The repo
 lives at `~/papers`, not in Dropbox or Yandex, because git repos inside sync folders get
 corrupted.
 
@@ -167,46 +165,6 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   that and never creates a folder; the skill stays for new folders, titles, PDFs and the
   inbox. Each skill now names its model in its frontmatter: Sonnet for `add-paper` and
   `expand-library`, Opus for the rest. Only the reader and the filing model are measured.
-- **Conversion problems are collected from the notes and fixed between reading and writing
-  (2026-10-07; replaced on 2026-10-16, below).** Reading `search-and-ranking` for its review, the reader reported a
-  conversion problem in 46 of 91 papers, 28 of them among the area's PDF-converted papers;
-  most were garbled equations whose meaning the prose kept. The reader now marks a problem
-  `key-content-broken` when a part the paper's findings rest on is missing or wrong (a
-  results table, the main equation, a section). `paperlib conversion-issues` copies every reported problem into the catalog,
-  which is the one list of them; the `fix-conversions` skill reads again only the papers
-  whose key content was broken, sends recurring flaws to the converter so new papers
-  benefit, and marks the rest `wont-fix`. Notes are not re-read when a paper merely
-  changes: since the converter settled on 3 Oct, a change to an already-read paper has
-  touched a median 0.08% of it
-  ([experiments/conversion-churn](../experiments/conversion-churn/README.md)), so tracking
-  which notes are out of date (built and removed the same day) was not worth its weight.
-- **Conversion problems are records under tickets, fixed in the engine (2026-10-16).** The
-  2026-10-07 process kept each paper's problems as a paragraph, three times over: on the
-  note's `conversion:` line, in the library's `catalog/conversion-issues.yaml` (380
-  paragraphs) and, for the causes, in a follow-ups list in the engine that had grown to 17
-  items. Grouping paragraphs by cause took a model reading prose each time, the count never
-  went down, and fix sessions ended up refreshing entries and editing papers by hand. Now a
-  problem is one record in the library's `issues/<stem>.yaml` (a file per paper, so
-  parallel sessions don't collide), whose `kind` is the id of an engine ticket,
-  `tickets/<id>.md`, one per cause, labelled with what it takes (`engine`, `reconvert`,
-  `reread`, `by-hand`). The reader writes records as it reads, a session adds one with
-  `paperlib issues add`, `/triage-conversions` files new ones under tickets, and
-  `/fix-conversions <ids>` fixes tickets in the converter and gives the overnight
-  `paperlib reconvert --issue <id>` command; `paperlib issues close` then closes the
-  records and names the notes to read again. Notes lost their `conversion:` line, which
-  went stale whenever a paper was fixed; `paperlib info` shows a paper's open problems. The
-  catalog's 380 paragraphs were split by Sonnet into 779 records ($1.91), after 194
-  problems that were the papers' own errors were dropped; the reader is now told those go
-  in the digest, and the 195 such remarks the migration found were appended to their 132
-  notes' digests as one bullet each, unchecked against the PDF, rather than re-reading the
-  papers (about $57). What is decided not to fix stays recorded in the same two places, so
-  it is not looked at again: a ticket in `tickets/wont-fix/` with a `reason` for a whole
-  cause, a record with `wont-fix: <reason>` for one problem; the tickets' index lists both
-  under "Won't fix", rather than in a separate document that would have to agree with
-  them. The folder is a ticket's state: the active ones (open, or fixed and waiting for the
-  overnight reconversion) at the top of `tickets/`, so that it shows what is left to do,
-  and the closed ones in `done/` and `wont-fix/`, kept as the record of how the work
-  converges; `paperlib tickets move` changes it. Tickets are markdown files for now; they could become GitHub issues.
 - **A quick look at a paper reports and does not recommend (2026-10-09).** Papers now arrive
   one at a time, and most need a look before they are worth adding. The first design gave
   a verdict (`add`, `skip` or `read first`) from the abstract, citation data, the folder's
@@ -236,28 +194,24 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
 - **A paper is tried by adding it, and dropped with `paperlib remove` (2026-10-11).** After
   `paperlib info`, the next step for a paper of some interest is to read a little of it with
   the agent, before deciding to keep it. A staging area was considered: convert into the
-  cache, chat, add later. It would give a paper a second state, and the notes, the page map,
-  the figures, `info`'s neighbours and the VS Code extension all assume a paper is at
-  `library/<topic>/<Title>.md`. It would also cover only the paper tried today, not a
+  cache, chat, add later. It would give a paper a second state, and the notes, `info`'s
+  neighbours and the VS Code extension all assume a paper is in `library/<topic>/`. It would also cover only the paper tried today, not a
   duplicate, a wrong match or a paper added a year ago. An add is already close to a trial,
-  since nothing is committed until I commit. So `remove` deletes the markdown, figures, PDF
+  since nothing is committed until I commit. So `remove` deletes the paper's text, its PDF
   and the agent's note, and with `--reason` records the paper in `catalog/skipped.yaml`; it
   leaves my overview note, and reports the reviews and notes that still name the paper. It
   lists all this and asks before it deletes, since a PDF may hold highlights and is not in
   git.
-- **What to read next is a command, and re-reading is for broken key content only
-  (2026-10-19).** The rollout of the literature reviews lived in a hand-kept task file in
+- **What to read next is a command, and re-reading is the exception (2026-10-19).** The rollout of the literature reviews lived in a hand-kept task file in
   the library: the order, a status per scope, how many papers had no note, and a list of
   39 notes to read again after a reconversion. Its counts went stale within days (it said
   42 of `llm/memory`'s papers had no note when all 70 had one). `paperlib reading` now
   computes the same from the library: per scope in the order of `review_scopes`, papers
   read and left, notes to read again, the API cost of reading them (fitted to 1,061 logged
   readings, $0.11 a paper plus $3.4 per million characters of reading view, median error
-  11%), and the review's state. A note to read again carries a `reread:` line, which
-  `paperlib issues close` writes only for records with key content broken, and a person by
-  hand: a reading costs about $0.30, and a session answering a question reads the paper as
-  it is now anyway. On that rule the 39-note list was dropped: none of its papers had a
-  record of key content broken.
+  11%; refitted for the text layer on 2026-10-26), and the review's state. A note to read
+  again carries a `reread:` line, which `paperlib reread` writes: a reading costs about
+  $0.30, and a session answering a question reads the paper as it is now anyway.
 - **The agent's copy of a paper becomes its PDF's text layer, beside the PDF (2026-10-26).**
   The library's markdown was meant to answer questions better than the PDF; measured, it
   answers them no better ([experiments/reading-formats](../experiments/reading-formats/README.md)).
@@ -273,22 +227,43 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   - The text layer keeps the numbers inside vector figures and has none of the converter's
     errors. The markdown's LaTeX bought nothing on 17 equation questions.
   So the text layer from `pdftotext -layout`, with a line `[page N]` at each page and the
-  PDF beside it, replaces the markdown as what an agent reads. Leaving the conversion (its
-  converters, tickets, reconversions and figure images) is most of the engine's code and the
-  library's disk. Everything else stays: the frontmatter, which needs a new home, the
-  indexes, notes, reviews and skills. Web articles have no PDF and stay markdown. Claude
-  Code's habit of opening a page only when the text lacks the value is what this rests on,
-  so `run.py canary` checks it on each release.
+  PDF beside it, replaces the markdown as what an agent reads. A paper is now
+  `library/<topic>/<Title>.txt`: its frontmatter, then the text layer, committed, so that a
+  session without the PDFs still reads every paper. Claude Code's habit of opening a page
+  only when the text lacks the value is what this rests on, so `run.py canary` checks it on
+  each release.
+
+  What went with the markdown: the arXiv-HTML and PDF converters (docling, marker's
+  equation model, OCR), page mapping, caption numbering, missing pages, KaTeX checks,
+  conversion symptoms, reconversions and hand corrections; the conversion problems the
+  reader recorded per paper (`issues/`, 799 records) and the tickets they were filed under
+  (38 open, two of them, `page-markers-within-sections` and `figure-text-lost`, the cause
+  of the markdown's wrong pages and missing figure numbers in the comparison above); the
+  skills that triaged and fixed them; 2.6 GB of figure images; 25 experiments on the
+  conversion; about 9,900 of the engine's 14,000 lines of scripts. The last engine with all of
+  it is commit `6466cd2`. The notes and reviews written from the markdown stay: the notes
+  lost only their line on conversion problems, and the guide says that a note written
+  before the switch may call a part of the paper missing that the text layer has.
+
+  Web articles stay markdown: a web page is made for the browser, and its printed PDF
+  often loses pages. Their converter, which shared the arXiv-HTML one's code, is now
+  Defuddle on the page as Chrome renders it; of three candidates on three articles it was
+  the only one to keep the maths as TeX and the footnotes, and it covered the articles as
+  fully as the old converter ([experiments/web-articles](../experiments/web-articles/README.md)).
+  They keep no images, and their `url` leads to what is missing. The move of the author's library, and what it
+  found (the reading view's cut rebuilt, two more web-converter fixes, and Claude Code refusing to read PDFs
+  outside the library until their folder is allowed), is in
+  [experiments/text-layer-switch](../experiments/text-layer-switch/README.md).
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).
 
 ## Next
 
-1. Switch the agent's copy to the text layer beside the PDF (decided 2026-10-26, above).
-   First a plan: where the frontmatter goes, `paperlib add` and `read`, the guide, the
-   VS Code extension, the 19 web articles; then retire the converters, their tickets and the
-   figure images.
+1. Check what the switch left unmeasured, as it happens: a review of a whole area written
+   from notes read off the text layer, its reading cost (the fit in `paperlib reading` is
+   from four papers until 20 readings are logged), and papers whose text layer has a
+   plausible wrong digit, which only a reader who opens the page catches.
 2. The `read` and `wrap` skills.
 3. Running a library from a cloud session (Claude Code on the web), which needs the engine
    installed by a setup step.

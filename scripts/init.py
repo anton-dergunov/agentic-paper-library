@@ -14,7 +14,7 @@ again (after updating the engine, or on another machine):
   Code opened on the library has them and engine edits show up at once (links to
   skills the engine no longer has are removed);
 - the PDF link named by `pdf_link:` (default pdf/), a symlink to the PDF root,
-  so an editor opened on the library shows the PDFs next to the markdown;
+  so an editor opened on the library shows the PDFs next to their text;
 - .vscode/settings.json for the PDF viewer, and .gitignore entries for the
   links;
 - then builds the indexes and the guide.
@@ -22,6 +22,7 @@ again (after updating the engine, or on another machine):
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -57,11 +58,9 @@ pdf_link: pdf
 # library: library
 # catalog: catalog
 # notes: notes
-# issues: issues           # conversion problems, one file per paper
-# corrections: corrections # hand corrections, applied again on reconvert
 # reviews: reviews
 # inbox: INBOX.txt
-# cache: ~/.cache/papers      # arXiv downloads, shared by every library
+# cache: ~/.cache/papers      # the saved index and the reading log, shared by every library
 # chrome: /path/to/chrome     # for web articles, when not found on PATH
 """
 
@@ -173,7 +172,7 @@ def main(argv):
         # .gitignore keeps the PDFs out of git, but they should show in quick open and
         # search, so VS Code is told not to apply it; what it hid is excluded here instead.
         "search.useIgnoreFiles": False,
-        "search.exclude": {"**/images": True, ".claude/skills": True, "reviews/.work": True,
+        "search.exclude": {".claude/skills": True, "reviews/.work": True,
                            "**/.DS_Store": True},
         "git.ignoreLimitWarning": True,
     }
@@ -192,6 +191,9 @@ def main(argv):
         gitignore.write_text("\n".join(lines + missing) + "\n", encoding="utf-8")
         print(f"  ignored {', '.join(missing)}")
 
+    if not shutil.which("pdftotext"):
+        print("  note: pdftotext is not installed; adding a paper needs it (it comes with poppler: "
+              "brew install poppler, or apt install poppler-utils)")
     sys.stdout.flush()
     env = dict(os.environ, PATH=str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"])
     return subprocess.run([sys.executable, str(ENGINE / "scripts" / "build-index.py")], env=env).returncode

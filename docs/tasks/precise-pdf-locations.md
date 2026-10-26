@@ -17,7 +17,7 @@ Two repositories: the viewer ([vscode-pdf-viewer](../../../vscode-pdf-viewer/), 
 
 - `paperlib locate <paper> --quote "<text>" | --table N | --figure N | --equation N [--page N]` prints the page, the rectangle(s) and the link, from the PDF with PyMuPDF.
 - A quote is matched with whitespace, hyphenation at line ends and ligatures normalised. It answers only when the match is unique on the page (or in the paper, without `--page`); otherwise it says how many matches there are, or none, and gives the page alone. A table or figure is its caption ("Table 2:", "Figure 3.") plus the region it labels: the table PyMuPDF's `find_tables` finds next to the caption, or the drawings and images above a figure caption, within the caption's column; failing that, the caption's own rectangle.
-- A quote copied from the text layer is in the PDF by construction; one copied from the markdown may not be (LaTeX, cells the converter changed), so this works best if the agent's copy of the paper is the text layer (see the reading-formats experiment, tiers F–H).
+- A quote copied from the text layer, the agent's copy of a paper, is in the PDF by construction.
 - Fixtures: a quote that is unique, one that repeats, one that spans a line break, a table and a figure from papers in `examples/library`.
 
 ## 3. Teach the agent, in few tokens

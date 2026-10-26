@@ -1,8 +1,8 @@
 {
   "name": "paper-library",
   "displayName": "Paper Library",
-  "description": "Open a paper of an agentic paper library by its title, switch between its PDF, markdown and notes, and search the papers' text.",
-  "version": "0.1.0",
+  "description": "Open a paper of an agentic paper library by its title, switch between its PDF, text and notes, and search the papers' text.",
+  "version": "0.2.0",
   "publisher": "anton",
   "license": "MIT",
   "author": {
@@ -65,7 +65,7 @@
       "explorer/context": [
         {
           "command": "paperLibrary.revealInLibrary",
-          "when": "paperLibrary.active && resourceExtname =~ /^\\.(md|pdf)$/",
+          "when": "paperLibrary.active && resourceExtname =~ /^\\.(md|txt|pdf)$/",
           "group": "navigation@90"
         }
       ]

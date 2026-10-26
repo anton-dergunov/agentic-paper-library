@@ -8,16 +8,15 @@ A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it
 | `pdf_root` | `pdfs` | Where the original PDFs go, mirroring `library/`. Keep it out of git: a synced folder (Dropbox, Yandex Disk, iCloud) makes the PDFs readable on a tablet. |
 | `pdf_link` | none (`init` writes `pdf`) | A symlink in the library to `pdf_root`, made by `paperlib init` and ignored by git. An editor opened on the library then shows both trees, and the indexes link each paper's PDF through it. |
 | `overview_dir` | none | A folder for your own note per paper, which the `overview` skill writes, e.g. a folder in an Obsidian vault. Without it, the skill asks where notes should go. |
-| `library`, `catalog`, `notes`, `issues`, `corrections`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `issues`, `corrections`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
+| `library`, `catalog`, `notes`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
 | `review_scopes` | the top-level folders | The areas to read and review, in the order to do them: a list of folders, or of groups of them (`- Primary areas: [llm/evaluation, search-and-ranking]`). `paperlib reading` shows each one's progress and cost. |
 | `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder and summary ([measured](../experiments/skill-models/README.md)). |
 | `info_model` | `sonnet` | The model `paperlib info` asks what a paper proposes and how it relates to the folder's papers. |
 | `reader_model` | `opus` | The model `paperlib read` gives each paper to for its note ([measured](../experiments/reading-models/README.md)). |
-| `icon_model` | `haiku` | The model that reads a symbol or logo an arXiv paper sets as a small picture, once per distinct picture, cached ([measured](../experiments/colours-marks-and-icons/README.md)); `off` keeps them as pictures. `PAPERLIB_ICONS` overrides it. |
-| `cache` | `~/.cache/papers` | arXiv downloads (HTML, figures, LaTeX sources) and marker's environment, shared by every library. |
+| `cache` | `~/.cache/papers` | The saved index of the papers' frontmatter, `info`'s answers and the log of `paperlib read`, shared by every library. |
 | `chrome` | found on PATH, then the macOS app | Headless Chrome, for web articles. |
 
-Relative paths are taken from the library root, and `~` is expanded. The environment variables `LIBRARY_DIR`, `PDF_ROOT` and `PAPERS_CACHE` override the config, for example on a machine where the PDFs are mounted somewhere else. `PAPERS_MARKER_PYTHON` points at another marker environment.
+Relative paths are taken from the library root, and `~` is expanded. The environment variables `LIBRARY_DIR`, `PDF_ROOT` and `PAPERS_CACHE` override the config, for example on a machine where the PDFs are mounted somewhere else.
 
 ## What else lives in a library
 
@@ -27,6 +26,6 @@ Relative paths are taken from the library root, and `~` is expanded. The environ
 | `CLAUDE.md` | `@AGENTS.md`, so that Claude Code reads it. |
 | `.claude/library-guide.md` | `paperlib build-index`, from the engine's [guide](../guide/library-guide.md) with your paths filled in. Commit it, so an agent without the engine still knows the conventions. |
 | `.claude/skills/` | `paperlib init`: symlinks to the engine's skills, ignored by git. |
-| `.vscode/settings.json` | `paperlib init`, once: the PDF viewer's root and search excludes. |
+| `.vscode/settings.json` | `paperlib init`, once: the PDF viewer's root, and search settings that show the PDFs. |
 
 Run `paperlib init` again after updating the engine, or on a new machine. It only adds what is missing.

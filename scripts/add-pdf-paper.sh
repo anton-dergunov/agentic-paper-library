@@ -11,18 +11,12 @@
 # Writes the same pair of files as add-arxiv-paper.sh:
 #
 #   $PDF_ROOT/<topic>/<Title>.pdf
-#   library/<topic>/<Title>.md
+#   library/<topic>/<Title>.txt     frontmatter, then the PDF's text layer
 #
 # The filename comes from --title if given and from the PDF's own basename
 # otherwise, cleaned and length-capped the same way as the arXiv script so that
 # filenames stay consistent across the whole library. The source PDF is copied,
 # not moved.
-#
-# There is no HTML rendering to convert here, so the markdown comes from the
-# PDF via scripts/pdf-to-markdown.py: layout analysis rebuilds the headings,
-# tables and figures around the PDF's own text. The frontmatter says
-# `source: pdf-text` and the markdown carries a note at the top, so that anyone
-# (or any agent) reading it knows what to check in the PDF.
 
 set -euo pipefail
 
@@ -55,14 +49,16 @@ if [ ! -f "$SRC_PDF" ]; then
   exit 1
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "error: python3 is required but not found on PATH" >&2
-  exit 1
-fi
+for cmd in pdftotext python3; do
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "error: $cmd is required but not found on PATH" >&2
+    exit 1
+  fi
+done
 
 ORIG_DIR="$PDF_ROOT/$TOPIC"
-MD_DIR="$LIBRARY_DIR/$TOPIC"
-mkdir -p "$ORIG_DIR" "$MD_DIR"
+TXT_DIR="$LIBRARY_DIR/$TOPIC"
+mkdir -p "$ORIG_DIR" "$TXT_DIR"
 
 if [ -z "$TITLE" ]; then
   TITLE="$(basename "$SRC_PDF" .pdf)"
@@ -74,7 +70,7 @@ echo "Title:    $TITLE"
 echo "Filename: $FILENAME"
 
 PDF="$ORIG_DIR/$FILENAME.pdf"
-MD="$MD_DIR/$FILENAME.md"
+TXT="$TXT_DIR/$FILENAME.txt"
 
 if [ -f "$PDF" ] && [ "$FORCE" != true ]; then
   echo "skip (exists): $PDF"
@@ -82,21 +78,12 @@ else
   cp "$SRC_PDF" "$PDF"
 fi
 
-if [ -f "$MD" ] && [ "$FORCE" != true ]; then
-  echo "skip (exists): $MD"
+if [ -f "$TXT" ] && [ "$FORCE" != true ]; then
+  echo "skip (exists): $TXT"
 else
-  WORK="$(mktemp -d)"
-  trap 'rm -rf "$WORK"' EXIT
-  # Layout analysis (docling): headings with their pages, tables, figures. It
-  # writes the note on how the paper was converted, and the page markers, itself.
-  python3 "$SCRIPTS_DIR/pdf-to-markdown.py" "$PDF" "$WORK/body.md" \
-    "$(dirname "$MD")/images" "$(basename "$MD" .md)"
-  {
-    python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-manual "$TITLE" pdf-text "$SOURCE_URL"
-    echo
-    cat "$WORK/body.md"
-  } > "$MD"
+  python3 "$SCRIPTS_DIR/paperlib.py" frontmatter-manual "$TITLE" pdf "$SOURCE_URL" \
+    | python3 "$SCRIPTS_DIR/paperlib.py" text-paper "$TXT" "$PDF"
 fi
 
 echo "Done: $PDF"
-echo "      $MD"
+echo "      $TXT"

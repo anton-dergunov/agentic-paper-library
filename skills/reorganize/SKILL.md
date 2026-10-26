@@ -34,8 +34,8 @@ changes.
 5. **Apply** the changes to the tree first, then the moves:
    - Add each new folder to `catalog/topics.yaml` with a one-line scope, next to its
      siblings; `paperlib move` refuses undeclared folders.
-   - Move each paper with `paperlib move <paper.md> <new-topic>`. A rename or merge
-     is a move of every paper in the folder. The command moves the markdown, figures and
+   - Move each paper with `paperlib move <paper.txt> <new-topic>`. A rename or merge
+     is a move of every paper in the folder. The command moves the paper's text and its
      PDF together.
    - Remove folders that no longer exist from `catalog/topics.yaml`, and update the `topic`
      of any `catalog/skipped.yaml` entry that pointed at them (`paperlib check` fails on

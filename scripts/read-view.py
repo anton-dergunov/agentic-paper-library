@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Print a paper as a reader needs it: the main text, without what a reader skips.
 
-    ./scripts/read-view.py <paper.md> [--appendix]
+    ./scripts/read-view.py <paper.txt> [--appendix]
 
-Keeps the title and the body up to the references heading, with the (p. N) markers on
-headings and the tables as they are. Drops the frontmatter, link targets (the link text
-stays), inline span, sup and anchor tags, and image links: a figure becomes "[figure]"
-beside its caption. The last line says what was left out. With --appendix, the sections
-after the reference list are kept: for a paper whose main results live there.
+Keeps the title and the text layer, with its "[page N]" lines, up to the reference list;
+the last line says what was left out. With --appendix, nothing is cut: for a paper whose
+main results live in its appendices. A web article's markdown is cut at its references
+heading.
 
 Reading this in one call costs a request for the paper instead of four or five for
 slices of it (experiments/review-token-cost). `paperlib read` gives a model this text.
@@ -16,7 +15,7 @@ slices of it (experiments/review-token-cost). `paperlib read` gives a model this
 import sys
 from pathlib import Path
 
-from paperlib import read_paper, read_view
+from paperlib import read_paper, text_view
 
 
 def main(argv):
@@ -27,7 +26,7 @@ def main(argv):
     path = Path(argv[0])
     if not path.is_file():
         sys.exit(f"read-view: no such paper: {path}")
-    sys.stdout.write(read_view(*read_paper(path), appendix=appendix))
+    sys.stdout.write(text_view(*read_paper(path), appendix=appendix))
 
 
 if __name__ == "__main__":

@@ -11,14 +11,14 @@
 The review scopes, in the order to read them, are `review_scopes` in paper-library.yaml: a
 list of folders, or groups of them ("Primary areas: [llm/evaluation, ...]"); without it,
 the top-level folders. A paper is read when its note has a digest. A note is to be read
-again when it carries a `reread:` line: `paperlib issues close` sets one when the closed
-records had broken key content, and `paperlib reread` by hand; `paperlib read --flagged
+again when it carries a `reread:` line, set by `paperlib reread`; `paperlib read --flagged
 <scope>` reads those papers again. Re-reading costs a model request a paper, so the mark is
-for a note whose findings rest on a part that was broken, not for every conversion change.
+for a note that is wrong or was written from a broken copy of its paper.
 
 The cost is a model request per paper, estimated from its reading view (`paperlib
 read-view`) with a line fitted to the readings logged in <cache>/read-papers.jsonl (dollars
-of API price against the view's length; a few dollars' error over an area). A review is
+of API price against the length of the view each was sent; a few dollars' error over an
+area). A review is
 `written <updated>` or, once the reader has gone through it, `checked <date>` (the
 review's `checked:` frontmatter); `+N` counts the scope's papers the review does not cover.
 """
@@ -28,12 +28,14 @@ import sys
 
 from paperlib import (
     CACHE_DIR, CONFIG, LIBRARY_DIR, flag_reread, has_digest, load_reviews, load_topics, paper_files,
-    paper_stem, read_paper, read_view, reread_reason, review_coverage, styled,
+    paper_stem, read_paper, reread_reason, review_coverage, styled, text_view,
 )
 
 # Dollars a reading costs: a fixed part (the prompt, the note written) and a part per
-# character of the reading view. Used until the log holds enough readings to fit them.
-DEFAULT_FIT = (0.111, 3.37e-6)
+# character of the reading view. Used until the log holds enough readings to fit them:
+# fitted to the four first readings of text-layer notes in experiments/reading-formats
+# (tier H, Opus 5.5).
+DEFAULT_FIT = (0.144, 2.81e-6)
 
 
 def review_scopes():
@@ -56,16 +58,15 @@ def cost_fit():
     log = CACHE_DIR / "read-papers.jsonl"
     if not log.exists():
         return DEFAULT_FIT
-    paths = {p.stem: p for p in paper_files()}
     xs, ys = [], []
     for line in log.read_text(encoding="utf-8").splitlines():
         try:
             entry = json.loads(line)
         except ValueError:
             continue
-        paper = paths.get(entry.get("paper"))
-        if paper and entry.get("usd"):
-            xs.append(len(read_view(*read_paper(paper))))
+        # Only readings that logged the length they were sent: the older ones read markdown.
+        if entry.get("chars") and entry.get("usd"):
+            xs.append(entry["chars"])
             ys.append(entry["usd"])
     if len(xs) < 20:
         return DEFAULT_FIT
@@ -86,7 +87,7 @@ def scope_state(scope, reviews, fit):
             unread.append(p)
         elif reread_reason(p):
             reread.append(p)
-    cost = {p: fit[0] + fit[1] * len(read_view(*read_paper(p))) for p in unread + reread}
+    cost = {p: fit[0] + fit[1] * len(text_view(*read_paper(p))) for p in unread + reread}
     review = reviews.get(scope)
     if review:
         meta = review["meta"]

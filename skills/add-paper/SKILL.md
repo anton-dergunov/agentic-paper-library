@@ -29,9 +29,8 @@ Paths below are the defaults; `.claude/library-guide.md` has this library's.
    `catalog/topics.yaml` (the add command refuses undeclared folders). State the choice in
    one line.
 3. **Run the add command.**
-   - arXiv: `paperlib add-arxiv <id> <topic>`. If the output says it fell back to the PDF
-     text layer, or the markdown looks like a conference template rather than the paper,
-     say so; for the template case rerun with `--from-pdf --force`.
+   - arXiv: `paperlib add-arxiv <id> <topic>`. If it warns that the text layer looks
+     unreadable, say so: the paper is marked `text-layer: broken` and read from its pages.
    - Web article (Distill, transformer-circuits.pub, a blog-hosted paper):
      `paperlib add-web <url> <topic>`; pass `--title`, `--authors "A; B"` or
      `--published YYYY-MM-DD` when the page's metadata lacks them.
@@ -40,11 +39,10 @@ Paths below are the defaults; `.claude/library-guide.md` has this library's.
 4. **Write the summary.** From the paper's abstract, introduction and conclusion, one
    neutral sentence on what the paper does or finds (a mechanism or result, not "this
    paper is about"), in the style of the folder's summaries. Set it with
-   `paperlib set-summary <paper.md> "<summary>"`, which handles the YAML quoting.
+   `paperlib set-summary <paper.txt> "<summary>"`, which handles the YAML quoting.
 5. **Rebuild and check.** `paperlib build-index`, then `paperlib check`, which must pass.
 6. **Report**, briefly:
-   - where it was filed, and whether the markdown came from `html` or `pdf-text`;
-   - the page-map line (headings placed / unplaced, and any pages it says the markdown lacks);
+   - where it was filed;
    - two or three sentences on what the paper is and how it relates to papers already in
      the library, with links;
    - if the folder's `README.md` links a literature review, one line: "Not yet in

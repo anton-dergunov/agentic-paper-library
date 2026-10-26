@@ -50,7 +50,7 @@ async function linkedLibrary() {
   const root = path.join(base, 'papers');
   const pdfRoot = path.join(base, 'Synced', 'Papers');
   const topic = path.join(root, 'library', 'llm', 'memory');
-  mkdirSync(path.join(topic, 'images', 'A-MEM. Agentic Memory'), { recursive: true });
+  mkdirSync(path.join(topic, '.hidden'), { recursive: true });
   mkdirSync(path.join(pdfRoot, 'llm', 'memory'), { recursive: true });
   mkdirSync(path.join(root, 'notes'));
   symlinkSync(pdfRoot, path.join(root, 'pdf'));
@@ -59,25 +59,31 @@ async function linkedLibrary() {
     `reader: the reader\npdf_root: ${pdfRoot}\npdf_link: pdf\n`,
   );
   writeFileSync(
-    path.join(topic, 'A-MEM. Agentic Memory.md'),
+    path.join(topic, 'A-MEM. Agentic Memory.txt'),
     `---\ntitle: 'A-MEM: Agentic Memory'\nauthors: [${'Some Author, '.repeat(2000)}Last Author]\n` +
-      `published: 2025-02-17\nsummary: Zettelkasten-style memory for agents.\n---\n\n# A-MEM\n`,
+      `published: 2025-02-17\nsource: pdf\nsummary: Zettelkasten-style memory for agents.\n---\n[page 1]\nA-MEM\n`,
   );
-  writeFileSync(path.join(topic, 'No Frontmatter.md'), '# Just a body\n');
+  writeFileSync(path.join(topic, 'No Frontmatter.txt'), '[page 1]\nJust a body\n');
+  writeFileSync(
+    path.join(topic, 'A Web Article.md'),
+    `---\ntitle: A Web Article\npublished: 2024-01-01\nsource: web\nsummary: An article.\n---\n\n# A Web Article\n`,
+  );
   writeFileSync(path.join(topic, 'README.md'), '# llm/memory\n');
-  writeFileSync(path.join(topic, 'images', 'A-MEM. Agentic Memory', 'x.md'), 'not a paper\n');
+  writeFileSync(path.join(topic, '.hidden', 'x.txt'), 'not a paper\n');
   writeFileSync(path.join(pdfRoot, 'llm', 'memory', 'A-MEM. Agentic Memory.pdf'), '%PDF-1.7\n');
   writeFileSync(path.join(root, 'notes', 'A-MEM. Agentic Memory.md'), '# A-MEM\n');
   return { root, pdfRoot, library: await loadLibrary(loadConfig(root, {})) };
 }
 
-test('papers: long frontmatter, no frontmatter, indexes and figures skipped, notes found', async () => {
+test('papers: text layers and a web article, long frontmatter, none, indexes and hidden folders skipped', async () => {
   const { root, library } = await linkedLibrary();
   assert.deepEqual(
     library.papers.map((p) => p.title),
-    ['A-MEM: Agentic Memory', 'No Frontmatter'],
+    ['A Web Article', 'A-MEM: Agentic Memory', 'No Frontmatter'],
   );
-  const [amem, bare] = library.papers;
+  const [web, amem, bare] = library.papers;
+  assert.equal(web.pdfPath, path.join(root, 'pdf', 'llm', 'memory', 'A Web Article.pdf'));
+  assert.equal(web.textPath, path.join(root, 'library', 'llm', 'memory', 'A Web Article.md'));
   assert.equal(amem.summary, 'Zettelkasten-style memory for agents.');
   assert.equal(amem.year, '2025');
   assert.equal(amem.pdfPath, path.join(root, 'pdf', 'llm', 'memory', 'A-MEM. Agentic Memory.pdf'));
@@ -86,18 +92,21 @@ test('papers: long frontmatter, no frontmatter, indexes and figures skipped, not
   assert.equal(bare.notesPath, undefined);
 });
 
-test('paperForFile: markdown, PDF through the link or the real root, notes', async () => {
+test('paperForFile: text, a web article, PDF through the link or the real root, notes', async () => {
   const { root, pdfRoot, library } = await linkedLibrary();
   const stem = 'A-MEM. Agentic Memory';
   const at = (file: string) => {
     const found = library.paperForFile(file);
     return found && [found.paper.stem, found.kind];
   };
-  assert.deepEqual(at(path.join(root, 'library', 'llm', 'memory', `${stem}.md`)), [stem, 'markdown']);
+  assert.deepEqual(at(path.join(root, 'library', 'llm', 'memory', `${stem}.txt`)), [stem, 'text']);
+  assert.deepEqual(at(path.join(root, 'library', 'llm', 'memory', 'A Web Article.md')), ['A Web Article', 'text']);
+  assert.deepEqual(at(path.join(root, 'library', 'llm', 'memory', `${stem}.txt`.normalize('NFD'))), [stem, 'text']);
   assert.deepEqual(at(path.join(root, 'pdf', 'llm', 'memory', `${stem}.pdf`)), [stem, 'pdf']);
   assert.deepEqual(at(path.join(pdfRoot, 'llm', 'memory', `${stem}.pdf`)), [stem, 'pdf']);
   assert.deepEqual(at(path.join(root, 'notes', `${stem}.md`)), [stem, 'notes']);
   assert.equal(at(path.join(root, 'library', 'llm', 'memory', 'README.md')), undefined);
-  assert.equal(at(path.join(root, 'library', 'llm', `${stem}.md`)), undefined);
+  assert.equal(at(path.join(root, 'library', 'llm', `${stem}.txt`)), undefined);
+  assert.equal(at(path.join(root, 'notes', `${stem}.txt`)), undefined);
   assert.equal(at(path.join(root, 'AGENTS.md')), undefined);
 });

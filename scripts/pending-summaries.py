@@ -6,7 +6,7 @@
 Writes one numbered block per paper with an empty `summary:` (under the given
 topics, or anywhere): its path, title and abstract. Abstracts of arXiv papers
 come from the export API, 100 per request; the others are read from the
-markdown (the Abstract section, or the opening text). The file is what a
+paper's own text (the Abstract, or the opening text of its first page). The file is what a
 summary writer reads instead of the papers; apply-summaries.py takes the
 numbered answers back.
 """
@@ -16,16 +16,16 @@ import sys
 import time
 from pathlib import Path
 
-from paperlib import LIBRARY_DIR, fetch, paper_files, parse_arxiv_entries, read_paper
+from paperlib import LIBRARY_DIR, PAGE_MARK, fetch, paper_index, parse_arxiv_entries, read_paper
 
 API = "https://export.arxiv.org/api/query"
 
 
 def abstract_from_body(body):
     text = re.sub(r"!\[[^\]]*\]\([^)]*\)|<[^>]+>", " ", body)
-    text = "\n".join(l for l in text.splitlines() if not l.startswith(">"))  # the pdf-text warning
+    text = PAGE_MARK.sub("", "\n".join(l for l in text.splitlines() if not l.startswith(">")))  # a web article's note
     m = re.search(r"^#+\s*Abstract[^\n]*\n(.*?)(?=^#+\s|\Z)", text, re.S | re.M | re.I)
-    if not m:  # PDF text: an "Abstract" / "ABSTRACT" word opening a line, near the start
+    if not m:  # a text layer: an "Abstract" / "ABSTRACT" word opening a line, near the start
         m = re.search(r"^\W*(?:Abstract|ABSTRACT)\b[.:—-]?\s*(.*)", text[:8000], re.S | re.M)
     chunk = m.group(1) if m else text
     return " ".join(chunk.split())[:1500]
@@ -36,13 +36,13 @@ def main(argv):
         sys.exit(__doc__)
     out, prefixes = Path(argv[0]), argv[1:]
     pending = []
-    for md in paper_files():
-        topic = md.parent.relative_to(LIBRARY_DIR).as_posix()
+    for paper, indexed in paper_index().items():
+        topic = paper.parent.relative_to(LIBRARY_DIR).as_posix()
         if prefixes and not any(topic == p or topic.startswith(p.rstrip("/") + "/") for p in prefixes):
             continue
-        meta, body = read_paper(md)
-        if not meta.get("summary"):
-            pending.append((md, meta, body))
+        if not indexed.get("summary"):
+            meta, body = read_paper(paper)
+            pending.append((paper, meta, body))
 
     ids = [str(m["arxiv"]) for _, m, _ in pending if m.get("arxiv")]
     abstracts = {}

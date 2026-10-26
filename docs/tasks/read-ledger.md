@@ -1,8 +1,6 @@
 # Task: a ledger of how agents read the library's papers
 
-If the library drops the markdown and keeps each paper's text layer beside its PDF (the reading-formats experiment, tiers F–H, decide this), it relies on Claude Code to read the text first and to look at a page image only when a value is drawn (a point on a plot, a bar, a raster figure). That is Claude Code's behaviour, guided by a line of the guide, not the library's code: it can improve with a release (a text-only or page-selective `Read` of PDFs would change the costs) or regress (whole PDFs read through `Read`, about twice the markdown's tokens, every page sent as text plus image). The experiment's canary checks it on fixed questions; this ledger checks it in real use.
-
-Do this only if the library switches to text layers; until then, the same command would show how often agents open PDFs beside the markdown, which is also worth knowing.
+The library keeps each paper's text layer beside its PDF (since 2026-10-26; the reading-formats experiment, tiers F–H), so it relies on Claude Code to read the text first and to look at a page image only when a value is drawn (a point on a plot, a bar, a raster figure). That is Claude Code's behaviour, guided by a line of the guide, not the library's code: it can improve with a release (a text-only or page-selective `Read` of PDFs would change the costs) or regress (whole PDFs read through `Read`, about twice the text layer's tokens, every page sent as text plus image). The experiment's canary checks it on fixed questions; this ledger checks it in real use.
 
 ## What it records
 
