@@ -1,0 +1,88 @@
+{
+ "rep": 2,
+ "order": [
+  "md",
+  "txt"
+ ],
+ "verdict": "txt",
+ "why": "Both notes report the numbers correctly. A cites many pages two to four pages off and raises a dubious Fig. 1 inconsistency. B's pages are accurate and its coverage of Table 5 is fuller; its one weak inconsistency is minor.",
+ "notes": {
+  "md": {
+   "wrong": [
+    {
+     "claim": "Inconsistency: text cites Fig. 1 for Muon at 1× batch, but Fig. 1 shows only 2× and 3×",
+     "pdf": "Fig. 1's caption mentions 2x and 3x, but the plot legend includes 'Muon 1x' and 'AdamW 1x', so the 1× comparison is in the figure.",
+     "page": 10
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [
+    {
+     "item": "621M model at 12.5M-token batch (Fig. 4)",
+     "cited": "p. 11",
+     "right": "p. 14 (text on p. 12)"
+    },
+    {
+     "item": "KL-SOAP hyperparameters (Table 6)",
+     "cited": "p. 11",
+     "right": "p. 13"
+    },
+    {
+     "item": "Muon vs SOAP at 1×/2×/4× with no ramp-up (Fig. 7)",
+     "cited": "p. 14",
+     "right": "p. 17"
+    },
+    {
+     "item": "MOP and KL-SOAP slightly below Muon at a 24M-token batch (Fig. 8)",
+     "cited": "p. 14",
+     "right": "pp. 16, 18"
+    },
+    {
+     "item": "Layer-wise distributed optimizer (round-robin assignment, allgather-V)",
+     "cited": "p. 16",
+     "right": "pp. 18–19"
+    },
+    {
+     "item": "Fig. 8 'fixed to 24M tokens'",
+     "cited": "p. 14",
+     "right": "p. 18"
+    },
+    {
+     "item": "Alg. 2 EMA convention",
+     "cited": "p. 11",
+     "right": "p. 13"
+    }
+   ],
+   "garbled": [],
+   "only_here": [
+    "Sec. 5.4.1 (reference SOAP omits the current gradient) vs Sec. 5.4.2 ('this implementation was present with SOAP') contradiction",
+    "Same model named 72B-A8B in Table 1 / Fig. 2 but '8B Hybrid MTP' in Table 5",
+    "FP32 (2^-23) and BF16 (2^-7) precision floors for Newton-Schulz",
+    "Max LR range 8e-4 to 1.6e-3; MoE aux-loss coefficient 1e-4; data are 1T/3T subsets of Nemotron-3",
+    "Muon 3× below Muon 2× on HumanEval"
+   ]
+  },
+  "txt": {
+   "wrong": [
+    {
+     "claim": "Inconsistency: abstract says 'up to 100M tokens' but the largest printed batches are 50M/75M",
+     "pdf": "Fig. 7 runs at 4x GBS, which is about 100M tokens (4 × 25M, or 96M from the 24M base), so the 100M claim is supported. B notes '4x GBS' itself.",
+     "page": 17
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Full Commonsense Avg rows for both models (e.g. 83.31 vs 82.66)",
+    "AdamW beats Muon 1× on HumanEval (63.26 vs 62.56)",
+    "Training loss used as the metric, justified by an unshown correlation with validation loss",
+    "Ramp-up used only in large-batch runs, so the 1× AdamW baseline has none",
+    "Stated limitation: no batch-size scaling laws derived",
+    "Learning rates transferred by RMS matching rather than tuned per optimizer (evidence caveat)"
+   ]
+  }
+ },
+ "usd": 0.8474119999999999,
+ "model": "claude-opus-5-5"
+}

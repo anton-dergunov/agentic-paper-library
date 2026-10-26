@@ -2,8 +2,11 @@
 """Tier H: a paper's note written from its PDF's text layer against one written from its
 markdown, both with today's guide/reading-prompt.md and the same model.
 
-    PAPER_LIBRARY=<library> uv run python notes.py write      # two notes per paper, into the cache
-    PAPER_LIBRARY=<library> uv run python notes.py compare    # one blind comparison per paper
+    PAPER_LIBRARY=<library> uv run python notes.py write [r]      # two notes per paper, into the cache
+    PAPER_LIBRARY=<library> uv run python notes.py compare [r]    # one blind comparison per paper
+
+r (default 1) is the repetition: r2 and r3 write each note again and compare them pair by
+pair, to tell the format's effect from the reader's variance.
 
 The markdown note is what `paperlib read` would write now: the reading view (references
 and what follows cut), the prompt as it is. The text-layer note gets `pdftotext -layout`
@@ -108,12 +111,16 @@ def system_prompt(rp, paper, form, tickets):
     return rp.SYSTEM + "\n\n" + template.replace("{{focus}}", "").replace("{{related}}", rp.related_list(md, md.parent))
 
 
-def write():
+def note_file(paper, form, rep):
+    return NOTES / ("%s.%s%s.md" % (paper, form, "" if rep == 1 else ".r%d" % rep))
+
+
+def write(rep=1):
     rp = reader()
     tickets = rp.load_tickets()
     for paper in PAPERS:
         for form in FORMS:
-            target = NOTES / ("%s.%s.md" % (paper, form))
+            target = note_file(paper, form, rep)
             if target.exists():
                 continue
             if form == "md":
@@ -127,8 +134,9 @@ def write():
             log = COMPARE / "usage.jsonl"
             log.parent.mkdir(parents=True, exist_ok=True)
             with log.open("a") as out:
-                out.write(json.dumps(dict(usage, paper=paper, form=form, step="note", left_out=left, model=run.MODEL)) + "\n")
-            print("%s %s: %d in, %d out, $%.2f" % (paper, form, usage["input"], usage["output"], usage["usd"] or 0),
+                out.write(json.dumps(dict(usage, paper=paper, form=form, rep=rep, step="note", left_out=left,
+                                          model=run.MODEL)) + "\n")
+            print("%s %s r%d: %d in, %d out, $%.2f" % (paper, form, rep, usage["input"], usage["output"], usage["usd"] or 0),
                   flush=True)
 
 
@@ -136,14 +144,14 @@ def without_conversion(note):
     return re.sub(r"^## Conversion[ \t]*\n.*?(?=^## |\Z)", "", note.strip("`\n"), flags=re.M | re.S).strip()
 
 
-def compare():
+def compare(rep=1):
     for paper in PAPERS:
-        target = COMPARE / ("%s.json" % paper)
+        target = COMPARE / ("%s%s.json" % (paper, "" if rep == 1 else ".r%d" % rep))
         if target.exists():
             continue
         forms = list(FORMS)
-        random.Random(paper).shuffle(forms)
-        notes = [without_conversion((NOTES / ("%s.%s.md" % (paper, f))).read_text()) for f in forms]
+        random.Random(paper if rep == 1 else "%s r%d" % (paper, rep)).shuffle(forms)
+        notes = [without_conversion(note_file(paper, f, rep).read_text()) for f in forms]
         content = [run.document(inputs.pdf(paper)),
                    {"type": "text", "text": COMPARE_PROMPT.format(a=notes[0], b=notes[1])}]
         result, _ = run.request(COMPARE_SYSTEM, content)
@@ -152,14 +160,14 @@ def compare():
         by_form = {forms[0]: parsed["A"], forms[1]: parsed["B"]}
         verdict = {"A": forms[0], "B": forms[1]}.get(parsed.get("verdict"), "equal")
         COMPARE.mkdir(parents=True, exist_ok=True)
-        target.write_text(json.dumps({"order": forms, "verdict": verdict, "why": parsed.get("why"), "notes": by_form,
+        target.write_text(json.dumps({"rep": rep, "order": forms, "verdict": verdict, "why": parsed.get("why"), "notes": by_form,
                                       "usd": result.get("total_cost_usd"), "model": run.MODEL},
                                      ensure_ascii=False, indent=1))
-        print("%s: %s (%s)  %s  $%.2f" % (paper, verdict, parsed.get("why"), "  ".join(
+        print("%s r%d: %s (%s)  %s  $%.2f" % (paper, rep, verdict, parsed.get("why"), "  ".join(
             "%s: %d wrong, %d numbers, %d pages, %d garbled, %d only here" % (
                 f, len(n["wrong"]), len(n["wrong_numbers"]), len(n["wrong_pages"]), len(n["garbled"]),
                 len(n["only_here"])) for f, n in by_form.items()), result.get("total_cost_usd") or 0), flush=True)
 
 
 if __name__ == "__main__":
-    {"write": write, "compare": compare}[sys.argv[1]]()
+    {"write": write, "compare": compare}[sys.argv[1]](int(sys.argv[2]) if len(sys.argv) > 2 else 1)

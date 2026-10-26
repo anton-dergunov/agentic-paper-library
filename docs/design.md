@@ -258,21 +258,46 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   hand: a reading costs about $0.30, and a session answering a question reads the paper as
   it is now anyway. On that rule the 39-note list was dropped: none of its papers had a
   record of key content broken.
+- **The agent's copy of a paper becomes its PDF's text layer, beside the PDF (2026-10-26).**
+  The library's markdown was meant to answer questions better than the PDF; measured, it
+  answers them no better ([experiments/reading-formats](../experiments/reading-formats/README.md)).
+  - On 51 single-paper questions the PDF got 51, the text layer 43 and the markdown 43. The
+    eight lost by both text forms are values drawn in a plot.
+  - Across papers, an agent in a folder of text layers answered 13 questions as well as one
+    in the library, for $0.30 a question against $0.42.
+  - With the PDF beside the text layer, an agent opened the page for 9 of 9 drawn values and
+    for 0 of 6 questions the text answers, unprompted. Where the text layer is broken, it
+    opened the page for 5 of 9 passages and read through the rest.
+  - Notes written from the text layer were preferred in 9 of 12 blind comparisons, with no
+    wrong page against the markdown's 17.
+  - The text layer keeps the numbers inside vector figures and has none of the converter's
+    errors. The markdown's LaTeX bought nothing on 17 equation questions.
+  So the text layer from `pdftotext -layout`, with a line `[page N]` at each page and the
+  PDF beside it, replaces the markdown as what an agent reads. Leaving the conversion (its
+  converters, tickets, reconversions and figure images) is most of the engine's code and the
+  library's disk. Everything else stays: the frontmatter, which needs a new home, the
+  indexes, notes, reviews and skills. Web articles have no PDF and stay markdown. Claude
+  Code's habit of opening a page only when the text lacks the value is what this rests on,
+  so `run.py canary` checks it on each release.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).
 
 ## Next
 
-1. The `read` and `wrap` skills.
-2. Running a library from a cloud session (Claude Code on the web), which needs the engine
+1. Switch the agent's copy to the text layer beside the PDF (decided 2026-10-26, above).
+   First a plan: where the frontmatter goes, `paperlib add` and `read`, the guide, the
+   VS Code extension, the 19 web articles; then retire the converters, their tickets and the
+   figure images.
+2. The `read` and `wrap` skills.
+3. Running a library from a cloud session (Claude Code on the web), which needs the engine
    installed by a setup step.
-3. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
+4. Link the Obsidian notes to library papers: concept notes and paper lists cite papers by
    arXiv id or title, and now nearly all of them have a library copy.
-4. Make reading a paper cheaper without reading it less: trim the fixed part of the request,
+5. Make reading a paper cheaper without reading it less: trim the fixed part of the request,
    then test a cheaper reading for the thinly covered areas
    ([tasks/reading-cost.md](tasks/reading-cost.md)).
-5. Run the session on the NAS, so it is always on:
+6. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone the engine, the library and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,

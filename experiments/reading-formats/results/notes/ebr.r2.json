@@ -1,0 +1,37 @@
+{
+ "rep": 2,
+ "order": [
+  "md",
+  "txt"
+ ],
+ "verdict": "txt",
+ "why": "Neither note has a factual, number or page error. B adds the [23]/[30] citation inconsistency, makes clear the NDCG headline comes from human review, and lists more undisclosed details. A's extra points are minor.",
+ "notes": {
+  "md": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Manual evaluation does not report how many queries were annotated or the annotation protocol",
+    "A/B test does not report business metrics beyond gross revenue",
+    "RocketQA linked as the source of cross-batch sampling and of cross-encoder denoising of mined negatives"
+   ]
+  },
+  "txt": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Paper's inconsistency: cross-batch sampling is cited as [23] on p.1 but as [30] on p.2",
+    "Headline +7.34% NDCG@5 comes from the human review, not from the A/B test",
+    "Only relative lifts are reported, no absolute metric values",
+    "Number of mining iterations and the token-overlap rules are not disclosed",
+    "No ablation of warm-start on its own"
+   ]
+  }
+ },
+ "usd": 0.28854,
+ "model": "claude-opus-5-5"
+}

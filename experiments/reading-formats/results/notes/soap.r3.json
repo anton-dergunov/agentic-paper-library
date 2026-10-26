@@ -1,0 +1,57 @@
+{
+ "rep": 3,
+ "order": [
+  "txt",
+  "md"
+ ],
+ "verdict": "txt",
+ "why": "Both wrongly say the appendices are missing. B adds a Fig. 7 misattribution, a misattributed source for blocking, and four page citations two or more pages off. B has extra Table 5 detail, but A is more accurate overall.",
+ "notes": {
+  "txt": {
+   "wrong": [
+    "Says the κ proof in Appendix A.3 is 'not included'. The PDF prints Appendix A.3 with the derivation on p. 28.",
+    "Says the MXFP8 validation in Appendix B is 'not included'. Appendix B and Table 7 are printed on p. 29."
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Muon 1× vs AdamW 1× on Nano-V3 for MMLU (73.71 vs 73.38), MMLU-PRO (58.19 vs 54.45), Coding Avg (62.23 vs 62.22) and Commonsense Avg (82.38 vs 81.89)",
+    "72B model Commonsense Avg 83.31 vs 82.66 and MMLU 74.89 vs 74.59",
+    "The 'gains most pronounced in coding' claim does not hold for Nano-V3 at 1× (62.23 vs 62.22)",
+    "The 24M-token caption of Fig. 8 conflicts with Table 3's statement that all models use a 3072-sample batch",
+    "Notes that the batch ramp-up was applied to both optimizers in the larger-batch runs"
+   ]
+  },
+  "md": {
+   "wrong": [
+    "Says the claim that AdamW degrades at large batch rests partly on Fig. 7. Fig. 7 compares only Muon and SOAP, with no AdamW (p. 17).",
+    "Says the condition-number proof is in an appendix that is 'not shown'. Appendix A.3 is printed (p. 28).",
+    "Says MXFP8 results are only in Appendix B, which is 'not shown'. Appendix B is printed (p. 29).",
+    "Credits the 'blocking' approach to Shampoo [12]. The paper credits blocking to [23], Anil et al. (p. 6)."
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [
+    "Fig. 6 (KL-SOAP gives fewer spikes): cited p. 13, printed p. 16 (text on p. 14)",
+    "Layer-wise distributed optimizer description: cited p. 16, printed p. 18–19",
+    "ZeRO-1/FSDP rationale: cited p. 5 and p. 16, printed p. 5, p. 6 and p. 18",
+    "Fig. 8 caption saying 24M tokens: cited p. 14–16, printed p. 18"
+   ],
+   "garbled": [],
+   "only_here": [
+    "AdamW is best on MBPP+ for Nano-V3 (59.36) and wins GSM8k on the hybrid model (87.87 vs 85.97)",
+    "MMLU-PRO falls as batch grows: 58.19 > 56.77 > 55.61",
+    "HumanEval 65.79 vs 57.62 on the hybrid model",
+    "Alg. 2's reversed EMA weighting puts most of the weight on the current step",
+    "Alg. 2's (λ+ε)^{−p} with p = −1 is odd, and line 14 uses an undefined Q̂",
+    "On the 621M model the oscillation eventually damps out",
+    "Full list of max LRs, with min LR at 1/100 of max",
+    "TP support for SOAP is listed as future work",
+    "No downstream evals for SOAP",
+    "Batch size is treated as a systems constraint"
+   ]
+  }
+ },
+ "usd": 0.840796,
+ "model": "claude-opus-5-5"
+}

@@ -1,0 +1,54 @@
+{
+ "rep": 2,
+ "order": [
+  "txt",
+  "md"
+ ],
+ "verdict": "md",
+ "why": "Each note has one unsupported claim of similar weight: A says the appendix was not provided, B says no latency figures exist. Numbers are accurate in both. B covers more results, caveats and inconsistencies.",
+ "notes": {
+  "txt": {
+   "wrong": [
+    {
+     "claim": "Strength line says the ablation sits 'in an appendix not provided'",
+     "pdf": "The appendix is included. Table 5 and §A.10 report a component ablation on LTP Profiles 000–002 (240 probes).",
+     "page": 18
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Acc for other LTP baselines (Mem0 0.188, SeCom 0.655, AriadneMem 0.453) and bank-coexist exceptions (Mem0 0.007, SeCom 0.990)",
+    "Mem0's top LoCoMo average judge Acc set against A-Mem+A-TMA's 0.5013",
+    "Points out that A-Mem+A-TMA judged QA cells do carry deltas, including ↑0.000 and a decline, unlike the other hosts",
+    "Notes that Sentry/Judge training data is not given in the main text"
+   ]
+  },
+  "md": {
+   "wrong": [
+    {
+     "claim": "Lists 'no cost or latency figures' among what is missing",
+     "pdf": "Appendix A.8 reports Sentry at about 50 ms per pair, the GRPO Judge at about 8 s per escalated pair, 23.2% escalation and about 2 s average diagnostic latency. These are not used as main results.",
+     "page": 19
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Graphiti/Zep LTP Judge Acc 0.559 vs 0.473",
+    "LTP average rank 1.79 vs 2.36, and A-Mem's 0.700 Judge Acc is the table best",
+    "Graphiti/Zep+A-TMA has the best LoCoMo rank (2.67) and its adversarial Judge Acc falls (0.4193 vs 0.4596)",
+    "InsideOut+A-TMA LoCoMo average F1 0.1340 vs 0.0432",
+    "Mem0 has the best judged Acc despite 0.0296 F1, so lexical and judged metrics disagree",
+    "Stable pre-rank adopted because the heuristic reranking bonuses were removed as brittle",
+    "Main text does not state the controller model or whether it was enabled for reported results",
+    "LoCoMo sample0 comparison appears only in the plot",
+    "Only three hosts receive A-TMA in the full tables"
+   ]
+  }
+ },
+ "usd": 0.64116,
+ "model": "claude-opus-5-5"
+}

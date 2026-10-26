@@ -1,0 +1,51 @@
+{
+ "rep": 2,
+ "order": [
+  "md",
+  "txt"
+ ],
+ "verdict": "txt",
+ "why": "Both notes get the numbers right. A cites Table 4 to p.3 instead of p.5 and misattributes the Arena data source. B adds Fig. 2–3 values, the McNemar-grid scope, and the missing between-axis test.",
+ "notes": {
+  "md": {
+   "wrong": [
+    {
+     "claim": "The 'Chatbot Arena: An Open Platform' paper supplies the Arena dataset",
+     "pdf_says": "The Arena sample is attributed to [23], Zheng et al., 'Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena'. The platform paper is not cited.",
+     "page": 2
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [
+    {
+     "item": "Minimal audit trail recommendation (Table 4)",
+     "cited_page": 3,
+     "right_page": 5
+    }
+   ],
+   "garbled": [],
+   "only_here": [
+    "Notes that jury sizes beyond the Qwen3-1.7B K=1,3,5 example are not disclosed",
+    "Notes that per-step accuracies and p-values appear only in the figures",
+    "Relates the paper to 'Judging the Judges' on position bias"
+   ]
+  },
+  "txt": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Per-size LLMBar accuracies from Fig. 2 (Qwen3 0.463/0.617/0.647/0.678; MiniMax 0.829/0.839/0.832/0.832; mimo-v2-pro 0.883)",
+    "Fig. 3 uncorrected p-values, including 0.032 for Qwen3 14B→32B on PandaLM",
+    "Judge's Verdict is excluded from the 18-test McNemar grid",
+    "No formal between-axis test",
+    "Cohen's κ and Spearman are promised but not tabulated",
+    "Padding string and granularity probe details are not shown",
+    "Links verbosity probe to Length-Controlled AlpacaEval; correctly notes 'Replacing Judges with Juries' is not cited"
+   ]
+  }
+ },
+ "usd": 0.295868,
+ "model": "claude-opus-5-5"
+}

@@ -1,0 +1,59 @@
+{
+ "rep": 3,
+ "order": [
+  "md",
+  "txt"
+ ],
+ "verdict": "txt",
+ "why": "A invents an 'Appendix Algorithm A.8' inconsistency, wrongly calls the appendix missing, and puts adversarial cells in Table 3. B's only error is calling Mem0 lowest on LTP Acc, and it adds a real caption/text inconsistency.",
+ "notes": {
+  "md": {
+   "wrong": [
+    {
+     "claim": "The paper cites the appendix as 'Appendix Algorithm A.8' (p. 8, p. 9), an inconsistency",
+     "pdf": "p. 9 says 'Appendix Algorithm 1'. There is no such inconsistency.",
+     "page": 9
+    },
+    {
+     "claim": "Sentry/Judge settings, LTP construction and verification, split sizes and the Acc vs Judge definitions are all in a 'missing appendix'",
+     "pdf": "The appendix is in the PDF. A.1 gives the 400/400 split, A.2–A.4 cover construction and verification, A.6 defines the metrics, A.8 gives the settings.",
+     "page": 15
+    },
+    {
+     "claim": "Graphiti/Zep adversarial judge-accuracy drop is described as a Table 3 cell printed without a delta",
+     "pdf": "The adversarial columns are in Table 4, not Table 3.",
+     "page": 11
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Graphiti/Zep+A-TMA adversarial judge accuracy falls (0.4193 vs 0.4596)",
+    "Graphiti/Zep+A-TMA has the best LoCoMo average rank (2.67)",
+    "Bank role 0 for base hosts is partly by design, since timestamp-only ordering is not credited"
+   ]
+  },
+  "txt": {
+   "wrong": [
+    {
+     "claim": "Mem0 is lowest on LTP Acc (0.188) / weakest system on LTP",
+     "pdf": "InsideOut has the lower Acc at 0.117. Mem0 is worst only by average rank (10.64).",
+     "page": 11
+    }
+   ],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Inconsistency: the text credits a 'usable temporal order' for bank role, but the Table 2 caption says timestamp-only ordering is not credited",
+    "Stated scope: A-TMA cannot recover records the host never stored or retrieved",
+    "The main text does not name the controller model",
+    "Mem0's LoCoMo judge accuracy of 0.5685 exceeds A-Mem+A-TMA's 0.5013",
+    "LTP validation: automatic structural checks plus stratified manual verification"
+   ]
+  }
+ },
+ "usd": 0.64588,
+ "model": "claude-opus-5-5"
+}

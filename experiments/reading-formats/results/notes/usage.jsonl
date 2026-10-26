@@ -6,3 +6,19 @@
 {"input": 24629, "output": 6493, "usd": 0.326884, "paper": "atma", "form": "txt", "step": "note", "left_out": "9 pages", "model": "claude-opus-5-5"}
 {"input": 18116, "output": 5487, "usd": 0.25466, "paper": "judgeshift", "form": "md", "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
 {"input": 24142, "output": 5818, "usd": 0.309488, "paper": "judgeshift", "form": "txt", "step": "note", "left_out": "nothing", "model": "claude-opus-5-5"}
+{"input": 29574, "output": 6223, "usd": 0.13459439999999998, "paper": "soap", "form": "md", "rep": 2, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 29575, "output": 7386, "usd": 0.1578624, "paper": "soap", "form": "md", "rep": 3, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 28081, "output": 8030, "usd": 0.17043580000000003, "paper": "soap", "form": "txt", "rep": 2, "step": "note", "left_out": "11 pages", "model": "claude-opus-5-5"}
+{"input": 28081, "output": 8436, "usd": 0.17855580000000001, "paper": "soap", "form": "txt", "rep": 3, "step": "note", "left_out": "11 pages", "model": "claude-opus-5-5"}
+{"input": 16603, "output": 3418, "usd": 0.0759002, "paper": "ebr", "form": "md", "rep": 2, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 16603, "output": 3741, "usd": 0.0823602, "paper": "ebr", "form": "md", "rep": 3, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 19928, "output": 4116, "usd": 0.0905252, "paper": "ebr", "form": "txt", "rep": 2, "step": "note", "left_out": "1 pages", "model": "claude-opus-5-5"}
+{"input": 19929, "output": 3588, "usd": 0.0799732, "paper": "ebr", "form": "txt", "rep": 3, "step": "note", "left_out": "1 pages", "model": "claude-opus-5-5"}
+{"input": 29840, "output": 7006, "usd": 0.15030759999999999, "paper": "atma", "form": "md", "rep": 2, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 29838, "output": 6214, "usd": 0.1344516, "paper": "atma", "form": "md", "rep": 3, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 24629, "output": 6185, "usd": 0.1328532, "paper": "atma", "form": "txt", "rep": 3, "step": "note", "left_out": "9 pages", "model": "claude-opus-5-5"}
+{"input": 24627, "output": 6909, "usd": 0.1473172, "paper": "atma", "form": "txt", "rep": 2, "step": "note", "left_out": "9 pages", "model": "claude-opus-5-5"}
+{"input": 18114, "output": 4722, "usd": 0.10226679999999999, "paper": "judgeshift", "form": "md", "rep": 3, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 18116, "output": 4833, "usd": 0.10450279999999999, "paper": "judgeshift", "form": "md", "rep": 2, "step": "note", "left_out": "the reading view's", "model": "claude-opus-5-5"}
+{"input": 24143, "output": 6628, "usd": 0.14160040000000004, "paper": "judgeshift", "form": "txt", "rep": 3, "step": "note", "left_out": "nothing", "model": "claude-opus-5-5"}
+{"input": 24144, "output": 6731, "usd": 0.1436684, "paper": "judgeshift", "form": "txt", "rep": 2, "step": "note", "left_out": "nothing", "model": "claude-opus-5-5"}

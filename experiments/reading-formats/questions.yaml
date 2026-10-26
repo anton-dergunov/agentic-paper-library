@@ -1,4 +1,4 @@
-# The test set of docs/plans/reading-formats.md. Pages are the PDF's; "tolerance" is for
+# The test set of plan.md. Pages are the PDF's; "tolerance" is for
 # values read off a plot; answerable: false marks questions whose right answer is that the
 # paper does not report it. Paper paths are under the library's library/ folder.
 

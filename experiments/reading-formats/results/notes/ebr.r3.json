@@ -1,0 +1,40 @@
+{
+ "rep": 3,
+ "order": [
+  "txt",
+  "md"
+ ],
+ "verdict": "equal",
+ "why": "Both notes are accurate on every number and page. A adds the citation inconsistency and the missing latency and cost. B adds the WS precision overclaim and the uninitialized-backbone inconsistency. These strengths roughly balance.",
+ "notes": {
+  "txt": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "Cross-batch sampling is cited inconsistently: [23] RocketQA on p.1 and [30] Wang et al. on p.2",
+    "Flags the 'massive real-world impact / millions of additional products' claim as unsupported by any table",
+    "Lists latency and serving cost of GTE-base vs DistilBERT as not reported",
+    "Notes that absolute metric values are absent",
+    "Notes that no public benchmark is used"
+   ]
+  },
+  "md": {
+   "wrong": [],
+   "wrong_numbers": [],
+   "wrong_pages": [],
+   "garbled": [],
+   "only_here": [
+    "WS does not actually recover precision: +2.01% is still below DistilBERT+DR+CB+HHN at +2.09%, contrary to the paper's 'recovered' claim",
+    "The 'uninitialized backbone' wording conflicts with GTE-base starting from a public checkpoint",
+    "Clarifies that the abstract's +7.34% NDCG@5 comes from human review, not offline metrics",
+    "Notes that D=8 GPUs, so the pool grows only about 8x, linearly",
+    "Notes that WS is not tested on DistilBERT and CB/HHN are not tested without DR",
+    "Notes that no cross-encoder accuracy is reported"
+   ]
+  }
+ },
+ "usd": 0.289132,
+ "model": "claude-opus-5-5"
+}
