@@ -81,7 +81,7 @@ paperlib install-vscode                              # optional: the VS Code ext
 Declare a topic or two in `catalog/topics.yaml`, then add a paper, from the shell or by asking Claude Code (`/add-paper 2305.18290`):
 
 ```bash
-paperlib add 2305.18290                              # a model picks the folder and writes the summary
+paperlib add 2305.18290                              # a model picks the folder and the type, and writes the summary
 ```
 
 The [user guide](docs/user-guide.md) takes it from there, task by task: the layout of a library, VS Code, looking at a paper before adding it, adding and removing papers, reading with the agent, literature reviews, and checking the library's health.

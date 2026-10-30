@@ -5,8 +5,8 @@
 
 Checks:
 
-- every paper has the required frontmatter fields, with a known `source` (and
-  a known `type` and `text-layer`, if it has them); a `.txt` paper is a PDF's
+- every paper has the required frontmatter fields, with a known `source` and
+  `type` (and a known `text-layer`, if it has one); a `.txt` paper is a PDF's
   text layer (`source: pdf`, a "[page 1]" line after the frontmatter), a `.md`
   paper a web article (`source: web`), and no paper has both;
 - every file in notes/ is named after a paper in the library;

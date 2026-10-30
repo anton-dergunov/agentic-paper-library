@@ -43,6 +43,7 @@ COMMANDS = {
     "read-view": ("read-view.py", True, "a paper's main text for reading, without the references: <paper.txt>"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
+    "fill-types": ("fill-types.py", True, "give papers without a type theirs: the note's, else one small request each: [<scope or paper.txt> ...] [--dry-run]"),
     "set-summary": ("paperlib.py", True, "set a paper's summary: <paper.txt> <summary>"),
     "set-type": ("paperlib.py", True, "set a paper's type: <paper.txt> <type>"),
     "filename": ("paperlib.py", False, "the filename stem for a title: <title>"),

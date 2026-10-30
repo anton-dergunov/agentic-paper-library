@@ -166,16 +166,18 @@ It reads the abstract and public records, not the paper. It never says whether t
 ## 6. Add papers
 
 ```bash
-paperlib add 2305.18290                                  # a model picks the folder and writes the summary
-paperlib add 2305.18290 --dry-run                        # show the folder and the summary, add nothing
+paperlib add 2305.18290                                  # a model picks the folder and the type, and writes the summary
+paperlib add 2305.18290 --dry-run                        # show the folder, the type and the summary, add nothing
 paperlib add-arxiv 2305.18290 llm/post-training          # or name the folder yourself
 paperlib add-pdf ~/Downloads/paper.pdf ml/classics --title "The Exact Title"
 paperlib add-web https://distill.pub/2017/momentum/ deep-learning/optimization
 ```
 
-Each one writes the PDF and the paper's text. `paperlib add` also writes the summary, rebuilds the indexes and runs the check. After the other three, do that yourself:
+Each one writes the PDF and the paper's text. `paperlib add` also writes the type and the summary, rebuilds the indexes and runs the check. After the other three, do that yourself:
 
 ```bash
+paperlib set-summary <paper.txt> "One sentence on what it does or finds."
+paperlib fill-types <paper.txt>                          # its type, from one small request
 paperlib build-index && paperlib check
 ```
 
@@ -194,6 +196,7 @@ Notes:
 - **A PDF is copied**, so the file in `Downloads` stays. Some publishers block scripts (ACM, Wiley, Springer, SSRN, OpenReview): download the PDF in a browser and use `add-pdf`.
 - **A web article** is rendered in Chrome and converted to markdown, without its figures; Chrome also prints it to the PDF. Printed web pages often lose parts, so the agent reads the markdown, and the article's `url` for what is missing.
 - **A PDF whose text layer is unreadable** (a scan) is added with a warning and marked `text-layer: broken`.
+- **Every paper has a type**: method, survey, benchmark, study, system, position or theory. It is chosen from the abstract when the paper is filed; `paperlib read` replaces it when the whole paper says otherwise, and `paperlib set-type <paper.txt> <type>` sets it by hand. `paperlib fill-types` gives one to every paper without it.
 
 ## 7. Remove, move and reorganise
 

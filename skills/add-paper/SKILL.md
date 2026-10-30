@@ -40,7 +40,9 @@ Paths below are the defaults; `.claude/library-guide.md` has this library's.
    neutral sentence on what the paper does or finds (a mechanism or result, not "this
    paper is about"), in the style of the folder's summaries. Set it with
    `paperlib set-summary <paper.txt> "<summary>"`, which handles the YAML quoting.
-5. **Rebuild and check.** `paperlib build-index`, then `paperlib check`, which must pass.
+5. **Type, rebuild and check.** `paperlib fill-types <paper.txt> [...]` sets each paper's
+   type from its title, summary and abstract; then `paperlib build-index`, then
+   `paperlib check`, which must pass.
 6. **Report**, briefly:
    - where it was filed;
    - two or three sentences on what the paper is and how it relates to papers already in
@@ -51,8 +53,8 @@ Paths below are the defaults; `.claude/library-guide.md` has this library's.
 
 ## Several papers at once
 
-Look them all up in one `paperlib lookup` call, run steps 2–4 per paper, then rebuild and
-check once. The add command retries when the export API rate-limits.
+Look them all up in one `paperlib lookup` call, run steps 2–4 per paper, then step 5
+once for all of them. The add command retries when the export API rate-limits.
 
 ## From the inbox
 
@@ -70,7 +72,8 @@ check once. The add command retries when the export API rate-limits.
    topic; mark `already in library`, `skipped earlier`, `new folder` and `unclear match`.
    Run no add command until the reader approves; they may change topics or skip entries by
    number. An entry they decline for good goes to `catalog/skipped.yaml` with their reason.
-5. **Add** the approved entries (steps 3–4 per paper), then rebuild and check once.
+5. **Add** the approved entries (steps 3–4 per paper), then type, rebuild and check them
+   once (step 5 above).
 6. **Drain the inbox.** Remove every entry that was added or was already in the library.
    Leave skipped and failed entries exactly as they were, and don't rewrite the rest.
 7. **Report** as in step 6, plus which entries are still in the inbox and why. One commit

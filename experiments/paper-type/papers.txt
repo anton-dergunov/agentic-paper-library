@@ -1,0 +1,105 @@
+benchmark	data-centric-ml/data-quality-and-shift/Benchmarking Distribution Shift in Tabular Data with TableShift
+benchmark	llm/evaluation/benchmarks/FrontierMath. A Benchmark for Evaluating Advanced Mathematical Reasoning in AI
+benchmark	llm/evaluation/benchmarks/MEGA. Multilingual Evaluation of Generative AI
+benchmark	llm/evaluation/benchmarks/Measuring short-form factuality in large language models
+benchmark	llm/evaluation/benchmarks/Spider. A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and
+benchmark	llm/evaluation/benchmarks/τ-bench. A Benchmark for Tool-Agent-User Interaction in Real-World Domains
+benchmark	llm/evaluation/benchmarks/τ^2-Bench. Evaluating Conversational Agents in a Dual-Control Environment
+benchmark	llm/personalization/benchmarks/PersonaMem-v3. Toward Omni-Platform Personal Intelligence for Holistic User Understanding
+benchmark	nlp/generation-metrics/SummEval. Re-evaluating Summarization Evaluation
+benchmark	nlp/tasks-and-methods/CrossRE. A Cross-Domain Dataset for Relation Extraction
+benchmark	nlp/tasks-and-methods/Large-Scale Multi-Label Text Classification on EU Legislation
+benchmark	reinforcement-learning/methodology/The Cross-environment Hyperparameter Setting Benchmark for Reinforcement Learning
+benchmark	search-and-ranking/evaluation/MS MARCO. A Human Generated MAchine Reading COmprehension Dataset
+benchmark	vision-and-multimodal/vision-language/Eyes Wide Shut. Exploring the Visual Shortcomings of Multimodal LLMs
+benchmark	vision-and-multimodal/vision-language/ViDoRe V3. A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World
+method	deep-learning/architectures/Identity Mappings in Deep Residual Networks
+method	deep-learning/uncertainty-and-robustness/Simple and Principled Uncertainty Estimation with Deterministic Deep Learning via Distance Awareness
+method	generative-models/diffusion/Representation Alignment for Generation. Training Diffusion Transformers Is Easier Than You Think
+method	llm/architecture/recurrent-and-state-space/Gated Delta Networks. Improving Mamba2 with Delta Rule
+method	llm/memory/agent/A-MEM. Agentic Memory for LLM Agents
+method	llm/memory/parametric/Titans. Learning to Memorize at Test Time
+method	llm/post-training/fine-tuning/On-Policy Distillation of Language Models. Learning from Self-Generated Mistakes
+method	llm/post-training/fine-tuning/Orca. Progressive Learning from Complex Explanation Traces of GPT-4
+method	llm/retrieval-augmented/GFM-RAG. Graph Foundation Model for Retrieval Augmented Generation
+method	llm/safety-and-privacy/Fast-DetectGPT. Efficient Zero-Shot Detection of Machine-Generated Text via Conditional Probability
+method	ml-systems/inference-and-serving/Efficiently Scaling Transformer Inference
+method	nlp/tasks-and-methods/Bad Characters. Imperceptible NLP Attacks
+method	recommender-systems/industrial-systems/Bootstrapping Conditional Retrieval for User-to-Item Recommendations
+method	search-and-ranking/indexing-and-classical-ir/Efficient Query Evaluation using a Two-Level Retrieval Process (WAND)
+method	vision-and-multimodal/vision/Image quality assessment. from error visibility to structural similarity
+position	data-centric-ml/data-quality-and-shift/Datasheets for Datasets
+position	deep-learning/architectures/How to represent part-whole hierarchies in a neural network
+position	llm/evaluation/methods/AI Agents That Matter
+position	llm/evaluation/methods/Position. Don't Use the CLT in LLM Evals With Fewer Than a Few Hundred Datapoints
+position	llm/personalization/methods/A Roadmap to Pluralistic Alignment
+position	llm/personalization/methods/LLM Agents Enable User-Governed Personalization Beyond Platform Boundaries
+position	llm/routing/Language Model Cascades
+position	llm/uncertainty-and-hallucination/Anthropomimetic Uncertainty. What Verbalized Uncertainty in Language Models is Missing
+position	ml-foundations/classical-ml/DBSCAN Revisited, Revisited
+position	ml-systems/production-ml/Model Cards for Model Reporting
+position	nlp/generation-metrics/A Call for Clarity in Reporting BLEU Scores
+position	reinforcement-learning/deep-rl/Welcome to the Era of Experience
+position	representation-learning/self-supervised/The Platonic Representation Hypothesis
+position	search-and-ranking/evaluation/Perspectives on Large Language Models for Relevance Judgment
+position	search-and-ranking/neural-ranking/The Neural Hype, Justiﬁed! A Recantation
+study	data-centric-ml/data-quality-and-shift/Can Foundation Models Wrangle Your Data
+study	deep-learning/normalization-and-regularization/When Does Label Smoothing Help
+study	deep-learning/optimizers-and-schedules/Scaling Laws and Compute-Optimal Training Beyond Fixed Training Durations
+study	llm/architecture/Round and Round We Go! What makes Rotary Positional Encodings useful
+study	llm/context/Recall Is Not Enough. A Reader-Context Diagnostic for Budget-Constrained Retrieval-Augmented
+study	llm/evaluation/methods/Mind the Sim2Real Gap in User Simulation for Agentic Tasks
+study	llm/personalization/methods/Re-Centering Humans in LLM Personalization
+study	llm/post-training/preference-learning/Let's Verify Step by Step
+study	llm/post-training/rl-for-reasoning/Spurious Rewards. Rethinking Training Signals in RLVR
+study	llm/safety-and-privacy/Deduplicating Training Data Mitigates Privacy Risks in Language Models
+study	ml-systems/production-ml/Building Your Own Product Copilot. Challenges, Opportunities, and Needs
+study	nlp/pretrained-language-models/Revisiting Few-sample BERT Fine-tuning
+study	recommender-systems/evaluation/A Case Study on Sampling Strategies for Evaluating Neural Sequential Item Recommendation Models
+study	reinforcement-learning/methodology/Deep Reinforcement Learning and the Deadly Triad
+study	reinforcement-learning/methodology/Deep Reinforcement Learning at the Edge of the Statistical Precipice
+survey	data-centric-ml/augmentation-and-synthetic-data/A Survey of Data Augmentation Approaches for NLP
+survey	deep-learning/A continual learning survey. Defying forgetting in classification tasks
+survey	deep-learning/efficiency-and-compression/Knowledge Distillation. A Survey
+survey	experimentation-and-metrics/causal-inference/A Survey on Causal Inference
+survey	generative-models/gans-and-vaes/An Introduction to Variational Autoencoders
+survey	llm/foundation-models/A Survey of Large Language Models
+survey	llm/memory/agent/Memory for Autonomous LLM Agents Mechanisms, Evaluation, and Emerging Frontiers
+survey	llm/personalization/methods/A Survey on Personalized Alignment -- The Missing Piece for Large Language Models in Real-World
+survey	llm/post-training/fine-tuning/Instruction Tuning for Large Language Models. A Survey
+survey	llm/post-training/preference-learning/A Comprehensive Survey of Reward Models. Taxonomy, Applications, Challenges, and Future
+survey	llm/post-training/rl-for-reasoning/LLM Post-Training. A Deep Dive into Reasoning Large Language Models
+survey	llm/pretraining/A Survey on Data Synthesis and Augmentation for Large Language Models
+survey	llm/retrieval-augmented/Can LLMs Be Trusted for Evaluating RAG Systems. A Survey of Methods and Datasets
+survey	llm/retrieval-augmented/Knowledge Conflicts for LLMs. A Survey
+survey	llm/uncertainty-and-hallucination/Siren's Song in the AI Ocean. A Survey on Hallucination in Large Language Models
+system	experimentation-and-metrics/ab-testing/Network experimentation at scale
+system	generative-models/diffusion/Diffusion Models Are Real-Time Game Engines
+system	llm/foundation-models/Kimi K2.5. Visual Agentic Intelligence
+system	llm/memory/agent/MemOS. A Memory OS for AI System
+system	llm/prompting-and-in-context/DSPy. Compiling Declarative Language Model Calls into Self-Improving Pipelines
+system	llm/text-analytics/Clio. Privacy-Preserving Insights into Real-World AI Use
+system	ml-systems/distributed-training/MegaScale-MoE. Large-Scale Communication-Efficient Training of Mixture-of-Experts Models in
+system	nlp/tasks-and-methods/Gmail Smart Compose. Real-Time Assisted Writing
+system	recommender-systems/deep-and-sequential/Transformers4Rec. Bridging the Gap between NLP and Sequential Session-Based Recommendation
+system	recommender-systems/industrial-systems/ItemSage. Learning Product Embeddings for Shopping Recommendations at Pinterest
+system	reinforcement-learning/methodology/Gymnasium. A Standard Interface for Reinforcement Learning Environments
+system	reinforcement-learning/methodology/OpenAI Gym
+system	search-and-ranking/dense-retrieval/Billion-scale similarity search with GPUs
+system	search-and-ranking/dense-retrieval/DiskANN. Fast Accurate Billion-point Nearest Neighbor Search on a Single Node
+system	search-and-ranking/dense-retrieval/Embedding based retrieval for long tail search queries in ecommerce
+theory	data-centric-ml/augmentation-and-synthetic-data/A Probabilistic Perspective on Model Collapse
+theory	deep-learning/normalization-and-regularization/Batch Normalization Explained
+theory	deep-learning/theory/A Probabilistic Interpretation of Transformers
+theory	deep-learning/theory/Every Model Learned by Gradient Descent Is Approximately a Kernel Machine
+theory	deep-learning/theory/Feature Learning in Infinite-Width Neural Networks
+theory	deep-learning/theory/Neural Tangent Kernel. Convergence and Generalization in Neural Networks
+theory	deep-learning/theory/The Implicit Bias of Gradient Descent on Separable Data
+theory	experimentation-and-metrics/ab-testing/Continuous Monitoring of A B Tests without Pain. Optional Stopping in Bayesian Testing
+theory	generative-models/diffusion/On the Mathematics of Diffusion Models
+theory	llm/post-training/fine-tuning/Learning Dynamics of LLM Finetuning
+theory	llm/post-training/preference-learning/A General Theoretical Paradigm to Understand Learning from Human Preferences
+theory	llm/pretraining/Strong Model Collapse
+theory	llm/safety-and-privacy/Language Models are Injective and Hence Invertible
+theory	ml-systems/inference-and-serving/Inference economics of language models
+theory	representation-learning/embeddings/Is Cosine-Similarity of Embeddings Really About Similarity

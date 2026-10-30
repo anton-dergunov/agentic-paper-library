@@ -12,9 +12,9 @@ and after them the papers outside it that were looked at before. A paper skipped
 For any other arXiv paper it collects, without a model: arXiv's metadata; Semantic Scholar's
 venue and citation counts, with a grade of the citation rate (UPTAKE below); and which of
 the library's papers, notes and reviews name the title. Then two small requests through
-`claude -p`, no tools: the filing request of `paperlib add`, for the folder it would go in,
-and one that says what the paper proposes, its type and character, and how it relates to the
-nearest papers of that folder (guide/info-prompt.md).
+`claude -p`, no tools: the filing request of `paperlib add`, for the folder it would go in
+and the paper's type, and one that says what the paper proposes, its character, and how it
+relates to the nearest papers of that folder (guide/info-prompt.md).
 
     --json     one JSON object per paper, on one line each, for another program
     --abstract the abstract as a row too, for a paper not in the library (--json always has it)
@@ -36,7 +36,7 @@ from urllib.parse import quote
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, FILING_EFFORT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
-    TYPES, ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics,
+    ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics,
     norm_title, note_path, paper_index, paper_stem, parse_arxiv_entries, read_paper, review_for,
     skipped_index, styled,
 )
@@ -141,7 +141,7 @@ def describe(info, topics, model, prompts):
     filing, (system, the_paper) = prompts
     reply, used = ask_model(model, filing[0], filing[1].format(title=info["title"], abstract=info["abstract"]),
                             effort=FILING_EFFORT)
-    folder, reason, _ = filing_choice(reply, topics)
+    folder, reason, kind, _ = filing_choice(reply, topics)
     listed = []
     if folder:
         listed = sorted((path, meta) for path, meta in paper_index().items() if path.parent == LIBRARY_DIR / folder)
@@ -164,9 +164,8 @@ def describe(info, topics, model, prompts):
             nearest.append({"title": meta.get("title"), "paper": relative(path),
                             "relation": relation if relation in RELATIONS else "same-problem",
                             "how": " ".join(str(item.get("how") or "").split())})
-    kind = str(answer.get("type") or "").strip().lower()
     text = lambda key: " ".join(str(answer.get(key) or "").split())
-    info.update(folder=folder, folder_papers=len(listed), type=kind if kind in TYPES else None,
+    info.update(folder=folder, folder_papers=len(listed), type=kind,
                 character=text("character"), proposes=text("proposes"), evidence=text("evidence"),
                 releases=text("releases"), nearest=nearest,
                 usage={k: (used.get(k) or 0) + (used2.get(k) or 0) for k in ("input", "output", "usd")})

@@ -5,6 +5,7 @@ published: 2024-03-18
 arxiv: '2403.11901'
 url: https://arxiv.org/abs/2403.11901
 source: pdf
+type: method
 summary: 'Larimar: LLMs with a distributed episodic memory supporting one-shot fact edits and selective forgetting.'
 added: 2026-10-03
 ---

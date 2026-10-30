@@ -10,7 +10,7 @@ A library is a folder with `paper-library.yaml` at its root. `paperlib` finds it
 | `overview_dir` | none | A folder for your own note per paper, which the `overview` skill writes, e.g. a folder in an Obsidian vault. Without it, the skill asks where notes should go. |
 | `library`, `catalog`, `notes`, `reviews`, `inbox` | `library`, `catalog`, `notes`, `reviews`, `INBOX.txt` | The library's own folders and files, if you want other names. |
 | `review_scopes` | the top-level folders | The areas to read and review, in the order to do them: a list of folders, or of groups of them (`- Primary areas: [llm/evaluation, search-and-ranking]`). `paperlib reading` shows each one's progress and cost. |
-| `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder and summary ([measured](../experiments/skill-models/README.md)). |
+| `filing_model` | `sonnet` | The model `paperlib add` asks for a paper's folder, type and summary ([measured](../experiments/skill-models/README.md), [type](../experiments/paper-type/README.md)), and `paperlib fill-types` for a type. |
 | `info_model` | `sonnet` | The model `paperlib info` asks what a paper proposes and how it relates to the folder's papers. |
 | `reader_model` | `opus` | The model `paperlib read` gives each paper to for its note ([measured](../experiments/reading-models/README.md)). |
 | `cache` | `~/.cache/papers` | The saved index of the papers' frontmatter, `info`'s answers and the log of `paperlib read`, shared by every library. |

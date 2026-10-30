@@ -273,6 +273,23 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   six notes against 2 at `high`, and the judge preferred the `high` note on all six. Those
   `high` reads had taken the level from the author's Claude Code setting, so `paperlib read`
   now passes `--effort high` itself ([experiments/reading-effort](../experiments/reading-effort/README.md)).
+- **Every paper has its type in its frontmatter, from filing on (2026-10-30).** Carrel shows a
+  paper's type on every row and filters by it, but only `paperlib read` wrote one, in the
+  note, so 446 of 2,275 papers had none. From the abstract, the filing request with a type
+  field agreed with the whole-paper reading on 97 of 105 papers, and a type-only request
+  with the stored summary on 100; most of the rest sit on the border between two types
+  ([experiments/paper-type](../experiments/paper-type/README.md)).
+  - The frontmatter's `type` is the one source, and `check` requires it. `paperlib add`'s
+    filing request gives it at no extra cost. The add-paper skill, and `add-batch` after its
+    summaries, run `paperlib fill-types`, which takes a note's type where there is one and
+    otherwise asks the type-only request ($0.0034 a paper).
+  - `paperlib read` replaces the type when the reading says otherwise, prints the change and
+    logs both, so the papers read from now on measure how often filing's type holds. A
+    session that finds a type wrong sets it with `paperlib set-type`.
+  - The note keeps its `type:` line: it is how the reading reports the type, and the record
+    of what the reading said if the type is later set by hand.
+  - The backfill on the author's library took 1,824 types from notes and asked for 446, for $1.57;
+    5 papers had one already.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

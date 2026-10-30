@@ -21,6 +21,7 @@ At most 20 bullet lines: the claim, the mechanism in plain words, the key defini
 ```
 
 Rules:
+- `type` is one of the seven: the closest one when the paper is mixed or unclear.
 - Every number carries its page and, if there is one, its table or figure: (p. N, Table M). Take the page from the nearest `[page N]` line above the passage.
 - Quote numbers exactly as the paper prints them. Never round, convert or compute a number, and never give one that is not in the text.
 - Every number names its baseline, or what it is compared with.

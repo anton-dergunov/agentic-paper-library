@@ -118,10 +118,11 @@ OVERVIEW_DIR = _path(CONFIG["overview_dir"], _BASE) if CONFIG.get("overview_dir"
 # viewer (see the guide): http://pdf.invalid/<path under PDF_ROOT>?page=N.
 PDF_LINK_BASE = "http://pdf.invalid/"
 
-# Field order in every paper's frontmatter. `summary` is written by whoever
-# files the paper (the add-paper skill), so the add scripts leave it empty.
+# Field order in every paper's frontmatter. `type` and `summary` are written by whoever
+# files the paper (`paperlib add`, the add-paper skill), so the add scripts leave them empty;
+# `paperlib read` replaces the type with the reading's (experiments/paper-type).
 FIELDS = ["title", "authors", "published", "arxiv", "url", "source", "type", "text-layer", "summary", "added"]
-REQUIRED = ["title", "source", "summary", "added"]
+REQUIRED = ["title", "source", "type", "summary", "added"]
 # `pdf`: the paper file holds the PDF's text layer. `web`: an article published as a web
 # page, its file holds the page converted to markdown, and its PDF is the page printed.
 SOURCES = {"pdf", "web"}
@@ -169,8 +170,11 @@ def split_frontmatter(text):
 
 
 def read_paper(path):
-    """Return (frontmatter dict, body) for a paper file; ({}, text) if none."""
-    return split_frontmatter(Path(path).read_text(encoding="utf-8"))
+    """Return (frontmatter dict, body) for a paper file; ({}, text) if none. The body is the
+    file's text exactly: a text layer keeps the carriage returns pdftotext wrote, so that
+    rewriting the frontmatter (write_paper) leaves it as it was."""
+    with open(path, encoding="utf-8", newline="") as f:
+        return split_frontmatter(f.read())
 
 
 def text_layer(pdf):
@@ -341,7 +345,7 @@ def render_frontmatter(meta):
 
 
 def write_paper(path, meta, body):
-    Path(path).write_text(render_frontmatter(meta) + body, encoding="utf-8")
+    Path(path).write_text(render_frontmatter(meta) + body, encoding="utf-8", newline="")
 
 
 def parse_arxiv_entries(xml_text):
@@ -402,6 +406,43 @@ def download(url, attempts):
         if attempt < attempts - 1:
             time.sleep(5 * (attempt + 1))
     return None
+
+
+ARXIV_API = "https://export.arxiv.org/api/query"
+
+
+def arxiv_abstracts(ids):
+    """Map arXiv id -> abstract, from the export API, 100 ids a request. An id the API does
+    not answer for is left out."""
+    ids, found = [str(i) for i in ids], {}
+    for start in range(0, len(ids), 100):
+        chunk = ids[start:start + 100]
+        if start:
+            time.sleep(3)  # the export API asks for a pause between requests
+        data = fetch(f"{ARXIV_API}?id_list={','.join(chunk)}&max_results={len(chunk)}", attempts=5)
+        if data and b"<entry" in data:
+            found.update({k: v["abstract"] for k, v in parse_arxiv_entries(data.decode("utf-8")).items()})
+    return found
+
+
+def abstract_from_body(body):
+    """A paper's abstract from its own text: the Abstract section, or the opening text of its
+    first page, at most 1,500 characters."""
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)|<[^>]+>", " ", body)
+    text = PAGE_MARK.sub("", "\n".join(l for l in text.splitlines() if not l.startswith(">")))  # a web article's note
+    m = re.search(r"^#+\s*Abstract[^\n]*\n(.*?)(?=^#+\s|\Z)", text, re.S | re.M | re.I)
+    if not m:  # a text layer: an "Abstract" / "ABSTRACT" word opening a line, near the start
+        m = re.search(r"^\W*(?:Abstract|ABSTRACT)\b[.:—-]?\s*(.*)", text[:8000], re.S | re.M)
+    chunk = m.group(1) if m else text
+    return " ".join(chunk.split())[:1500]
+
+
+def paper_abstracts(papers):
+    """Map paper path -> abstract: arXiv's for a paper with an id, else its own text's."""
+    papers = [Path(p) for p in papers]
+    metas = {p: read_paper(p) for p in papers}
+    online = arxiv_abstracts(sorted({str(m["arxiv"]) for m, _ in metas.values() if m.get("arxiv")}))
+    return {p: online.get(str(meta.get("arxiv"))) or abstract_from_body(body) for p, (meta, body) in metas.items()}
 
 
 def title_to_filename(title):
@@ -515,19 +556,43 @@ def filing_prompts(topics):
     return system, "THE PAPER" + the_paper
 
 
+def _json_reply(reply, who):
+    try:
+        return json.loads(reply[reply.index("{"):reply.rindex("}") + 1])
+    except ValueError:
+        raise RuntimeError(f"the {who} did not reply with JSON: " + reply.strip()[:200])
+
+
+def _type(value):
+    """A type from a model's answer, or None when it is not one of TYPES."""
+    kind = str(value or "").strip().lower()
+    return kind if kind in TYPES else None
+
+
 def filing_choice(reply, topics):
-    """(folder, reason, summary) from a filing model's JSON reply.
+    """(folder, reason, type, summary) from a filing model's JSON reply.
 
     The folder is None when the model found none, or named one that is not declared: a
-    script never creates a folder, that is the reader's decision.
+    script never creates a folder, that is the reader's decision. The type is None when it
+    is not one of TYPES.
     """
-    try:
-        answer = json.loads(reply[reply.index("{"):reply.rindex("}") + 1])
-    except ValueError:
-        raise RuntimeError("the filing model did not reply with JSON: " + reply.strip()[:200])
+    answer = _json_reply(reply, "filing model")
     folder = str(answer.get("folder") or "").strip().strip("/")
     summary = " ".join(str(answer.get("summary") or "").split())
-    return (folder if folder in topics else None), str(answer.get("reason") or "").strip(), summary
+    return ((folder if folder in topics else None), str(answer.get("reason") or "").strip(),
+            _type(answer.get("type")), summary)
+
+
+def type_prompts():
+    """(system prompt, paper template) for a request that types a paper already in the
+    library: guide/type-prompt.md. The template takes `title`, `summary` and `abstract`."""
+    rules, the_paper = (ENGINE_ROOT / "guide" / "type-prompt.md").read_text(encoding="utf-8").split("THE PAPER")
+    return "You are a careful research librarian.\n\n" + rules.format().strip(), "THE PAPER" + the_paper
+
+
+def type_choice(reply):
+    """The type from a type request's JSON reply, or None when it is not one of TYPES."""
+    return _type(_json_reply(reply, "type model").get("type"))
 
 
 def load_skipped():

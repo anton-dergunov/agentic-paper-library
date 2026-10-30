@@ -83,6 +83,15 @@ def strings():
           == ["Zep. A Graph", "Zep. A Graph", "Q", "Q", "v2.0"])
     check("paper_stem is NFC", paperlib.paper_stem("Мей.txt") == "Мей")
 
+    with tempfile.TemporaryDirectory() as tmp:
+        paper = Path(tmp) / "A Small Paper.txt"
+        body = "[page 1]\nInventory: 3\r\n  efficiency.\r\nmore\rtext\n"
+        paperlib.write_paper(paper, META, body)
+        meta, read = paperlib.read_paper(paper)
+        paperlib.write_paper(paper, {**meta, "type": "method"}, read)
+        check("a frontmatter edit leaves the text layer's carriage returns as they were",
+              read == body and paper.read_bytes().endswith(body.encode()), repr(read))
+
 
 def fixture():
     if not shutil.which("pdftotext"):

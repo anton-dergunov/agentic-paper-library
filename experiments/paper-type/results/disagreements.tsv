@@ -1,0 +1,12 @@
+paper	note	filing	type-only
+vision-and-multimodal/vision-language/Eyes Wide Shut. Exploring the Visual Shortcomings of Multimodal LLMs	benchmark	benchmark	study
+llm/memory/agent/A-MEM. Agentic Memory for LLM Agents	method	method	system
+nlp/tasks-and-methods/Bad Characters. Imperceptible NLP Attacks	method	study	method
+llm/routing/Language Model Cascades	position	method	position
+ml-foundations/classical-ml/DBSCAN Revisited, Revisited	position	study	position
+ml-systems/production-ml/Model Cards for Model Reporting	position	method	method
+nlp/generation-metrics/A Call for Clarity in Reporting BLEU Scores	position	study	position
+llm/context/Recall Is Not Enough. A Reader-Context Diagnostic for Budget-Constrained Retrieval-Augmented	study	method	study
+reinforcement-learning/methodology/Deep Reinforcement Learning at the Edge of the Statistical Precipice	study	method	study
+llm/prompting-and-in-context/DSPy. Compiling Declarative Language Model Calls into Self-Improving Pipelines	system	system	method
+search-and-ranking/dense-retrieval/Embedding based retrieval for long tail search queries in ecommerce	system	method	method

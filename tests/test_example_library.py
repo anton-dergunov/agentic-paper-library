@@ -58,12 +58,13 @@ def read_view_problems(root):
 
 
 def filing_problems(root):
-    """A filing model's reply is used only when it names a declared folder."""
+    """A filing model's reply is used only when it names a declared folder, and a known type."""
     code = ("import json, paperlib as p; t = p.load_topics(); f = next(iter(t)); "
-            "r = lambda folder: p.filing_choice('Here: ' + json.dumps({'folder': folder, 'reason': 'r', "
-            "'summary': 'a  b'}), t); "
-            "assert r(f) == (f, 'r', 'a b'), r(f); assert r('none')[0] is None; "
-            "assert r('not/declared')[0] is None; assert r(f + '/')[0] == f")
+            "r = lambda folder, kind='Survey': p.filing_choice('Here: ' + json.dumps({'folder': folder, 'reason': 'r', "
+            "'type': kind, 'summary': 'a  b'}), t); "
+            "assert r(f) == (f, 'r', 'survey', 'a b'), r(f); assert r('none')[0] is None; "
+            "assert r('not/declared')[0] is None; assert r(f + '/')[0] == f; assert r(f, 'essay')[2] is None; "
+            "assert p.type_choice('{\"type\": \" Theory\"}') == 'theory' and p.type_choice('{}') is None")
     env = dict(os.environ, PAPER_LIBRARY=str(root), PYTHONPATH=str(ENGINE / "scripts"))
     result = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, text=True)
     return result.stderr.strip().splitlines()[-1:] if result.returncode else []
@@ -216,6 +217,44 @@ def note_fields_problems(root):
     return result.stderr.strip().splitlines()[-1:] if result.returncode else []
 
 
+def type_problems(root):
+    """fill-types takes a paper's type from its note and leaves a type it has; check requires
+    one; a reading replaces a type that differs, and logs both."""
+    problems = []
+    paper, other = papers(root)[:2]
+    other_type = re.search(r"^type: (\w+)$", other.read_text(), re.M).group(1)
+    paper.write_text(re.sub(r"^type: \w+\n", "", paper.read_text(), count=1, flags=re.M))
+    if "missing or empty `type`" not in run("check-library.py", root).stdout:
+        problems.append("check passes a paper without a type")
+    note = root / "notes" / f"{paper.stem}.md"
+    note.parent.mkdir(exist_ok=True)
+    note.write_text("# T\n\ntype: study\n\n## Digest\n\n- a claim\n")
+    before = paper.read_text()
+    result = run("fill-types.py", root, "--dry-run")
+    if "1 from their note, 0 to ask" not in result.stdout or paper.read_text() != before:
+        problems.append(f"--dry-run: {result.stdout.strip()[:120]}")
+    result = run("fill-types.py", root)
+    if result.returncode or not re.search(r"^type: study$", paper.read_text(), re.M):
+        problems.append(f"the note's type not taken: {(result.stdout + result.stderr).strip()[-160:]}")
+    if not re.search(rf"^type: {other_type}$", other.read_text(), re.M):
+        problems.append("a paper's own type changed")
+    # A reading whose type differs replaces it, through read_one with the request stubbed.
+    code = ("import importlib.util, sys; from pathlib import Path; import paperlib as p; "
+            "spec = importlib.util.spec_from_file_location('rp', Path(p.SCRIPTS_DIR) / 'read-papers.py'); "
+            "rp = importlib.util.module_from_spec(spec); spec.loader.exec_module(rp); "
+            "rp.ask_model = lambda *a, **k: ('# T\\n\\ntype: theory\\n\\n## Digest\\n\\n- x\\n', {'input': 1, 'output': 1}); "
+            "paper = Path(sys.argv[1]); usage = rp.read_one(paper, paper.parent, 'm', '', '{{related}}', False); "
+            "assert (usage['type_before'], usage['type_after']) == ('study', 'theory'), usage; "
+            "assert p.read_paper(paper)[0]['type'] == 'theory'")
+    env = dict(os.environ, PAPER_LIBRARY=str(root), PYTHONPATH=str(ENGINE / "scripts"),
+               PAPERS_CACHE=str(root.parent / "cache"))
+    result = subprocess.run([sys.executable, "-c", code, str(paper)], env=env, capture_output=True, text=True)
+    if result.returncode:
+        problems.append("read: " + result.stderr.strip().splitlines()[-1])
+    note.unlink(missing_ok=True)
+    return problems
+
+
 def yaml_list(path):
     import yaml
     return yaml.safe_load(path.read_text()) or []
@@ -240,7 +279,7 @@ def main():
             if not ok:
                 print(result.stdout + result.stderr)
         failures += report("read-view.py", read_view_problems(root), "main text and pages kept, references cut")
-        failures += report("filing", filing_problems(root), "only a declared folder is accepted")
+        failures += report("filing", filing_problems(root), "only a declared folder and a known type are accepted")
         failures += report("paper-info.py", info_problems(root), "library papers found by id, by title and with -C")
         for index in sorted(root.joinpath("library").rglob("README.md")):
             rel = index.relative_to(root)
@@ -251,6 +290,7 @@ def main():
         failures += report("check-library.py", check_problems(root), "a missing text layer and a paper in two forms fail")
         failures += report("reading.py", reading_problems(root), "scopes counted, notes marked to re-read and cleared")
         failures += report("note_fields", note_fields_problems(root), "type, family and evidence read from the note's head")
+        failures += report("types", type_problems(root), "required, filled from the note, replaced by a reading")
         failures += report("remove-paper.py", remove_problems(root), "asks first, deletes the paper's files, records the skip")
     sys.exit(1 if failures else 0)
 

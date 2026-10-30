@@ -4,6 +4,7 @@ authors: [Gabriel Goh]
 published: 2017-04-04
 url: https://distill.pub/2017/momentum/
 source: web
+type: theory
 summary: Interactive explanation of momentum in gradient descent, using the dynamics of a linear system to show how it widens the range of stable step sizes and speeds convergence.
 added: 2026-10-03
 ---

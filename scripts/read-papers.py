@@ -13,7 +13,8 @@ guide/reading-prompt.md, with the focus and the scope's papers, is the system pr
 same for every paper of a scope, so the requests after the first read it from the prompt
 cache. Each paper is its own request, so nothing read earlier is paid for again, and a run
 that is stopped loses only the papers in progress: run it again and it continues. An
-existing note's Q&A is kept.
+existing note's Q&A is kept. The note's `type:` replaces the paper's frontmatter type when
+they differ: the whole paper is better evidence than the abstract it was filed from.
 
     --limit N     read at most N papers in this run (to spend a known budget)
     --jobs N      requests at a time (default 4)
@@ -28,7 +29,8 @@ existing note's Q&A is kept.
     --all         every review scope (`review_scopes` in paper-library.yaml), in its order,
                   so the areas to review first are read first
 
-Prints a line per paper with its tokens, and appends the same to <cache>/read-papers.jsonl.
+Prints a line per paper with its tokens and any change of type, and appends the same to
+<cache>/read-papers.jsonl (`type_before`, `type_after`: how often filing's type held).
 
 A request refused for a moment (rate limit, service busy) is retried after a pause. When
 the account's usage window is used up, no further requests are sent, the message with its
@@ -45,8 +47,8 @@ from concurrent.futures import CancelledError, ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from paperlib import (
-    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, note_path, paper_files, paper_index,
-    paper_stem, read_paper, reread_reason, text_view,
+    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, NOTES_DIR, ask_model, note_fields, note_path, paper_files,
+    paper_index, paper_stem, read_paper, reread_reason, text_view, write_paper,
 )
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
@@ -151,7 +153,13 @@ def read_one(paper, scope_dir, model, focus, template, appendix):
     note = note.rstrip() + "\n\n## Q&A\n" + (f"\n{qa}\n" if qa else "")
     NOTES_DIR.mkdir(parents=True, exist_ok=True)
     note_path(paper).write_text(note, encoding="utf-8")
-    usage.update(paper=paper_stem(paper), model=model, seconds=round(time.time() - start), chars=len(view))
+    meta, body = read_paper(paper)  # read again: the request took a minute
+    before, after = meta.get("type"), note_fields(paper).get("type")
+    if after and after != before:
+        meta["type"] = after
+        write_paper(paper, meta, body)
+    usage.update(paper=paper_stem(paper), model=model, seconds=round(time.time() - start), chars=len(view),
+                 type_before=before, type_after=after)
     return usage
 
 
@@ -244,8 +252,10 @@ def main(argv):
             totals["output"] += usage["output"]
             with log.open("a", encoding="utf-8") as out:
                 out.write(json.dumps(usage, ensure_ascii=False) + "\n")
+            changed = usage["type_after"] and usage["type_after"] != usage["type_before"]
             print(f"  read {paper_stem(paper)} ({usage['input']} in, {usage['output']} out, "
-                  f"{usage['seconds']} s)", flush=True)
+                  f"{usage['seconds']} s)" + (f"; type {usage['type_before'] or 'none'} → {usage['type_after']}"
+                                               if changed else ""), flush=True)
     print(f"read: {read} notes written, {failed} failed, {stopped} not read because of the limit; "
           f"{totals['input']} input and {totals['output']} output tokens")
     if stop.is_set():

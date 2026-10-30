@@ -4,13 +4,14 @@
     ./scripts/add-paper.py <arxiv-id-or-url> [...] [--model ID] [--dry-run]
 
 For each paper: arXiv's metadata, then one model request (through `claude -p`, no tools) with
-the topic tree, the title and the abstract, which answers with a folder and a one-line
-summary; then add-arxiv-paper.sh into that folder, and the summary is set. The indexes are
+the topic tree, the title and the abstract, which answers with a folder, the paper's type
+and a one-line summary; then add-arxiv-paper.sh into that folder, and the type and summary
+are set. `paperlib read` replaces the type if the whole paper says otherwise. The indexes are
 rebuilt and the library checked once at the end.
 
     --model ID    the filing model (default: `filing_model` in paper-library.yaml, else
                   sonnet; experiments/skill-models compares the candidates)
-    --dry-run     print the folder, the reason and the summary, and add nothing
+    --dry-run     print the folder, the reason, the type and the summary, and add nothing
 
 A paper already in the library, or skipped earlier (catalog/skipped.yaml), is not added. No
 folder is ever created: when the model finds none that fits, the paper is left out and
@@ -83,7 +84,7 @@ def main(argv):
         try:
             reply, _ = ask_model(model, system, the_paper.format(
                 title=entry["title"], abstract=entry["abstract"]), effort=FILING_EFFORT)
-            folder, reason, summary = filing_choice(reply, topics)
+            folder, reason, kind, summary = filing_choice(reply, topics)
         except RuntimeError as error:
             print(f"  not added: {error}")
             left += 1
@@ -93,7 +94,7 @@ def main(argv):
                   "  use the add-paper skill, which proposes a new folder")
             left += 1
             continue
-        print(f"  folder:  {folder} ({reason})\n  summary: {summary}")
+        print(f"  folder:  {folder} ({reason})\n  type:    {kind or '(none)'}\n  summary: {summary}")
         if dry_run:
             continue
         code = subprocess.run([str(SCRIPTS_DIR / "add-arxiv-paper.sh"), with_version, folder]).returncode
@@ -104,6 +105,8 @@ def main(argv):
             continue
         meta, body = read_paper(path)
         meta["summary"] = summary
+        if kind:
+            meta["type"] = kind
         write_paper(path, meta, body)
         added += 1
 

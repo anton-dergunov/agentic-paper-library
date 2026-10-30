@@ -16,9 +16,9 @@ source and run again.
 Rows whose status is `added`, `in library` or `struck` are left alone; every
 other row is tried, so a rerun resumes an interrupted batch and retries the
 failures. Each row's status becomes `added`, `in library`, `needs a PDF` or
-`failed: <last line of output>`, saved after every paper. Summaries are not
-written here (see pending-summaries.py); rebuild the indexes and check the
-library after the batch.
+`failed: <last line of output>`, saved after every paper. Summaries and types
+are not written here: after the batch, write the summaries (pending-summaries.py),
+then `paperlib fill-types`, then rebuild the indexes and check the library.
 """
 
 import subprocess
