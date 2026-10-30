@@ -118,6 +118,28 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   every link type except `http(s)`. So page links are `http://pdf.invalid/<path>?page=…`
   URLs, which my PDF viewer extension claims and opens at the spot, next to the chat. Its
   [README](https://github.com/anton-dergunov/vscode-pdf-viewer) has the format and the setup.
+- **A citation marks its place (2026-10-30).** An agent's citation of a value, sentence, table,
+  figure or equation carries the rectangle where the PDF prints it (`rect=`), and both viewers
+  (vscode-pdf-viewer, carrel) mark it. The agent gets the link from `paperlib locate`, one call
+  per answer, by a quote copied from the text layer or a float's name. The command reads the
+  PDF with PyMuPDF and checks each target at writing time.
+  - On 59 citations from the reader's chats it marks the right region for 58; the 59th is a
+    phrase that repeats on its page, which it reports. For 7 of 21 tables the agent had given
+    the page that mentions the table rather than the one that prints it, so the page given is
+    tried first and then the whole paper.
+  - Haiku followed the rule in 5 fresh questions: 14 links, all marked, all right. The rule
+    costs 82 tokens of the guide ([experiments/pdf-locations](../experiments/pdf-locations/README.md)).
+  - A quote rather than a text-layer line number: `pdftotext -layout` sets two columns side by
+    side on one line. Matching in the viewer instead would save the call, but the agent would
+    never learn that a quote missed or repeated, and PDF.js finds no tables or figures.
+  - The rectangles are not kept in the text layer, which every question reads; they cost
+    tokens only when a citation is written. Reviews and notes keep `page` and `dest`.
+  - PyMuPDF 2.0, AGPL, with onnxruntime and a layout model: its table finder places the
+    tables 1.28 gets wrong, and pdfplumber finds 5 of the 21.
+  - The mark is an overlay, never an annotation. It arrives with a ring that settles, then
+    stays until the reader taps the page or follows another link. A mark that fades on its
+    own would be gone by the time the reader's eyes come over from the chat, and e-ink shows
+    no animation.
 - **Engine and library apart (2026-10-03).** I keep libraries in more than one context (my own,
   and one per employer or project), and the engine is worth sharing while the collection is
   not. The library is a folder with `paper-library.yaml`; the engine finds it from the working
@@ -308,7 +330,10 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
 5. Make reading a paper cheaper without reading it less: trim the fixed part of the request,
    then test a cheaper reading for the thinly covered areas
    ([tasks/reading-cost.md](tasks/reading-cost.md)).
-6. Run the session on the NAS, so it is always on:
+6. Rectangles in notes and reviews: they are read again and again, so a `rect` per number
+   costs tokens on every read. Decide once carrel's tally shows how often the reader follows a
+   link from them.
+7. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone the engine, the library and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,

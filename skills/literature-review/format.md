@@ -280,7 +280,8 @@ a row of boxes adds nothing; write the list.
   of the title).
 - **A place in a paper:** a `pdf.invalid` link as `.claude/library-guide.md` describes
   ("Linking to a place in a paper"), using the pdf base that `--links` prints, plus `?page=N` and `dest` where it
-  helps: `[p. 7, Table 2](http://pdf.invalid/…/Zep.%20….pdf?dest=table.2&page=7)`.
+  helps: `[p. 7, Table 2](http://pdf.invalid/…/Zep.%20….pdf?dest=table.2&page=7)`. No `rect`: a review is
+  read for its claims, and the page is enough to check one.
 - **Another review:** relative, `../search-and-ranking.md`.
 
 `paperlib check` fails on any of these that doesn't resolve, and

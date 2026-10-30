@@ -25,7 +25,7 @@ Install the Paper Library extension once per machine, with `paperlib install-vsc
 
 ## Reading with the agent
 
-Install [vscode-pdf-viewer](https://github.com/anton-dergunov/vscode-pdf-viewer), a separate extension. When the agent cites "p. 7, Table 2", the citation is a link: `http://pdf.invalid/<path>?dest=table.2&page=7`. A click opens the PDF at that spot in the viewer, next to the chat, and highlights you make there are saved in the PDF.
+Install [vscode-pdf-viewer](https://github.com/anton-dergunov/vscode-pdf-viewer), a separate extension. When the agent cites "p. 7, Table 2", the citation is a link: `http://pdf.invalid/<path>?page=7&rect=130,306,479,397`, which `paperlib locate` writes. A click opens the PDF in the viewer, next to the chat, with the table marked; a click on the page clears the mark. Highlights you make there are saved in the PDF; the mark never is.
 
 Links in the Claude Code chat need the viewer's preview-API setup, described in its README. The library guide tells the agent how to write these links, and never to open the viewer itself; the agent reads a PDF's page with its own tools when the text lacks a value.
 

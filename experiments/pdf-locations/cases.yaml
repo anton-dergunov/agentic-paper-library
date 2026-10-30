@@ -1,0 +1,82 @@
+# Citations from the reader's chats in the library (16 sessions, 98 distinct links), each
+# turned into the target an agent would pass to `paperlib locate`, with what the mark should
+# cover. `link` is the link as the agent wrote it; `claim` the words it backed (shortened).
+# Papers by their text path under the library.
+
+zep: llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory.txt
+memgpt: llm/memory/agent/MemGPT. Towards LLMs as Operating Systems.txt
+completep: deep-learning/optimizers-and-schedules/Don't be lazy. CompleteP enables compute-efficient deep transformers.txt
+spec: llm/prompting-and-in-context/Towards Spec Learning. Inference-Time Alignment from Preference Pairs.txt
+judgebench: llm/evaluation/methods/JudgeBench. A Benchmark for Evaluating LLM-based Judges.txt
+worldk: search-and-ranking/click-models-and-unbiased-ltr/On the Necessity of World Knowledge for Mitigating Missing Labels in Extreme Classification.txt
+locomo: llm/memory/benchmarks/Evaluating Very Long-Term Conversational Memory of LLM Agents.txt
+longmemeval: llm/memory/benchmarks/LongMemEval. Benchmarking Chat Assistants on Long-Term Interactive Memory.txt
+lmcor: llm/post-training/fine-tuning/Small Language Models Improve Giants by Rewriting Their Outputs.txt
+deepsearch: llm/retrieval-augmented/Benchmarking Deep Search over Heterogeneous Enterprise Data.txt
+gemini: llm/foundation-models/Gemini 1.5. Unlocking multimodal understanding across millions of tokens of context.txt
+
+cases:
+# Quotes the agents passed as search=, and values stated in prose
+- {id: q1, paper: zep, target: "6:easily fitting within current LLM context windows", link: "dest=subsection.4.2&page=6&search=…", claim: "DMR fits easily in the model's context", expect: the phrase}
+- {id: q2, paper: memgpt, target: "5:lossy summarization", link: "page=5&search=lossy summarization", claim: "GPT-4 Turbo baseline sees a lossy summary", expect: the phrase}
+- {id: q3, paper: completep, target: "9:Complete Feature Learning", link: "page=9&search=Complete Feature Learning", claim: "the paper calls this condition complete feature learning", expect: the term where it is defined (Desideratum 3)}
+- {id: q4, paper: zep, target: "6:insufficient methodological details", link: "…&search=insufficient methodological details", claim: "MemGPT paper gives too few details", expect: the phrase}
+- {id: q5, paper: zep, target: "6:marginal improvements", link: "…&search=marginal improvements", claim: "They call the gains marginal", expect: the phrase}
+- {id: q6, paper: zep, target: "5:20 most relevant", link: "page=5&search=20 most relevant", claim: "the setup section says the top 20 facts", expect: the phrase}
+- {id: q7, paper: zep, target: "6:top 10", link: "…&search=top 10", claim: "the DMR section says the top 10", expect: the phrase}
+- {id: q8, paper: zep, target: "7:LongMemEval and MemGPT", link: "page=7&search=LongMemEval and MemGPT", claim: "MemGPT couldn't load an existing history", expect: the phrase}
+- {id: q9, paper: zep, target: "6:single-turn, fact-retrieval questions", link: "page=6&search=…", claim: "questions single-turn and vaguely worded", expect: the phrase}
+- {id: q10, paper: lmcor, target: "10:Strong fine-tuned models", link: "page=10&search=Strong fine-tuned models", claim: "weak spots stated in Limitations", expect: the phrase}
+- {id: q11, paper: zep, target: "7:we were unable to achieve successful question responses", link: "page=7&search=…", claim: "MemGPT couldn't be run on LongMemEval", expect: the phrase}
+- {id: q12, paper: spec, target: "5:Even at N =10 the macro-average reaches 0.664", link: "page=5&dest=subsection.4.2", claim: "N=10 already gives a macro win rate of 0.664", expect: the sentence, over a line break}
+- {id: q13, paper: worldk, target: "4:Lemma 1", link: "dest=subsection.3.2&page=4", claim: "p. 4, Lemma 1", expect: the lemma's label in the right column}
+- {id: q14, paper: completep, target: "7:CompleteP saves 11.8% of FLOPs for optimal N : L", link: "dest=figure.4&page=6", claim: "CompleteP keeps a ratio ... saves 11.8%", expect: the phrase}
+- {id: q15, paper: gemini, target: "21:1,462 page book (i.e., 710K tokens)", link: "page=21", claim: "one 710K-token book", expect: the phrase}
+- {id: q16, paper: spec, target: "9:Specs run 150 to 300 words", link: "page=8", claim: "The spec is 150-300 words", expect: the phrase (the agent's page was 8; the text says 9)}
+- {id: q17, paper: lmcor, target: "1:matching and even outperforming standard fine-tuning", link: "page=10&search=…", claim: "the claim is worded to fit", expect: the phrase, hyphenated over a line break in the left column}
+# Tables
+- {id: t1, paper: zep, target: "6:table.1", link: "dest=table.1&page=6", claim: "DMR results", expect: Table 1 and its caption}
+- {id: t2, paper: zep, target: "7:table.2", link: "dest=table.2&page=7", claim: "Overall results", expect: Table 2}
+- {id: t3, paper: zep, target: "7:table.3", link: "dest=table.3&page=7", claim: "By question type, gpt-4o", expect: Table 3}
+- {id: t4, paper: memgpt, target: "5:table.2", link: "dest=table.2&page=5", claim: "MemGPT 93.4%", expect: Table 2}
+- {id: t5, paper: completep, target: "4:table.1", link: "dest=table.1&page=4", claim: "the 1/L multiplier alone isn't enough", expect: Table 1}
+- {id: t6, paper: completep, target: "7:table.2", link: "dest=table.2&page=7", claim: "12-34% headline", expect: Table 2}
+- {id: t7, paper: completep, target: "7:table.3", link: "dest=table.3&page=7", claim: "0.008 loss at 200 TPP", expect: Table 3, a table without rules}
+- {id: t8, paper: spec, target: "7:table.6", link: "page=7&dest=table.6", claim: "0.75 of comparisons against DPO", expect: Table 6}
+- {id: t9, paper: spec, target: "5:table.2", link: "page=5&dest=table.2", claim: "random selection beats curated", expect: Table 2}
+- {id: t10, paper: spec, target: "table.9", link: "page=17", claim: "GPT-5.5 scored 0.50 on Math-DPO (App. C, Table 9)", expect: Table 9, found without a page}
+- {id: t11, paper: spec, target: "19:table.10", link: "page=19", claim: "DPO trained on 1,000 pairs", expect: Table 10}
+- {id: t12, paper: worldk, target: "7:table.1", link: "dest=table.1&page=7", claim: "49.60 vs 47.70", expect: Table 1, in a two-column page}
+- {id: t13, paper: locomo, target: "4:table.1", link: "dest=table.1&page=4", claim: "LoCoMo statistics", expect: Table 1}
+- {id: t14, paper: lmcor, target: "6:table.6", link: "dest=table.6&page=6", claim: "multiple candidates help", expect: Table 6}
+- {id: t15, paper: lmcor, target: "7:table.9", link: "dest=table.9&page=7", claim: "44.5 ROUGE-2 on E2E", expect: Table 9}
+- {id: t16, paper: lmcor, target: "4:table.1", link: "dest=table.1&page=4", claim: "59.38 -> 62.48", expect: Table 1}
+- {id: t17, paper: lmcor, target: "5:table.3", link: "dest=table.3&page=5", claim: "fine-tuned PaLM 21.2 vs 16.5", expect: Table 3}
+- {id: t18, paper: lmcor, target: "6:table.5", link: "dest=table.5&page=6", claim: "std 1.9 vs 0.3", expect: Table 5}
+- {id: t19, paper: deepsearch, target: "7:table.2", link: "dest=table.2&page=7", claim: "ReAct GPT-4o 32.96", expect: Table 2}
+- {id: t20, paper: deepsearch, target: "7:table.4", link: "dest=table.4&page=7", claim: "gold evidence 62-86", expect: Table 4}
+- {id: t21, paper: longmemeval, target: "3:table.1", link: "dest=table.1&page=3", claim: "benchmark comparison", expect: Table 1}
+# Values in a table's cell
+- {id: c1, paper: zep, target: "6:table.1>35.3", link: "dest=table.1&page=6", claim: "Recursive summarization gpt-4-turbo 35.3%", expect: the cell 35.3%}
+- {id: c2, paper: memgpt, target: "5:table.2>93.4", link: "dest=table.2&page=5", claim: "MemGPT gpt-4-turbo 93.4%", expect: the cell 93.4%}
+- {id: c3, paper: worldk, target: "7:table.1>49.60", link: "dest=table.1&page=7", claim: "49.60 vs 47.70", expect: the cell 49.60}
+- {id: c4, paper: lmcor, target: "4:table.1>62.48", link: "dest=table.1&page=4", claim: "59.38 -> 62.48", expect: the cell 62.48}
+- {id: c5, paper: deepsearch, target: "7:table.2>32.96", link: "dest=table.2&page=7", claim: "ReAct GPT-4o 32.96", expect: the cell 32.96}
+- {id: c6, paper: longmemeval, target: "6:0.870 0.606", link: "dest=figure.3&page=6", claim: "GPT-4o 0.870 oracle vs 0.606 full", expect: the two cells in the row (a quote, the table has no caption on the page)}
+# Figures
+- {id: f1, paper: completep, target: "9:figure.6", link: "dest=figure.6&page=9", claim: "complete feature learning", expect: Figure 6}
+- {id: f2, paper: completep, target: "5:figure.2", link: "dest=figure.2&page=5", claim: "LR and init move with depth", expect: Figure 2 (a grid of plots)}
+- {id: f3, paper: completep, target: "6:figure.4", link: "dest=figure.4&page=6", claim: "width-to-depth ratio", expect: Figure 4}
+- {id: f4, paper: judgebench, target: "10:figure.4", link: "dest=figure.4&page=10", claim: "per-judge values", expect: Figure 4}
+- {id: f5, paper: worldk, target: "2:figure.1", link: "dest=figure.1&page=2", claim: "click logs lose labels", expect: Figure 1, two-column page}
+- {id: f6, paper: longmemeval, target: "figure.1", link: "dest=figure.1&page=3 / page=4", claim: "Fig. 1", expect: Figure 1 (two chats cited it on p. 3 and p. 4)}
+- {id: f7, paper: longmemeval, target: "6:figure.3", link: "dest=figure.3&page=6", claim: "0.870 vs 0.606", expect: Figure 3}
+- {id: f8, paper: longmemeval, target: "5:figure.2", link: "dest=figure.2&page=5", claim: "Fig. 2", expect: Figure 2}
+- {id: f9, paper: longmemeval, target: "10:figure.6", link: "dest=figure.6&page=10", claim: "oracle retrieval result", expect: Figure 6}
+- {id: f10, paper: longmemeval, target: "19:figure.9", link: "dest=figure.9&page=19", claim: "Fig. 9", expect: Figure 9}
+- {id: f11, paper: lmcor, target: "4:figure.3", link: "dest=figure.3&page=4", claim: "1k vs 10k examples", expect: Figure 3}
+- {id: f12, paper: spec, target: "18:figure.4", link: "page=18", claim: "keywords ... entirely free of typos", expect: Figure 4 (a figure of text)}
+# Equations
+- {id: e1, paper: completep, target: "2:eq.1", link: "dest=section.1&page=2", claim: "h <- h + L^-a F(h)", expect: equation (1)}
+- {id: e2, paper: completep, target: "10:eq.6", link: "dest=section.6&page=10", claim: "p. 10, Eq. 6", expect: equation (6)}
+- {id: e3, paper: lmcor, target: "3:eq.2", link: "dest=section.2&page=3", claim: "corrector input and target", expect: equation (2)}

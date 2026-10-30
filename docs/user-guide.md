@@ -130,7 +130,7 @@ The working layout is the PDF on one side and the Claude Code panel on the other
 |---|---|
 | Open a paper by its title | ⌥⌘P (Ctrl+Alt+P), then type words from the title or topic. Enter opens the PDF. |
 | Switch between a paper's PDF, text and note | **Paper Library: Reveal in Library** from the command palette, then Enter. |
-| Jump to the page an answer cites | Click the citation in the chat, such as "p. 7, Table 2". |
+| Jump to the place an answer cites | Click the citation in the chat, such as "p. 7, Table 2". The PDF opens there with the sentence, value, table or figure marked; a click on the page clears the mark. |
 | Browse by topic | Open `library/README.md` in the Markdown preview (⇧⌘V) and follow the links. |
 | Search the text of all papers | **Paper Library: Search Library Text**. |
 

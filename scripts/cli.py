@@ -40,6 +40,7 @@ COMMANDS = {
     "read": ("read-papers.py", True, "read papers into notes, one request each: <scope or paper.txt> ... [--limit N] [--redo | --flagged]"),
     "reading": ("reading.py", True, "what is left to read, area by area, and its cost: [<scope>]"),
     "reread": ("reading.py", True, "mark notes to be read again: <paper or stem> ... --reason \"...\" | --clear"),
+    "locate": ("locate.py", True, "where a quote, table, figure or equation is printed, as links that mark it: <paper> [page:]<quote | table.N | figure.N | eq.N | table.N>quote> ..."),
     "read-view": ("read-view.py", True, "a paper's main text for reading, without the references: <paper.txt>"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
@@ -95,8 +96,9 @@ def main(argv):
         return init.main(args)
     if name == "test":
         env = script_env()
-        code = run([sys.executable, str(ENGINE / "tests" / "test_text_layer.py")], env)
-        return code or run([sys.executable, str(ENGINE / "tests" / "test_example_library.py")], env)
+        codes = [run([sys.executable, str(ENGINE / "tests" / name)], env)
+                 for name in ("test_text_layer.py", "test_locate.py", "test_example_library.py")]
+        return next((code for code in codes if code), 0)
     if name == "install-vscode":
         return install_vscode()
     if name not in COMMANDS:
