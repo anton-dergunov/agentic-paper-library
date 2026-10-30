@@ -24,7 +24,7 @@ import sys
 from urllib.parse import quote
 
 from paperlib import (
-    CONFIG, LIBRARY_DIR, SCRIPTS_DIR, ask_model, fetch, filing_choice, filing_prompts,
+    CONFIG, FILING_EFFORT, LIBRARY_DIR, SCRIPTS_DIR, ask_model, fetch, filing_choice, filing_prompts,
     library_arxiv_ids, load_topics, norm_title, parse_arxiv_entries, read_paper, skipped_index,
     write_paper,
 )
@@ -82,7 +82,7 @@ def main(argv):
             continue
         try:
             reply, _ = ask_model(model, system, the_paper.format(
-                title=entry["title"], abstract=entry["abstract"]))
+                title=entry["title"], abstract=entry["abstract"]), effort=FILING_EFFORT)
             folder, reason, summary = filing_choice(reply, topics)
         except RuntimeError as error:
             print(f"  not added: {error}")

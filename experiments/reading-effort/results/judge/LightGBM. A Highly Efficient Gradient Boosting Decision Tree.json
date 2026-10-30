@@ -1,0 +1,57 @@
+{
+ "points": [
+  "1 Problem: conventional and histogram-based GBDT scan every instance for every feature. Histogram building costs O(#data × #feature) and dominates training, so LightGBM aims to cut both #data and #feature (pp. 1–2).",
+  "2 GOSS recipe: sort instances by |gradient|, keep the top a×100%, randomly sample b×100% of the rest, and multiply the sampled small-gradient instances by (1−a)/b when computing the variance gain (Alg. 2, Eq. 1, p. 4).",
+  "3 GOSS theory: Theorem 3.2 bounds the gain-approximation error with probability at least 1−δ, and the error vanishes for large n when splits are not too unbalanced. Random sampling is the special case a = 0, and GOSS beats it when C_{0,β} > C_{a,β−a}. The proof is in the supplement (pp. 4–5).",
+  "4 EFB: bundle mutually exclusive sparse features. Optimal bundling is NP-hard by reduction from graph coloring (Thm 4.1). The greedy algorithm orders features by degree, or by nonzero count when there are millions of features, costs O(#feature²) once before training, and can tolerate a conflict rate γ with an accuracy effect of O([(1−γ)n]^−2/3) (pp. 5–6, Alg. 3).",
+  "5 Bundle construction: features in a bundle are merged by adding bin offsets so each original feature occupies its own bin range. Histogram cost then becomes O(#data × #bundle) (p. 6, Alg. 4).",
+  "6 Data and hardware: five public datasets from Table 1 (Allstate 12M×4228 sparse; Flight Delay 10M×700 sparse; LETOR 2M×136 dense, NDCG; KDD10 19M×29M; KDD12 119M×54M; AUC for the classification sets). The server has two E5-2670 v3 CPUs (24 cores), 256GB memory, and runs 16 threads (pp. 6–7).",
+  "7 Baselines and settings: xgb_exa (pre-sorted, layer-wise, tuned to grow similar trees), xgb_his, lgb_baseline (LightGBM without GOSS/EFB), EFB_only, and SGB at the same sampling ratio. Leaf-wise growth is used except for xgb_exa. a = b = 0.05 on Allstate/KDD10/KDD12 and 0.1 on Flight Delay/LETOR; γ = 0. Speed-ups are per-iteration times, and accuracy is taken at the best-scoring iteration (pp. 6–7).",
+  "8 Speed results (Table 2, p. 7): LightGBM vs lgb_baseline is 0.28 vs 6.07, 0.22 vs 1.39, 0.31 vs 0.49, 2.85 vs 39.85 and 12.67 vs 168.26 s per iteration, i.e. 21x, 6x, 1.6x, 14x and 13x. Against xgb_his it is up to 9x faster (Allstate); xgb_his runs out of memory on KDD10 and KDD12. xgb_exa is much slower (10.85–191.99 s).",
+  "9 Accuracy results (Table 3, p. 7): LightGBM matches lgb_baseline almost exactly (e.g. 0.7846 vs 0.7847 on Flight Delay, 0.5275 vs 0.5277 on LETOR, 0.7051 vs 0.7049 on KDD12). SGB is lower on every dataset, and xgb_exa/xgb_his are equal or lower.",
+  "10 Ablations: GOSS alone (EFB_only vs LightGBM) gives about 2x speed-up using 10–20% of the data. EFB alone (lgb_baseline vs EFB_only) gives large speed-ups on the large sparse sets (e.g. 39.85 → 6.33 s on KDD10). GOSS beats SGB on LETOR at every sampling ratio from 0.1 to 0.4 (0.5224 vs 0.5182 at 0.1; 0.5296 vs 0.5267 at 0.4; Table 4, p. 8)."
+ ],
+ "notes": {
+  "A": {
+   "errors": [],
+   "missed": []
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "Accuracy is reported from the best iteration on the test set (p. 7).",
+     "paper": "p. 7 says only 'we get the accuracy results from the iteration with the best score'. It never says which set that score was measured on, so selection on the test set is an inference presented as fact."
+    }
+   ],
+   "missed": [
+    6
+   ]
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "The large speed-ups are therefore relative to the authors' own unoptimised baseline.",
+     "paper": "p. 8 states 'Please note lgb_baseline has been optimized for the sparse features'. lgb_baseline lacks only GOSS and EFB, and it is faster than xgb_his on LETOR (0.49 vs 0.63, Table 2). The note itself says lgb_baseline includes the nonzero-table optimisation."
+    }
+   ],
+   "missed": []
+  }
+ },
+ "best": {
+  "letter": "A",
+  "why": "A covers all ten points with no errors, including the full Table 3 with the SGB and xgb_exa columns, the separate GOSS and EFB ablations, and correctly hedged remarks on the paper's inconsistencies and unstated details."
+ },
+ "key": {
+  "A": "high",
+  "B": "low",
+  "C": "medium"
+ },
+ "usage": {
+  "input": 23063,
+  "output": 6914,
+  "usd": 0.253593,
+  "cache_write": 23061,
+  "cache_read": 0,
+  "thinking": 5015
+ }
+}

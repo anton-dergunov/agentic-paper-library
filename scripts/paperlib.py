@@ -456,20 +456,26 @@ def review_scopes():
     return ([("", loose)] if loose else []) + groups
 
 
-def ask_model(model, system, prompt):
+def ask_model(model, system, prompt, effort=None):
     """One request to a Claude model through `claude -p`, with no tools.
 
-    Returns (reply text, usage dict); raises RuntimeError on failure.
+    Returns (reply text, usage dict); raises RuntimeError on failure. The usage's `input` is
+    all input tokens, of which `cache_write` were written to the prompt cache and
+    `cache_read` read from it; `thinking` is the part of `output` spent thinking.
 
     The environment keeps the user's CLAUDE.md files and background requests out of the
-    request: they are about 800 of its 1,400 fixed tokens (experiments/prompt-trim).
+    request: they are about 800 of its 1,400 fixed tokens (experiments/prompt-trim). It also
+    keeps the cache to five minutes: `claude -p` writes the whole request, the paper too, to
+    the cache, and a one-hour write costs twice the input price where a five-minute one costs
+    1.25 times (docs/design.md).
     """
     env = {**os.environ, "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
-           "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
+           "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1", "FORCE_PROMPT_CACHING_5M": "1"}
     with tempfile.TemporaryDirectory() as empty:
         done = subprocess.run(
             ["claude", "-p", "--model", model, "--tools", "", "--system-prompt", system,
-             "--output-format", "json", "--no-session-persistence"],
+             "--output-format", "json", "--no-session-persistence"]
+            + (["--effort", effort] if effort else []),
             input=prompt, capture_output=True, text=True, cwd=empty, env=env)
     try:
         reply = json.loads(done.stdout)
@@ -481,7 +487,15 @@ def ask_model(model, system, prompt):
     return reply["result"], {
         "input": sum(usage.get(k, 0) or 0 for k in
                      ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")),
-        "output": usage.get("output_tokens", 0), "usd": reply.get("total_cost_usd")}
+        "output": usage.get("output_tokens", 0), "usd": reply.get("total_cost_usd"),
+        "cache_write": usage.get("cache_creation_input_tokens", 0) or 0,
+        "cache_read": usage.get("cache_read_input_tokens", 0) or 0,
+        "thinking": (usage.get("output_tokens_details") or {}).get("thinking_tokens", 0) or 0}
+
+
+# The effort of `paperlib add` and `paperlib info`'s requests, set here rather than left to
+# the user's Claude Code setting. Not measured: it is the level they ran at until now.
+FILING_EFFORT = "high"
 
 
 def filing_prompts(topics):

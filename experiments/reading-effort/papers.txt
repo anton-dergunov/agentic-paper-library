@@ -1,0 +1,6 @@
+ml-foundations/classical-ml/DBSCAN Revisited, Revisited
+ml-foundations/classical-ml/LightGBM. A Highly Efficient Gradient Boosting Decision Tree
+recommender-systems/collaborative-filtering/The BellKor Solution to the Netflix Grand Prize
+recommender-systems/deep-and-sequential/Deep Neural Networks for YouTube Recommendations
+recommender-systems/deep-and-sequential/Progressive Layered Extraction (PLE). A Novel Multi-Task Learning Model for Personalized
+recommender-systems/evaluation/Are We Really Making Much Progress. A Worrying Analysis of Recent Neural Recommendation Approaches

@@ -1,0 +1,72 @@
+{
+ "points": [
+  "1 Problem: MTL recommenders suffer negative transfer and a 'seesaw phenomenon', where one task improves at another's expense and no MTL model beats single-task models on all tasks. The paper attributes this to complex, sample-dependent task correlations such as VCR (MSE regression) and VTR (binary classification) in Tencent video ranking (pp. 1, 3–4, Fig. 3).",
+  "2 CGC (Customized Gate Control): explicit task-specific and shared expert modules. Each task's gate is a softmax over a linear map of the input and weights only the shared experts plus that task's own experts (Eqs. 2–5). Unlike MMOE, a tower has no connection to other tasks' specific experts (p. 5).",
+  "3 PLE: stacks multi-level extraction networks. It adds a gate for the shared experts over all experts in the layer, and higher-level gates take lower-level gate outputs as the selector instead of the raw input. Parameters are thus separated progressively ('progressive separation routing', Eqs. 6–7, p. 6).",
+  "4 Joint loss: training uses the union of all tasks' sample spaces, and each task's loss is masked to its own sample space (Eq. 9). Loss weights are dynamic, ω_k,0 × γ_k^t per epoch (Eq. 10) (p. 7).",
+  "5 Industrial setup: Tencent News logs over 8 days, with 46.926M users, 2.682M videos and 0.995B samples; the first 7 days are training (p. 7). Towers are MLPs [256,128,64] with ReLU, experts are single-layer, and multi-level models have two levels. Baselines are single-task, hard sharing, asymmetric/customized sharing, cross-stitch, sluice, MMOE and ML-MMOE. MTL gain is defined in Eq. 11.",
+  "6 VTR/VCR (complex correlation), Table 1: single-task AUC 0.6787 / MSE 0.1321; MMOE 0.6803/0.1319; CGC 0.6832/0.1320; PLE 0.6831/0.1307 (best MSE, gains +0.0044/+0.0013). The baselines show the seesaw.",
+  "7 CTR/VCR (normal correlation), Table 2: single-task 0.7379/0.1179; MMOE 0.7382/0.1175; CGC 0.7398/0.1155; PLE 0.7406/0.1150 (best on both tasks).",
+  "8 Online A/B test, 4 weeks, VTR+VCR, gains over single-task (Table 3): PLE +4.17% view count / +3.57% watch time; CGC +3.92/+2.75; MMOE +1.94/+1.73; ML-MMOE +1.96/+1.10; hard sharing −1.65/−1.79. The abstract claims +2.23%/+1.84% over SOTA MTL.",
+  "9 Multi-task groups (Table 4): CGC and PLE gain over single-task on nearly all tasks, and PLE beats CGC. In the 4-task group PLE gains +0.0128/+0.0017/+0.0058/+0.0080 versus CGC +0.0097/+0.0016/+0.0008/+0.0012.",
+  "10 Public datasets: synthetic data (MMOE generator) shows PLE with an 87.2% average increase in MTL gain over MMOE, while hard sharing and MMOE show the seesaw (Fig. 7). On census-income and Ali-CCP (Table 5), PLE beats single-task and MMOE on all tasks, e.g. Ali-CCP CVR PLE 0.6097 vs single 0.6040 vs MMOE 0.5738."
+ ],
+ "notes": {
+  "A": {
+   "errors": [
+    {
+     "quote": "Only single-task and MMOE are compared on public data.",
+     "paper": "On the synthetic data, Fig. 7 also includes hard parameter sharing: 'hard parameter sharing and MMOE sometimes suffer from seesaw phenomenon' (p. 9). Only Table 5 (census-income, Ali-CCP) is limited to single-task and MMOE."
+    },
+    {
+     "quote": "Loss weights decay by epoch as ω_k,0 × γ_k^t",
+     "paper": "Eq. 10 (p. 7) only says the weight is updated by an 'updating ratio γ_k', a hyper-parameter. The paper never says the weights decay or that γ_k < 1."
+    },
+    {
+     "quote": "In this group every model except cross-stitch has positive gain on both tasks.",
+     "paper": "Table 2 (p. 8) shows ML-MMOE with CTR MTL gain −0.0001. The paper's text makes this claim, but its own table contradicts it."
+    }
+   ],
+   "missed": []
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "Cross-stitch is the only model with a negative gain, −0.0158 on CTR (p. 8, Table 2).",
+     "paper": "Table 2 (p. 8) also shows ML-MMOE with a negative CTR gain of −0.0001."
+    },
+    {
+     "quote": "public baselines limited to MMOE",
+     "paper": "The synthetic-data results (Fig. 7, p. 9) also include hard parameter sharing. Only Table 5 is limited to single-task and MMOE."
+    }
+   ],
+   "missed": []
+  },
+  "C": {
+   "errors": [
+    {
+     "quote": "public sets compared only with single-task and MMOE",
+     "paper": "The synthetic-data comparison (Fig. 7, p. 9) also includes hard parameter sharing ('hard parameter sharing and MMOE sometimes suffer from seesaw phenomenon')."
+    }
+   ],
+   "missed": []
+  }
+ },
+ "best": {
+  "letter": "C",
+  "why": "C covers all ten points with the most complete and accurate numbers, including baseline gains, dataset sizes and the undisclosed details, and it has the fewest errors; it even catches the ML-MMOE −0.0001 inconsistency that A and B get wrong."
+ },
+ "key": {
+  "A": "low",
+  "B": "medium",
+  "C": "high"
+ },
+ "usage": {
+  "input": 29460,
+  "output": 6468,
+  "usd": 0.276658,
+  "cache_write": 29458,
+  "cache_read": 0,
+  "thinking": 4453
+ }
+}

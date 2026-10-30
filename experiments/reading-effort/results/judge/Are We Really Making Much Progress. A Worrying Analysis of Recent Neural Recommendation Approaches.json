@@ -1,0 +1,50 @@
+{
+ "points": [
+  "1 Problem: the paper asks whether recent deep-learning top-n recommenders are reproducible with reasonable effort, and whether they actually beat simple but well-tuned baselines (two research questions).",
+  "2 Paper selection and criteria: the authors manually scanned long papers from KDD, SIGIR, WWW and RecSys (2015-2018) that propose a DL top-n method evaluated with ranking or classification metrics, giving 18 papers. A paper counted as reproducible if working code (at most minimally modified) and at least one dataset with public or reconstructible splits were available; authors were contacted and given 30 days.",
+  "3 Reproducibility result: 7/18 (39%) were reproducible; KDD 3/4, RecSys 1/7, SIGIR 1/3, WWW 2/4 (Table 1).",
+  "4 Protocol: original code was refactored to separate training and tuning from a shared evaluation code that applies each paper's original evaluation procedure. Neural methods used their reported optimal hyper-parameters (not re-tuned). Baselines were tuned by Bayesian search (Scikit-Optimize, 35 cases, first 5 random; k 5-800, h 0-1000, alpha and beta 0-2).",
+  "5 Baselines: TopPopular, UserKNN, ItemKNN (cosine with shrink, optional TF-IDF/BM25), ItemKNN-CBF, ItemKNN-CFCBF, P3alpha (3-step random walk), RP3beta (popularity-penalized P3alpha); SLIM added for NCF and Mult-VAE.",
+  "6 CMN: never the best method. RP3beta beats it on CiteULike-a (HR@5 0.8226 vs 0.8069) and Pinterest (0.7018 vs 0.6872). On Epinions, TopPopular wins by a large margin (0.5429 vs 0.4195), tied to popularity skew (Gini 0.69 vs 0.37) and to CMN's popularity bias.",
+  "7 MCRec (MovieLens100k): ItemKNN beats MCRec on all measures (PREC@10 0.3327 vs 0.3077). The original used a nonstandard NDCG and chose the best epoch per metric on the test set.",
+  "8 CVAE and CDL (CiteULike): hybrid or content KNN baselines win at short cutoffs (e.g. ItemKNN-CFCBF REC@50 0.1837 vs CVAE 0.0772; ItemKNN-CBF 0.2135 vs CDL 0.0543). The neural methods win only at long cutoffs (100 and above) on some datasets. CVAE is always better than CDL.",
+  "9 NCF/NeuMF: epochs were re-selected on validation instead of the test set. On Pinterest, ItemKNN and RP3beta beat NeuMF on all metrics. On MovieLens1M, NeuMF beats the simple baselines (HR@5 0.5486 vs 0.4922) but SLIM beats NeuMF (0.5589). SpectralCF: loses to all baselines, even TopPopular, on HetRec and Amazon. Its MovieLens win (+50% Recall@20) comes from a non-random provided split (test Gini 0.92 vs about 0.79); on proper random splits it is worse than the baselines.",
+  "10 Mult-VAE: the only method clearly beating the simple baselines (10-20%). Against tuned SLIM it gains up to 5% on Recall (Netflix REC@20 0.2626 vs 0.2551), but NDCG differences are tiny and SLIM is sometimes better (NDCG@20 0.2473 vs 0.2448), so progress depends on the metric."
+ ],
+ "notes": {
+  "A": {
+   "errors": [],
+   "missed": []
+  },
+  "B": {
+   "errors": [
+    {
+     "quote": "The abstract's \"6 of 7 outperformed by simple heuristics\" overstates the NCF result",
+     "paper": "The abstract (p. 1) says \"6 of them can often be outperformed with comparably simple heuristic methods\". The note's quotation drops \"often\", which is the qualifier its overclaim argument turns on."
+    }
+   ],
+   "missed": []
+  },
+  "C": {
+   "errors": [],
+   "missed": []
+  }
+ },
+ "best": {
+  "letter": "C",
+  "why": "C covers all ten points with accurate, well-sourced numbers. It also catches a real inconsistency the others miss: SpectralCF's REC@100 of 0.4254 actually exceeds TopPopular's 0.4244 in Table 7, despite the text's claim that TopPopular beat it in all configurations."
+ },
+ "key": {
+  "A": "medium",
+  "B": "low",
+  "C": "high"
+ },
+ "usage": {
+  "input": 30177,
+  "output": 7441,
+  "usd": 0.29970300000000005,
+  "cache_write": 30175,
+  "cache_read": 0,
+  "thinking": 5895
+ }
+}

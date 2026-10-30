@@ -8,7 +8,7 @@
 For every paper named, or under a scope (a folder of the library), that has no digest in
 notes/<stem>.md yet, sends the paper's reading view (paperlib read-view: its text layer cut
 at the references) to a model through
-`claude -p`, with no tools, and writes the reply as the note. The prompt in
+`claude -p`, with no tools and at high effort, and writes the reply as the note. The prompt in
 guide/reading-prompt.md, with the focus and the scope's papers, is the system prompt: the
 same for every paper of a scope, so the requests after the first read it from the prompt
 cache. Each paper is its own request, so nothing read earlier is paid for again, and a run
@@ -51,6 +51,9 @@ from paperlib import (
 
 SYSTEM = "You read research papers carefully and write precise notes on them."
 RELATED_MAX = 150
+# Set here, not left to the user's Claude Code setting: medium and low wrote worse notes
+# (experiments/reading-effort).
+EFFORT = "high"
 
 
 def note_state(stem):
@@ -112,7 +115,7 @@ def ask(model, system, prompt):
         if stop.is_set():
             raise UsageLimit("stopped: the usage limit was reached")
         try:
-            return ask_model(model, system, prompt)
+            return ask_model(model, system, prompt, effort=EFFORT)
         except RuntimeError as error:
             if WINDOW_LIMIT.search(str(error)):
                 stop.set()

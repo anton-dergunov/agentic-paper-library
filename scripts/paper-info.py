@@ -35,7 +35,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from paperlib import (
-    CACHE_DIR, CONFIG, ENGINE_ROOT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
+    CACHE_DIR, CONFIG, ENGINE_ROOT, FILING_EFFORT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
     TYPES, ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics,
     norm_title, note_path, paper_index, paper_stem, parse_arxiv_entries, read_paper, review_for,
     skipped_index, styled,
@@ -139,7 +139,8 @@ def describe(info, topics, model, prompts):
 
     Raises RuntimeError when a request fails or the reply is not JSON."""
     filing, (system, the_paper) = prompts
-    reply, used = ask_model(model, filing[0], filing[1].format(title=info["title"], abstract=info["abstract"]))
+    reply, used = ask_model(model, filing[0], filing[1].format(title=info["title"], abstract=info["abstract"]),
+                            effort=FILING_EFFORT)
     folder, reason, _ = filing_choice(reply, topics)
     listed = []
     if folder:
@@ -148,7 +149,8 @@ def describe(info, topics, model, prompts):
              f"{' '.join(str(meta.get('summary') or '').split())}" for n, (_, meta) in enumerate(listed, 1)]
     reply, used2 = ask_model(model, system, the_paper.format(
         title=info["title"], comment=info["comment"] or "none", abstract=info["abstract"],
-        folder=folder or "none fits", scope=topics.get(folder, reason), neighbours="\n".join(lines) or "(none)"))
+        folder=folder or "none fits", scope=topics.get(folder, reason), neighbours="\n".join(lines) or "(none)"),
+        effort=FILING_EFFORT)
     try:
         answer = json.loads(reply[reply.index("{"):reply.rindex("}") + 1])
     except ValueError:

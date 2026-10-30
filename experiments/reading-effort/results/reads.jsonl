@@ -1,0 +1,12 @@
+{"input": 26010, "output": 4276, "usd": 0.21556799999999998, "cache_write": 26008, "cache_read": 0, "thinking": 1543, "paper": "DBSCAN Revisited, Revisited", "effort": "medium"}
+{"input": 26011, "output": 3011, "usd": 0.0679114, "cache_write": 517, "cache_read": 25492, "thinking": 340, "paper": "DBSCAN Revisited, Revisited", "effort": "low"}
+{"input": 16591, "output": 4457, "usd": 0.1584658, "cache_write": 13750, "cache_read": 2839, "thinking": 1502, "paper": "LightGBM. A Highly Efficient Gradient Boosting Decision Tree", "effort": "medium"}
+{"input": 16590, "output": 3056, "usd": 0.0669272, "cache_write": 517, "cache_read": 16071, "thinking": 618, "paper": "LightGBM. A Highly Efficient Gradient Boosting Decision Tree", "effort": "low"}
+{"input": 23694, "output": 3239, "usd": 0.18324800000000002, "cache_write": 23692, "cache_read": 0, "thinking": 731, "paper": "The BellKor Solution to the Netflix Grand Prize", "effort": "medium"}
+{"input": 23694, "output": 2398, "usd": 0.0551832, "cache_write": 516, "cache_read": 23176, "thinking": 401, "paper": "The BellKor Solution to the Netflix Grand Prize", "effort": "low"}
+{"input": 15072, "output": 2006, "usd": 0.0456188, "cache_write": 516, "cache_read": 14554, "thinking": 211, "paper": "Deep Neural Networks for YouTube Recommendations", "effort": "low"}
+{"input": 15073, "output": 3132, "usd": 0.138003, "cache_write": 15071, "cache_read": 0, "thinking": 809, "paper": "Deep Neural Networks for YouTube Recommendations", "effort": "medium"}
+{"input": 23938, "output": 3037, "usd": 0.16651280000000002, "cache_write": 21037, "cache_read": 2899, "thinking": 548, "paper": "Progressive Layered Extraction (PLE). A Novel Multi-Task Learning Model for Personalized", "effort": "low"}
+{"input": 23938, "output": 3969, "usd": 0.08665199999999999, "cache_write": 516, "cache_read": 23420, "thinking": 1490, "paper": "Progressive Layered Extraction (PLE). A Novel Multi-Task Learning Model for Personalized", "effort": "medium"}
+{"input": 23028, "output": 3237, "usd": 0.17987799999999998, "cache_write": 23026, "cache_read": 0, "thinking": 526, "paper": "Are We Really Making Much Progress. A Worrying Analysis of Recent Neural Recommendation Approaches", "effort": "low"}
+{"input": 23028, "output": 4586, "usd": 0.0988148, "cache_write": 517, "cache_read": 22509, "thinking": 1586, "paper": "Are We Really Making Much Progress. A Worrying Analysis of Recent Neural Recommendation Approaches", "effort": "medium"}

@@ -254,6 +254,25 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   found (the reading view's cut rebuilt, two more web-converter fixes, and Claude Code refusing to read PDFs
   outside the library until their folder is allowed), is in
   [experiments/text-layer-switch](../experiments/text-layer-switch/README.md).
+- **A model request caches for five minutes, not an hour (2026-10-30).** `claude -p` writes
+  the whole request to the prompt cache, the paper too, and on a subscription it writes
+  for an hour, at twice the input price; only the system prompt is ever read back.
+  - On a 10K-token probe with Haiku, the request cost $0.00203 with the one-hour cache,
+    $0.00127 with `FORCE_PROMPT_CACHING_5M=1` and $0.00103 with no caching. Opus writes for
+    an hour at $8 a million tokens, against $4 a million for input.
+  - Of the 647 reads since the prompt trim, an average one cost $0.325, and $0.20 of that
+    went on cache writes.
+  - With five-minute writes the paper costs 1.25 times the input price, and an area's
+    instructions and list stay cached between its reads, which take about 50 s each. That
+    should make a read about a quarter cheaper.
+
+  `ask_model` sets the variable for every request (reads, `paperlib add`, `paperlib info`),
+  and logs cache writes, cache reads and thinking apart from the input and output totals.
+  On six papers the same reads came to $0.258 instead of $0.320. A lower `--effort` would
+  save another 28% (`medium`) to 37% (`low`), but it wrote worse notes: 5 and 8 errors in
+  six notes against 2 at `high`, and the judge preferred the `high` note on all six. Those
+  `high` reads had taken the level from the author's Claude Code setting, so `paperlib read`
+  now passes `--effort high` itself ([experiments/reading-effort](../experiments/reading-effort/README.md)).
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

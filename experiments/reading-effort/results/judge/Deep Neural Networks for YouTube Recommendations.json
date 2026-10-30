@@ -1,0 +1,45 @@
+{
+ "points": [
+  "1 Problem and design: YouTube recommendation must handle scale, freshness and noisy implicit feedback. The system is a two-stage funnel of neural networks: candidate generation narrows millions of videos to hundreds, and ranking scores those hundreds so a few dozen are shown. It replaces a matrix-factorization predecessor, has about 1B parameters, is trained on hundreds of billions of examples, and is built on TensorFlow/Google Brain.",
+  "2 Candidate generation is extreme multiclass classification: a softmax over videos uses the dot product of a user/context embedding u with video embeddings v_j. It is trained on implicit feedback (a completed watch is a positive). Sampled softmax with importance weighting uses several thousand negatives, giving more than a 100x speedup; hierarchical softmax was less accurate. Serving uses approximate nearest-neighbour search in dot-product space, and A/B results were insensitive to the choice of ANN algorithm.",
+  "3 Candidate-generation inputs: averaged embeddings of watched video IDs (averaging beat sum and max) and of search unigram/bigram tokens; geography and device embeddings; gender, logged-in state and age normalized to [0,1]. These are concatenated and fed into a ReLU tower.",
+  "4 'Example age' feature: the age of the training example is fed during training and set to zero or slightly negative at serving. This removes the bias toward average popularity over the training window. Figure 4 shows it for one video only; the conclusion claims a dramatic watch-time gain on fresh videos in A/B testing, with no number.",
+  "5 Label and context choices: examples come from all watches, including embedded ones; each user contributes a fixed number of examples; search history enters as unordered token bags so the model cannot replay the last search page; the model predicts the next watch from a rolled-back history rather than a held-out random watch, which leaks the future. The next-watch setup was better in A/B tests, with no numbers.",
+  "6 Candidate-generation experiment setup: 1M videos and 1M search tokens, 256-dim embeddings, bags of at most 50 watches and 50 searches, a 1M-class softmax of dimension 256, trained to convergence. Halving towers run from depth 0 (linear) to depth 4 (2048→1024→512→256). Baseline: depth 0 performs very similarly to the predecessor MF system.",
+  "7 Candidate-generation result: holdout MAP rises with added features (watches → +searches → +example age → all features) and with depth (Figure 6). Values are given only in the plot.",
+  "8 Ranking model and features: a DNN scores each impression, with a watch-time objective because CTR promotes clickbait. It uses hundreds of features, about half categorical and half continuous. The key signals are the user's past interaction with the item or similar items, plus candidate-source features and impression frequency (for churn). Embedding dimension grows with log cardinality, vocabularies are truncated to the top N, out-of-vocabulary values map to zero, and embeddings are shared within an ID space. Continuous features are quantile-normalized to [0,1) and also input as x̃² and √x̃.",
+  "9 Weighted logistic regression: clicked impressions are weighted by watch time and unclicked ones get unit weight. The learned odds ΣT_i/(N−k) ≈ E[T](1+P) ≈ E[T], and e^x is applied at inference.",
+  "10 Ranking results (Table 1, next-day holdout, weighted per-user loss = mispredicted watch time over clicked/unclicked pairs as a fraction of total watch time): 41.6% with no hidden layers; 256 ReLU 36.9%; 512 ReLU 36.7%; 1024 ReLU 35.8%; 512→256 35.2%; 1024→512 34.7%; 1024→512→256 34.6%, chosen within the CPU budget. Ablations: removing feature powers adds +0.2% loss, and equal weighting of positives and negatives adds +4.1%. Claims of beating linear and tree-based baselines and the A/B gains have no numbers."
+ ],
+ "notes": {
+  "A": {
+   "errors": [],
+   "missed": []
+  },
+  "B": {
+   "errors": [],
+   "missed": []
+  },
+  "C": {
+   "errors": [],
+   "missed": []
+  }
+ },
+ "best": {
+  "letter": "B",
+  "why": "B is error-free and the most complete: it covers every point and adds the exact metric definition, the tmax − tN example-age definition, the clickbait rationale, the blending of other candidate sources, and a careful account of which claims lack numbers."
+ },
+ "key": {
+  "A": "low",
+  "B": "high",
+  "C": "medium"
+ },
+ "usage": {
+  "input": 19494,
+  "output": 7141,
+  "usd": 0.240288,
+  "cache_write": 19492,
+  "cache_read": 0,
+  "thinking": 5616
+ }
+}
