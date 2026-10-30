@@ -543,10 +543,38 @@ def note_path(paper):
     return NOTES_DIR / f"{paper_stem(paper)}.md"
 
 
+def _note_head(paper):
+    """A paper's note split at its digest: (the lines above it, what follows "## Digest").
+    The digest is None when the note has none, and both are None when there is no note."""
+    note = note_path(paper)
+    if not note.exists():
+        return None, None
+    head, _, digest = note.read_text(encoding="utf-8").partition("\n## Digest")
+    return head, (digest if _ else None)
+
+
 def has_digest(paper):
     """Whether a paper (a path or a stem) has been read: its note holds a digest."""
-    note = NOTES_DIR / f"{paper_stem(paper)}.md"
-    return note.exists() and "## Digest" in note.read_text(encoding="utf-8")
+    return _note_head(paper)[1] is not None
+
+
+# The fields a reading writes above the digest (guide/reading-prompt.md), one per line.
+_NOTE_FIELD = re.compile(r"^(type|family|evidence):[ \t]*(.*?)[ \t]*$", re.M)
+
+
+def note_fields(paper):
+    """What the note's head says of a paper: {type, family, evidence}, the ones it holds,
+    or {} when the paper has no note. A type outside TYPES is left out."""
+    head = _note_head(paper)[0] or ""
+    fields = {}
+    for name, value in _NOTE_FIELD.findall(head):
+        if value and name not in fields:
+            fields[name] = value
+    if fields.get("type", "").lower() not in TYPES:
+        fields.pop("type", None)
+    else:
+        fields["type"] = fields["type"].lower()
+    return fields
 
 
 # A note to read again: "reread: <why> (<date>)" among the lines above its digest, set by
@@ -556,22 +584,17 @@ _REREAD = re.compile(r"^reread: (.*)$", re.M)
 
 def reread_reason(paper):
     """Why a paper's note is to be read again, or "" when it is not."""
-    note = NOTES_DIR / f"{paper_stem(paper)}.md"
-    if not note.exists():
-        return ""
-    head = note.read_text(encoding="utf-8").split("\n## Digest", 1)[0]
-    m = _REREAD.search(head)
+    m = _REREAD.search(_note_head(paper)[0] or "")
     return m.group(1).strip() if m else ""
 
 
 def flag_reread(paper, reason=None, today=None):
     """Mark a paper's note to be read again (reason None takes the mark off). Returns
     False when the paper has no note with a digest, which a reading will write anyway."""
-    note = NOTES_DIR / f"{paper_stem(paper)}.md"
-    if not has_digest(paper):
+    head, digest = _note_head(paper)
+    if digest is None:
         return False
-    text = note.read_text(encoding="utf-8")
-    head, digest = text.split("\n## Digest", 1)
+    note = note_path(paper)
     head = _REREAD.sub("", head).rstrip("\n")
     head = re.sub(r"\n{3,}", "\n\n", head)
     if reason:

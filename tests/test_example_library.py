@@ -188,6 +188,29 @@ def reading_problems(root):
     return problems
 
 
+def note_fields_problems(root):
+    """note_fields reads the type, family and evidence above a note's digest, and only there."""
+    paper = papers(root)[0]
+    note = root / "notes" / f"{paper.stem}.md"
+    note.parent.mkdir(exist_ok=True)
+    code = ("import paperlib as p, sys; paper = sys.argv[1]; note = p.note_path(paper); "
+            "assert p.note_fields(paper) == {}, 'no note'; "
+            "note.write_text('# T\\n\\ntype: Method\\nfamily: sparse attention\\n"
+            "evidence: two benchmarks; strength: one run\\nreread: x (2026-10-01)\\n\\n"
+            "## Digest\\n\\ntype: survey\\nfamily: not this\\n'); "
+            "f = p.note_fields(paper); assert f == {'type': 'method', 'family': 'sparse attention', "
+            "'evidence': 'two benchmarks; strength: one run'}, f; "
+            "assert p.reread_reason(paper) == 'x (2026-10-01)'; "
+            "note.write_text('# T\\n\\ntype: essay\\nfamily: \\n\\n## Digest\\n'); "
+            "assert p.note_fields(paper) == {}, p.note_fields(paper); "
+            "note.write_text('# T\\n\\ntype: study\\n'); "
+            "assert p.note_fields(paper) == {'type': 'study'} and not p.has_digest(paper)")
+    env = dict(os.environ, PAPER_LIBRARY=str(root), PYTHONPATH=str(ENGINE / "scripts"))
+    result = subprocess.run([sys.executable, "-c", code, str(paper)], env=env, capture_output=True, text=True)
+    note.unlink(missing_ok=True)
+    return result.stderr.strip().splitlines()[-1:] if result.returncode else []
+
+
 def yaml_list(path):
     import yaml
     return yaml.safe_load(path.read_text()) or []
@@ -222,6 +245,7 @@ def main():
             print(f"{'ok  ' if same else 'FAIL'} {rel} matches the committed index")
         failures += report("check-library.py", check_problems(root), "a missing text layer and a paper in two forms fail")
         failures += report("reading.py", reading_problems(root), "scopes counted, notes marked to re-read and cleared")
+        failures += report("note_fields", note_fields_problems(root), "type, family and evidence read from the note's head")
         failures += report("remove-paper.py", remove_problems(root), "asks first, deletes the paper's files, records the skip")
     sys.exit(1 if failures else 0)
 
