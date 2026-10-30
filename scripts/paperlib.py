@@ -439,6 +439,23 @@ def load_topics():
     return yaml.safe_load(TOPICS_FILE.read_text(encoding="utf-8")) or {}
 
 
+def review_scopes():
+    """The areas to read and review, in their order: [(group, [scope, ...])], group "" when the
+    config lists no groups (`review_scopes` in paper-library.yaml; without it, the top-level
+    folders)."""
+    declared = CONFIG.get("review_scopes")
+    if not declared:
+        tops = sorted({t.split("/")[0] for t in load_topics()})
+        return [("", tops)]
+    groups, loose = [], []
+    for item in declared:
+        if isinstance(item, dict):
+            groups += [(str(name), [str(s).strip("/") for s in scopes or []]) for name, scopes in item.items()]
+        else:
+            loose.append(str(item).strip("/"))
+    return ([("", loose)] if loose else []) + groups
+
+
 def ask_model(model, system, prompt):
     """One request to a Claude model through `claude -p`, with no tools.
 
@@ -562,10 +579,30 @@ def has_digest(paper):
 _NOTE_FIELD = re.compile(r"^(type|family|evidence):[ \t]*(.*?)[ \t]*$", re.M)
 
 
+_DIGEST_END = re.compile(r"^## ", re.M)
+
+
+def read_note(paper):
+    """A paper's note in one read, or None when it has none: {"fields": note_fields', "digest":
+    the digest's text (up to the next `## ` section; None when the note has no digest),
+    "reread": reread_reason's}."""
+    head, digest = _note_head(paper)
+    if head is None:
+        return None
+    if digest is not None:
+        end = _DIGEST_END.search(digest)
+        digest = (digest[:end.start()] if end else digest).strip("\n")
+    reread = _REREAD.search(head)
+    return {"fields": _fields(head), "digest": digest, "reread": reread.group(1).strip() if reread else ""}
+
+
 def note_fields(paper):
     """What the note's head says of a paper: {type, family, evidence}, the ones it holds,
     or {} when the paper has no note. A type outside TYPES is left out."""
-    head = _note_head(paper)[0] or ""
+    return _fields(_note_head(paper)[0] or "")
+
+
+def _fields(head):
     fields = {}
     for name, value in _NOTE_FIELD.findall(head):
         if value and name not in fields:

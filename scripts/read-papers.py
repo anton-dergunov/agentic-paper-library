@@ -169,7 +169,7 @@ def main(argv):
         else:
             targets.append(arg)
     if "--all" in flags:
-        from reading import review_scopes
+        from paperlib import review_scopes
         targets += [s for _, scopes in review_scopes() for s in scopes]
     if not targets:
         sys.exit(__doc__)

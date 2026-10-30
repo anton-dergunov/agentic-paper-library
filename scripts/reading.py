@@ -28,7 +28,7 @@ import sys
 
 from paperlib import (
     CACHE_DIR, CONFIG, LIBRARY_DIR, flag_reread, has_digest, load_reviews, load_topics, paper_files,
-    paper_stem, read_paper, reread_reason, review_coverage, styled, text_view,
+    paper_stem, read_paper, reread_reason, review_coverage, review_scopes, styled, text_view,
 )
 
 # Dollars a reading costs: a fixed part (the prompt, the note written) and a part per
@@ -36,21 +36,6 @@ from paperlib import (
 # fitted to the four first readings of text-layer notes in experiments/reading-formats
 # (tier H, Opus 5.5).
 DEFAULT_FIT = (0.144, 2.81e-6)
-
-
-def review_scopes():
-    """[(group, [scope, ...])] in reading order; group "" when the config lists no groups."""
-    declared = CONFIG.get("review_scopes")
-    if not declared:
-        tops = sorted({t.split("/")[0] for t in load_topics()})
-        return [("", tops)]
-    groups, loose = [], []
-    for item in declared:
-        if isinstance(item, dict):
-            groups += [(str(name), [str(s).strip("/") for s in scopes or []]) for name, scopes in item.items()]
-        else:
-            loose.append(str(item).strip("/"))
-    return ([("", loose)] if loose else []) + groups
 
 
 def cost_fit():

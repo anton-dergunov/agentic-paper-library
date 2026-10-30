@@ -201,10 +201,15 @@ def note_fields_problems(root):
             "f = p.note_fields(paper); assert f == {'type': 'method', 'family': 'sparse attention', "
             "'evidence': 'two benchmarks; strength: one run'}, f; "
             "assert p.reread_reason(paper) == 'x (2026-10-01)'; "
+            "n = p.read_note(paper); assert n['digest'].startswith('type: survey') and n['reread'] == 'x (2026-10-01)', n; "
+            "note.write_text('# T\\n\\ntype: method\\n\\n## Digest\\n\\n- a claim\\n\\n## Q&A\\n\\nQ?\\n'); "
+            "assert p.read_note(paper)['digest'] == '- a claim', p.read_note(paper); "
             "note.write_text('# T\\n\\ntype: essay\\nfamily: \\n\\n## Digest\\n'); "
             "assert p.note_fields(paper) == {}, p.note_fields(paper); "
             "note.write_text('# T\\n\\ntype: study\\n'); "
-            "assert p.note_fields(paper) == {'type': 'study'} and not p.has_digest(paper)")
+            "assert p.note_fields(paper) == {'type': 'study'} and not p.has_digest(paper); "
+            "assert p.read_note(paper)['digest'] is None; note.unlink(); assert p.read_note(paper) is None; "
+            "assert [s for _, g in p.review_scopes() for s in g] == sorted({t.split('/')[0] for t in p.load_topics()})")
     env = dict(os.environ, PAPER_LIBRARY=str(root), PYTHONPATH=str(ENGINE / "scripts"))
     result = subprocess.run([sys.executable, "-c", code, str(paper)], env=env, capture_output=True, text=True)
     note.unlink(missing_ok=True)
