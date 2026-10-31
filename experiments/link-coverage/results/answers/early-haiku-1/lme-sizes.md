@@ -1,0 +1,12 @@
+**LongMemEval S and M** are two fixed-size settings of the same benchmark. They differ only in how long the chat history is. The questions and answers are identical. The paper says the history length "is freely extensible," and S and M are the two standard settings it provides for consistent comparison ([p. 5](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=5&rect=108,664,285,676), [p. 5](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=5&rect=383,664,504,675)):
+
+- **S** is about 115k tokens of history per question. Each question's evidence sessions are hidden in a longer stream of unrelated chats.
+- **M** has 500 sessions, about 1.5M tokens. It is roughly 13× longer than S.
+
+Each history is built the same way. The authors sample unrelated user-AI sessions, drawn from self-chat simulations and public ShareGPT and UltraChat data, and insert the evidence sessions in the middle with plausible timestamps. This is a needle-in-a-haystack design, but the evidence is several long sessions, not one short fact.
+
+**Oracle** is the other setting the paper uses. It gives the model only the evidence sessions, with no haystack. It is an upper bound that isolates reasoning from retrieval. GPT-4o scores 0.870 with oracle sessions and 0.606 on S, a 30.3% drop ([p. 6](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=6)). The M results are in the retrieval experiments, where memory systems are scored on M as well as S (Table 8 and the retrieval tables).
+
+**Other versions:** this paper names only S, M and Oracle. It does not describe any other variant, so I can't say from this text what other versions exist. Any later release may have added some, and I'd need another source to confirm that.
+
+Two caveats for comparing numbers. S and M have different lengths, so scores are only comparable within the same setting. And the paper's retrieval results on M are lower than on S for the same memory method (for example, Mistral-Nemo's K=V score is 0.640 on S and 0.554 on M in Table 8, [p. 16](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=16)). I took the page number for Table 8 from the text layer without checking it, so verify it in the PDF.

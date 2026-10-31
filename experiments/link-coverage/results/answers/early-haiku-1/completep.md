@@ -1,0 +1,15 @@
+The paper's main idea is a way to set hyperparameters so that deep transformers train well and can be scaled in depth without re-tuning. It does this with one choice, a depth exponent α, and shows that α = 1 (which they call **CompleteP**) is the only good value.
+
+**The problem.** Each residual block's output is added to the residual stream, and the paper scales that output by L^(-α), where L is depth. Standard parameterization (SP) and µP don't scale depth correctly. As a result, the best learning rate and init scale drift as you add layers, so deep models are either mis-tuned or trained poorly. ([Dey et al., p. 1](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=1); the scaling rule is in [Eq. 1, p. 2](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=2).)
+
+**The α = 1 claim.** Of the two candidates, α = 0.5 and α = 1, only α = 1 gives:
+- **Depth-wise hyperparameter transfer.** The optimal learning rate and init scale stay put from 2 to 128 layers ([p. 5](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=5), Figure 2).
+- **Non-lazy learning in every layer.** This is the new theoretical idea. A "lazy" layer behaves like its linearization around initialization, so extra depth adds little. With α = 1, the nonlinear second-order term in a block's update is the same order as the linear term, so every layer keeps learning features ([pp. 9–10](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=9), Eq. 6).
+
+**What it buys in practice.**
+- At 1.5B non-embedding parameters, CompleteP saves 11.8% of training FLOPs at the optimal width-to-depth ratio, and 34.4% for the deepest model (L = 179) ([p. 7](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=7), Finding 5).
+- Deep-narrow shapes stay near compute-optimal. N:L ≈ 11.8 is within 1% of optimal, against N:L ≈ 38.7 under µP (Finding 6). This contradicts the common N:L ≈ 100 rule of thumb.
+
+**The recipe.** Beyond the residual scaling, the paper also rescales the learning rates of biases and LayerNorm, weight decay, and AdamW's ε with depth and width. It states these are needed for α = 0.5 to train stably ([Table 1, p. 4](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=4)).
+
+Page 1 itself is the abstract and Figure 1, a three-panel summary of these results. The detail above comes from pages 2–10, which I read as well. The experiments are on SlimPajama, with models up to 1.5B non-embedding parameters, so the large-scale claims are extrapolations.

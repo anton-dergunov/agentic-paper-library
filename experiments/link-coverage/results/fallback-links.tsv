@@ -1,0 +1,530 @@
+base-haiku-1	completep	p.1	[L]). **Results (from pages 1–2 only; I h
+base-haiku-1	judgebench	p.4	**Short answer:** read pages 4–6 (the pipe
+base-haiku-1	judgebench	p.19	**Short answer:** read pages 4–6 (the pipeline and the dataset) and pages 19–20 (filterin
+base-haiku-1	judgebench	p.4 figure.2	tness checks). The rest is mostly results you can skim. **What to read, in order** 1. **p. 4, Figure 2.** The wh
+base-haiku-1	judgebench	p.5	only questions with at least one correct and one incorrect response, then pair them. 2. **p. 5, "JudgeBe
+base-haiku-1	judgebench	p.5	e model fixes all three, at the cost of making the pairs hard mainly for that model. 3. **p. 5–6, "JudgeBe
+base-haiku-1	judgebench	p.6	LM disagree on correctness, because format errors would otherwise create a shortcut. 4. **p. 6, "Evaluat
+base-haiku-1	judgebench	p.19	unt, and ties in both trials count as wrong. Read this before comparing any numbers. 5. **p. 19, A.3–A.5.
+base-haiku-1	judgebench	p.9 table.4	th check (562 vs 561 tokens, so length bias is controlled). **Most useful overall** - **p. 9, Table 4.** Judge 
+base-haiku-1	judgebench	p.9 figure.4	 the benchmark measures the model's ability to solve the problem, not something else. - **p. 9–10, Figure 4.** The bi
+base-haiku-1	judgebench	p.8	model bias is real but bounded. Use it to decide how far to trust per-judge rankings. - **p. 8, the "Rew
+base-haiku-1	judgebench	p.2	s, which matters if you use judges as reward models. **Skip for now:** the related work (pp. 2–4 beyond th
+base-haiku-1	judgebench	p.16	line), the reference list, A.1 and A.2 (judge details and fine-tuned judge failure modes, pp. 16–17), and A.6
+base-haiku-1	judgebench	p.21	 and A.2 (judge details and fine-tuned judge failure modes, pp. 16–17), and A.6 (prompts, p. 21). Read A.
+base-haiku-1	judgebench	p.1	 want to know why fine-tuned judges score below chance. **What I did not check:** I read pp. 1–10 and the a
+base-haiku-1	judgebench	p.5	ly says LiveCodeBench provides a verification algorithm. If that matters for you, look at pp. 5 and 21 or
+base-haiku-1	lme-con	p.6	I'll check what page 6 says abou
+base-haiku-1	lme-parts	p.2	00 questions in seven types. They test five memory abilities against two history lengths. Page 2 only has 
+base-haiku-1	lme-parts	p.3	engths. Page 2 only has the motivation and the start of related work. The task list is on p. 3 (Figure 1
+base-haiku-1	lme-parts	p.3 figure.1	ork. The task list is on p. 3 (Figure 1), which I also read. **The seven question types (p. 3, Fig. 1)** | Que
+base-haiku-1	lme-parts	p.2	ng of the figure and Table 1, not a table in the paper. **What to read, in order** 1. **p. 2, contribu
+base-haiku-1	lme-parts	p.3 table.1	nd of intro):** the four findings in one place. Quick, and it is the whole argument. 2. **p. 3, Table 1 and Fig. 
+base-haiku-1	lme-parts	p.4	Bank, PerLTQA and DialSim, and the seven types with examples. This is the task list. 3. **p. 4–6 (§3, cons
+base-haiku-1	lme-parts	p.6	ow the questions and histories are built, the GPT-4o judge (agrees with experts over 97%, p. 6; Table 6 
+base-haiku-1	lme-parts	p.21 table.6	 questions and histories are built, the GPT-4o judge (agrees with experts over 97%, p. 6; Table 6 on p. 21), and the
+base-haiku-1	lme-parts	p.6 figure.3	t showing commercial assistants at 0.577 and 0.330 against 0.918 for full-history GPT-4o (p. 6, Fig. 3). 4. **p.
+base-haiku-1	lme-parts	p.8	 assistants at 0.577 and 0.330 against 0.918 for full-history GPT-4o (p. 6, Fig. 3). 4. **p. 8–10 (§5, the 
+base-haiku-1	lme-parts	p.8 figure.5	is the most useful part for memory-system work. Rounds beat sessions as the storage unit (p. 8, Fig. 5); adding 
+base-haiku-1	lme-parts	p.9 table.3	 (p. 8, Fig. 5); adding extracted user facts to the keys gives +9.4% recall and +5.4% QA (p. 9, Table 3); time-aw
+base-haiku-1	lme-parts	p.10 table.4	4% QA (p. 9, Table 3); time-aware query expansion helps temporal recall only with GPT-4o (p. 10, Table 4); chain-o
+base-haiku-1	lme-parts	p.10 figure.6	ll only with GPT-4o (p. 10, Table 4); chain-of-note with JSON input adds up to 10 points (p. 10, Fig. 6). **Most
+base-haiku-1	lme-parts	p.3	 adds up to 10 points (p. 10, Fig. 6). **Most useful overall:** the Figure 1 examples on p. 3 for the t
+base-haiku-1	lme-parts	p.8	st useful overall:** the Figure 1 examples on p. 3 for the tasks, then the §5 findings on p. 8–10 for desig
+base-haiku-1	lme-parts	p.2	asks, then the §5 findings on p. 8–10 for design choices. Skip the related-work survey on p. 2–3 unless yo
+base-haiku-1	lme-sizes	p.1	d settings** (the paper says these are "two standard settings for consistent comparison", p. 1 and p. 5)
+base-haiku-1	lme-sizes	p.5	s** (the paper says these are "two standard settings for consistent comparison", p. 1 and p. 5): - **Lo
+base-haiku-1	lme-sizes	p.5 subsection.A.2	_M:** 500 sessions, about 1.5M tokens per question. The filler comes from three sources (p. 5, App. A.2): 50% sim
+base-haiku-1	lme-sizes	p.6 figure.3	 to S, for example GPT-4o goes from 0.870 to 0.606 and Llama-3.1-70B from 0.744 to 0.334 (p. 6, Fig. 3). Most of
+base-haiku-1	lme-sizes	p.10 figure.6	 0.334 (p. 6, Fig. 3). Most of the paper's reading-strategy experiments use this setting (p. 10, Fig. 6). **Othe
+base-haiku-1	topics	p.3	**Short answer:** this paper doesn't name a default. Page 3 is the su
+base-haiku-1	topics	p.9	tself is a map, not a recommendation. What the library supports is a judgement built from pages 9–10 and the F
+base-haiku-1	topics	p.9	FASTopic note. My pick is FASTopic, with BERTopic as the practical baseline. - **Survey, p. 9:** the cl
+base-haiku-1	topics	p.10	[L]). BERTopic is the widely used one of these. - **Survey, p. 10:** FASTop
+base-haiku-2	completep	p.2	ngle exponent $\alpha$, the update is $h_{\ell+1} = h_\ell + L^{-\alpha} F_\ell(h_\ell)$ (Eq. 1, p. 2). Prior w
+base-haiku-2	completep	p.2	yers). Earlier work had argued that transfer across depth was impossible at any $\alpha$ (p. 2). - **Laz
+base-haiku-2	completep	p.2	earity then go unused. With $\alpha = 1$, every layer keeps learning non-linear features (p. 2). The aut
+base-haiku-2	completep	p.4 table.1	rNorm learning rate, the bias learning rate, AdamW's weight decay and AdamW's $\epsilon$ (Table 1, p. 4). The aut
+base-haiku-2	completep	p.2	p. 4). The authors say these changes are essential for stable training at $\alpha = 0.5$ (p. 2). **Resu
+base-haiku-2	completep	p.2	 $\alpha = 1$ saves 11.8% of FLOPs over µP at the optimal shape, and 34.4% at 179 layers (p. 2). - Revis
+base-haiku-2	completep	p.2 figure.1	where earlier work favoured about 100. CompleteP keeps a wider range of shapes efficient (p. 2, Fig. 1 right). 
+base-haiku-2	completep	p.3	 on Cerebras hardware. The paper leaves out mixture-of-experts and parallel sub-networks (p. 3). The "la
+base-haiku-2	judgebench	p.4	**Short answer:** read pages 4–6 closely, 
+base-haiku-2	judgebench	p.10	**Short answer:** read pages 4–6 closely, then the Table 4 and Figure 4 ablation on page 10. Everythi
+base-haiku-2	judgebench	p.4 figure.2	gure 4 ablation on page 10. Everything else can be skimmed. **Read in this order** 1. **Pp. 4–5, Figure 2 and Secti
+base-haiku-2	judgebench	p.5	model inconsistent on a question is also one that can't tell right from wrong on it. 2. **P. 5–6, "Dataset
+base-haiku-2	judgebench	p.6 section.4	agree on are dropped as format errors. Final size is 350 pairs (154 / 98 / 56 / 42). 3. **P. 6, Section 4 "Evaluati
+base-haiku-2	judgebench	p.9 subsection.4.4	t as wrong. This rule decides what every number means, so read it before the tables. 4. **P. 9–10, Section 4.4 and Table
+base-haiku-2	judgebench	p.1	"single generator removes self-preference" argument still holds. **Skim as needed** - **Pp. 1–2:** the ar
+base-haiku-2	judgebench	p.7 table.1	reference is the wrong target for hard questions. Read the intro for motivation only. - **Pp. 7–8, Tables 1–3:** the re
+base-haiku-2	judgebench	p.9 figure.3	ward-model band (59–64%). Check the table cells you need rather than memorising them. - **P. 9, Figure 3:** how ot
+base-haiku-2	judgebench	p.19 subsection.A.3	 3:** how other meta-benchmarks compare. Useful for the "JudgeBench is harder" claim. - **Appendix A.3 (p. 19):** how th
+base-haiku-2	judgebench	p.20 subsection.A.4	harder" claim. - **Appendix A.3 (p. 19):** how the random filtering balances subsets. - **Appendix A.4 (p. 20):** length
+base-haiku-2	judgebench	p.20 subsection.A.5	:** length bias. Relevant if you care about the "judges prefer longer answers" point. - **Appendix A.5 (p. 20):** an exa
+base-haiku-2	judgebench	p.21 subsection.A.6	nt. - **Appendix A.5 (p. 20):** an example where the two correctness checks disagree. - **Appendix A.6 (p. 21):** the ju
+base-haiku-2	judgebench	p.16 subsection.A.1	*Appendix A.6 (p. 21):** the judge prompts. Read these only if you want to reproduce. - **Appendix A.1–A.2 (pp. 16–18):** judge 
+base-haiku-2	judgebench	p.2	judge details and fine-tuned-judge analysis. Skip unless you need them. - **Related work, p. 2–3:** skip. 
+base-haiku-2	judgebench	p.4	**Related work, p. 2–3:** skip. **Most useful overall** - **Pipeline plus scoring rule (pp. 4–6).** Once 
+base-haiku-2	judgebench	p.10 figure.4	an judge any similar benchmark and see what its numbers mean. - **The generator ablation (p. 10, Figure 4).** It sh
+base-haiku-2	judgebench	p.8	e both trials must agree on the right answer. The paper's "random guessing" comparison on p. 8 is theref
+base-haiku-2	judgebench	p.6	 . Its Digest already covers the numbers on pp. 6–10. Page ref
+base-haiku-2	kv	p.3	nd values of every earlier token. With $q_i = W_q x_i$, $k_j = W_k x_j$, $v_j = W_v x_j$ (Eq. 2, p. 3), the out
+base-haiku-2	kv	p.3	put is $o_i = \sum_j \mathrm{softmax}_j\!\left(\frac{q_i k_j^\top}{\sqrt{d}}\right) v_j$ (Eq. 3, p. 3). The key
+base-haiku-2	kv	p.4	–2.7× on ShareGPT. - The paper is inconsistent on sharing savings: it says "up to 55%" on p. 4 and repor
+base-haiku-2	kv	p.11	aper is inconsistent on sharing savings: it says "up to 55%" on p. 4 and reports 66.3% on p. 11. Written
+base-haiku-2	lme-con	p.8 table.2	ing framework. Reading is one of the four control points, alongside value, key and query (p. 8, Table 2). - It is
+base-haiku-2	lme-con	p.7 subsection.5.1	 for every experiment in §5.2–5.4: "we apply Chain-of-Note and json format … by default" (§5.1, p. 7). - The p
+base-haiku-2	lme-con	p.23	Chain-of-Note and json format … by default" (§5.1, p. 7). - The prompt (Fig. 13, appendix p. 23) is a sma
+base-haiku-2	lme-con	p.10 subsection.5.5	CoN with JSON-formatted input is worth up to about +10 points even with oracle retrieval (§5.5, p. 10, Fig. 6).
+base-haiku-2	lme-con	p.10 figure.6	s as "chain-of-note with JSON input is worth up to +10 points even with oracle retrieval (p. 10, Fig. 6)". The pa
+base-haiku-2	lme-con	p.6	y search and read the §5.1, §5.5 and appendix passages. I didn't confirm that the text on page 6 of the PD
+base-haiku-2	lme-con	p.7	at the text on page 6 of the PDF itself mentions CoN. Its mentions are on the intro page, p. 7, p. 10 an
+base-haiku-2	lme-con	p.10	 text on page 6 of the PDF itself mentions CoN. Its mentions are on the intro page, p. 7, p. 10 and p. 23
+base-haiku-2	lme-con	p.23	age 6 of the PDF itself mentions CoN. Its mentions are on the intro page, p. 7, p. 10 and p. 23. If you m
+base-haiku-2	lme-con	p.6	CoN. Its mentions are on the intro page, p. 7, p. 10 and p. 23. If you meant something on page 6, tell me 
+base-haiku-2	lme-parts	p.19 figure.9	ral sessions, up to six, and evidence statements usually sit near the start of a session (p. 19, Fig. 9). **What
+base-haiku-2	lme-parts	p.3 figure.1	 19, Fig. 9). **What to read, in order** (PDF pages, from the markers): 1. **p. 3, Fig. 1 and Table
+base-haiku-2	lme-parts	p.4 subsection.3.2	pares with LoCoMo, MemoryBank and PerLTQA. This is the fastest way to see the tasks. 2. **p. 4, §3.2.** The fo
+base-haiku-2	lme-parts	p.6 figure.3	ormal definition of each ability and type. Read this once and you have the taxonomy. 3. **p. 6, Fig. 3.** The he
+base-haiku-2	lme-parts	p.8 table.2	 for full-history GPT-4o. Long-context models drop 30–60% from oracle sessions to S. 4. **p. 8, Table 2 and Fig. 
+base-haiku-2	lme-parts	p.9 table.3	 → retrieval → reading view with four control points (value, key, query, reading). Then **pp. 9–10, Tables 3–4 and Fig. 
+base-haiku-2	lme-parts	p.21 table.6	re query expansion needs a strong LLM, and chain-of-note adds up to about 10 points. 5. **p. 21, Table 6 and the j
+base-haiku-2	lme-parts	p.4 figure.2	reference and abstention (0.90). **Skip for now:** the ontology and generation pipeline (pp. 4–5, Fig. 2, Table 5)
+base-haiku-2	lme-parts	p.22	** the ontology and generation pipeline (pp. 4–5, Fig. 2, Table 5), the appendix prompts (pp. 22–27) unless y
+base-haiku-2	lme-parts	p.3	and Tables 8–11 unless you are choosing a reader model. **Most useful overall for you:** p. 3 for the t
+base-haiku-2	lme-parts	p.8	ss you are choosing a reader model. **Most useful overall for you:** p. 3 for the tasks, p. 8–10 for what 
+base-haiku-2	lme-parts	p.21	 for you:** p. 3 for the tasks, p. 8–10 for what actually moves memory-system scores, and p. 21 to judge 
+base-haiku-3	completep	p.1	 actually learning. The authors report 12–34% compute savings over µP at 1.9B parameters (p. 1; p. 2). 
+base-haiku-3	completep	p.2	lly learning. The authors report 12–34% compute savings over µP at 1.9B parameters (p. 1; p. 2). **The 
+base-haiku-3	completep	p.2	residual block adds its output to the stream, and the paper scales that output by L^{-α} (Eq. 1, p. 2). The two
+base-haiku-3	completep	p.5 figure.2	re-tune at each depth. With α = 1, the L = 2 settings stay near-optimal up to 128 layers (Figures 2–3, p. 5). The tra
+base-haiku-3	completep	p.9	, so depth and nonlinearity go unused. Their definition is in the note's Q&A-free digest (p. 9, Eq. 4), and the
+base-haiku-3	completep	p.7	te's Q&A-free digest (p. 9, Eq. 4), and the argument is a heuristic toy-model derivation (p. 7, p. 10). 
+base-haiku-3	completep	p.10	&A-free digest (p. 9, Eq. 4), and the argument is a heuristic toy-model derivation (p. 7, p. 10). **The 
+base-haiku-3	completep	p.4 table.1	s of hidden, bias and LayerNorm parameters, AdamW's ε, weight decay, and the unembedding (Table 1, p. 4). It call
+base-haiku-3	completep	p.2 figure.7	p. 4). It calls the LayerNorm, bias and ε corrections essential for stability at α = 0.5 (p. 2, Figure 7). **Resu
+base-haiku-3	completep	p.7 table.2	ompute-optimal shape (N = 1984, L = 32). The 34.4% saving comes from the 179-layer model (Table 2, p. 7). - Compl
+base-haiku-3	completep	p.6 figure.4	 CompleteP keeps N:L ≈ 11.8 within 1% of compute-optimal loss, where µP needs N:L ≈ 38.7 (p. 6, Figure 4f). So you 
+base-haiku-3	completep	p.7 table.3	ncy. - At 200 tokens per parameter, CompleteP has the lowest loss in all four settings in Table 3 (p. 7). The marg
+base-haiku-3	completep	p.7	 downstream tasks do not favour CompleteP, and the differences are within standard error (p. 7). - The s
+base-haiku-3	completep	p.8	only 3 points. - The paper's own notes give inconsistent exponents for the learning rate (p. 8 vs p. 9).
+base-haiku-3	completep	p.9	oints. - The paper's own notes give inconsistent exponents for the learning rate (p. 8 vs p. 9). **Rela
+base-haiku-3	judgebench	p.4 section.3	erence are mostly removed. The wrong answers are subtle, so the pairs are hard to judge. (Sec. 3, p. 4–5) **What 
+base-haiku-3	judgebench	p.4 figure.2	ubtle, so the pairs are hard to judge. (Sec. 3, p. 4–5) **What to read, in order** 1. **Fig. 2, p. 4.** The pi
+base-haiku-3	judgebench	p.4 section.3	 p. 4–5) **What to read, in order** 1. **Fig. 2, p. 4.** The pipeline on one page. 2. **Sec. 3, p. 4–5.** Why th
+base-haiku-3	judgebench	p.5	ment bias. This is the core design argument. 3. **Sec. 3, "Data Filtering and selection", p. 5–6.** The so
+base-haiku-3	judgebench	p.6	s. That is the most practical detail for anyone building something similar. Counts are on p. 6. 4. **A.3
+base-haiku-3	judgebench	p.19	ost practical detail for anyone building something similar. Counts are on p. 6. 4. **A.3, p. 19.** How th
+base-haiku-3	judgebench	p.19	th Table 8 showing an augmented 770-pair knowledge set keeps the same rankings. 5. **A.5, p. 19–20, and A.4,
+base-haiku-3	judgebench	p.19	an augmented 770-pair knowledge set keeps the same rankings. 5. **A.5, p. 19–20, and A.4, p. 19.** Correc
+base-haiku-3	judgebench	p.6	ample of disagreement is short and makes the checker problem concrete. 6. **Sec. 4 intro, p. 6.** Positi
+base-haiku-3	judgebench	p.9 subsection.4.4	istent verdicts count as correct. The rule is easy to get wrong when reimplementing. 7. **Sec. 4.4, p. 9–10 (Table 4 
+base-haiku-3	judgebench	p.6	 construction. **Things to check while reading:** - **Counts disagree.** The main text (p. 6) gives 35
+base-haiku-3	judgebench	p.19	eading:** - **Counts disagree.** The main text (p. 6) gives 350 pairs with 56 math. A.3 (p. 19) gives 46
+base-haiku-3	judgebench	p.10 figure.4	estion was kept because GPT-4o got it inconsistently, so GPT-4o judges are disadvantaged. Fig. 4 (p. 10) shows the
+base-haiku-3	kv	p.4	[L]; the note also cites p. 4). On a 40
+base-haiku-3	kv	p.11 figure.15	sampling and 37.6–55.2% for beam search on Alpaca; 16.2–30.5% and 44.3–66.3% on ShareGPT (pp. 11, Fig. 15). - **Lat
+base-haiku-3	kv	p.12 figure.18	ttention kernel is 20–26% slower than FasterTransformer's because of block-table lookups (p. 12, Fig. 18a). Block s
+base-haiku-3	kv	p.12 figure.18	kups (p. 12, Fig. 18a). Block sizes of 16–128 work best on ShareGPT, and 16–32 on Alpaca (p. 12, Fig. 18b). - **Swa
+base-haiku-3	kv	p.13 figure.19	an be swapped to CPU RAM or recomputed. The two cost about the same at block sizes 16–64 (p. 13, Fig. 19). ## Cav
+base-haiku-3	kv	p.2	s no variance reporting. The "no accuracy change" claim is asserted rather than measured (p. 2). - The p
+base-haiku-3	kv	p.4	cts itself in places: it gives a 55% beam-search saving in one spot and 66.3% in another (pp. 4, 11). The
+base-haiku-3	lme-con	p.10	t what is relevant, and then reasons over those notes to answer. The paper's own summary (p. 10): it "dec
+base-haiku-3	lme-con	p.10 figure.6	xtract evidence, then answer, with greedy decoding and an 800-token cap. - **Main result (p. 10, Fig. 6).** With 
+base-haiku-3	lme-con	p.6 figure.3	models; without CoN, JSON does not reliably beat plain text. - **Pilot on full histories (p. 6, Fig. 3b).** The t
+base-haiku-3	lme-con	p.6	 to 0.420, and the Phi-3 models also fall. The "% Drop" column matches these numbers. The p. 6 text attr
+base-haiku-3	lme-con	p.6	e for, or hurts, weaker readers that must sift through the whole ~115K-token history. The p. 6 table is 
+base-haiku-3	lme-con	p.10	o-column layout makes the row alignment easy to misread. The note in covers the p. 10 result in
+base-haiku-3	lme-con	p.6	 easy to misread. The note in covers the p. 10 result in its Digest but not the p. 6 pilot, so
+base-haiku-3	lme-con	p.6	The note in covers the p. 10 result in its Digest but not the p. 6 pilot, so the p. 6 point is 
+base-haiku-3	lme-parts	p.2	ting note first. The note has a digest, but I'll check the task list against the text on pages 2–5 before an
+base-haiku-3	lme-parts	p.19	in Figure 9(a) but not which share belongs to which type. I'll look at that figure on PDF page 19. The pie
+base-haiku-3	lme-parts	p.2	e in it. The questions fall into seven types, which the paper groups into five abilities. Page 2, where yo
+base-haiku-3	lme-parts	p.3 figure.1	vidence sits near the start of its session (Fig. 9b–c). **What to read, in order** 1. **p. 3, Fig. 1 and Table
+base-haiku-3	lme-parts	p.4 subsection.3.2	[L] 2. **p. 4, §3.2.** The de
+base-haiku-3	lme-parts	p.19 figure.9	[L] 3. **p. 19, Fig. 9 and A.3.*
+base-haiku-3	lme-parts	p.21 table.6	[L] 4. **p. 21, Table 6.** How re
+base-haiku-3	lme-parts	p.4 figure.2	ainst 30 per type. Skip for now: the rest of the curation and history-building pipeline (pp. 4–5, Fig. 2, A.1–A.2)
+base-haiku-3	lme-parts	p.6 figure.3	pp. 4–5, Fig. 2, A.1–A.2), and the prompts in the appendix. **Most useful overall** - **p. 6, Fig. 3 (pilot st
+base-haiku-3	lme-parts	p.21 table.7	[L] - **p. 21, Table 7.** Where 
+base-haiku-3	lme-parts	p.21	dge-update and temporal questions drop sharply. Read it against the 97-question sample on p. 21, since it
+base-haiku-3	lme-parts	p.8	ons drop sharply. Read it against the 97-question sample on p. 21, since it is small. - **pp. 8–10 (Table 2,
+base-haiku-3	topics	KEPT PLAIN	nce is only the authors' automatic metrics (FASTopic paper, p. 6–7, Tables 1–3
+base-haiku-3	topics	p.3	The survey doesn't name a default model. Page 3 is only t
+base-haiku-3	topics	p.3	A on exactly this, which I've drawn on below. I didn't re-check its page citations beyond page 3. - **No 
+base-haiku-3	topics	p.10	e closest thing to an endorsement.** The survey calls it "a neat and efficient paradigm" (p. 10). Its fir
+base-haiku-3	topics	p.14	ys benchmarks have found "conventional LDA can still outperform NTMs in certain aspects" (p. 14–15). It also
+base-haiku-3	topics	p.14	gree with human judgment for neural models, and that preprocessing alone changes results (p. 14). - **Som
+base-haiku-3	topics	p.9	ec, BERTopic) and TopicGPT can't supply proper doc-topic and/or topic-word distributions (p. 9). My pra
+base-sonnet-1	completep	p.2	e, and also argued that depth-wise hyperparameter transfer is impossible at any $\alpha$ (p. 2). - **Thi
+base-sonnet-1	completep	p.5 figure.2	a = 1$ keeps the optimum stable across depth. SP, µP and $\alpha = 0.5$ all see it shift (p. 5, Figures 2–3, shown in
+base-sonnet-1	completep	p.10	tion predicts, so depth and nonlinearity go unused. - **The test is a toy width-1 model (p. 10, Eqs. 5–7).** A blo
+base-sonnet-1	completep	p.7	** It is derived at a fixed token count, while most experiments fix tokens per parameter (p. 7, p. 10). 
+base-sonnet-1	completep	p.10	is derived at a fixed token count, while most experiments fix tokens per parameter (p. 7, p. 10). ### Pr
+base-sonnet-1	completep	p.2 figure.7	s ε The authors say these corrections are essential for stable training at $\alpha=0.5$ (p. 2, Figure 7). That ma
+base-sonnet-1	completep	p.6	[L], right; p. 6): the opt
+base-sonnet-1	judgebench	p.4	 and one is wrong. - Pair a right answer with a wrong one. 2. **The construction text, pp. 4–6**. This c
+base-sonnet-1	judgebench	p.6	he automatic checker and GPT-4o-mini disagree are dropped. - **Final size and scoring (p. 6):** 350 p
+base-sonnet-1	judgebench	p.1	is right and one is a tie. A coin-flip judge therefore scores below 50%. 3. **Motivation, pp. 1–2** (skim, 
+base-sonnet-1	judgebench	p.5	aren't "judge accuracy in general". If you want one rule: read the pipeline figure, then pp. 5–6, then Tab
+base-sonnet-1	kv	KEPT PLAIN	size, OPT-13B | 2.2× vs Orca (Oracle), 4.3× vs Orca (Max) | Fig. 13a, p. 10
+base-sonnet-1	kv	p.6	write. Parallel sampling, beam search and shared system prompts can therefore share them (pp. 6–8). - When 
+base-sonnet-1	kv	p.8	 whole sequence is evicted. Its blocks are either swapped to CPU RAM or recomputed later (p. 8). ## Mea
+base-sonnet-1	kv	p.11 figure.15	y saved by sharing, Alpaca | 6.1–9.8% for parallel sampling, 37.6–55.2% for beam search | Fig. 15, p. 11 | | Share
+base-sonnet-1	kv	p.12	[L] than FasterTransformer, from the block-table lookups | p. 12 | | Block
+base-sonnet-1	kv	p.13 figure.19	[L], Fig. 19, p. 13 | ## Cav
+base-sonnet-1	kv	p.2	and Orca is a reimplementation. - "Without affecting accuracy" is asserted, not measured (p. 2). - Pagin
+base-sonnet-1	lme-con	p.24	iation on the original, and it generates up to 800 tokens with greedy decoding (Appendix, p. 24). The Co
+base-sonnet-1	lme-con	p.10	up to 800 tokens with greedy decoding (Appendix, p. 24). The CoN discussion itself is on p. 10, not p. 6
+base-sonnet-1	lme-con	p.6	okens with greedy decoding (Appendix, p. 24). The CoN discussion itself is on p. 10, not p. 6. Page 6 o
+base-sonnet-1	lme-con	p.6	with greedy decoding (Appendix, p. 24). The CoN discussion itself is on p. 10, not p. 6. Page 6 only list
+base-sonnet-1	lme-parts	p.3	I'll check the note and the paper's section structure first. The tasks are all on page 3–4, so you n
+base-sonnet-1	lme-parts	p.4 subsection.3.2	xample per question type, each with its evidence statements and the answer. Start here. - §3.2 on p. 4 gives the
+base-sonnet-1	lme-parts	p.5	 against a rubric describing the preferred response. **How the histories are built (skim p. 5).** The e
+base-sonnet-1	lme-parts	p.3 subsection.3.2	the main difficulty of the benchmark. **Most useful overall, in order:** 1. **Fig. 1 and §3.2 (pp. 3–4).** This i
+base-sonnet-1	lme-parts	p.6 figure.3	order:** 1. **Fig. 1 and §3.2 (pp. 3–4).** This is the task definition. 2. **Pilot study, Fig. 3 (p. 6).** Long-c
+base-sonnet-1	lme-parts	p.8 table.2	ch easier version. It shows why the benchmark is hard. 3. **Unified framework, Fig. 4 and Table 2 (p. 8).** It spl
+base-sonnet-1	lme-parts	p.8 section.5	ding, with four design knobs. It is the paper's most reusable idea. 4. **Design findings, §5 (pp. 8–10).** These 
+base-sonnet-1	lme-parts	p.19 figure.9	or temporal questions. - Use chain-of-note reading with JSON input. 5. **Appendix A.3, Fig. 9 (p. 19).** It giv
+base-sonnet-1	lme-parts	p.3	...]] with a 20-line digest of the numbers. Its Q&A section is empty. I read the note and pp. 3–4 directly,
+base-sonnet-1	lme-sizes	p.6	size. It is an upper-bound setting that separates reading ability from retrieval ability (p. 6). | - **
+base-sonnet-1	lme-sizes	p.6	 from oracle to S. GPT-4o goes from 0.870 to 0.606 and Llama-3.1-70B from 0.744 to 0.334 (p. 6, from the
+base-sonnet-1	lme-sizes	p.26	variants:** Besides S and M and the oracle setting, I found none in the paper's text. The page 26 table com
+base-sonnet-1	lme-sizes	p.26	 rests on a keyword search of the paper and its note, not a full read. I did not read the page 26 table. I 
+base-sonnet-1	lme-sizes	p.6	d not read the page 26 table. I also didn't get a precise link for the oracle sentence on page 6, because 
+base-sonnet-1	topics	KEPT PLAIN	nce is the authors' automatic metrics only (FASTopic paper, p. 6–7, Tables 1–3
+base-sonnet-1	topics	p.10	[L] (p. 10). FASTopi
+base-sonnet-1	topics	p.14	[L] neural topic models in some respects (p. 14). Preproc
+base-sonnet-1	topics	p.9	2Vec, BERTopic and TopicGPT can't give proper document-topic or topic-word distributions (p. 9). **My p
+early-haiku-1	completep	p.1	[L]). Page 1 itself is
+early-haiku-1	completep	p.2	bstract and Figure 1, a three-panel summary of these results. The detail above comes from pages 2–10, which I 
+early-haiku-1	judgebench	p.4 figure.2	tyle control and no self-enhancement bias) and why you keep only mixed-outcome questions. Figure 2 on p. 4 is the di
+early-haiku-1	judgebench	p.6	e only manual inspection mentioned is of checker disagreements, which were format errors (p. 6). The pap
+early-haiku-1	judgebench	p.20	isagreements, which were format errors (p. 6). The paper's own ~98–99% checker agreement (p. 20) is the m
+early-haiku-1	kv	KEPT PLAIN	r OPT-13B it batches 2.2× more requests than Orca (Oracle) (p. 11, Fig. 13a
+early-haiku-1	kv	p.11 figure.12	[L] (p. 11, Fig. 12). For OPT
+early-haiku-1	kv	p.11 figure.15	[L] (p. 11, Fig. 15). - **Sha
+early-haiku-1	kv	p.12 figure.16	[L] (p. 12, Fig. 16). - **Cos
+early-haiku-1	kv	p.12 figure.18	. 16). - **Costs:** the paged attention kernel is 20–26% slower than FasterTransformer's (p. 12, Fig. 18a). Swappin
+early-haiku-1	lme-con	p.6	tant details and then reasoning over the shorter notes. **How this paper uses it:** - **Page 6 (pilot st
+early-haiku-1	lme-con	p.6 figure.3	f-note technique was applied." So on this page CoN does not rescue long-context reading. (p. 6, Figure 3b; lines 45
+early-haiku-1	lme-con	p.9 subsection.5.5	 6, Figure 3b; lines 457–467 of the text layer) - **Reading strategy in the design study (§5.5, p. 9-ish):** C
+early-haiku-1	lme-con	p.6	 is listed as one of the nine systems compared, with a "CoN" reading strategy. Note that page 6 shows CoN
+early-haiku-1	lme-parts	p.3 figure.1	[L]. **What to read, in order:** 1. **Figure 1 (p. 3)**: the fa
+early-haiku-1	lme-parts	p.4 subsection.3.2	to read, in order:** 1. **Figure 1 (p. 3)**: the fastest way to see every task type. 2. **§3.2 (p. 4)**: the fi
+early-haiku-1	lme-parts	p.19 subsection.A.2	type definitions in precise terms. This is the section to read if you only read one. 3. **Appendix A.2 (p. 19)**: how hi
+early-haiku-1	lme-parts	p.21 table.6	reGPT and UltraChat. This determines what the scores actually measure. 4. **Appendix A.4, Table 6 (p. 21)** with **
+early-haiku-1	lme-parts	p.20 figure.10	 determines what the scores actually measure. 4. **Appendix A.4, Table 6 (p. 21)** with **Figure 10 (p. 20)**: how th
+early-haiku-1	lme-parts	p.6 figure.3	y is 90% or higher per type, and the lowest scores are on preference and abstention. 5. **Figure 3 (p. 6)**: the he
+early-haiku-1	lme-parts	p.8	emory system:** §4 (the indexing/retrieval/reading framework) and §5 (design experiments, pp. 8–10). Read th
+early-haiku-2	completep	p.1	iency gains over the prior state of the art, which is µP here (per my note, not stated on page 1). It also
+early-haiku-2	completep	p.1	oss depth, FLOP savings for deep models, and a larger range of efficient N:L ratios. The page 1 claims ar
+early-haiku-2	judgebench	p.4	The construction is on pages 4–6 and the c
+early-haiku-2	judgebench	p.10	The construction is on pages 4–6 and the checks on pages 10 and 19. R
+early-haiku-2	judgebench	p.19 subsection.A.3	 4 on the same page shows judging tracks solving. **Read for detail on the construction (p. 19, Appendix A.3–A.5)** - A.3
+early-haiku-2	judgebench	p.2	e regex and GPT-4o-mini correctness checks. **Skip for the construction:** related work (pp. 2–3), the jud
+early-haiku-2	judgebench	p.6	s checks. **Skip for the construction:** related work (pp. 2–3), the judge descriptions (pp. 6–7), the res
+early-haiku-2	judgebench	p.7	. 2–3), the judge descriptions (pp. 6–7), the result tables for judges and reward models (pp. 7–9, unless y
+early-haiku-2	judgebench	p.21	nd reward models (pp. 7–9, unless you want the numbers), and the prompts in the appendix (pp. 21–26). **Most
+early-haiku-2	judgebench	p.4	nt the numbers), and the prompts in the appendix (pp. 21–26). **Most useful overall** - p. 4 (the idea
+early-haiku-2	judgebench	p.6	and the prompts in the appendix (pp. 21–26). **Most useful overall** - p. 4 (the idea), p. 6 (the scor
+early-haiku-2	judgebench	p.10 table.4	ix (pp. 21–26). **Most useful overall** - p. 4 (the idea), p. 6 (the scoring rule), and Table 4 on p. 10. These th
+early-haiku-2	judgebench	p.7 table.2	gn, how to read a score, and the main finding that judging is about as hard as solving. - Table 2 on p. 7 for model
+early-haiku-2	judgebench	p.6	s solving. - Table 2 on p. 7 for model comparisons. **One inconsistency to know about.** Page 6 gives 56 
+early-haiku-2	judgebench	p.19 subsection.A.3	e inconsistency to know about.** Page 6 gives 56 math pairs, which sums to the 350 total. Appendix A.3 on p. 19 says 46 m
+early-haiku-2	kv	p.3	-weighted sum over the cached values, with scores from the query against the cached keys (Eq. 3, p. 3). Each st
+early-haiku-2	kv	p.5	- The attention kernel computes the score for each block separately and sums the results (Eq. 4, p. 5), so non-
+early-haiku-2	lme-con	p.6 subsection.5.5	Xiv:2311.09210) for it. **How it is used in LongMemEval** - **The problem it addresses (§5.5, p. 6):** even 
+early-haiku-2	lme-parts	p.2	[L]. Page 2 is the in
+early-haiku-2	lme-parts	p.21 table.6	howing that commercial assistants score well below offline reading. - **Judge validation, Table 6 (p. 21)**: the ev
+early-haiku-2	topics	KEPT PLAIN	ings and derive topics from cluster terms (p. 9). FASTopic (p. 10, §3.11
+early-haiku-2	topics	p.3	The paper doesn't name a default model, and page 3 doesn't e
+early-haiku-2	topics	p.3	The paper doesn't name a default model, and page 3 doesn't either. Page 3 is the pr
+early-haiku-2	topics	p.16	say, which bears on a default: - **LDA is still the reference point.** The survey notes (p. 16) that som
+early-haiku-2	topics	p.4	eural topic model is the VAE framework, with NVDM and ProdLDA as the pioneering examples (p. 4). - **Emb
+early-haiku-2	topics	p.9	** Top2Vec and BERTopic cluster document embeddings and derive topics from cluster terms (p. 9). FASTopi
+early-haiku-2	topics	p.15 subsection.6.1	nd stable. The survey gives no benchmark numbers for these. - **Metric choice is shaky.** Section 6.1 (p. 15) says cohe
+early-haiku-3	completep	p.1	 CompleteP, that fixes this and makes deep models more compute-efficient. **The problem (p. 1, abstract
+early-haiku-3	completep	p.2	linear approximation. Then the extra depth and nonlinearity add little. **The mechanism (p. 2, Eq. 1).** Each 
+early-haiku-3	completep	p.1 figure.1	consistently better, both for learning-rate transfer across depth and for training speed (Figure 1, p. 1). **What
+early-haiku-3	completep	p.2 table.1	hors also rescale LayerNorm, the bias learning rates, AdamW's weight decay and AdamW's ε (Table 1, p. 2). They ca
+early-haiku-3	completep	p.2	depth-wise hyperparameter transfer, which the authors say Yang et al. thought impossible (p. 2). - For 1
+early-haiku-3	completep	p.2	pleteP saves 11.8% of FLOPs over µP at the optimal shape and 34.4% for a 179-layer model (p. 2). The abs
+early-haiku-3	completep	p.1	ardware or deployment constraints call for unusual shapes (Figure 1, right). I read only page 1 and the s
+early-haiku-3	completep	p.2	nstraints call for unusual shapes (Figure 1, right). I read only page 1 and the start of page 2, so the T
+early-haiku-3	judgebench	p.4	**Short answer:** read pages 4–6 (how the 
+early-haiku-3	judgebench	p.9	**Short answer:** read pages 4–6 (how the pairs are built and scored) and the ablation on pages 9–10. Everythi
+early-haiku-3	judgebench	p.4 figure.2	ither motivation or a results table you can look up when needed. **Reading order** 1. **p. 4, Figure 2, and §3 "
+early-haiku-3	judgebench	p.5	enerator for both sides removes style differences and self-preference across models. 2. **p. 5–6, "JudgeBe
+early-haiku-3	judgebench	p.6	mini and the automatic checker disagree on format. The final split is 154 / 98 / 56 / 42 (p. 6). 3. **p.
+early-haiku-3	judgebench	p.6	 automatic checker disagree on format. The final split is 154 / 98 / 56 / 42 (p. 6). 3. **p. 6, the star
+early-haiku-3	judgebench	p.9 subsection.4.4	lip judge scores below 50%. You need this to read any number in the paper correctly. 4. **p. 9–10, §4.4 ablation.
+early-haiku-3	judgebench	p.19 subsection.A.3	as evidence of self-preference, because the paper's own argument goes the other way. 5. **Appendix A.3 (p. 19) and A.5 (
+early-haiku-3	judgebench	p.19	, because the paper's own argument goes the other way. 5. **Appendix A.3 (p. 19) and A.5 (p. 19–20).** Read 
+early-haiku-3	judgebench	p.1	d an example where the format checker and the LLM grader disagree. **Skim or skip** - **pp. 1–3** (abstra
+early-haiku-3	judgebench	p.2	ee-level hierarchy (instruction following, correctness, style). Read the abstract and the p. 2 figure if
+early-haiku-3	judgebench	p.7 table.1	, correctness, style). Read the abstract and the p. 2 figure if you want the framing. - **Tables 1–3 (pp. 7–9)** hold th
+early-haiku-3	judgebench	p.10 table.4	 1–3 (pp. 7–9)** hold the judge, model and reward-model numbers. Read them as needed. - **Table 4 (p. 10)** is wort
+early-haiku-3	judgebench	p.4	cific judge. **A.6** holds the prompts. **Most useful overall:** the construction logic (p. 4–5), the sco
+early-haiku-3	judgebench	p.6	the prompts. **Most useful overall:** the construction logic (p. 4–5), the scoring rule (p. 6), and the
+early-haiku-3	judgebench	p.9	he construction logic (p. 4–5), the scoring rule (p. 6), and the generator-bias ablation (p. 9–10). Togethe
+early-haiku-3	kv	KEPT PLAIN	ot prefix (LLaMA-13B) | 3.58× throughput vs Orca (Oracle) | p. 12
+early-haiku-3	kv	p.11	vs Orca (Oracle) | p. 12 | | Memory saved by beam-search sharing (Alpaca) | 37.6%–55.2% | p. 11 | | Atten
+early-haiku-3	kv	p.4	p to 22× over FasterTransformer). - The paper gives beam-search sharing as "up to 55%" on p. 4 and 66.3%
+early-haiku-3	kv	p.11	erTransformer). - The paper gives beam-search sharing as "up to 55%" on p. 4 and 66.3% on p. 11. - "Witho
+early-haiku-3	lme-con	p.6 figure.6	ls, then reasoning over a shorter, cleaner text. **How LongMemEval uses it** (§5.5, with Figure 6 on p. 6): - **In
+early-haiku-3	lme-con	p.6	ON are applied throughout §5.2–5.4 unless stated otherwise. - **Result (oracle retrieval, p. 6):** a poo
+early-haiku-3	lme-parts	p.3 figure.1	ntion (30 questions) | ABS | Say "I don't know" to false-premise questions | The paper's Figure 1 (p. 3) gives one
+early-haiku-3	lme-parts	p.19	ions | The paper's Figure 1 (p. 3) gives one example per type, and the type breakdown is p. 19. The text
+early-haiku-3	lme-parts	p.3 figure.1	ed per-type counts. Check the figure if you need them. **What to read, in order:** 1. **p. 3, Figure 1 and Table
+early-haiku-3	lme-parts	p.4 subsection.3.1	what the tasks look like, and how this benchmark differs from LoCoMo and MemoryBank. 2. **p. 4, §3.1–3.2.** The fo
+early-haiku-3	lme-parts	p.5 figure.2	ssions, question, answer) and the definitions of the five abilities and seven types. 3. **p. 5, Figure 2 and "Hist
+early-haiku-3	lme-parts	p.6 subsection.3.3	 filler sessions. Read this if you want to judge whether the benchmark is realistic. 4. **p. 6, §3.3–3.4.** The GP
+early-haiku-3	lme-parts	p.21 table.6	p. 6, §3.3–3.4.** The GPT-4o judge (>97% agreement with experts; prompts and agreement in Table 6, p. 21) and the 
+early-haiku-3	lme-parts	p.19 figure.9	e headline numbers: ChatGPT 0.577 and Coze 0.330, against 0.918 for offline reading. 5. **p. 19, Figure 9.** Type d
+early-haiku-3	lme-parts	p.7	 session. **Skip for a task overview:** §4 (the unified indexing/retrieval/reading view, pp. 7–8) and §5 (
+early-haiku-3	lme-parts	p.8	:** §4 (the unified indexing/retrieval/reading view, pp. 7–8) and §5 (design experiments, pp. 8–10). Those m
+early-haiku-3	lme-parts	p.17 subsection.A.1	. 8–10). Those matter if you're building a memory system, not for understanding the data. Appendix A.1 (pp. 17–18, the onto
+early-haiku-3	lme-parts	p.4	generation prompts) only matters if you plan to build variants. **Most useful overall:** p. 4–5 for what 
+early-haiku-3	lme-parts	p.3	d variants. **Most useful overall:** p. 4–5 for what the tasks are and how they're made, p. 3 Figure 1 
+early-haiku-3	lme-parts	p.6	ll:** p. 4–5 for what the tasks are and how they're made, p. 3 Figure 1 for examples, and p. 6 for how a
+early-haiku-3	lme-sizes	p.16	[L]). The paper's Table 8 in the appendix (p. 16 or so, no
+early-haiku-3	topics	p.3	opic or FASTopic) as the modern option to compare against. What the paper supports: - **Page 3 is only t
+early-haiku-3	topics	p.3 figure.2	nly the setup.** It defines topics as word distributions and documents as topic mixtures (Figure 2, p. 3), then in
+early-haiku-3	topics	p.4	es (Figure 2, p. 3), then introduces the VAE framework that most neural topic models use (p. 4 onward). 
+early-haiku-3	topics	p.13	benchmarking studies find conventional LDA can still outperform NTMs in certain respects (p. 13, citing D
+early-haiku-3	topics	p.9	irection.** Top2Vec and BERTopic cluster document embeddings and derive topics from them (p. 9). FASTopi
+early-haiku-3	topics	p.10	h optimal transport between pretrained document embeddings and topic and word embeddings (p. 10). The sur
+early-haiku-3	topics	p.13	rsity metrics may disagree with human judgment, and preprocessing choices change results (pp. 13–14). Whateve
+new-haiku-1	judgebench	p.4	**Short version:** Read pp. 4–6 for the c
+new-haiku-1	judgebench	p.2 figure.1	ly scores if both verdicts agree on the correct answer. **What to read, in order** 1. **p. 2, Figure 1** — the t
+new-haiku-1	judgebench	p.4 figure.2	rrectness, then style). Its examples show what JudgeBench tests and what it doesn't. 2. **p. 4, Figure 2 and §3** 
+new-haiku-1	judgebench	p.5 section.3	2 and §3** — the pipeline. This is the core idea, and the reason the pairs are hard. 3. **pp. 5–6, §3 "datasets
+new-haiku-1	judgebench	p.6 section.4	nd why GPT-4o-mini plus the automatic checker are used to drop format-only failures. 4. **p. 6, §4** — the t
+new-haiku-1	judgebench	p.19 subsection.A.3	 to read any number in the paper. Under it, a coin-flip judge scores well below 50%. 5. **pp. 19–21, Appendix A.3 and A.5**
+new-haiku-1	judgebench	p.7 table.1	ntation (Table 8), which tests whether 154 pairs is enough. **Most useful results** - **Table 1 (p. 7)** — promp
+new-haiku-1	judgebench	p.7 table.2	Table 1 (p. 7)** — prompted, fine-tuned and multi-agent judges. Most are near chance. - **Table 2 (p. 7)** — the s
+new-haiku-1	judgebench	p.10 figure.4	ng models lead, so this is the table that says "judging needs reasoning". - **Table 4 and Figure 4 (p. 10)** — judgi
+new-haiku-1	judgebench	p.19 subsection.A.4	st for the model that generated it, which is a selection effect, not self-preference. - **Appendix A.4 (p. 19)** — the l
+new-haiku-1	judgebench	p.6	s you need to reproduce a judge. **A paper inconsistency to know about.** The main text (p. 6) gives 56
+new-haiku-1	judgebench	p.19 subsection.A.3	consistency to know about.** The main text (p. 6) gives 56 math pairs and a total of 350. Appendix A.3 (p. 19) says 46 m
+new-haiku-1	judgebench	p.6	ing note ( ) repeats the p. 6 figure of
+new-haiku-1	kv	p.4	- The paper contradicts itself in places. The beam-search memory saving is "up to 55%" on p. 4 but 66.3%
+new-haiku-1	kv	p.11	dicts itself in places. The beam-search memory saving is "up to 55%" on p. 4 but 66.3% on p. 11. It also 
+new-haiku-1	kv	p.13	er more than 20% of swapping's latency, yet also that swapping wins at large block sizes (p. 13). - It is
+new-haiku-1	kv	p.1	h longer contexts, larger models and more complex decoding, per the authors' own summary (p. 1).
+new-haiku-1	lme-parts	p.4 subsection.3.2	**The dataset: 500 questions in 7 types, covering 5 abilities** (p. 4, §3.2; examples
+new-haiku-1	lme-parts	p.3 figure.1	**The dataset: 500 questions in 7 types, covering 5 abilities** (p. 4, §3.2; examples in Figure 1, p. 3) | Type 
+new-haiku-1	lme-parts	p.2 section.1	kens) or 500 sessions (LongMemEval_M, ~1.5M tokens). Evidence sits among filler sessions (p. 2, §1). **What
+new-haiku-1	lme-parts	p.3 figure.1	okens). Evidence sits among filler sessions (p. 2, §1). **What to read, in order** 1. **Figure 1, p. 3**: one ex
+new-haiku-1	lme-parts	p.4 subsection.3.2	1, p. 3**: one example per type. This takes two minutes and makes the rest concrete. 2. **§3.2, p. 4**: the ab
+new-haiku-1	lme-parts	p.6 table.6	2, p. 4**: the ability and type definitions. This is the core of the paper. 3. **§3.3 and Table 6, pp. 6 and 21**:
+new-haiku-1	lme-parts	p.6 figure.3	 agreement with experts (97% overall). Read this before trusting any score. 4. **§3.4 and Figure 3, p. 6**: the pi
+new-haiku-1	lme-parts	p.21 table.7	ot showing commercial systems and long-context models drop sharply at the _S length. 5. **Table 7, p. 21**: per-ty
+new-haiku-1	lme-parts	p.8 table.2	estions, which show where memory systems fail (multi-session and temporal are weak). 6. **Table 2, p. 8, and §5 (
+new-haiku-1	lme-parts	p.8 section.5	 where memory systems fail (multi-session and temporal are weak). 6. **Table 2, p. 8, and §5 (pp. 8–10)**: the de
+new-haiku-1	lme-parts	p.3 table.1	lding a memory system; the summary in the note covers the numbers. **Skim or skip** - **Table 1, p. 3**: the co
+new-haiku-1	lme-parts	p.19 figure.9	3**: the comparison with other benchmarks. Useful for positioning, not for the tasks. - **Figure 9, p. 19**: datase
+new-haiku-1	lme-parts	p.16	 them. Check the PDF page if you need them. - **Appendix A.1 (question generation, around p. 16)**: read 
+new-haiku-1	topics	p.3	Page 3 doesn't n
+new-haiku-1	topics	p.14	swer your question from this page. The closest the survey gets to a recommendation is on p. 14, in its e
+new-haiku-1	topics	p.14	hold up. Coherence metrics also disagree with human judgment on some newer neural models (pp. 14–15). So by 
+new-haiku-1	topics	p.17	he paper's conclusion, read the "Methods" and "Challenges" sections (the conclusion is on p. 17) to see w
+new-haiku-2	completep	p.1	rifts as depth grows, so you either re-tune at each size or accept a worse run (abstract, p. 1). Some pa
+new-haiku-2	completep	p.1	nly features close to its linearization. Then the extra depth and nonlinearity go unused (p. 1). **The 
+new-haiku-2	completep	p.2	mpossible at any $\alpha$. Other work found $\alpha = 1$ learns better as $L \to \infty$ (p. 2). The aut
+new-haiku-2	completep	p.1 figure.1	ly more compute-efficient, through better hyperparameter transfer and faster pretraining (Figure 1, p. 1). They ca
+new-haiku-2	completep	p.2	he learning rate and init scale across depth, which earlier theory had called impossible (p. 2). - **A r
+new-haiku-2	completep	p.2	and AdamW ε. The authors say these are essential for stable training with $\alpha = 0.5$ (p. 2; Table 1,
+new-haiku-2	completep	p.2	alpha = 1$ save 11.8% FLOPs over µP at the optimal shape and 34.4% for a 179-layer model (p. 2). The abs
+new-haiku-2	completep	p.1	keeps a wider range of width-to-depth ratios compute-efficient. **Caveats.** I read only pages 1–2, so the l
+new-haiku-2	judgebench	p.4	ction sections against the text before recommending them. The construction is clear from pp. 4–6 and Appen
+new-haiku-2	judgebench	p.4 figure.2	 **Read these, in this order** (about 12 pages of the 27, including the appendix): 1. **p. 4, Figure 2, and §3 "
+new-haiku-2	judgebench	p.4	of the 27, including the appendix): 1. **p. 4, Figure 2, and §3 "JudgeBench's pipeline" (p. 4 to top of
+new-haiku-2	judgebench	p.5	uding the appendix): 1. **p. 4, Figure 2, and §3 "JudgeBench's pipeline" (p. 4 to top of p. 5).** This 
+new-haiku-2	judgebench	p.5	g, and pair a correct response with an incorrect one. Figure 2 shows it on one page. 2. **p. 5, "JudgeBe
+new-haiku-2	judgebench	p.6	GPT-4o-mini) is used to drop pairs where the automatic checker failed on formatting. 3. **p. 6, the two-
+new-haiku-2	judgebench	p.19 subsection.A.3	 metric, so read it before any number. Under it, a coin-flip judge scores below 50%. 4. **Appendix A.3 (p. 19), exact co
+new-haiku-2	judgebench	p.19 subsection.A.5	11 pairs each, and the same for LiveBench. This is where the final split comes from. 5. **Appendix A.5 (pp. 19–20), correctn
+new-haiku-2	judgebench	p.10 table.4	 correctness checking.** How answers were extracted and when a response was dropped. 6. **p. 10, Table 4 and Figur
+new-haiku-2	judgebench	p.19	nerated by Claude-3.5-Sonnet. This is the main limit of the construction. Optional: A.4 (p. 19) for the 
+new-haiku-2	judgebench	p.20	imit of the construction. Optional: A.4 (p. 19) for the length-bias check, and A.6 (from p. 20) for the 
+new-haiku-2	judgebench	p.4 section.3	ork and most of the §4 tables unless you need specific results. **Most useful overall:** §3 on pp. 4–5 is the re
+new-haiku-2	judgebench	p.6	e idea, since the same recipe applies to any dataset with ground truth and a checker. The p. 6 scoring r
+new-haiku-2	judgebench	p.10	round truth and a checker. The p. 6 scoring rule determines how to read every number. The p. 10 ablation 
+new-haiku-2	judgebench	p.6 section.3	not solve. **Two things I found while checking:** - **The math count is inconsistent.** §3 (p. 6) gives 56 
+new-haiku-2	judgebench	p.19	 **The math count is inconsistent.** §3 (p. 6) gives 56 math pairs in the final 350. A.3 (p. 19) says 46 
+new-haiku-2	lme-con	p.10 subsection.5.5	s, then reason from the concise notes. **How LongMemEval uses it** - **Reader strategy (§5.5, p. 10).** After
+new-haiku-2	lme-con	p.25 figure.13	item before reasoning. The paper applies CoN and JSON by default in §5.2–5.4. - **Prompt (Fig. 13, p. 25).** The C
+new-haiku-2	lme-con	p.23	d adds "Answer (step by step):". The non-CoN baseline drops that instruction. The text on p. 23 says the 
+new-haiku-2	lme-con	p.10 figure.6	instruction. The text on p. 23 says the prompt is "a small variation of" CoN. - **Result (Fig. 6, p. 10).** Under
+new-haiku-2	lme-con	p.6	risons across memory systems should hold the reader prompt fixed. I did not confirm that page 6 itself di
+new-haiku-2	lme-con	p.10	t fixed. I did not confirm that page 6 itself discusses CoN; the passages above are from pp. 10, 23 and 2
+new-haiku-2	lme-parts	p.3 table.1	ongMemEval-M (500 sessions, about 1.5M tokens). **Which parts to read, in order:** 1. **p. 3, Table 1 and Figur
+new-haiku-2	lme-parts	p.4 subsection.3.2	MemoryBank, PerLTQA, LoCoMo and DialSim, and one concrete example per question type. 2. **p. 4, §3.2 (the defi
+new-haiku-2	lme-parts	p.6 subsection.3.4	nd seven types, each defined in a sentence. This is the reference for the task list. 3. **p. 6, §3.4 and Figur
+new-haiku-2	lme-parts	p.5 figure.2	fline reading with GPT-4o. This tells you whether the benchmark is hard in practice. 4. **p. 5, Figure 2 and "Hist
+new-haiku-2	lme-parts	p.19 figure.9	uilt, and how the haystack is padded. Read it only if you plan to build on the data. 5. **p. 19, Figure 9 (Appendix
+new-haiku-2	lme-parts	p.3 figure.1	he text layer, so read the page itself for the per-type counts. **Most useful overall:** Figure 1 (p. 3) plus the 
+new-haiku-2	lme-parts	p.4	the per-type counts. **Most useful overall:** Figure 1 (p. 3) plus the §3.2 definitions (p. 4) cover wh
+new-haiku-2	lme-parts	p.6 figure.3	ful overall:** Figure 1 (p. 3) plus the §3.2 definitions (p. 4) cover what the tasks are. Figure 3 (p. 6) is the re
+new-haiku-2	lme-parts	p.1	endix A.4) is worth a look only if you plan to use GPT-4o as the grader. Caveats: I read pp. 1–6 and the A
+new-haiku-2	lme-sizes	p.5	only in how much filler history surrounds the same questions.** The paper defines them on page 5 (§3.2): 
+new-haiku-2	lme-sizes	p.6	h is not a length setting. It gives the model only the evidence sessions, with no filler (p. 6). Oracle 
+new-haiku-2	lme-sizes	p.6	aper reports 0.870 with Oracle and 0.606 on _S, a 30–60% drop across long-context models (p. 6, and the 
+new-haiku-2	lme-sizes	p.3	and 0.606 on _S, a 30–60% drop across long-context models (p. 6, and the pilot results on p. 3–6). I foun
+new-haiku-2	lme-sizes	p.5	 says _S has "~50 sessions". The paper gives only the token count for _S (p. 5), so that
+new-haiku-2	topics	KEPT PLAIN	now. The newer paper in this folder is FASTopic (May 2024, p. 1
+new-haiku-2	topics	p.3	I'll check the paper's text on page 3, plus the
+new-haiku-2	topics	p.3	 existing note, before answering. No review or note covers this folder yet, so I'll read page 3 of the pa
+new-haiku-2	topics	p.3	g. No review or note covers this folder yet, so I'll read page 3 of the paper directly. Page 3 doesn't n
+new-haiku-2	topics	p.3	 since it is the newer paper in the same folder. The paper doesn't name a default model. Page 3 is the se
+new-haiku-2	topics	p.3	ere is the VAE-based neural topic model, which it calls "the most basic and popular NTM" (p. 3). That is
+new-haiku-2	topics	p.1	- **Don't trust a single number for choosing.** The coherence paper in this folder (2021, p. 1 abstract)
+new2-haiku-1	completep	p.2	l stream, $h_{\ell+1} = h_\ell + L^{-\alpha} F_\ell(h_\ell)$, with $\alpha \in [0.5, 1]$ (p. 2, Eq. 1). Earlier
+new2-haiku-1	completep	p.2	th and width. They report these changes are needed for stable training at $\alpha = 0.5$ (p. 2). - **Com
+new2-haiku-1	completep	p.1	 efficiency gains and a wider range of width-to-depth ratios that stay compute-efficient (p. 1; p. 2). 
+new2-haiku-1	completep	p.2	iency gains and a wider range of width-to-depth ratios that stay compute-efficient (p. 1; p. 2). This i
+new2-haiku-1	completep	p.3	upports the "non-lazy" argument; I have not read that part yet. The paper's related work (p. 3) places i
+new2-haiku-1	judgebench	p.4	**Short version:** read pp. 4–6 for the c
+new2-haiku-1	judgebench	p.19	**Short version:** read pp. 4–6 for the construction, then pp. 19 for the f
+new2-haiku-1	judgebench	p.4 section.3	[L]. **Must-read sections, in order:** - **§3, pp. 4–5:** the pi
+new2-haiku-1	judgebench	p.6	e and why it's built this way. This is the core. - **§4 opening and the aggregation rule, p. 6:** each p
+new2-haiku-1	judgebench	p.19	 verdicts count as wrong. You need this to read any number in the paper. - **A.3 and A.5, p. 19:** how ma
+new2-haiku-1	judgebench	p.19	 A.5, p. 19:** how many questions were sampled, and how the labels were checked. - **A.4, p. 19:** length
+new2-haiku-1	judgebench	p.9 figure.4	ponses average about 562 vs 561 tokens, so length can't explain the results. - **§4.4 and Figure 4, pp. 9–10:** the ge
+new2-haiku-1	judgebench	p.2	 best judge scores are around 80% (o3-mini, high). **Safe to skip:** the related work on pp. 2–3, the judg
+new2-haiku-1	judgebench	p.20 table.8	 results carry the generator bias described above. - The paper's own augmented-set check (Table 8, p. 20) shows th
+new2-haiku-1	judgebench	p.1	0) shows that the rankings hold, but the overall pair count is still small (350). I read pp. 1–10 and A.3–A
+new2-haiku-1	kv	KEPT PLAIN	ughput over FasterTransformer and Orca at the same latency (p. 1
+new2-haiku-1	kv	p.4	[L], or about 1.6 GB for one 2048-token request (p. 4). - **Mem
+new2-haiku-1	kv	p.2 figure.2	[L] (p. 2, Fig. 2, read fro
+new2-haiku-1	kv	p.6	lel sampling, beam search, a shared prompt prefix), with copy-on-write when they diverge (pp. 6–8). - The a
+new2-haiku-1	kv	p.12	[L]). The default block size is 16 tokens (p. 12). **Meas
+new2-haiku-1	kv	p.11	ain over Orca (Oracle) on Alpaca rises from 1.3× (basic sampling) to 2.3× (beam width 6) (p. 11). - **Mem
+new2-haiku-1	kv	p.11	lpaca and 44.3–66.3% on ShareGPT; parallel sampling 6–10% (Alpaca) and 16–31% (ShareGPT) (p. 11). - **Sha
+new2-haiku-1	kv	p.12	[L] (p. 12). - **Cos
+new2-haiku-1	kv	p.12	[L] than FasterTransformer's attention, because of block-table lookups (p. 12). **Cave
+new2-haiku-1	kv	p.2	nce is reported. - The paper asserts that accuracy is unaffected but does not measure it (p. 2). - It co
+new2-haiku-1	kv	p.4	p. 2). - It contradicts itself on beam-search savings: the introduction says "up to 55%" (p. 4), while §
+new2-haiku-1	kv	p.11	 beam-search savings: the introduction says "up to 55%" (p. 4), while §6.3 reports 66.3% (p. 11). - This 
+new2-haiku-1	lme-con	p.6	m the text layer, and an answer worth keeping should be appended to a new note's Q&A. Its page 6 is the on
+new2-haiku-1	lme-con	p.6	ething else, such as the chain-of-note technique from the paper, tell me and I'll look at page 6 for that.
+new2-haiku-1	lme-parts	p.19	other types, so they fall within those shares. The percentages come from the pie chart on p. 19; the coun
+new2-haiku-1	lme-parts	p.3 figure.1	ts are my conversion of them to 500. **Which parts to read, in order** 1. **Table 1 and Figure 1, p. 3** ([L]
+new2-haiku-1	lme-parts	p.4 subsection.3.2	xample per type, and how this benchmark compares with LoCoMo, MemoryBank and others. 2. **§3.2, p. 4** ([L]
+new2-haiku-1	lme-parts	p.5 subsection.3.3	 the precise definition of each ability and type. This is the section to quote from. 3. **§3.3, p. 5**: the GP
+new2-haiku-1	lme-parts	p.19	greement with humans. Read it if you plan to reuse the evaluation. 4. **Figure 9 and A.3, p. 19**: the ty
+new2-haiku-1	lme-parts	p.5 figure.2	 that most questions need up to six sessions. Skim or skip §3.2's construction pipeline (p. 5, Fig. 2) unless y
+new2-haiku-1	lme-parts	p.6 subsection.3.4	r skip §3.2's construction pipeline (p. 5, Fig. 2) unless you plan to build similar data. §3.4 (p. 6) has the h
+new2-haiku-1	lme-parts	p.7 section.4	 gap: commercial systems and long-context LLMs drop 30–60%. **Most useful overall** - **§4, p. 7: the unif
+new2-haiku-1	lme-parts	p.8 subsection.5.2	ework to compare other memory systems against, and Table 2 maps nine of them onto it. - **§5.2, p. 8 and Fig. 
+new2-haiku-1	lme-parts	p.9 table.3	mmaries and extracted facts lose information, but facts help multi-session questions. - **Table 3, p. 9:** adding
+new2-haiku-1	lme-parts	p.10 figure.6	to the index key gives about 9.4% better recall and 5.4% better accuracy. - **Table 4 and Fig. 6, p. 10:** time-a
+new2-haiku-1	lme-parts	p.17	nts, even with perfect retrieval. Skip for now: the question-construction detail in A.1 (pp. 17–19), the eva
+new2-haiku-1	lme-parts	p.20	 now: the question-construction detail in A.1 (pp. 17–19), the evaluation prompts in A.4 (pp. 20–21), and the
+new2-haiku-1	lme-parts	p.25 appendix.E	etail in A.1 (pp. 17–19), the evaluation prompts in A.4 (pp. 20–21), and the ablations in Appendix E (pp. 25–27) unless yo
+new2-haiku-1	topics	p.3	**Short answer: this paper doesn't say.** Page 3 is the su
+new2-haiku-2	completep	p.1	pports a wider range of width-to-depth ratios at similar compute efficiency. I read only page 1 (abstract
+new2-haiku-2	judgebench	p.4 section.3	**Short answer:** read §3 (pp. 4–6) and the s
+new2-haiku-2	judgebench	p.6 section.4	**Short answer:** read §3 (pp. 4–6) and the scoring rule in §4 (p. 6). Those tw
+new2-haiku-2	judgebench	p.10 subsection.4.4	s hold the whole method. Then check the appendix counts (A.3) and the generator ablation (§4.4, p. 10). Skip th
+new2-haiku-2	judgebench	p.4	prompts unless you plan to rerun it. **What to read, in order** 1. **Idea and pipeline, p. 4–5** ([L]
+new2-haiku-2	judgebench	p.5	 and one incorrect answer, then pair a correct with an incorrect one. The key claim is on p. 5: a model 
+new2-haiku-2	judgebench	p.5	estion inconsistently also can't tell right from wrong on it. 2. **Sources and filtering, p. 5–6** ([L]
+new2-haiku-2	judgebench	p.6	nses where it disagrees with the regex checker are dropped (format errors). 3. **Scoring, p. 6** ([L]
+new2-haiku-2	judgebench	p.19	verdicts count as wrong, so a coin-flip judge scores below 50%. 4. **Dataset counts, A.3, p. 19** ([L]
+new2-haiku-2	judgebench	p.10 subsection.4.4	Table 8: the judge ranking is unchanged at 770 knowledge pairs). 5. **Generator ablation, §4.4, p. 10** ([L]
+new2-haiku-2	judgebench	p.19	y tell you what the benchmark measures and what its 50% baseline means. A.4 (length bias, p. 19) is a sho
+new2-haiku-2	judgebench	p.19	 means. A.4 (length bias, p. 19) is a short check worth a glance. A.5 (checker agreement, pp. 19–21) is only 
+new2-haiku-2	judgebench	p.6	cover the fine-tuned judges and prompts. **Inconsistency to know about:** the main text (p. 6) gives 56
+new2-haiku-2	judgebench	p.19	tency to know about:** the main text (p. 6) gives 56 math pairs, for a total of 350. A.3 (p. 19) gives 46
+new2-haiku-2	lme-con	p.6	10-point gap between the best and worst reading strategy for GPT-4o. **Why it matters on page 6:** the pi
+new2-haiku-2	lme-con	p.10 figure.6	 needed. Notes: the page-6 claim is from the text layer, and the 10-point figure is from Figure 6 (p. 10 per the e
+new2-haiku-2	lme-parts	p.3 table.1	w far to trust the judge and the human results. ## Most useful overall - **Figure 1 and Table 1 (p. 3)** are the
+new2-haiku-2	lme-parts	p.4 subsection.3.2	l - **Figure 1 and Table 1 (p. 3)** are the most useful for understanding the tasks. - **§3.2 (p. 4–5)** explain
+new2-haiku-2	lme-parts	p.6 figure.3	- **§3.2 (p. 4–5)** explains the construction, which determines what the scores mean. - **Figure 3 (p. 6)** is the 
+new2-haiku-2	lme-parts	p.7 section.4	at the scores mean. - **Figure 3 (p. 6)** is the result that motivates the benchmark. - **§4–5 (p. 7 onward)**
+new2-haiku-2	lme-parts	p.17 table.5	ad them only if you are building a memory system; they are outside the task question. - **Table 5 (p. 17)** is the 
+new2-haiku-2	lme-parts	p.19 figure.9	 I have not checked these page numbers against the PDF; the text layer's page breaks put Figure 9 on p. 19 and Table
+new2-haiku-2	lme-parts	p.21 table.6	hese page numbers against the PDF; the text layer's page breaks put Figure 9 on p. 19 and Table 6 on p. 21. The text
+new2-haiku-2	lme-sizes	p.5	 must search, not in the questions. - **LongMemEval_S** (about 115k tokens per question, p. 5): each qu
+new2-haiku-2	lme-sizes	p.5	[L] - **LongMemEval_M** (500 sessions, about 1.5M tokens, p. 5): the sam
+new2-haiku-3	completep	p.2	e is no note for this paper in yet. If you want the mechanism itself, I can read pages 2 onward an
+new2-haiku-3	judgebench	p.4 section.3	r most are likely in the appendix, so I'll locate those sections. **Short answer:** read §3 (pp. 4–6) closely, 
+new2-haiku-3	judgebench	p.19	p. 4–6) closely, then the appendix bits on filtering and the correctness check (A.3, A.5, pp. 19–20). For res
+new2-haiku-3	judgebench	p.10 table.4	the correctness check (A.3, A.5, pp. 19–20). For results, the single most useful table is Table 4 (p. 10), which sh
+new2-haiku-3	judgebench	p.1	. Skip most of the rest on a first pass. **How it is built, in order:** 1. **Principle (pp. 1–2).** Judge
+new2-haiku-3	judgebench	p.4 figure.2	t reliably check correctness and drift toward plausible or longer answers. 2. **Pipeline (pp. 4–5, Fig. 2 on p. 4).
+new2-haiku-3	judgebench	p.4	rrectness and drift toward plausible or longer answers. 2. **Pipeline (pp. 4–5, Fig. 2 on p. 4).** Take 
+new2-haiku-3	judgebench	p.5	consistently is one it also can't reliably tell right from wrong. 3. **Sources and sizes (p. 5–6).** MMLU-
+new2-haiku-3	judgebench	p.5	The result is 350 pairs: 154 knowledge, 98 reasoning, 56 math, 42 coding. 4. **Filtering (p. 5–6, A.3 on p
+new2-haiku-3	judgebench	p.19	50 pairs: 154 knowledge, 98 reasoning, 56 math, 42 coding. 4. **Filtering (p. 5–6, A.3 on p. 19, A.5 on p
+new2-haiku-3	judgebench	p.19	knowledge, 98 reasoning, 56 math, 42 coding. 4. **Filtering (p. 5–6, A.3 on p. 19, A.5 on pp. 19–20).** A GPT
+new2-haiku-3	judgebench	p.6	matting errors, not wrong answers. Random subsampling balances the subsets. 5. **Scoring (p. 6).** Each 
+new2-haiku-3	judgebench	p.10 figure.4	p judge scores below 50%. **Most useful parts, in order:** - **Generator-bias ablation (p. 10, Fig. 4; counts i
+new2-haiku-3	judgebench	p.19	ost useful parts, in order:** - **Generator-bias ablation (p. 10, Fig. 4; counts in A.3, p. 19).** Claud
+new2-haiku-3	judgebench	p.10 table.4	 judge how much the benchmark depends on its generator. - **Judge-versus-solver ablation (Table 4, p. 10).** Judge
+new2-haiku-3	judgebench	p.6	 is the clearest sign that verifying code is harder than the math case. - **Scoring rule (p. 6).** Neede
+new2-haiku-3	judgebench	p.19	to read any number in the paper, because it sets the chance level. - **Length check (A.4, p. 19).** Corre
+new2-haiku-3	judgebench	p.7 table.1	are about the same length (562 vs 561 tokens), so length bias is controlled. - **Results (Tables 1–3, pp. 7–8).** Read 
+new2-haiku-3	judgebench	p.17	 Skim them unless you need specific numbers. **Optional, if you plan to rerun it:** A.2 (pp. 17–18) explains
+new2-haiku-3	judgebench	p.21	to rerun it:** A.2 (pp. 17–18) explains why fine-tuned judges underperform, and A.6 (from p. 21) has the 
+new2-haiku-3	lme-con	p.6	pplied throughout the main experiments (§5.2–5.4), alongside JSON-formatted memory items (p. 6 figure an
+new2-haiku-3	lme-con	p.23 figure.13	Retrieved items are sorted by timestamp before reading. - **Prompt.** The reading prompt (Figure 13, p. 23) is a sma
+new2-haiku-3	lme-con	p.6	hat a poor reading strategy can cost up to 10 points even with perfect retrieval. **What page 6 shows** 
+new2-haiku-3	lme-parts	p.4	wer is buried in one or more earlier sessions. Seven question types cover five abilities (p. 4): | Type
+new2-haiku-3	lme-parts	p.4	n't know" | Each question is a 4-tuple (history S, question q, question date, answer a) (p. 4). Histori
+new2-haiku-3	lme-parts	p.2	 _S at about 115K tokens (around 50 sessions) and _M at 500 sessions (about 1.5M tokens) (p. 2). **Read
+new2-haiku-3	lme-parts	p.3 figure.1	ions) and _M at 500 sessions (about 1.5M tokens) (p. 2). **Read these, in order:** 1. **Figure 1, p. 3–4.** One co
+new2-haiku-3	lme-parts	p.4 subsection.3.2	 concrete example per type. This is the fastest way to see what the tasks look like. 2. **§3.2, p. 4–5.** The fi
+new2-haiku-3	lme-parts	p.5 subsection.3.3	tatements woven into task-oriented chats). Read this to know what the questions are. 3. **§3.3–3.4, p. 5–6, and Figu
+new2-haiku-3	lme-parts	p.21 table.7	. 0.918 for full-history GPT-4o; long-context drop from 0.870 to 0.606). 4. **Table 6 and Table 7, p. 21.** Judge 
+new2-haiku-3	lme-parts	p.19 figure.9	%) and the human evaluation. Read these before trusting the judge for your own work. 5. **Figure 9, p. 19 (A.3).** 
+new2-haiku-3	lme-parts	p.8 section.5	xt layer, so check the figure in the PDF before quoting shares. **Most useful overall:** §5 (p. 8–10), which ha
+new2-haiku-3	lme-parts	p.9	*Most useful overall:** §5 (p. 8–10), which has the design findings. Table 3 (key design, p. 9) and Figu
+new2-haiku-3	lme-parts	p.10	which has the design findings. Table 3 (key design, p. 9) and Figure 6 (reading strategy, p. 10) are the 
+new2-haiku-3	lme-parts	p.7 table.2	3 (key design, p. 9) and Figure 6 (reading strategy, p. 10) are the most reusable. §4 and Table 2 (p. 7–8) give the 
+new2-haiku-3	lme-parts	p.2	k that makes the comparisons possible. **Skip on a first pass:** the related-work block (p. 2–3, except t
+new2-haiku-3	topics	p.3	 models (NTMs) by network structure and by scenario (short text, cross-lingual, dynamic). Page 3 sets up t
+new2-sonnet-1	completep	p.10 figure.6	k's update drift toward its linearization at rate $1/\sqrt{L}$, which is the lazy regime (p. 10, Figure 6). Only $\
+new2-sonnet-1	completep	p.7	the title. The paper calls this argument a heuristic on a toy width-1 model, not a proof (p. 7, p. 10). 
+new2-sonnet-1	completep	p.10	tle. The paper calls this argument a heuristic on a toy width-1 model, not a proof (p. 7, p. 10). **What
+new2-sonnet-1	completep	p.2	aper calls the LayerNorm, bias and ε corrections essential for stability at $\alpha=0.5$ (p. 2). **Evid
+new2-sonnet-1	completep	p.6 figure.4	-optimal. At 1.5B, a ratio of 11.8 stays within 1% of the best loss, against 38.7 for µP (p. 6, Figure 4f). - **Opt
+new2-sonnet-1	completep	p.5	mpute-optimal width-to-depth ratio stays below about 60, not the ~100 common in practice (p. 5–6). **Cave
+new2-sonnet-1	completep	p.9	h the key numbers checked against the cited pages. I didn't re-derive the theory section (pp. 9–10), so the 
+new2-sonnet-1	judgebench	p.1	 reading order. ## To understand how it's built (about 10 minutes) 1. **Intro argument, pp. 1–2.** This e
+new2-sonnet-1	judgebench	p.4	[L].** The whole pipeline in one picture. Read it first. 3. **Section 3, "JudgeBench", pp. 4–6.** This i
+new2-sonnet-1	judgebench	p.6 section.4	s 350 pairs: 154 knowledge, 98 reasoning, 56 math, 42 coding. 4. **Scoring rule, start of Section 4, p. 6.** Each p
+new2-sonnet-1	judgebench	p.19	 this, but keep it in mind when reading any number. 5. **Appendix A.3 (dataset filtering, p. 19)** is opt
+new2-sonnet-1	judgebench	p.3	five models scores 64% here, which is lower than on the others. ## Skip - Related work (p. 3) and the 
+new2-sonnet-1	kv	KEPT PLAIN	e on OPT-13B, vs Orca (Oracle) / Orca (Max) | 2.2× / 4.3× | p. 10, Fig. 13a
+new2-sonnet-1	kv	p.11 figure.15	mory saved by sharing, beam search / parallel sampling (Alpaca) | 37.6–55.2% / 6.1–9.8% | p. 11, Fig. 15 | | Share
+new2-sonnet-1	kv	p.12 figure.16	 Fig. 15 | | Shared prefix throughput vs Orca (Oracle), 1-shot / 5-shot | 1.67× / 3.58× | p. 12, Fig. 16 | | Atten
+new2-sonnet-1	lme-con	p.6 subsection.5.5	ay an item is irrelevant instead of being pulled off by it. **How LongMemEval uses it** (§5.5, p. 6): - **Whe
+new2-sonnet-1	lme-parts	p.4	to get a feel for the tasks. 2. The list of five abilities and seven question types is on p. 4, in §3.2.
+new2-sonnet-1	lme-parts	p.8 section.5	writes of questions from the other types. **Most useful parts overall, in order:** 1. **§5, pp. 8–10: what mak
+new2-sonnet-1	lme-parts	p.6 figure.3	f-note with JSON input adds up to 10 points even when retrieval is perfect. 2. **§3.4 and Fig. 3, p. 6: the pilo
+new2-sonnet-1	lme-parts	p.4 subsection.3.3	ontext models lose 30–60% going from oracle sessions to the 115K-token version (_S). 3. **§3.3, pp. 4–5: how hist
+new2-sonnet-1	lme-parts	p.2	 at about 115K tokens and _M at about 1.5M. **Skip on a first pass:** - §2 related work (pp. 2–4). - The a
+new2-sonnet-1	lme-parts	p.11	 at about 1.5M. **Skip on a first pass:** - §2 related work (pp. 2–4). - The appendices (pp. 11 onwards),
+new2-sonnet-1	lme-parts	p.21 table.6	 work (pp. 2–4). - The appendices (pp. 11 onwards), apart from the judge-agreement table (Table 6, p. 21) if you d
+new2-sonnet-1	lme-parts	p.2	 The numbers above come from the library note ( ), and I confirmed the p. 2–4 content a
+new2-sonnet-1	lme-sizes	p.5	. For example, Mistral-Nemo with gets 0.666 on S and 0.598 on M. The paper (p. 5) says the
+new2-sonnet-1	topics	KEPT PLAIN	ns, which this survey lacks (the note puts them at FASTopic p. 6–7, Tables 1–3
+new2-sonnet-1	topics	p.14	[L] (p. 14). Preproc
+new2-sonnet-1	topics	p.9	[L] (p. 9). Their a
+base-haiku-1	43	43	43
+base-haiku-2	53	53	53
+base-haiku-3	62	61	61
+base-sonnet-1	40	38	38
+early-haiku-1	27	20	20
+early-haiku-2	27	26	26
+early-haiku-3	52	51	51
+new-haiku-1	34	34	34
+new-haiku-2	51	50	50
+new2-haiku-1	44	43	43
+new2-haiku-2	27	25	25
+new2-haiku-3	37	37	37
+new2-sonnet-1	28	26	26

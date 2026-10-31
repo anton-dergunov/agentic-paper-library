@@ -1,0 +1,12 @@
+**S vs. M:** the two are the same questions and the same construction pipeline, with different amounts of distractor chat history.
+
+- **LongMemEval_S** has about 115k tokens per question. The paper says this history is about 50 sessions ([p. 5](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=5); [p. 6](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=6)).
+- **LongMemEval_M** has 500 sessions, about 1.5M tokens ([p. 5](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=5)).
+
+In both, the evidence sessions are inserted at random positions inside unrelated sessions. Those come from self-chat simulations and public ShareGPT and UltraChat data, and each session gets a plausible timestamp ([p. 5](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=5)). So M tests the same memory task under a much larger haystack. The paper's pilot shows the cost of length: GPT-4o drops from 0.870 with only the evidence sessions to 0.606 when reading the full S history ([p. 6](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=6)). The paper reports only S results for the long-context LLMs, so the M numbers in its tables come from the memory-system experiments, not from this pilot.
+
+**Other versions:** the paper defines no others. It says the pipeline "allows us to compile chat histories of arbitrary length" but names only S and M as standard settings ([p. 5](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=5)).
+
+**Oracle** is not a dataset size. It is a retrieval setting in which the model sees only the evidence sessions, with no distractors. The paper uses it as the upper bound: the gap between Oracle and S is the cost of finding the evidence in a long history ([p. 6](http://pdf.invalid/llm/memory/benchmarks/LongMemEval.%20Benchmarking%20Chat%20Assistants%20on%20Long-Term%20Interactive%20Memory.pdf?page=6)).
+
+If you have seen other LongMemEval variants, such as a separate oracle file in the released data, they are not described in this paper. Check the dataset release for those.

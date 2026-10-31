@@ -44,7 +44,7 @@ A paper's text and its PDF have the same topic path and filename stem.
 
 YAML frontmatter: `title`, `authors`, `published`, `arxiv`, `url`, `source` (`pdf` for a text layer, `web` for a web article), `type` (`method` | `survey` | `benchmark` | `study` | `system` | `position` | `theory`; set at filing, replaced by `paperlib read`; when a paper shows it is wrong, `paperlib set-type`), `text-layer` (optional: `broken`), `summary` (one neutral sentence on what the paper does or finds; the indexes show it), `added`.
 
-Cite pages from the `[page N]` line above the passage: "p. 7, Table 2". The page is the PDF's, counted from 1, which is what the PDF viewer opens.
+Cite pages from the `[page N]` line above the passage: "p. 7, Table 2"; in an answer to the reader, as a link (below). The page is the PDF's, counted from 1, which is what the PDF viewer opens.
 
 ## Notes: agent memory per paper
 

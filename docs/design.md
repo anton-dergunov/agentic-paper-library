@@ -326,6 +326,21 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
     of what the reading said if the type is later set by hand.
   - The backfill on the author's library took 1,824 types from notes and asked for 446, for $1.57;
     5 papers had one already.
+- **Page citations in answers are links, and carrel links the ones left plain (2026-10-31).**
+  Answers linked the lead citation of each point and left passing ones plain ("Table 6 on
+  p. 20", "read pp. 8–10"); "which parts should I read" answers often had no link at all. The
+  guide set the citation style, plain "p. 7, Table 2", 40 lines before it asked for links, and
+  notes cite plain pages too.
+  - The guide's line on citing pages now adds "in an answer, as a link (below)": 16 tokens.
+    On Haiku, linked citations went from 27% to 47%, with no visible cost in tokens or time.
+    Widening the link section to passing mentions and ranges did nothing measurable, so it
+    was left as it was. Nothing asks for more citations or for a link on every page.
+  - carrel links a plain page citation in an answer to that page of the paper asked about,
+    with a table's, figure's or section's named destination when the citation gives one. It
+    skips answers that link two papers, and a citation whose sentence names another library
+    paper. 507 of 525 plain citations in the test answers, none to the wrong paper
+    ([experiments/link-coverage](../experiments/link-coverage/README.md)). Claude Code's panel
+    gets only the guide's line.
 - **The pages notes and reviews cite are checked against the paper (2026-10-30).** The notes
   read from the markdown cited the page a section starts on, the only page its headings
   carried, so 60% of their table and figure pages were wrong and their prose pages often a page

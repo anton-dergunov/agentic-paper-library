@@ -1,0 +1,5 @@
+kind	name	chars	tokens	model
+file	before	9245	3524	claude-haiku-5-5
+file	after	9432	3601	claude-haiku-5-5
+file	after-plain	9398	3585	claude-haiku-5-5
+file	early	9292	3540	claude-haiku-5-5

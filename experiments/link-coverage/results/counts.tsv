@@ -1,0 +1,107 @@
+run	question	cited	linked	beside	plain	links	rect	locate	out_tok	cost	sec
+base-haiku-1	completep	5	4	0	1	4	0	0	2727	0.007	13.756
+base-haiku-1	judgebench	15	0	0	15	0	0	0	4058	0.013	24.969
+base-haiku-1	kv	11	11	0	0	11	11	1	8742	0.020	55.734
+base-haiku-1	lme-con	2	1	0	1	1	0	0	2730	0.009	17.058
+base-haiku-1	lme-parts	17	0	0	17	0	0	0	3316	0.010	23.879
+base-haiku-1	lme-sizes	6	1	0	5	1	0	0	4136	0.012	26.467
+base-haiku-1	topics	6	2	0	4	2	0	0	4605	0.011	35.234
+base-haiku-2	completep	8	0	0	8	0	0	0	1762	0.007	14.832
+base-haiku-2	judgebench	19	0	0	19	0	0	0	5443	0.013	36.232
+base-haiku-2	kv	15	11	0	4	11	6	3	7932	0.017	56.858
+base-haiku-2	lme-con	10	0	0	10	0	0	0	2751	0.008	19.628
+base-haiku-2	lme-parts	12	0	0	12	0	0	0	6262	0.012	43.594
+base-haiku-2	lme-sizes	7	7	0	0	7	0	0	4968	0.011	34.601
+base-haiku-2	topics	6	6	0	0	6	0	0	3022	0.011	19.622
+base-haiku-3	completep	15	0	0	15	0	0	0	3444	0.010	28.929
+base-haiku-3	judgebench	14	1	0	13	1	0	0	4576	0.014	35.047
+base-haiku-3	kv	13	6	0	7	6	4	1	5932	0.013	47.496
+base-haiku-3	lme-con	8	0	0	8	0	0	0	5914	0.012	62.390
+base-haiku-3	lme-parts	16	4	0	12	4	4	1	9211	0.018	63.496
+base-haiku-3	lme-sizes	4	4	0	0	4	0	0	3777	0.009	28.332
+base-haiku-3	topics	7	0	0	7	0	0	0	2695	0.009	26.540
+base-sonnet-1	completep	10	3	0	7	4	4	1	3033	0.163	43.816
+base-sonnet-1	judgebench	12	8	0	4	8	8	1	3901	0.166	51.123
+base-sonnet-1	kv	18	11	0	7	12	11	2	4590	0.202	57.530
+base-sonnet-1	lme-con	7	3	0	4	3	3	2	2593	0.148	38.984
+base-sonnet-1	lme-parts	11	2	0	9	2	2	1	3508	0.191	51.130
+base-sonnet-1	lme-sizes	6	1	0	5	1	1	2	2942	0.158	45.097
+base-sonnet-1	topics	4	0	1	3	2	2	2	2296	0.153	36.199
+early-haiku-1	completep	8	6	0	2	6	0	0	2833	0.011	15.518
+early-haiku-1	judgebench	15	12	0	3	12	0	0	7481	0.017	45.035
+early-haiku-1	kv	11	6	3	2	12	9	2	8048	0.017	51.886
+early-haiku-1	lme-con	4	0	0	4	0	0	0	2786	0.009	18.558
+early-haiku-1	lme-parts	11	4	0	7	4	0	0	4517	0.012	28.608
+early-haiku-1	lme-sizes	4	4	0	0	4	2	1	3780	0.010	22.863
+early-haiku-1	topics	7	1	0	6	2	0	0	2888	0.009	18.471
+early-haiku-2	completep	4	2	0	2	2	0	0	2416	0.008	17.226
+early-haiku-2	judgebench	17	4	0	13	4	0	0	5852	0.015	37.495
+early-haiku-2	kv	20	18	0	2	18	11	2	8207	0.018	52.822
+early-haiku-2	lme-con	1	0	0	1	0	0	0	2254	0.007	14.055
+early-haiku-2	lme-parts	10	8	0	2	8	0	0	5603	0.013	31.735
+early-haiku-2	lme-sizes	7	7	0	0	7	0	0	3736	0.009	19.586
+early-haiku-2	topics	7	0	0	7	0	0	0	4514	0.012	27.102
+early-haiku-3	completep	8	0	0	8	0	0	0	1944	0.006	12.680
+early-haiku-3	judgebench	16	0	0	16	0	0	0	4253	0.012	28.204
+early-haiku-3	kv	13	9	0	4	9	7	2	7321	0.015	73.185
+early-haiku-3	lme-con	2	0	0	2	0	0	0	2343	0.008	14.666
+early-haiku-3	lme-parts	19	5	0	14	5	0	0	5889	0.018	35.388
+early-haiku-3	lme-sizes	4	3	0	1	3	0	0	2510	0.008	15.479
+early-haiku-3	topics	7	0	0	7	0	0	0	4347	0.011	28.160
+new-haiku-1	completep	4	4	0	0	4	0	0	1777	0.006	14.835
+new-haiku-1	judgebench	13	0	0	13	0	0	0	5315	0.013	33.946
+new-haiku-1	kv	22	18	0	4	18	5	2	11025	0.021	67.140
+new-haiku-1	lme-con	1	1	0	0	1	0	0	3129	0.008	20.190
+new-haiku-1	lme-parts	13	0	0	13	0	0	0	6382	0.014	43.896
+new-haiku-1	lme-sizes	4	4	0	0	4	0	0	3333	0.009	23.307
+new-haiku-1	topics	4	0	0	4	0	0	0	2500	0.009	22.901
+new-haiku-2	completep	9	1	0	8	1	0	0	2660	0.008	16.243
+new-haiku-2	judgebench	16	0	0	16	0	0	0	5938	0.012	38.443
+new-haiku-2	kv	15	15	0	0	15	12	1	11616	0.020	65.658
+new-haiku-2	lme-con	6	0	0	6	0	0	0	2742	0.008	18.950
+new-haiku-2	lme-parts	9	0	0	9	0	0	0	5421	0.013	38.539
+new-haiku-2	lme-sizes	5	0	0	5	0	0	0	2839	0.009	19.107
+new-haiku-2	topics	7	0	0	7	0	0	0	3011	0.009	25.898
+new2-haiku-1	completep	7	2	0	5	2	0	0	2751	0.007	14.422
+new2-haiku-1	judgebench	19	9	0	10	9	0	0	4450	0.013	26.259
+new2-haiku-1	kv	19	7	2	10	12	6	1	7977	0.016	43.273
+new2-haiku-1	lme-con	2	0	0	2	0	0	0	1148	0.005	7.558
+new2-haiku-1	lme-parts	14	0	2	12	2	0	0	8767	0.016	41.800
+new2-haiku-1	lme-sizes	6	6	0	0	6	0	0	4432	0.010	22.293
+new2-haiku-1	topics	7	6	0	1	6	0	0	2942	0.012	17.558
+new2-haiku-2	completep	3	2	0	1	2	0	0	1986	0.007	10.673
+new2-haiku-2	judgebench	20	7	5	8	7	0	0	5024	0.011	24.480
+new2-haiku-2	kv	17	17	0	0	18	10	1	11514	0.021	65.319
+new2-haiku-2	lme-con	6	4	0	2	4	0	0	3145	0.009	21.568
+new2-haiku-2	lme-parts	14	7	0	7	7	0	0	5655	0.014	35.240
+new2-haiku-2	lme-sizes	5	3	0	2	3	0	0	2622	0.007	13.907
+new2-haiku-2	topics	8	6	0	2	6	0	0	4411	0.013	25.005
+new2-haiku-3	completep	4	3	0	1	3	0	0	1619	0.006	14.927
+new2-haiku-3	judgebench	19	0	0	19	0	0	0	4513	0.013	30.002
+new2-haiku-3	kv	16	16	0	0	16	15	4	11007	0.024	69.224
+new2-haiku-3	lme-con	4	1	0	3	1	0	0	4812	0.010	32.915
+new2-haiku-3	lme-parts	13	0	0	13	0	0	0	4838	0.011	37.532
+new2-haiku-3	lme-sizes	4	4	0	0	4	0	0	4176	0.012	39.534
+new2-haiku-3	topics	5	4	0	1	4	0	0	3516	0.010	30.889
+new2-sonnet-1	completep	11	4	0	7	4	4	1	2262	0.131	42.341
+new2-sonnet-1	judgebench	11	6	0	5	6	6	2	2839	0.149	49.498
+new2-sonnet-1	kv	10	7	0	3	7	7	1	3876	0.189	53.024
+new2-sonnet-1	lme-con	1	0	0	1	0	0	0	1091	0.105	17.003
+new2-sonnet-1	lme-parts	13	5	0	8	7	7	1	2831	0.160	53.409
+new2-sonnet-1	lme-sizes	3	2	0	1	2	2	1	3589	0.258	47.425
+new2-sonnet-1	topics	4	1	2	1	3	3	2	2267	0.163	33.425
+
+run	answers	cited	linked	beside	plain	coverage	links	rect	locate	out_tok	cost	sec
+base-haiku-1	7	62	19	0	43	31%	19	11	1	30314	0.08	197
+base-haiku-2	7	77	24	0	53	31%	24	6	3	32140	0.08	225
+base-haiku-3	7	77	15	0	62	19%	15	8	2	35549	0.08	292
+base-sonnet-1	7	68	28	1	39	43%	32	31	11	22863	1.18	324
+early-haiku-1	7	60	33	3	24	60%	40	11	3	32333	0.08	201
+early-haiku-2	7	66	39	0	27	59%	39	11	2	32582	0.08	200
+early-haiku-3	7	69	17	0	52	25%	17	7	2	28607	0.08	208
+new-haiku-1	7	61	27	0	34	44%	27	5	2	33461	0.08	226
+new-haiku-2	7	67	16	0	51	24%	16	12	1	34227	0.08	223
+new2-haiku-1	7	74	30	4	40	46%	37	6	1	32467	0.08	173
+new2-haiku-2	7	73	46	5	22	70%	47	10	1	34357	0.08	196
+new2-haiku-3	7	65	28	0	37	43%	28	15	4	34481	0.09	255
+new2-sonnet-1	7	53	25	2	26	51%	29	29	8	18755	1.16	296

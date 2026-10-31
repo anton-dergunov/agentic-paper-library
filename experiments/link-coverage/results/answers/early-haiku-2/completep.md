@@ -1,0 +1,9 @@
+The main idea is a new way to scale the weights of a transformer as it gets deeper, so that the best learning rate stays the same across depths and the network actually uses its extra layers.
+
+- **The problem:** Common parameterizations either fail to transfer the best base hyperparameters (mainly learning rate) when depth changes, so you must re-tune at every scale or accept worse training. Even when transfer works, a deep network can sit in a "lazy" regime, where each layer learns only features close to its linearization. Depth and nonlinearity then go to waste. The title's "don't be lazy" refers to this. (Abstract, [page 1](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=1))
+- **The proposal:** CompleteP is a parameterization that gets both depth-wise hyperparameter transfer and non-lazy learning in every layer. Its core is a residual-branch multiplier of L^{-1} for L layers. The formula is on [page 2](http://pdf.invalid/deep-learning/optimizers-and-schedules/Don't%20be%20lazy.%20CompleteP%20enables%20compute-efficient%20deep%20transformers.pdf?page=2), and I have not re-checked it against the page image.
+- **The payoff:** The authors report 12–34% compute-efficiency gains over the prior state of the art, which is µP here (per my note, not stated on page 1). It also keeps a wider range of width-to-depth ratios compute-efficient, so you can pick shapes that suit your hardware.
+
+Figure 1 on this page summarizes three results: stable learning rate across depth, FLOP savings for deep models, and a larger range of efficient N:L ratios.
+
+The page 1 claims are headline numbers. The evidence is a single architecture family and one dataset, and the transfer results are mostly in figures.

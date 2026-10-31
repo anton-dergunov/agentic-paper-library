@@ -1,0 +1,12 @@
+Let me use the Read tool for the passage instead.
+
+**Short answer: this paper doesn't name a default, and it doesn't make the case for a neural one either.** Its own evidence points the other way for a default you'd rely on.
+
+- **The survey is a map, not a recommendation.** It organises neural topic models (NTMs) by network structure and by scenario (short text, cross-lingual, dynamic). Page 3 sets up the problem in LDA's terms (K topics as word distributions, each document as a topic mixture, Figure 2) and presents the VAE-based NTM as the basic model. ([p. 3](http://pdf.invalid/nlp/topic-models/A%20Survey%20on%20Neural%20Topic%20Models.%20Methods%2C%20Applications%2C%20and%20Challenges.pdf?page=3))
+- **The paper's own caveat favours conventional LDA as the baseline.** In the challenges section it says that inconsistent metrics and settings have led benchmarking studies to conclude that "conventional LDA can still outperform NTMs in certain aspects" (Doan and Hoang 2021; Hoyle et al. 2022). ([p. 14](http://pdf.invalid/nlp/topic-models/A%20Survey%20on%20Neural%20Topic%20Models.%20Methods%2C%20Applications%2C%20and%20Challenges.pdf?page=14))
+- **Results depend on preprocessing.** The same section says pre-processing choices (document-frequency cut-offs, vocabulary size, stop-word lists) change outcomes a lot, and papers vary them, so NTM gains may not hold up. ([p. 14](http://pdf.invalid/nlp/topic-models/A%20Survey%20on%20Neural%20Topic%20Models.%20Methods%2C%20Applications%2C%20and%20Challenges.pdf?page=14))
+- **Coherence scores are unreliable for NTMs.** The survey notes that automatic coherence and diversity metrics may disagree with human judgment on neural models. ([p. 14](http://pdf.invalid/nlp/topic-models/A%20Survey%20on%20Neural%20Topic%20Models.%20Methods%2C%20Applications%2C%20and%20Challenges.pdf?page=14))
+
+**My recommendation, from this paper alone:** use a well-tuned LDA with fixed, documented preprocessing as the default and the baseline. Treat an NTM as something to beat that baseline on your data, judged by human checks, not coherence alone. Only then does a newer model earn the default slot.
+
+This answer rests on the survey, which is from 2024. The library's `FASTopic` paper (2405.17978) is a newer candidate, and I haven't read its note or results, so I can't say whether it beats LDA under the same conditions. If you want, I can check its note and the topic-models review next.

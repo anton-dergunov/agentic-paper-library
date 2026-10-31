@@ -1,0 +1,8 @@
+llm/memory/benchmarks/LongMemEval. Benchmarking Chat Assistants on Long-Term Interactive Memory
+llm/evaluation/methods/JudgeBench. A Benchmark for Evaluating LLM-based Judges
+deep-learning/optimizers-and-schedules/Don't be lazy. CompleteP enables compute-efficient deep transformers
+ml-systems/inference-and-serving/Efficient Memory Management for Large Language Model Serving with PagedAttention
+nlp/topic-models/A Survey on Neural Topic Models. Methods, Applications, and Challenges
+nlp/topic-models/FASTopic. Pretrained Transformer is a Fast, Adaptive, Stable, and Transferable Topic Model
+nlp/topic-models/Is Automated Topic Model Evaluation Broken. The Incoherence of Coherence
+llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory

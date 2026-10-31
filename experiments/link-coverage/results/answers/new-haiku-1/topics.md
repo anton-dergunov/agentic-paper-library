@@ -1,0 +1,7 @@
+Page 3 doesn't name a default. It's the introduction and the setup section: it defines topic modeling as LDA frames it (K topics as word distributions, documents as topic mixtures, Figure 2), and says the survey covers neural variants built on a VAE. So the paper doesn't answer your question from this page.
+
+The closest the survey gets to a recommendation is on p. 14, in its evaluation section. It says that benchmarking studies have found "the conventional LDA can still outperform NTMs in certain aspects" (Doan and Hoang, 2021; Hoyle et al., 2022). It attributes this partly to inconsistent evaluation: pre-processing, top-word counts and coherence settings vary across papers, so reported NTM gains may not hold up. Coherence metrics also disagree with human judgment on some newer neural models (pp. 14–15).
+
+So by this paper's own evidence, there is no clear default. Conventional LDA is still a strong, cheap baseline, and any neural model has to beat it under the same pre-processing, which the survey says is often not the case. Before you rely on the paper's conclusion, read the "Methods" and "Challenges" sections (the conclusion is on p. 17) to see whether it names a model. I haven't checked those sections yet.
+
+The other two topic-model papers in the same folder (FASTopic and the coherence critique) may be more direct on this. I can read them next if you want a recommendation grounded in the library.
