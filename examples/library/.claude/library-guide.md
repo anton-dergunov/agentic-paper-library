@@ -88,6 +88,6 @@ When you point the reader to a place in a paper, make the citation a link; it op
 
 - **Path:** the paper's path under `library/`, its extension replaced by `.pdf`, percent-encoded: spaces as `%20`, and `#`, `?` or `%` in a title (`&` and `+` stay).
 - **`page`:** always; from the `[page N]` line above the passage.
-- **`rect`:** for a value, sentence, table, figure or equation, run `paperlib locate <paper> <target>…` once for all of an answer's citations and paste the links it prints. A target is `7:table.2`, `7:figure.3`, `2:eq.1`, `7:table.2>49.60` for a value in a table, or `6:<a phrase copied from the text>`. On "N matches", lengthen the phrase; "(on p. 8)" corrects your page.
+- **`rect`:** for a value, sentence, table, figure or equation, also one taken from a note or review (their pages can be wrong), run `paperlib locate <paper> <target>…` once for all of an answer's citations and paste the links it prints. A target is `7:table.2`, `7:figure.3`, `2:eq.1`, `7:table.2>49.60` for a value in a table, or `6:<a phrase copied from the text>`. On "N matches", lengthen the phrase; "(on p. 8)" corrects your page.
 - **`dest`:** for a section, in papers made with LaTeX (most of arXiv): `section.4`, `subsection.4.3`, `subsubsection.2.2.3`, `appendix.A`, `subsection.A.1`. A missing name falls back to `page`, so a guess costs nothing.
 - Keep the link text in the "p. 7, Table 2" style; several links in one answer are fine. Never open the PDF viewer yourself.

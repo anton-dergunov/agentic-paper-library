@@ -3,14 +3,14 @@
 **Question.** A citation link opens the PDF at a page, or at a LaTeX named destination (`dest=table.2`), and the reader then looks for the value, the sentence or the figure on that page. The PDF knows where every word is printed. Can a command find the region an agent means (a quote, a value in a table, a table, a figure, an equation) well enough that the link can carry its rectangle (`rect=`) and the viewer can mark it? And will an agent use the command, at what cost?
 
 **Status.** Measured 30 Oct 2026 on 59 citations that agents wrote in the author's library (16 chats, 98 distinct links), turned into `paperlib locate` targets.
-- **The final version marks the right region for 58 of 59 targets.** The one left is a quote that occurs 5 times on its page, which the command reports as such: the agent lengthens it. By kind, judged by eye on crops of each page:
+- **The final version marks the right region for 58 of 59 targets**, and for 3 more added later from an Opus chat that had caught it out. The one left is a quote that occurs 5 times on its page, which the command reports as such: the agent lengthens it. By kind, judged by eye on crops of each page:
   - quotes: 16 of 17 (and the repeated one)
   - values in a table: 6 of 6
   - tables: 21 of 21
   - figures: 12 of 12
   - equations: 3 of 3
 - **The page the agent gave was wrong for 7 of the 21 tables** and one quote. It was the page whose text mentions the table, not the one that prints it; a named destination had hidden this until now. The command tries the page it is given first, then the whole paper, and says "(on p. 8)".
-- **Haiku 4.5 followed the new rule** in 5 fresh questions through carrel: every one of its 14 page links carried a rectangle, and all 14 marked what the answer meant. It made one `locate` call per answer, about 60–200 tokens in and 250–450 tokens back, and $0.01 for each whole answer. The rule adds 82 tokens to the guide.
+- **Haiku 4.5 followed the new rule** in 5 fresh questions through carrel: every one of its 14 page links carried a rectangle, and all 14 marked what the answer meant. It made one `locate` call per answer, about 60–200 tokens in and 250–450 tokens back, and $0.01 for each whole answer. The rule adds 95 tokens to the guide.
 
 **`paperlib locate` shipped, with PyMuPDF 2.0; the guide tells agents to use it for every specific citation; both viewers draw the mark.** The experiment cost about $0.06 (the Haiku chats and the token counts).
 
@@ -52,7 +52,8 @@ Each fix came from a crop that was wrong. The first version found a region for 5
 | 1 | 6 tables not found: the agent's page was wrong | searching the whole paper when the page misses |
 | 2 | captions of two lines cut (a figure, a table); a table's top row and its note left out; figures under a table grew into it (3); a figure grew into the paragraph above it, whose `GPT-4o` and `Claude-3.5` counted as numbers | captions continued across blocks; text near a found table added; stopping at captions and captioned tables; counting numbers by letters |
 | 3 | a figure made of tables cut short; a bold run-in heading hid running text; an equation took the paragraph under it, whose superscripts touch its subscripts | stopping only at captioned tables; printed rows; equations never take running text |
-| 4 | none | |
+| 4 | none on the 59 | |
+| 5 (30 Oct, from the reader's Opus chat on KV caches: 3 more cases) | a figure on a first page took the title and abstract: arXiv's stamp, set sideways in the margin, moved the text's left edge, so the two columns were not seen; an equation took the end of the sentence leading into it ("wise computation:"); a table cited from a note on p. 8 is on p. 9 | sideways text left out of the page's layout; a row at the column's left edge with two words is running text; the guide asks for `locate` also on citations from notes and reviews, whose pages are often wrong ([tasks/wrong-pages](../../docs/tasks/wrong-pages.md)). The 59 unchanged; the 3 right |
 
 ### Alternatives
 
@@ -70,7 +71,7 @@ PyMuPDF 2.0 brings onnxruntime and a layout model with it (about 100 MB). Its ta
 
 - **Time.** A quote takes 0.01–0.03 s on its page. A table takes 0.2–0.5 s (the table finder), and a figure or equation about 0.02 s. One `paperlib locate` call with five targets takes about 1.5 s, starting Python included.
 - **A link.** The rectangle adds 21 characters for a block, or two rectangles for a phrase over a line break (`&rect=130,306,479,397`); it replaces `dest=…`, which `locate`'s links leave out.
-- **The rule.** The guide's link section went from 376 to 458 tokens (+82), loaded in every session.
+- **The rule.** The guide's link section went from 376 to 458 tokens (+82), and to 471 (+95) once it also asks for `locate` on citations from notes and reviews; it is loaded in every session.
 
 ### The agent (Haiku 4.5, through carrel)
 

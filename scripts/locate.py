@@ -126,7 +126,8 @@ class Page:
 
     @property
     def lines(self):
-        """[{box, text, size, block}] for every line of text."""
+        """[{box, text, size, block, across}] for every line of text; `across` is false for
+        text set sideways (an axis label, arXiv's stamp in the margin)."""
         if self._lines is None:
             self._lines = []
             for block in self.page.get_text("dict", flags=pymupdf.TEXTFLAGS_DICT & ~pymupdf.TEXT_PRESERVE_IMAGES)["blocks"]:
@@ -137,7 +138,8 @@ class Page:
                     chars = sum(len(s["text"]) for s in spans)
                     size = sum(s["size"] * len(s["text"]) for s in spans) / chars
                     self._lines.append({"box": self.unrotated(line["bbox"]), "block": block["number"], "size": size,
-                                        "text": "".join(s["text"] for s in spans).strip()})
+                                        "text": "".join(s["text"] for s in spans).strip(),
+                                        "across": abs(line["dir"][0]) > 0.9})
         return self._lines
 
     @property
@@ -145,7 +147,8 @@ class Page:
         """(left, right, body size, two columns): the text's extent, the size most of the
         text is set in, and whether the page sets its text in two columns."""
         if self._layout is None:
-            lines = [l for l in self.lines if self.height * MARGIN < l["box"][1] < self.height * (1 - MARGIN)]
+            # Not text set sideways: arXiv's stamp in the left margin would move the text's edge.
+            lines = [l for l in self.lines if l["across"] and self.height * MARGIN < l["box"][1] < self.height * (1 - MARGIN)]
             if not lines:
                 self._layout = (0, self.width, 10, False)
                 return self._layout
@@ -396,8 +399,9 @@ class Page:
         rows = []
         for box, text in printed:
             words = len(_WORD.findall(text))
-            # Running text says words; a display equation, at most "where" or "for all".
-            if words >= 6 or (words >= 3 and box[0] <= column[0] + 15):
+            # Running text says words; a display equation, at most "where" or "for all". The
+            # end of the sentence that leads into it ("wise computation:") starts the column.
+            if words >= 6 or (words >= 2 and box[0] <= column[0] + 15):
                 continue
             rows.append(box)
         for d in self.page.get_drawings():

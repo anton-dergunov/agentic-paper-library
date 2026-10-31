@@ -13,6 +13,8 @@ locomo: llm/memory/benchmarks/Evaluating Very Long-Term Conversational Memory of
 longmemeval: llm/memory/benchmarks/LongMemEval. Benchmarking Chat Assistants on Long-Term Interactive Memory.txt
 lmcor: llm/post-training/fine-tuning/Small Language Models Improve Giants by Rewriting Their Outputs.txt
 deepsearch: llm/retrieval-augmented/Benchmarking Deep Search over Heterogeneous Enterprise Data.txt
+vllm: ml-systems/inference-and-serving/Efficient Memory Management for Large Language Model Serving with PagedAttention.txt
+pope: ml-systems/inference-and-serving/Efficiently Scaling Transformer Inference.txt
 gemini: llm/foundation-models/Gemini 1.5. Unlocking multimodal understanding across millions of tokens of context.txt
 
 cases:
@@ -80,3 +82,8 @@ cases:
 - {id: e1, paper: completep, target: "2:eq.1", link: "dest=section.1&page=2", claim: "h <- h + L^-a F(h)", expect: equation (1)}
 - {id: e2, paper: completep, target: "10:eq.6", link: "dest=section.6&page=10", claim: "p. 10, Eq. 6", expect: equation (6)}
 - {id: e3, paper: lmcor, target: "3:eq.2", link: "dest=section.2&page=3", claim: "corrector input and target", expect: equation (2)}
+# Added 30 Oct 2026 from the reader's chat "KV cache mechanics and measurements" (Opus 5.5),
+# where these three marked the wrong region or page
+- {id: k1, paper: vllm, target: "1:figure.1", link: "page=1&rect=54,71,560,409", claim: "KV cache takes over 30% of memory", expect: "Figure 1 in the right column (it took the title and abstract: arXiv's sideways stamp hid the two columns)"}
+- {id: k2, paper: vllm, target: "5:eq.4", link: "page=5&rect=317,250,559,300", claim: "attention computed block by block", expect: "equation (4), without the line that leads into it"}
+- {id: k3, paper: pope, target: "8:table.1", link: "page=8 (from the paper's note, without locate)", claim: "multiquery raises the max context from 660 to 43,000", expect: "Table 1, on p. 9: the note says p. 8"}

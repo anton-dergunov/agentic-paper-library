@@ -128,7 +128,7 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
     the page that mentions the table rather than the one that prints it, so the page given is
     tried first and then the whole paper.
   - Haiku followed the rule in 5 fresh questions: 14 links, all marked, all right. The rule
-    costs 82 tokens of the guide ([experiments/pdf-locations](../experiments/pdf-locations/README.md)).
+    costs 95 tokens of the guide ([experiments/pdf-locations](../experiments/pdf-locations/README.md)).
   - A quote rather than a text-layer line number: `pdftotext -layout` sets two columns side by
     side on one line. Matching in the viewer instead would save the call, but the agent would
     never learn that a quote missed or repeated, and PDF.js finds no tables or figures.
@@ -330,10 +330,12 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
 5. Make reading a paper cheaper without reading it less: trim the fixed part of the request,
    then test a cheaper reading for the thinly covered areas
    ([tasks/reading-cost.md](tasks/reading-cost.md)).
-6. Rectangles in notes and reviews: they are read again and again, so a `rect` per number
+6. Correct the pages notes and reviews cite: 60% of their table and figure citations point a
+   page or two early, likely from the old markdown conversion ([tasks/wrong-pages.md](tasks/wrong-pages.md)).
+7. Rectangles in notes and reviews: they are read again and again, so a `rect` per number
    costs tokens on every read. Decide once carrel's tally shows how often the reader follows a
    link from them.
-7. Run the session on the NAS, so it is always on:
+8. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone the engine, the library and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,
