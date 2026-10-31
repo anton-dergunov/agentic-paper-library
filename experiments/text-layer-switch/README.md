@@ -13,6 +13,7 @@
   - the reading view's search for the reference list, which missed or misplaced 667 papers' and took 5 minutes over the library (now 108, in 5 s);
   - two failures of the web converter on transformer-circuits.pub;
   - a race in `paperlib read`.
+- **Afterwards, the pages notes and reviews cite** were corrected without reading again ([below](#afterwards-the-pages-notes-and-reviews-cite-30-oct-2026)): 6,840 table and figure pages and 5,817 prose pages in notes, 595 in reviews, $2.80 of Haiku.
 - **One finding needs the author's decision.** Agents did open the PDF's page when the text lacked a value, as in the experiment, but Claude Code refused to read it: the PDFs are outside the library, behind the `pdf/` link.
 
 **Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), [`docs/text-layer.md`](../../docs/text-layer.md).
@@ -99,6 +100,63 @@ Three notes, $0.65 (estimated $0.83 by the refitted cost line).
 - **The agent opens the page when the text lacks a value**, in a real library as in tier F, and for the paper marked `text-layer: broken`.
 - **In the library the PDF cannot be read.** The PDFs live in a synced folder outside the library, reached through `pdf/`. Claude Code resolves the link and treats the file as outside the session's folders: refused in a headless session, a permission prompt in an interactive one. Tier F's copies held the PDFs inside the session's folder, so it did not show there.
 - **The fix is a setting, which this session was not allowed to write** (it changes what an agent may do), so it is left to the author: the PDF folder in `permissions.additionalDirectories` of the library's `.claude/settings.local.json`. `paperlib init` could write it for every library; see [`docs/text-layer.md`](../../docs/text-layer.md#setup).
+
+## Afterwards: the pages notes and reviews cite (30 Oct 2026)
+
+**Question.** The switch kept the notes and reviews, but 60% of their table and figure citations gave the wrong page ([`pdf-locations`](../pdf-locations/README.md)). Can they be corrected without reading the papers again, about $600 at $0.35 a note?
+
+**The cause.** The markdown marked pages on headings only: `page-map.py` wrote the page a section starts on, `### 4.3 Title (p. 6)`. A note's "p. 6" is the first page of the section its claim came from, and the claim is printed there or later. In 300 notes, 97.6% of the prose citations name a page where one of the PDF's sections starts. So the error is not one shift per note: it depends on where in its section each claim sits.
+
+**The old markdown was still there.** `git filter-repo` had left the commits from before the switch in the library's pack (132 of 135 readable); the ref `refs/archive/markdown` now keeps them from `git gc`. Each note is matched against the version it was read from, found through the filter's commit map. The 11 notes read from text layers are left alone.
+
+### Method
+
+Cheapest first; a citation's page changes only when a step settles it.
+
+| Step | What settles a page | Apparatus |
+|---|---|---|
+| Tables and figures | The page whose text layer prints the caption, or `locate`'s PDF finder when the text layer prints none or several. A range grows to hold the caption's page. A caption more than 5 pages away is left: the citation gives the page of the text that discusses the float. 32 sampled fixes all agree with `locate`. | `paperlib check-pages --fix` |
+| Quote | A quote of three or more words in the claim, printed on one page | [`fix-pages.py`](fix-pages.py) `apply` |
+| Section | Every passage under the cited heading is placed on one page | |
+| Words | The old markdown cut into passages (sentences, merged to 12 words), each placed on the pages that print its word 4-grams. The passage under the cited heading sharing the claim's rarest words wins, by a margin of 4. A table, or a passage not placed, that wins leaves the page unknown. | |
+| Haiku | Given the claim and the numbered passages under its heading, it names the passage that states the claim; the claim takes that passage's page when it is placed on one page | `fix-pages.py apply-model` |
+
+The claim is the text between the previous citation on its line and this one; for a review, the link's sentence. Page ranges ("p. 8–9") are left alone.
+
+### Measured
+
+On 2,496 prose citations in notes whose quote settles the page, with the quote taken out of the claim ([`results/pages-measure.txt`](results/pages-measure.txt)). 64% are right as written.
+
+| Step | Moves that fix | Moves that break a right page | Moves still wrong |
+|---|--:|--:|--:|
+| Words, margin 2 | 307 | 48 | 34 |
+| **Words, margin 4** | **250** | **31** | **28** |
+| Words, margin 6 | 185 | 15 | 20 |
+| **Haiku**, on the 201 citations words leave open at margin 6 ($0.04) | **30** | **6** | **4** |
+| Sonnet, the same 201 ($1.42) | 33 | 8 | 5 |
+| Haiku, moving only where words' best guess agrees | 15 | 4 | 1 |
+
+- "Break" overcounts: read by hand, several are claims of two facts on adjacent pages, where the new page prints the other one.
+- Before tables and unplaced passages counted as "unknown", words at margin 3 fixed 317 and broke 47.
+- The section rule kept 175 right and missed 22 fixes; it never moves a page wrongly once it requires every passage to be placed.
+- Haiku decides 70% of what it is given. Sonnet is no better at 35 times the price, and agreement halves the fixes without improving the ratio.
+
+### Applied to the author's library
+
+| | Citations | Moved | Kept by a step | Left as written |
+|---|--:|--:|--:|--:|
+| Notes, tables and figures | 14,180 | 6,840 | 6,554 | 786 (189 far, 597 no caption found) |
+| Notes, prose, single pages | 23,853 | 5,817 | 15,958 | 2,078 |
+| Reviews, tables and figures | 913 | 453 | 404 | 56 |
+| Reviews, prose | 609 | 142 | 374 | 93 |
+
+- The notes' prose moves: quote 901, section 14, words 3,609, Haiku 1,293. By the measurement, about four in five fix a page.
+- What is left is thin: 2 notes have more than 20 citations left, 50 more than 10; none is worth reading again for this. Per note in [`results/pages-left.tsv`](results/pages-left.tsv).
+- Haiku: 1,635 requests for the notes, $2.76; the reviews' 254 citations a few cents more. Measuring cost $1.56.
+- The library's diff changes page numbers only (checked by a script that blanks every page reference), in 1,769 files; `review-status` finds no broken link.
+- Every decision is in [`results/pages.tsv`](results/pages.tsv), [`pages-model.tsv`](results/pages-model.tsv) and [`pages-reviews.tsv`](results/pages-reviews.tsv).
+
+**Left:** 4,836 prose page ranges in notes keep their headings' pages; 2,078 single prose citations keep their section's first page; tables and figures `check-pages` cannot place stay. The guide's rule to run `locate` on a page taken from a note covers them in answers.
 
 ## Not measured
 

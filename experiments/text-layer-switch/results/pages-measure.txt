@@ -1,0 +1,74 @@
+# fix-pages.py measure (rules, on 2,496 citations a quote settles; quote taken out)
+known	2496
+known, right as written	1595
+known, wrong as written	901
+margin 2: open	890
+margin 2: section kept, a fix missed	22
+margin 2: section kept, right	175
+margin 2: section moved, broke a right page	1
+margin 2: section moved, fixed	1
+margin 2: words kept, a fix missed	139
+margin 2: words kept, right	879
+margin 2: words moved, broke a right page	48
+margin 2: words moved, fixed	307
+margin 2: words moved, still wrong	34
+margin 4: open	1128
+margin 4: section kept, a fix missed	22
+margin 4: section kept, right	175
+margin 4: section moved, broke a right page	1
+margin 4: section moved, fixed	1
+margin 4: words kept, a fix missed	115
+margin 4: words kept, right	745
+margin 4: words moved, broke a right page	31
+margin 4: words moved, fixed	250
+margin 4: words moved, still wrong	28
+margin 6: open	1418
+margin 6: section kept, a fix missed	22
+margin 6: section kept, right	175
+margin 6: section moved, broke a right page	1
+margin 6: section moved, fixed	1
+margin 6: words kept, a fix missed	79
+margin 6: words kept, right	580
+margin 6: words moved, broke a right page	15
+margin 6: words moved, fixed	185
+margin 6: words moved, still wrong	20
+margin 8: open	1585
+margin 8: section kept, a fix missed	22
+margin 8: section kept, right	175
+margin 8: section moved, broke a right page	1
+margin 8: section moved, fixed	1
+margin 8: words kept, a fix missed	62
+margin 8: words kept, right	476
+margin 8: words moved, broke a right page	10
+margin 8: words moved, fixed	150
+margin 8: words moved, still wrong	14
+
+# fix-pages.py measure-model 200 6 haiku / sonnet (the citations the rules leave open at margin 6)
+201 citations in 124 requests, $0.04, 555,389 input tokens
+model and words agree: kept, a fix missed	8
+model and words agree: kept, right	71
+model and words agree: moved, broke a right page	4
+model and words agree: moved, fixed	15
+model and words agree: moved, still wrong	1
+model and words agree: unsure	102
+model: kept, a fix missed	14
+model: kept, right	87
+model: moved, broke a right page	6
+model: moved, fixed	30
+model: moved, still wrong	4
+model: unsure	60
+---
+201 citations in 124 requests, $1.42, 533,176 input tokens
+model and words agree: kept, a fix missed	6
+model and words agree: kept, right	68
+model and words agree: moved, broke a right page	2
+model and words agree: moved, fixed	17
+model and words agree: moved, still wrong	1
+model and words agree: unsure	99
+model: kept, a fix missed	8
+model: kept, right	92
+model: moved, broke a right page	8
+model: moved, fixed	33
+model: moved, still wrong	5
+model: unsure	47
+request failed	3

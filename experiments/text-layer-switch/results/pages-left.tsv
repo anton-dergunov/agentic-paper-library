@@ -1,0 +1,1804 @@
+note	citations	moved	left
+Advances and Challenges in Foundation Agents. From Brain-Inspired Intelligence to Evolutionary	86	13	50
+A Survey of Quantization Methods for Efficient Neural Network Inference	29	2	22
+Towards Reasoning Era. A Survey of Long Chain-of-Thought for Reasoning Large Language Models	37	6	18
+Trustworthiness in Retrieval-Augmented Generation Systems. A Survey	34	5	18
+Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes	34	3	17
+Anytime-valid off-policy inference for contextual bandits	26	5	16
+Multiple Randomization Designs. Estimation and Inference with Interference	31	2	16
+A Probabilistic Perspective on Model Collapse	19	2	15
+DeepSeekMoE. Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models	35	7	15
+Graph Convolutional Neural Networks for Web-Scale Recommender Systems	29	4	15
+Long Short-Term Memory	19	1	15
+A Review of Off-Policy Evaluation in Reinforcement Learning	31	6	14
+A guide to convolution arithmetic for deep learning	18	1	14
+Hypothesis testing with e-values	32	5	14
+Instruction Tuning for Large Language Models. A Survey	60	7	14
+Introduction to Multi-Armed Bandits	35	4	14
+OneRec Technical Report	23	4	13
+Snorkel. Rapid Training Data Creation with Weak Supervision	19	0	13
+Challenges and Applications of Large Language Models	47	14	12
+DCN V2. Improved Deep & Cross Network and Practical Lessons for Web-scale Learning to Rank Systems	23	2	12
+Metric Learning. A Survey	23	3	12
+Native Sparse Attention. Hardware-Aligned and Natively Trainable Sparse Attention	20	3	12
+Optimizing Distributed Training on Frontier for Large Language Models	19	2	12
+Perspectives on Large Language Models for Relevance Judgment	17	2	12
+Reducing Activation Recomputation in Large Transformer Models	23	5	12
+Reinforcement Learning. An Overview	67	23	12
+Self-Attentive Sequential Recommendation	21	0	12
+Snorkel DryBell. A Case Study in Deploying Weak Supervision at Industrial Scale	18	3	12
+Stealing Part of a Production Language Model	25	3	12
+Sufficient Context. A New Lens on Retrieval Augmented Generation Systems	28	5	12
+The Power of Noise. Redefining Retrieval for RAG Systems	23	4	12
+Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback	17	1	12
+Transformers are SSMs. Generalized Models and Efficient Algorithms Through Structured State Space	22	3	12
+ZeRO-Offload. Democratizing Billion-Scale Model Training	28	2	12
+A Statistical Framework for Ranking LLM-Based Chatbots	16	0	11
+A Survey of On-Policy Distillation for Large Language Models	24	8	11
+A Survey of Self-Evolving Agents. What, When, How, and Where to Evolve on the Path to Artificial	22	3	11
+Applying the Delta method in metric analytics. A practical guide with novel ideas	25	1	11
+Choosing a Proxy Metric from Past Experiments	26	6	11
+Goal Driven Discovery of Distributional Differences via Language Descriptions	18	3	11
+Learning under Concept Drift. A Review	22	5	11
+Optimizing Instructions and Demonstrations for Multi-Stage Language Model Programs	17	0	11
+Representation Learning on Graphs. Methods and Applications	22	3	11
+The Art of Scaling Reinforcement Learning Compute for LLMs	16	1	11
+Time-uniform central limit theory and asymptotic confidence sequences	21	2	11
+Transformer models. an introduction and catalog	32	5	11
+Transformers learn in-context by gradient descent	18	4	11
+Unbiased Offline Evaluation of Contextual-bandit-based News Article Recommendation Algorithms	12	0	11
+When and why vision-language models behave like bags-of-words, and what to do about it	18	3	11
+Wide & Deep Learning for Recommender Systems	16	3	11
+A Farewell to the Bias-Variance Tradeoff. An Overview of the Theory of Overparameterized Machine	29	13	10
+A Primer in BERTology. What we know about how BERT works	22	1	10
+A Survey on Test-Time Scaling in Large Language Models. What, How, Where, and How Well	30	0	10
+An Empirical Study of Training Self-Supervised Vision Transformers	17	2	10
+Autonomy Reshapes How Personalization Affects Privacy Concerns and Trust in LLM Agents	13	0	10
+Causal Embeddings for Recommendation	21	2	10
+ClashEval. Quantifying the tug-of-war between an LLM's internal prior and external evidence	27	3	10
+Compositional Embeddings Using Complementary Partitions for Memory-Efficient Recommendation Systems	23	1	10
+Data curation via joint example selection further accelerates multimodal learning	14	0	10
+DocETL. Agentic Query Rewriting and Evaluation for Complex Document Processing	35	12	10
+Efficient Transformers. A Survey	20	1	10
+Energy-based Out-of-distribution Detection	11	0	10
+FlashAttention-2. Faster Attention with Better Parallelism and Work Partitioning	22	1	10
+Interference, Bias, and Variance in Two-Sided Marketplace Experimentation. Guidance for Platforms	22	4	10
+LLM Evaluators Recognize and Favor Their Own Generations	15	0	10
+LLM-Blender. Ensembling Large Language Models with Pairwise Ranking and Generative Fusion	19	1	10
+Large Language Model Post-Training. A Unified View of Off-Policy and On-Policy Learning	21	1	10
+Measuring what Matters. Construct Validity in Large Language Model Benchmarks	11	1	10
+Meta-learners for Estimating Heterogeneous Treatment Effects using Machine Learning	25	11	10
+Model Context Protocol Threat Modeling and Analyzing Vulnerabilities to Prompt Injection with Tool	33	6	10
+OneRec-V2 Technical Report	18	4	10
+Provable Scaling Laws of Feature Emergence from Learning Dynamics of Grokking	25	2	10
+QASC. A Dataset for Question Answering via Sentence Composition	15	4	10
+Scaling Laws for Neural Language Models	47	9	10
+Sparse Autoencoders for Hypothesis Generation	26	1	10
+Time-uniform, nonparametric, nonasymptotic confidence sequences	26	4	10
+World Models	29	4	10
+A GPU-specialized Inference Parameter Server for Large-Scale Deep Recommendation Models	17	2	9
+A General Theoretical Paradigm to Understand Learning from Human Preferences	15	2	9
+A Survey on Data Synthesis and Augmentation for Large Language Models	24	9	9
+ARES. An Automated Evaluation Framework for Retrieval-Augmented Generation Systems	23	3	9
+ATLAS. Learning to Optimally Memorize the Context at Test Time	17	3	9
+Beyond Consensus. Perspectivist Modeling and Evaluation of Annotator Disagreement in NLP	20	3	9
+Byte Latent Transformer. Patches Scale Better Than Tokens	36	6	9
+Deep Entity Matching with Pre-Trained Language Models	36	2	9
+DeepMind Control Suite	26	5	9
+DeepWalk. Online Learning of Social Representations	17	0	9
+Detecting and Correcting for Label Shift with Black Box Predictors	17	1	9
+Dialogue Disentanglement in Software Engineering. How Far are We	13	2	9
+Distillation Scaling Laws	17	4	9
+Do Transformer Modifications Transfer Across Implementations and Applications	18	5	9
+Don't be lazy. CompleteP enables compute-efficient deep transformers	20	2	9
+Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM	26	6	9
+Expert Finding in Community Question Answering. A Review	27	5	9
+Fake it till you make it. Learning transferable representations from synthetic ImageNet clones	15	1	9
+Goal-Driven Explainable Clustering via Language Descriptions	13	2	9
+LLMLingua. Compressing Prompts for Accelerated Inference of Large Language Models	24	1	9
+MTGR. Industrial-Scale Generative Recommendation Framework in Meituan	24	2	9
+Machine Learning Techniques in Automatic Music Transcription. A Systematic Survey	24	3	9
+Managed Geo-Distributed Feature Store. Architecture and System Design	20	1	9
+Offline A B testing for Recommender Systems	27	5	9
+Recommender Systems with Generative Retrieval	17	4	9
+Recursive Language Models	14	1	9
+Rich-Item Recommendations for Rich-Users. Exploiting Dynamic and Static Side Information	17	6	9
+Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters	28	13	9
+Small Models Struggle to Learn from Strong Reasoners	16	3	9
+Training language models to follow instructions with human feedback	25	5	9
+Using Ego-Clusters to Measure Network Effects at LinkedIn	17	2	9
+Why Warmup the Learning Rate. Underlying Mechanisms and Improvements	15	2	9
+A Systematic Review and Replicability Study of BERT4Rec for Sequential Recommendation	24	3	8
+A Troubling Analysis of Reproducibility and Progress in Recommender Systems Research	22	7	8
+Bag of Tricks for Efficient Text Classification	19	1	8
+Beat this! Accurate beat tracking without DBN postprocessing	12	0	8
+Command A. An Enterprise-Ready Large Language Model	18	0	8
+Continuous Monitoring of A B Tests without Pain. Optional Stopping in Bayesian Testing	17	4	8
+Data Augmentation Approaches in Natural Language Processing. A Survey	19	3	8
+Deep Sets	10	0	8
+Differentially Private Fine-tuning of Language Models	13	2	8
+Doing More with Less. A Survey on Routing Strategies for Resource Optimisation in Large Language	22	5	8
+Estimating means of bounded random variables by betting	26	5	8
+Explaining Neural Scaling Laws	16	4	8
+Fast-DetectGPT. Efficient Zero-Shot Detection of Machine-Generated Text via Conditional Probability	25	3	8
+FlexGen. High-Throughput Generative Inference of Large Language Models with a Single GPU	21	3	8
+Hyena Hierarchy. Towards Larger Convolutional Language Models	23	1	8
+In Search of Lost Domain Generalization	20	3	8
+Inference economics of language models	19	7	8
+Jailbreaking Black Box Large Language Models in Twenty Queries	11	0	8
+Large Batch Optimization for Deep Learning. Training BERT in 76 minutes	12	0	8
+Large Language Models are not Fair Evaluators	9	0	8
+Learning to (Learn at Test Time). RNNs with Expressive Hidden States	18	2	8
+Learning with Noisy Labels Revisited. A Study Using Real-World Human Annotations	13	1	8
+Machine Teaching. A New Paradigm for Building Machine Learning Systems	18	4	8
+More Agents Is All You Need	20	3	8
+Mostly Exploration-Free Algorithms for Contextual Bandits	14	1	8
+Muon is Scalable for LLM Training	16	0	8
+Neural Contextual Bandits with UCB-based Exploration	19	2	8
+Neural Tangent Kernel. Convergence and Generalization in Neural Networks	12	1	8
+Novelty and Primacy. A Long-Term Estimator for Online Experiments	18	4	8
+OLMo. Accelerating the Science of Language Models	27	5	8
+Off-Policy Evaluation and Learning for the Future under Non-Stationarity	15	2	8
+Offline Reinforcement Learning with Implicit Q-Learning	18	6	8
+Offline Reinforcement Learning. Tutorial, Review, and Perspectives on Open Problems	13	0	8
+Quiet-STaR. Language Models Can Teach Themselves to Think Before Speaking	22	2	8
+REALM. Retrieval-Augmented Language Model Pre-Training	24	3	8
+Rethinking the Inception Architecture for Computer Vision	12	0	8
+Revisiting Neural Retrieval on Accelerators	18	2	8
+Router-R1. Teaching LLMs Multi-Round Routing and Aggregation via Reinforcement Learning	21	1	8
+SWE-Bench Pro. Can AI Agents Solve Long-Horizon Software Engineering Tasks	40	5	8
+Shampoo. Preconditioned Stochastic Tensor Optimization	13	1	8
+SilverTorch. A Unified Model-based System to Democratize Large-Scale Recommendation on GPUs	25	3	8
+Statistical Challenges in Online Controlled Experiments. A Review of A B Testing Methodology	32	20	8
+Stress-Testing Model Specs Reveals Character Differences among Language Models	20	3	8
+Sycophancy to Subterfuge. Investigating Reward-Tampering in Large Language Models	22	4	8
+The Arcade Learning Environment. An Evaluation Platform for General Agents	13	3	8
+The Landscape of Agentic Reinforcement Learning for LLMs. A Survey	52	7	8
+The Road Less Scheduled	13	1	8
+Top-K Off-Policy Correction for a REINFORCE Recommender System	25	4	8
+Towards Understanding Ensemble, Knowledge Distillation and Self-Distillation in Deep Learning	21	4	8
+Training Compute-Optimal Large Language Models	17	2	8
+Trustworthy Online Marketplace Experimentation with Budget-split Design	28	3	8
+UPRISE. Universal Prompt Retrieval for Improving Zero-Shot Evaluation	17	3	8
+Uncertainty Quantification and Confidence Calibration in Large Language Models. A Survey	15	2	8
+Unsupervised Data Augmentation for Consistency Training	12	2	8
+Unsupervised Random Walk Sentence Embeddings. A Strong but Simple Baseline	13	0	8
+We Have No Idea How Models will Behave in Production until Production . How Engineers	27	5	8
+X-Class. Text Classification with Extremely Weak Supervision	14	1	8
+A Case Study on Sampling Strategies for Evaluating Neural Sequential Item Recommendation Models	20	3	7
+A Contextual-Bandit Approach to Personalized News Article Recommendation	23	2	7
+A Cookbook of Self-Supervised Learning	24	4	7
+A Survey of Large Language Models	11	2	7
+A Survey on Neural Topic Models. Methods, Applications, and Challenges	15	2	7
+A Survey on Truth Discovery	25	0	7
+A systematic study of the class imbalance problem in convolutional neural networks	26	7	7
+Adafactor. Adaptive Learning Rates with Sublinear Memory Cost	10	0	7
+Addressing Function Approximation Error in Actor-Critic Methods	12	2	7
+AlignScore. Evaluating Factual Consistency with a Unified Alignment Function	15	2	7
+An Empirical Study of Mamba-based Language Models	12	3	7
+An Introduction to Variational Autoencoders	20	9	7
+Anatomy of a Privacy-Safe Large-Scale Information Extraction System Over Email	17	2	7
+Auditing language models for hidden objectives	21	3	7
+BERTopic. Neural topic modeling with a class-based TF-IDF procedure	25	2	7
+Batch Normalization. Accelerating Deep Network Training by Reducing Internal Covariate Shift	21	2	7
+Benchmarking noisy label detection methods	13	1	7
+Beyond Accuracy. Behavioral Testing of NLP models with CheckList	10	1	7
+Big Bird. Transformers for Longer Sequences	15	3	7
+BitFunnel. Revisiting Signatures for Search	12	0	7
+Bridging Control Variates and Regression Adjustment in A B Testing. From Design-Based to	13	1	7
+Can Foundation Models Wrangle Your Data	16	2	7
+Choosing How to Remember. Adaptive Memory Structures for LLM Agents	10	0	7
+Choosing Online Experiment Designs under Interference in Ads, Recommendations, and	20	5	7
+Climbing towards NLU. On Meaning, Form, and Understanding in the Age of Data	13	1	7
+Closing the Train-Test Gap in World Models for Gradient-Based Planning	11	0	7
+Codebase-Memory. Tree-Sitter-Based Knowledge Graphs for LLM Code Exploration via MCP	22	3	7
+Complex Embeddings for Simple Link Prediction	14	4	7
+Concept Induction. Analyzing Unstructured Text with High-Level Concepts Using LLooM	18	0	7
+Confident Learning. Estimating Uncertainty in Dataset Labels	15	3	7
+Cumulated Gain-Based Evaluation of IR Techniques	18	7	7
+Data-centric Artificial Intelligence. A Survey	16	4	7
+Datasheets for Datasets	15	3	7
+Deep Research Agents. A Systematic Examination And Roadmap	16	1	7
+DeepSeekMath. Pushing the Limits of Mathematical Reasoning in Open Language Models	13	1	7
+Design Patterns for Securing LLM Agents against Prompt Injections	18	4	7
+Design and analysis of experiments in networks. Reducing bias from interference	12	3	7
+Do ImageNet Classifiers Generalize to ImageNet	22	1	7
+DropBlock. A regularization method for convolutional networks	10	0	7
+ELEPHANT. Measuring and understanding social sycophancy in LLMs	22	6	7
+Efficient Streaming Language Models with Attention Sinks	14	3	7
+Efficiently Scaling Transformer Inference	22	3	7
+Embarrassingly Shallow Autoencoders for Sparse Data	19	8	7
+Expected Reciprocal Rank for Graded Relevance	15	0	7
+Expertise Networks in Online Communities. Structure and Algorithms	15	3	7
+Extending Context Window of Large Language Models via Positional Interpolation	13	1	7
+Extracting Training Data from Large Language Models	19	3	7
+Feature Learning in Infinite-Width Neural Networks	22	0	7
+FlashAttention-3. Fast and Accurate Attention with Asynchrony and Low-precision	13	1	7
+FlashAttention. Fast and Memory-Efficient Exact Attention with IO-Awareness	17	4	7
+GShard. Scaling Giant Models with Conditional Computation and Automatic Sharding	32	5	7
+Graph cluster randomization. network exposure to multiple universes	24	1	7
+Harnessing the Power of LLMs in Practice. A Survey on ChatGPT and Beyond	19	4	7
+How much do language models memorize	22	3	7
+Inverse Scaling in Test-Time Compute	10	2	7
+Knowledge Conflicts for LLMs. A Survey	18	6	7
+Knowledge-Based Trust. Estimating the Trustworthiness of Web Sources	21	1	7
+Length-Controlled AlpacaEval. A Simple Way to Debias Automatic Evaluators	16	2	7
+LongLLMLingua. Accelerating and Enhancing LLMs in Long Context Scenarios via Prompt Compression	19	2	7
+MM-LLMs. Recent Advances in MultiModal Large Language Models	17	3	7
+Mamba. Linear-Time Sequence Modeling with Selective State Spaces	15	1	7
+Mixture-of-Agents Enhances Large Language Model Capabilities	18	0	7
+Nemotron-Cascade 2. Post-Training LLMs with Cascade RL and Multi-Domain On-Policy Distillation	26	11	7
+Neural Collaborative Filtering	20	6	7
+Overview of the TREC 2019 deep learning track	19	4	7
+Personality Traits in Large Language Models	8	1	7
+Phi-4 Technical Report	10	1	7
+Prevalence of Neural Collapse during the terminal phase of deep learning training	12	1	7
+Prometheus 2. An Open Source Language Model Specialized in Evaluating Other Language Models	18	2	7
+PyTorch-BigGraph. A Large-scale Graph Embedding System	28	10	7
+Rethinking the Role of Demonstrations. What Makes In-Context Learning Work	16	4	7
+Revisiting the Performance of iALS on Item Recommendation Benchmarks	13	0	7
+Reward is enough	12	1	7
+RoFormer. Enhanced Transformer with Rotary Position Embedding	28	4	7
+RouterDC. Query-Based Router by Dual Contrastive Learning for Assembling Large Language Models	10	1	7
+Self-Normalizing Neural Networks	17	4	7
+Spurious Rewards. Rethinking Training Signals in RLVR	14	1	7
+Strong Model Collapse	24	4	7
+The Attacker Moves Second. Stronger Adaptive Attacks Bypass Defenses Against Llm Jailbreaks and	17	4	7
+The LambdaLoss Framework for Ranking Metric Optimization	18	2	7
+The Lifetime of Email Messages. A Large-Scale Analysis of Email Revisitation	11	1	7
+The Perspectivist Paradigm Shift. Assumptions and Challenges of Capturing Human Labels	13	1	7
+Toward Multi-Session Personalized Conversation. A Large-Scale Dataset and Hierarchical Tree	20	7	7
+Training Agents Inside of Scalable World Models	20	2	7
+Training Deep Nets with Sublinear Memory Cost	20	4	7
+Training data-efficient image transformers & distillation through attention	13	3	7
+UltraFeedback. Boosting Language Models with Scaled AI Feedback	9	1	7
+Universal Model Routing for Efficient LLM Inference	18	5	7
+Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks	12	0	7
+Welcome to the Era of Experience	14	1	7
+Why Language Models Hallucinate	21	5	7
+YaRN. Efficient Context Window Extension of Large Language Models	21	4	7
+ZeRO. Memory Optimizations Toward Training Trillion Parameter Models	21	2	7
+iText2KG. Incremental Knowledge Graphs Construction Using Large Language Models	8	0	7
+infty-former. Infinite Memory Transformer	19	0	7
+A Comprehensive Survey on Graph Neural Networks	16	5	6
+A Deep Relevance Matching Model for Ad-hoc Retrieval	17	2	6
+A Simple but Tough-to-Beat Baseline for Sentence Embeddings	10	2	6
+A Survey of Data Augmentation Approaches for NLP	16	2	6
+A Survey of Deep Active Learning	19	6	6
+A Survey of Lottery Ticket Hypothesis	15	2	6
+AI PERSONA. Towards Life-long Personalization of LLMs	11	0	6
+ARC-AGI-2. A New Challenge for Frontier AI Reasoning Systems	15	1	6
+Accuracy on the Line. On the Strong Correlation Between Out-of-Distribution and In-Distribution	16	3	6
+Actions Speak Louder than Words. Trillion-Parameter Sequential Transducers for Generative	19	5	6
+Active Preference Learning for Large Language Models	15	1	6
+Active Prompting with Chain-of-Thought for Large Language Models	19	5	6
+Active Retrieval Augmented Generation	10	0	6
+AgentMemBench. A Systematic Benchmark for Evaluating Long-Term Memory Management Strategies in	17	0	6
+Alignment faking in large language models	14	3	6
+Always Valid Inference. Bringing Sequential Analysis to A B Testing	15	4	6
+Anthropomimetic Uncertainty. What Verbalized Uncertainty in Language Models is Missing	19	2	6
+Assisting in Writing Wikipedia-like Articles From Scratch with Large Language Models	20	1	6
+Automatic Prompt Optimization with Gradient Descent and Beam Search	16	4	6
+Best Practices and Lessons Learned on Synthetic Data	16	1	6
+Boilerplate detection using shallow text features	13	1	6
+Bootstrapping Conditional Retrieval for User-to-Item Recommendations	15	0	6
+Calibrated Language Models Must Hallucinate	19	1	6
+Can LLMs Generate Novel Research Ideas. A Large-Scale Human Study with 100+ NLP Researchers	17	2	6
+Cartridges. Lightweight and general-purpose long context representations via self-study	15	2	6
+Challenges in Detoxifying Language Models	13	0	6
+Chameleon. Plug-and-Play Compositional Reasoning with Large Language Models	12	2	6
+Counterfactual Reasoning and Learning Systems	14	3	6
+Deep & Cross Network for Ad Click Predictions	17	1	6
+Deep Interest Network for Click-Through Rate Prediction	16	3	6
+Design and Analysis of Switchback Experiments	10	0	6
+Discovering Language Model Behaviors with Model-Written Evaluations	13	1	6
+Distilling the Knowledge in a Neural Network	17	2	6
+Dolma. an Open Corpus of Three Trillion Tokens for Language Model Pretraining Research	13	2	6
+Dynamic Cheatsheet. Test-Time Learning with Adaptive Memory	12	1	6
+Dynamic Routing Between Capsules	8	0	6
+Efficiently Teaching an Effective Dense Retriever with Balanced Topic Aware Sampling	19	5	6
+Embedding Entities and Relations for Learning and Inference in Knowledge Bases	21	6	6
+Empirical Design in Reinforcement Learning	13	1	6
+Establishing Best Practices for Building Rigorous Agentic Benchmarks	12	4	6
+Evaluation of Retrieval-Augmented Generation. A Survey	12	5	6
+Experimental Design in Two-Sided Platforms. An Analysis of Bias	14	4	6
+FaceNet. A Unified Embedding for Face Recognition and Clustering	16	1	6
+Factorization Machines	13	2	6
+Fast and Accurate Network Embeddings via Very Sparse Random Projection	24	0	6
+Flow Straight and Fast. Learning to Generate and Transfer Data with Rectified Flow	11	1	6
+From Bytes to Ideas. Language Modeling with Autoregressive U-Nets	19	3	6
+From RAG to Memory. Non-Parametric Continual Learning for Large Language Models	14	5	6
+Frontier Models are Capable of In-context Scheming	12	2	6
+GFM-RAG. Graph Foundation Model for Retrieval Augmented Generation	11	1	6
+GISTBench. Evaluating LLM User Understanding via Evidence-Based Interest Verification	22	1	6
+Generative Verifiers. Reward Modeling as Next-Token Prediction	12	5	6
+HELMET. How to Evaluate Long-Context Language Models Effectively and Thoroughly	20	5	6
+Hallucination is Inevitable. An Innate Limitation of Large Language Models	14	2	6
+High-resolution Piano Transcription with Pedals by Regressing Onset and Offset Times	8	1	6
+Hungry Hungry Hippos. Towards Language Modeling with State Space Models	10	0	6
+Ignore This Title and HackAPrompt. Exposing Systemic Vulnerabilities of LLMs through a Global Scale	24	5	6
+Image quality assessment. from error visibility to structural similarity	17	6	6
+Insights into DeepSeek-V3. Scaling Challenges and Reflections on Hardware for AI Architectures	28	1	6
+LLMs are Also Effective Embedding Models. An In-depth Overview	16	7	6
+LaMP-QA. A Benchmark for Personalized Long-form Question Answering	13	4	6
+Language Models in the Loop. Incorporating Prompting into Weak Supervision	16	1	6
+Language Models with Conformal Factuality Guarantees	19	6	6
+Large Language Models Struggle to Describe the Haystack without Human Help. Human-in-the-loop	28	7	6
+Leveraging Topic Specificity and Social Relationships for Expert Finding in Community Question	29	9	6
+LiveBench. A Challenging, Contamination-Limited LLM Benchmark	15	1	6
+Llama-Nemotron. Efficient Reasoning Models	17	2	6
+LongLaMP. A Benchmark for Personalized Long-form Text Generation	15	2	6
+MESH. Scaling Up Retrieval with Heterogeneous Content Unification	17	1	6
+Mastering Diverse Domains through World Models	20	3	6
+Measuring Attribution in Natural Language Generation Models	20	6	6
+Measuring Mathematical Problem Solving With the MATH Dataset	20	7	6
+MetricX-24. The Google Submission to the WMT 2024 Metrics Shared Task	17	1	6
+Mitigating Over-Personalization in LLMs via Structured Memory	19	2	6
+Nemotron-4 340B Technical Report	10	2	6
+Neural Collaborative Filtering vs. Matrix Factorization Revisited	13	2	6
+Neural Discrete Representation Learning	15	4	6
+Non-Clicks Mean Irrelevant. Propensity Ratio Scoring As a Correction	23	1	6
+OpenHands. An Open Platform for AI Software Developers as Generalist Agents	15	5	6
+Outrageously Large Neural Networks. The Sparsely-Gated Mixture-of-Experts Layer	20	2	6
+Persona Vectors. Monitoring and Controlling Character Traits in Language Models	15	2	6
+Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks	15	3	6
+Precise Zero-Shot Dense Retrieval without Relevance Labels	20	5	6
+Pretraining Data Mixtures Enable Narrow Model Selection Capabilities in Transformer Models	14	3	6
+ProRL. Prolonged Reinforcement Learning Expands Reasoning Boundaries in Large Language Models	12	2	6
+Quasi-Oracle Estimation of Heterogeneous Treatment Effects	22	11	6
+Qwen-Image-Layered. Towards Inherent Editability via Layer Decomposition	8	1	6
+RECOMP. Improving Retrieval-Augmented LMs with Compression and Selective Augmentation	13	1	6
+RL's Razor. Why Online Reinforcement Learning Forgets Less	11	0	6
+RLAIF vs. RLHF. Scaling Reinforcement Learning from Human Feedback with AI Feedback	10	0	6
+RWKV-7 Goose with Expressive Dynamic State Evolution	14	4	6
+RankRAG. Unifying Context Ranking with Retrieval-Augmented Generation in LLMs	18	5	6
+Recursive Learning Without Collapse. A Weighting-Based Stabilization Framework	14	3	6
+Reflexion. Language Agents with Verbal Reinforcement Learning	25	7	6
+Resurrecting Recurrent Neural Networks for Long Sequences	17	3	6
+Retentive Network. A Successor to Transformer for Large Language Models	23	2	6
+Rethinking Memory in LLM based Agents. Representations, Operations, and Emerging Topics	15	0	6
+Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks	19	3	6
+Revisiting Transformer-based Models for Long Document Classification	14	1	6
+RotatE. Knowledge Graph Embedding by Relational Rotation in Complex Space	20	3	6
+SGLang. Efficient Execution of Structured Language Model Programs	20	6	6
+SOAP. Improving and Stabilizing Shampoo using Adam	13	3	6
+Safety Alignment Should Be Made More Than Just a Few Tokens Deep	10	2	6
+Scaling Laws for Generative Mixed-Modal Language Models	11	2	6
+Scaling Laws for Precision	17	2	6
+Stabilizing the Lottery Ticket Hypothesis	9	1	6
+TD-MPC2. Scalable, Robust World Models for Continuous Control	11	2	6
+Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve	22	5	6
+Teaching Models to Express Their Uncertainty in Words	20	4	6
+The False Promise of Imitating Proprietary LLMs	7	0	6
+The Unfairness of Popularity Bias in Recommendation	12	0	6
+The Use of MMR, Diversity-Based Reranking for Reordering Documents and Producing Summaries	19	1	6
+The case for 4-bit precision. k-bit Inference Scaling Laws	19	3	6
+ThetaEvolve. Test-time Learning on Open Problems	17	2	6
+Tongyi DeepResearch Technical Report	23	5	6
+Towards Optimal Variance Reduction in Online Controlled Experiments	16	3	6
+Train Short, Test Long. Attention with Linear Biases Enables Input Length Extrapolation	25	11	6
+Understanding R1-Zero-Like Training. A Critical Perspective	6	0	6
+Unifying Generative and Dense Retrieval for Sequential Recommendation	10	2	6
+Variance reduction combining pre-experiment and in-experiment data	19	9	6
+Variational Autoencoders for Collaborative Filtering	22	2	6
+WebArena. A Realistic Web Environment for Building Autonomous Agents	15	0	6
+Wiring the 'Why'. A Unified Taxonomy and Survey of Abductive Reasoning in LLMs	14	2	6
+graph2vec. Learning Distributed Representations of Graphs	17	11	6
+tinyBenchmarks. evaluating LLMs with fewer examples	24	3	6
+A Careful Examination of Large Language Model Performance on Grade School Arithmetic	23	7	5
+A Large Scale Benchmark for Individual Treatment Effect Prediction and Uplift Modeling	15	3	5
+A Metric Learning Reality Check	9	3	5
+A Probabilistic Interpretation of Transformers	14	2	5
+A Shared Low-Rank Adaptation Approach to Personalized RLHF	13	3	5
+A Survey of Context Engineering for Large Language Models	46	12	5
+A Survey on Causal Inference	15	0	5
+A Survey on LLM-based Conversational User Simulation	6	1	5
+A Survey on Large Language Models for Recommendation	18	5	5
+AWQ. Activation-aware Weight Quantization for LLM Compression and Acceleration	16	5	5
+Adding Conditional Control to Text-to-Image Diffusion Models	9	1	5
+AgentInstruct. Toward Generative Teaching with Agentic Flows	10	1	5
+Agentic Retrieval-Augmented Generation. A Survey on Agentic RAG	23	2	5
+Are Large Language Model-based Evaluators the Solution to Scaling Up Multilingual Evaluation	21	6	5
+Attention is Not All You Need. Pure Attention Loses Rank Doubly Exponentially with Depth	11	0	5
+AudioLM. a Language Modeling Approach to Audio Generation	14	2	5
+BART. Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and	11	1	5
+BARTScore. Evaluating Generated Text as Text Generation	11	1	5
+BLIP-2. Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language	8	2	5
+Benchmark Data Contamination of Large Language Models. A Survey	12	3	5
+Bleu. a Method for Automatic Evaluation of Machine Translation	19	1	5
+Building Your Own Product Copilot. Challenges, Opportunities, and Needs	18	1	5
+Calibrate Before Use. Improving Few-Shot Performance of Language Models	20	3	5
+Can AI-Generated Text be Reliably Detected	7	1	5
+Can Large Language Models Transform Computational Social Science	27	4	5
+Chain-of-Layer. Iteratively Prompting Large Language Models for Taxonomy Induction from Limited	19	4	5
+ChatGPT Outperforms Crowd-Workers for Text-Annotation Tasks	18	1	5
+Clio. Privacy-Preserving Insights into Real-World AI Use	21	5	5
+ColBERT. Efficient and Effective Passage Search via Contextualized Late Interaction over BERT	21	6	5
+Constitutional AI. Harmlessness from AI Feedback	18	0	5
+DAPO. An Open-Source LLM Reinforcement Learning System at Scale	11	1	5
+DETRs Beat YOLOs on Real-time Object Detection	7	0	5
+DINOv3	18	3	5
+Data-Efficient Image Recognition with Contrastive Predictive Coding	14	5	5
+Dataset Cartography. Mapping and Diagnosing Datasets with Training Dynamics	12	3	5
+Debating with More Persuasive LLMs Leads to More Truthful Answers	18	3	5
+Deep Double Descent. Where Bigger Models and More Data Hurt	13	1	5
+Deep Retrieval. Learning A Retrievable Structure for Large-Scale Recommendations	19	4	5
+Deep learning with noisy labels. exploring techniques and remedies in medical image analysis	15	4	5
+Deep reinforcement learning from human preferences	14	1	5
+Demystifying Parallel and Distributed Deep Learning. An In-Depth Concurrency Analysis	18	6	5
+Denoising Diffusion Implicit Models	9	1	5
+Dense Text Retrieval based on Pretrained Language Models. A Survey	18	4	5
+Diffusion vs. Autoregressive Language Models. A Text Embedding Perspective	14	0	5
+Does Reinforcement Learning Really Incentivize Reasoning Capacity in LLMs Beyond the Base Model	13	0	5
+Don't Stop Pretraining. Adapt Language Models to Domains and Tasks	9	1	5
+EDA. Easy Data Augmentation Techniques for Boosting Performance on Text Classification Tasks	12	2	5
+Effective Data Augmentation With Diffusion Models	23	3	5
+Efficient Attention. Attention with Linear Complexities	15	4	5
+Efficient Query Evaluation using a Two-Level Retrieval Process (WAND)	23	3	5
+End-to-End Neural Ad-hoc Ranking with Kernel Pooling	8	0	5
+Enriching Word Vectors with Subword Information	9	0	5
+Entropic Out-of-Distribution Detection. Seamless Detection of Unknown Examples	9	3	5
+Estimating Treatment Effects using Multiple Surrogates. The Role of the Surrogate Score and the	16	1	5
+Evaluating LLM Personalization via Semantic Constraint Verification	15	1	5
+ExpeL. LLM Agents Are Experiential Learners	8	0	5
+Explaining grokking through circuit efficiency	9	0	5
+Fast Inference from Transformers via Speculative Decoding	18	3	5
+Fast Transformer Decoding. One Write-Head is All You Need	14	1	5
+Fine-Tuning Pre-trained Language Model with Weak Supervision. A Contrastive-Regularized	16	2	5
+Flamingo. a Visual Language Model for Few-Shot Learning	13	1	5
+From Storage to Experience. A Survey on the Evolution of LLM Agent Memory Mechanisms	15	1	5
+Fuzzy Substring Matching. On-device Fuzzy Friend Search at Snapchat	16	1	5
+GPipe. Efficient Training of Giant Neural Networks using Pipeline Parallelism	13	0	5
+Gated Delta Networks. Improving Mamba2 with Delta Rule	6	0	5
+GenRec. An LLM-Backed Recommendation Ranker at Netflix	18	3	5
+Graph Embedding Techniques, Applications, and Performance. A Survey	12	2	5
+Graph Retrieval-Augmented Generation. A Survey	21	3	5
+Grokking as the Transition from Lazy to Rich Training Dynamics	15	1	5
+Group Normalization	16	0	5
+Gymnasium. A Standard Interface for Reinforcement Learning Environments	16	2	5
+Harmony. Overcoming the Hurdles of GPU Memory Capacity to Train Massive DNN Models on Commodity	16	4	5
+High Fidelity Neural Audio Compression	17	3	5
+Holistic Evaluation of Language Models	25	9	5
+Horovod. fast and easy distributed deep learning in TensorFlow	13	5	5
+How Do AI Agents Do Human Work. Comparing AI and Human Workflows Across Diverse Occupations	21	2	5
+Identifying Mislabeled Data using the Area Under the Margin Ranking	15	2	5
+Improving Alignment and Robustness with Circuit Breakers	10	2	5
+Infini-gram. Scaling Unbounded n-gram Language Models to a Trillion Tokens	19	0	5
+Into the Unknown Unknowns. Engaged Human Learning through Participation in Language Model Agent	20	4	5
+Is Cosine-Similarity of Embeddings Really About Similarity	11	2	5
+Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena	11	1	5
+Justice or Prejudice. Quantifying Biases in LLM-as-a-Judge	7	0	5
+Kimi K2.5. Visual Agentic Intelligence	13	0	5
+LINE. Large-scale Information Network Embedding	15	2	5
+Laplace Redux -- Effortless Bayesian Deep Learning	16	3	5
+Large Language Model Hacking. Quantifying the Hidden Risks of Using LLMs for Text Annotation	15	3	5
+Large Language Models Enable Few-Shot Clustering	13	0	5
+Late Chunking. Contextual Chunk Embeddings Using Long-Context Embedding Models	9	1	5
+Less is More. Recursive Reasoning with Tiny Networks	17	3	5
+LiRank. Industrial Large Scale Ranking Models at LinkedIn	22	4	5
+LightRAG. Simple and Fast Retrieval-Augmented Generation	10	3	5
+Llama Guard. LLM-based Input-Output Safeguard for Human-AI Conversations	15	3	5
+Long-term Causal Inference Under Persistent Confounding via Data Combination	13	1	5
+LongRoPE. Extending LLM Context Window Beyond 2 Million Tokens	6	0	5
+Lost in the Middle. How Language Models Use Long Contexts	17	4	5
+M3-Embedding. Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through	20	8	5
+MemGuard. Preventing Memory Contamination in Long-Term Memory-Augmented Large Language Models	13	3	5
+Meta-Learning for Cold-Start Personalization in Prompt-Tuned LLMs	19	0	5
+Monolith. Real Time Recommendation System With Collisionless Embedding Table	18	5	5
+MuSiQue. Multihop Questions via Single-hop Question Composition	8	0	5
+NV-Embed. Improved Techniques for Training LLMs as Generalist Embedding Models	19	3	5
+Nested Learning. The Illusion of Deep Learning Architectures	21	7	5
+Off-policy evaluation for slate recommendation	17	2	5
+On the Spectral Bias of Neural Networks	13	2	5
+Open Problems and Fundamental Limitations of Reinforcement Learning from Human Feedback	13	2	5
+P-GenRM. Personalized Generative Reward Model with Test-time User-based Scaling	13	4	5
+PPTC Benchmark. Evaluating Large Language Models for PowerPoint Task Completion	19	2	5
+Playing Atari with Deep Reinforcement Learning	9	2	5
+Pre-trained Language Model for Web-scale Retrieval in Baidu Search	19	3	5
+Privacy-Preserving Instructions for Aligning Large Language Models	19	10	5
+RankMixer. Scaling Up Ranking Models in Industrial Recommenders	25	8	5
+Reading Tea Leaves. How Humans Interpret Topic Models	9	0	5
+Recall Is Not Enough. A Reader-Context Diagnostic for Budget-Constrained Retrieval-Augmented	31	6	5
+Reliability without Validity. A Systematic, Large-Scale Evaluation of LLM-as-a-Judge Models Across	11	0	5
+Remember the Decision, Not the Description. A Rate-Distortion Framework for Agent Memory	15	1	5
+Rethinking Benchmark and Contamination for Language Models with Rephrased Samples	9	1	5
+Reverse Thinking Makes LLMs Stronger Reasoners	13	4	5
+RewardBench. Evaluating Reward Models for Language Modeling	9	0	5
+Rule Based Rewards for Language Model Safety	8	0	5
+SFT Conflicts, RL Coexists. A Theoretical and Empirical Analysis of Multi-Task Learning for LLMs	14	1	5
+SFT Memorizes, RL Generalizes. A Comparative Study of Foundation Model Post-training	21	1	5
+Scaling up Test-Time Compute with Latent Reasoning. A Recurrent Depth Approach	32	7	5
+Search-R1. Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning	15	3	5
+Self-Refine. Iterative Refinement with Self-Feedback	27	8	5
+SelfCheckGPT. Zero-Resource Black-Box Hallucination Detection for Generative Large Language Models	19	1	5
+Shopping Queries Dataset. A Large-Scale ESCI Benchmark for Improving Product Search	23	2	5
+Simple and Principled Uncertainty Estimation with Deterministic Deep Learning via Distance Awareness	9	1	5
+Siren's Song in the AI Ocean. A Survey on Hallucination in Large Language Models	10	3	5
+Sleeper Agents. Training Deceptive LLMs that Persist Through Safety Training	21	6	5
+SmoothQuant. Accurate and Efficient Post-Training Quantization for Large Language Models	11	0	5
+Sparse, Dense, and Attentional Representations for Text Retrieval	16	4	5
+SparseGPT. Massive Language Models Can Be Accurately Pruned in One-Shot	20	7	5
+Spectral Normalization for Generative Adversarial Networks	7	0	5
+SpinQuant. LLM quantization with learned rotations	8	2	5
+Stable Video Diffusion. Scaling Latent Video Diffusion Models to Large Datasets	12	1	5
+Teaching Language Models to Reason with Tools	13	4	5
+The Instruction Hierarchy. Training LLMs to Prioritize Privileged Instructions	15	3	5
+The Leaderboard Illusion	11	3	5
+TheAgentCompany. Benchmarking LLM Agents on Consequential Real World Tasks	11	1	5
+Thoughts Are All Over the Place. On the Underthinking of o1-Like LLMs	12	5	5
+Three Mechanisms of Weight Decay Regularization	7	0	5
+Towards Deep Learning Models Resistant to Adversarial Attacks	10	2	5
+Towards Large Reasoning Models. A Survey of Reinforced Reasoning with Large Language Models	28	10	5
+Towards Understanding Sycophancy in Language Models	18	8	5
+TransAct. Transformer-based Realtime User Action Model for Recommendation at Pinterest	28	5	5
+Tulu 3. Pushing Frontiers in Open Language Model Post-Training	11	1	5
+Unbiased Learning to Rank. On Recent Advances and Practical Applications	13	0	5
+Understanding Contrastive Representation Learning through Alignment and Uniformity on the	11	0	5
+Understanding Diffusion Models. A Unified Perspective	6	1	5
+Understanding Practitioners Perspectives on Monitoring Machine Learning Systems	23	7	5
+Understanding the Ability of LLMs to Handle Character-Level Perturbation	13	1	5
+UniIR. Training and Benchmarking Universal Multimodal Information Retrievers	12	1	5
+Unifying Large Language Models and Knowledge Graphs. A Roadmap	14	0	5
+Unsupervised Learning of Visual Features by Contrasting Cluster Assignments	13	1	5
+When Knowledge Is Not Free. Cost-Aware Evidence Selection in Retrieval-Augmented Generation	23	2	5
+When Thinking Fails. The Pitfalls of Reasoning for Instruction-Following in LLMs	21	0	5
+When does text prediction benefit from additional context. An exploration of contextual signals for	11	2	5
+WildFeedback. Aligning LLMs With In-situ User Interactions And Feedback	11	5	5
+ZeRO-Infinity. Breaking the GPU Memory Wall for Extreme Scale Deep Learning	22	0	5
+ZeroGen. Efficient Zero-shot Learning via Dataset Generation	17	3	5
+jina-embeddings-v4. Universal Embeddings for Multimodal Multilingual Retrieval	18	2	5
+struc2vec. Learning Node Representations from Structural Identity	10	2	5
+A Comprehensive Survey of Direct Preference Optimization. Datasets, Theories, Variants, and	10	2	4
+A ConvNet for the 2020s	13	1	4
+A Large Scale Heterogeneous Treatment Effect Estimation Framework and Its Applications of Users'	13	0	4
+A Large Scale Search Dataset for Unbiased Learning to Rank	20	0	4
+A Large-Scale Corpus for Conversation Disentanglement	19	2	4
+A Survey of Agentic Reasoning for Large Language Models. Towards Recursively Self-Improving and	28	4	4
+A Survey of Uncertainty in Deep Neural Networks	18	5	4
+A Survey on Personalized Alignment -- The Missing Piece for Large Language Models in Real-World	5	0	4
+A Survey on Rubric-Guided Reinforcement Learning for Language Models	25	2	4
+Absolute Zero. Reinforced Self-play Reasoning with Zero Data	16	2	4
+Accurately Modeling Biased Random Walks on Weighted Graphs Using Node2vec+	14	2	4
+Adam. A Method for Stochastic Optimization	15	5	4
+Adaptive-RAG. Learning to Adapt Retrieval-Augmented Large Language Models through Question	10	2	4
+Agent-as-a-Judge. Evaluate Agents with Agents	15	5	4
+AgentPoison. Red-teaming LLM Agents via Poisoning Memory or Knowledge Bases	11	1	4
+An Alternative Cross Entropy Loss for Learning-to-Rank	22	4	4
+An Empirical Study of Obsolete Answers on Stack Overflow	14	2	4
+An Image is Worth 16x16 Words. Transformers for Image Recognition at Scale	9	2	4
+ArCHer. Training Language Model Agents via Hierarchical Multi-Turn RL	12	4	4
+Aria-MIDI. A Dataset of Piano MIDI Files for Symbolic Music Modeling	11	3	4
+Ask Me Anything. A simple strategy for prompting language models	16	2	4
+Assigning people to tasks identified in email. The EPA dataset for addressee tagging for detected	26	2	4
+AttnGAN. Fine-Grained Text to Image Generation with Attentional Generative Adversarial Networks	16	5	4
+Augmenting Language Models with Long-Term Memory	10	5	4
+Auto-Encoding Variational Bayes	28	11	4
+AutoAugment. Learning Augmentation Policies from Data	13	2	4
+Averaging Weights Leads to Wider Optima and Better Generalization	13	4	4
+BIG-Bench Extra Hard	14	8	4
+BLEURT. Learning Robust Metrics for Text Generation	14	2	4
+Back to Basics. Revisiting REINFORCE Style Optimization for Learning from Human Feedback in LLMs	9	1	4
+Bayesian Teaching Enables Probabilistic Reasoning in Large Language Models	12	4	4
+Benchmarking Neural Network Robustness to Common Corruptions and Perturbations	23	11	4
+BetterBench. Assessing AI Benchmarks, Uncovering Issues, and Establishing Best Practices	11	2	4
+Beyond Globally Optimal. Focused Learning for Improved Recommendations	9	0	4
+Beyond Recall. Behavioral Specification as an Interpretive Layer for AI Personalization	14	5	4
+Bias and Debias in Recommender System. A Survey and Future Directions	14	2	4
+Bigger, Regularized, Optimistic. scaling for compute and sample-efficient continuous control	12	1	4
+Billion-scale similarity search with GPUs	20	0	4
+CRITIC. Large Language Models Can Self-Correct with Tool-Interactive Critiquing	10	1	4
+Can LLM Already Serve as A Database Interface. A BIg Bench for Large-Scale Database Grounded	18	2	4
+Can LLMs Be Trusted for Evaluating RAG Systems. A Survey of Methods and Datasets	12	3	4
+Cascading Bandits. Learning to Rank in the Cascade Model	16	0	4
+Contrastive Learning of Medical Visual Representations from Paired Images and Text	7	1	4
+Contrastive Multiview Coding	10	2	4
+Control-Plane Placement Shapes Forgetting. An Architectural Study of Agent Memory Across Thirteen	8	2	4
+DABS. A Domain-Agnostic Benchmark for Self-Supervised Learning	7	0	4
+Data Interpreter. An LLM Agent For Data Science	10	4	4
+Data Programming. Creating Large Training Sets, Quickly	17	3	4
+Deep Ensembles. A Loss Landscape Perspective	7	1	4
+Deep Learning based Recommender System. A Survey and New Perspectives	16	6	4
+Deep Reinforcement Learning at the Edge of the Statistical Precipice	9	2	4
+Deep Reinforcement Learning, a textbook	12	8	4
+DeepFM. A Factorization-Machine based Neural Network for CTR Prediction	11	3	4
+DeepNet. Scaling Transformers to 1,000 Layers	7	1	4
+DeepRecSys. A System for Optimizing End-To-End At-scale Neural Recommendation Inference	24	5	4
+DeepSeek-R1. Incentivizing Reasoning Capability in LLMs via Reinforcement Learning	8	3	4
+Deliberative Alignment. Reasoning Enables Safer Language Models	13	6	4
+Detecting hallucinations in large language models using semantic entropy	23	2	4
+Differential Transformer	9	2	4
+Direct Preference Optimization. Your Language Model is Secretly a Reward Model	6	2	4
+DistServe. Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving	18	4	4
+Do LLMs Recognize Your Preferences. Evaluating Personalized Preference Following in LLMs	8	1	4
+Do Membership Inference Attacks Work on Large Language Models	12	2	4
+DocRED. A Large-Scale Document-Level Relation Extraction Dataset	14	7	4
+Don't Use LLMs to Make Relevance Judgments	23	16	4
+Efficient Memory Management for Large Language Model Serving with PagedAttention	16	5	4
+EfficientNet. Rethinking Model Scaling for Convolutional Neural Networks	8	3	4
+Efficiently Modeling Long Sequences with Structured State Spaces	14	1	4
+Eliciting Human Preferences with Language Models	10	0	4
+Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling	13	3	4
+Enhancing Chat Language Models by Scaling High-quality Instructional Conversations	9	1	4
+Evaluating Large Language Models Trained on Code	11	4	4
+Evaluating for the long term. Learnings from industry	8	2	4
+EvoMemBench. Benchmarking Agent Memory from a Self-Evolving Perspective	4	0	4
+Experts, Errors, and Context. A Large-Scale Study of Human Evaluation for Machine Translation	8	2	4
+FANToM. A Benchmark for Stress-testing Machine Theory of Mind in Interactions	8	1	4
+Faith and Fate. Limits of Transformers on Compositionality	21	0	4
+Fast and Three-rious. Speeding Up Weak Supervision with Triplet Methods	15	2	4
+Feature Hashing for Large Scale Multitask Learning	25	1	4
+Fine-Tuning Pretrained Language Models. Weight Initializations, Data Orders, and Early Stopping	10	2	4
+FineTuneBench. How well do commercial fine-tuning APIs infuse knowledge into LLMs	10	0	4
+FitNets. Hints for Thin Deep Nets	8	1	4
+Formal Models for Expert Finding in Enterprise Corpora	23	1	4
+From RankNet to LambdaRank to LambdaMART. An Overview	20	7	4
+GPQA. A Graduate-Level Google-Proof Q&A Benchmark	16	4	4
+Gaussian Error Linear Units (GELUs)	14	6	4
+Generalized Random Forests	11	4	4
+Generating Training Data with Language Models. Towards Zero-Shot Language Understanding	8	0	4
+Generative Adapter. Contextualizing Language Models in Parameters with A Single Forward Pass	8	2	4
+Generative Representational Instruction Tuning	12	0	4
+GloVe. Global Vectors for Word Representation	6	0	4
+Gorilla. Large Language Model Connected with Massive APIs	17	4	4
+Griffin. Mixing Gated Linear Recurrences with Local Attention for Efficient Language Models	17	5	4
+Group Sequence Policy Optimization	7	0	4
+HelpSteer2. Open-source dataset for training top-performing reward models	9	1	4
+High-Dimensional Continuous Control Using Generalized Advantage Estimation	25	4	4
+How Can Recommender Systems Benefit from Large Language Models. A Survey	16	1	4
+How Does Batch Normalization Help Optimization	13	2	4
+Image Quality Assessment. Unifying Structure and Texture Similarity	11	2	4
+Improved Baselines with Visual Instruction Tuning	12	2	4
+Interpreting User Requests in the Context of Natural Language Standing Instructions	8	0	4
+Introducing the Enron Corpus	9	0	4
+Inverse Constitutional AI. Compressing Preferences into Principles	18	5	4
+Is Label Smoothing Truly Incompatible with Knowledge Distillation. An Empirical Study	6	2	4
+Is Stack Overflow Obsolete. An Empirical Study of the Characteristics of ChatGPT Answers to Stack	20	3	4
+Joint Word and Entity Embeddings for Entity Retrieval from a Knowledge Graph	6	0	4
+KIVI. A Tuning-Free Asymmetric 2bit Quantization for KV Cache	14	1	4
+Kernel and Rich Regimes in Overparametrized Models	7	1	4
+Knowledge Distillation. A Survey	17	8	4
+Knowledge Graphs	22	7	4
+LIMA. Less Is More for Alignment	13	0	4
+LLM Pruning and Distillation in Practice. The Minitron Approach	13	5	4
+LLMs-as-Judges. A Comprehensive Survey on LLM-based Evaluation Methods	16	3	4
+LLaMA. Open and Efficient Foundation Language Models	9	0	4
+LONGER. Scaling Up Long Sequence Modeling in Industrial Recommenders	22	3	4
+Large Language Models Encode Clinical Knowledge	15	5	4
+Large Language Models are Effective Text Rankers with Pairwise Ranking Prompting	7	0	4
+Large Language Models as Optimizers	22	6	4
+Large Language Models for User Interest Journeys	8	2	4
+LeJEPA. Provable and Scalable Self-Supervised Learning Without the Heuristics	11	3	4
+Learning Optimal Personalised Reservation Prices in Impression Ad Auctions with Mixture Density	10	2	4
+Let Me Speak Freely. A Study on the Impact of Format Restrictions on Performance of Large Language	16	3	4
+Let's Verify Step by Step	19	4	4
+Leveraging Passage Retrieval with Generative Models for Open Domain Question Answering	11	0	4
+Leveraging Procedural Generation to Benchmark Reinforcement Learning	7	0	4
+LogiDynamics. Unraveling the Dynamics of Inductive, Abductive and Deductive Logical Inferences in	9	3	4
+LongBench v2. Towards Deeper Understanding and Reasoning on Realistic Long-context Multitasks	14	2	4
+MMLU-Pro. A More Robust and Challenging Multi-Task Language Understanding Benchmark	18	5	4
+Magistral	15	5	4
+Mastering Atari with Discrete World Models	21	1	4
+Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm	9	4	4
+MegaScale-Infer. Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism	19	3	4
+MegaScale. Scaling Large Language Model Training to More Than 10,000 GPUs	13	4	4
+MemMA. Coordinating the Memory Cycle through Multi-Agent Reasoning and In-Situ Self-Evolution	8	0	4
+MemOS. A Memory OS for AI System	10	0	4
+Memory Decoder. A Pretrained, Plug-and-Play Memory for Large Language Models	7	1	4
+Memory for Autonomous LLM Agents Mechanisms, Evaluation, and Emerging Frontiers	23	1	4
+MetaGPT. Meta Programming for A Multi-Agent Collaborative Framework	12	2	4
+Mind Reading or Misreading. LLMs on the Big Five Personality Test	13	2	4
+MiniMax-01. Scaling Foundation Models with Lightning Attention	25	12	4
+Mixtral of Experts	7	0	4
+Model Cards for Model Reporting	20	3	4
+Momentum Contrast for Unsupervised Visual Representation Learning	12	0	4
+Monitoring Reasoning Models for Misbehavior and the Risks of Promoting Obfuscation	16	7	4
+MultiEURLEX -- A multi-lingual and multi-label legal document classification dataset for zero-shot	8	1	4
+No LLM Solved Yu Tsumura's 554th Problem	12	4	4
+OP-Bench. Benchmarking Over-Personalization for Memory-Augmented Personalized Conversational Agents	7	1	4
+On the Necessity of World Knowledge for Mitigating Missing Labels in Extreme Classification	13	1	4
+On-Policy Distillation of Language Models. Learning from Self-Generated Mistakes	7	1	4
+Operationalizing Machine Learning. An Interview Study	16	2	4
+Optimizing Search Engines using Clickthrough Data	12	2	4
+PLUM. Adapting Pre-trained Language Models for Industrial-scale Generative Recommendations	17	5	4
+Parameter-Efficient Transfer Learning for NLP	14	5	4
+Persia. An Open, Hybrid System Scaling Deep Learning-based Recommenders up to 100 Trillion	16	4	4
+Personalization of Large Language Models. A Survey	7	1	4
+Phi-3 Technical Report. A Highly Capable Language Model Locally on Your Phone	12	0	4
+Physics of Language Models. Part 3.3, Knowledge Capacity Scaling Laws	20	6	4
+PinRec. Unified Generative Retrieval for Pinterest Recommender Systems	21	2	4
+PipeDream. Fast and Efficient Pipeline Parallel DNN Training	15	2	4
+Position. Bayesian Deep Learning is Needed in the Age of Large-Scale AI	9	0	4
+Prediction-Powered Inference	12	1	4
+QuaRot. Outlier-Free 4-Bit Inference in Rotated LLMs	16	4	4
+Quantifying Variance in Evaluation Benchmarks	17	2	4
+R-Tuning. Instructing Large Language Models to Say `I Don't Know'	13	1	4
+RAG vs. GraphRAG. A Systematic Evaluation and Key Insights	9	0	4
+ROUGE. A Package for Automatic Evaluation of Summaries	17	5	4
+RWKV. Reinventing RNNs for the Transformer Era	19	3	4
+Ring Attention with Blockwise Transformers for Near-Infinite Context	14	6	4
+Round and Round We Go! What makes Rotary Positional Encodings useful	10	1	4
+RouterBench. A Benchmark for Multi-LLM Routing System	19	2	4
+Rubrics as Rewards. Reinforcement Learning Beyond Verifiable Domains	9	0	4
+SAGE. A Novelty Gate for Efficient Memory Evolution in Agentic LLMs	15	6	4
+SGDR. Stochastic Gradient Descent with Warm Restarts	12	3	4
+SPADE. Synthesizing Data Quality Assertions for Large Language Model Pipelines	20	2	4
+Scaling Laws for Reward Model Overoptimization	9	0	4
+Scaling Synthetic Data Creation with 1,000,000,000 Personas	15	4	4
+Self-Consistency Improves Chain of Thought Reasoning in Language Models	11	1	4
+Self-RAG. Learning to Retrieve, Generate, and Critique through Self-Reflection	12	1	4
+Self-supervised Learning for Large-scale Item Recommendations	14	1	4
+Semantic IDs for Joint Generative Search and Recommendation	12	1	4
+Sentence-T5. Scalable Sentence Encoders from Pre-trained Text-to-Text Models	5	0	4
+SigLIP 2. Multilingual Vision-Language Encoders with Improved Semantic Understanding, Localization	16	6	4
+SimMIM. A Simple Framework for Masked Image Modeling	9	0	4
+Small Language Models Improve Giants by Rewriting Their Outputs	11	2	4
+Stop Overthinking. A Survey on Efficient Reasoning for Large Language Models	21	5	4
+Structured Uncertainty guided Clarification for LLM Agents	9	1	4
+SummEval. Re-evaluating Summarization Evaluation	12	5	4
+Synthetic Data from Diffusion Models Improves ImageNet Classification	15	5	4
+TWIN. TWo-stage Interest Network for Lifelong User Behavior Modeling in CTR Prediction at Kuaishou	14	4	4
+Teach LLMs to Personalize -- An Approach inspired by Writing Education	6	0	4
+The Lottery Ticket Hypothesis. Finding Sparse, Trainable Neural Networks	7	3	4
+The Perception-Distortion Tradeoff	14	0	4
+The Phenomenon of Policy Churn	15	1	4
+The Pitfalls of Simplicity Bias in Neural Networks	12	2	4
+The Proximal Surrogate Index. Long-Term Treatment Effects under Unobserved Confounding	15	0	4
+The Unreasonable Effectiveness of Deep Features as a Perceptual Metric	9	1	4
+TinyBERT. Distilling BERT for Natural Language Understanding	14	8	4
+Titans. Learning to Memorize at Test Time	6	0	4
+Towards Efficient Generative Large Language Model Serving. A Survey from Algorithms to Systems	6	1	4
+Transformers are RNNs. Fast Autoregressive Transformers with Linear Attention	19	1	4
+Transfusion. Predict the Next Token and Diffuse Images with One Multi-Modal Model	20	2	4
+Uncertainty Decomposition for Clarification Seeking in LLM Agents	13	1	4
+Understanding Dimensional Collapse in Contrastive Self-supervised Learning	5	0	4
+Understanding Training Efficiency of Deep Learning Recommendation Models at Scale	21	1	4
+Universal and Transferable Adversarial Attacks on Aligned Language Models	19	6	4
+Unlimiformer. Long-Range Transformers with Unlimited Length Input	15	4	4
+Unsupervised Cross-lingual Representation Learning at Scale	13	3	4
+V-JEPA 2. Self-Supervised Video Models Enable Understanding, Prediction and Planning	17	2	4
+VICReg. Variance-Invariance-Covariance Regularization for Self-Supervised Learning	8	1	4
+VLM2Vec-V2. Advancing Multimodal Embedding for Videos, Images, and Visual Documents	7	1	4
+Violation of Expectation via Metacognitive Prompting Reduces Theory of Mind Prediction Error in	11	1	4
+Voicebox. Text-Guided Multilingual Universal Speech Generation at Scale	9	4	4
+Voxtral	9	0	4
+Where Reasoning Matters. Rethinking Latent Reasoning in Semantic ID-based Generative Recommendation	6	0	4
+With Little Power Comes Great Responsibility	9	1	4
+Words That Make Language Models Perceive	15	1	4
+Yahoo! Learning to Rank Challenge Overview	19	4	4
+mHC. Manifold-Constrained Hyper-Connections	12	5	4
+mmBERT. A Modern Multilingual Encoder with Annealed Language Learning	16	2	4
+xCOMET. Transparent Machine Translation Evaluation through Fine-grained Error Detection	8	0	4
+xLSTM. Extended Long Short-Term Memory	15	3	4
+3D Gaussian Splatting for Real-Time Radiance Field Rendering	18	2	3
+8-bit Optimizers via Block-wise Quantization	8	1	3
+A Categorical Archive of ChatGPT Failures	12	2	3
+A Critical Study on Data Leakage in Recommender System Offline Evaluation	6	2	3
+A Method for Evaluating Hyperparameter Sensitivity in Reinforcement Learning	12	4	3
+A Practitioner's Guide to Continual Multimodal Pretraining	12	2	3
+A Simple Baseline for Bayesian Uncertainty in Deep Learning	11	2	3
+A Survey of Zero-shot Generalisation in Deep Reinforcement Learning	12	5	3
+A Survey on Efficient Inference for Large Language Models	13	4	3
+A continual learning survey. Defying forgetting in classification tasks	7	0	3
+A critical look at the evaluation of GNNs under heterophily. Are we really making progress	10	1	3
+ANN-Benchmarks. A Benchmarking Tool for Approximate Nearest Neighbor Algorithms	15	2	3
+AWAC. Accelerating Online Reinforcement Learning with Offline Datasets	13	7	3
+AgentDojo. A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents	16	3	3
+AirGapAgent. Protecting Privacy-Conscious Conversational Agents	16	1	3
+Algorithmic progress in language models	23	6	3
+An Experimental Comparison of Click Position-Bias Models	11	2	3
+An Introduction to Neural Information Retrieval t	10	7	3
+Are Emergent Abilities of Large Language Models a Mirage	15	5	3
+Asking and Answering Questions to Evaluate the Factual Consistency of Summaries	8	0	3
+Atlas. Few-shot Learning with Retrieval Augmented Language Models	16	2	3
+AutoGen. Enabling Next-Gen LLM Applications via Multi-Agent Conversation	14	3	3
+Axial Attention in Multidimensional Transformers	14	3	3
+BERTScore. Evaluating Text Generation with BERT	19	2	3
+BLINK. Multimodal Large Language Models Can See but Not Perceive	6	2	3
+BPR. Bayesian Personalized Ranking from Implicit Feedback	19	6	3
+Bad Students Make Great Teachers. Active Learning Accelerates Large-Scale Visual Understanding	18	1	3
+Benchmarking Distribution Shift in Tabular Data with TableShift	14	2	3
+Better Generalization with Semantic IDs. A Case Study in Ranking for Recommendations	16	1	3
+Beyond the 80 20 Rule. High-Entropy Minority Tokens Drive Effective Reinforcement Learning for LLM	11	2	3
+Big Self-Supervised Models are Strong Semi-Supervised Learners	8	2	3
+CLAP. Learning Audio Concepts From Natural Language Supervision	16	0	3
+Can LLMs Keep a Secret. Testing Privacy Implications of Language Models via Contextual Integrity	10	2	3
+CapSpeech. Enabling Downstream Applications in Style-Captioned Text-to-Speech	19	5	3
+CatBoost. unbiased boosting with categorical features	16	3	3
+Chain of Thought Monitorability. A New and Fragile Opportunity for AI Safety	12	1	3
+ClusterLLM. Large Language Models as a Guide for Text Clustering	18	3	3
+Cognitive Behaviors that Enable Self-Improving Reasoners, or, Four Habits of Highly Effective STaRs	11	3	3
+ColBERTv2. Effective and Efficient Retrieval via Lightweight Late Interaction	18	4	3
+Comment on The Illusion of Thinking. Understanding the Strengths and Limitations of Reasoning	14	2	3
+Consistency Models	8	0	3
+Corrective Retrieval Augmented Generation	8	1	3
+Critical Learning Periods in Deep Neural Networks	9	5	3
+Cyclical Learning Rates for Training Neural Networks	19	10	3
+DARLA. Improving Zero-Shot Transfer in Reinforcement Learning	13	4	3
+Data-Driven Switchback Experiments. Theoretical Tradeoffs and Empirical Bayes Designs	6	0	3
+Decoding billions of integers per second through vectorization	14	8	3
+Deconstructing Lottery Tickets. Zeros, Signs, and the Supermask	9	2	3
+Deduplicating Training Data Mitigates Privacy Risks in Language Models	19	2	3
+Deep Learning Recommendation Model for Personalization and Recommendation Systems	18	0	3
+DeepSeek-V2. A Strong, Economical, and Efficient Mixture-of-Experts Language Model	8	0	3
+DeepSeek-V3 Technical Report	17	2	3
+DeepSeek-V3.2. Pushing the Frontier of Open Large Language Models	11	3	3
+Delving Deep into Rectifiers. Surpassing Human-Level Performance on ImageNet Classification	13	5	3
+Demystifying Long Chain-of-Thought Reasoning in LLMs	9	0	3
+Dense Passage Retrieval for Open-Domain Question Answering	13	2	3
+Densely Connected Convolutional Networks	17	0	3
+Deploying an Artificial Intelligence System for COVID-19 Testing at the Greek Border	22	3	3
+Diffusion Transformers with Representation Autoencoders	5	0	3
+DistilBERT, a distilled version of BERT. smaller, faster, cheaper and lighter	13	4	3
+Distributed Representations of Sentences and Documents	22	5	3
+Do Deep Nets Really Need to be Deep	13	2	3
+DoLa. Decoding by Contrasting Layers Improves Factuality in Large Language Models	17	6	3
+DoReMi. Optimizing Data Mixtures Speeds Up Language Model Pretraining	14	2	3
+Double Debiased Machine Learning for Treatment and Causal Parameters	6	0	3
+Doubly Robust Policy Evaluation and Learning	16	4	3
+Doubly-Robust Estimation for Correcting Position-Bias in Click Feedback for Unbiased Learning to	18	9	3
+DynamicMem. A Long-Horizon Memory Benchmark in Real-World Settings	9	3	3
+Embedding-based Retrieval in Facebook Search	21	8	3
+Emergent Abilities of Large Language Models	13	1	3
+Enabling Large Language Models to Generate Text with Citations	9	1	3
+End-to-End Object Detection with Transformers	9	2	3
+Entity Embeddings of Categorical Variables	7	1	3
+Evaluation measures for preference judgments	9	1	3
+Evidential Deep Learning to Quantify Classification Uncertainty	14	6	3
+FASTopic. Pretrained Transformer is a Fast, Adaptive, Stable, and Transferable Topic Model	13	0	3
+FEVER. a large-scale dataset for Fact Extraction and VERification	24	4	3
+Failing Loudly. An Empirical Study of Methods for Detecting Dataset Shift	14	1	3
+Fantastic Pretraining Optimizers and Where to Find Them	12	4	3
+Fine-tune BERT for Extractive Summarization	12	0	3
+Fixup Initialization. Residual Learning Without Normalization	9	1	3
+Flipping the Dialogue. Training and Evaluating User Language Models	15	1	3
+Found in the Middle. Calibrating Positional Attention Bias Improves Long Context Utilization	14	2	3
+FrontierMath. A Benchmark for Evaluating Advanced Mathematical Reasoning in AI	27	13	3
+FrugalGPT. How to Use Large Language Models While Reducing Cost and Improving Performance	13	3	3
+GAIA. a benchmark for General AI Assistants	18	1	3
+GME. Improving Universal Multimodal Retrieval by Multimodal LLMs	5	0	3
+GPT detectors are biased against non-native English writers	8	1	3
+GQA. Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints	14	0	3
+GSPMD. General and Scalable Parallelization for ML Computation Graphs	9	0	3
+Gemini Embedding. Generalizable Embeddings from Gemini	16	3	3
+Generalized Out-of-Distribution Detection. A Survey	6	1	3
+Generalizing Verifiable Instruction Following	8	1	3
+GraphRouter. A Graph-based Router for LLM Selections	17	2	3
+H_2O. Heavy-Hitter Oracle for Efficient Generative Inference of Large Language Models	13	2	3
+HaluMem. Evaluating Hallucinations in Memory Systems of Agents	5	1	3
+HellaSwag. Can a Machine Really Finish Your Sentence	12	3	3
+Hierarchical Reasoning Model	17	10	3
+Hierarchical Text-Conditional Image Generation with CLIP Latents	11	3	3
+Highway Networks	13	0	3
+How Close is ChatGPT to Human Experts. Comparison Corpus, Evaluation, and Detection	14	3	3
+How Does Critical Batch Size Scale in Pre-training	12	3	3
+How Well Do Models Follow Their Constitutions	18	2	3
+Humanity's Last Exam	16	1	3
+I-Con. A Unifying Framework for Representation Learning	13	4	3
+Implementation Matters in Deep Policy Gradients. A Case Study on PPO and TRPO	10	4	3
+Improving Cloud Storage Search with User Activity	12	1	3
+Inference-Time Intervention. Eliciting Truthful Answers from a Language Model	15	1	3
+Is Automated Topic Model Evaluation Broken. The Incoherence of Coherence	17	1	3
+Is ChatGPT Good at Search. Investigating Large Language Models as Re-Ranking Agents	7	0	3
+Is Model Collapse Inevitable. Breaking the Curse of Recursion by Accumulating Real and Synthetic	21	5	3
+Is Semantic Chunking Worth the Computational Cost	12	2	3
+Jamba. A Hybrid Transformer-Mamba Language Model	12	4	3
+Judging the Judges. A Systematic Study of Position Bias in LLM-as-a-Judge	15	2	3
+KTO. Model Alignment as Prospect Theoretic Optimization	17	4	3
+Know Me, Respond to Me. Benchmarking LLMs for Dynamic User Profiling and Personalized Responses at	8	0	3
+Know What You Don't Know. Unanswerable Questions for SQuAD	15	0	3
+Know When To Stop. A Study of Semantic Drift in Text Generation	11	1	3
+Know You Before You Speak. User-State Modeling for LLM Personalization in Multi-Turn Conversation	10	1	3
+LESS. Selecting Influential Data for Targeted Instruction Tuning	11	0	3
+LLMLingua-2. Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression	14	2	3
+Language Models are Injective and Hence Invertible	23	3	3
+Language Models as Knowledge Bases	8	3	3
+Large Language Models Can Be Strong Differentially Private Learners	18	10	3
+Large Language Models Cannot Self-Correct Reasoning Yet	9	2	3
+Large Language Models are Zero-Shot Rankers for Recommender Systems	7	2	3
+Large Language Models for Data Annotation and Synthesis. A Survey	17	5	3
+Large Language Models for Information Retrieval. A Survey	10	1	3
+Large Language Monkeys. Scaling Inference Compute with Repeated Sampling	23	9	3
+Large language models can accurately predict searcher preferences	9	0	3
+Large-scale validation and analysis of interleaved search evaluation	8	1	3
+Latent Dirichlet Allocation	13	5	3
+Learning Dynamics of LLM Finetuning	6	0	3
+Learning General Purpose Distributed Sentence Representations via Large Scale Multi-task Learning	8	1	3
+Learning Preference Adaptation for Large Language Model Personalization via Verbal Reinforcement	6	0	3
+Learning both Weights and Connections for Efficient Neural Networks	13	1	3
+Learning to Discover at Test Time	8	1	3
+Learning to Rank using Gradient Descent (RankNet)	14	6	3
+LightGCN. Simplifying and Powering Graph Convolution Network for Recommendation	19	2	3
+LightMem. Lightweight and Efficient Memory-Augmented Generation	5	1	3
+Line Goes Up. Inherent Limitations of Benchmarks for Evaluating Large Language Models	8	3	3
+LongCat-Flash Technical Report	21	5	3
+Lost in Simulation. LLM-Simulated Users are Unreliable Proxies for Human Users in Agentic	7	0	3
+M+. Extending MemoryLLM with Scalable Long-Term Memory	17	0	3
+MEGA. Multilingual Evaluation of Generative AI	17	9	3
+MMAU. A Massive Multi-Task Audio Understanding and Reasoning Benchmark	12	6	3
+MT3. Multi-Task Multitrack Music Transcription	8	3	3
+MTEB. Massive Text Embedding Benchmark	19	2	3
+Machine Learning for Variance Reduction in Online Experiments	13	3	3
+Magpie. Alignment Data Synthesis from Scratch by Prompting Aligned LLMs with Nothing	11	1	3
+Make Your LLM Fully Utilize the Context	13	2	3
+Making the V in VQA Matter. Elevating the Role of Image Understanding in Visual Question Answering	4	0	3
+Megatron-LM. Training Multi-Billion Parameter Language Models Using Model Parallelism	19	9	3
+MemBench. Towards More Comprehensive Evaluation on the Memory of LLM-based Agents	12	2	3
+MemDefrag. Latent Memory Defragmentation for Large Language Models	8	0	3
+Memanto. Typed Semantic Memory with Information-Theoretic Retrieval for Long-Horizon Agents	13	1	3
+Meta Pseudo Labels	13	2	3
+MiniLLM. On-Policy Distillation of Large Language Models	7	1	3
+Mistral 7B	4	1	3
+Mixed Precision Training	12	2	3
+MoBA. Mixture of Block Attention for Long-Context LLMs	9	4	3
+Movie Gen. A Cast of Media Foundation Models	16	3	3
+Muse. Text-To-Image Generation via Masked Generative Transformers	13	3	3
+Navigating the Grey Area. Expressions of Overconfidence and Uncertainty in	10	2	3
+NeRF. Representing Scenes as Neural Radiance Fields for View Synthesis	11	5	3
+Neural Architectures for Named Entity Recognition	16	5	3
+Neural Ordinary Differential Equations	8	0	3
+Neural Ranking Models with Weak Supervision	8	0	3
+Normalizing Flows. An Introduction and Review of Current Methods	12	1	3
+Not what you've signed up for. Compromising Real-World LLM-Integrated Applications with Indirect	15	2	3
+ORPO. Monolithic Preference Optimization without Reference Model	14	7	3
+OSWorld. Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments	15	5	3
+OctoThinker. Mid-training Incentivizes Reinforcement Learning Scaling	4	1	3
+Off-Policy Evaluation for Ranking Policies under Deterministic Logging Policies	24	3	3
+Olmo 3	16	4	3
+On Layer Normalization in the Transformer Architecture	14	3	3
+On the Difficulty of Evaluating Baselines. A Study on Recommender Systems	14	0	3
+On the Variance of the Adaptive Learning Rate and Beyond	10	1	3
+Orca. Progressive Learning from Complex Explanation Traces of GPT-4	16	9	3
+Out of Order. How Important Is The Sequential Order of Words in a Sentence in Natural Language	10	2	3
+PAL. Program-aided Language Models	22	0	3
+PLAID. An Efficient Engine for Late Interaction Retrieval	10	1	3
+POPI. Personalizing LLMs via Optimized Natural Language Preference Inference	6	0	3
+Passage Re-ranking with BERT	9	1	3
+Pay Attention to MLPs	6	0	3
+Perception Encoder. The best visual embeddings are not at the output of the network	8	0	3
+PersonaBench. Evaluating AI Models on Understanding Personal Information through Accessing	9	4	3
+PersonaLens. A Benchmark for Personalization Evaluation in Conversational AI Assistants	8	1	3
+Policy-Aware Unbiased Learning to Rank for Top-k Rankings	18	3	3
+Practical Lessons from Predicting Clicks on Ads at Facebook	7	1	3
+Predicting Search Satisfaction Metrics with Interleaved Comparisons	18	4	3
+Preference Fine-Tuning of LLMs Should Leverage Suboptimal, On-Policy Data	3	0	3
+Preference Leakage. A Contamination Problem in LLM-as-a-judge	5	2	3
+Privacy-Aware Personalized Entity Representations for Improved User	10	3	3
+PyTorch FSDP. Experiences on Scaling Fully Sharded Data Parallel	23	4	3
+Query2doc. Query Expansion with Large Language Models	15	2	3
+Ragas. Automated Evaluation of Retrieval Augmented Generation	16	2	3
+Ranking Relevance in Yahoo Search	12	0	3
+Reasoning or Reciting. Exploring the Capabilities and Limitations of Language Models Through	15	5	3
+Reciprocal rank fusion outperforms condorcet and individual rank learning methods	10	1	3
+Regularizing Neural Networks by Penalizing Confident Output Distributions	8	2	3
+Reinforcement Learning for LLM Post-Training. A Survey	16	5	3
+Reinforcement Learning for Reasoning in Large Language Models with One Training Example	15	2	3
+Repeat After Me. Transformers are Better than State Space Models at Copying	15	2	3
+Representation Learning. A Review and New Perspectives	15	1	3
+Retrieval meets Long Context Large Language Models	10	1	3
+Retrieval-Augmented Generation for Large Language Models. A Survey	20	8	3
+Revisiting the Arcade Learning Environment. Evaluation Protocols and Open Problems for General	8	1	3
+Reward Model Ensembles Help Mitigate Overoptimization	16	1	3
+Rigging the Lottery. Making All Tickets Winners	16	3	3
+RoBERTa. A Robustly Optimized BERT Pretraining Approach	10	0	3
+Robust Speech Recognition via Large-Scale Weak Supervision	8	2	3
+RocketQA. An Optimized Training Approach to Dense Passage Retrieval for Open-Domain Question	13	4	3
+Root Mean Square Layer Normalization	9	1	3
+RouteLLM. Learning to Route LLMs with Preference Data	16	3	3
+SAM 3. Segment Anything with Concepts	9	2	3
+SQuAD. 100,000+ Questions for Machine Comprehension of Text	14	6	3
+SWE-agent. Agent-Computer Interfaces Enable Automated Software Engineering	10	1	3
+SWE-bench. Can Language Models Resolve Real-World GitHub Issues	12	3	3
+Scaling Language-Free Visual Representation Learning	6	0	3
+Scaling Law of Large Sequential Recommendation Models	17	4	3
+Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms	7	2	3
+Searching for Activation Functions	8	1	3
+Segment Anything	15	0	3
+Self-training with Noisy Student improves ImageNet classification	8	0	3
+Semantic Operators. A Declarative Model for Rich, AI-based Data Processing	11	1	3
+Session-based Recommendations with Recurrent Neural Networks	15	4	3
+Sheared LLaMA. Accelerating Language Model Pre-training via Structured Pruning	15	0	3
+Shortcut Learning in Deep Neural Networks	21	2	3
+Should We Still Pretrain Encoders with Masked Language Modeling	8	0	3
+SimCSE. Simple Contrastive Learning of Sentence Embeddings	9	1	3
+Simple and Effective Masked Diffusion Language Models	8	0	3
+Simplifying Deep Temporal Difference Learning	14	2	3
+Simulated Customers Never Walk Away. Decision Fidelity of LLM User Simulators Measured Against Real	12	3	3
+Skywork-Reward-V2. Scaling Preference Data Curation via Human-AI Synergy	4	1	3
+SlideVQA. A Dataset for Document Visual Question Answering on Multiple Images	12	0	3
+Small-scale proxies for large-scale Transformer training instabilities	4	0	3
+Soft Actor-Critic. Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor	6	1	3
+Spider 2.0. Evaluating Language Models on Real-World Enterprise Text-to-SQL Workflows	9	1	3
+Splitwise. Efficient generative LLM inference using phase splitting	16	3	3
+Spotting LLMs With Binoculars. Zero-Shot Detection of Machine-Generated Text	10	4	3
+Stop Regressing. Training Value Functions via Classification for Scalable Deep RL	3	0	3
+StreamingVLM. Real-Time Understanding for Infinite Video Streams	12	2	3
+Style Outweighs Substance. Failure Modes of LLM Judges in Alignment Benchmarking	8	2	3
+Summaries as Centroids for Interpretable and Scalable Text Clustering	13	0	3
+TLDR. Extreme Summarization of Scientific Documents	14	0	3
+Taming Transformers for High-Resolution Image Synthesis	9	1	3
+Tensor Programs V. Tuning Large Neural Networks via Zero-Shot Hyperparameter Transfer	11	0	3
+Text Embeddings Reveal (Almost) As Much As Text	16	1	3
+The Curse of Recursion. Training on Generated Data Makes Models Forget	13	2	3
+The Entropy Mechanism of Reinforcement Learning for Reasoning Language Models	8	3	3
+The Era of 1-bit LLMs. All Large Language Models are in 1.58 Bits	10	1	3
+The Implicit Bias of Gradient Descent on Separable Data	16	12	3
+The Llama 3 Herd of Models	12	3	3
+The Platonic Representation Hypothesis	4	0	3
+The Prompt Report. A Systematic Survey of Prompt Engineering Techniques	15	1	3
+Thinking LLMs. General Instruction Following with Thought Generation	9	0	3
+Thought Anchors. Which LLM Reasoning Steps Matter	26	5	3
+TnT-LLM. Text Mining at Scale with Large Language Models	15	5	3
+To Model or to Intervene. A Comparison of Counterfactual and Online Learning to Rank from User	17	4	3
+Topic Community Based Temporal Expertise for Question Routing	18	3	3
+Topic Modeling in Embedding Spaces	11	4	3
+Toward Activity Discovery in the Personal Web	9	0	3
+Towards Musically Informed Evaluation of Piano Transcription Models	16	4	3
+Towards Observability for Production Machine Learning Pipelines	13	3	3
+ToxiGen. A Large-Scale Machine-Generated Dataset for Adversarial and Implicit Hate Speech Detection	19	2	3
+Transformer Memory as a Differentiable Search Index	16	2	3
+Transformers in Vision. A Survey	9	2	3
+Tree of Thoughts. Deliberate Problem Solving with Large Language Models	12	5	3
+Trust Region Policy Optimization	13	4	3
+Trust or Escalate. LLM Judges with Provable Guarantees for Human Agreement	9	1	3
+Turning Dross Into Gold Loss. is BERT4Rec really better than SASRec	10	2	3
+U-Net. Convolutional Networks for Biomedical Image Segmentation	11	3	3
+Underspecification Presents Challenges for Credibility in Modern Machine Learning	8	0	3
+Understanding Optimization in Deep Learning with Central Flows	21	4	3
+Understanding World or Predicting Future. A Comprehensive Survey of World Models	8	2	3
+Understanding the Role of Cross-Entropy Loss in Fairly Evaluating Large Language Model-based	6	1	3
+Understanding the difficulty of training deep feedforward neural networks	14	5	3
+UniPinRec. Unifying Generative Retrieval and Ranking at Pinterest Scale	15	3	3
+Universal Sentence Encoder	9	1	3
+VGGT. Visual Geometry Grounded Transformer	11	3	3
+WRENCH. A Comprehensive Benchmark for Weak Supervision	9	0	3
+Warm-starting Contextual Bandits. Robustly Combining Supervised and Bandit Feedback	15	2	3
+What Can Transformers Learn In-Context. A Case Study of Simple Function Classes	16	2	3
+What Matters In On-Policy Reinforcement Learning. A Large-Scale Empirical Study	25	7	3
+When AI Benchmarks Plateau. A Systematic Study of Benchmark Saturation	15	1	3
+When Less is More. Investigating Data Pruning for Pretraining LLMs at Scale	5	1	3
+When to Trust Your Model. Model-Based Policy Optimization	14	2	3
+Whose Opinions Do Language Models Reflect	22	5	3
+mT5. A massively multilingual pre-trained text-to-text transformer	10	4	3
+s1. Simple test-time scaling	17	1	3
+A Broad-Coverage Challenge Corpus for Sentence Understanding through Inference	15	1	2
+A Call for Clarity in Reporting BLEU Scores	12	3	2
+A Dynamic Bayesian Network Click Model for Web Search Ranking	30	5	2
+A Latent Semantic Model with Convolutional-Pooling Structure for Information Retrieval	9	2	2
+A Path Towards Autonomous Machine Intelligence	10	1	2
+A Simple Framework for Contrastive Learning of Visual Representations	10	2	2
+A Style-Based Generator Architecture for Generative Adversarial Networks	11	2	2
+A Survey of Agent Memory in the Second Half. Towards Self-Evolving and Long-Horizon Agents	9	0	2
+A Survey of Visual Transformers	13	4	2
+A Survey on Hallucination in Large Language Models. Principles, Taxonomy, Challenges, and Open	9	7	2
+A Survey on Large Language Model Benchmarks	9	2	2
+A Survey on Large Language Model based Autonomous Agents	10	4	2
+A Survey on Long-Term Memory Security in LLM Agents. Attacks, Defenses, and Governance Across the	20	7	2
+A Survey on Programmatic Weak Supervision	15	2	2
+A Tutorial on Thompson Sampling	5	1	2
+A Watermark for Large Language Models	8	0	2
+AI as Humanity's Salieri. Quantifying Linguistic Creativity of Language Models via Systematic	9	1	2
+AbsenceBench. Language Models Can't Tell What's Missing	6	0	2
+Accelerating Large-Scale Inference with Anisotropic Vector Quantization	13	1	2
+Accuracy at the Top	13	2	2
+Ad Click Prediction. a View from the Trenches	18	6	2
+AdaGReS Adaptive Greedy Context Selection via Redundancy-Aware Scoring for Token-Budgeted RAG	16	1	2
+Adaptive Subgradient Methods for Online Learning and Stochastic Optimization	14	5	2
+Adding Error Bars to Evals. A Statistical Approach to Language Model Evaluations	12	4	2
+Agent Workflow Memory	6	0	2
+Agentic Context Engineering. Evolving Contexts for Self-Improving Language Models	15	3	2
+Algorithm Discovery With LLMs. Evolutionary Search Meets Reinforcement Learning	10	1	2
+AlphaResearch. Accelerating New Algorithm Discovery with Language Models	18	3	2
+An Empirical Model of Large-Batch Training	18	4	2
+An Empirical Study on Large-Scale Multi-Label Text Classification Including Few and Zero-Shot Labels	8	1	2
+An Introduction to Conditional Random Fields	7	5	2
+An overview of gradient descent optimization algorithms	16	2	2
+Analyzing and Improving the Image Quality of StyleGAN	11	2	2
+Annotation Artifacts in Natural Language Inference Data	10	2	2
+ArcFace. Additive Angular Margin Loss for Deep Face Recognition	6	4	2
+Arch-Router. Aligning LLM Routing with Human Preferences	11	3	2
+Are Convolutional Neural Networks or Transformers more like human vision	11	4	2
+Asynchronous Methods for Deep Reinforcement Learning	13	3	2
+Attention Is All You Need	7	1	2
+BERT4Rec. Sequential Recommendation with Bidirectional Encoder Representations from Transformer	11	3	2
+BRIGHT. A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval	19	9	2
+Batch Normalization Explained	10	3	2
+Belief Memory. Agent Memory Under Partial Observability	6	2	2
+Benchmarking World-Model Learning with Environment-Level Queries	21	7	2
+Beyond Retrieval. Learning Compact User Representations for Scalable LLM Personalization	5	0	2
+Beyond the Imitation Game. Quantifying and extrapolating the capabilities of language models	31	6	2
+COMET. A Neural Framework for MT Evaluation	15	3	2
+CUPID. Evaluating Personalized and Contextualized Alignment of LLMs from Interactions	7	1	2
+Cambrian-1. A Fully Open, Vision-Centric Exploration of Multimodal LLMs	9	4	2
+Can LLMs Express Their Uncertainty. An Empirical Evaluation of Confidence Elicitation in LLMs	10	4	2
+Chain-of-Verification Reduces Hallucination in Large Language Models	10	0	2
+Chatbot Arena. An Open Platform for Evaluating LLMs by Human Preference	8	1	2
+Cheating Automatic LLM Benchmarks. Null Models Achieve High Win Rates	4	0	2
+Clever Hans or Neural Theory of Mind. Stress Testing Social Reasoning in Large Language Models	6	0	2
+Cognitive Architectures for Language Agents	10	2	2
+ColdRoute. Effective Routing of Cold Questions in Stack Exchange Sites	7	2	2
+Conservative Q-Learning for Offline Reinforcement Learning	9	3	2
+Contextualized Privacy Defense for LLM Agents	10	1	2
+Continual Learning via Sparse Memory Finetuning	4	1	2
+Cross-Model KV Cache Transfer in LLM Families. A Closed-Form Linear Mapping for Prefill Reuse	20	3	2
+CutClaw. Agentic Hours-Long Video Editing via Music Synchronization	11	4	2
+Darwin Godel Machine. Open-Ended Evolution of Self-Improving Agents	14	4	2
+Data Shapley. Equitable Valuation of Data for Machine Learning	19	11	2
+DataComp. In search of the next generation of multimodal datasets	15	5	2
+Database Reasoning Over Text	8	0	2
+DeBERTa. Decoding-enhanced BERT with Disentangled Attention	10	3	2
+Deep Bayesian Bandits Showdown. An Empirical Comparison of Bayesian Deep Networks for Thompson	9	1	2
+Deep Compression. Compressing Deep Neural Networks with Pruning, Trained Quantization and Huffman	16	4	2
+Deep Learning on Graphs. A Survey	19	7	2
+Deep Networks with Stochastic Depth	20	8	2
+DeepSeek LLM. Scaling Open-Source Language Models with Longtermism	8	4	2
+DeepSeek-OCR. Contexts Optical Compression	21	4	2
+DeepSeek-V4. Towards Highly Efficient Million-Token Context Intelligence	11	0	2
+Deepchecks. A Library for Testing and Validating Machine Learning Models and Data	14	2	2
+Democratizing Large Language Models via Personalized Parameter-Efficient Fine-tuning	4	0	2
+Descending through a Crowded Valley - Benchmarking Deep Learning Optimizers	19	3	2
+DetectGPT. Zero-Shot Machine-Generated Text Detection using Probability Curvature	6	1	2
+Detecting Near-Duplicates for Web Crawling	21	2	2
+DiLoCo. Distributed Low-Communication Training of Language Models	12	5	2
+Diffusion Model Alignment Using Direct Preference Optimization	10	2	2
+Disentangling Score Content and Performance Style for Joint Piano Rendering and Transcription	10	0	2
+DiskANN. Fast Accurate Billion-point Nearest Neighbor Search on a Single Node	8	1	2
+DoRA. Weight-Decomposed Low-Rank Adaptation	2	0	2
+Does Your Dermatology Classifier Know What It Doesn't Know. Detecting the Long-Tail of Unseen	4	1	2
+Dropout as a Bayesian Approximation. Representing Model Uncertainty in Deep Learning	5	1	2
+EfficientNetV2. Smaller Models and Faster Training	8	1	2
+EmbeddingGemma. Powerful and Lightweight Text Representations	11	1	2
+End-to-end Piano Performance-MIDI to Score Conversion with Transformers	12	1	2
+Enhancing Personalized Multi-Turn Dialogue with Curiosity Reward	8	1	2
+Entity Matching using Large Language Models	5	1	2
+Epistemic Neural Networks	14	4	2
+Evaluating the World Model Implicit in a Generative Model	9	0	2
+Explainable Prediction of Medical Codes from Clinical Text	14	2	2
+Explaining Datasets in Words. Statistical Models with Natural Language Parameters	14	5	2
+Exploring Simple Siamese Representation Learning	12	1	2
+Extreme Multi-label Loss Functions for Recommendation, Tagging, Ranking & Other Missing Label	7	1	2
+Eyes Wide Shut. Exploring the Visual Shortcomings of Multimodal LLMs	9	2	2
+F5-TTS. A Fairytaler that Fakes Fluent and Faithful Speech with Flow Matching	7	2	2
+FLASK. Fine-grained Language Model Evaluation based on Alignment Skill Sets	11	3	2
+Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs)	9	1	2
+Finding Structure in Time	7	4	2
+Fine-Tuning LLaMA for Multi-Stage Text Retrieval	26	8	2
+Fine-Tuning or Retrieval. Comparing Knowledge Injection in LLMs	10	2	2
+FlashInfer. Efficient and Customizable Attention Engine for LLM Inference Serving	20	4	2
+Flow-GRPO. Training Flow Matching Models via Online RL	6	1	2
+FollowBench. A Multi-level Fine-grained Constraints Following Benchmark for Large Language Models	10	3	2
+From Crowdsourced Data to High-Quality Benchmarks. Arena-Hard and BenchBuilder Pipeline	8	2	2
+From image descriptions to visual denotations. New similarity metrics for semantic inference over	8	2	2
+G-Eval. NLG Evaluation using GPT-4 with Better Human Alignment	6	0	2
+GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium	6	1	2
+GDPval. Evaluating AI Model Performance on Real-World Economically Valuable Tasks	17	4	2
+GLUE. A Multi-Task Benchmark and Analysis Platform for Natural Language Understanding	8	1	2
+GPTQ. Accurate Post-Training Quantization for Generative Pre-trained Transformers	23	4	2
+Generative Adversarial Transformers	9	3	2
+Grounding DINO. Marrying DINO with Grounded Pre-Training for Open-Set Object Detection	12	3	2
+HORIZON. A Benchmark for In-the-wild User Behaviour Modeling	13	2	2
+HealthBench. Evaluating Large Language Models Towards Improved Human Health	12	3	2
+HotpotQA. A Dataset for Diverse, Explainable Multi-hop Question Answering	6	3	2
+How Good is the Bayes Posterior in Deep Neural Networks Really	13	3	2
+How to Fine-Tune BERT for Text Classification	8	0	2
+How to set AdamW's weight decay as you scale model and dataset size	7	1	2
+Hyper-Connections	10	3	2
+ImageNet classification with deep convolutional neural networks	19	3	2
+Improved Distribution Matching Distillation for Fast Image Synthesis	12	1	2
+Improving Deep Learning For Airbnb Search	16	5	2
+Improving Text Embeddings with Large Language Models	15	4	2
+Improving User Privacy in Personalized Generation. Client-Side Retrieval-Augmented Modification of	8	4	2
+Improving language models by retrieving from trillions of tokens	19	6	2
+Instance Normalization. The Missing Ingredient for Fast Stylization	12	6	2
+Instruction-Following Evaluation for Large Language Models	11	1	2
+Integrating Summarization and Retrieval for Enhanced Personalization via Large Language Models	12	3	2
+Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions	12	2	2
+Is ChatGPT a Good Recommender. A Preliminary Study	14	3	2
+Is GPT-3 a Good Data Annotator	13	3	2
+ItemSage. Learning Product Embeddings for Shopping Recommendations at Pinterest	8	0	2
+JudgeBench. A Benchmark for Evaluating LLM-based Judges	6	1	2
+Just Ask for Calibration. Strategies for Eliciting Calibrated Confidence Scores from Language	12	7	2
+KAG. Boosting LLMs in Professional Domains via Knowledge Augmented Generation	10	4	2
+L2 Regularization versus Batch and Weight Normalization	15	4	2
+LIMO. Less is More for Reasoning	5	0	2
+LLM.int8(). 8-bit Matrix Multiplication for Transformers at Scale	18	6	2
+LLM2Vec. Large Language Models Are Secretly Powerful Text Encoders	11	1	2
+LLMs + Persona-Plug = Personalized LLMs	7	1	2
+LaMP. When Large Language Models Meet Personalization	5	1	2
+Language Models (Mostly) Know What They Know	22	9	2
+Large Language Model Routing with Benchmark Datasets	9	3	2
+Large Language Models Can Self-Improve	3	0	2
+Large Language Models Should Learn Personalized Rather Than Aggregated Human Preferences	19	1	2
+Large Language Models are Zero-Shot Reasoners	10	3	2
+Large Language Models. A Survey	13	7	2
+Larimar. Large Language Models with Episodic Memory Control	11	3	2
+Learning Transferable Visual Models From Natural Language Supervision	7	0	2
+Learning deep structured semantic models for web search using clickthrough data	13	2	2
+Learning from Noisy Labels with Deep Neural Networks. A Survey	21	4	2
+Learning the Structure of Generative Models without Labeled Data	10	2	2
+Lessons from the Trenches on Reproducible Evaluation of Language Models	14	2	2
+LexRank. Graph-based Lexical Centrality as Salience in Text Summarization	12	3	2
+Linguistic Regularities in Sparse and Explicit Word Representations	12	1	2
+LoRA Learns Less and Forgets Less	4	0	2
+LoRA. Low-Rank Adaptation of Large Language Models	9	0	2
+MIRIX. Multi-Agent Memory System for LLM-Based Agents	16	7	2
+MMTEB. Massive Multilingual Text Embedding Benchmark	22	8	2
+MS MARCO. A Human Generated MAchine Reading COmprehension Dataset	8	2	2
+Mass-Editing Memory in a Transformer	4	1	2
+Mastering Atari, Go, Chess and Shogi by Planning with a Learned Model	11	7	2
+Measuring AI Ability to Complete Long Software Tasks	15	1	2
+Measuring Faithfulness in Chain-of-Thought Reasoning	16	2	2
+MegaScale-MoE. Large-Scale Communication-Efficient Training of Mixture-of-Experts Models in	10	4	2
+MemSyco-Bench. Benchmarking Sycophancy in Agent Memory	6	1	2
+MemoryBank. Enhancing Large Language Models with Long-Term Memory	4	0	2
+Memp. Exploring Agent Procedural Memory	5	0	2
+MiniCPM. Unveiling the Potential of Small Language Models with Scalable Training Strategies	10	2	2
+MirrorBench. A Benchmark to Evaluate Conversational User-Proxy Agents for Human-Likeness	13	2	2
+Mixture-of-Recursions. Learning Dynamic Recursive Depths for Adaptive Token-Level Computation	13	0	2
+Modular Deep Learning	16	6	2
+Movement Pruning. Adaptive Sparsity by Fine-Tuning	10	1	2
+Multi-Component Automatic Context Window Optimization for Personalization in Large Language Models	6	0	2
+Multimodal Chain-of-Thought Reasoning. A Comprehensive Survey	14	3	2
+Natural Emergent Misalignment from Reward Hacking in Production RL	12	7	2
+Nemotron-CC. Transforming Common Crawl into a Refined Long-Horizon Pretraining Dataset	8	1	2
+No-Human in the Loop. Agentic Evaluation at Scale for Recommendation	14	1	2
+O-Mem. Omni Memory System for Personalized, Long Horizon, Self-Evolving Agents	6	3	2
+OLMoTrace. Tracing Language Model Outputs Back to Trillions of Training Tokens	16	3	2
+Off-Policy Evaluation for Large Action Spaces via Embeddings	15	0	2
+On Calibration of Modern Neural Networks	11	0	2
+On Large-Batch Training for Deep Learning. Generalization Gap and Sharp Minima	10	5	2
+On Transferability of Prompt Tuning for Natural Language Processing	6	0	2
+On the Mathematics of Diffusion Models	11	2	2
+On the Theoretical Limitations of Embedding-Based Retrieval	12	0	2
+One Embedder, Any Task. Instruction-Finetuned Text Embeddings	8	1	2
+Onsets and Frames. Dual-Objective Piano Transcription	15	3	2
+OpenPose. Realtime Multi-Person 2D Pose Estimation using Part Affinity Fields	8	1	2
+Opening the Black Box of Deep Neural Networks via Information	16	7	2
+PACRR. A Position-Aware Neural IR Model for Relevance Matching	13	6	2
+PERMA. Benchmarking Personalized Memory Agents via Event-Driven Preference and Realistic Task	9	2	2
+PaliGemma 2. A Family of Versatile VLMs for Transfer	6	4	2
+Parallelizing Linear Transformers with the Delta Rule over Sequence Length	13	2	2
+Performance MIDI-to-score conversion by neural beat tracking	8	0	2
+Peri-LN. Revisiting Normalization Layer in the Transformer Architecture	14	1	2
+PersonaAgent. Bridging Memory and Action for Personalized LLM Agents	14	2	2
+PersonaMem-v2. Towards Personalized Intelligence via Learning Implicit User Personas and Agentic	8	0	2
+Personalized Expertise Search at LinkedIn	28	11	2
+Personalized Language Modeling from Personalized Human Feedback	3	1	2
+Personalizing Dialogue Agents. I have a dog, do you have pets too	4	0	2
+Position. Don't Use the CLT in LLM Evals With Fewer Than a Few Hundred Datapoints	4	0	2
+Position. Episodic Memory is the Missing Piece for Long-Term LLM Agents	8	0	2
+Pretraining Large Language Models with NVFP4	11	6	2
+Promptagator. Few-shot Dense Retrieval From 8 Examples	16	5	2
+Provable Guarantees for Self-Supervised Deep Learning with Spectral Contrastive Loss	20	4	2
+Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or. How I learned to	20	3	2
+Query-Key Normalization for Transformers	9	0	2
+Qwen3 Technical Report	6	0	2
+RAPTOR. Recursive Abstractive Processing for Tree-Organized Retrieval	8	1	2
+REBEL. Relation Extraction By End-to-end Language generation	14	1	2
+RankZephyr. Effective and Robust Zero-Shot Listwise Reranking is a Breeze!	7	2	2
+RecToM. A Benchmark for Evaluating Machine Theory of Mind in LLM-based Conversational Recommender	5	2	2
+Reconciling modern machine learning practice and the bias-variance trade-off	13	7	2
+Reformer. The Efficient Transformer	18	6	2
+Rephrasing the Web. A Recipe for Compute and Data-Efficient Language Modeling	14	3	2
+Representation Learning with Contrastive Predictive Coding	5	1	2
+Rethinking Machine Unlearning for Large Language Models	11	1	2
+Retrieval Augmented Generation or Long-Context LLMs. A Comprehensive Study and Hybrid Approach	17	2	2
+Robustness Gym. Unifying the NLP Evaluation Landscape	7	2	2
+Role-Play with Large Language Models	14	7	2
+S-LoRA. Serving Thousands of Concurrent LoRA Adapters	17	3	2
+SIMD Compression and the Intersection of Sorted Integers	20	15	2
+SOLOIST. Building Task Bots at Scale with Transfer Learning and Machine Teaching	8	3	2
+SPLADE-v3. New baselines for SPLADE	13	1	2
+STaR. Bootstrapping Reasoning With Reasoning	17	2	2
+Scaling Data-Constrained Language Models	15	3	2
+Scaling Laws and Compute-Optimal Training Beyond Fixed Training Durations	4	0	2
+Scaling Rectified Flow Transformers for High-Resolution Image Synthesis	4	0	2
+Score-Based Generative Modeling through Stochastic Differential Equations	6	0	2
+Search-based User Interest Modeling with Lifelong Sequential Behavior Data for Click-Through Rate	26	8	2
+Search-o1. Agentic Search-Enhanced Large Reasoning Models	14	5	2
+Selective Annotation Makes Language Models Better Few-Shot Learners	13	1	2
+SentencePiece. A simple and language independent subword tokenizer and detokenizer for Neural Text	12	2	2
+Set-of-Mark Prompting Unleashes Extraordinary Visual Grounding in GPT-4V	19	6	2
+Shallow pooling for sparse labels	21	6	2
+Sigmoid Loss for Language Image Pre-Training	15	5	2
+SimBa. Simplicity Bias for Scaling Up Parameters in Deep Reinforcement Learning	4	0	2
+SimPO. Simple Preference Optimization with a Reference-Free Reward	14	4	2
+Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles	10	3	2
+Skip-Thought Vectors	6	3	2
+Sophia. A Scalable Stochastic Second-order Optimizer for Language Model Pre-training	5	1	2
+Spider. A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and	19	6	2
+StarSpace. Embed All The Things!	15	2	2
+Steering Llama 2 via Contrastive Activation Addition	16	3	2
+Supervised Contrastive Learning	5	0	2
+Synthetic Data Generation with Large Language Models for Text Classification. Potential and	15	3	2
+TTRL. Test-Time Reinforcement Learning	8	0	2
+TensorFlow. A system for large-scale machine learning	22	6	2
+Terminal-Bench. Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces	15	1	2
+Text Understanding from Scratch	8	1	2
+Text and Code Embeddings by Contrastive Pre-Training	2	0	2
+TextRank. Bringing Order into Text	14	2	2
+The AdEMAMix Optimizer. Better, Faster, Older	6	2	2
+The Anatomy of a Large-Scale Hypertextual Web Search Engine	20	5	2
+The Curse of Depth in Large Language Models	7	0	2
+The Free Transformer	17	7	2
+The Hateful Memes Challenge. Detecting Hate Speech in Multimodal Memes	20	5	2
+The Illusion of Thinking. Understanding the Strengths and Limitations of Reasoning Models via the	13	5	2
+The Unlocking Spell on Base LLMs. Rethinking Alignment via In-Context Learning	9	1	2
+Towards Spec Learning. Inference-Time Alignment from Preference Pairs	14	2	2
+Training Large Language Models to Reason in a Continuous Latent Space	15	9	2
+Unbiased LambdaMART. An Unbiased Pairwise Learning-to-Rank Algorithm	12	2	2
+Unbiased Learning to Rank Meets Reality. Lessons from Baidu's Large-Scale Search Dataset	21	6	2
+Uncertainty-Aware Clarification in LLM Agents with Information Gain	7	1	2
+Understanding Data Storage and Ingestion for Large-Scale Deep Recommendation Model Training	10	3	2
+Understanding deep learning requires rethinking generalization	9	2	2
+Understanding plasticity in neural networks	3	1	2
+Unified Embedding Based Personalized Retrieval in Etsy Search	33	2	2
+VASA-1. Lifelike Audio-Driven Talking Faces Generated in Real Time	6	0	2
+VLM2Vec. Training Vision-Language Models for Massive Multimodal Embedding Tasks	11	5	2
+Very Deep Convolutional Networks for Large-Scale Image Recognition	10	1	2
+Voyager. An Open-Ended Embodied Agent with Large Language Models	8	1	2
+WILDS. A Benchmark of in-the-Wild Distribution Shifts	16	2	2
+Wasserstein GAN	15	7	2
+WebGPT. Browser-assisted question-answering with human feedback	11	2	2
+Weight Normalization. A Simple Reparameterization to Accelerate Training of Deep Neural Networks	18	2	2
+What Makes for Good Views for Contrastive Learning	9	2	2
+What Would Elsa Do. Freezing Layers During Transformer Fine-Tuning	9	0	2
+What is the State of Neural Network Pruning	10	1	2
+Which Tricks Are Important for Learning to Rank	19	6	2
+Why Does the Effective Context Length of LLMs Fall Short	9	1	2
+XLM-E. Cross-lingual Language Model Pre-training via ELECTRA	8	0	2
+YOLOv3. An Incremental Improvement	5	0	2
+Zero Bubble Pipeline Parallelism	8	3	2
+mixup. Beyond Empirical Risk Minimization	6	4	2
+2 OLMo 2 Furious	6	2	1
+A Roadmap to Pluralistic Alignment	1	0	1
+A Simple and Effective Pruning Approach for Large Language Models	5	1	1
+A Sober Look at Progress in Language Model Reasoning. Pitfalls and Paths to Reproducibility	8	0	1
+A Survey on Employing Large Language Models for Text-to-SQL Tasks	11	4	1
+A Survey on LLM-as-a-Judge	4	2	1
+Accurate, Large Minibatch SGD. Training ImageNet in 1 Hour	7	0	1
+Adaptive Mixtures of Local Experts	3	1	1
+Advances in Pre-Training Distributed Word Representations	7	0	1
+Agents That Know Too Much. A Data-Centric Survey of Privacy in LLM Agents	10	2	1
+Alpa. Automating Inter- and Intra-Operator Parallelism for Distributed Deep Learning	10	1	1
+AlpsBench. An LLM Personalization Benchmark for Real-Dialogue Memorization and Preference Alignment	9	1	1
+Anytime-Valid Confidence Sequences in an Enterprise A B Testing Platform	14	2	1
+Approximate Nearest Neighbor Negative Contrastive Learning for Dense Text Retrieval	9	1	1
+Are LLM Decisions Faithful to Verbal Confidence	10	0	1
+Are Neural Rankers still Outperformed by Gradient Boosted Decision Trees	8	2	1
+Are we done with ImageNet	13	3	1
+AutoMix. Automatically Mixing Language Models	18	4	1
+Automated Annotation with Generative AI Requires Validation	8	3	1
+BEIR. A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models	3	0	1
+BERT. Pre-training of Deep Bidirectional Transformers for Language Understanding	8	3	1
+BEiT. BERT Pre-Training of Image Transformers	16	2	1
+Bad Characters. Imperceptible NLP Attacks	13	0	1
+Beyond Chinchilla-Optimal. Accounting for Inference in Language Model Scaling Laws	9	1	1
+Beyond Ranking. Optimizing Whole-Page Presentation	9	2	1
+Beyond Semantics. The Unreasonable Effectiveness of Reasonless Intermediate Tokens	3	2	1
+Beyond a Million Tokens. Benchmarking and Enhancing Long-Term Memory in LLMs	13	2	1
+BlazePose. On-device Real-time Body Pose tracking	12	3	1
+BloombergGPT. A Large Language Model for Finance	13	6	1
+Bootstrap your own latent. A new approach to self-supervised Learning	6	1	1
+Building Self-Evolving Agents via Experience-Driven Lifelong Learning. A Framework and Benchmark	4	0	1
+Building a Scalable, Effective, and Steerable Search and Ranking Platform	20	6	1
+CaRT. Teaching LLM Agents to Know When They Know Enough	8	1	1
+Can Large Language Models Design Accurate Label Functions	16	0	1
+Can You Trust Your Model's Uncertainty. Evaluating Predictive Uncertainty Under Dataset Shift	13	6	1
+Can large language models explore in-context	5	2	1
+Chain-of-Thought Prompting Elicits Reasoning in Large Language Models	14	7	1
+Challenges in Deploying Machine Learning. a Survey of Case Studies	33	14	1
+Challenging BIG-Bench Tasks and Whether Chain-of-Thought Can Solve Them	9	2	1
+Classifier-Free Diffusion Guidance	15	7	1
+Clipper. A Low-Latency Online Prediction Serving System	13	4	1
+CoTracker3. Simpler and Better Point Tracking by Pseudo-Labelling Real Videos	7	1	1
+ColPali. Efficient Document Retrieval with Vision Language Models	16	2	1
+Cold-Start Personalization via Training-Free Priors from Structured World Models	10	3	1
+Collaborative Filtering for Implicit Feedback Datasets	3	0	1
+Conformer. Convolution-augmented Transformer for Speech Recognition	5	0	1
+Continual Learning of Large Language Models. A Comprehensive Survey	4	1	1
+Continuous control with deep reinforcement learning	6	1	1
+Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering	11	2	1
+CrossRE. A Cross-Domain Dataset for Relation Extraction	4	1	1
+Curriculum learning	6	0	1
+CutMix. Regularization Strategy to Train Strong Classifiers with Localizable Features	1	0	1
+DINOv2. Learning Robust Visual Features without Supervision	3	0	1
+DSPy. Compiling Declarative Language Model Calls into Self-Improving Pipelines	8	2	1
+DataComp-LM. In search of the next generation of training sets for language models	12	2	1
+DeText. A Deep Text Ranking Framework with BERT	12	0	1
+Decision Transformer. Reinforcement Learning via Sequence Modeling	5	0	1
+Decomposing Physician Disagreement in HealthBench	4	0	1
+Decoupled Weight Decay Regularization	6	0	1
+Deep Anomaly Detection with Outlier Exposure	3	0	1
+Deep Natural Language Processing for LinkedIn Search Systems	6	2	1
+Deep Reinforcement Learning and the Deadly Triad	4	0	1
+Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models	7	1	1
+Deep Reinforcement Learning that Matters	9	2	1
+Deep contextualized word representations	10	2	1
+Denoising Diffusion Probabilistic Models	11	2	1
+Depth Anything V2	12	3	1
+Describing Differences between Text Distributions with Natural Language	8	1	1
+Discovering Value from Community Activity on Focused Question Answering Sites. A Case Study of	5	1	1
+Distributed Representations of Words and Phrases and their Compositionality	14	8	1
+Do Vision Transformers See Like Convolutional Neural Networks	1	0	1
+Document Expansion by Query Prediction	20	9	1
+Document Ranking with a Pretrained Sequence-to-Sequence Model	12	3	1
+Does Math Reasoning Improve General LLM Capabilities. Understanding Transferability of LLM Reasoning	5	0	1
+Dream to Control. Learning Behaviors by Latent Imagination	14	0	1
+DreamBooth. Fine Tuning Text-to-Image Diffusion Models for Subject-Driven Generation	9	2	1
+Dropout. A Simple Way to Prevent Neural Networks from Overfitting	9	4	1
+EAGLE-3. Scaling up Inference Acceleration of Large Language Models via Training-Time Test	7	0	1
+ELECTRA. Pre-training Text Encoders as Discriminators Rather Than Generators	2	0	1
+Efficient Estimation of Word Representations in Vector Space	9	4	1
+Embedding based retrieval for long tail search queries in ecommerce	17	1	1
+Emergent Misalignment. Narrow finetuning can produce broadly misaligned LLMs	12	2	1
+Emerging Properties in Self-Supervised Vision Transformers	6	1	1
+Enabling Factorized Piano Music Modeling and Generation with the MAESTRO Dataset	6	2	1
+Enhancing Performance and Scalability of Large-Scale Recommendation Systems with Jagged Flash	3	0	1
+EnvPool. A Highly Parallel Reinforcement Learning Environment Execution Engine	8	0	1
+EuroBERT. Scaling Multilingual Encoders for European Languages	20	1	1
+Evaluating LLM Alignment on Personality Inference from Real-World Interview Data	8	0	1
+Evaluating Object Hallucination in Large Vision-Language Models	6	0	1
+Explanations from Large Language Models Make Small Reasoners Better	7	1	1
+FLUX.1 Kontext. Flow Matching for In-Context Image Generation and Editing in Latent Space	12	1	1
+FastFormers. Highly Efficient Transformer Models for Natural Language Understanding	5	0	1
+FastText.zip. Compressing text classification models	14	3	1
+Fine-Tune an SLM or Prompt an LLM. The Case of Generating Low-Code Workflows	9	1	1
+Fine-Tuned LLMs Know They Don't Know. A Parameter-Efficient Approach to Recovering Honesty	4	0	1
+FlashMem. Distilling Intrinsic Latent Memory via Computation Reuse	12	0	1
+From Local to Global. A Graph RAG Approach to Query-Focused Summarization	15	2	1
+GEPA. Reflective Prompt Evolution Can Outperform Reinforcement Learning	7	2	1
+GLU Variants Improve Transformer	9	1	1
+GLiNER. Generalist Model for Named Entity Recognition using Bidirectional Transformer	6	0	1
+GPT-4 Technical Report	5	0	1
+GSM-Symbolic. Understanding the Limitations of Mathematical Reasoning in Large Language Models	14	7	1
+Gated Attention for Large Language Models. Non-linearity, Sparsity, and Attention-Sink-Free	13	2	1
+Gemini 1.5. Unlocking multimodal understanding across millions of tokens of context	5	2	1
+Gemma 3 Technical Report	13	6	1
+Generative Adversarial Networks	8	1	1
+Genie. Generative Interactive Environments	7	1	1
+Gmail Smart Compose. Real-Time Assisted Writing	11	1	1
+Gradient Descent on Neural Networks Typically Occurs at the Edge of Stability	4	2	1
+Grokking. Generalization Beyond Overfitting on Small Algorithmic Datasets	6	2	1
+Harnessing the Universal Geometry of Embeddings	8	3	1
+HippoRAG. Neurobiologically Inspired Long-Term Memory for Large Language Models	9	3	1
+HorizonBench. Long-Horizon Personalization with Evolving Preferences	5	0	1
+How Do Large Language Models Acquire Factual Knowledge During Pretraining	5	3	1
+How do language models learn facts. Dynamics, curricula and hallucinations	9	2	1
+How to Steal Reasoning Without Reasoning Traces	10	5	1
+How to train your ViT. Data, Augmentation, and Regularization in Vision Transformers	10	1	1
+Human-level control through deep reinforcement learning	7	1	1
+Hybrid LLM. Cost-Efficient and Quality-Aware Query Routing	17	4	1
+IIRC. A Dataset of Incomplete Information Reading Comprehension Questions	12	3	1
+Improving Language Understanding by Generative Pre-Training	4	0	1
+In Prospect and Retrospect. Reflective Memory Management for Long-term Personalized Dialogue Agents	7	1	1
+In-context Autoencoder for Context Compression in a Large Language Model	7	0	1
+Information Retrieval System Evaluation. Effort, Sensitivity, and Reliability	19	0	1
+Inverse Scaling. When Bigger Isn't Better	20	3	1
+Is BERT Really Robust. A Strong Baseline for Natural Language Attack on Text Classification and	5	2	1
+Is Chain-of-Thought Reasoning of LLMs a Mirage. A Data Distribution Lens	15	4	1
+Kimi Linear. An Expressive, Efficient Attention Architecture	17	4	1
+Kimi k1.5. Scaling Reinforcement Learning with LLMs	19	4	1
+LLM-Powered Knowledge Graphs for Enterprise Intelligence and Analytics	11	1	1
+LLMs Can Get Brain Rot . A Pilot Study on Twitter X	1	0	1
+LLMs Get Lost In Multi-Turn Conversation	18	9	1
+LLMs Know More Than They Show. On the Intrinsic Representation of LLM Hallucinations	10	3	1
+LMSYS-Chat-1M. A Large-Scale Real-World LLM Conversation Dataset	8	1	1
+Language Model Cascades	12	2	1
+Language Models are Few-Shot Learners	7	0	1
+Language Models are Unsupervised Multitask Learners	20	3	1
+Large Language Diffusion Models	10	1	1
+Large Language Models Are Human-Level Prompt Engineers	8	0	1
+Large Scale GAN Training for High Fidelity Natural Image Synthesis	8	2	1
+Large Search Model. Redefining Search Stack in the Era of LLMs	4	2	1
+Layer Normalization	5	1	1
+Learning Latent Dynamics for Planning from Pixels	14	4	1
+Learning label-label correlations in Extreme Multi-label Classification via Label Features	8	2	1
+LiNR. Model Based Neural Retrieval on GPUs at LinkedIn	13	4	1
+LiveCodeBench. Holistic and Contamination Free Evaluation of Large Language Models for Code	9	3	1
+Longformer. The Long-Document Transformer	10	0	1
+LumberChunker. Long-Form Narrative Document Segmentation	13	4	1
+MMMU. A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark for Expert AGI	6	2	1
+Mamba-3. Improved Sequence Modeling using State Space Principles	15	1	1
+Many-Shot In-Context Learning	15	6	1
+Masked Autoencoders Are Scalable Vision Learners	7	0	1
+Matching the Blanks. Distributional Similarity for Relation Learning	11	4	1
+Matryoshka Representation Learning	15	5	1
+Measuring Massive Multitask Language Understanding	14	5	1
+Mem0. Building Production-Ready AI Agents with Scalable Long-Term Memory	2	0	1
+MemAgent. Reshaping Long-Context LLM with Multi-Conv RL-based Memory Agent	10	4	1
+MemGPT. Towards LLMs as Operating Systems	4	0	1
+Memory Injection Attacks on LLM Agents via Query-Only Interaction	8	1	1
+Memory Layers at Scale	2	0	1
+Memory OS of AI Agent	4	0	1
+Memory Poisoning Attack and Defense on Memory Based LLM-Agents	18	5	1
+Memory-R1. Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement	4	0	1
+Mind the Sim2Real Gap in User Simulation for Agentic Tasks	10	2	1
+MiniCheck. Efficient Fact-Checking of LLMs on Grounding Documents	11	1	1
+Moshi. a speech-text foundation model for real-time dialogue	12	1	1
+MoverScore. Text Generation Evaluating with Contextualized Embeddings and Earth Mover Distance	10	3	1
+NVIDIA Nemotron 3. Efficient and Open Intelligence	6	1	1
+Nemotron-H. A Family of Accurate and Efficient Hybrid Mamba-Transformer Models	23	8	1
+Network experimentation at scale	23	8	1
+Neural Machine Translation by Jointly Learning to Align and Translate	11	2	1
+No Zero-Shot Without Exponential Data. Pretraining Concept Frequency Determines Multimodal Model	14	7	1
+Offline RL for Natural Language Generation with Implicit Language Q Learning	11	2	1
+On Empirical Comparisons of Optimizers for Deep Learning	18	10	1
+On Memory Construction and Retrieval for Personalized Conversational Agents	3	0	1
+On the Stability of Fine-tuning BERT. Misconceptions, Explanations, and Strong Baselines	4	0	1
+OpenOOD v1.5. Enhanced Benchmark for Out-of-Distribution Detection	4	1	1
+OpenThoughts. Data Recipes for Reasoning Models	3	0	1
+Optimizing User Profiles via Contextual Bandits for Retrieval-Augmented LLM Personalization	13	1	1
+PERSONA. A Reproducible Testbed for Pluralistic Alignment	12	7	1
+PRISM-X. Experiments on Personalised Fine-Tuning with Human and Simulated Users	7	0	1
+Perceptual Losses for Real-Time Style Transfer and Super-Resolution	4	1	1
+PersonaMem-v3. Toward Omni-Platform Personal Intelligence for Holistic User Understanding	10	5	1
+PersonalLLM. Tailoring LLMs to Individual Preferences	3	0	1
+Personalized Adaptation via In-Context Preference Learning	12	1	1
+Personalized Soups. Personalized Large Language Model Alignment via Post-hoc Parameter Merging	2	0	1
+PinnerSage. Multi-Modal User Embedding Framework for Recommendations at Pinterest	13	3	1
+Poisoning Attacks on LLMs Require a Near-constant Number of Poison Samples	15	0	1
+Pre-trained Language Model based Ranking in Baidu Search	17	4	1
+Pretrained Transformers for Text Ranking. BERT and Beyond	6	3	1
+Probabilistic Topic Models	3	0	1
+Prompt-to-Leaderboard	9	3	1
+Proximal Policy Optimization Algorithms	10	1	1
+Pythia. A Suite for Analyzing Large Language Models Across Training and Scaling	13	3	1
+Quantifying Uncertainty in Answers from any Language Model and Enhancing their Trustworthiness	18	3	1
+Qwen3-VL Technical Report	20	6	1
+REPLUG. Retrieval-Augmented Black-Box Language Models	9	1	1
+RLHF Workflow. From Reward Modeling to Online RLHF	3	0	1
+Rainbow. Combining Improvements in Deep Reinforcement Learning	5	1	1
+RandAugment. Practical automated data augmentation with a reduced search space	8	2	1
+Re-Centering Humans in LLM Personalization	7	2	1
+ReAct. Synergizing Reasoning and Acting in Language Models	10	0	1
+ReTool. Reinforcement Learning for Strategic Tool Use in LLMs	9	0	1
+Realistic Zero-Shot Cross-Lingual Transfer in Legal Topic Classification	4	0	1
+Reasoning Models Don't Always Say What They Think	9	3	1
+RecAI. Leveraging Large Language Models for Next-Generation Recommender Systems	17	1	1
+Recent Advances in Speech Language Models. A Survey	11	1	1
+RegMix. Data Mixture as Regression for Language Model Pre-training	9	1	1
+Reinforcement learning based recommender systems. A survey	6	2	1
+Replacing Judges with Juries. Evaluating LLM Generations with a Panel of Diverse Models	14	1	1
+Representation Alignment for Generation. Training Diffusion Transformers Is Easier Than You Think	12	6	1
+Revisiting DocRED -- Addressing the False Negative Problem in Relation Extraction	6	0	1
+Revisiting Feature Prediction for Learning Visual Representations from Video	8	1	1
+Revisiting Few-sample BERT Fine-tuning	6	1	1
+Rho-1. Not All Tokens Are What You Need	4	2	1
+SAM 2. Segment Anything in Images and Videos	20	6	1
+SCULPT. Systematic Tuning of Long Prompts	11	4	1
+Sampling Matters in Deep Embedding Learning	4	1	1
+Scaling Deep Contrastive Learning Batch Size under Memory Limited Setup	11	1	1
+Scaling Vision Transformers to 22 Billion Parameters	14	3	1
+Search Snippet Evaluation at Yandex. Lessons Learned and Future Directions	4	0	1
+Self-Alignment with Instruction Backtranslation	5	0	1
+Self-Instruct. Aligning Language Models with Self-Generated Instructions	8	1	1
+Self-Rewarding Language Models	14	1	1
+Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture	6	1	1
+Self-Taught Evaluators	7	0	1
+SemAxis. A Lightweight Framework to Characterize Domain-Specific Word Semantics Beyond Sentiment	17	1	1
+Semantic Uncertainty. Linguistic Invariances for Uncertainty Estimation in Natural Language	9	2	1
+Sentence-BERT. Sentence Embeddings using Siamese BERT-Networks	11	6	1
+Sequence to Sequence Learning with Neural Networks	10	0	1
+Seven Failure Points When Engineering a Retrieval Augmented Generation System	13	4	1
+Sharpness-Aware Minimization for Efficiently Improving Generalization	6	0	1
+Simple and Controllable Music Generation	17	5	1
+SimpleRL-Zoo. Investigating and Taming Zero Reinforcement Learning for Open Base Models in the Wild	5	0	1
+Sleep-time Compute. Beyond Inference Scaling at Test-time	3	1	1
+Smarter, Better, Faster, Longer. A Modern Bidirectional Encoder for Fast, Memory Efficient, and	21	7	1
+SmolLM2. When Smol Goes Big -- Data-Centric Training of a Small Language Model	18	2	1
+State of What Art. A Call for Multi-Prompt LLM Evaluation	12	3	1
+Super-Convergence. Very Fast Training of Neural Networks Using Large Learning Rates	9	4	1
+Supervised Reinforcement Learning. From Expert Trajectories to Step-wise Reasoning	14	9	1
+Swap-guided Preference Learning for Personalized Reinforcement Learning from Human Feedback	9	1	1
+Swin Transformer V2. Scaling Up Capacity and Resolution	7	1	1
+Switch Transformers. Scaling to Trillion Parameter Models with Simple and Efficient Sparsity	13	5	1
+Synthetic Test Collections for Retrieval Evaluation	11	1	1
+TRUE. Re-evaluating Factual Consistency Evaluation	6	0	1
+Taming the Monster. A Fast and Simple Algorithm for Contextual Bandits	15	3	1
+Term Frequency Normalisation Tuning for BM25 and DFR Models	5	2	1
+Test-Time Training with Self-Supervision for Generalization under Distribution Shifts	7	0	1
+Text-to-LoRA. Instant Transformer Adaption	8	2	1
+Text-to-SQL Benchmarks are Broken. An In-Depth Analysis of Annotation Errors	9	0	1
+TextGrad. Automatic Differentiation via Text	12	4	1
+The Coin Flip Judge. Reliability and Bias in LLM-as-a-Judge Evaluation	8	1	1
+The Flan Collection. Designing Data and Methods for Effective Instruction Tuning	5	1	1
+The Harvard USPTO Patent Dataset. A Large-Scale, Well-Structured, and Multi-Purpose Corpus of	2	0	1
+The Marginal Value of Adaptive Gradient Methods in Machine Learning	9	3	1
+The PRISM Alignment Dataset. What Participatory, Representative and Individualised Human Feedback	5	3	1
+The Probabilistic Relevance Framework. BM25 and Beyond	5	2	1
+Toolformer. Language Models Can Teach Themselves to Use Tools	9	1	1
+TopicGPT. A Prompt-based Topic Modeling Framework	13	1	1
+Towards Disentangling Relevance and Bias in Unbiased Learning to Rank	12	2	1
+Towards a Unified Multi-Dimensional Evaluator for Text Generation	8	3	1
+Training Products of Experts by Minimizing Contrastive Divergence	2	0	1
+Transformer-XL. Attentive Language Models Beyond a Fixed-Length Context	11	4	1
+Transformers are Sample-Efficient World Models	9	3	1
+Transformers without Normalization	7	1	1
+UMBRELA. UMbrela is the (Open-Source Reproduction of the) Bing RELevance Assessor	19	0	1
+UQABench. Evaluating User Embedding for Prompting LLMs in Personalized Question Answering	8	1	1
+Unbiased Learning-to-Rank with Biased Feedback	13	0	1
+Unpacking DPO and PPO. Disentangling Best Practices for Learning from Preference Feedback	6	1	1
+Unsupervised Dense Information Retrieval with Contrastive Learning	11	3	1
+Unsupervised Feature Learning via Non-Parametric Instance-level Discrimination	8	0	1
+User-LLM. Efficient LLM Contextualization with User Embeddings	3	0	1
+ViDoRe V3. A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World	14	2	1
+Vision Transformers Need Registers	6	2	1
+Visual Discovery at Pinterest	6	2	1
+Visual Instruction Tuning	10	1	1
+Weight Uncertainty in Neural Networks	20	6	1
+Well-Read Students Learn Better. On the Importance of Pre-training Compact Models	4	1	1
+Were RNNs All We Needed	11	1	1
+When Does Label Smoothing Help	3	0	1
+When to use Graphs in RAG. A Comprehensive Analysis for Graph Retrieval-Augmented Generation	4	1	1
+Why Do Multi-Agent LLM Systems Fail	10	1	1
+Why Do We Need Weight Decay in Modern Deep Learning	5	1	1
+Why Less is More (Sometimes). A Theory of Data Curation	14	5	1
+Wukong. Towards a Scaling Law for Large-Scale Recommendation	16	0	1
+Zep. A Temporal Knowledge Graph Architecture for Agent Memory	8	1	1
+data2vec. A General Framework for Self-supervised Learning in Speech, Vision and Language	7	0	1
+jina-embeddings-v3. Multilingual Embeddings With Task LoRA	16	6	1
+node2vec. Scalable Feature Learning for Networks	8	2	1
+A Baseline for Detecting Misclassified and Out-of-Distribution Examples in Neural Networks	9	2	0
+A Comprehensive Survey of Reward Models. Taxonomy, Applications, Challenges, and Future	4	0	0
+A Comprehensive Survey on World Models for Embodied AI	5	1	0
+A disciplined approach to neural network hyper-parameters. Part 1 -- learning rate, batch size	3	1	0
+A-MEM. Agentic Memory for LLM Agents	4	1	0
+AI Agents That Matter	10	4	0
+ALBERT. A Lite BERT for Self-supervised Learning of Language Representations	9	5	0
+AlphaEvolve. A coding agent for scientific and algorithmic discovery	12	3	0
+Are We Ready For An Agent-Native Memory System	2	1	0
+Autoencoding Variational Inference For Topic Models	6	1	0
+Barlow Twins. Self-Supervised Learning via Redundancy Reduction	10	2	0
+Batch Normalization is a Cause of Adversarial Vulnerability	3	1	0
+Benchmarking Deep Search over Heterogeneous Enterprise Data	14	1	0
+Benchmarking Optimizers for Large Language Model Pretraining	3	0	0
+Beyond RAG for Agent Memory. Retrieval by Decoupling and Aggregation	6	0	0
+BrowseComp. A Simple Yet Challenging Benchmark for Browsing Agents	11	0	0
+Checklists Are Better Than Reward Models For Aligning Language Models	9	1	0
+Cockpit. A Practical Debugging Tool for the Training of Deep Neural Networks	9	1	0
+Contrastive Representation Distillation	5	2	0
+Cosmos World Foundation Model Platform for Physical AI	11	7	0
+Data-centric AI. Perspectives and Challenges	3	0	0
+Decoding speech perception from non-invasive brain recordings	19	5	0
+Deduplicating Training Data Makes Language Models Better	15	4	0
+Deep Graph Infomax	8	3	0
+Deep Residual Learning for Image Recognition	1	0	0
+Deeper Text Understanding for IR with Contextual Neural Language Modeling	14	4	0
+Diffusion Models Are Real-Time Game Engines	17	4	0
+Diffusion Models Beat GANs on Image Synthesis	3	0	0
+Diffusion for World Modeling. Visual Details Matter in Atari	3	0	0
+Distilling Task-Specific Knowledge from BERT into Simple Neural Networks	12	2	0
+Don't Decay the Learning Rate, Increase the Batch Size	17	2	0
+Early Visual Concept Learning with Unsupervised Deep Learning	8	2	0
+Efficient Deep Learning. A Survey on Making Deep Learning Models Smaller, Faster, and Better	3	0	0
+Efficient Training of Large Language Models on Distributed Infrastructures. A Survey	31	11	0
+Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World	10	4	0
+Efficient set intersection for inverted indexing	2	1	0
+Elucidating the Design Space of Diffusion-Based Generative Models	1	0	0
+Estimating Average Causal Effects Under General Interference, with Application to a Social Network	4	0	0
+Evaluating Memory in LLM Agents via Incremental Multi-Turn Interactions	3	0	0
+Evaluating Very Long-Term Conversational Memory of LLM Agents	4	0	0
+Every Model Learned by Gradient Descent Is Approximately a Kernel Machine	9	8	0
+Explaining and Harnessing Adversarial Examples	2	0	0
+Exploring Data Splitting Strategies for the Evaluation of Recommendation Models	4	1	0
+Exploring Plain Vision Transformer Backbones for Object Detection	7	2	0
+Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer	3	1	0
+Externalization in LLM Agents. A Unified Review of Memory, Skills, Protocols and Harness Engineering	15	6	0
+FNet. Mixing Tokens with Fourier Transforms	7	3	0
+Faster R-CNN. Towards Real-Time Object Detection with Region Proposal Networks	7	4	0
+Finetuned Language Models Are Zero-Shot Learners	7	0	0
+Flow Matching for Generative Modeling	4	0	0
+From Research to Production and Back. Ludicrously Fast Neural Machine Translation	12	0	0
+Fundamental Problems With Model Editing. How Should Rational Belief Revision Work in LLMs	2	1	0
+GLM-5. from Vibe Coding to Agentic Engineering	28	8	0
+Gemini 2.5. Pushing the Frontier with Advanced Reasoning, Multimodality, Long Context, and Next	11	1	0
+Generalization through Memorization. Nearest Neighbor Language Models	16	5	0
+Generating Long Sequences with Sparse Transformers	18	3	0
+Generative Agents. Interactive Simulacra of Human Behavior	8	3	0
+Get To The Point. Summarization with Pointer-Generator Networks	12	5	0
+Going Deeper with Convolutions	4	1	0
+High-Resolution Image Synthesis with Latent Diffusion Models	7	3	0
+How to represent part-whole hierarchies in a neural network	8	2	0
+HuBERT. Self-Supervised Speech Representation Learning by Masked Prediction of Hidden Units	7	4	0
+Identity Mappings in Deep Residual Networks	2	1	0
+In Defense of the Triplet Loss for Person Re-Identification	3	0	0
+Intriguing properties of neural networks	5	1	0
+Is DPO Superior to PPO for LLM Alignment. A Comprehensive Study	4	2	0
+Is synthetic data from generative models ready for image recognition	3	0	0
+Knowledge Collapse in LLMs. When Fluency Survives but Facts Fail under Recursive Synthetic Training	9	4	0
+LLM Agents Enable User-Governed Personalization Beyond Platform Boundaries	12	1	0
+LLM Post-Training. A Deep Dive into Reasoning Large Language Models	13	3	0
+Language Is Not All You Need. Aligning Perception with Language Models	13	1	0
+Language Models are Open Knowledge Graphs	9	0	0
+Large-Scale Multi-Label Text Classification on EU Legislation	13	3	0
+Large-scale Validation of Counterfactual Learning Methods. A Test-Bed	4	1	0
+Learning from others' mistakes. Avoiding dataset biases without modeling them	6	2	0
+Learning to Compress Prompts with Gist Tokens	10	2	0
+Learning to summarize from human feedback	20	5	0
+Least-to-Most Prompting Enables Complex Reasoning in Large Language Models	10	2	0
+Leveraging tropical reef, bird and unrelated sounds for superior transfer learning in marine	10	6	0
+Llama 2. Open Foundation and Fine-Tuned Chat Models	20	6	0
+LongMemEval. Benchmarking Chat Assistants on Long-Term Interactive Memory	4	2	0
+MAUVE. Measuring the Gap Between Neural Text and Human Text using Divergence Frontiers	3	0	0
+MEMORYLLM. Towards Self-Updatable Large Language Models	2	0	0
+MLE-bench. Evaluating Machine Learning Agents on Machine Learning Engineering	15	3	0
+MLP-Mixer. An all-MLP Architecture for Vision	7	5	0
+Maintaining Plasticity in Deep Continual Learning	3	0	0
+Mask R-CNN	6	2	0
+Measuring short-form factuality in large language models	18	6	0
+Memorizing Transformers	5	1	0
+Memory in the Age of AI Agents	9	1	0
+MobileNets. Efficient Convolutional Neural Networks for Mobile Vision Applications	4	4	0
+Modeling Future Conversation Turns to Teach LLMs to Ask Clarifying Questions	4	0	0
+Molmo and PixMo. Open Weights and Open Data for State-of-the-Art Vision-Language Models	11	0	0
+Mooncake. A KVCache-centric Disaggregated Architecture for LLM Serving	15	4	0
+NV-Retriever. Improving text embedding models with effective hard-negative mining	9	0	0
+NeoBERT. A Next-Generation BERT	5	2	0
+Neural Architecture Search. A Survey	2	1	0
+Neural Codec Language Models are Zero-Shot Text to Speech Synthesizers	9	2	0
+Neural Machine Translation of Rare Words with Subword Units	10	2	0
+NoLiMa. Long-Context Evaluation Beyond Literal Matching	7	3	0
+Obfuscated Gradients Give a False Sense of Security. Circumventing Defenses to Adversarial Examples	18	3	0
+OmniToM. Benchmarking Theory of Mind in LLMs via Explicit Belief Modeling	9	1	0
+On the Integration of Self-Attention and Convolution	6	2	0
+On the Origin of Implicit Regularization in Stochastic Gradient Descent	9	0	0
+Open Bandit Dataset and Pipeline. Towards Realistic and Reproducible Off-Policy Evaluation	13	0	0
+OpenAI Gym	12	2	0
+Overton. A Data System for Monitoring and Improving Machine-Learned Products	15	3	0
+PEGASUS. Pre-training with Extracted Gap-sentences for Abstractive Summarization	6	1	0
+PaLM 2 Technical Report	11	2	0
+PaLM. Scaling Language Modeling with Pathways	2	0	0
+Personalized RewardBench. Evaluating Reward Models with Human Aligned Personalization	9	1	0
+Personalizing Reinforcement Learning from Human Feedback with Variational Preference Learning	8	2	0
+PinnerFormer. Sequence Modeling for User Representation at Pinterest	8	2	0
+Pixie. A System for Recommending 3+ Billion Items to 200+ Million Users in Real-Time	12	0	0
+Powerful A B-Testing Metrics and Where to Find Them	11	2	0
+PyTorch Distributed. Experiences on Accelerating Data Parallel Training	13	4	0
+QLoRA. Efficient Finetuning of Quantized LLMs	14	4	0
+Quantization and Training of Neural Networks for Efficient Integer-Arithmetic-Only Inference	8	1	0
+Qwen2.5-Omni Technical Report	5	0	0
+Qwen2.5-VL Technical Report	7	0	0
+Qwen3 Embedding. Advancing Text Embedding and Reranking Through Foundation Models	12	4	0
+RULER. What's the Real Context Size of Your Long-Context Language Models	13	4	0
+Rank1. Test-Time Compute for Reranking in Information Retrieval	20	10	0
+Ray. A Distributed Framework for Emerging AI Applications	10	2	0
+Reasoning Language Models. A Blueprint	18	5	0
+ReasoningBank. Scaling Agent Self-Evolving with Reasoning Memory	6	4	0
+Rethinking the Value of Network Pruning	1	1	0
+Revisiting Automated Topic Model Evaluation with Large Language Models	12	3	0
+Revisiting Reliability in Large-Scale Machine Learning Research Clusters	10	3	0
+RewardBench 2. Advancing Reward Model Evaluation	6	4	0
+Scalable Diffusion Models with Transformers	9	4	0
+Scaling Instruction-Finetuned Language Models	2	1	0
+Scaling to Very Very Large Corpora for Natural Language Disambiguation	4	1	0
+Self-Adapting Language Models	9	1	0
+Sparks of Artificial General Intelligence. Early experiments with GPT-4	10	7	0
+Speak & Improve Challenge 2025. Tasks and Baseline Systems	8	1	0
+Swin Transformer. Hierarchical Vision Transformer using Shifted Windows	9	1	0
+Symbolic Discovery of Optimization Algorithms	2	0	0
+TALLRec. An Effective and Efficient Tuning Framework to Align Large Language Model with	4	0	0
+Tangled up in BLEU. Reevaluating the Evaluation of Automatic Machine Translation Evaluation Metrics	5	1	0
+Text Embeddings by Weakly-Supervised Contrastive Pre-training	8	2	0
+The BiGGen Bench. A Principled Benchmark for Fine-grained Evaluation of Language Models with	11	3	0
+The Cross-environment Hyperparameter Setting Benchmark for Reinforcement Learning	1	0	0
+The FineWeb Datasets. Decanting the Web for the Finest Text Data at Scale	5	0	0
+The GAN is dead; long live the GAN! A Modern GAN Baseline	8	3	0
+The Pile. An 800GB Dataset of Diverse Text for Language Modeling	12	3	0
+To Tune or Not to Tune. Adapting Pretrained Representations to Diverse Tasks	4	0	0
+TorchTitan. One-stop PyTorch native solution for production ready LLM pre-training	18	5	0
+Toward Personalized LLM-Powered Agents. Foundations, Evaluation, and Future Directions	3	1	0
+Towards In-context Scene Understanding	6	1	0
+Transformer-Based Rhythm Quantization of Performance MIDI Using Beat Annotations	5	3	0
+Uncertainty Distillation. Teaching Language Models to Express Semantic Confidence	12	5	0
+Understanding the Disharmony between Dropout and Batch Normalization by Variance Shift	2	0	0
+User as Code. Executable Memory for Personalized Agents	7	1	0
+Visual Search at Pinterest	6	2	0
+Visualizing the Loss Landscape of Neural Nets	9	3	0
+Wan. Open and Advanced Large-Scale Video Generative Models	15	1	0
+When Memory Updates but Behavior Does Not. Repairing Implicit Stale Dependencies in Personalized	19	1	0
+Who Validates the Validators. Aligning LLM-Assisted Evaluation of LLM Outputs with Human Preferences	12	2	0
+WildChat. 1M ChatGPT Interaction Logs in the Wild	8	2	0
+WizardLM. Empowering large pre-trained language models to follow complex instructions	8	0	0
+Word Rotator's Distance	6	1	0
+iBOT. Image BERT Pre-Training with Online Tokenizer	3	0	0
+wav2vec 2.0. A Framework for Self-Supervised Learning of Speech Representations	5	1	0

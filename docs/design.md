@@ -312,6 +312,16 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
     of what the reading said if the type is later set by hand.
   - The backfill on the author's library took 1,824 types from notes and asked for 446, for $1.57;
     5 papers had one already.
+- **The pages notes and reviews cite are checked against the paper (2026-10-30).** The notes
+  read from the markdown cited the page a section starts on, the only page its headings
+  carried, so 60% of their table and figure pages were wrong and their prose pages often a page
+  early. They were corrected without reading again, from the old markdown kept in the
+  library's git ([experiments/text-layer-switch](../experiments/text-layer-switch/README.md#afterwards-the-pages-notes-and-reviews-cite-30-oct-2026)):
+  12,657 pages in notes and 595 in reviews, $2.80 of Haiku; 2,078 prose pages and 4,836 ranges
+  stay as written.
+  - `paperlib check-pages` stays: it finds each table and figure a note or review cites on the
+    page that prints its caption, and `--fix` rewrites the page. Notes read from the text layer
+    cite the right page, so it is a check rather than a step of reading.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).
@@ -330,12 +340,10 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
 5. Make reading a paper cheaper without reading it less: trim the fixed part of the request,
    then test a cheaper reading for the thinly covered areas
    ([tasks/reading-cost.md](tasks/reading-cost.md)).
-6. Correct the pages notes and reviews cite: 60% of their table and figure citations point a
-   page or two early, likely from the old markdown conversion ([tasks/wrong-pages.md](tasks/wrong-pages.md)).
-7. Rectangles in notes and reviews: they are read again and again, so a `rect` per number
+6. Rectangles in notes and reviews: they are read again and again, so a `rect` per number
    costs tokens on every read. Decide once carrel's tally shows how often the reader follows a
    link from them.
-8. Run the session on the NAS, so it is always on:
+7. Run the session on the NAS, so it is always on:
    - install Claude Code there,
    - clone the engine, the library and the vault,
    - check that Cloud Sync is two-way for Yandex and Dropbox,

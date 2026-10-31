@@ -177,10 +177,62 @@ def links():
     check("a link without a mark", locate.link(pdf, 3).endswith(".pdf?page=3"))
 
 
+def check_pages():
+    """`paperlib check-pages`: citations read from notes and reviews, captions found in a
+    text layer, and pages rewritten."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("check_pages", ENGINE / "scripts" / "check-pages.py")
+    cp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cp)
+
+    note = ("- Max context (p. 8, Table 1). Setup (p. 8). Both (p. 9, Tables 2–3; p. 4, Fig. 3b).\n"
+            "- A range (p. 8–9, Figure 8) and two floats (pp. 3, 9, Table 4) and (see p. 6, Table III).\n")
+    refs = cp.note_refs(note)
+    got = [(r.first, r.last, r.floats) for r in refs]
+    want = [(8, 8, [("table", "1")]), (8, 8, []), (9, 9, [("table", "2"), ("table", "3")]),
+            (4, 4, [("figure", "3b")]), (8, 9, [("figure", "8")]), (3, 3, []), (9, 9, [("table", "4")]),
+            (6, 6, [("table", "III")])]
+    check("note citations: pages, ranges, ';' items, bare pages in a list, plural and lettered floats",
+          got == want, got)
+
+    body = ("[page 1]\nIntro mentions Table 1. and Figure 2 in passing.\n"
+            "[page 2]\nTable 1: Results.        Figure 2. Accuracy over time.\n"
+            "[page 3]\nTABLE III\nA sentence ending in Table 1. so it is not a caption.\n")
+    caps = cp.caption_pages(cp.text_pages(body))
+    check("captions: a column's start, after ':' or '.', a Roman number alone",
+          caps[("table", "1")] == {2: 2} and caps[("figure", "2")] == {2: 1} and caps[("table", "III")] == {3: 1},
+          dict(caps))
+
+    text = "Max context (p. 8, Table 1); a range (p. 8–9, Figure 8)."
+    a, b = cp.note_refs(text)
+    one = cp.Check(a, "wrong", (9,))
+    two = cp.Check(b, "wrong", (10,))
+    fixed = cp.apply(text, [(one.ref, one.fixed), (two.ref, two.fixed)])
+    check("a page becomes the caption's; a range grows to hold it",
+          fixed == "Max context (p. 9, Table 1); a range (p. 8–10, Figure 8).", fixed)
+    check("the shift of a single page", one.shift == 1)
+    listed = "Fails (p. 2, 7, Fig. 3)."
+    bare = cp.note_refs(listed)[1]
+    fixed = cp.apply(listed, [(bare, cp.Check(bare, "wrong", (5,)).fixed)])
+    check("a bare page in a list stays bare", fixed == "Fails (p. 2, 5, Fig. 3).", fixed)
+
+    review = ("See [p. 4, Table 2](http://pdf.invalid/llm/A.pdf?dest=table.2&page=4) and "
+              "[p. 6](http://pdf.invalid/llm/A.pdf?dest=figure.1&page=6).")
+    found = cp.review_link_refs(review)
+    check("review links: the float from the text, else from dest",
+          [(r.first, r.floats, stem) for r, stem, _ in found] == [(4, [("table", "2")], "A"), (6, [("figure", "1")], "A")],
+          [(r.first, r.floats, stem) for r, stem, _ in found])
+    ref, _, m = found[0]
+    new = cp.fix_review_text(review, [(ref, m, "p. 5", 5)])
+    check("a review link's text and page= rewritten, dest kept",
+          new.startswith("See [p. 5, Table 2](http://pdf.invalid/llm/A.pdf?dest=table.2&page=5) and"), new)
+
+
 if __name__ == "__main__":
     strings()
     papers()
     links()
+    check_pages()
     with tempfile.TemporaryDirectory() as tmp:
         pdf = Path(tmp) / "paper.pdf"
         pdf_cases(pdf, build(pdf))

@@ -33,6 +33,7 @@ COMMANDS = {
     "skips": ("reading-list-skips.py", True, "record papers struck from a reading list as skipped"),
     "build-index": ("build-index.py", True, "regenerate every README index and the agent guide"),
     "check": ("check-library.py", True, "check the library is consistent; non-zero on any problem"),
+    "check-pages": ("check-pages.py", True, "check the pages notes and reviews give for tables and figures: [--fix] [--list] [<scope or note> ...]"),
     "move": ("move-paper.sh", True, "move a paper's text and PDF: <paper.txt> <topic>"),
     "remove": ("remove-paper.py", True, "take a paper out: its text, PDF and note: <paper.txt, arxiv id or title words> ... [--reason \"...\"] [--yes]"),
     "rename": ("rename-papers.py", True, "rename papers whose filename no longer matches the title"),

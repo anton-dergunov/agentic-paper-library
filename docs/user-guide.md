@@ -281,6 +281,7 @@ paperlib review-status               # which reviews miss papers or have broken 
 | `paperlib check` | Every paper has its fields, its text and its PDF; every paper is in a declared folder; no PDF is in git; notes, reviews and the catalog name papers that exist; links in reviews resolve. It prints the problems and exits non-zero on any. Run it after every change. |
 | `paperlib build-index` | Rebuilds the indexes and the agent guide. Run it before `check` after adding, moving or removing by hand, or after editing `catalog/`. |
 | `paperlib review-status` | For each review, the papers of its area it does not cover and its broken links. `paperlib review-status <topic>` adds which papers have no note. `--fix-links` repairs links to papers that moved. |
+| `paperlib check-pages [<topic or note>]` | Whether the pages notes and reviews give for tables and figures are the pages that print their captions. `--list` shows each wrong one, `--fix` corrects them. |
 | `paperlib text <topic or paper.txt>` | Makes papers' text again from their PDFs, keeping their fields: after replacing a PDF, or after a poppler upgrade (`--dry-run` lists the papers whose text would change). |
 
 ## 11. Commands and skills
@@ -297,7 +298,7 @@ In a terminal (`paperlib --help` has the full list):
 | `read` | Reads papers into notes | [9](#9-write-a-literature-review) |
 | `reading`, `reread` | What is left to read, by area, and its cost; mark a note to read again | [9](#9-write-a-literature-review) |
 | `review-status` | Review coverage and unread papers | [9](#9-write-a-literature-review), [10](#10-check-the-librarys-health) |
-| `build-index`, `check` | Rebuild the indexes, check consistency | [10](#10-check-the-librarys-health) |
+| `build-index`, `check`, `check-pages` | Rebuild the indexes, check consistency, check cited pages | [10](#10-check-the-librarys-health) |
 | `text` | Make papers' text again from their PDFs | [10](#10-check-the-librarys-health) |
 
 In a Claude Code session:
