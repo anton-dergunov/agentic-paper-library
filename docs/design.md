@@ -317,8 +317,10 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   carried, so 60% of their table and figure pages were wrong and their prose pages often a page
   early. They were corrected without reading again, from the old markdown kept in the
   library's git ([experiments/text-layer-switch](../experiments/text-layer-switch/README.md#afterwards-the-pages-notes-and-reviews-cite-30-oct-2026)):
-  12,657 pages in notes and 595 in reviews, $2.80 of Haiku; 2,078 prose pages and 4,836 ranges
-  stay as written.
+  12,657 pages in notes and 595 in reviews, $2.80 of Haiku. A second round (2026-10-31) fixed
+  279 more table and figure pages, moved 315 prose pages, and gave 1,189 prose citations the
+  range of pages their claim is printed on, for $2.76; 232 single prose pages, 4,836 ranges
+  and 435 tables and figures that no caption places stay as written.
   - `paperlib check-pages` stays: it finds each table and figure a note or review cites on the
     page that prints its caption, and `--fix` rewrites the page. Notes read from the text layer
     cite the right page, so it is a check rather than a step of reading.

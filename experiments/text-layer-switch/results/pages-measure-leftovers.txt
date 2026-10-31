@@ -1,0 +1,32 @@
+# fix-pages.py measure-leftovers (the second round's steps as applied; citations a quote settles, quote taken out)
+2496 known answers; first round's model $0.62; 392 left by the first round
+the leftover steps' model $0.16
+all: kept, a fix missed	14
+all: kept, right	37
+all: left, right as written	25
+all: left, wrong as written	27
+all: moved, broke a right page	3
+all: moved, fixed	23
+all: moved, still wrong	5
+all: range of 2, holds the page	199
+all: range of 2, misses the page	11
+all: range of 3, holds the page	33
+all: range of 3, misses the page	4
+all: range of 4, holds the page	11
+filled, section: kept, right	2
+filled, words: kept, a fix missed	2
+left: left, right as written	25
+left: left, wrong as written	27
+model, one claim: kept, a fix missed	12
+model, one claim: kept, right	27
+model, one claim: moved, broke a right page	3
+model, one claim: moved, fixed	23
+model, one claim: moved, still wrong	5
+model, one claim: range of 2, holds the page	36
+model, one claim: range of 2, misses the page	2
+section span: kept, right	8
+section span: range of 2, holds the page	163
+section span: range of 2, misses the page	9
+section span: range of 3, holds the page	33
+section span: range of 3, misses the page	4
+section span: range of 4, holds the page	11

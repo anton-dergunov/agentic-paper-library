@@ -38,7 +38,13 @@ FLOATS = {"table": "table", "tab": "table", "figure": "figure", "fig": "figure",
 _TARGET = re.compile(r"^(?:(\d+):)?(.*)$", re.S)
 _FLOAT = re.compile(r"^(table|tab|figure|fig|eq|equation)\.(\w+(?:\.\w+)?)$", re.I)
 _WORD = re.compile(r"[A-Za-z]{4,}")
-_CAPTION = re.compile(r"^(table|tab\.|figure|fig\.)\s*([A-Z]?\d+(?:\.\d+)?[a-z]?)\s*([:.|—–-]|$)", re.I)
+_LABEL = r"[A-Z]?\d+(?:\.\d+)?[a-z]?|[IVXL]+"
+_CAPTION = re.compile(rf"^(table|tab\.|figure|fig\.)\s*({_LABEL})\s*([:.|—–-]|$)", re.I)
+# A caption whose label is set in bold and runs straight into its text, with no colon:
+# "**Table 1** Summary of…" (Meta's papers). Only a bold label tells it from a mention.
+# Case matters here: in "Table 1Summary" (PyMuPDF drops the space) the label is "1".
+_BOLD_CAPTION = re.compile(rf"^(Table|TABLE|Tab\.|Figure|FIGURE|Fig\.|FIG\.)\s*({_LABEL})\s*\S")
+_ROMAN = {"I": 1, "V": 5, "X": 10, "L": 50}
 
 # Growing a float's region from its caption: the most whitespace allowed between two of
 # its parts, in points, and how far a table found by PyMuPDF may sit from its caption.
@@ -50,6 +56,16 @@ CLEARANCE = 5
 EQUATION_GAP = 6
 # Running heads and page numbers live in these margins (a share of the page's height).
 MARGIN = 0.06
+
+
+def label_key(label):
+    """A float's number as labels are compared: upper case, and a Roman number as Arabic, since
+    arXiv's HTML may number the tables "III" that the PDF prints "3"."""
+    s = label.upper()
+    if not re.fullmatch(r"[IVXL]+", s):
+        return s
+    values = [_ROMAN[c] for c in s]
+    return str(sum(-v if i + 1 < len(values) and values[i + 1] > v else v for i, v in enumerate(values)))
 
 
 def fold(text):
@@ -139,7 +155,8 @@ class Page:
                     size = sum(s["size"] * len(s["text"]) for s in spans) / chars
                     self._lines.append({"box": self.unrotated(line["bbox"]), "block": block["number"], "size": size,
                                         "text": "".join(s["text"] for s in spans).strip(),
-                                        "across": abs(line["dir"][0]) > 0.9})
+                                        "across": abs(line["dir"][0]) > 0.9,
+                                        "bold": bool(spans[0]["flags"] & 16) or "bold" in spans[0]["font"].lower()})
         return self._lines
 
     @property
@@ -219,14 +236,19 @@ class Page:
                 boxes.append(box)
         return boxes
 
+    @staticmethod
+    def is_caption(line):
+        """The caption match for a line that starts a table's or figure's caption, else None."""
+        return _CAPTION.match(line["text"]) or (line.get("bold") and _BOLD_CAPTION.match(line["text"]))
+
     def caption(self, kind, label):
         """The box of a table's or figure's caption, from its first line on: the rest of
         that block, and the lines that continue it in the next blocks. None when the page
         has no such caption."""
         hits = []
         for i, l in enumerate(self.lines):
-            m = _CAPTION.match(l["text"])
-            if m and m.group(1).lower().startswith(kind[:3]) and m.group(2).lower() == label.lower():
+            m = self.is_caption(l)
+            if m and m.group(1).lower().startswith(kind[:3]) and label_key(m.group(2)) == label_key(label):
                 starts_block = i == 0 or self.lines[i - 1]["block"] != l["block"]
                 hits.append((not starts_block, i))
         if not hits:
@@ -243,7 +265,7 @@ class Page:
                 b = l["box"]
                 if (0 <= b[1] - box[3] <= 0.6 * height and abs(l["size"] - first["size"]) < 0.5
                         and min(b[2], box[2]) - max(b[0], box[0]) > 0.5 * (b[2] - b[0])
-                        and not _CAPTION.match(l["text"])):
+                        and not self.is_caption(l)):
                     box, grew = _box([box, b]), True
         return box
 
@@ -278,7 +300,7 @@ class Page:
         """The tables with a table caption next to them: a figure may be made of tables
         of its own, which do not end it."""
         captions = [self.caption("table", m.group(2)) for l in self.lines
-                    if (m := _CAPTION.match(l["text"])) and m.group(1).lower().startswith("tab")]
+                    if (m := self.is_caption(l)) and m.group(1).lower().startswith("tab")]
         return [t for t in self.tables
                 if any(min(abs(t[1] - c[3]), abs(c[1] - t[3])) <= TABLE_GAP and min(t[2], c[2]) > max(t[0], c[0])
                        for c in captions)]
@@ -307,7 +329,7 @@ class Page:
         for lines in blocks.values():
             box = _box([l["box"] for l in lines])
             if inside(box):
-                stop = self.is_prose(lines, column) or _CAPTION.match(lines[0]["text"]) or in_table(box)
+                stop = self.is_prose(lines, column) or self.is_caption(lines[0]) or in_table(box)
                 parts.append((box, "stop" if stop else "text"))
         for d in self.page.get_drawings():
             box = self.unrotated(d["rect"])
@@ -345,6 +367,22 @@ class Page:
                 region = (region[0], region[1], region[2], min(region[3], min(b[1] for b in stops) - CLEARANCE))
         return region
 
+    def trim_table(self, box, caption, column):
+        """A table's box cut at running text or another float's caption inside it: the table
+        finder can join two tables and the paragraph between them into one. Running text is
+        wider than the table's box; a header row that looks like prose is not."""
+        others = [l["box"] for l in self.lines if self.is_caption(l) and not _contains(caption, l["box"])]
+        wide = [b for b, what in self.parts(column, False)
+                if what == "stop" and (b[0] < box[0] - 10 or b[2] > box[2] + 10)]
+        stops = [b for b in others + wide
+                 if b[1] >= box[1] - 1 and b[3] <= box[3] + 1 and min(b[2], box[2]) > max(b[0], box[0])
+                 and not _contains(b, caption)]
+        if box[3] <= caption[1] + 2:  # the table is above its caption
+            cut = [b[3] for b in stops if b[3] <= caption[1]]
+            return (box[0], max(cut) + CLEARANCE, box[2], box[3]) if cut else box
+        cut = [b[1] for b in stops if b[1] >= caption[3]]
+        return (box[0], box[1], box[2], min(cut) - CLEARANCE) if cut else box
+
     def find_float(self, kind, label):
         """A table's or figure's region with its caption, or (None, why)."""
         caption = self.caption(kind, label)
@@ -355,7 +393,7 @@ class Page:
             for box in self.tables:
                 near = min(abs(box[1] - caption[3]), abs(caption[1] - box[3]))
                 if near <= TABLE_GAP and min(box[2], caption[2]) > max(box[0], caption[0]):
-                    region = _box([caption, box])
+                    region = _box([caption, self.trim_table(box, caption, column)])
                     # Rows above the rules and the table's notes below them, which the
                     # table finder leaves out.
                     above = box[1] < caption[1]

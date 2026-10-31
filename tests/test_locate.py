@@ -92,6 +92,19 @@ def build(path):
     page.insert_text((100, 120), "A marked phrase near the top.", fontsize=10, fontname="tiro")
     page.set_cropbox(pymupdf.Rect(20, 30, 592, 762))
     page.set_rotation(90)
+
+    # Page 4: a caption whose bold label runs into its text with no colon (Meta's papers),
+    # after a line that only mentions the table; and an IEEE caption with a Roman number.
+    page = doc.new_page(width=612, height=792)
+    page.insert_text((72, 100), "Table 3 shows the totals by month for each site.", fontsize=10, fontname="tiro")
+    page.insert_text((72, 140), "Table 3", fontsize=9, fontname="tibo")
+    page.insert_text((108, 140), "Totals by month.", fontsize=9, fontname="tiro")
+    for i, (a, b) in enumerate([("January", "12"), ("February", "15")]):
+        page.insert_text((190, 160 + 13 * i), a, fontsize=9, fontname="tiro")
+        page.insert_text((350, 160 + 13 * i), b, fontsize=9, fontname="tiro")
+    page.insert_text((250, 300), "TABLE IV", fontsize=9, fontname="tiro")
+    page.insert_text((200, 312), "Results on the second site.", fontsize=9, fontname="tiro")
+    page.insert_text((200, 330), "March   17", fontsize=9, fontname="tiro")
     doc.save(path)
     return table
 
@@ -104,6 +117,11 @@ def strings():
           and locate.parse_target("2:eq.1")[1:3] == ("equation", "1"))
     check("a target: a quote inside a float", locate.parse_target("7:table.1>49.60") == (7, "table", "1", "49.60"))
     check("a target: a colon inside a quote", locate.parse_target("3:a 3:1 ratio") == (3, "quote", None, "a 3:1 ratio"))
+    check("labels: Roman numbers compare as Arabic", locate.label_key("iii") == "3" and locate.label_key("XIV") == "14"
+          and locate.label_key("3b") == "3B" and locate.label_key("A1") == "A1")
+    check("a caption: a plain line that mentions a table is not one",
+          not locate.Page.is_caption({"text": "Table 3 shows the totals", "bold": False})
+          and locate.Page.is_caption({"text": "Table 3Totals by month.", "bold": True}))
     check("fold: ligatures, case, spacing and hyphens", locate.fold("eﬃcient  Re-\nranking") == "efficientreranking")
 
 
@@ -147,6 +165,14 @@ def pdf_cases(pdf, table):
     check("a value on the page twice is reported", rects is None and "2 matches" in why, why)
     page, rects, why = find("2:table.2>93.4")
     check("a value is unique inside its table", rects and rects[0][0] >= 460, (rects, why))
+
+    page, rects, why = find("table.3")
+    check("a bold label running into its caption is a caption; a mention is not",
+          page == 4 and rects and rects[0][1] >= 125, (page, rects, why))
+    page, rects, why = find("table.4")
+    check("a Roman number in the PDF answers an Arabic one", page == 4 and rects, (page, why))
+    page, rects, why = find("table.IV")
+    check("and a Roman one", page == 4 and rects, (page, why))
 
     page, rects, why = find("3:A marked phrase")
     with pymupdf.open(pdf) as doc:
@@ -197,11 +223,12 @@ def check_pages():
 
     body = ("[page 1]\nIntro mentions Table 1. and Figure 2 in passing.\n"
             "[page 2]\nTable 1: Results.        Figure 2. Accuracy over time.\n"
-            "[page 3]\nTABLE III\nA sentence ending in Table 1. so it is not a caption.\n")
+            "[page 3]\nTABLE III\nA sentence ending in Table 1. so it is not a caption.\n"
+            "[page 4]\nTable 5 shows more.\nTable 5 Results by month, the weak form.\n")
     caps = cp.caption_pages(cp.text_pages(body))
-    check("captions: a column's start, after ':' or '.', a Roman number alone",
-          caps[("table", "1")] == {2: 2} and caps[("figure", "2")] == {2: 1} and caps[("table", "III")] == {3: 1},
-          dict(caps))
+    check("captions: a column's start, after ':' or '.', a Roman number alone (as Arabic), the weak form",
+          caps[("table", "1")] == {2: 2} and caps[("figure", "2")] == {2: 1} and caps[("table", "3")] == {3: 1}
+          and caps[("table", "5")] == {4: 0}, dict(caps))
 
     text = "Max context (p. 8, Table 1); a range (p. 8–9, Figure 8)."
     a, b = cp.note_refs(text)

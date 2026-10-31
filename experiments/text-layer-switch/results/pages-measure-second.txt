@@ -1,0 +1,19 @@
+# fix-pages.py measure-second (Haiku's second opinion on words' moves at margin 4; 309 citations a quote settles, quote taken out)
+$0.16
+model agrees: moved, broke a right page	15
+model agrees: moved, fixed	241
+model agrees: moved, still wrong	21
+model disagrees, its own page: kept, a fix missed	7
+model disagrees, its own page: kept, right	16
+model disagrees, its own page: moved, fixed	1
+model disagrees, its own page: moved, still wrong	3
+model disagrees: range of 2, holds the page	19
+model disagrees: range of 2, misses the page	3
+model disagrees: range of 3, holds the page	3
+model disagrees: range of 4, holds the page	1
+model disagrees: range of 4, misses the page	1
+model unsure: moved, fixed	4
+model unsure: moved, still wrong	1
+words alone: moved, broke a right page	31
+words alone: moved, fixed	250
+words alone: moved, still wrong	28

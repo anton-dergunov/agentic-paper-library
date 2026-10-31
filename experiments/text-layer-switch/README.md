@@ -13,7 +13,7 @@
   - the reading view's search for the reference list, which missed or misplaced 667 papers' and took 5 minutes over the library (now 108, in 5 s);
   - two failures of the web converter on transformer-circuits.pub;
   - a race in `paperlib read`.
-- **Afterwards, the pages notes and reviews cite** were corrected without reading again ([below](#afterwards-the-pages-notes-and-reviews-cite-30-oct-2026)): 6,840 table and figure pages and 5,817 prose pages in notes, 595 in reviews, $2.80 of Haiku.
+- **Afterwards, the pages notes and reviews cite** were corrected without reading again ([below](#afterwards-the-pages-notes-and-reviews-cite-30-oct-2026)): 6,840 table and figure pages and 5,817 prose pages in notes, 595 in reviews, $2.80 of Haiku. A second round fixed 279 more table and figure pages, and settled what the first left: 315 prose pages moved, and 1,189 citations now cite a range of two to four pages, which holds the page nine times in ten by the measurement, for $2.76 more.
 - **One finding needs the author's decision.** Agents did open the PDF's page when the text lacked a value, as in the experiment, but Claude Code refused to read it: the PDFs are outside the library, behind the `pdf/` link.
 
 **Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), [`docs/text-layer.md`](../../docs/text-layer.md).
@@ -115,7 +115,7 @@ Cheapest first; a citation's page changes only when a step settles it.
 
 | Step | What settles a page | Apparatus |
 |---|---|---|
-| Tables and figures | The page whose text layer prints the caption, or `locate`'s PDF finder when the text layer prints none or several. A range grows to hold the caption's page. A caption more than 5 pages away is left: the citation gives the page of the text that discusses the float. 32 sampled fixes all agree with `locate`. | `paperlib check-pages --fix` |
+| Tables and figures | The page whose text layer prints the caption, or `locate`'s PDF finder when the text layer prints none or several. A range grows to hold the caption's page. A caption more than 5 pages away is left (since the second round, also one 2 or more pages before): the citation gives the page of the text that discusses the float. 32 sampled fixes all agree with `locate`. | `paperlib check-pages --fix` |
 | Quote | A quote of three or more words in the claim, printed on one page | [`fix-pages.py`](fix-pages.py) `apply` |
 | Section | Every passage under the cited heading is placed on one page | |
 | Words | The old markdown cut into passages (sentences, merged to 12 words), each placed on the pages that print its word 4-grams. The passage under the cited heading sharing the claim's rarest words wins, by a margin of 4. A table, or a passage not placed, that wins leaves the page unknown. | |
@@ -156,7 +156,59 @@ On 2,496 prose citations in notes whose quote settles the page, with the quote t
 - The library's diff changes page numbers only (checked by a script that blanks every page reference), in 1,769 files; `review-status` finds no broken link.
 - Every decision is in [`results/pages.tsv`](results/pages.tsv), [`pages-model.tsv`](results/pages-model.tsv) and [`pages-reviews.tsv`](results/pages-reviews.tsv).
 
-**Left:** 4,836 prose page ranges in notes keep their headings' pages; 2,078 single prose citations keep their section's first page; tables and figures `check-pages` cannot place stay. The guide's rule to run `locate` on a page taken from a note covers them in answers.
+### Second round (31 Oct 2026)
+
+**Tables and figures.**
+- Two caption forms the finders missed, in `locate` and `check-pages` alike:
+  - a bold label running into its caption with no colon ("Table 6 DNA…", in Meta's papers: OLMo 2, SAM 3, Movie Gen, DyT);
+  - Roman numbers against Arabic ("Table III" finds "TABLE 3").
+- `locate` cuts a table box that the PDF's table finder merged with a paragraph and another table.
+- A caption two or more pages *before* the cited page is now "far" and left alone. There the citation gives the page of the text that discusses the float, as with a teaser figure cited from the results. The first round had moved 112 such citations back (84 notes, 1 review); they were restored.
+- `check-pages --fix` then fixed 279 more pages in notes and 35 in reviews.
+- Notes now: 13,757 right, 0 wrong, 314 far, 109 unprovable. Reviews: 901 right, 0 wrong, 6 far, 6 unprovable.
+
+**Prose.** What the first round left, and a second opinion on the words rule's moves, by [`fix-pages.py`](fix-pages.py) `apply-leftovers`, in order:
+
+| Step | What settles the citation |
+|---|---|
+| Filled | An unplaced passage that is not a table (a display equation) takes the page of the placed passages before and after it, when both are on one page; the rules run again |
+| Haiku, one claim | The claim asked alone; Haiku's first pick placed on one page gives that page, a pick across a page break the two-page range |
+| Section span | The run of pages N, N+1, … printing the section's placed passages, at most four: "p. N–M" |
+| Second opinion | Haiku is asked about each move of the words rule; when it names another page, the citation cites the range over both |
+
+Measured on the known answers that the first round would leave: 392 citations ([`results/pages-measure-leftovers.txt`](results/pages-measure-leftovers.txt), $0.78):
+
+| Step | Single pages right | Single pages wrong | Ranges holding the page | Ranges missing it | Left |
+|---|--:|--:|--:|--:|--:|
+| Filled | 2 | 2 | | | |
+| Haiku, one claim | 50 | 20 | 36 | 2 | |
+| Section span | 8 | | 207 | 13 | |
+| No passages | | | | | 52 |
+
+- A range always starts at the cited page, so a section span never loses a right page; it widens it.
+- Haiku asked twice about the same claims varies: a first run gave 48 right and 5 wrong.
+- A step by a table or figure named in the claim (its caption's page, within N−1 to N+5) fixed 9 and gave 7 wrong pages of 21, so it was dropped: prose about a table is often printed away from its caption ([`results/pages-measure-leftovers-captions.txt`](results/pages-measure-leftovers-captions.txt)).
+
+The second opinion, on the 309 known moves of the words rule ([`results/pages-measure-second.txt`](results/pages-measure-second.txt), $0.16):
+- Haiku agrees with 277 (241 fix, 15 break a right page, 21 still wrong) and is unsure of 5.
+- It disagrees with 27, which become ranges: 23 hold the page.
+- Wrong single pages fall from 59 to 37, for 27 ranges.
+
+**Applied** ([`results/pages-leftovers.tsv`](results/pages-leftovers.tsv), [`pages-leftovers-reviews.tsv`](results/pages-leftovers-reviews.tsv)), $2.76 of Haiku:
+
+| | Notes | Reviews |
+|---|--:|--:|
+| Left by the first round | 2,077 | 93 |
+| Filled: kept / moved | 158 / 25 | 5 / 0 |
+| Haiku, one claim: kept / moved / range | 555 / 287 / 301 | 10 / 3 / 6 |
+| Section span: kept / range | 40 / 492 | 3 / 54 |
+| Still left (no passage placed) | 219 | 12 |
+| Words' moves: agreed or unsure / range | 3,278 / 327 | 64 / 9 |
+
+- One note (*Sigmoid Loss*) was skipped: a hand fix had added a citation, so its first-round log no longer lines up.
+- The library's diff changes page numbers only, in 928 files. `paperlib check` passes, and `review-status` finds no broken link.
+
+**Left:** 4,836 prose page ranges in notes keep their headings' pages. 220 single prose citations in notes and 12 in reviews keep their section's first page: no passage under the heading could be placed. Tables and figures that `check-pages` cannot place stay as written (423 in notes, 12 in reviews). The guide's rule to run `locate` on a page taken from a note covers them in answers.
 
 ## Not measured
 

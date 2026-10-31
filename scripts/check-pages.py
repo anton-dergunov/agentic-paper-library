@@ -10,9 +10,10 @@ caption or several. A range ("p. 8–9, Table 1") is right when it holds the cap
 
 Prints, per note or review with a wrong page, how its citations are shifted, and a total.
 --list prints each wrong citation. --fix rewrites what the captions prove: a page becomes
-the caption's page; a range grows to hold it. A caption further than MAX_SHIFT pages away
-is reported as "far", not fixed: such a citation usually gives the page of the text that
-discusses the float (an appendix figure discussed in the main text). With no scope, every
+the caption's page; a range grows to hold it. A caption more than MAX_SHIFT pages after the
+cited page, or more than MAX_BACK before it, is reported as "far", not fixed: such a citation
+usually gives the page of the text that discusses the float (an appendix figure, or a teaser
+figure, discussed in the results). With no scope, every
 note and review is checked. Exits 1 when a page is wrong and --fix is not given.
 """
 
@@ -28,6 +29,10 @@ from paperlib import (LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PAGE_MARK, PDF_LINK_
                       paper_stem, pdf_path_for, read_paper)
 
 MAX_SHIFT = 5
+# A float printed before the page cited: one page is LaTeX placing it at the top of the page
+# before the text; more is a figure cited from the text that discusses it later ("p. 7,
+# Figure 1" for a teaser on p. 2), where the text's page is the one worth keeping.
+MAX_BACK = 1
 
 # A page reference: "p. 8", "pp. 8–9", "p. 8-9".
 _PAGES = re.compile(r"\b(pp?\.)[ \t]*(\d+)(?:[ \t]*([–—-])[ \t]*(\d+))?")
@@ -38,9 +43,11 @@ _FLOATS = re.compile(rf"\b(Tables?|Tab\.|Figures?|Figs?\.?)[ \t]*({_LABEL})"
                      rf"(?:[ \t]*(?:[–—-]|,|and)[ \t]*({_LABEL}))?")
 # A parenthesised citation in a note: anything in parentheses that names a page.
 _GROUP = re.compile(r"\(([^()]*\bpp?\.[ \t]*\d[^()]*)\)")
-# A caption's first words where a text-layer segment (a column of a line) starts.
+# A caption's first words where a text-layer segment (a column of a line) starts. The weak
+# form, a capitalised word straight after the number ("Table 6 DNA classification…"), is a
+# caption whose label the PDF sets in bold; the text layer cannot tell it from a sentence.
 _CAPTION = re.compile(rf"^(Table|TABLE|Tab\.|Figure|FIGURE|Fig\.|FIG\.)[ \t]*({_LABEL})"
-                      rf"[ \t]*(?:([:|—–])|(\.)(?=[ \t]+[A-Z(]|[ \t]*$)|$)")
+                      rf"[ \t]*(?:([:|—–])|(\.)(?=[ \t]+[A-Z(]|[ \t]*$)|$|(?P<weak>(?=[ \t]+[A-Z][a-z])))")
 _COLUMN_GAP = re.compile(r"[ \t]{3,}")
 # Review links, as `review-refs --inline` writes them.
 _REVIEW_LINK = re.compile(r"(?<!\!)\[((?:\\.|[^\]\\])*)\]\((" + re.escape(PDF_LINK_BASE) + r"[^)\s]+)\)")
@@ -51,8 +58,9 @@ def kind_of(word):
 
 
 def base_label(label):
-    """A float's number as its caption prints it: "3b" (a panel) is Figure 3."""
-    return re.sub(r"(?<=\d)[a-z]$", "", label).upper()
+    """A float's number as captions are looked up: "3b" (a panel) is Figure 3, and "III" is 3."""
+    from locate import label_key
+    return label_key(re.sub(r"(?<=\d)[a-z]$", "", label))
 
 
 @dataclass
@@ -136,15 +144,17 @@ def text_pages(body):
 
 def caption_pages(pages):
     """{(kind, label): {page: strength}}: where the text layer prints a caption's first
-    words at the start of a column; strength 2 after ":" or "|", 1 after "." or alone."""
+    words at the start of a column; strength 2 after ":" or "|", 1 after "." or alone, 0 in
+    the weak form."""
     found = defaultdict(dict)
     for n, text in pages.items():
         for line in text.splitlines():
             for seg in _COLUMN_GAP.split(line.strip()):
                 m = _CAPTION.match(seg)
                 if m:
-                    key = (kind_of(m.group(1)), m.group(2).upper())
-                    found[key][n] = max(found[key].get(n, 0), 2 if m.group(3) else 1)
+                    key = (kind_of(m.group(1)), base_label(m.group(2)))
+                    strength = 2 if m.group(3) else 0 if m.group("weak") is not None else 1
+                    found[key][n] = max(found[key].get(n, 0), strength)
     return found
 
 
@@ -168,11 +178,10 @@ class Paper:
 
     def _find(self, kind, label):
         hits = self.captions.get((kind, label), {})
-        strong = [p for p, s in hits.items() if s == 2]
-        if len(hits) == 1:
-            return next(iter(hits)), None
-        if len(strong) == 1:
-            return strong[0], None
+        # The strongest form decides when one page prints it; otherwise the PDF does.
+        best = [p for p, s in hits.items() if s == max(hits.values())] if hits else []
+        if len(best) == 1:
+            return best[0], None
         page, why = self._pdf_find(kind, label)
         if page:
             return page, None
@@ -238,8 +247,7 @@ def check_ref(ref, paper):
         return Check(ref, "unknown", tuple(sorted(pages)), "; ".join(whys))
     if all(ref.first <= p <= ref.last for p in pages) and (ref.first != ref.last or len(pages) == 1):
         return Check(ref, "right", tuple(sorted(pages)))
-    far = max(abs(p - ref.first) for p in pages) > MAX_SHIFT if ref.first == ref.last else \
-        any(p < ref.first - MAX_SHIFT or p > ref.last + MAX_SHIFT for p in pages)
+    far = any(p < ref.first - MAX_BACK or p > ref.last + MAX_SHIFT for p in pages)
     return Check(ref, "far" if far else "wrong", tuple(sorted(pages)))
 
 
@@ -368,10 +376,12 @@ def main(argv):
             if listing:
                 for c in bad:
                     print(f"  {describe(c)} -> {'p. ' + ', '.join(map(str, c.pages))}{' (far)' if c.verdict == 'far' else ''}")
-        if listing:
-            for c in checks:
-                if c.verdict == "unknown":
-                    print(f"  ? {describe(c)}: {c.why}")
+        unknown = [c for c in checks if c.verdict == "unknown"]
+        if listing and unknown:
+            if not bad:
+                print(f"{name}: {len(unknown)} of {len(checks)} unprovable")
+            for c in unknown:
+                print(f"  ? {describe(c)}: {c.why}")
 
     for note in notes:
         p = paper(note.stem)
