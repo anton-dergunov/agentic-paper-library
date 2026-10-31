@@ -1,0 +1,6 @@
+llm/post-training/preference-learning/Direct Preference Optimization. Your Language Model is Secretly a Reward Model
+llm/post-training/fine-tuning/LoRA. Low-Rank Adaptation of Large Language Models
+search-and-ranking/indexing-and-classical-ir/The Probabilistic Relevance Framework. BM25 and Beyond
+llm/memory/agent/Zep. A Temporal Knowledge Graph Architecture for Agent Memory
+llm/evaluation/methods/JudgeBench. A Benchmark for Evaluating LLM-based Judges
+ml-systems/inference-and-serving/Efficient Memory Management for Large Language Model Serving with PagedAttention

@@ -26,7 +26,7 @@ Rules:
 - Quote numbers exactly as the paper prints them. Never round, convert or compute a number, and never give one that is not in the text.
 - Every number names its baseline, or what it is compared with.
 - State only what the paper says. Do not add facts you know from elsewhere (a cited paper's authors, a predecessor's settings), and do not present an inference as the paper's statement.
-- A number or an equation whose text looks garbled (a digit or a sign missing, a fraction spread over lines): say so in the digest, and do not quote it as exact. A result given only in a plot is not in the text: say which figure shows it (p. N, Figure M) rather than that it is not disclosed.
+- A number or an equation whose text looks garbled (a digit or a sign missing, a fraction spread over lines): say so in the digest, and do not quote it as exact. Write a formula in LaTeX (`$…$`), rewritten from the text rather than copied, with its symbols defined. A result given only in a plot is not in the text: say which figure shows it (p. N, Figure M) rather than that it is not disclosed.
 - "Related in library" lists only other papers from the list below (it includes this one), by exact name, that this paper builds on, compares with or contradicts; leave it empty if none.
 
 Papers in the same area of the library:

@@ -56,11 +56,31 @@ right. Aim for a clear structure and real insight, in few words:
 
 ### Math
 
-Assume the reader likes maths but remembers intuition, not formulas. At most one small
-formula, only when it makes the idea click, in reduced notation and followed by one
-sentence on what it means. No numeric worked examples. Usually words are enough: "the loss
-exponentially up-weights the best attempts, so the model learns mostly from its rare
-successes".
+Assume the reader likes maths but remembers intuition, not formulas. Formulas are welcome,
+as many as the idea calls for: a reader with a formal maths education takes one in at a
+glance. What gets in the way is maths for its own sake. Write like a good maths teacher:
+
+- **Give the formula that is the idea.** When the paper's method or subject is a formula
+  (a loss, an update rule, a scoring function such as BM25), the note states it.
+- **Elsewhere, a formula where it says something better than words**: a well-known form, a
+  statement whose brevity makes the idea clearer, a subject that is mathematical. Don't
+  formalise what a plain sentence says as well, and never stack formulas without words
+  between them.
+- **Intuition first.** The plain idea comes first; the formula then makes it exact.
+- **LaTeX, always**: `$…$` in a line, `$$…$$` on lines of their own (Obsidian draws only
+  these), never a code span or Unicode (`W_q·x`). Rewrite the text layer's maths in LaTeX
+  rather than copying it: the text drops symbols and spreads fractions over lines, so read
+  the PDF page where it is unclear.
+- **Readable notation.** Define each symbol at its first use and keep one notation through
+  the note: the paper's, unless a simpler one reads better. Split a long formula into
+  named parts: define the pieces, then combine them, or label them with
+  `\underbrace{…}_{\text{…}}`, or lay them out in an `aligned` block.
+- **Explain the unusual or heavy.** Follow such a formula with what it says in words and,
+  where it helps, a simpler or special case (one variable, no batch index), or build it up
+  in steps.
+- **A small worked example is welcome** when its numbers make the idea click; its numbers
+  illustrate, so the rule on numbers above does not apply. Mark one the paper doesn't
+  give "(ours, not from the paper)".
 
 ### Diagrams
 
@@ -201,9 +221,10 @@ These names mean the same in every type:
 - **Novelty**: 3–5 one-line bullets of the form "vs [[X]]: the difference", from the paper's
   own related work, concurrent work marked. Optionally one line on the broader trend the
   paper names.
-- **Concepts**: always last. Prerequisites as a link plus a one-line plain gloss, no
-  formulas. Skip what the reader clearly knows (for an ML reader: LoRA, transformers;
-  anything with a concept note in the notes folder).
+- **Concepts**: always last. Prerequisites as a link plus a one-line plain gloss, with
+  its formula where that is the clearest gloss (softmax,
+  $\mathrm{softmax}(z)_i = e^{z_i} / \sum_j e^{z_j}$). Skip what the reader clearly knows
+  (for an ML reader: LoRA, transformers; anything with a concept note in the notes folder).
 
 | Type | The paper… | `###` subsections of Overview, in order |
 |---|---|---|

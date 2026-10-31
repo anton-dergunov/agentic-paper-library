@@ -1,0 +1,38 @@
+== results/base: display, inline, code-span maths, Unicode maths, words
+  Direct Preferenc (0, 0, 0, 0, 1031)
+  JudgeBench. A Be (0, 0, 0, 0, 843)
+  KV cache questio (0, 0, 0, 0, 785)
+  LoRA. Low-Rank A (0, 0, 0, 0, 928)
+  The Probabilisti (0, 0, 0, 0, 681)
+  Zep. A Temporal  (0, 0, 0, 0, 806)
+== results/first-draft: display, inline, code-span maths, Unicode maths, words
+  Direct Preferenc (1, 8, 0, 0, 1084)
+  JudgeBench. A Be (0, 0, 0, 0, 696)
+  KV cache questio (0, 0, 0, 0, 686)
+  LoRA. Low-Rank A (0, 18, 0, 0, 886)
+  The Probabilisti (0, 0, 0, 0, 864)
+  Zep. A Temporal  (0, 0, 0, 0, 810)
+== results/final-1: display, inline, code-span maths, Unicode maths, words
+  Direct Preferenc (1, 11, 0, 0, 948)
+  JudgeBench. A Be (0, 0, 0, 0, 779)
+  KV cache questio (0, 0, 0, 0, 606)
+  LoRA. Low-Rank A (0, 22, 0, 0, 877)
+  The Probabilisti (1, 11, 0, 0, 866)
+  Zep. A Temporal  (0, 1, 0, 0, 791)
+== results/final-2: display, inline, code-span maths, Unicode maths, words
+  Direct Preferenc (0, 8, 0, 0, 850)
+  JudgeBench. A Be (0, 0, 0, 0, 840)
+  KV cache questio (2, 6, 0, 0, 613)
+  LoRA. Low-Rank A (1, 25, 0, 0, 1067)
+  The Probabilisti (1, 15, 0, 0, 616)
+  Zep. A Temporal  (0, 0, 0, 0, 753)
+== results/digests-old: display, inline, code-span maths, Unicode maths, words
+  Direct Preferenc (0, 0, 0, 22, 837)
+  Efficient Memory (0, 0, 0, 0, 842)
+  The Probabilisti (0, 0, 0, 4, 850)
+  Zep. A Temporal  (0, 0, 0, 0, 805)
+== results/digests-new: display, inline, code-span maths, Unicode maths, words
+  Direct Preferenc (0, 16, 0, 0, 810)
+  Efficient Memory (0, 6, 0, 0, 960)
+  The Probabilisti (0, 27, 0, 0, 925)
+  Zep. A Temporal  (0, 10, 0, 0, 859)

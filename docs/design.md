@@ -308,6 +308,20 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   - `paperlib read` replaces the type when the reading says otherwise, prints the change and
     logs both, so the papers read from now on measure how often filing's type holds. A
     session that finds a type wrong sets it with `paperlib set-type`.
+- **Formulas in LaTeX, used where they help (2026-10-31).** Answers and digests wrote
+  formulas as text copied from the text layer (`q = W_q·x`), and the overview format allowed
+  one small formula, so no overview had any. Claude Code's panel, carrel, VS Code's preview
+  and Obsidian all draw `$…$` and `$$…$$`.
+  - The overview format's § Math now asks for as many formulas as the idea calls for:
+    - always the formula that is the idea (a loss, an update rule, a score);
+    - others only where they beat words;
+    - each symbol defined, a long formula split into parts, a heavy one explained;
+    - worked examples welcome.
+  - The review format restates this, the guide has one bullet (about 70 tokens a turn), and
+    the reading prompt one sentence.
+  - On Haiku, overviews of DPO, LoRA and BM25 gained their formulas, and those of Zep and
+    JudgeBench stayed almost without. Digests moved from Unicode maths to LaTeX, and all 191
+    formulas render ([experiments/latex-math](../experiments/latex-math/README.md)).
   - The note keeps its `type:` line: it is how the reading reports the type, and the record
     of what the reading said if the type is later set by hand.
   - The backfill on the author's library took 1,824 types from notes and asked for 446, for $1.57;

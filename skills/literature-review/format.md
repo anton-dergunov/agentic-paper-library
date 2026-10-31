@@ -30,8 +30,14 @@ The `overview` skill's `format.md` sets the voice. These rules carry over:
 - **Bold lead-ins name the thing** (the family, the design choice, the kind of evidence),
   and the text after them says what it does. Short paragraphs; bullets where items are
   parallel. No `---` separators.
-- **Math:** at most a few small formulas in the whole review, each followed by one
-  sentence saying what it means.
+- **Math:** as many formulas as the area calls for. An approach whose idea is a formula (a
+  loss, an update rule, a score) gets it; elsewhere a formula goes where it says something
+  better than words, never as decoration or one after another without words between.
+  Always LaTeX, `$…$` in a line and `$$…$$` on lines of their own, rewritten from the text
+  layer rather than copied, never a code span or Unicode. Define each symbol at first use, keep one notation across the review, split a
+  long formula into named parts, and follow an unusual or heavy one with what it says in
+  words. A formula several papers share is written once, where the review introduces it.
+  A small worked example is welcome when it makes an idea click.
 - **Diagrams:** see "Diagrams and figures" below. Draw one where a picture shows something
   the text cannot, and pick the type that fits; don't default to a left-to-right chain of
   boxes.

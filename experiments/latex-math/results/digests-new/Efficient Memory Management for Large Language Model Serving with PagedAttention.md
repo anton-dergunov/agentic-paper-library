@@ -1,0 +1,31 @@
+# Efficient Memory Management for Large Language Model Serving with PagedAttention
+
+type: method
+family: LLM inference serving; KV-cache memory management (paging borrowed from OS virtual memory)
+evidence: OPT-13B/66B/175B and LLaMA-13B on A100 cloud instances, ShareGPT and Alpaca request traces with Poisson arrivals (p. 10, §6.1), against FasterTransformer and three self-implemented Orca variants (p. 10); strength: one hardware setup, baselines reimplemented by the authors, no repeated runs or error bars shown, ablations present (p. 12–13, §7)
+
+## Digest
+
+- Claim: existing LLM serving systems waste KV-cache memory, which caps batch size and throughput. Paging the KV cache (PagedAttention) and serving it through vLLM gives 2–4× throughput over FasterTransformer and Orca at similar latency (p. 1; p. 2; p. 13, §10).
+- Motivation: for a 13B model on an A100 40GB, weights take about 65% (26 GB), and the dynamic KV-cache share is "close to 30%" (p. 1, Fig. 1; Table 1, p. 9). In existing systems only 20.4%–38.2% of KV-cache memory holds actual token states (p. 2; Fig. 2 is a stacked chart whose series labels do not map cleanly in the text layer).
+- Cache size: OPT-13B needs 800 KB per token, computed as 2 × 5120 × 40 × 2 bytes, so a 2048-token request can need up to 1.6 GB (p. 4).
+- Mechanism: each request's KV cache is split into fixed-size logical blocks. A block table maps each logical block to a physical GPU block, and physical blocks are allocated on demand as tokens are generated. Attention reads the KV blocks separately, so they need not be contiguous (p. 5–6, Figs. 5–6, §4.2–4.3).
+- Definitions: block size B, with default 16 (p. 12, §7.2). Reference counts and copy-on-write apply at block granularity (p. 7, §4.4). "All-or-nothing" eviction, and sequence groups gang-scheduled together (p. 8, §4.5).
+- Blocked attention (p. 5, Eq. 4): $o_i=\sum_{j=1}^{\lceil i/B\rceil} V_j A_{ij}^{\top}$, where $K_j$ and $V_j$ are the key and value blocks, and $A_{ij}$ is the row of normalized scores of query $q_i$ against block $K_j$. The denominator is garbled in the text layer, so this normalization is reconstructed from Eq. 3 and is not quoted from the paper.
+- Sharing: parallel sampling and beam search share prompt and prefix blocks. On Alpaca, memory saving is 6.1%–9.8% for parallel sampling and 37.6%–55.2% for beam search; on ShareGPT it is 16.2%–30.5% and 44.3%–66.3% (p. 11, §6.3, Fig. 15). The text uses the 37.6% figure while Fig. 15 labels 37.56.
+- Scheduling: FCFS. When GPU blocks run out, sequences are preempted by swapping to CPU RAM or by recomputation. Swap space is bounded by the GPU KV allocation (p. 8, §4.5). Recomputation overhead is "never higher than 20% of swapping's latency" in the microbenchmark, and the two are comparable at block sizes 16–64 end-to-end (p. 13, §7.3, Fig. 19).
+- Kernel cost: the PagedAttention kernel has 20–26% higher attention latency than FasterTransformer's kernel (p. 12, §7.1, Fig. 18a). The authors argue this affects only the attention operator.
+- Headline results, ShareGPT basic sampling: vLLM sustains 1.7×–2.7× the request rate of Orca (Oracle) and 2.7×–8× that of Orca (Max) at similar latency, and up to 22× that of FasterTransformer (p. 11, §6.2, Fig. 12). Average batched requests for OPT-13B on ShareGPT are 30.42 (vLLM), 13.62 (Orca Oracle), and 7.00 (Orca Max) (p. 10, Fig. 13a); the text gives 2.2× and 4.3× (p. 11).
+- Baselines: Orca is not public, so the authors reimplemented it with buddy allocation in three variants. Oracle assumes known output lengths and is "infeasible to achieve in practice." Pow2 over-reserves by up to 2×, and Max reserves 2048 tokens (p. 10, §6.1). FasterTransformer runs under the authors' own dynamic-batching scheduler (p. 10).
+- Workload: ShareGPT has 8.4× longer inputs and 5.8× longer outputs on average than Alpaca (p. 10). Table 1 (p. 9): 13B on A100 40 GB has 26 GB of parameters, 12 GB for KV cache, and 15.7K KV slots. 66B on 4×A100 has 21 GB and 9.7K slots. 175B on 8×A100-80GB has 264 GB and 60.1K slots. Request times are synthesized from Poisson arrivals, since the datasets have no timestamps. OPT-175B runs use 15-minute traces, others 1-hour (p. 10).
+- Where the text claims more than the tables show: the abstract and intro say gains grow with longer sequences, larger models, and complex decoding (p. 1, p. 2). The OPT-175B Alpaca result is the exception, where vLLM's advantage over Orca (Oracle) and Orca (Pow2) is "less pronounced" (p. 11, Fig. 12f). The "2–4×" headline is not a single tabulated number. The text reports 1.3× over Orca (Oracle) for OPT-13B Alpaca basic sampling, rising to 2.3× at beam width 6 (p. 11).
+- Other workloads: shared-prefix translation with LLaMA-13B gives 1.67× (1-shot prefix) and 3.58× (5-shot) throughput over Orca (Oracle) (p. 11, Fig. 16). The chatbot workload (OPT-13B, prompts cut to the last 1024 tokens, outputs up to 1024, no KV reuse across rounds) gives 2× the request rate of the three Orca baselines (p. 12, Fig. 17).
+- Block size: block sizes 16–128 perform best on ShareGPT and 16–32 on Alpaca; the values appear only as a plot (p. 12, Fig. 18b). The default of 16 is justified by this plot and the text.
+- Accuracy: the text says vLLM improves throughput "without affecting the model accuracy at all" (p. 2). No accuracy experiment appears in the main text read.
+- Not disclosed or unsupported: no cost-per-request or SLO definition beyond normalized latency (mean end-to-end latency divided by output length, p. 10). The footnote says per-layer and combined KV block layouts "have no performance difference" (p. 5, footnote 1) without data. The intro says the prompt part is "12% of the total KV cache memory" and points to §6.3 (p. 4), but the §6.3 text read does not contain that figure. Only A100-class GPUs are used.
+- Scope limit the authors state: for compute-bound DNN workloads, the technique "may rather degrade the performance" from indirection overhead (p. 13, §8).
+- The paper's own inconsistencies: p. 3 cites "Eq. 4" for the self-attention computation that is Eq. 3 (Eq. 4 is the blocked form, p. 5); Fig. 1 text says the KV share is "close to 30%" while the figure label reads ">30%" (p. 1, p. 1).
+
+## Related in library
+
+## Q&A
