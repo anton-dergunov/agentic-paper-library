@@ -353,8 +353,17 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   - `paperlib check-pages` stays: it finds each table and figure a note or review cites on the
     page that prints its caption, and `--fix` rewrites the page. Notes read from the text layer
     cite the right page, so it is a check rather than a step of reading.
+- **Meaning search (2026-10-31).** The library reached 2,275 papers, and grep, the indexes and
+  carrel's text search all match words. `paperlib meaning` ranks the papers by how close they are
+  to a description, and `paperlib similar` lists a paper's nearest. Each paper is embedded
+  locally from its title, summary and abstract, and the vectors are cached by the digest of the
+  model and the text, so only a new or changed paper is embedded again. The encoder,
+  Qwen3-Embedding-0.6B, was chosen on 32 reader-style queries with pooled top 10s graded by
+  Sonnet: nDCG@10 0.752, against 0.628 for the best small encoder and 0.504 for BM25 over the
+  same text ([experiments/meaning-search](../experiments/meaning-search/README.md)). carrel
+  serves the same search on the tablet.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
-  revisit if the library reaches thousands of papers), pdfpal (its CLI-plus-skill design is
+  meaning search is now the engine's own, above), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).
 
 ## Next

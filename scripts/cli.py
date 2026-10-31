@@ -46,12 +46,15 @@ COMMANDS = {
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
     "fill-types": ("fill-types.py", True, "give papers without a type theirs: the note's, else one small request each: [<scope or paper.txt> ...] [--dry-run]"),
+    "meaning": ("meaning.py", True, "papers ranked by what they are about: \"<description>\" [--in <topic>] [-n N] [--json]"),
+    "similar": ("meaning.py", True, "a paper's nearest papers by meaning: <paper.txt, arxiv id or title words> [-n N] [--json]"),
+    "embed": ("meaning.py", True, "embed the papers that have no vector yet, for meaning and similar: [<scope or paper.txt> ...]"),
     "set-summary": ("paperlib.py", True, "set a paper's summary: <paper.txt> <summary>"),
     "set-type": ("paperlib.py", True, "set a paper's type: <paper.txt> <type>"),
     "filename": ("paperlib.py", False, "the filename stem for a title: <title>"),
 }
 # paperlib.py's own subcommands keep their name, as does a command a script serves beside its own.
-PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename", "reread"}
+PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename", "reread", "embed", "meaning", "similar"}
 
 
 def usage():
@@ -98,7 +101,7 @@ def main(argv):
     if name == "test":
         env = script_env()
         codes = [run([sys.executable, str(ENGINE / "tests" / name)], env)
-                 for name in ("test_text_layer.py", "test_locate.py", "test_example_library.py")]
+                 for name in ("test_text_layer.py", "test_locate.py", "test_meaning.py", "test_example_library.py")]
         return next((code for code in codes if code), 0)
     if name == "install-vscode":
         return install_vscode()

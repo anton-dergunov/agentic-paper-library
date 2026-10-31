@@ -1,0 +1,35 @@
+# Reader-style queries for the judged measure: what a reader might type into the Meaning box,
+# spread over the library's areas, worded as a description rather than a paper's own terms.
+# Written before any encoder was run; none was changed after.
+- {id: q01, query: LLM judges preferring answers written by their own model}
+- {id: q02, query: an assistant that remembers a user across many conversations}
+- {id: q03, query: does a language model's stated confidence match how often it is right}
+- {id: q04, query: correcting for users clicking the top results more when training a ranker}
+- {id: q05, query: using data from before an experiment to make A/B tests more sensitive}
+- {id: q06, query: making attention cheap enough for very long documents}
+- {id: q07, query: training models to reason with rewards from answers that can be checked}
+- {id: q08, query: language models that call external tools and APIs}
+- {id: q09, query: benchmark questions leaking into training data and inflating scores}
+- {id: q10, query: models telling users what they want to hear instead of the truth}
+- {id: q11, query: large language models as recommender systems}
+- {id: q12, query: serving many LLM requests at once on GPUs with high throughput}
+- {id: q13, query: simulating users to evaluate a conversational system}
+- {id: q14, query: finding mislabelled examples in a training set}
+- {id: q15, query: merging the result lists of several search systems into one ranking}
+- {id: q16, query: long-term effects of a product change that a short experiment misses}
+- {id: q17, query: getting a model to reveal text it memorized during training}
+- {id: q18, query: sentence embeddings for semantic similarity}
+- {id: q19, query: shrinking a prompt to save tokens without losing what matters}
+- {id: q20, query: sending each query to a cheap or an expensive model depending on difficulty}
+- {id: q21, query: explaining why a model made one particular prediction}
+- {id: q22, query: finding interpretable features inside a network with sparse autoencoders}
+- {id: q23, query: discovering the themes of a large collection of documents}
+- {id: q24, query: published machine learning results that do not hold up when rerun}
+- {id: q25, query: how AI assistants change the productivity of workers}
+- {id: q26, query: when gradient boosted trees beat neural networks on tables of data}
+- {id: q27, query: retrieving passages with learned dense vectors for open-domain question answering}
+- {id: q28, query: inferring a person's personality or preferences from what they write}
+- {id: q29, query: knowledge graphs combined with retrieval-augmented generation}
+- {id: q30, query: how much data and how many parameters to use for a fixed compute budget}
+- {id: q31, query: whether people trust and follow advice from an algorithm}
+- {id: q32, query: telling whether searchers were satisfied without asking them}

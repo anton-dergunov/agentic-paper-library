@@ -7,8 +7,10 @@ license = "MIT"
 requires-python = ">=3.12"
 dependencies = [
     "lxml>=6",                     # the metadata of web articles
+    "numpy>=2",                    # meaning search's vectors
     "pymupdf>=1.26",               # where a quote, table or figure is printed (paperlib locate); AGPL-3.0
     "pyyaml>=6",
+    "sentence-transformers>=6.2",  # meaning search's encoder (paperlib meaning); Apache-2.0
 ]
 
 [tool.uv]

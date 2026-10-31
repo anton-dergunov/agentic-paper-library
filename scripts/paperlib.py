@@ -613,6 +613,26 @@ def find_by_title(words, titles):
     return [key for key, title in titles.items() if wanted and all(w in norm_title(title).split() for w in wanted)]
 
 
+ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(v\d+)?")
+
+
+def papers_named(arg, index=None):
+    """The library papers `arg` names: a paper file, an arXiv id or URL, or title words (every
+    paper whose title holds them all). Raises ValueError for a file outside the library."""
+    path = Path(arg).expanduser()
+    if path.suffix in PAPER_SUFFIXES and path.is_file():
+        path = path.resolve()
+        if not path.is_relative_to(LIBRARY_DIR.resolve()) or path.name == "README.md":
+            raise ValueError(f"{arg} is not a paper under {LIBRARY_DIR}")
+        return [LIBRARY_DIR / path.relative_to(LIBRARY_DIR.resolve())]
+    found = ARXIV_ID.search(arg)
+    if found:
+        path = library_arxiv_ids().get(found.group(1))
+        return [path] if path else []
+    index = paper_index() if index is None else index
+    return find_by_title(arg, {path: meta.get("title") for path, meta in index.items()})
+
+
 class _NoAliases(yaml.SafeDumper):
     """Write a shared value (the date) in full each time: appended anchors would clash."""
 

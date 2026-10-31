@@ -14,12 +14,13 @@ Two kinds of command appear below:
 | Understand the folders | [3. What is in a library](#3-what-is-in-a-library) |
 | Set up the editor | [4. Set up VS Code](#4-set-up-vs-code) |
 | Look at a paper before adding it | [5. Look at a paper](#5-look-at-a-paper) |
-| Add papers | [6. Add papers](#6-add-papers) |
-| Remove or move papers | [7. Remove, move and reorganise](#7-remove-move-and-reorganise) |
-| Read a paper with the agent | [8. Read a paper with the agent](#8-read-a-paper-with-the-agent) |
-| Write a literature review | [9. Write a literature review](#9-write-a-literature-review) |
-| Check that the library is in good shape | [10. Check the library's health](#10-check-the-librarys-health) |
-| Find a command | [11. Commands and skills](#11-commands-and-skills) |
+| Find papers by what they are about | [6. Find papers by meaning](#6-find-papers-by-meaning) |
+| Add papers | [7. Add papers](#7-add-papers) |
+| Remove or move papers | [8. Remove, move and reorganise](#8-remove-move-and-reorganise) |
+| Read a paper with the agent | [9. Read a paper with the agent](#9-read-a-paper-with-the-agent) |
+| Write a literature review | [10. Write a literature review](#10-write-a-literature-review) |
+| Check that the library is in good shape | [11. Check the library's health](#11-check-the-librarys-health) |
+| Find a command | [12. Commands and skills](#12-commands-and-skills) |
 
 ## 1. Install
 
@@ -163,7 +164,26 @@ It reads the abstract and public records, not the paper. It never says whether t
 | `--again` | Ignores the saved answer and looks the paper up afresh. |
 | `--json` | One JSON object per paper, for another program. |
 
-## 6. Add papers
+## 6. Find papers by meaning
+
+```bash
+paperlib embed                                        # once: embeds every paper (about 25 minutes on an Apple GPU)
+paperlib meaning "LLM judges preferring their own model's answers"
+paperlib meaning "variance reduction in online experiments" --in experimentation-and-metrics -n 20
+paperlib similar 2306.05685                           # a paper's nearest papers: its file, arXiv id or title words
+```
+
+`meaning` ranks the library's papers by how close they are to a description, whatever words the papers use and whichever folder they sit in. `similar` lists a paper's nearest papers. Each paper is embedded from its title, summary and abstract with a local model (Qwen3-Embedding-0.6B), so nothing leaves the machine. The first run downloads the model (1.2 GB). After that only new or changed papers are embedded, and both commands do it themselves first. On this engine's measurement it found more of what a reader meant than keyword search over the same text ([experiment](../experiments/meaning-search/README.md)).
+
+| Option | Effect |
+|---|---|
+| `--in <topic>` | Only that topic and the topics under it. |
+| `-n N` | How many papers to show (10 by default). |
+| `--json` | A JSON list, for another program. |
+
+The agent uses them too, when grep would miss a paper that words a topic differently.
+
+## 7. Add papers
 
 ```bash
 paperlib add 2305.18290                                  # a model picks the folder and the type, and writes the summary
@@ -198,7 +218,7 @@ Notes:
 - **A PDF whose text layer is unreadable** (a scan) is added with a warning and marked `text-layer: broken`.
 - **Every paper has a type**: method, survey, benchmark, study, system, position or theory. It is chosen from the abstract when the paper is filed; `paperlib read` replaces it when the whole paper says otherwise, and `paperlib set-type <paper.txt> <type>` sets it by hand. `paperlib fill-types` gives one to every paper without it.
 
-## 7. Remove, move and reorganise
+## 8. Remove, move and reorganise
 
 ```bash
 paperlib remove 2305.18290 --reason "not for me"     # by arXiv id, title words or path
@@ -214,7 +234,7 @@ Adding a paper is also how you try one: add it, read a little with the agent, an
 
 **Reorganise** a folder that has grown too large with `/reorganize <topic>`. It proposes splits, merges and moves with reasons, and changes nothing until you choose.
 
-## 8. Read a paper with the agent
+## 9. Read a paper with the agent
 
 1. **Before reading:** `/overview <title words>` writes a note to read in 3–5 minutes: the setting, the idea, why it works, the evidence, and what is new against your library. It goes to `overview_dir`. For many papers this is all the reading they need.
 2. **While reading:** open the PDF, and ask in the Claude Code panel. For example: "explain eq. 4 without the notation", "how is this different from DPO", "what do my papers say about temporal knowledge graphs". Answers cite the page and the table, and in VS Code the citation opens the PDF there.
@@ -222,7 +242,7 @@ Adding a paper is also how you try one: add it, read a little with the agent, an
 
 **On a tablet:** read the PDF from the synced folder in any PDF app, and reach the session with Remote Control: run `claude remote-control` in the library on your computer and open it from the Claude app.
 
-## 9. Write a literature review
+## 10. Write a literature review
 
 A review covers one topic folder and everything under it, and is written to `reviews/<topic>.md`. Below, `<topic>` is a folder such as `llm/memory`.
 
@@ -269,7 +289,7 @@ It writes the review from the notes: the kinds of approaches, a map of the paper
 | Update a review after adding papers | `paperlib read <topic>`, then `/literature-review update <topic>`. |
 | See which reviews are behind | `paperlib reading`, `paperlib review-status`, or `/literature-review status`. |
 
-## 10. Check the library's health
+## 11. Check the library's health
 
 ```bash
 paperlib check                       # is everything consistent?
@@ -284,7 +304,7 @@ paperlib review-status               # which reviews miss papers or have broken 
 | `paperlib check-pages [<topic or note>]` | Whether the pages notes and reviews give for tables and figures are the pages that print their captions. `--list` shows each wrong one, `--fix` corrects them. |
 | `paperlib text <topic or paper.txt>` | Makes papers' text again from their PDFs, keeping their fields: after replacing a PDF, or after a poppler upgrade (`--dry-run` lists the papers whose text would change). |
 
-## 11. Commands and skills
+## 12. Commands and skills
 
 In a terminal (`paperlib --help` has the full list):
 
@@ -293,23 +313,24 @@ In a terminal (`paperlib --help` has the full list):
 | `init` | Creates or refreshes a library | [2](#2-create-a-library) |
 | `install-vscode` | One-time install of the VS Code extension | [4](#4-set-up-vs-code) |
 | `info` | A quick look at a paper | [5](#5-look-at-a-paper) |
-| `add`, `add-arxiv`, `add-pdf`, `add-web` | Add a paper | [6](#6-add-papers) |
-| `remove`, `move`, `rename` | Take out, refile, rename | [7](#7-remove-move-and-reorganise) |
-| `read` | Reads papers into notes | [9](#9-write-a-literature-review) |
-| `reading`, `reread` | What is left to read, by area, and its cost; mark a note to read again | [9](#9-write-a-literature-review) |
-| `review-status` | Review coverage and unread papers | [9](#9-write-a-literature-review), [10](#10-check-the-librarys-health) |
-| `build-index`, `check`, `check-pages` | Rebuild the indexes, check consistency, check cited pages | [10](#10-check-the-librarys-health) |
-| `text` | Make papers' text again from their PDFs | [10](#10-check-the-librarys-health) |
+| `meaning`, `similar`, `embed` | Find papers by what they are about; a paper's nearest; embed new papers | [6](#6-find-papers-by-meaning) |
+| `add`, `add-arxiv`, `add-pdf`, `add-web` | Add a paper | [7](#7-add-papers) |
+| `remove`, `move`, `rename` | Take out, refile, rename | [8](#8-remove-move-and-reorganise) |
+| `read` | Reads papers into notes | [10](#10-write-a-literature-review) |
+| `reading`, `reread` | What is left to read, by area, and its cost; mark a note to read again | [10](#10-write-a-literature-review) |
+| `review-status` | Review coverage and unread papers | [10](#10-write-a-literature-review), [11](#11-check-the-librarys-health) |
+| `build-index`, `check`, `check-pages` | Rebuild the indexes, check consistency, check cited pages | [11](#11-check-the-librarys-health) |
+| `text` | Make papers' text again from their PDFs | [11](#11-check-the-librarys-health) |
 
 In a Claude Code session:
 
 | Skill | Does | Section |
 |---|---|---|
 | `/paper-info` | A quick look at a paper | [5](#5-look-at-a-paper) |
-| `/add-paper` | Adds a paper from any source, or the inbox | [6](#6-add-papers) |
-| `/expand-library` | Finds and adds the papers missing from an area | [6](#6-add-papers) |
-| `/reorganize` | Proposes splits, merges and moves of folders | [7](#7-remove-move-and-reorganise) |
-| `/overview` | A short note to read before a paper | [8](#8-read-a-paper-with-the-agent) |
-| `/literature-review` | Writes or updates the review of an area | [9](#9-write-a-literature-review) |
+| `/add-paper` | Adds a paper from any source, or the inbox | [7](#7-add-papers) |
+| `/expand-library` | Finds and adds the papers missing from an area | [7](#7-add-papers) |
+| `/reorganize` | Proposes splits, merges and moves of folders | [8](#8-remove-move-and-reorganise) |
+| `/overview` | A short note to read before a paper | [9](#9-read-a-paper-with-the-agent) |
+| `/literature-review` | Writes or updates the review of an area | [10](#10-write-a-literature-review) |
 
 The skills are available in a session opened on the library. To use them from other folders, install them as a plugin: `/plugin marketplace add anton-dergunov/agentic-paper-library`.

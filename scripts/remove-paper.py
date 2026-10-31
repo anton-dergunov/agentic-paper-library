@@ -18,18 +18,14 @@ check, which fails while a review still links the paper.
 """
 
 import datetime
-import re
 import subprocess
 import sys
-from pathlib import Path
 
 from paperlib import (
     LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, SCRIPTS_DIR, append_skipped,
-    PAPER_SUFFIXES, find_by_title, library_arxiv_ids, load_reviews, note_path, paper_index, paper_stem,
+    load_reviews, note_path, paper_index, paper_stem, papers_named,
     pdf_path_for, read_paper, review_links,
 )
-
-ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(v\d+)?")
 
 
 def relative(path):
@@ -37,18 +33,10 @@ def relative(path):
 
 
 def resolve(arg, index):
-    """The library papers `arg` names: a paper file, an arXiv id or title words."""
-    path = Path(arg).expanduser()
-    if path.suffix in PAPER_SUFFIXES and path.is_file():
-        path = path.resolve()
-        if not path.is_relative_to(LIBRARY_DIR.resolve()) or path.name == "README.md":
-            sys.exit(f"error: {arg} is not a paper under {LIBRARY_DIR}")
-        return [LIBRARY_DIR / path.relative_to(LIBRARY_DIR.resolve())]
-    found = ARXIV_ID.search(arg)
-    if found:
-        path = library_arxiv_ids().get(found.group(1))
-        return [path] if path else []
-    return find_by_title(arg, {path: meta.get("title") for path, meta in index.items()})
+    try:
+        return papers_named(arg, index)
+    except ValueError as error:
+        sys.exit(f"error: {error}")
 
 
 def changed_since_added(pdf, meta):
