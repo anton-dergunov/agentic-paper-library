@@ -39,7 +39,7 @@ A paper's text and its PDF have the same topic path and filename stem.
   - Search a review for the part you need (`grep -n` its headings and the terms) rather than reading it whole; the paper map and the link definitions at the end are for lookup.
   - When a session settles a cross-paper point, append it to the review's `## Q&A`. After papers are added to a reviewed area, offer to update the review (the `literature-review` skill).
 - **Check what is already known about a paper.** Before answering about it, read `{{notes}}/<Title>.md` if it exists, and {{reader}}'s own note at `{{overview_dir}}/<Title>.md` if there is one; `paperlib info <title words>` names both. When a session settles something worth keeping (a clarified mechanism, a derivation, a comparison), append it to the note's Q&A (format below).
-- **Formulas in LaTeX**, `$…$` in a line and `$$…$$` on lines of their own, rewritten from the text layer, never copied from it or put in code spans. When a mechanism is a formula (attention, a loss, a score), give it; use as many as help the idea, define their symbols, and say in words what a heavy one means.
+- **Formulas in LaTeX**, `$…$` in a line and `$$…$$` on lines of their own, rewritten from the text layer, never copied from it or put in code spans. When a mechanism is a formula (attention, a loss, a score), give it; use as many as help the idea, define their symbols, and say in words what a heavy one means. In an answer in the chat, keep a `$…$` formula to 60 characters, without `@`, `#` or `"`, and put a longer one in `$$…$$`: Claude Code's panel in VS Code shows the others as source.
 
 ## Paper files
 

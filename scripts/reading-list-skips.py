@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 from paperlib import (
-    append_skipped, fetch, library_arxiv_ids, load_topics, norm_title, paper_index,
+    CONFIG, append_skipped, fetch, library_arxiv_ids, load_topics, norm_title, paper_index,
     parse_arxiv_entries, skipped_index,
 )
 
@@ -104,7 +104,7 @@ def main(argv):
         sys.exit(__doc__)
     md = Path(argv[0])
     tsv = md.with_suffix(".tsv")
-    reason = reason or f"Struck by Anton from the {md.stem} reading list"
+    reason = reason or f"Struck by {CONFIG.get('reader') or 'the reader'} from the {md.stem} reading list"
     today = datetime.date.today()
 
     topics = load_topics()

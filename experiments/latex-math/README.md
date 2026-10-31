@@ -21,12 +21,12 @@ The experiment cost $0.66.
 
 | Where it is read | Draws | Evidence |
 |---|---|---|
-| Claude Code's panel in VS Code (2.1.314) | `$…$`, `$$…$$`, `\(…\)`, `\[…\]` | Its webview bundles KaTeX through a micromark maths extension. It looks for `$$`, `\(…\)`, `\[…\]` or an inline `$` pattern in an answer, then loads KaTeX for it. Read from `webview/index.js` |
+| Claude Code's panel in VS Code (2.1.314) | `$…$`, `$$…$$`, `\(…\)`, `\[…\]` | Its webview bundles KaTeX through a micromark maths extension. It looks for `$$`, `\(…\)`, `\[…\]` or an inline `$` pattern in an answer, then loads KaTeX for it. Read from `webview/index.js`. **Inline `$…$` is guarded** (found 31 Oct 2026): it stays as source when it is longer than 60 characters, holds `@`, `#`, `"`, `&&` or `\\`, or looks like a price or prose. `$$…$$` on lines of its own takes up to 1,024 characters |
 | carrel (chat, digests, reviews, overviews) | the same four | `src/carrel/static/markdown.js`, KaTeX 0.19.0, Pandoc's `$` rule |
 | VS Code's markdown preview (notes, reviews) | `$…$`, `$$…$$` | built in (`markdown.math.enabled`); not tested here |
 | Obsidian (overviews) | `$…$`, `$$…$$` | its documentation; not tested here |
 
-So the prompts ask for `$…$` and `$$…$$`, the forms all four draw. Prices stay text: the panel and carrel need no space after an opening `$` and none before a closing one, so "$1.24 to $0.36", already in a review, is not read as maths. No mod or extension was needed.
+So the prompts ask for `$…$` and `$$…$$`, the forms all four draw. The panel's guard on inline formulas was found later, when `$\mathrm{AP}@10 = \frac{1}{Z}\sum…$` showed as source in it: the guide now tells an answer in the chat to keep `$…$` short and without those characters, and to put a longer formula in `$$…$$`. Notes, overviews and reviews are read in carrel and Obsidian, which have no such guard, and keep the rule as it was. Prices stay text: the panel and carrel need no space after an opening `$` and none before a closing one, so "$1.24 to $0.36", already in a review, is not read as maths. No mod or extension was needed.
 
 ## Method
 
