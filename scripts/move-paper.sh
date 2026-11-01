@@ -58,6 +58,8 @@ fi
 
 mkdir -p "$NEW_DIR" "$PDF_ROOT/$NEW_TOPIC"
 mv "$SRC" "$NEW_DIR/$STEM.$EXT"
+# The reader's star and tags go with it.
+python3 "$SCRIPTS_DIR/paperlib.py" move-marks "$SRC" "$NEW_DIR/$STEM.$EXT"
 
 if [ -f "$OLD_PDF" ]; then
   mv "$OLD_PDF" "$NEW_PDF"

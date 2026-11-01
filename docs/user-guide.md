@@ -232,6 +232,8 @@ Adding a paper is also how you try one: add it, read a little with the agent, an
 
 **Move** takes the paper's text and its PDF together and rebuilds the indexes. The target folder must be declared in `catalog/topics.yaml`.
 
+**Stars and tags** are yours, kept in `catalog/reader.yaml`: a star marks a paper to read later, and a tag gathers papers for one of your projects, across folders. You set them in carrel; agents read them when you ask (`paperlib starred`, `paperlib tags [<tag>]`) and never set them. Move, rename and remove carry them along. Your highlights stay in the PDFs; `paperlib highlights <paper>` lists them with the words under each.
+
 **Reorganise** a folder that has grown too large with `/reorganize <topic>`. It proposes splits, merges and moves with reasons, and changes nothing until you choose.
 
 ## 9. Read a paper with the agent
@@ -316,6 +318,7 @@ In a terminal (`paperlib --help` has the full list):
 | `meaning`, `similar`, `embed` | Find papers by what they are about; a paper's nearest; embed new papers | [6](#6-find-papers-by-meaning) |
 | `add`, `add-arxiv`, `add-pdf`, `add-web` | Add a paper | [7](#7-add-papers) |
 | `remove`, `move`, `rename` | Take out, refile, rename | [8](#8-remove-move-and-reorganise) |
+| `starred`, `tags`, `highlights` | Your stars, tags and highlights, read-only | [8](#8-remove-move-and-reorganise) |
 | `read` | Reads papers into notes | [10](#10-write-a-literature-review) |
 | `reading`, `reread` | What is left to read, by area, and its cost; mark a note to read again | [10](#10-write-a-literature-review) |
 | `review-status` | Review coverage and unread papers | [10](#10-write-a-literature-review), [11](#11-check-the-librarys-health) |

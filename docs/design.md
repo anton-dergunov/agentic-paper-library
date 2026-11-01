@@ -362,6 +362,16 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   Sonnet: nDCG@10 0.752, against 0.628 for the best small encoder and 0.504 for BM25 over the
   same text ([experiments/meaning-search](../experiments/meaning-search/README.md)). carrel
   serves the same search on the tablet.
+- **The reader's stars, tags and highlights (2026-11-01).** A star marks a paper to read
+  later; a tag gathers papers for one of the reader's projects, across folders, with an optional
+  line on what it is for. Both live in `catalog/reader.yaml`, not in the papers' frontmatter:
+  the frontmatter is what the filing model writes and what every agent reads in a paper, and a
+  `tags:` field there would invite the agent to fill it. A tag stands for a project only the
+  reader knows, so agents read the file (`paperlib starred`, `tags`) and never write it, and
+  there is no command that does: carrel writes it through `paperlib.py`'s functions, and
+  `move`, `rename` and `remove` keep its paths in step. Highlights stay in the PDFs, whichever
+  app made them; `paperlib highlights` reads them with PyMuPDF, about 6 ms a paper, with the
+  words under each.
 - **Other tools considered:** Open Paper (same shape as PaperNook), Khoj (meaning-based search;
   meaning search is now the engine's own, above), pdfpal (its CLI-plus-skill design is
   what this project does), Paperless-ngx (a document archive, not a reader).

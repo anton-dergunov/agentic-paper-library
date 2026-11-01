@@ -18,6 +18,8 @@ Checks:
   folder;
 - every entry in catalog/skipped.yaml has a title and a reason, names a
   declared topic if it names one, and is not a paper that is in the library;
+- every paper starred or tagged in catalog/reader.yaml is in the library, and
+  every tag's name is well formed;
 - every review in reviews/ names a declared scope, and every local link in it
   (to a paper, a page in a paper's PDF, another review) resolves.
 """
@@ -28,8 +30,8 @@ import unicodedata
 from pathlib import Path
 
 from paperlib import (
-    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_ROOT, REQUIRED, SOURCES, TEXT_LAYER_STATES, TOPIC_PATH, TYPES,
-    load_reviews, load_skipped, load_topics, norm_title, paper_index, paper_stem, pdf_path_for,
+    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, PDF_ROOT, REQUIRED, SOURCES, TAG_NAME, TEXT_LAYER_STATES, TOPIC_PATH,
+    TYPES, load_reader, load_reviews, load_skipped, load_topics, norm_title, paper_index, paper_stem, pdf_path_for,
     split_frontmatter, review_links,
 )
 
@@ -68,6 +70,21 @@ def check_catalog(index):
         if paper:
             problems.append(f"{name} ({entry['title']}): skipped but in the library at "
                             f"{paper.relative_to(LIBRARY_DIR)}")
+
+    try:
+        marks = load_reader()
+    except Exception as error:  # a hand edit that broke the YAML
+        return problems + [f"catalog/reader.yaml: cannot be read: {error}"]
+    known = {unicodedata.normalize("NFC", paper.relative_to(LIBRARY_DIR).as_posix()) for paper in index}
+    for key in marks["starred"]:
+        if key not in known:
+            problems.append(f"catalog/reader.yaml: starred `{key}` is not in the library")
+    for name, tag in marks["tags"].items():
+        if not TAG_NAME.match(name):
+            problems.append(f"catalog/reader.yaml: malformed tag name `{name}`")
+        for key in tag["papers"]:
+            if key not in known:
+                problems.append(f"catalog/reader.yaml: `{key}` tagged {name} is not in the library")
     return problems
 
 

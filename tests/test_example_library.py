@@ -22,13 +22,25 @@ ENGINE = Path(__file__).resolve().parent.parent
 EXAMPLE = ENGINE / "examples" / "library"
 
 
-def run(script, root, *args, **extra_env):
+def library_env(root, **extra_env):
     env = dict(os.environ, PAPER_LIBRARY=str(root), PDF_ROOT=str(root / "no-pdfs"),
                PAPERS_CACHE=str(root.parent / "cache"))
     env.update(extra_env)
     env["PATH"] = str(Path(sys.executable).parent) + os.pathsep + env["PATH"]
-    return subprocess.run([sys.executable, str(ENGINE / "scripts" / script), *args], env=env,
-                          capture_output=True, text=True)
+    return env
+
+
+def run(script, root, *args, **extra_env):
+    command = [str(ENGINE / "scripts" / script)]
+    if not script.endswith(".sh"):
+        command.insert(0, sys.executable)
+    return subprocess.run(command + list(args), env=library_env(root, **extra_env), capture_output=True, text=True)
+
+
+def paperlib_call(root, code):
+    """Runs Python with paperlib imported as `p`, in the library: what carrel does to the marks."""
+    return subprocess.run([sys.executable, "-c", "import paperlib as p, datetime\n" + code], cwd=root,
+                          env=library_env(root, PYTHONPATH=str(ENGINE / "scripts")), capture_output=True, text=True)
 
 
 def papers(root):
@@ -125,7 +137,10 @@ def remove_problems(root):
         problems.append("deleted without --yes")
     if "skipped.yaml" not in result.stdout or yaml_list(skipped):
         problems.append("the skip is not announced, or recorded before the paper is removed")
+    paperlib_call(root, f"p.star({str(paper)!r}, True); p.set_paper_tags({str(paper)!r}, ['gone-with-it'])")
     result = run("remove-paper.py", root, arxiv_id, "--reason", "not for this library", "--yes")
+    if "gone-with-it" in paperlib_call(root, "print(p.load_reader())").stdout:
+        problems.append("the reader's marks on a removed paper are left")
     left = [f.name for f in (paper, pdf, note) if f.exists()]
     if left:
         problems.append(f"left behind: {left}")
@@ -255,6 +270,57 @@ def type_problems(root):
     return problems
 
 
+def marks_problems(root):
+    """The reader's star and tags: kept in catalog/reader.yaml, listed by `tags` and `starred`,
+    moved with a paper, and checked."""
+    problems = []
+    first, second = [p.relative_to(root).as_posix() for p in papers(root)[:2]]
+    result = paperlib_call(root, f"""
+p.star({first!r}, True, datetime.date(2026, 10, 30))
+p.set_paper_tags({first!r}, ["Carrel", "memory talk"])
+p.set_paper_tags({second!r}, ["carrel"])
+p.edit_tag("carrel", about="Papers for: the tablet reader.")
+""")
+    if result.returncode:
+        return [f"marking failed: {result.stderr.strip()[-200:]}"]
+    listed = run("paperlib.py", root, "tags").stdout
+    if "carrel  2 papers  Papers for: the tablet reader." not in listed or "memory-talk  1 paper" not in listed:
+        problems.append(f"tags: {listed!r}")
+    if first not in run("paperlib.py", root, "tags", "memory-talk").stdout:
+        problems.append("tags memory-talk: its paper is not listed")
+    if not run("paperlib.py", root, "starred").stdout.startswith(f"2026-10-30  {first}"):
+        problems.append("starred: the starred paper is not listed with its date")
+    reader = root / "catalog" / "reader.yaml"
+    if not reader.read_text().startswith("#") or "? " in reader.read_text():
+        problems.append("reader.yaml: no header, or a long key written as `? key`")
+
+    # A move carries them; a paper taken out of the tags with no description leaves its tag.
+    paper = root / first
+    topic = paper.parent.relative_to(root / "library").as_posix()
+    other = next(t for t in yaml_list(root / "catalog" / "topics.yaml") if t != topic and "/" not in t)
+    # The temporary folder is reached through /var and /private/var: move-paper.sh wants one.
+    result = run("move-paper.sh", root, str(paper.resolve()), other)
+    moved = f"library/{other}/{paper.name}"
+    marks = paperlib_call(root, "print(p.load_reader())").stdout
+    if result.returncode or paper.name not in marks or f"{other}/{paper.name}" not in marks or \
+            f"'{topic}/{paper.name}'" in marks:
+        problems.append(f"move: the marks did not follow ({result.stderr.strip()[-200:]})")
+    if run("check-library.py", root).returncode:
+        problems.append("check fails after a move with marks")
+    run("move-paper.sh", root, str((root / moved).resolve()), topic)
+
+    # A stray entry is a problem; taking every mark off leaves no tag behind.
+    text = reader.read_text()
+    reader.write_text(text + "  nowhere:\n    papers:\n      gone/Missing.txt: 2026-10-01\n")
+    if "gone/Missing.txt` tagged nowhere is not in the library" not in run("check-library.py", root).stdout:
+        problems.append("check: a tag naming no paper passes")
+    reader.write_text(text)
+    paperlib_call(root, f"p.set_paper_tags({first!r}, []); p.star({first!r}, False); p.delete_tag('carrel')")
+    if paperlib_call(root, "print(p.load_reader())").stdout.strip() != "{'starred': {}, 'tags': {}}":
+        problems.append(f"emptied: {reader.read_text()!r}")
+    return problems
+
+
 def yaml_list(path):
     import yaml
     return yaml.safe_load(path.read_text()) or []
@@ -291,6 +357,7 @@ def main():
         failures += report("reading.py", reading_problems(root), "scopes counted, notes marked to re-read and cleared")
         failures += report("note_fields", note_fields_problems(root), "type, family and evidence read from the note's head")
         failures += report("types", type_problems(root), "required, filled from the note, replaced by a reading")
+        failures += report("reader.yaml", marks_problems(root), "starred and tagged, listed, moved with a paper, checked")
         failures += report("remove-paper.py", remove_problems(root), "asks first, deletes the paper's files, records the skip")
     sys.exit(1 if failures else 0)
 

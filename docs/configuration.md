@@ -26,6 +26,7 @@ Relative paths are taken from the library root, and `~` is expanded. The environ
 | `CLAUDE.md` | `@AGENTS.md`, so that Claude Code reads it. |
 | `.claude/library-guide.md` | `paperlib build-index`, from the engine's [guide](../guide/library-guide.md) with your paths filled in. Commit it, so an agent without the engine still knows the conventions. |
 | `.claude/skills/` | `paperlib init`: symlinks to the engine's skills, ignored by git. |
+| `catalog/reader.yaml` | You, through carrel: the papers you starred to read and the tags you gather papers under, each tag with an optional line on what it is for. `paperlib move`, `rename` and `remove` keep its paths in step; agents only read it. |
 | `.vscode/settings.json` | `paperlib init`, once: the PDF viewer's root, and search settings that show the PDFs. |
 
 Run `paperlib init` again after updating the engine, or on a new machine. It only adds what is missing.

@@ -4,7 +4,7 @@
     ./scripts/remove-paper.py <paper.txt | arxiv-id-or-url | title words> ... [--reason "..."] [--yes]
 
 It first lists what it will delete: the paper's file (its text layer, or a web article's
-markdown), the PDF and notes/<Title>.md. It also lists
+markdown), the PDF and notes/<Title>.md; the reader's star and tags on it go too. It also lists
 what it leaves for a person to decide: the reader's own overview note, the reviews that
 link the paper and the other notes that name it. On a terminal it then asks; anywhere else
 it deletes only with --yes.
@@ -22,7 +22,7 @@ import subprocess
 import sys
 
 from paperlib import (
-    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, SCRIPTS_DIR, append_skipped,
+    LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, SCRIPTS_DIR, append_skipped, drop_marks,
     load_reviews, note_path, paper_index, paper_stem, papers_named,
     pdf_path_for, read_paper, review_links,
 )
@@ -100,6 +100,7 @@ def remove(p):
     for path in [p["paper"], p["pdf"], p["note"]]:
         if path:
             path.unlink()
+    drop_marks(p["paper"])
 
 
 def main(argv):

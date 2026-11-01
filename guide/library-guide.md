@@ -14,6 +14,7 @@ A research-paper library kept with agentic-paper-library: each paper as its PDF 
 | Topic tree (declared) | `{{catalog}}/topics.yaml`: every folder with its scope |
 | Papers deliberately not added | `{{catalog}}/skipped.yaml`: title, reason, date |
 | Papers waiting to be added | `{{inbox}}`, drained by `/add-paper inbox` |
+| {{reader}}'s stars and tags | `{{catalog}}/reader.yaml`: papers starred to read, and tags gathering papers for {{reader}}'s projects, set in carrel |
 | Agent memory per paper (committed) | `{{notes}}/<Title>.md`: digest, related papers, Q&A |
 | Literature review per area (committed) | `{{reviews}}/<topic path>.md`: narrative, findings, paper map, Q&A |
 | {{reader}}'s own note per paper | `{{overview_dir}}/<Title>.md`, written by the `overview` skill |
@@ -32,6 +33,7 @@ A paper's text and its PDF have the same topic path and filename stem.
 - **Notes written before 2026-10-26 were read from a markdown conversion**: where one says something is missing from the paper's text, look in the text layer before believing it.
 - **Prefer the local copy to the web.** Search the web only for work not in the library.
 - **Indexes are generated.** Never edit a `README.md` under `{{library}}/`. After adding, moving or removing a paper, or changing `{{catalog}}/`, run `paperlib build-index`, then `paperlib check`, which must pass.
+- **Stars, tags and highlights are {{reader}}'s own.** `paperlib starred`, `paperlib tags [<tag>]` and `paperlib highlights <paper>` read them: use them when {{reader}} names a tag or asks what they starred or highlighted. Never suggest, add or remove a star or a tag, and never write `{{catalog}}/reader.yaml`: a tag stands for a project only {{reader}} knows, and filing a paper means its folder.
 - **Don't re-propose skipped papers.** `paperlib lookup` flags those in `{{catalog}}/skipped.yaml` as `skipped earlier`. Record every new skip there, with the reason; if {{reader}} changes their mind, remove the entry first.
 - **Prefer a better tool to a workaround.** When a library or model would do a job better than paperlib does, propose it rather than hand-tuning heuristics, and compare candidates on real papers first.
 - **Start from the review, then check the paper.** For a question about an area, a comparison across papers, or "what exists on X", first read the review whose scope covers it: `{{reviews}}/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.

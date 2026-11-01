@@ -12,6 +12,9 @@ Also usable from the shell scripts:
     paperlib.py set-summary <paper> <summary>
     paperlib.py filename <title>
     paperlib.py set-type <paper> <type>
+    paperlib.py tags [<tag>]
+    paperlib.py starred
+    paperlib.py move-marks <old paper> <new paper>
     paperlib.py fetch <url> <out-file>
     paperlib.py shell-config
 
@@ -23,7 +26,9 @@ line. set-summary and set-type rewrite
 the paper's `summary:` or `type:` field in place; filename prints the filename
 stem for a title; fetch downloads a URL with fetch()'s retries, writing an empty
 file on 404 or repeated failure; shell-config prints the library's paths as
-shell assignments for config.sh, and fails outside a library.
+shell assignments for config.sh, and fails outside a library. tags lists the
+reader's tags (or one tag's papers) and starred the papers starred to read, from
+catalog/reader.yaml; move-marks keeps that file in step when a paper moves.
 """
 
 import datetime
@@ -102,6 +107,9 @@ CACHE_DIR = Path(os.environ.get("PAPERS_CACHE") or _path(CONFIG.get("cache", "~/
 CATALOG_DIR = _path(CONFIG.get("catalog", "catalog"), _BASE)
 TOPICS_FILE = CATALOG_DIR / "topics.yaml"
 SKIPPED_FILE = CATALOG_DIR / "skipped.yaml"
+# The reader's own marks: the papers starred to read, and tags gathering papers for a project.
+READER_FILE = CATALOG_DIR / "reader.yaml"
+TAG_NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
 TOPIC_PATH = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)*$")
 # Agent memory about papers: notes/<stem>.md, one per paper, keyed by the stem.
 NOTES_DIR = _path(CONFIG.get("notes", "notes"), _BASE)
@@ -655,6 +663,183 @@ def append_skipped(entries):
     SKIPPED_FILE.write_text(text, encoding="utf-8")
 
 
+_READER_HEADER = """\
+# {Reader}'s own marks: the papers starred to read, and tags gathering papers for a project.
+# Written by carrel as {reader} stars and tags papers; `paperlib move`, `rename` and `remove`
+# keep the paths in step. Agents read it only when asked, and never change it.
+"""
+
+
+def reader_key(paper):
+    """A paper's key in the reader's file: its path under LIBRARY_DIR. Raises ValueError for a
+    path that is not a paper there."""
+    path = Path(paper)
+    if not path.is_absolute():
+        # From the working folder when it names a paper there, else from LIBRARY_DIR.
+        here = Path.cwd() / path
+        inside = here.resolve().is_relative_to(LIBRARY_DIR.resolve())
+        path = here if inside else LIBRARY_DIR / path
+    path = Path(os.path.normpath(path))
+    if path.suffix in PAPER_SUFFIXES and path.name != "README.md":
+        # The same folder however it is reached: as configured, or with its links resolved.
+        for root, each in ((LIBRARY_DIR, path), (LIBRARY_DIR.resolve(), path.resolve())):
+            if each.is_relative_to(root):
+                # One Unicode form: a synced folder may hand back another.
+                return unicodedata.normalize("NFC", each.relative_to(root).as_posix())
+    raise ValueError(f"{paper} is not a paper under {LIBRARY_DIR}")
+
+
+def _nfc(text):
+    return unicodedata.normalize("NFC", str(text))
+
+
+def _date_text(value):
+    return value.isoformat() if hasattr(value, "isoformat") else str(value or "")
+
+
+def load_reader():
+    """The reader's marks: {"starred": {paper key: date}, "tags": {name: {"about": text,
+    "papers": {paper key: date}}}}, the keys as `reader_key` makes them and the dates as text
+    (the day each paper was starred or tagged)."""
+    try:
+        raw = yaml.safe_load(READER_FILE.read_text(encoding="utf-8")) or {}
+    except FileNotFoundError:
+        raw = {}
+    starred = {_nfc(k): _date_text(v) for k, v in (raw.get("starred") or {}).items()}
+    tags = {}
+    for name, tag in (raw.get("tags") or {}).items():
+        tag = tag or {}
+        tags[str(name)] = {
+            "about": " ".join(str(tag.get("about") or "").split()),
+            "papers": {_nfc(k): _date_text(v) for k, v in (tag.get("papers") or {}).items()},
+        }
+    return {"starred": starred, "tags": tags}
+
+
+def save_reader(marks):
+    """Writes the reader's marks, sorted, under the file's header, in one step. Written line by
+    line: YAML's own writer turns a key over 128 characters, a long title, into `? key`."""
+    def scalar(value):
+        return yaml.safe_dump(value, allow_unicode=True, width=10_000).removesuffix("\n...\n").strip()
+
+    def dated(papers, indent):
+        return "".join(f"{indent}{scalar(key)}: {day}\n" for key, day in sorted(papers.items()))
+
+    reader = str(CONFIG.get("reader") or "the reader")
+    text = _READER_HEADER.format(Reader=reader[:1].upper() + reader[1:], reader=reader)
+    if marks["starred"]:
+        text += "starred:\n" + dated(marks["starred"], "  ")
+    if marks["tags"]:
+        text += "tags:\n"
+        for name, tag in sorted(marks["tags"].items()):
+            text += f"  {name}:\n"
+            if tag["about"]:
+                text += f"    about: {scalar(tag['about'])}\n"
+            text += "    papers:\n" + dated(tag["papers"], "      ") if tag["papers"] else "    papers: {}\n"
+    READER_FILE.parent.mkdir(parents=True, exist_ok=True)
+    partial = READER_FILE.with_name(f".{READER_FILE.name}.{os.getpid()}.{threading.get_ident()}.tmp")
+    partial.write_text(text, encoding="utf-8")
+    os.replace(partial, READER_FILE)
+
+
+def tag_name(name):
+    """A tag's name as typed, made into one: lower case, words joined by hyphens. Raises
+    ValueError when nothing usable is left."""
+    made = re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore")
+                  .decode().lower()).strip("-")
+    if not TAG_NAME.match(made) or len(made) > 40:
+        raise ValueError(f"`{name}` cannot be a tag: use letters, digits and hyphens, at most 40")
+    return made
+
+
+def star(paper, on, today=None):
+    """Stars a paper to read (dated today, or kept from when it was starred), or takes the
+    star off. Returns the date it is starred, or None."""
+    key, marks = reader_key(paper), load_reader()
+    if on:
+        marks["starred"].setdefault(key, (today or datetime.date.today()).isoformat())
+    else:
+        marks["starred"].pop(key, None)
+    save_reader(marks)
+    return marks["starred"].get(key)
+
+
+def set_paper_tags(paper, names, today=None):
+    """Gives a paper exactly these tags, creating the ones that do not exist. A tag that loses
+    its last paper and has no description goes. Returns the paper's tags, sorted."""
+    key, marks = reader_key(paper), load_reader()
+    wanted = {tag_name(name) for name in names}
+    day = (today or datetime.date.today()).isoformat()
+    for name in wanted:
+        tag = marks["tags"].setdefault(name, {"about": "", "papers": {}})
+        tag["papers"].setdefault(key, day)
+    for name in list(marks["tags"]):
+        if name not in wanted:
+            _untag(marks, name, key)
+    save_reader(marks)
+    return sorted(wanted)
+
+
+def _untag(marks, name, key):
+    tag = marks["tags"][name]
+    tag["papers"].pop(key, None)
+    if not tag["papers"] and not tag["about"]:
+        del marks["tags"][name]
+
+
+def edit_tag(name, about=None, rename=None):
+    """Sets a tag's description (an empty one clears it), or renames it; renamed onto a tag
+    that exists, the two become one. Creates a tag given a description. Returns its name."""
+    name, marks = tag_name(name), load_reader()
+    tag = marks["tags"].setdefault(name, {"about": "", "papers": {}})
+    if about is not None:
+        tag["about"] = " ".join(str(about).split())
+    if rename is not None:
+        new = tag_name(rename)
+        if new != name:
+            del marks["tags"][name]
+            other = marks["tags"].setdefault(new, {"about": "", "papers": {}})
+            other["about"] = other["about"] or tag["about"]
+            for key, day in tag["papers"].items():
+                other["papers"][key] = min(day, other["papers"].get(key, day))
+            name, tag = new, other
+    if not tag["papers"] and not tag["about"]:
+        del marks["tags"][name]
+    save_reader(marks)
+    return name
+
+
+def delete_tag(name):
+    """Takes a tag off every paper, and its description with it."""
+    marks = load_reader()
+    if marks["tags"].pop(tag_name(name), None) is not None:
+        save_reader(marks)
+
+
+def move_marks(old, new):
+    """Keeps a paper's star and tags when it moves to `new` or is renamed."""
+    old, new, marks = reader_key(old), reader_key(new), load_reader()
+    changed = False
+    for papers in [marks["starred"]] + [tag["papers"] for tag in marks["tags"].values()]:
+        if old in papers:
+            papers[new] = papers.pop(old)
+            changed = True
+    if changed:
+        save_reader(marks)
+
+
+def drop_marks(paper):
+    """Takes a paper that leaves the library out of the reader's marks."""
+    key, marks = reader_key(paper), load_reader()
+    changed = marks["starred"].pop(key, None) is not None
+    for name in list(marks["tags"]):
+        if key in marks["tags"][name]["papers"]:
+            _untag(marks, name, key)
+            changed = True
+    if changed:
+        save_reader(marks)
+
+
 def note_path(paper):
     return NOTES_DIR / f"{paper_stem(paper)}.md"
 
@@ -923,6 +1108,34 @@ def arxiv_meta(arxiv_id, entry, source):
     }
 
 
+def _shown(path):
+    """A path as an agent in the library uses it: relative to the library root when inside it."""
+    path = Path(path)
+    return path.relative_to(LIBRARY_ROOT).as_posix() if path.is_relative_to(LIBRARY_ROOT) else str(path)
+
+
+def _print_tags(name=None):
+    """`paperlib tags`: every tag with its count and description; with a name, its papers."""
+    tags = load_reader()["tags"]
+    if name is None:
+        if not tags:
+            print("no tags")
+        for tag_, tag in sorted(tags.items()):
+            count = len(tag["papers"])
+            about = f"  {tag['about']}" if tag["about"] else ""
+            print(f"{tag_}  {count} paper{'s' if count != 1 else ''}{about}")
+        return 0
+    tag = tags.get(name)
+    if tag is None:
+        print(f"no tag `{name}` (paperlib tags lists them)", file=sys.stderr)
+        return 1
+    if tag["about"]:
+        print(tag["about"])
+    for key, day in sorted(tag["papers"].items(), key=lambda item: (item[1], item[0]), reverse=True):
+        print(f"{day}  {_shown(LIBRARY_DIR / key)}")
+    return 0
+
+
 def _main(argv):
     if len(argv) >= 5 and argv[1] == "frontmatter-arxiv":
         xml_path, arxiv_id, source = argv[2], argv[3], argv[4]
@@ -970,6 +1183,16 @@ def _main(argv):
             sys.exit(f"error: {path} has no frontmatter")
         meta["type"] = kind
         write_paper(path, meta, body)
+    elif len(argv) in (2, 3) and argv[1] == "tags":
+        sys.exit(_print_tags(argv[2] if len(argv) == 3 else None))
+    elif len(argv) == 2 and argv[1] == "starred":
+        starred = load_reader()["starred"]
+        if not starred:
+            print("no papers starred")
+        for key, day in sorted(starred.items(), key=lambda item: (item[1], item[0]), reverse=True):
+            print(f"{day}  {_shown(LIBRARY_DIR / key)}")
+    elif len(argv) == 4 and argv[1] == "move-marks":
+        move_marks(Path(argv[2]).resolve(), Path(argv[3]).resolve())
     elif len(argv) == 4 and argv[1] == "fetch":
         Path(argv[3]).write_bytes(fetch(argv[2]) or b"")
     elif len(argv) == 2 and argv[1] == "shell-config":

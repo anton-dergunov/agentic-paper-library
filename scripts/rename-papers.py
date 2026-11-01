@@ -5,7 +5,8 @@
 
 For every paper (or the ones given), the expected filename stem is
 title_to_filename(<frontmatter title>). When it differs, the paper's file, the PDF
-under PDF_ROOT and the notes/ memory file move to the new stem together. Run after
+under PDF_ROOT and the notes/ memory file move to the new stem together, and the reader's
+star and tags (catalog/reader.yaml) follow. Run after
 the filename rule changes; rebuild the indexes afterwards. The reader's own notes
 (overview_dir in the config) are not touched: the ones that exist are listed at the
 end.
@@ -15,7 +16,8 @@ import sys
 from pathlib import Path
 
 from paperlib import (
-    LIBRARY_DIR, NOTES_DIR, OVERVIEW_DIR, paper_index, paper_stem, pdf_path_for, read_paper, title_to_filename,
+    LIBRARY_DIR, NOTES_DIR, OVERVIEW_DIR, move_marks, paper_index, paper_stem, pdf_path_for, read_paper,
+    title_to_filename,
 )
 
 
@@ -30,6 +32,7 @@ def rename(paper, stem, dry_run):
         return f"{old}  ->  {stem}"
     pdf = pdf_path_for(paper)
     paper.rename(new_paper)  # a rename, not write-then-delete: safe when only the case changes
+    move_marks(paper, new_paper)
     if pdf.exists():
         pdf.rename(pdf_path_for(new_paper))
     note = NOTES_DIR / f"{old}.md"

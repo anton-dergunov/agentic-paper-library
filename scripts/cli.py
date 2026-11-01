@@ -42,6 +42,9 @@ COMMANDS = {
     "reading": ("reading.py", True, "what is left to read, area by area, and its cost: [<scope>]"),
     "reread": ("reading.py", True, "mark notes to be read again: <paper or stem> ... --reason \"...\" | --clear"),
     "locate": ("locate.py", True, "where a quote, table, figure or equation is printed, as links that mark it: <paper> [page:]<quote | table.N | figure.N | eq.N | table.N>quote> ..."),
+    "highlights": ("highlights.py", True, "the reader's highlights in a paper's PDF, with the words under them: <paper> [--json]"),
+    "tags": ("paperlib.py", True, "the reader's tags, or one tag's papers: [<tag>] (read-only: the reader tags papers in carrel)"),
+    "starred": ("paperlib.py", True, "the papers the reader starred to read, newest first (read-only)"),
     "read-view": ("read-view.py", True, "a paper's main text for reading, without the references: <paper.txt>"),
     "review-status": ("review-status.py", True, "literature-review coverage and links"),
     "review-refs": ("review-refs.py", True, "turn a review's paper links into reference-style links: [<scope>]"),
@@ -54,7 +57,8 @@ COMMANDS = {
     "filename": ("paperlib.py", False, "the filename stem for a title: <title>"),
 }
 # paperlib.py's own subcommands keep their name, as does a command a script serves beside its own.
-PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename", "reread", "embed", "meaning", "similar"}
+PAPERLIB_SUBCOMMANDS = {"set-summary", "set-type", "filename", "reread", "embed", "meaning", "similar", "tags",
+                        "starred"}
 
 
 def usage():
@@ -101,7 +105,8 @@ def main(argv):
     if name == "test":
         env = script_env()
         codes = [run([sys.executable, str(ENGINE / "tests" / name)], env)
-                 for name in ("test_text_layer.py", "test_locate.py", "test_meaning.py", "test_example_library.py")]
+                 for name in ("test_text_layer.py", "test_locate.py", "test_highlights.py", "test_meaning.py",
+                              "test_example_library.py")]
         return next((code for code in codes if code), 0)
     if name == "install-vscode":
         return install_vscode()
