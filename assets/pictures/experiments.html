@@ -1,10 +1,11 @@
 <!doctype html>
 <!--
-  Source of assets/pictures/experiments.png. Six rows, each from one write-up under experiments/:
-  reading-formats (two rows: tiers B and D, and tier F), web-articles, skill-models, reading-models and
+  Source of assets/pictures/experiments.png. Seven rows, each from one write-up under experiments/:
+  reading-formats (two rows: tiers B and D, and tier F), web-articles, skill-models, reading-models,
   review-usefulness (its second run, of 6 Oct 2026: the sums over the three questions a review
-  covers). The count of 10 is the number of rows in experiments/README.md, which also
-  gives the size of the author's library. Render with assets/pictures/render.sh experiments.
+  covers) and meaning-search (its status line: nDCG@10 on the 32 judged queries). The count of 16
+  is the number of rows in experiments/README.md, which also gives the size of the author's
+  library. Render with assets/pictures/render.sh experiments.
 -->
 <html lang="en">
 <head>
@@ -13,7 +14,7 @@
 <title>Design choices were measured</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  .t { flex: 1 1 auto; display: grid; grid-template-columns: 252px 1fr 236px; grid-template-rows: 26px repeat(6, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .t { flex: 1 1 auto; display: grid; grid-template-columns: 252px 1fr 236px; grid-template-rows: 26px repeat(7, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
   .t > div { padding: 0 14px; display: flex; flex-direction: column; justify-content: center; border-top: 1px solid var(--line); font-size: 11.6px; line-height: 1.36; min-width: 0; }
   .t > .th { border-top: 0; background: var(--panel); font: 700 10px Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); height: 26px; }
   .t .q { font-weight: 700; font-size: 13px; }
@@ -29,7 +30,7 @@
 <div class="frame">
   <div class="head big">
     <h1>Design choices were measured</h1>
-    <span class="sub">Each choice of format, converter, prompt and model was tested on real papers before it was adopted. Six of the 10 experiments:</span>
+    <span class="sub">Each choice of format, converter, prompt and model was tested on real papers before it was adopted. Seven of the 16 experiments:</span>
   </div>
 
   <div class="t">
@@ -58,9 +59,13 @@
     <div class="q">Answer from the review, or from the papers?<span class="exp">(experiments/review-usefulness)</span></div>
     <div class="m"><span>Starting from the review, then checking the paper: <b>4.7</b> wrong statements over three questions and <b>22% fewer tokens</b>. Without reviews: 6.3 wrong; without reviews or notes: 3.3. The answers were no more complete.</span></div>
     <div class="d">Start from the review, and check the paper before stating a number</div>
+
+    <div class="q">Which encoder finds the papers a reader describes?<span class="exp">(experiments/meaning-search)</span></div>
+    <div class="m"><span>2,275 papers, 32 queries worded as a reader would, the pooled top 10s graded. nDCG@10: <code>Qwen3-Embedding-0.6B</code> <b>0.752</b>, keyword search (BM25) <b>0.504</b>. The abstract carries the meaning; the one-line summary alone does not.</span></div>
+    <div class="d"><span><code>Qwen3-Embedding-0.6B</code>, on title, summary and abstract</span></div>
   </div>
 
-  <div class="foot"><b>10 experiments</b> are in the repository (<span class="exp" style="font-size: 11px">experiments/</span>), each with its method, scripts and results. Used by the author on a library of about 2,300 papers.</div>
+  <div class="foot"><b>16 experiments</b> are in the repository (<span class="exp" style="font-size: 11px">experiments/</span>), each with its method, scripts and results. Used by the author on a library of about 2,300 papers.</div>
 </div>
 </body>
 </html>
