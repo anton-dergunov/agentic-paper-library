@@ -30,7 +30,9 @@ It began on 29 September 2026 with 240 papers from a project on LLM memory. With
 
 ## Reading with the agent
 
-Open the library in VS Code with the PDF on one side and Claude Code on the other, or read on a tablet with the session on Remote Control. Ask as you read; the answers cite the page and the table, and in VS Code the citation opens the PDF there. [Working in VS Code](docs/vscode.md) has the setup.
+Open the library in VS Code with the PDF on one side and Claude Code on the other. Ask as you read; the answers cite the page and the table, and with [PDF Viewer for VS Code](https://github.com/anton-dergunov/vscode-pdf-viewer) the citation opens the PDF there. [Working in VS Code](docs/vscode.md) has the setup.
+
+Away from the desk, [carrel](https://github.com/anton-dergunov/carrel) does the same on a tablet or in a Mac app: the paper, the chat beside it, citations that turn the page, and the whole library around them (its areas, reviews, a map of the papers by meaning, and search by text and by meaning). The session still runs here, in the library on your computer.
 
 ## Skills
 

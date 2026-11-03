@@ -242,7 +242,7 @@ Adding a paper is also how you try one: add it, read a little with the agent, an
 2. **While reading:** open the PDF, and ask in the Claude Code panel. For example: "explain eq. 4 without the notation", "how is this different from DPO", "what do my papers say about temporal knowledge graphs". Answers cite the page and the table, and in VS Code the citation opens the PDF there.
 3. **What is kept:** when a session settles something worth keeping, the agent adds it to the Q&A of `notes/<Title>.md`. Later sessions read that note before the paper.
 
-**On a tablet:** read the PDF from the synced folder in any PDF app, and reach the session with Remote Control: run `claude remote-control` in the library on your computer and open it from the Claude app.
+**On a tablet:** [carrel](https://github.com/anton-dergunov/carrel) shows the library, a paper and its Claude Code chat side by side, with citations that turn the page; the session runs in the library on your computer. Without it, read the PDF from the synced folder in any PDF app, and reach the session with Remote Control: run `claude remote-control` in the library on your computer and open it from the Claude app.
 
 ## 10. Write a literature review
 
