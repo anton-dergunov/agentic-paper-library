@@ -5,3 +5,4 @@
 {"encoder": "specter", "model": "sentence-transformers/allenai-specter", "revision": "2c68eeca61259b2dd70c3f2628219f925df7031a", "papers": 2275, "dims": 768, "max_tokens": 512, "query_ms": 17.5, "seconds_tsa": 238.3, "seconds_ts": 34.0, "seconds_ta": 216.5, "cpu_seconds_a_paper": 0.133, "cpu_query_ms": 27.9, "peak_rss_mb": 921}
 {"encoder": "qwen3", "model": "Qwen/Qwen3-Embedding-0.6B", "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3", "papers": 2275, "dims": 1024, "max_tokens": 1024, "query_ms": 79.0, "seconds_tsa": 1534.6, "seconds_ts": 192.0, "seconds_ta": 1460.0, "cpu_seconds_a_paper": 16.918, "cpu_query_ms": 466.5, "peak_rss_mb": 1433}
 {"encoder": "bge-base", "variant": "body", "chunks": 18184, "seconds_body": 1946.9}
+{"encoder": "qwen3", "variant": "body", "chunks": 18200, "seconds_body": 11380.6, "slices_embedded": 19, "slices": 19}

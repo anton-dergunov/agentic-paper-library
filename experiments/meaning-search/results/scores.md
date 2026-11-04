@@ -1,6 +1,6 @@
 # Scores
 
-2275 papers; 88 scope queries (leaf topics with 5 papers or more); 32 judged queries, 2036 grades. A judged query's pool holds 66 papers (median), of which 18 are graded 1 or 2 and 9 graded 2; 30 queries have more than 10 relevant papers, where R@10 cannot reach 1.
+2275 papers; 88 scope queries (leaf topics with 5 papers or more); 32 judged queries, 2065 grades. A judged query's pool holds 67 papers (median), of which 19 are graded 1 or 2 and 9 graded 2; 30 queries have more than 10 relevant papers, where R@10 cannot reach 1.
 
 ## Judged queries
 
@@ -8,33 +8,35 @@ Relevant for P, R and MAP: graded 1 or 2. R@10 (2): of the papers graded 2. MAP@
 
 | Run | nDCG@10 | P@10 | R@10 | R@10 (2) | MAP@10 | Ungraded in top 10 |
 |---|--:|--:|--:|--:|--:|--:|
-| qwen3 · tsa | 0.752 | 0.716 | 0.388 | 0.642 | 0.666 | 0% |
-| qwen3 · ta | 0.739 | 0.706 | 0.382 | 0.631 | 0.652 | 0% |
-| qwen3 · ts | 0.675 | 0.653 | 0.361 | 0.578 | 0.572 | 0% |
-| bge-base · body | 0.646 | 0.688 | 0.370 | 0.547 | 0.602 | 0% |
-| bge-base · ta | 0.628 | 0.619 | 0.342 | 0.514 | 0.551 | 0% |
-| bge-small · ta | 0.622 | 0.603 | 0.322 | 0.510 | 0.529 | 0% |
-| bge-base · tsa | 0.619 | 0.597 | 0.319 | 0.501 | 0.544 | 0% |
-| bge-small · tsa | 0.611 | 0.594 | 0.319 | 0.486 | 0.514 | 0% |
-| minilm · tsa | 0.574 | 0.591 | 0.326 | 0.444 | 0.496 | 0% |
-| minilm · ta | 0.568 | 0.575 | 0.315 | 0.449 | 0.483 | 0% |
-| e5-small · tsa | 0.542 | 0.550 | 0.295 | 0.464 | 0.457 | 0% |
-| e5-small · ta | 0.526 | 0.537 | 0.283 | 0.415 | 0.437 | 0% |
-| bge-base · ts | 0.510 | 0.531 | 0.288 | 0.424 | 0.438 | 0% |
-| bm25 · tsa | 0.504 | 0.512 | 0.281 | 0.446 | 0.430 | 0% |
-| bge-small · ts | 0.503 | 0.531 | 0.287 | 0.398 | 0.432 | 0% |
-| bm25 · ta | 0.492 | 0.494 | 0.265 | 0.424 | 0.409 | 0% |
-| minilm · ts | 0.486 | 0.522 | 0.291 | 0.370 | 0.426 | 0% |
-| e5-small · ts | 0.442 | 0.481 | 0.246 | 0.300 | 0.394 | 0% |
-| specter · tsa | 0.373 | 0.387 | 0.211 | 0.275 | 0.303 | 0% |
-| specter · ts | 0.370 | 0.391 | 0.227 | 0.296 | 0.280 | 0% |
-| specter · ta | 0.366 | 0.394 | 0.229 | 0.276 | 0.303 | 0% |
-| bm25 · ts | 0.337 | 0.347 | 0.181 | 0.272 | 0.252 | 0% |
+| qwen3 · body | 0.753 | 0.759 | 0.405 | 0.650 | 0.711 | 0% |
+| qwen3 · tsa | 0.752 | 0.716 | 0.382 | 0.641 | 0.666 | 0% |
+| qwen3 · ta | 0.739 | 0.706 | 0.377 | 0.630 | 0.652 | 0% |
+| qwen3 · ts | 0.675 | 0.653 | 0.356 | 0.577 | 0.572 | 0% |
+| bge-base · body | 0.646 | 0.688 | 0.365 | 0.546 | 0.602 | 0% |
+| bge-base · ta | 0.628 | 0.619 | 0.337 | 0.513 | 0.551 | 0% |
+| bge-small · ta | 0.622 | 0.603 | 0.318 | 0.509 | 0.529 | 0% |
+| bge-base · tsa | 0.619 | 0.597 | 0.314 | 0.500 | 0.544 | 0% |
+| bge-small · tsa | 0.611 | 0.594 | 0.314 | 0.485 | 0.514 | 0% |
+| minilm · tsa | 0.574 | 0.591 | 0.322 | 0.443 | 0.496 | 0% |
+| minilm · ta | 0.568 | 0.575 | 0.311 | 0.448 | 0.483 | 0% |
+| e5-small · tsa | 0.542 | 0.550 | 0.291 | 0.463 | 0.457 | 0% |
+| e5-small · ta | 0.526 | 0.537 | 0.279 | 0.414 | 0.437 | 0% |
+| bge-base · ts | 0.510 | 0.531 | 0.284 | 0.424 | 0.438 | 0% |
+| bm25 · tsa | 0.504 | 0.512 | 0.277 | 0.445 | 0.430 | 0% |
+| bge-small · ts | 0.503 | 0.531 | 0.282 | 0.397 | 0.432 | 0% |
+| bm25 · ta | 0.492 | 0.494 | 0.261 | 0.423 | 0.409 | 0% |
+| minilm · ts | 0.486 | 0.522 | 0.286 | 0.370 | 0.426 | 0% |
+| e5-small · ts | 0.442 | 0.481 | 0.242 | 0.299 | 0.394 | 0% |
+| specter · tsa | 0.373 | 0.387 | 0.209 | 0.275 | 0.303 | 0% |
+| specter · ts | 0.370 | 0.391 | 0.224 | 0.296 | 0.280 | 0% |
+| specter · ta | 0.366 | 0.394 | 0.227 | 0.275 | 0.303 | 0% |
+| bm25 · ts | 0.337 | 0.347 | 0.179 | 0.271 | 0.252 | 0% |
 
 ## Topics
 
 | Run | Topic@10 (folder) | Topic@10 (area) | Scope R-prec | Scope nDCG@20 |
 |---|--:|--:|--:|--:|
+| qwen3 · body | 0.499 | 0.744 | 0.564 | 0.699 |
 | qwen3 · tsa | 0.499 | 0.744 | 0.584 | 0.720 |
 | qwen3 · ta | 0.489 | 0.737 | 0.573 | 0.716 |
 | qwen3 · ts | 0.418 | 0.682 | 0.547 | 0.684 |
@@ -76,6 +78,7 @@ A `body` run's topic agreement is its `tsa` text's: its neighbours are found fro
 
 | Run | Mean difference | 95% interval | Queries better / worse |
 |---|--:|--:|--:|
+| qwen3 · body | +0.001 | -0.031 to +0.032 | 16 / 13 |
 | qwen3 · ta | -0.013 | -0.030 to +0.005 | 11 / 19 |
 | qwen3 · ts | -0.076 | -0.113 to -0.039 | 6 / 24 |
 | bge-base · body | -0.106 | -0.170 to -0.042 | 10 / 22 |
@@ -100,37 +103,37 @@ A `body` run's topic agreement is its `tsa` text's: its neighbours are found fro
 
 ## Judged nDCG@10 by query (title, summary and abstract)
 
-| Query | qwen3 | bge-base | bge-small | minilm | e5-small | bm25 | specter |
-|---|--:|--:|--:|--:|--:|--:|--:|
-| q01 LLM judges preferring answers written by their own model | 0.61 | 0.42 | 0.62 | 0.38 | 0.19 | 0.21 | 0.18 |
-| q02 an assistant that remembers a user across many conversations | 1.00 | 1.00 | 0.96 | 1.00 | 0.87 | 0.35 | 0.25 |
-| q03 does a language model's stated confidence match how often it is right | 0.91 | 0.93 | 0.78 | 0.87 | 0.56 | 0.45 | 0.21 |
-| q04 correcting for users clicking the top results more when training a ranker | 1.00 | 0.73 | 0.86 | 1.00 | 0.53 | 0.57 | 0.68 |
-| q05 using data from before an experiment to make A/B tests more sensitive | 0.81 | 0.61 | 0.37 | 0.29 | 0.56 | 0.08 | 0.00 |
-| q06 making attention cheap enough for very long documents | 0.72 | 0.26 | 0.45 | 0.34 | 0.18 | 0.44 | 0.07 |
-| q07 training models to reason with rewards from answers that can be checked | 0.63 | 0.39 | 0.43 | 0.23 | 0.79 | 0.29 | 0.50 |
-| q08 language models that call external tools and APIs | 0.66 | 0.60 | 0.63 | 0.50 | 0.62 | 0.74 | 0.27 |
-| q09 benchmark questions leaking into training data and inflating scores | 0.76 | 0.61 | 0.77 | 0.55 | 0.24 | 0.40 | 0.41 |
-| q10 models telling users what they want to hear instead of the truth | 0.37 | 0.00 | 0.00 | 0.10 | 0.19 | 0.22 | 0.35 |
-| q11 large language models as recommender systems | 0.89 | 0.84 | 0.96 | 0.94 | 0.75 | 0.56 | 0.70 |
-| q12 serving many LLM requests at once on GPUs with high throughput | 0.70 | 0.78 | 0.75 | 0.57 | 0.81 | 0.96 | 0.49 |
-| q13 simulating users to evaluate a conversational system | 0.96 | 0.69 | 0.86 | 0.77 | 0.84 | 0.64 | 0.76 |
-| q14 finding mislabelled examples in a training set | 0.67 | 0.57 | 0.57 | 0.62 | 0.55 | 0.22 | 0.74 |
-| q15 merging the result lists of several search systems into one ranking | 0.77 | 0.77 | 0.36 | 0.31 | 0.32 | 0.30 | 0.66 |
-| q16 long-term effects of a product change that a short experiment misses | 0.80 | 0.87 | 0.69 | 0.63 | 0.68 | 0.90 | 0.55 |
-| q17 getting a model to reveal text it memorized during training | 0.62 | 0.29 | 0.29 | 0.44 | 0.88 | 0.96 | 0.36 |
-| q18 sentence embeddings for semantic similarity | 0.80 | 0.75 | 0.96 | 0.81 | 0.88 | 0.95 | 0.62 |
-| q19 shrinking a prompt to save tokens without losing what matters | 0.75 | 0.69 | 0.52 | 0.44 | 0.30 | 0.40 | 0.00 |
-| q20 sending each query to a cheap or an expensive model depending on difficulty | 0.68 | 0.73 | 0.58 | 0.75 | 0.33 | 0.16 | 0.00 |
-| q21 explaining why a model made one particular prediction | 0.64 | 0.87 | 0.72 | 0.93 | 0.39 | 0.55 | 0.16 |
-| q22 finding interpretable features inside a network with sparse autoencoders | 0.92 | 0.76 | 0.83 | 0.85 | 0.79 | 0.90 | 0.45 |
-| q23 discovering the themes of a large collection of documents | 0.70 | 0.43 | 0.37 | 0.37 | 0.50 | 0.38 | 0.29 |
-| q24 published machine learning results that do not hold up when rerun | 0.57 | 0.66 | 0.59 | 0.44 | 0.23 | 0.18 | 0.11 |
-| q25 how AI assistants change the productivity of workers | 0.86 | 0.97 | 0.90 | 0.85 | 0.89 | 0.90 | 0.79 |
-| q26 when gradient boosted trees beat neural networks on tables of data | 0.88 | 0.79 | 0.51 | 0.78 | 0.74 | 0.57 | 0.13 |
-| q27 retrieving passages with learned dense vectors for open-domain question answering | 0.85 | 0.72 | 0.69 | 0.62 | 0.81 | 0.79 | 0.77 |
-| q28 inferring a person's personality or preferences from what they write | 0.74 | 0.60 | 0.58 | 0.55 | 0.71 | 0.49 | 0.22 |
-| q29 knowledge graphs combined with retrieval-augmented generation | 0.86 | 0.53 | 0.74 | 0.56 | 0.74 | 0.73 | 0.57 |
-| q30 how much data and how many parameters to use for a fixed compute budget | 0.71 | 0.15 | 0.33 | 0.18 | 0.22 | 0.75 | 0.05 |
-| q31 whether people trust and follow advice from an algorithm | 0.46 | 0.29 | 0.24 | 0.15 | 0.06 | 0.04 | 0.04 |
-| q32 telling whether searchers were satisfied without asking them | 0.76 | 0.52 | 0.68 | 0.54 | 0.16 | 0.06 | 0.56 |
+| Query | bge-base | bge-small | minilm | e5-small | bm25 | specter |
+|---|--:|--:|--:|--:|--:|--:|
+| q01 LLM judges preferring answers written by their own model | 0.42 | 0.62 | 0.38 | 0.19 | 0.21 | 0.18 |
+| q02 an assistant that remembers a user across many conversations | 1.00 | 0.96 | 1.00 | 0.87 | 0.35 | 0.25 |
+| q03 does a language model's stated confidence match how often it is right | 0.93 | 0.78 | 0.87 | 0.56 | 0.45 | 0.21 |
+| q04 correcting for users clicking the top results more when training a ranker | 0.73 | 0.86 | 1.00 | 0.53 | 0.57 | 0.68 |
+| q05 using data from before an experiment to make A/B tests more sensitive | 0.61 | 0.37 | 0.29 | 0.56 | 0.08 | 0.00 |
+| q06 making attention cheap enough for very long documents | 0.26 | 0.45 | 0.34 | 0.18 | 0.44 | 0.07 |
+| q07 training models to reason with rewards from answers that can be checked | 0.39 | 0.43 | 0.23 | 0.79 | 0.29 | 0.50 |
+| q08 language models that call external tools and APIs | 0.60 | 0.63 | 0.50 | 0.62 | 0.74 | 0.27 |
+| q09 benchmark questions leaking into training data and inflating scores | 0.61 | 0.77 | 0.55 | 0.24 | 0.40 | 0.41 |
+| q10 models telling users what they want to hear instead of the truth | 0.00 | 0.00 | 0.10 | 0.19 | 0.22 | 0.35 |
+| q11 large language models as recommender systems | 0.84 | 0.96 | 0.94 | 0.75 | 0.56 | 0.70 |
+| q12 serving many LLM requests at once on GPUs with high throughput | 0.78 | 0.75 | 0.57 | 0.81 | 0.96 | 0.49 |
+| q13 simulating users to evaluate a conversational system | 0.69 | 0.86 | 0.77 | 0.84 | 0.64 | 0.76 |
+| q14 finding mislabelled examples in a training set | 0.57 | 0.57 | 0.62 | 0.55 | 0.22 | 0.74 |
+| q15 merging the result lists of several search systems into one ranking | 0.77 | 0.36 | 0.31 | 0.32 | 0.30 | 0.66 |
+| q16 long-term effects of a product change that a short experiment misses | 0.87 | 0.69 | 0.63 | 0.68 | 0.90 | 0.55 |
+| q17 getting a model to reveal text it memorized during training | 0.29 | 0.29 | 0.44 | 0.88 | 0.96 | 0.36 |
+| q18 sentence embeddings for semantic similarity | 0.75 | 0.96 | 0.81 | 0.88 | 0.95 | 0.62 |
+| q19 shrinking a prompt to save tokens without losing what matters | 0.69 | 0.52 | 0.44 | 0.30 | 0.40 | 0.00 |
+| q20 sending each query to a cheap or an expensive model depending on difficulty | 0.73 | 0.58 | 0.75 | 0.33 | 0.16 | 0.00 |
+| q21 explaining why a model made one particular prediction | 0.87 | 0.72 | 0.93 | 0.39 | 0.55 | 0.16 |
+| q22 finding interpretable features inside a network with sparse autoencoders | 0.76 | 0.83 | 0.85 | 0.79 | 0.90 | 0.45 |
+| q23 discovering the themes of a large collection of documents | 0.43 | 0.37 | 0.37 | 0.50 | 0.38 | 0.29 |
+| q24 published machine learning results that do not hold up when rerun | 0.66 | 0.59 | 0.44 | 0.23 | 0.18 | 0.11 |
+| q25 how AI assistants change the productivity of workers | 0.97 | 0.90 | 0.85 | 0.89 | 0.90 | 0.79 |
+| q26 when gradient boosted trees beat neural networks on tables of data | 0.79 | 0.51 | 0.78 | 0.74 | 0.57 | 0.13 |
+| q27 retrieving passages with learned dense vectors for open-domain question answering | 0.72 | 0.69 | 0.62 | 0.81 | 0.79 | 0.77 |
+| q28 inferring a person's personality or preferences from what they write | 0.60 | 0.58 | 0.55 | 0.71 | 0.49 | 0.22 |
+| q29 knowledge graphs combined with retrieval-augmented generation | 0.53 | 0.74 | 0.56 | 0.74 | 0.73 | 0.57 |
+| q30 how much data and how many parameters to use for a fixed compute budget | 0.15 | 0.33 | 0.18 | 0.22 | 0.75 | 0.05 |
+| q31 whether people trust and follow advice from an algorithm | 0.29 | 0.24 | 0.15 | 0.06 | 0.04 | 0.04 |
+| q32 telling whether searchers were satisfied without asking them | 0.52 | 0.68 | 0.54 | 0.16 | 0.06 | 0.56 |

@@ -362,6 +362,11 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
   Sonnet: nDCG@10 0.752, against 0.628 for the best small encoder and 0.504 for BM25 over the
   same text ([experiments/meaning-search](../experiments/meaning-search/README.md)). carrel
   serves the same search on the tablet.
+  - **The body is not embedded (2026-11-04).** Adding the opening 2,000 words of each paper,
+    in eight chunks, left Qwen3's nDCG@10 where it was (0.753 against 0.752, 95% interval for
+    the difference −0.031 to +0.032). The relevant papers it added to the top 10s were on
+    related aspects, not on the topic itself, and it would cost seven times the embedding:
+    about 3 hours for the library and 75 MB more in carrel's server.
 - **The reader's stars, tags and highlights (2026-11-01).** A star marks a paper to read
   later; a tag gathers papers for one of the reader's projects, across folders, with an optional
   line on what it is for. Both live in `catalog/reader.yaml`, not in the papers' frontmatter:

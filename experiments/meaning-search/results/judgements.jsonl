@@ -2034,3 +2034,32 @@
 {"id": "q32", "paper": "llm/personalization/benchmarks/LaMP-QA. A Benchmark for Personalized Long-form Question Answering", "grade": 0, "model": "sonnet"}
 {"id": "q32", "paper": "experimentation-and-metrics/metric-design/Focus on the Long-Term. It's better for Users and Business", "grade": 1, "model": "sonnet"}
 {"id": "q32", "paper": "llm/personalization/methods/Cold-Start Personalization via Training-Free Priors from Structured World Models", "grade": 0, "model": "sonnet"}
+{"id": "q01", "paper": "llm/prompting-and-in-context/Towards Spec Learning. Inference-Time Alignment from Preference Pairs", "grade": 0, "model": "sonnet", "usd": 0.0035464999999999997}
+{"id": "q06", "paper": "llm/foundation-models/DeepSeek-V3.2. Pushing the Frontier of Open Large Language Models", "grade": 1, "model": "sonnet", "usd": 0.0037015}
+{"id": "q08", "paper": "llm/pretraining/Best Practices and Lessons Learned on Synthetic Data", "grade": 0, "model": "sonnet", "usd": 0.005684}
+{"id": "q08", "paper": "llm/agents/Search-R1. Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning", "grade": 2, "model": "sonnet"}
+{"id": "q08", "paper": "llm/post-training/rl-for-reasoning/Cognitive Behaviors that Enable Self-Improving Reasoners, or, Four Habits of Highly Effective STaRs", "grade": 0, "model": "sonnet"}
+{"id": "q09", "paper": "llm/evaluation/benchmarks/ARC-AGI-2. A New Challenge for Frontier AI Reasoning Systems", "grade": 0, "model": "sonnet", "usd": 0.006216500000000001}
+{"id": "q09", "paper": "llm/behaviour/Auditing language models for hidden objectives", "grade": 0, "model": "sonnet"}
+{"id": "q09", "paper": "llm/reasoning/Inverse Scaling in Test-Time Compute", "grade": 0, "model": "sonnet"}
+{"id": "q10", "paper": "search-and-ranking/click-models-and-unbiased-ltr/An Experimental Comparison of Click Position-Bias Models", "grade": 0, "model": "sonnet", "usd": 0.0051265}
+{"id": "q10", "paper": "llm/evaluation/methods/A Survey on LLM-based Conversational User Simulation", "grade": 0, "model": "sonnet"}
+{"id": "q10", "paper": "recommender-systems/evaluation/Effects of Position Bias on Click-Based Recommender Evaluation", "grade": 0, "model": "sonnet"}
+{"id": "q14", "paper": "deep-learning/theory/Understanding deep learning requires rethinking generalization", "grade": 1, "model": "sonnet", "usd": 0.0035965}
+{"id": "q15", "paper": "search-and-ranking/dense-retrieval/Embedding based retrieval for long tail search queries in ecommerce", "grade": 0, "model": "sonnet", "usd": 0.0034865}
+{"id": "q16", "paper": "experimentation-and-metrics/ab-testing/Trustworthy online controlled experiments. five puzzling outcomes explained", "grade": 1, "model": "sonnet", "usd": 0.0034715}
+{"id": "q18", "paper": "search-and-ranking/search-systems/Improving Cloud Storage Search with User Activity", "grade": 1, "model": "sonnet", "usd": 0.0033415000000000003}
+{"id": "q19", "paper": "llm/safety-and-privacy/Ignore This Title and HackAPrompt. Exposing Systemic Vulnerabilities of LLMs through a Global Scale", "grade": 0, "model": "sonnet", "usd": 0.0046165}
+{"id": "q19", "paper": "llm/context/Recursive Language Models", "grade": 1, "model": "sonnet"}
+{"id": "q20", "paper": "llm/routing/Prompt-to-Leaderboard", "grade": 1, "model": "sonnet", "usd": 0.004929}
+{"id": "q20", "paper": "ml-systems/distributed-training/MegaScale-MoE. Large-Scale Communication-Efficient Training of Mixture-of-Experts Models in", "grade": 0, "model": "sonnet"}
+{"id": "q21", "paper": "llm/uncertainty-and-hallucination/Semantic Uncertainty. Linguistic Invariances for Uncertainty Estimation in Natural Language", "grade": 0, "model": "sonnet", "usd": 0.003699}
+{"id": "q23", "paper": "llm/pretraining/OLMoTrace. Tracing Language Model Outputs Back to Trillions of Training Tokens", "grade": 0, "model": "sonnet", "usd": 0.0034315}
+{"id": "q24", "paper": "research-practice/CORE-Bench. Fostering the Credibility of Published Research Through a Computational Reproducibility", "grade": 1, "model": "sonnet", "usd": 0.0035365}
+{"id": "q28", "paper": "llm/post-training/data/Scaling Synthetic Data Creation with 1,000,000,000 Personas", "grade": 0, "model": "sonnet", "usd": 0.004608999999999999}
+{"id": "q28", "paper": "llm/personalization/benchmarks/AlpsBench. An LLM Personalization Benchmark for Real-Dialogue Memorization and Preference Alignment", "grade": 1, "model": "sonnet"}
+{"id": "q30", "paper": "deep-learning/architectures/Rethinking the Inception Architecture for Computer Vision", "grade": 0, "model": "sonnet", "usd": 0.0043765}
+{"id": "q30", "paper": "vision-and-multimodal/vision-language/A Practitioner's Guide to Continual Multimodal Pretraining", "grade": 1, "model": "sonnet"}
+{"id": "q31", "paper": "trustworthy-ml/fairness-and-bias/A Survey on Bias and Fairness in Machine Learning", "grade": 0, "model": "sonnet", "usd": 0.004549}
+{"id": "q31", "paper": "experimentation-and-metrics/metric-design/Evaluating for the long term. Learnings from industry", "grade": 0, "model": "sonnet"}
+{"id": "q32", "paper": "search-and-ranking/evaluation/Search Snippet Evaluation at Yandex. Lessons Learned and Future Directions", "grade": 1, "model": "sonnet", "usd": 0.0033789999999999996}

@@ -44,7 +44,9 @@ def scores(run, queries):
     if variant == "body":
         best = qs @ vectors(encoder, "tsa").T
         owner = np.load(CACHE / encoder / "body-owner.npy")
-        sims = qs @ vectors(encoder, "body").T
+        sims = qs @ np.load(CACHE / encoder / "body.npy").T
+        if len(owner) != sims.shape[1] or owner.max() >= best.shape[1]:
+            raise SystemExit(f"{encoder} body: its chunks are not on the corpus's papers; run body.py again")
         for i in range(len(queries)):
             np.maximum.at(best[i], owner, sims[i])
         return best

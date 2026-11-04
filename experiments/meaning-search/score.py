@@ -8,9 +8,9 @@
   as gold: R-precision and nDCG@20.
 - Judged queries: nDCG@10 (gains 2^grade - 1, the ideal from every grade the query has);
   P@10, R@10 and MAP@10 with grade 1 or 2 as relevant, and R@10 of the grade-2 papers; the
-  share of a run's top 10 left ungraded (counted as not relevant). Each run
-  is compared with the best one query by query: the mean difference in nDCG@10 and its 95%
-  interval from a paired bootstrap over the queries (10,000 resamples, fixed seed).
+  share of a run's top 10 left ungraded (counted as not relevant). Each run is compared with
+  the best run of one text a paper (not `body`) query by query: the mean difference in nDCG@10
+  and its 95% interval from a paired bootstrap over the queries (10,000 resamples, fixed seed).
 """
 import json
 import math
@@ -154,14 +154,14 @@ def main(argv):
     for name, c in cost.items():
         out.append(f"| {name} | `{c['model']}` | `{(c.get('revision') or '')[:10]}` | {c['dims']} | {c['max_tokens']} | "
                    f"{c.get('seconds_tsa')} | {c.get('query_ms')} | {c.get('cpu_seconds_a_paper')} | {c.get('cpu_query_ms')} | {c.get('peak_rss_mb')} |")
-    ranked = [r[0] for r in ranked_rows]
-    best = ranked[0]
+    best = next(r[0] for r in ranked_rows if not r[0].endswith("· body"))  # one text a paper, as shipped
+    ranked = [r[0] for r in ranked_rows if r[0] != best]
     rng = np.random.default_rng(0)
     ids = [q["id"] for q in queries]
     picks = rng.integers(0, len(ids), size=(10_000, len(ids)))
     out += ["", f"## Paired against the best run, {best} (judged nDCG@10)", "",
             "| Run | Mean difference | 95% interval | Queries better / worse |", "|---|--:|--:|--:|"]
-    for name in ranked[1:]:
+    for name in ranked:
         diff = np.array([per_query[name][i] - per_query[best][i] for i in ids])
         means = diff[picks].mean(axis=1)
         low, high = np.percentile(means, [2.5, 97.5])

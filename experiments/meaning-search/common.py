@@ -32,12 +32,30 @@ VARIANTS = ("tsa", "ts", "ta")
 HEAD_BYTES = 16384  # the abstract is near the start; abstract_from_body looks at 8,000 characters
 
 
+CORPUS = RESULTS / "papers.txt"  # the papers measured (31 Oct 2026); papers added later are left out
+
+
+_PAPERS = []
+
+
 def papers():
-    """[(paper file, its topic, its frontmatter)], sorted by path, for every paper in the library."""
-    rows = []
-    for path, meta in sorted(paperlib.paper_index().items()):
-        rows.append((path, path.parent.relative_to(paperlib.LIBRARY_DIR).as_posix(), meta))
-    return rows
+    """[(paper file, its topic, its frontmatter)], sorted by path: the papers of CORPUS, or every
+    paper in the library when there is none. Every cached matrix has a row for each, in this order."""
+    if not _PAPERS:
+        _PAPERS.extend(_papers())
+    return list(_PAPERS)
+
+
+def _papers():
+    index = sorted(paperlib.paper_index().items())
+    if CORPUS.exists():
+        wanted = CORPUS.read_text(encoding="utf-8").split("\n")
+        wanted = {w for w in wanted if w}
+        index = [(p, m) for p, m in index if relative(p) in wanted]
+        if len(index) != len(wanted):
+            missing = wanted - {relative(p) for p, _ in index}
+            sys.exit(f"{len(missing)} papers of {CORPUS.name} are not in the library, e.g. {sorted(missing)[0]}")
+    return [(path, path.parent.relative_to(paperlib.LIBRARY_DIR).as_posix(), meta) for path, meta in index]
 
 
 def relative(paper):
@@ -105,7 +123,10 @@ def scope_queries(rows, least=5):
 def vectors(encoder, variant):
     """The papers' matrix for an encoder and variant, rows in papers()' order."""
     import numpy as np
-    return np.load(CACHE / encoder / f"{variant}.npy")
+    matrix = np.load(CACHE / encoder / f"{variant}.npy")
+    if len(matrix) != len(papers()):
+        sys.exit(f"{encoder} {variant}: embedded on {len(matrix)} papers, the corpus has {len(papers())}")
+    return matrix
 
 
 def query_vectors(encoder):

@@ -5,10 +5,11 @@
 The main text is paperlib.text_view's (no references), without page lines; its first
 CHUNKS chunks of WORDS words each (abstract, introduction, the start of the method) are
 embedded with the encoder's document prefix. Writes <cache>/<encoder>/body.npy and
-body-owner.npy (the paper each chunk belongs to, as a row of papers()), and its seconds to
-results/cost.jsonl. It saves its work in slices of SLICE chunks (<cache>/<encoder>/body-parts/),
-so a run that stops starts again where it stopped. A paper's `body` score for a query is the best of its chunks and its
-title, summary and abstract (rank.py).
+body-owner.npy (the paper each chunk belongs to, as a row of papers(): the corpus in
+results/papers.txt), and its seconds to results/cost.jsonl. It saves its work in slices of
+SLICE chunks (<cache>/<encoder>/body-parts/), so a run that stops starts again where it
+stopped. A paper's `body` score for a query is the best of its chunks and its title, summary
+and abstract (rank.py).
 """
 import json
 import sys
