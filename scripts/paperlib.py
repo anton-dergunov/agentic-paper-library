@@ -384,6 +384,22 @@ def parse_arxiv_entries(xml_text):
     return out
 
 
+def arxiv_reply(data):
+    """Map bare arXiv id -> metadata from the export API's reply (`fetch`'s bytes), or None when
+    there is no answer: nothing came, or something that is not its Atom feed (a throttled or
+    broken reply). A feed without an entry is an answer: arXiv has none of the ids asked for.
+    An id with the wrong form gets an error entry, which is left out like a missing one."""
+    if not data:
+        return None
+    try:
+        root = ET.fromstring(data)
+    except ET.ParseError:
+        return None
+    if root.tag != f"{{{ATOM['a']}}}feed":
+        return None
+    return parse_arxiv_entries(data.decode("utf-8"))
+
+
 def fetch(url, attempts=4):
     """GET a URL and return its body as bytes, or None on 404 or repeated failure.
 
@@ -428,8 +444,7 @@ def arxiv_abstracts(ids):
         if start:
             time.sleep(3)  # the export API asks for a pause between requests
         data = fetch(f"{ARXIV_API}?id_list={','.join(chunk)}&max_results={len(chunk)}", attempts=5)
-        if data and b"<entry" in data:
-            found.update({k: v["abstract"] for k, v in parse_arxiv_entries(data.decode("utf-8")).items()})
+        found.update({k: v["abstract"] for k, v in (arxiv_reply(data) or {}).items()})
     return found
 
 

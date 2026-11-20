@@ -82,6 +82,28 @@ def filing_problems(root):
     return result.stderr.strip().splitlines()[-1:] if result.returncode else []
 
 
+def arxiv_reply_problems(root):
+    """The export API's reply: a feed without an entry says arXiv has none of the ids (so `add`
+    reports the id not found), while no reply, or a page that is not the feed, is no answer."""
+    feed = ('<?xml version="1.0" encoding="UTF-8"?>\n<feed xmlns="http://www.w3.org/2005/Atom" '
+            'xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"><title>arXiv Query</title>{}'
+            '<opensearch:totalResults>{}</opensearch:totalResults></feed>')
+    entry = ("<entry><id>http://arxiv.org/abs/2305.18290v3</id><title>Direct  Preference\n Optimization</title>"
+             "<published>2023-05-29T17:57:46Z</published><summary>An abstract.</summary>"
+             "<author><name>Rafael Rafailov</name></author></entry>")
+    error = "<entry><id>http://arxiv.org/api/errors#incorrect_id_format_for_x</id><title>Error</title></entry>"
+    code = (f"none = {feed.format('', 0)!r}.encode(); one = {feed.format(entry, 1)!r}.encode(); "
+            f"bad = {feed.format(error, 1)!r}.encode()\n"
+            "assert p.arxiv_reply(none) == {}, p.arxiv_reply(none)\n"
+            "got = p.arxiv_reply(one); assert list(got) == ['2305.18290'], got\n"
+            "assert got['2305.18290']['title'] == 'Direct Preference Optimization' and got['2305.18290']['version'] == 3\n"
+            "assert p.arxiv_reply(bad) == {}, p.arxiv_reply(bad)\n"
+            "for broken in (None, b'', b'<html><body>Rate exceeded.</body></html>', b'Rate exceeded.', one[:60]):\n"
+            "    assert p.arxiv_reply(broken) is None, broken")
+    result = paperlib_call(root, code)
+    return result.stderr.strip().splitlines()[-1:] if result.returncode else []
+
+
 def info_problems(root):
     """`info` answers for a library paper from the library alone, by arXiv id and by title words.
 
@@ -346,6 +368,7 @@ def main():
                 print(result.stdout + result.stderr)
         failures += report("read-view.py", read_view_problems(root), "main text and pages kept, references cut")
         failures += report("filing", filing_problems(root), "only a declared folder and a known type are accepted")
+        failures += report("arxiv_reply", arxiv_reply_problems(root), "a feed without an entry is an answer; no feed is none")
         failures += report("paper-info.py", info_problems(root), "library papers found by id, by title and with -C")
         for index in sorted(root.joinpath("library").rglob("README.md")):
             rel = index.relative_to(root)

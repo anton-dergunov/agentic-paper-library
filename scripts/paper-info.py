@@ -36,8 +36,8 @@ from urllib.parse import quote
 
 from paperlib import (
     CACHE_DIR, CONFIG, ENGINE_ROOT, FILING_EFFORT, LIBRARY_DIR, LIBRARY_ROOT, NOTES_DIR, OVERVIEW_DIR, REVIEWS_DIR,
-    ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics,
-    norm_title, note_path, paper_index, paper_stem, parse_arxiv_entries, read_paper, review_for,
+    arxiv_reply, ask_model, fetch, filing_choice, filing_prompts, find_by_title, load_reviews, load_topics,
+    norm_title, note_path, paper_index, paper_stem, read_paper, review_for,
     skipped_index, styled,
 )
 
@@ -283,7 +283,7 @@ def main(argv):
     # arXiv's export API throttles for minutes at a time; Semantic Scholar then supplies the
     # title, abstract and date as well, without the categories and the authors' comment.
     data = fetch(f"{API}?id_list={quote(','.join(fresh))}&max_results={len(fresh)}", attempts=2)
-    entries = parse_arxiv_entries(data.decode("utf-8")) if data and b"<entry" in data else {}
+    entries = arxiv_reply(data) or {}
     records = semantic_scholar([i for i in fresh if i not in skipped_by_id or i not in entries])
     for arxiv_id, record in records.items():
         if arxiv_id not in entries and record.get("title") and record.get("abstract"):

@@ -20,7 +20,7 @@ import textwrap
 import time
 from urllib.parse import quote
 
-from paperlib import LIBRARY_DIR, fetch, library_arxiv_ids, norm_title, parse_arxiv_entries, skipped_index
+from paperlib import LIBRARY_DIR, arxiv_reply, fetch, library_arxiv_ids, norm_title, skipped_index
 
 API = "https://export.arxiv.org/api/query"
 ARXIV_ID = re.compile(r"(\d{4}\.\d{4,5})(?:v\d+)?")
@@ -28,10 +28,7 @@ STOP_WORDS = set("the and for with from into via are its our their this that not
 
 
 def query(params):
-    data = fetch(f"{API}?{params}", attempts=5)
-    if data is None or b"<entry" not in data:
-        return None
-    return parse_arxiv_entries(data.decode("utf-8"))
+    return arxiv_reply(fetch(f"{API}?{params}", attempts=5))
 
 
 def show(arxiv_id, entry, in_library, skipped, abstract):

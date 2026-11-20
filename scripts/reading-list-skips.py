@@ -20,8 +20,8 @@ import sys
 from pathlib import Path
 
 from paperlib import (
-    CONFIG, append_skipped, fetch, library_arxiv_ids, load_topics, norm_title, paper_index,
-    parse_arxiv_entries, skipped_index,
+    CONFIG, append_skipped, arxiv_reply, fetch, library_arxiv_ids, load_topics, norm_title,
+    paper_index, skipped_index,
 )
 
 ARXIV_ID = re.compile(r"\b(\d{4}\.\d{4,5})\b")
@@ -83,8 +83,7 @@ def arxiv_titles(ids):
         chunk = ids[i:i + 100]
         data = fetch(f"https://export.arxiv.org/api/query?id_list={','.join(chunk)}"
                      f"&max_results={len(chunk)}", attempts=5)
-        if data and b"<entry" in data:
-            out.update({k: v["title"] for k, v in parse_arxiv_entries(data.decode()).items()})
+        out.update({k: v["title"] for k, v in (arxiv_reply(data) or {}).items()})
     return out
 
 

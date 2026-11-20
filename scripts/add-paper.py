@@ -25,9 +25,8 @@ import sys
 from urllib.parse import quote
 
 from paperlib import (
-    CONFIG, FILING_EFFORT, LIBRARY_DIR, SCRIPTS_DIR, ask_model, fetch, filing_choice, filing_prompts,
-    library_arxiv_ids, load_topics, norm_title, parse_arxiv_entries, read_paper, skipped_index,
-    write_paper,
+    CONFIG, FILING_EFFORT, LIBRARY_DIR, SCRIPTS_DIR, arxiv_reply, ask_model, fetch, filing_choice,
+    filing_prompts, library_arxiv_ids, load_topics, norm_title, read_paper, skipped_index, write_paper,
 )
 
 API = "https://export.arxiv.org/api/query"
@@ -55,7 +54,7 @@ def main(argv):
     wanted = {ARXIV_ID.search(r).group(1): ARXIV_ID.search(r).group(0) for r in raw}
 
     data = fetch(f"{API}?id_list={quote(','.join(wanted))}&max_results={len(wanted)}", attempts=5)
-    entries = parse_arxiv_entries(data.decode("utf-8")) if data and b"<entry" in data else None
+    entries = arxiv_reply(data)
     if entries is None:
         sys.exit("error: arXiv export API gave no usable response")
 
