@@ -14,6 +14,7 @@ A research-paper library kept with agentic-paper-library: each paper as its PDF 
 | Topic tree (declared) | `catalog/topics.yaml`: every folder with its scope |
 | Papers deliberately not added | `catalog/skipped.yaml`: title, reason, date |
 | Papers waiting to be added | `INBOX.txt`, drained by `/add-paper inbox` |
+| the reader's stars and tags | `catalog/reader.yaml`: papers starred to read, and tags gathering papers for the reader's projects, set in carrel |
 | Agent memory per paper (committed) | `notes/<Title>.md`: digest, related papers, Q&A |
 | Literature review per area (committed) | `reviews/<topic path>.md`: narrative, findings, paper map, Q&A |
 | the reader's own note per paper | `(not configured)/<Title>.md`, written by the `overview` skill |
@@ -32,6 +33,7 @@ A paper's text and its PDF have the same topic path and filename stem.
 - **Notes written before 2026-10-26 were read from a markdown conversion**: where one says something is missing from the paper's text, look in the text layer before believing it.
 - **Prefer the local copy to the web.** Search the web only for work not in the library.
 - **Indexes are generated.** Never edit a `README.md` under `library/`. After adding, moving or removing a paper, or changing `catalog/`, run `paperlib build-index`, then `paperlib check`, which must pass.
+- **Stars, tags and highlights are the reader's own.** `paperlib starred`, `paperlib tags [<tag>]` and `paperlib highlights <paper>` read them: use them when the reader names a tag or asks what they starred or highlighted. Never suggest, add or remove a star or a tag, and never write `catalog/reader.yaml`: a tag stands for a project only the reader knows, and filing a paper means its folder.
 - **Don't re-propose skipped papers.** `paperlib lookup` flags those in `catalog/skipped.yaml` as `skipped earlier`. Record every new skip there, with the reason; if the reader changes their mind, remove the entry first.
 - **Prefer a better tool to a workaround.** When a library or model would do a job better than paperlib does, propose it rather than hand-tuning heuristics, and compare candidates on real papers first.
 - **Start from the review, then check the paper.** For a question about an area, a comparison across papers, or "what exists on X", first read the review whose scope covers it: `reviews/<scope>.md`, where the scope is the folder or its nearest ancestor that has a review. The folder's `README.md` links it.
@@ -80,7 +82,7 @@ their baselines, each with its page (p. N).
 
 Topics are folder paths under `library/`, lowercase and hyphenated (`llm/memory/agent`), each declared with its scope in `catalog/topics.yaml`; `paperlib check` fails on a paper in an undeclared folder. A new folder is the reader's decision: propose it with a scope, don't create it.
 
-## Linking to a place in a paper
+## Linking to a paper
 
 When you point the reader to a place in a paper, make the citation a link; it opens the PDF at that spot in [vscode-pdf-viewer](https://github.com/anton-dergunov/vscode-pdf-viewer):
 
@@ -89,7 +91,8 @@ When you point the reader to a place in a paper, make the citation a link; it op
 ```
 
 - **Path:** the paper's path under `library/`, its extension replaced by `.pdf`, percent-encoded: spaces as `%20`, and `#`, `?` or `%` in a title (`&` and `+` stay).
-- **`page`:** always; from the `[page N]` line above the passage.
+- **`page`:** always for a place; from the `[page N]` line above the passage.
 - **`rect`:** for a value, sentence, table, figure or equation, also one taken from a note or review (their pages can be wrong), run `paperlib locate <paper> <target>…` once for all of an answer's citations and paste the links it prints. A target is `7:table.2`, `7:figure.3`, `2:eq.1`, `7:table.2>49.60` for a value in a table, or `6:<a phrase copied from the text>`. On "N matches", lengthen the phrase; "(on p. 8)" corrects your page.
 - **`dest`:** for a section, in papers made with LaTeX (most of arXiv): `section.4`, `subsection.4.3`, `subsubsection.2.2.3`, `appendix.A`, `subsection.A.1`. A missing name falls back to `page`, so a guess costs nothing.
 - Keep the link text in the "p. 7, Table 2" style; several links in one answer are fine. Never open the PDF viewer yourself.
+- **A whole paper**, named in an answer without a place in it (related papers, "see X"): the same link with no query, its short name as the text, as in `[Zep](http://pdf.invalid/llm/memory/agent/Zep.%20A%20Temporal%20Knowledge%20Graph%20Architecture%20for%20Agent%20Memory.pdf)`. Not its text file, even when a review or README you read links that: the text is for agents, and the reader reads the PDF. Reviews and notes keep the links their formats ask for.

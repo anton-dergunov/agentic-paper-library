@@ -14,7 +14,7 @@
 
 **`paperlib locate` shipped, with PyMuPDF 2.0; the guide tells agents to use it for every specific citation; both viewers draw the mark.** The experiment cost about $0.06 (the Haiku chats and the token counts).
 
-**Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), `paperlib locate`, the guide's "Linking to a place in a paper", vscode-pdf-viewer and carrel.
+**Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), `paperlib locate`, the guide's "Linking to a paper", vscode-pdf-viewer and carrel.
 
 ## Method
 

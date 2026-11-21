@@ -14,7 +14,7 @@
 
 **The line shipped in the guide, and the fallback in carrel.** The experiment cost $3.25 (11 Haiku runs at $0.08, 2 Sonnet runs at $1.17, token counts).
 
-**Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), the guide's "Paper files" and "Linking to a place in a paper", carrel's `src/carrel/static/page-links.js`.
+**Serves.** [`docs/design.md`](../../docs/design.md#decisions-log), the guide's "Paper files" and "Linking to a paper", carrel's `src/carrel/static/page-links.js`.
 
 ## Method
 
