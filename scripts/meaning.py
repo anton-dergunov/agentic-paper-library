@@ -124,6 +124,87 @@ class SentenceEncoder:
         return np.asarray(vectors, dtype=np.float32)
 
 
+class ChildEncoder:
+    """The pinned model in a child process of its own, for a program that keeps running (carrel's
+    server). `SentenceEncoder.unload()` frees the model but leaves torch imported, about 400 MB that
+    a process never gives back; here torch lives only in the child, and `unload()` ends it, so the
+    parent never holds it. The first `encode` starts the child, which loads the model as
+    `SentenceEncoder` does (a few seconds); a child that died is started again by the next one.
+    `command` stands in for the child in the tests."""
+
+    def __init__(self, model=MODEL, revision=REVISION, command=None):
+        self.model, self.revision = model, revision
+        self._command = command or [sys.executable, str(Path(__file__).resolve()), "--encoder-child",
+                                    model, revision or ""]
+        self._child = None
+        self._lock = threading.Lock()
+
+    @property
+    def loaded(self):
+        return self._child is not None and self._child.poll() is None
+
+    def encode(self, texts, query=False):
+        """Unit vectors, one row per text, as float32, from the child."""
+        import numpy as np
+        import subprocess
+        request = (json.dumps({"texts": list(texts), "query": bool(query)}) + "\n").encode("utf-8")
+        with self._lock:
+            if not self.loaded:
+                # Its stderr is the parent's, for the model's own warnings.
+                self._child = subprocess.Popen(self._command, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            child = self._child
+            try:
+                child.stdin.write(request)
+                child.stdin.flush()
+                header = child.stdout.readline().decode("utf-8").strip()
+                if header.startswith("!"):
+                    raise RuntimeError(f"the encoder failed: {json.loads(header[1:])}")
+                data = child.stdout.read(int(header))
+            except (OSError, ValueError) as error:
+                self._end()
+                raise RuntimeError(f"the encoder's process ended ({error or 'no answer'})") from None
+        return np.load(io.BytesIO(data), allow_pickle=False)
+
+    def unload(self):
+        """End the child, and with it the model and torch. Returns whether there was one."""
+        with self._lock:
+            return self._end()
+
+    def _end(self):
+        child, self._child = self._child, None
+        if child is None:
+            return False
+        try:
+            child.stdin.close()  # the child's loop ends at the end of its input
+            child.wait(timeout=10)
+        except Exception:
+            child.kill()
+            child.wait()
+        return True
+
+
+def _serve_encoder(model, revision, encoder=None):
+    """The child of ChildEncoder: a request a line on stdin ({"texts", "query"}), answered on
+    stdout with the size of an `np.save` and the bytes, or "!" and the error as JSON. Anything else
+    the libraries print goes to stderr, so the answers stay whole."""
+    import numpy as np
+    answers = os.fdopen(os.dup(sys.stdout.fileno()), "wb")
+    os.dup2(sys.stderr.fileno(), sys.stdout.fileno())
+    encoder = encoder or SentenceEncoder(model, revision or None)
+    for line in sys.stdin.buffer:
+        try:
+            request = json.loads(line)
+            vectors = encoder.encode(request["texts"], query=request["query"])
+        except Exception as error:
+            answers.write(b"!" + json.dumps(f"{type(error).__name__}: {error}").encode("utf-8") + b"\n")
+            answers.flush()
+            continue
+        buffer = io.BytesIO()
+        np.save(buffer, vectors, allow_pickle=False)
+        answers.write(f"{buffer.tell()}\n".encode("utf-8") + buffer.getvalue())
+        answers.flush()
+
+
 def _have_model(model, revision):
     """Whether the Hugging Face cache already holds the model at this revision. The first use
     downloads it (1.2 GB), which a sandboxed agent cannot: `paperlib embed` outside it does."""
@@ -323,6 +404,9 @@ def _progress(done, total):
 
 
 def main(argv):
+    if argv[:1] == ["--encoder-child"] and len(argv) == 3:
+        _serve_encoder(argv[1], argv[2])
+        return 0
     if not argv or argv[0] not in {"embed", "meaning", "similar"}:
         sys.exit(__doc__)
     command, args = argv[0], list(argv[1:])

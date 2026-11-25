@@ -5,7 +5,8 @@
 
 Checks that every paper is embedded once and kept, that a changed summary re-embeds only its
 paper, that a search and a topic narrow as they should, and that a paper is not its own
-nearest. The stand-in hashes words into a small vector, so a paper's own words find it.
+nearest. The stand-in hashes words into a small vector, so a paper's own words find it. The
+encoder in a child process is checked with the same stand-in in the child.
 """
 
 import os
@@ -45,13 +46,50 @@ class Words:
         return out / np.maximum(np.linalg.norm(out, axis=1, keepdims=True), 1e-9)
 
 
+class Chatty(Words):
+    """The stand-in as the child runs it: it fails on "boom", and prints on stdout as libraries do,
+    which the child must keep out of its answers."""
+
+    def encode(self, texts, query=False):
+        if "boom" in texts:
+            raise ValueError("boom")
+        print("(the stand-in child printing on stdout, which it sends to stderr)")
+        return super().encode(texts, query)
+
+
 def check(problems, ok, message):
     if not ok:
         problems.append(message)
 
 
+def check_child(problems):
+    """ChildEncoder against the stand-in run in a child (this file with --words-child)."""
+    child = meaning.ChildEncoder("test/words", "", command=[sys.executable, __file__, "--words-child"])
+    texts = ["direct preference optimization", "memory for agents"]
+    check(problems, not child.loaded, "a child encoder started before its first encode")
+    vectors = child.encode(texts)
+    check(problems, np.allclose(vectors, Words().encode(texts)) and vectors.dtype == np.float32,
+          "the child's vectors differ from the encoder's own")
+    first = child._child.pid
+    try:
+        child.encode(["boom"])
+        problems.append("an encoder's error in the child was not raised")
+    except RuntimeError as error:
+        check(problems, "boom" in str(error), f"the child's error lost its message: {error}")
+    check(problems, child.loaded and child._child.pid == first, "an encoder's error ended the child")
+    check(problems, child.unload() and not child.loaded and not child.unload(), "unload() did not end the child")
+    child.encode(texts)
+    check(problems, child._child.pid != first, "encode() after unload() did not start a new child")
+    child._child.kill()
+    child._child.wait()
+    child.encode(texts)  # a child that died is started again
+    check(problems, child.loaded, "a dead child was not started again")
+    child.unload()
+
+
 def main():
     problems = []
+    check_child(problems)
     papers = paperlib.paper_index()
     encoder = Words()
     space = meaning.build(encoder)
@@ -95,4 +133,7 @@ def main():
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--words-child"]:
+        meaning._serve_encoder("test/words", "", encoder=Chatty())
+        sys.exit(0)
     sys.exit(main())

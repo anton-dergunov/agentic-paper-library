@@ -367,6 +367,12 @@ The `overview` skill covers step 2. Steps 3 and 4 work in any session today; the
     the difference −0.031 to +0.032). The relevant papers it added to the top 10s were on
     related aspects, not on the topic itself, and it would cost seven times the embedding:
     about 3 hours for the library and 75 MB more in carrel's server.
+  - **The model in a child process (2026-11-25).** A program that keeps running embeds through
+    `ChildEncoder`: the model runs in a child that `unload()` ends. Freed in the program itself,
+    the model left torch imported. Measured in one process, it went from 15 MB to 1,636 MB for a
+    question and fell back only to 423 MB, which carrel's server then held for days. With the
+    child it stays at 22 MB. `paperlib` itself still loads the model in its own short-lived
+    process.
 - **The reader's stars, tags and highlights (2026-11-01).** A star marks a paper to read
   later; a tag gathers papers for one of the reader's projects, across folders, with an optional
   line on what it is for. Both live in `catalog/reader.yaml`, not in the papers' frontmatter:
